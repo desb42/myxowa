@@ -25,33 +25,33 @@ ROOT_DIR=g:/myxowa_dev
 ANT_BINARY=/cygdrive/g/apache-ant-1.10.5/bin/ant
 export JAVA_HOME=/cygdrive/g/Java/jdk1.8.0_181
 
-## == REMOVE PREVIOUS ARTIFACTS ==
-#rm -rf ./master
-#rm -rf ./src
-#rm -rf ./dev
-#rm -rf ./bin
-#rm -rf ./file
-#rm -rf ./user
-#rm -rf ./wiki
-#rm -rf ./xowa_dev.jar
-#
-## == DOWNLOAD XOWA SOURCE ==
-## get src and unzip
-#curl -LO https://api.github.com/repos/desb42/myxowa/tarball/master
-#mkdir src
-## unzip; note that "strip 1" removes container folder EX: gnosygnu-123456
-#tar -zxf master -C ./src --strip 1
-#
-## == REORGANIZE DOWNLOAD FILES ==
-## move /res/ to /root/ folder
-#mv src/res/* .
-## needed for Windows only (cygwin defaults to non-execute permissions)
-#chmod -R 755 ./bin/$PLAT_NAME/xulrunner
-#
-## remove test files
-#find ./src -type f -name '*_tst.java' -delete
-#find ./src -type f -name '*_fxt.java' -delete
-#find ./src -type f -name '*_mok.java' -delete
+# == REMOVE PREVIOUS ARTIFACTS ==
+rm -rf ./master
+rm -rf ./src
+rm -rf ./dev
+rm -rf ./bin
+rm -rf ./file
+rm -rf ./user
+rm -rf ./wiki
+rm -rf ./xowa_dev.jar
+
+# == DOWNLOAD XOWA SOURCE ==
+# get src and unzip
+curl -LO https://api.github.com/repos/desb42/myxowa/tarball/master
+mkdir src
+# unzip; note that "strip 1" removes container folder EX: gnosygnu-123456
+tar -zxf master -C ./src --strip 1
+
+# == REORGANIZE DOWNLOAD FILES ==
+# move /res/ to /root/ folder
+mv src/res/* .
+# needed for Windows only (cygwin defaults to non-execute permissions)
+chmod -R 755 ./bin/$PLAT_NAME/xulrunner
+
+# remove test files
+find ./src -type f -name '*_tst.java' -delete
+find ./src -type f -name '*_fxt.java' -delete
+find ./src -type f -name '*_mok.java' -delete
 
 # == BUILD XOWA ==
 $ANT_BINARY -v -buildfile ./dev/make/ant/xowa_compile.xml  -Droot_dir=$ROOT_DIR -Djdk=$JAVA_JDK_VERSION 
