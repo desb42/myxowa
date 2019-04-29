@@ -1,0 +1,83 @@
+<!-- message div -->
+<div id='xo_msg_box' style='width:100%; color:red'>&nbsp;</div>
+
+<!-- help div -->
+<div id='cur_help_div' class='xohelp_div'>
+  <div id='cur_help_msg' class='xohelp_msg'>
+    <div>
+      <div class='xohelp_row'><span class='xoimg_help_x24 xoimg_media_play'>&nbsp;</span><span class='xohelp_row_text'>Run search</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- main div -->
+<div id='main_div' style='width:100%'> 
+  <div class='cur_data_row' style='height:40px'>
+    <label style='vertical-align:middle'>Search</label>
+    <input id='query_box' type='text' value='{{domain}}' class='cur_data_input1' style='width:80%' onkeydown='xo.search_fulltext.search_keydown(event)' accesskey="m" placeholder='Enter a search query (For example: find me)'></input>
+    <a class='xoimg_btn_x24 xoimg_media_play' title='search'    href='javascript:void(0)' onclick='return xo.search_fulltext.search()' id='search_btn'>&nbsp;</a>
+    <a class='xoimg_btn_x24 xoimg_help_tip'   title='view help' href='javascript:void(0)' onclick='return xo.help.toggle("cur")'>&nbsp;</a>      
+  </div>
+  <div class='flex_div' >
+    <div style='width:120px;margin: 0px 4px 0px 10px;font-weight: bold;'>Options:</div>
+    <table>
+      <tr>
+        <td>Case sensitive</td>
+        <td><input id='case_match_box' type='checkbox' {{#case_match}}checked={{/case_match}}></input></td>
+        <td style='padding-left:20px;'>Max pages per wiki</td>
+        <td><input id='max_pages_per_wiki_box' type='text' value='{{max_pages_per_wiki}}' placeholder='Enter maximum number of pages to show (For example: 100)'></input></td>
+        <td style='padding-left:20px;'>Wikis</td>
+        <td><input id='wikis_box' type='text' value='{{wikis}}' class='' placeholder='Enter wikis separated by a pipe (For example: home|wiki.me.org)'></input></td>
+      </tr>
+      <tr>
+        <td>Auto-wildcard start</td>
+        <td><input id='auto_wildcard_bgn_box' type='checkbox' {{#auto_wildcard_bgn}}checked={{/auto_wildcard_bgn}}></input></td>
+        <td style='padding-left:20px;'>Max matches per page</td>
+        <td><input id='max_snips_per_page_box' type='text' value='{{max_snips_per_page}}' placeholder='Enter maximum number of matches to show per page (For example: 10)'></input></td>
+        <td style='padding-left:20px;'>Namespaces</td>
+        <td><input id='ns_box' type='text' value='{{namespaces}}' class='' placeholder='Enter namespaces separated by a pipe (For example: 0|4)'></input></td>
+      </tr>
+      <tr>
+        <td>Auto-wildcard end</td>
+        <td><input id='auto_wildcard_end_box' type='checkbox' {{#auto_wildcard_end}}checked={{/auto_wildcard_end}}></input></td>
+      </tr>
+    </table>
+  </div>
+  <div id='results_wikis' style='width:100%'>
+    <div id='results_wikis_last'>&nbsp;</div>
+  </div>
+<!--
+  
+  <div class='cur_data_row'>
+    <label>Case sensitive</label>
+    <input id='case_match_box' type='checkbox' {{#case_match}}checked={{/case_match}}></input>
+  </div>
+  <div class='cur_data_row'>
+    <label>Auto-wildcard start</label>
+    <input id='auto_wildcard_bgn_box' type='checkbox' {{#auto_wildcard_bgn}}checked={{/auto_wildcard_bgn}}></input>
+  </div>
+  <div class='cur_data_row'>
+    <label>Auto-wildcard end</label>
+    <input id='auto_wildcard_end_box' type='checkbox' {{#auto_wildcard_end}}checked={{/auto_wildcard_end}}></input>
+  </div>
+  <div class='cur_data_row'>
+    <label>Max pages per wiki</label>
+    <input id='max_pages_per_wiki_box' type='text' value='{{max_pages_per_wiki}}' class='cur_data_input' placeholder='Enter maximum number of pages to show (For example: 100)'></input>
+  </div>
+  <div class='cur_data_row'>
+    <label>Max matches per page</label>
+    <input id='max_snips_per_page_box' type='text' value='{{max_snips_per_page}}' class='cur_data_input' placeholder='Enter maximum number of matches to show per page (For example: 10)'></input>
+  </div>
+  <div class='cur_data_row'>
+    <label>Wikis</label>
+    <input id='wikis_box' type='text' value='{{wikis}}' class='cur_data_input' placeholder='Enter wikis separated by a pipe (For example: home|wiki.me.org)'></input>
+  </div>
+  <div class='cur_data_row'>
+    <label>Namespaces</label>
+    <input id='ns_box' type='text' value='{{namespaces}}' class='cur_data_input' placeholder='Enter namespaces separated by a pipe (For example: 0|4)'></input>
+  </div>
+  <div id='results_wikis' style='width:100%'>
+    <div id='results_wikis_last'>&nbsp;</div>
+  </div>
+  -->
+</div>

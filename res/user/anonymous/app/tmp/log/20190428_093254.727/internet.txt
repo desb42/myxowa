@@ -1,0 +1,3 @@
+20190428_083556.963 download pass: src='https://commons.wikimedia.org/w/api.php?action=query&format=xml&prop=imageinfo&iiprop=size|url&redirects&titles=File:Japanese_Wood_Engravings.djvu' trg='mem/download.tmp'
+20190428_083557.227 download pass: src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Japanese_Wood_Engravings.djvu/page8-220px-Japanese_Wood_Engravings.djvu.jpg' trg='d:/des/xowa_x/file\commons.wikimedia.org\thumb\4\f\3\4\Japanese_Wood_Engravings.djvu\220px-8.jpg'
+20190428_083644.231 download pass: src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Japanese_Wood_Engravings.djvu/page9-220px-Japanese_Wood_Engravings.djvu.jpg' trg='d:/des/xowa_x/file\commons.wikimedia.org\thumb\4\f\3\4\Japanese_Wood_Engravings.djvu\220px-9.jpg'

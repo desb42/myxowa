@@ -1,0 +1,450 @@
+20190428_083254.378 env.init: version=4.6.1.1903
+20190428_083254.460 env.init: jar_url=xowa_test.jar; build_date=2019-04-23 07:55:19
+20190428_083254.461 env.init: op_sys=windows64
+20190428_083254.467 
+arguments:
+  [0] = '--root_dir'
+  [1] = 'd:/des/xowa_x/'
+
+20190428_083254.471 gui.splash.bgn
+20190428_083254.551 gui.splash.end
+20190428_083254.702 app.ctor.bgn
+20190428_083254.888 app.ctor.end
+20190428_083255.000 app.boot:servers
+20190428_083255.001 app.boot:app.init
+20190428_083255.687 db.schema.load.bgn: conn=data source=d:/des/xowa_x/user\xowa.user.anonymous.sqlite3;version=3;
+20190428_083255.852 db.schema.load.bgn: conn=data source=d:/des/xowa_x/bin\any\xowa\addon\app\cfg\xo.cfg.sqlite3;version=3;
+20190428_083255.941 app.boot:gfs.run
+20190428_083255.956 gfs.done: d:/des/xowa_x/user\anonymous\app\cfg\os.windows_64.gfs
+20190428_083255.979 gfs.done: d:/des/xowa_x/bin\any\xowa\cfg\app\xowa.gfs
+20190428_083255.980 app.boot:app.launch
+20190428_083255.985 wiki.db_core.v2.standard: url=d:/des/xowa_x/bin\any\xowa\wiki\home\home.xowa
+20190428_083255.994 db.schema.load.bgn: conn=data source=d:/des/xowa_x/bin\any\xowa\wiki\home\home.xowa;version=3;
+20190428_083256.001 fsdb.db_core.v2: type=all url=d:/des/xowa_x/bin\any\xowa\wiki\home\home.xowa
+20190428_083255.983 wiki.init.bgn: home
+20190428_083256.107 wiki.init.end
+20190428_083256.165 site_cfg loaded; wiki=home itm=extensiontags tid=itm
+20190428_083256.220 site_cfg loaded; wiki=home itm=interwikimap tid=itm
+20190428_083256.494 swt.kit.init.done
+20190428_083258.067 wiki.db_core.v2.standard: url=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-core.xowa
+20190428_083258.087 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-core.xowa;version=3;
+20190428_083258.102 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-xtn.search.core.xowa;version=3;
+20190428_083258.108 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-xtn.search.link-title-ns.000-db.001.xowa;version=3;
+20190428_083258.116 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-xtn.search.link-title-ns.999-db.001.xowa;version=3;
+20190428_083258.127 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.000.xowa;version=3;
+20190428_083258.145 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.004.xowa;version=3;
+20190428_083258.159 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.102.xowa;version=3;
+20190428_083258.170 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.012.xowa;version=3;
+20190428_083258.177 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.100.xowa;version=3;
+20190428_083258.180 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.006.xowa;version=3;
+20190428_083258.191 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.008.xowa;version=3;
+20190428_083258.207 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.010.xowa;version=3;
+20190428_083258.212 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.014.xowa;version=3;
+20190428_083258.229 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.104.xowa;version=3;
+20190428_083258.245 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.000-db.002.xowa;version=3;
+20190428_083258.254 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.828.xowa;version=3;
+20190428_083258.270 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-text-ns.2600.xowa;version=3;
+20190428_083258.280 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-xtn.category.core.xowa;version=3;
+20190428_083258.297 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-xtn.category.link-db.001.xowa;version=3;
+20190428_083258.314 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-html-ns.000.xowa;version=3;
+20190428_083258.319 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-html-ns.000-db.002.xowa;version=3;
+20190428_083258.324 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-html-ns.000-db.003.xowa;version=3;
+20190428_083258.331 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-html-ns.000-db.004.xowa;version=3;
+20190428_083258.346 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-html-ns.004.xowa;version=3;
+20190428_083258.354 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-html-ns.014.xowa;version=3;
+20190428_083258.368 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-html-ns.008.xowa;version=3;
+20190428_083258.370 fsdb.db_core.v2: type=lot url=d:/des/xowa_x/wiki\fr.wikipedia.org\fr.wikipedia.org-file-core.xowa
+20190428_083257.685 app.gui.kit_init.done
+20190428_083258.001 app.gui.win_load.done
+20190428_083258.002 app.launch.page.bgn
+20190428_083258.029 wiki.init.bgn: fr.wikipedia.org
+20190428_083258.495 wiki.init.end
+20190428_083258.495 site_cfg loaded; wiki=fr.wikipedia.org itm=extensiontags tid=cfg
+20190428_083258.496 site_cfg loaded; wiki=fr.wikipedia.org itm=interwikimap tid=cfg
+20190428_083300.542 page.load: url=fr.wikipedia.org/wiki/Mykonos?action=edit
+20190428_083300.622 wiki.db_core.v2.standard: url=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-core.xowa
+20190428_083300.624 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-core.xowa;version=3;
+20190428_083300.625 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-xtn.search.core.xowa;version=3;
+20190428_083300.626 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-xtn.search.link-title-ns.000-db.001.xowa;version=3;
+20190428_083300.627 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-xtn.search.link-title-ns.999-db.001.xowa;version=3;
+20190428_083300.628 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.000.xowa;version=3;
+20190428_083300.629 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.004.xowa;version=3;
+20190428_083300.630 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.100.xowa;version=3;
+20190428_083300.630 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.012.xowa;version=3;
+20190428_083300.631 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.006.xowa;version=3;
+20190428_083300.632 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.010.xowa;version=3;
+20190428_083300.633 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.008.xowa;version=3;
+20190428_083300.634 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.118.xowa;version=3;
+20190428_083300.635 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.014.xowa;version=3;
+20190428_083300.636 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.000-db.002.xowa;version=3;
+20190428_083300.637 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.828.xowa;version=3;
+20190428_083300.638 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.000-db.003.xowa;version=3;
+20190428_083300.639 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.108.xowa;version=3;
+20190428_083300.639 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.000-db.004.xowa;version=3;
+20190428_083300.640 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.710.xowa;version=3;
+20190428_083300.641 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.000-db.005.xowa;version=3;
+20190428_083300.642 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.2300.xowa;version=3;
+20190428_083300.643 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.004-db.002.xowa;version=3;
+20190428_083300.644 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-text-ns.000-db.006.xowa;version=3;
+20190428_083300.645 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-xtn.category.core.xowa;version=3;
+20190428_083300.646 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-xtn.category.link-db.001.xowa;version=3;
+20190428_083300.647 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-xtn.category.link-db.002.xowa;version=3;
+20190428_083300.648 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-xtn.category.link-db.003.xowa;version=3;
+20190428_083300.649 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000.xowa;version=3;
+20190428_083300.650 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.002.xowa;version=3;
+20190428_083300.650 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.003.xowa;version=3;
+20190428_083300.651 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.004.xowa;version=3;
+20190428_083300.652 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.005.xowa;version=3;
+20190428_083300.653 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.006.xowa;version=3;
+20190428_083300.654 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.007.xowa;version=3;
+20190428_083300.655 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.008.xowa;version=3;
+20190428_083300.656 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.009.xowa;version=3;
+20190428_083300.656 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.010.xowa;version=3;
+20190428_083300.657 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.011.xowa;version=3;
+20190428_083300.658 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.000-db.012.xowa;version=3;
+20190428_083300.659 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.004.xowa;version=3;
+20190428_083300.660 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.004-db.002.xowa;version=3;
+20190428_083300.661 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.014.xowa;version=3;
+20190428_083300.661 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-html-ns.008.xowa;version=3;
+20190428_083300.662 fsdb.db_core.v2: type=lot url=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-file-core.xowa
+20190428_083300.603 wiki.init.bgn: en.wikipedia.org
+20190428_083300.693 wiki.init.end
+20190428_083300.694 site_cfg loaded; wiki=en.wikipedia.org itm=extensiontags tid=cfg
+20190428_083300.694 site_cfg loaded; wiki=en.wikipedia.org itm=interwikimap tid=cfg
+20190428_083300.752 wiki.db_core.v2.standard: url=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-core.xowa
+20190428_083300.760 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-core.xowa;version=3;
+20190428_083300.768 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-xtn.search.core.xowa;version=3;
+20190428_083300.774 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-xtn.search.link-title-ns.000-db.001.xowa;version=3;
+20190428_083300.784 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-xtn.search.link-title-ns.999-db.001.xowa;version=3;
+20190428_083300.802 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.000.xowa;version=3;
+20190428_083300.823 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.004.xowa;version=3;
+20190428_083300.832 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.102.xowa;version=3;
+20190428_083300.841 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.012.xowa;version=3;
+20190428_083300.842 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.008.xowa;version=3;
+20190428_083300.851 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.006.xowa;version=3;
+20190428_083300.855 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.112.xowa;version=3;
+20190428_083300.860 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.010.xowa;version=3;
+20190428_083300.865 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.014.xowa;version=3;
+20190428_083300.874 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.110.xowa;version=3;
+20190428_083300.882 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.108.xowa;version=3;
+20190428_083300.892 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-text-ns.828.xowa;version=3;
+20190428_083300.902 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-xtn.category.core.xowa;version=3;
+20190428_083300.907 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-xtn.category.link-db.001.xowa;version=3;
+20190428_083300.915 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-html-ns.000.xowa;version=3;
+20190428_083300.928 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-html-ns.004.xowa;version=3;
+20190428_083300.936 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-html-ns.014.xowa;version=3;
+20190428_083300.944 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-html-ns.008.xowa;version=3;
+20190428_083300.952 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-html-ns.102.xowa;version=3;
+20190428_083300.954 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-html-ns.110.xowa;version=3;
+20190428_083300.960 fsdb.db_core.v2: type=lot url=d:/des/xowa_x/wiki\en.wikibooks.org\en.wikibooks.org-file-core.xowa
+20190428_083300.710 wiki.init.bgn: en.wikibooks.org
+20190428_083301.015 wiki.init.end
+20190428_083301.016 site_cfg loaded; wiki=en.wikibooks.org itm=extensiontags tid=cfg
+20190428_083301.016 site_cfg loaded; wiki=en.wikibooks.org itm=interwikimap tid=cfg
+20190428_083301.151 wiki.db_core.v2.standard: url=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-core.xowa
+20190428_083301.169 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-core.xowa;version=3;
+20190428_083301.177 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-xtn.search.core.xowa;version=3;
+20190428_083301.187 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-xtn.search.link-title-ns.000-db.001.xowa;version=3;
+20190428_083301.193 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-xtn.search.link-title-ns.999-db.001.xowa;version=3;
+20190428_083301.200 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.000.xowa;version=3;
+20190428_083301.212 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.004.xowa;version=3;
+20190428_083301.232 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.012.xowa;version=3;
+20190428_083301.242 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.102.xowa;version=3;
+20190428_083301.251 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.008.xowa;version=3;
+20190428_083301.264 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.006.xowa;version=3;
+20190428_083301.286 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.010.xowa;version=3;
+20190428_083301.301 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.100.xowa;version=3;
+20190428_083301.313 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.014.xowa;version=3;
+20190428_083301.327 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.828.xowa;version=3;
+20190428_083301.333 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-text-ns.000-db.002.xowa;version=3;
+20190428_083301.347 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-xtn.category.core.xowa;version=3;
+20190428_083301.367 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-xtn.category.link-db.001.xowa;version=3;
+20190428_083301.372 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-html-ns.000.xowa;version=3;
+20190428_083301.377 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-html-ns.000-db.002.xowa;version=3;
+20190428_083301.384 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-html-ns.000-db.003.xowa;version=3;
+20190428_083301.395 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-html-ns.004.xowa;version=3;
+20190428_083301.411 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-html-ns.014.xowa;version=3;
+20190428_083301.429 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-html-ns.008.xowa;version=3;
+20190428_083301.430 fsdb.db_core.v2: type=lot url=d:/des/xowa_x/wiki\it.wikipedia.org\it.wikipedia.org-file-core.xowa
+20190428_083301.089 wiki.init.bgn: it.wikipedia.org
+20190428_083301.554 wiki.init.end
+20190428_083301.554 site_cfg loaded; wiki=it.wikipedia.org itm=extensiontags tid=cfg
+20190428_083301.554 site_cfg loaded; wiki=it.wikipedia.org itm=interwikimap tid=cfg
+20190428_083301.627 wiki.db_core.v2.standard: url=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-core.xowa
+20190428_083301.628 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-core.xowa;version=3;
+20190428_083301.630 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.search.core.xowa;version=3;
+20190428_083301.631 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.search.link-title-ns.000-db.001.xowa;version=3;
+20190428_083301.631 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.search.link-title-ns.999-db.001.xowa;version=3;
+20190428_083301.632 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.000.xowa;version=3;
+20190428_083301.633 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.004.xowa;version=3;
+20190428_083301.634 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.102.xowa;version=3;
+20190428_083301.635 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.100.xowa;version=3;
+20190428_083301.636 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.114.xowa;version=3;
+20190428_083301.637 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.010.xowa;version=3;
+20190428_083301.638 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.014.xowa;version=3;
+20190428_083301.639 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.012.xowa;version=3;
+20190428_083301.640 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.006.xowa;version=3;
+20190428_083301.640 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.008.xowa;version=3;
+20190428_083301.641 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.104.xowa;version=3;
+20190428_083301.642 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.106.xowa;version=3;
+20190428_083301.643 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.828.xowa;version=3;
+20190428_083301.644 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.category.core.xowa;version=3;
+20190428_083301.645 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.category.link-db.001.xowa;version=3;
+20190428_083301.645 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.000.xowa;version=3;
+20190428_083301.647 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.004.xowa;version=3;
+20190428_083301.647 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.014.xowa;version=3;
+20190428_083301.648 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.008.xowa;version=3;
+20190428_083301.649 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.102.xowa;version=3;
+20190428_083301.649 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.106.xowa;version=3;
+20190428_083301.650 fsdb.db_core.v2: type=lot url=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-file-core.xowa
+20190428_083301.618 wiki.init.bgn: en.wikisource.org
+20190428_083301.658 wiki.init.end
+20190428_083301.658 site_cfg loaded; wiki=en.wikisource.org itm=extensiontags tid=cfg
+20190428_083301.658 site_cfg loaded; wiki=en.wikisource.org itm=interwikimap tid=cfg
+20190428_083301.670 app.launch.page.end
+20190428_083303.054 no cldrName file exists for lang; lang=null
+20190428_083303.054 lang does not have a cldrName file; lang=null page=fr.wikipedia.org/wiki/Mykonos?action=edit
+20190428_083303.766 wiki.db_core.v2.standard: url=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-core.xowa
+20190428_083303.768 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-core.xowa;version=3;
+20190428_083303.769 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.000.xowa;version=3;
+20190428_083303.771 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.004.xowa;version=3;
+20190428_083303.772 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.010.xowa;version=3;
+20190428_083303.773 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.006.xowa;version=3;
+20190428_083303.774 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.014.xowa;version=3;
+20190428_083303.776 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.012.xowa;version=3;
+20190428_083303.777 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.008.xowa;version=3;
+20190428_083303.778 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.100.xowa;version=3;
+20190428_083303.779 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.102.xowa;version=3;
+20190428_083303.780 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.104.xowa;version=3;
+20190428_083303.781 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.106.xowa;version=3;
+20190428_083303.782 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.006-db.002.xowa;version=3;
+20190428_083303.783 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.006-db.003.xowa;version=3;
+20190428_083303.784 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.828.xowa;version=3;
+20190428_083303.785 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.1198.xowa;version=3;
+20190428_083303.786 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.460.xowa;version=3;
+20190428_083303.787 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.490.xowa;version=3;
+20190428_083303.787 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.003.xowa;version=3;
+20190428_083303.788 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.006-db.004.xowa;version=3;
+20190428_083303.789 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.2600.xowa;version=3;
+20190428_083303.790 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.006-db.005.xowa;version=3;
+20190428_083303.791 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.006-db.006.xowa;version=3;
+20190428_083303.792 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.486.xowa;version=3;
+20190428_083303.792 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.006-db.007.xowa;version=3;
+20190428_083303.793 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-text-ns.006-db.008.xowa;version=3;
+20190428_083303.794 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-xtn.category.core.xowa;version=3;
+20190428_083303.795 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-xtn.category.link-db.001.xowa;version=3;
+20190428_083303.796 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-xtn.category.link-db.002.xowa;version=3;
+20190428_083303.797 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-xtn.category.link-db.003.xowa;version=3;
+20190428_083303.798 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-xtn.category.link-db.004.xowa;version=3;
+20190428_083303.799 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-xtn.category.link-db.005.xowa;version=3;
+20190428_083303.799 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-xtn.category.link-db.006.xowa;version=3;
+20190428_083303.800 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-xtn.category.link-db.007.xowa;version=3;
+20190428_083303.801 fsdb.db_core.v2: type=lot url=d:/des/xowa_x/wiki\commons.wikimedia.org\commons.wikimedia.org-file-core.xowa
+20190428_083303.761 wiki.init.bgn: commons.wikimedia.org
+20190428_083303.819 wiki.init.end
+20190428_083303.820 site_cfg loaded; wiki=commons.wikimedia.org itm=extensiontags tid=cfg
+20190428_083303.820 site_cfg loaded; wiki=commons.wikimedia.org itm=interwikimap tid=cfg
+20190428_083304.390 wiki.db_core.v2.standard: url=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-core.xowa
+20190428_083304.392 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-core.xowa;version=3;
+20190428_083304.394 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-core.wbase.xowa;version=3;
+20190428_083304.395 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.004.xowa;version=3;
+20190428_083304.396 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.008.xowa;version=3;
+20190428_083304.398 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000.xowa;version=3;
+20190428_083304.399 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.012.xowa;version=3;
+20190428_083304.400 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.010.xowa;version=3;
+20190428_083304.401 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.014.xowa;version=3;
+20190428_083304.402 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.1198.xowa;version=3;
+20190428_083304.403 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.002.xowa;version=3;
+20190428_083304.405 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.003.xowa;version=3;
+20190428_083304.406 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.120.xowa;version=3;
+20190428_083304.406 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.004.xowa;version=3;
+20190428_083304.408 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.005.xowa;version=3;
+20190428_083304.409 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.006.xowa;version=3;
+20190428_083304.410 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.007.xowa;version=3;
+20190428_083304.411 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.828.xowa;version=3;
+20190428_083304.412 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.008.xowa;version=3;
+20190428_083304.413 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.009.xowa;version=3;
+20190428_083304.413 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.010.xowa;version=3;
+20190428_083304.414 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.011.xowa;version=3;
+20190428_083304.415 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.2600.xowa;version=3;
+20190428_083304.416 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.012.xowa;version=3;
+20190428_083304.417 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.013.xowa;version=3;
+20190428_083304.417 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.014.xowa;version=3;
+20190428_083304.418 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.015.xowa;version=3;
+20190428_083304.419 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.016.xowa;version=3;
+20190428_083304.421 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.017.xowa;version=3;
+20190428_083304.422 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.018.xowa;version=3;
+20190428_083304.423 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.019.xowa;version=3;
+20190428_083304.424 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.020.xowa;version=3;
+20190428_083304.425 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.021.xowa;version=3;
+20190428_083304.426 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.022.xowa;version=3;
+20190428_083304.427 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.023.xowa;version=3;
+20190428_083304.428 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.024.xowa;version=3;
+20190428_083304.429 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.025.xowa;version=3;
+20190428_083304.430 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.026.xowa;version=3;
+20190428_083304.431 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.027.xowa;version=3;
+20190428_083304.431 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.028.xowa;version=3;
+20190428_083304.432 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.029.xowa;version=3;
+20190428_083304.433 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.030.xowa;version=3;
+20190428_083304.434 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.031.xowa;version=3;
+20190428_083304.435 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.032.xowa;version=3;
+20190428_083304.435 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.033.xowa;version=3;
+20190428_083304.436 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.034.xowa;version=3;
+20190428_083304.437 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.035.xowa;version=3;
+20190428_083304.438 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.036.xowa;version=3;
+20190428_083304.439 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.037.xowa;version=3;
+20190428_083304.440 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.038.xowa;version=3;
+20190428_083304.441 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.146.xowa;version=3;
+20190428_083304.442 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.039.xowa;version=3;
+20190428_083304.443 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.040.xowa;version=3;
+20190428_083304.444 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.041.xowa;version=3;
+20190428_083304.444 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.042.xowa;version=3;
+20190428_083304.445 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-xtn.category.core.xowa;version=3;
+20190428_083304.446 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-xtn.category.link-db.001.xowa;version=3;
+20190428_083304.447 fsdb.db_core.v2: type=lot url=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-file-core.xowa
+20190428_083304.381 wiki.init.bgn: www.wikidata.org
+20190428_083304.465 wiki.init.end
+20190428_083304.466 site_cfg loaded; wiki=www.wikidata.org itm=extensiontags tid=cfg
+20190428_083304.466 site_cfg loaded; wiki=www.wikidata.org itm=interwikimap tid=cfg
+20190428_083304.825 parser.tmpl:dynamic is blank; page=fr.wikipedia.org/wiki/Mykonos?action=edit
+20190428_083304.826 parser.tmpl:dynamic is blank; page=fr.wikipedia.org/wiki/Mykonos?action=edit
+20190428_083308.119 page_load: loaded wikitext; page=Mykonos wikitext_len=27981
+20190428_083308.886 page.load: url=fr.wikipedia.org/wiki/Aide:Bac_à_sable?action=edit
+20190428_083308.887 page.async: url=fr.wikipedia.org/wiki/Mykonos?action=edit
+20190428_083308.890 redlink.redlink_bgn: page=Mykonos total_links=0
+20190428_083308.891 redlink.redlink_end: redlinks_run=0
+20190428_083310.117 page_load: loaded wikitext; page=Aide:Bac_à_sable wikitext_len=5276
+20190428_083310.138 page.load: url=home/wiki/Special:XowaCfg?grp=xowa.html.tidy
+20190428_083310.138 page.async: url=fr.wikipedia.org/wiki/Aide:Bac_à_sable?action=edit
+20190428_083310.140 redlink.redlink_bgn: page=Aide:Bac_à_sable total_links=0
+20190428_083310.140 redlink.redlink_end: redlinks_run=0
+20190428_083310.183 page_load: loaded wikitext; page=Special:XowaCfg wikitext_len=0
+20190428_083310.266 20190428_083310.266 page.load: url=en.wikipedia.org/wiki/Module:Random_slideshow?action=edit
+page.async: url=home/wiki/Special:XowaCfg?grp=xowa.html.tidy20190428_083310.266 20190428_083310.266 page.load: url=en.wikipedia.org/wiki/Module:Random_slideshow?action=edit
+page.async: url=home/wiki/Special:XowaCfg?grp=xowa.html.tidy
+20190428_083310.267 redlink.redlink_bgn: page=Special:XowaCfg total_links=0
+20190428_083310.267 redlink.redlink_end: redlinks_run=0
+20190428_083310.462 page_load: loaded wikitext; page=Module:Random_slideshow wikitext_len=7074
+20190428_083310.763 page.load: url=en.wikibooks.org/wiki/Algorithms/Divide_and_Conquer
+20190428_083310.763 page.async: url=en.wikipedia.org/wiki/Module:Random_slideshow?action=edit
+20190428_083311.431 page_load: loaded wikitext; page=Algorithms/Divide_and_Conquer wikitext_len=36511
+20190428_083312.031 page.load: url=it.wikipedia.org/wiki/Modulo:Portale
+20190428_083312.031 page.async: url=en.wikibooks.org/wiki/Algorithms/Divide_and_Conquer
+20190428_083312.033 redlink.redlink_bgn: page=Algorithms/Divide_and_Conquer total_links=23
+20190428_083312.080 redlink.redlink_end: redlinks_run=1
+20190428_083312.530 page_load: loaded wikitext; page=Modulo:Portale wikitext_len=6935
+20190428_083313.367 page.async: url=it.wikipedia.org/wiki/Modulo:Portale
+20190428_083313.367 page.load: url=it.wikipedia.org/wiki/Henry_Cavendish?action=html
+20190428_083315.778 page_load: loaded wikitext; page=Henry_Cavendish wikitext_len=2677
+20190428_083316.221 page.load: url=en.wikisource.org/wiki/Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19
+20190428_083316.221 page.async: url=it.wikipedia.org/wiki/Henry_Cavendish?action=html
+20190428_083316.221 page.load: url=en.wikisource.org/wiki/Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19
+20190428_083316.221 20190428_083316.222 redlink.redlink_bgn: page=Henry_Cavendish total_links=108
+20190428_083316.358 page_load: loaded wikitext; page=Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19 wikitext_len=2840
+20190428_083316.421 sidebar item is missing pipe; only href is available; item will be hidden: item=TOOLBOXEND
+20190428_083316.437 page.async: url=en.wikisource.org/wiki/Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19
+20190428_083316.438 redlink.redlink_bgn: page=Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19 total_links=1
+20190428_083316.439 redlink.redlink_end: redlinks_run=0
+20190428_083317.578 redlink.redlink_end: redlinks_run=17
+20190428_083335.033 page.load: url=en.wikisource.org/wiki/Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19
+20190428_083335.039 page_load: loaded wikitext; page=Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19 wikitext_len=2840
+20190428_083335.039 page.load: url=en.wikisource.org/wiki/Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19
+20190428_083335.046 page_load: loaded wikitext; page=Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19 wikitext_len=2840
+20190428_083335.055 page.async: url=en.wikisource.org/wiki/Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19
+20190428_083335.056 redlink.redlink_bgn: page=Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19 total_links=1
+20190428_083335.056 redlink.redlink_end: redlinks_run=0
+20190428_083353.411 page.load: url=en.wikisource.org/wiki/Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19?action=edit
+20190428_083353.417 page_load: loaded wikitext; page=Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19 wikitext_len=2840
+20190428_083353.426 page.async: url=en.wikisource.org/wiki/Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19?action=edit
+20190428_083353.426 redlink.redlink_bgn: page=Page:Portland,_Oregon,_its_History_and_Builders_volume_1.djvu/19 total_links=0
+20190428_083353.426 redlink.redlink_end: redlinks_run=0
+20190428_083414.454 page.load: url=en.wikisource.org/wiki/Special:XowaDefaultTab
+20190428_083414.455 page_load: loaded wikitext; page=Special:XowaDefaultTab wikitext_len=0
+20190428_083414.545 page.async: url=en.wikisource.org/wiki/Special:XowaDefaultTab
+20190428_083414.545 redlink.redlink_bgn: page=Special:XowaDefaultTab total_links=0
+20190428_083414.545 redlink.redlink_end: redlinks_run=0
+20190428_083419.223 search.search by page_tbl; search=en.wikisource.org/wiki/index:japanese_wood_engravings.djvu
+20190428_083419.226 search.search by link_tbl; search=en.wikisource.org/wiki/Index:Japanese_Wood_Engravings.djvu
+20190428_083419.231 search.resolving; phrase=en.wikisource.org/wiki/Index:Japanese_Wood_Engravings.djvu score_bgn=999596 score_end=1000001
+20190428_083419.281 search.detaching; phrase=en.wikisource.org/wiki/Index:Japanese_Wood_Engravings.djvu score_bgn=0 score_end=0
+20190428_083422.139 page.load: url=en.wikisource.org/wiki/Index:Japanese_Wood_Engravings.djvu
+20190428_083422.159 page_load: loaded wikitext; page=Index:Japanese_Wood_Engravings.djvu wikitext_len=710
+20190428_083422.190 page.async: url=en.wikisource.org/wiki/Index:Japanese_Wood_Engravings.djvu
+20190428_083422.191 redlink.redlink_bgn: page=Index:Japanese_Wood_Engravings.djvu total_links=106
+20190428_083517.775 search.search by page_tbl; search=en.wikipedia.org/wiki/wikipedia:sandbox?action=edit
+20190428_083517.778 search.search by link_tbl; search=en.wikipedia.org/wiki/Wikipedia:Sandbox?action=edit
+20190428_083517.780 search.resolving; phrase=en.wikipedia.org/wiki/Wikipedia:Sandbox?action=edit score_bgn=999596 score_end=1000001
+20190428_083517.832 search.detaching; phrase=en.wikipedia.org/wiki/Wikipedia:Sandbox?action=edit score_bgn=0 score_end=0
+20190428_083519.210 page.load: url=en.wikipedia.org/wiki/Wikipedia:Sandbox?action=edit
+20190428_083519.361 page_load: loaded wikitext; page=Wikipedia:Sandbox wikitext_len=440
+20190428_083519.395 page.async: url=en.wikipedia.org/wiki/Wikipedia:Sandbox?action=edit
+20190428_083519.395 redlink.redlink_bgn: page=Wikipedia:Sandbox total_links=0
+20190428_083519.395 redlink.redlink_end: redlinks_run=0
+20190428_083556.102 page.async: url=en.wikipedia.org/wiki/Wikipedia:Sandbox?action=edit
+20190428_083556.963 download pass: src='https://commons.wikimedia.org/w/api.php?action=query&format=xml&prop=imageinfo&iiprop=size|url&redirects&titles=File:Japanese_Wood_Engravings.djvu' trg='mem/download.tmp'
+20190428_083557.033 file.get: file=Japanese_Wood_Engravings.djvu width=-1 page=Wikipedia:Sandbox
+20190428_083557.227 download pass: src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Japanese_Wood_Engravings.djvu/page8-220px-Japanese_Wood_Engravings.djvu.jpg' trg='d:/des/xowa_x/file\commons.wikimedia.org\thumb\4\f\3\4\Japanese_Wood_Engravings.djvu\220px-8.jpg'
+20190428_083557.507 redlink.redlink_bgn: page=Wikipedia:Sandbox total_links=6
+20190428_083557.511 redlink.redlink_end: redlinks_run=0
+20190428_083642.041 page.async: url=en.wikipedia.org/wiki/Wikipedia:Sandbox?action=edit
+20190428_083642.165 file.get: file=Japanese_Wood_Engravings.djvu width=-1 page=Wikipedia:Sandbox
+20190428_083644.231 download pass: src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Japanese_Wood_Engravings.djvu/page9-220px-Japanese_Wood_Engravings.djvu.jpg' trg='d:/des/xowa_x/file\commons.wikimedia.org\thumb\4\f\3\4\Japanese_Wood_Engravings.djvu\220px-9.jpg'
+20190428_083644.246 failed to save file: ttl=Japanese_Wood_Engravings.djvu url=d:/des/xowa_x/file\commons.wikimedia.org\thumb\4\f\3\4\Japanese_Wood_Engravings.djvu\220px-9.jpg err=[err 0] <org.sqlite.SQLiteException> [SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed (UNIQUE constraint failed: fsdb_thm.thm_id)
+[err 1] <db_stmt> insert failed: url=data source=d:/des/xowa_x/wiki\en.wikipedia.org\en.wikipedia.org-file-user.xowa;version=3; sql=INSERT INTO fsdb_thm (thm_id, thm_owner_id, thm_w, thm_h, thm_time, thm_page, thm_bin_db_id, thm_size, thm_modified, thm_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+[trace]:
+  org.sqlite.core.DB.newSQLException(DB.java:909)
+  org.sqlite.core.DB.newSQLException(DB.java:921)
+  org.sqlite.core.DB.execute(DB.java:825)
+  org.sqlite.jdbc3.JDBC3PreparedStatement.execute(JDBC3PreparedStatement.java:53)
+  gplx.dbs.qrys.Db_stmt_cmd.Exec_insert(Db_stmt_cmd.java:126)
+  gplx.fsdb.data.Fsd_thm_tbl.Insert(Fsd_thm_tbl.java:70)
+  gplx.fsdb.data.Fsd_thm_tbl.Insert(Fsd_thm_tbl.java:51)
+  gplx.fsdb.meta.Fsm_atr_fil.Insert_thm(Fsm_atr_fil.java:54)
+  gplx.fsdb.meta.Fsm_mnt_itm.Insert_thm(Fsm_mnt_itm.java:55)
+  gplx.xowa.files.Xof_bin_updater.Save_bin(Xof_bin_updater.java:35)
+  gplx.xowa.files.Xof_file_wkr.Save_bin(Xof_file_wkr.java:128)
+  gplx.xowa.files.Xof_file_wkr.Show_img(Xof_file_wkr.java:64)
+  gplx.xowa.files.fsdb.Xof_fsdb_mgr__sql.Fsdb_search_by_list(Xof_fsdb_mgr__sql.java:63)
+  gplx.xowa.files.xfers.Xof_xfer_queue.Exec_v2(Xof_xfer_queue.java:68)
+  gplx.xowa.files.xfers.Xof_xfer_queue.Exec(Xof_xfer_queue.java:33)
+  gplx.xowa.guis.views.Xog_async_wkr.Async_imgs(Xog_async_wkr.java:54)
+  gplx.xowa.guis.views.Xog_async_wkr.Async(Xog_async_wkr.java:36)
+  gplx.xowa.guis.views.Xog_async_wkr.Async(Xog_async_wkr.java:21)
+  gplx.xowa.guis.views.Xog_win_itm.Invk(Xog_win_itm.java:71)
+  gplx.Gfo_invk_.Invk_by_msg(Gfo_invk_.java:34)
+  gplx.core.threads.Thread_adp.run(Thread_adp.java:33)
+  java.lang.Thread.run(Thread.java:748)
+20190428_083644.254 redlink.redlink_bgn: page=Wikipedia:Sandbox total_links=6
+20190428_083644.256 redlink.redlink_end: redlinks_run=0
+20190429_123333.734 term:bgn
+20190429_123333.795 term:app_term
+20190429_123333.805 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.807 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.809 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.811 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.834 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.841 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.842 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.848 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.853 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.854 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.856 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.858 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.859 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.860 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.861 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.862 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.864 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.865 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.867 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.868 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.870 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.872 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.873 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.875 archive dir del: d:/des/xowa_x/user\anonymous\app\tmp\log\20190428_093254.727\
+20190429_123333.875 app term
+20190429_123333.875 term:log_wtr
+20190429_123333.876 term:log_mgr
+20190429_123333.983 term:wiki_mgr
+20190429_123334.152 swt.kit.term:bgn
+20190429_123334.153 swt.kit.term:cursor

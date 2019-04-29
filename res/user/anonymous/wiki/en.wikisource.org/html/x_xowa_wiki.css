@@ -1,0 +1,662 @@
+/*XOWA:MediaWiki:Common.css*/
+/* CSS placed here will be applied to all skins */
+
+/* end baseline See  [[MediaWiki:Gadget-Site.css]]  for remaining CSS loaded */
+/* 
+/*XOWA://en.wikisource.org/w/index.php?title=MediaWiki:Dynimg.css&action=raw&ctype=text/css*/
+/* force images wrapped within this div class to inherit width and ???? */
+div.freedImg {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	font-size: 94%;
+	margin-top: 0.40em !important;
+	margin-right: auto;
+	margin-bottom: 0.50em !important;
+	margin-left: auto;
+	padding: .3px .3px .3px .3px;
+}
+div.freedImg > p.freedImg {
+	width: inherit !important;
+	height: auto;
+	margin-top: 0 !important;
+	margin-right: 0 !important;
+	margin-bottom: 0 !important;
+	margin-left: 0 !important;
+}
+/*  for original freedImg class using paragraph tag  */
+p.freedImg > a, span.freedImg > a {
+	width: inherit !important;
+	height: auto;
+}
+/*  for newer newFreedImg class using span tag  */
+span#mySpan2 > a {
+	width: inherit !important;
+	height: auto;
+}
+.freedImg img[src*="wikipedia"], .freedImg img[src*="wikisource"], /*XOWA:handle file:// paths which will have /commons.wikimedia.org/ but not /wikipedia/ */ .freedImg img[src*="wikimedia"], .freedImg img[src*="score"], .freedImg img[src*="math"] {
+	width: inherit !important;
+	height: auto;
+}
+p.imgCaption, span.imgCaption {
+	font-size: 94%;
+	line-height: 1.0;
+	margin-top: 0.3750em;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 0;
+	padding-top: 0.25em; /* was padding-top: 0.75px; */
+	padding-right: 1.00px;
+	padding-bottom: 0.75px;
+	padding-left: 1.00px;
+}
+/*  old tests of unconstrained images & params  */
+.freedImgClass {
+	height: 100% !important;
+	margin-top: auto !important;
+	margin-right: auto !important;
+	margin-bottom: auto !important;
+	margin-left: auto !important;
+	overflow: hidden !important;
+	text-align: center !important;
+	width: 100% !important;
+}
+/**
+ * The following rules are for rotation testing only.
+ *
+ */
+.rotp90, .rot90 {
+	-moz-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+.rot180 {
+	-moz-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+.rotn90, .rot270 {
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+/* @end */
+
+ */
+
+/*XOWA://en.wikisource.org/w/index.php?title=MediaWiki:Dynimg.css&action=raw&ctype=text/css*/
+/* force images wrapped within this div class to inherit width and ???? */
+div.freedImg {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	font-size: 94%;
+	margin-top: 0.40em !important;
+	margin-right: auto;
+	margin-bottom: 0.50em !important;
+	margin-left: auto;
+	padding: .3px .3px .3px .3px;
+}
+div.freedImg > p.freedImg {
+	width: inherit !important;
+	height: auto;
+	margin-top: 0 !important;
+	margin-right: 0 !important;
+	margin-bottom: 0 !important;
+	margin-left: 0 !important;
+}
+/*  for original freedImg class using paragraph tag  */
+p.freedImg > a, span.freedImg > a {
+	width: inherit !important;
+	height: auto;
+}
+/*  for newer newFreedImg class using span tag  */
+span#mySpan2 > a {
+	width: inherit !important;
+	height: auto;
+}
+.freedImg img[src*="wikipedia"], .freedImg img[src*="wikisource"], /*XOWA:handle file:// paths which will have /commons.wikimedia.org/ but not /wikipedia/ */ .freedImg img[src*="wikimedia"], .freedImg img[src*="score"], .freedImg img[src*="math"] {
+	width: inherit !important;
+	height: auto;
+}
+p.imgCaption, span.imgCaption {
+	font-size: 94%;
+	line-height: 1.0;
+	margin-top: 0.3750em;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 0;
+	padding-top: 0.25em; /* was padding-top: 0.75px; */
+	padding-right: 1.00px;
+	padding-bottom: 0.75px;
+	padding-left: 1.00px;
+}
+/*  old tests of unconstrained images & params  */
+.freedImgClass {
+	height: 100% !important;
+	margin-top: auto !important;
+	margin-right: auto !important;
+	margin-bottom: auto !important;
+	margin-left: auto !important;
+	overflow: hidden !important;
+	text-align: center !important;
+	width: 100% !important;
+}
+/**
+ * The following rules are for rotation testing only.
+ *
+ */
+.rotp90, .rot90 {
+	-moz-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+.rot180 {
+	-moz-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+.rotn90, .rot270 {
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+/* @end */
+
+
+
+/*	Stylesheets being tested	*/
+/* 
+/*XOWA://en.wikisource.org/w/index.php?title=MediaWiki:Coltest.css&action=raw&ctype=text/css*/
+.dotted {
+	background-image:url('https://upload.wikimedia.org/wikipedia/commons/archive/4/41/20110411221233%21Dot_leader_-_10px.svg');
+	background-repeat:repeat-x;
+	background-position:left bottom;
+}
+ul.leaders {
+	position: relative;
+	min-width: 40em;
+	margin-left: 0;
+	padding: 0;
+	overflow-x: hidden;
+	list-style: none;
+}
+ul.leaders li:after {
+	font-family: serif;
+	float: left;
+	width: 0;
+	white-space: nowrap;
+	content:
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . ";
+}
+ul.leaders span:first-child {
+	padding-right: 0.50em;
+	background: white;
+}
+ul.leaders span + span {
+	float: right;
+	position: relative;
+	padding-left: 0.33em;
+	background: white;
+	z-index: 1;
+}
+/**
+ * Help pick a name
+ *
+ * Finally  CSS3 has presented us with a way to mimic the
+ * old-school tags for tables.
+ * 
+ *   v. Alpha - 2016/01/20
+ */
+.fauxTableContainer, .fauxTableContainer *, .faux-table-container, .faux-table-container * {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.fauxTable, .fauxTableSepa, .faux-table, .faux-table-s {
+	display: table;
+	border-collapse: separate;
+	border-spacing: 2px 2px;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	empty-cells: show;
+	text-indent: initial;
+}
+.fauxTableColl, .faux-table-c {
+	display: table;
+	border-collapse: collapse;
+	border-spacing: 0 0;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	empty-cells: hide;
+	text-indent: initial;
+}
+.fauxCaption, .faux-caption {
+	display: table-caption;
+	caption-side: top;
+	text-align: center;
+}
+.fauxColGroup, .faux-colgroup {
+	display: table-column-group;
+}
+.fauxCol, .faux-col {
+	display: table-column;
+}
+.fauxThead, .faux-thead {
+	display: table-header-group;
+	border-color: inherit;
+	vertical-align: middle;
+}
+.fauxTbody, .faux-tbody {
+	display: table-row-group;
+	border-color: inherit;
+	vertical-align: middle;
+}
+.fauxTfoot, .faux-tfoot {
+	display: table-footer-group;
+	border-color: inherit;
+	vertical-align: middle;
+}
+.fauxTr, .faux-tr {
+	display: table-row;
+	border-color: inherit;
+	vertical-align: inherit;
+}
+.fauxTd, .faux-td {
+	display: table-cell;
+	padding-top: 1px;
+	padding-right: 1px;
+	padding-bottom: 1px;
+	padding-left: 1px;
+	vertical-align: inherit;
+}
+.fauxTh, .faux-th {
+	display: table-cell;
+	font-weight: 700;
+	padding-top: 1px;
+	padding-right: 1px;
+	padding-bottom: 1px;
+	padding-left: 1px;
+	text-align: center;
+	vertical-align: inherit;
+}
+/*
+ *==== All namespace header template settings =====
+ */
+#heederContainer {
+	position: relative;
+	border-collapse: collapse;
+	border-spacing: 0 0;
+/*	border-bottom: calc(1rem * 0.0625) solid #DDD;*/
+	empty-cells: hide;
+	font-size: 1rem;
+	line-height: 1.375;
+	margin: 0 auto 0.25em auto;
+	width: 100%;
+}
+.heedertemplate, .heedertemplate-notes {
+	border-top: thin solid #DDD;
+	border-right: thin solid #DDD;
+	border-bottom: thin solid #DDD;
+	border-left: thin solid #DDD;
+	margin: 0 auto 0 auto;
+	width: 100%;
+}
+/* Forward and backward link */
+.gen_heeder_backlink, .gen_heeder_forelink {
+	font-size: calc(1rem * 0.8750);
+	line-height: normal;
+}
+.gen_heeder_backlink {
+	text-align: left;
+	width: 20%;
+}
+.gen_heeder_forelink {
+	text-align: right;
+	width: 20%;
+}
+/* Title field */
+.gen_heeder_title {
+	text-align: center;
+	width: 60%;
+}
+#navigationHeeder, #navigationHeeder .faux-tbody {
+	background-color: #E6F2E6;
+}
+#navigationNotes, #navigationNotes .faux-tbody {
+	background-color: #FAFAFF;
+}
+#navigationNotes .notesField {
+	font-size: 0.75em;
+	line-height: 1.50;
+}
+/*
+ * Help pick a name
+ *
+ * Finally  CSS3 has presented us with a way to mimic the
+ * old-school COL tag for formatting repetitive settings down
+ * all the cells of a single column with only a single set of
+ * values. Format 1 cell and you've formatted the entire column.
+ * 
+ *   v. Beta - 01/04/2015
+**/
+
+/*
+ *      First column of target table
+ */
+table.colTest > tr > td:nth-child(0n+1), table.colTest > * > tr > td:nth-child(0n+1) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	text-align: right;
+	background-color: yellow;
+}
+/*
+ *      Last column of target table
+ */
+table.colTest > tr > td:nth-last-child(-n+1), table.colTest > * > tr > td:nth-last-child(-n+1) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	text-align: right;
+	background-color: lime;
+}
+/*
+ *      Second to last column (or 7th from the left) of target table
+ */
+table.colTest > tr > td:nth-child(8n-1), table.colTest > * > tr > td:nth-child(8n-1) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	text-align: center;
+}
+/*
+ *      Sixth column of target table
+ */
+table.colTest > tr > td:nth-child(8n-2), table.colTest > * > tr > td:nth-child(8n-2) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	text-align: left;
+}
+/*
+ *      Fifth column of target table
+ */
+table.colTest > tr > td:nth-child(8n-3), table.colTest > * > tr > td:nth-child(8n-3) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	text-align: right;
+}
+/*
+ *      Fourth column of target table
+ */
+table.colTest > tr > td:nth-child(0n+4), table.colTest > * > tr > td:nth-child(0n+4) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	font-size: 0.83em;
+	text-align: right;
+	vertical-align: text-top;
+}
+/*
+ *      Third column of target table
+ */
+table.colTest > tr > td:nth-child(0n+3), table.colTest > * > tr > td:nth-child(0n+3) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	text-align: center;
+	letter-spacing: 2px;
+}
+/*
+ *      Second column of target table
+ */
+table.colTest > tr > td:nth-child(0n+2), table.colTest > * > tr > td:nth-child(0n+2) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	text-align: right;
+	font-variant: small-caps;
+}
+/*
+ *       columns of target table
+ */
+
+/*
+ *       columns of target table
+ */
+/* ########## PARK EARLIER REVISIONS BELOW THIS LINE PLEASE ########### */
+/*
+ *      All 'Even' numbered columns of target table
+ *
+table.colTest > tr > td:nth-child(even), table.colTest > * > tr > td:nth-child(even) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	text-align: right;
+}
+ */
+/*
+ *      All 'Odd' numbered columns of target table
+ *
+table.colTest > tr > td:nth-child(odd), table.colTest > * > tr > td:nth-child(odd) {
+	display: table-cell;
+	padding-right: 0.75em;
+	padding-left: 0.75em;
+	text-align: right;
+}
+ */
+/* ########## NEW ADDTIONS BELOW THIS LINE PLEASE ########### */
+
+
+/*
+ *       columns of target table
+ */
+
+/*
+ *       columns of target table
+ */
+
+
+/* @end */
+
+ */
+/*
+/*XOWA://en.wikisource.org/w/index.php?title=MediaWiki:Dynimg.css&action=raw&ctype=text/css*/
+/* force images wrapped within this div class to inherit width and ???? */
+div.freedImg {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	font-size: 94%;
+	margin-top: 0.40em !important;
+	margin-right: auto;
+	margin-bottom: 0.50em !important;
+	margin-left: auto;
+	padding: .3px .3px .3px .3px;
+}
+div.freedImg > p.freedImg {
+	width: inherit !important;
+	height: auto;
+	margin-top: 0 !important;
+	margin-right: 0 !important;
+	margin-bottom: 0 !important;
+	margin-left: 0 !important;
+}
+/*  for original freedImg class using paragraph tag  */
+p.freedImg > a, span.freedImg > a {
+	width: inherit !important;
+	height: auto;
+}
+/*  for newer newFreedImg class using span tag  */
+span#mySpan2 > a {
+	width: inherit !important;
+	height: auto;
+}
+.freedImg img[src*="wikipedia"], .freedImg img[src*="wikisource"], /*XOWA:handle file:// paths which will have /commons.wikimedia.org/ but not /wikipedia/ */ .freedImg img[src*="wikimedia"], .freedImg img[src*="score"], .freedImg img[src*="math"] {
+	width: inherit !important;
+	height: auto;
+}
+p.imgCaption, span.imgCaption {
+	font-size: 94%;
+	line-height: 1.0;
+	margin-top: 0.3750em;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 0;
+	padding-top: 0.25em; /* was padding-top: 0.75px; */
+	padding-right: 1.00px;
+	padding-bottom: 0.75px;
+	padding-left: 1.00px;
+}
+/*  old tests of unconstrained images & params  */
+.freedImgClass {
+	height: 100% !important;
+	margin-top: auto !important;
+	margin-right: auto !important;
+	margin-bottom: auto !important;
+	margin-left: auto !important;
+	overflow: hidden !important;
+	text-align: center !important;
+	width: 100% !important;
+}
+/**
+ * The following rules are for rotation testing only.
+ *
+ */
+.rotp90, .rot90 {
+	-moz-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+.rot180 {
+	-moz-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+.rotn90, .rot270 {
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+/* @end */
+
+*/
+
+/* ######## TESTS OR TEMPS BELOW ######### */
+
+@media screen {
+.mw-body .mw-body-content .hdng { background: none; line-height: normal; margin: 0; padding: 0; border-bottom: medium none currentColor; font-weight: 400; text-decoration: none; font-family: "Linux Libertine",Georgia,Times,serif; overflow: hidden; }
+.mw-body .mw-body-content h1.hdng { margin-top: 0.67em; margin-bottom: 0.67em; font-size: 2.00em; border-bottom: medium none currentColor; font-weight: 400; text-decoration: none; font-family: "Linux Libertine",Georgia,Times,serif; }
+.mw-body .mw-body-content h2.hdng { margin-top: 0.83em; margin-bottom: 0.83em; font-size: 1.50em; border-bottom: medium none currentColor; font-weight: 400; text-decoration: none; font-family: "Linux Libertine",Georgia,Times,serif; }
+.mw-body .mw-body-content h3.hdng { margin-top: 1.00em; margin-bottom: 1.00em; font-size: 1.17em; border-bottom: medium none currentColor; font-weight: 400; text-decoration: none; font-family: "Linux Libertine",Georgia,Times,serif; }
+.mw-body .mw-body-content h4.hdng { margin-top: 1.33em; margin-bottom: 1.33em; font-size: 1.00em; border-bottom: medium none currentColor; font-weight: 400; text-decoration: none; font-family: "Linux Libertine",Georgia,Times,serif; }
+.mw-body .mw-body-content h5.hdng { margin-top: 1.67em; margin-bottom: 1.67em; font-size: 0.83em; border-bottom: medium none currentColor; font-weight: 400; text-decoration: none; font-family: "Linux Libertine",Georgia,Times,serif; }
+.mw-body .mw-body-content h6.hdng { margin-top: 2.33em; margin-bottom: 2.33em; font-size: 0.67em; border-bottom: medium none currentColor; font-weight: 400; text-decoration: none; font-family: "Linux Libertine",Georgia,Times,serif; }
+}
+
+.mw-abusefilter-editor { width: 600px }  /* widens abuse filter editor */
+/* ######## END OF TESTS OR TEMPS ######## */
+
+/*XOWA:MediaWiki:Vector.css*/
+/* CSS placed here will affect users of the Vector skin */
+
+/**
+ * ######## Fixes for Typography Refresh #########
+ */
+
+/* Needed by non-selected tabs to support border-box cascade */
+div.vectorTabs span {
+	height: 100%;
+}
+/* ######## End Typography Refresh Fixes ######### */
+
+/**
+ * ##### Fixes for IE font-size relative units bug #####
+ *
+ * see https://connect.microsoft.com/IE/feedback/details/816709/
+ */
+.mw-body .mw-indicators {
+	position: relative;
+	font-size: 0.8750em;
+	font-size: calc(1.00em * 0.8750);
+	line-height: 1.6;
+/* Move page status indicators down slightly */
+	top: 0.50em;
+	float: right;
+	z-index: 1;
+}
+#bodyContent.mw-body-content {
+	position: relative;
+	font-size: 0.8750em;
+	font-size: calc(1.00em * 0.8750);
+	line-height: 1.6;
+	z-index: 0;
+}
+
+/* ##### End IE font-size relative units bug fixes ##### */
+
+/* Border box sizing for search html form container */
+div#simpleSearch {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/* Menu over FR box */
+div.vectorMenu div {
+	z-index: 2;
+}
+
+/* Styling for updated markers on watchlist, history and recent/related changes */
+li.mw-changeslist-line-watched, li.mw-history-line-updated {
+	list-style-image: url("upload.wikimedia.org/wikipedia/commons/c/c2/ChangedBulletVector.png");
+	list-style-image: url("upload.wikimedia.org/wikipedia/commons/1/19/ChangedBulletVector.svg");
+}
+
+/*
+ * Giving those boring gray standard buttons a Vector-like appearance.
+
+button, input[type="button"], input[type="submit"], input[type="reset"] {
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	border: 1px solid;
+	border-color: #CCC #666 #666 #CCC;
+	padding: 2px 7px;
+	background-color: #FFFFFF;
+	/* @embed */
+/*	background-image: url("en.wikisource.org/w/skins/Vector/images/tab-break.png");
+	background-position: left top;
+	background-repeat: repeat-x;
+}
+button:hover, input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover {
+	background-position: 0% 30%;
+}
+button:active, input[type="button"]:active, input[type="submit"]:active, input[type="reset"]:active {
+	border-color: #666 #AAA #AAA #666;
+}
+ */

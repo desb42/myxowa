@@ -1,0 +1,30 @@
+     0|20181023_143207.311|INFO|task_mgr.load_or_init.bgn|
+     0|20181023_143224.062|INFO|task_mgr.load_or_init.bgn|
+     0|20181023_143250.653|INFO|task_mgr.reload.bgn|
+     0|20181023_143252.982|INFO|task_mgr.reload.bgn|
+     0|20181023_143317.815|INFO|xobc_cmd task bgn|task_id=532|step_id=5198|cmd_id=0|
+     0|20181023_143846.255|INFO|xobc_cmd task download|task_id=532|step_id=5198|trg_url=d:/des/xowa_x/wiki\commons.wikimedia.org\tmp\bldr\Xowa_commonswiki_2017-09_text_ns.006_db.011.zip\download.zip|trg_len=1476942172|
+     0|20181023_143846.255|INFO|xobc_cmd task end|task_id=532|step_id=5198|cmd_id=0|
+     0|20181023_143854.844|INFO|xobc_cmd task end|task_id=532|step_id=5198|cmd_id=1|
+     0|20181023_143930.017|INFO|xobc_cmd task end|task_id=532|step_id=5198|cmd_id=2|
+     0|20181023_143930.030|INFO|xobc_cmd task end|task_id=532|step_id=5198|cmd_id=3|
+     0|20181023_143930.054|INFO|xobc_cmd task end|task_id=532|step_id=5198|cmd_id=4|
+     0|20181023_143952.643|INFO|xobc_cmd task download|task_id=532|step_id=5199|trg_url=d:/des/xowa_x/wiki\commons.wikimedia.org\tmp\bldr\Xowa_commonswiki_2017-09_text_ns.486.zip\download.zip|trg_len=8592697|
+     0|20181023_143952.643|INFO|xobc_cmd task end|task_id=532|step_id=5199|cmd_id=0|
+     0|20181023_143952.687|INFO|xobc_cmd task end|task_id=532|step_id=5199|cmd_id=1|
+     0|20181023_143952.888|INFO|xobc_cmd task end|task_id=532|step_id=5199|cmd_id=2|
+     0|20181023_143952.954|INFO|xobc_cmd task bgn|task_id=532|step_id=5199|cmd_id=4|
+     0|20181023_143952.955|INFO|xobc_cmd task end|task_id=532|step_id=5199|cmd_id=4|
+     0|20181023_152152.095|INFO|xobc_cmd task download|task_id=532|step_id=5200|trg_url=d:/des/xowa_x/wiki\commons.wikimedia.org\tmp\bldr\Xowa_commonswiki_2017-09_text_ns.006_db.012.zip\download.zip|trg_len=1408315700|
+     0|20181023_152152.095|INFO|xobc_cmd task end|task_id=532|step_id=5200|cmd_id=0|
+     0|20181023_152156.354|INFO|xobc_cmd task end|task_id=532|step_id=5200|cmd_id=1|
+     0|20181023_152230.149|INFO|xobc_cmd task end|task_id=532|step_id=5200|cmd_id=2|
+     0|20181023_152230.191|INFO|xobc_cmd task bgn|task_id=532|step_id=5200|cmd_id=4|
+     0|20181023_152230.261|INFO|xobc_cmd task end|task_id=532|step_id=5200|cmd_id=4|
+     0|20181023_153536.195|INFO|xobc_cmd task download|task_id=532|step_id=5201|trg_url=d:/des/xowa_x/wiki\commons.wikimedia.org\tmp\bldr\Xowa_commonswiki_2017-09_text_ns.006_db.013.zip\download.zip|trg_len=377327055|
+     0|20181023_153536.195|INFO|xobc_cmd task end|task_id=532|step_id=5201|cmd_id=0|
+     0|20181023_153537.366|INFO|xobc_cmd task end|task_id=532|step_id=5201|cmd_id=1|
+     0|20181023_153549.530|INFO|xobc_cmd task end|task_id=532|step_id=5201|cmd_id=2|
+     0|20181023_153549.552|INFO|xobc_cmd task bgn|task_id=532|step_id=5201|cmd_id=4|
+     0|20181023_153549.554|INFO|xobc_cmd task end|task_id=532|step_id=5201|cmd_id=4|
+     0|20181023_153549.598|INFO|task_mgr.transfer.bgn|task_uid=532|src=work|trg=done|

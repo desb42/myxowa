@@ -1,0 +1,62 @@
+20190428_085453.124 env.init: version=4.6.1.1903
+20190428_085453.198 env.init: jar_url=classes\; build_date=2019-04-23 12:24:51
+20190428_085453.199 env.init: op_sys=windows64
+20190428_085453.215 
+arguments:
+  [0] = '--root_dir'
+  [1] = 'd:/des/xowa_x/'
+  [2] = '--app_mode'
+  [3] = 'http_server'
+  [4] = '--http_server_port'
+  [5] = '8002'
+
+20190428_085454.406 app.ctor.bgn
+20190428_085454.743 app.ctor.end
+20190428_085454.940 app.boot:servers
+20190428_085454.941 app.boot:app.init
+20190428_085455.350 db.schema.load.bgn: conn=data source=d:/des/xowa_x/user\xowa.user.anonymous.sqlite3;version=3;
+20190428_085455.625 db.schema.load.bgn: conn=data source=d:/des/xowa_x/bin\any\xowa\addon\app\cfg\xo.cfg.sqlite3;version=3;
+20190428_085455.682 app.boot:gfs.run
+20190428_085455.697 gfs.done: d:/des/xowa_x/user\anonymous\app\cfg\os.windows_64.gfs
+20190428_085455.728 gfs.done: d:/des/xowa_x/bin\any\xowa\cfg\app\xowa.gfs
+20190428_085455.729 app.boot:app.launch
+20190428_085455.735 wiki.db_core.v2.standard: url=d:/des/xowa_x/bin\any\xowa\wiki\home\home.xowa
+20190428_085455.757 db.schema.load.bgn: conn=data source=d:/des/xowa_x/bin\any\xowa\wiki\home\home.xowa;version=3;
+20190428_085455.770 fsdb.db_core.v2: type=all url=d:/des/xowa_x/bin\any\xowa\wiki\home\home.xowa
+20190428_085455.734 wiki.init.bgn: home
+20190428_085455.918 wiki.init.end
+20190428_085455.999 site_cfg loaded; wiki=home itm=extensiontags tid=itm
+20190428_085456.055 site_cfg loaded; wiki=home itm=interwikimap tid=itm
+20190428_085456.072 HTTP Server started: Navigate to http://localhost:8002
+20190428_085512.089 wiki.db_core.v2.standard: url=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-core.xowa
+20190428_085512.091 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-core.xowa;version=3;
+20190428_085512.093 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.search.core.xowa;version=3;
+20190428_085512.095 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.search.link-title-ns.000-db.001.xowa;version=3;
+20190428_085512.097 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.search.link-title-ns.999-db.001.xowa;version=3;
+20190428_085512.098 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.000.xowa;version=3;
+20190428_085512.100 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.004.xowa;version=3;
+20190428_085512.102 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.102.xowa;version=3;
+20190428_085512.103 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.100.xowa;version=3;
+20190428_085512.105 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.114.xowa;version=3;
+20190428_085512.107 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.010.xowa;version=3;
+20190428_085512.108 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.014.xowa;version=3;
+20190428_085512.109 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.012.xowa;version=3;
+20190428_085512.111 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.006.xowa;version=3;
+20190428_085512.112 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.008.xowa;version=3;
+20190428_085512.113 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.104.xowa;version=3;
+20190428_085512.114 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.106.xowa;version=3;
+20190428_085512.116 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-text-ns.828.xowa;version=3;
+20190428_085512.117 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.category.core.xowa;version=3;
+20190428_085512.118 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-xtn.category.link-db.001.xowa;version=3;
+20190428_085512.119 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.000.xowa;version=3;
+20190428_085512.120 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.004.xowa;version=3;
+20190428_085512.121 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.014.xowa;version=3;
+20190428_085512.123 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.008.xowa;version=3;
+20190428_085512.124 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.102.xowa;version=3;
+20190428_085512.129 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-html-ns.106.xowa;version=3;
+20190428_085512.130 fsdb.db_core.v2: type=lot url=d:/des/xowa_x/wiki\en.wikisource.org\en.wikisource.org-file-core.xowa
+20190428_085512.080 wiki.init.bgn: en.wikisource.org
+20190428_085512.140 wiki.init.end
+20190428_085512.141 site_cfg loaded; wiki=en.wikisource.org itm=extensiontags tid=cfg
+20190428_085512.142 site_cfg loaded; wiki=en.wikisource.org itm=interwikimap tid=cfg
+20190428_085512.159 page.load: url=en.wikisource.org/wiki/Page:Japanese_Wood_Engravings.djvu/9

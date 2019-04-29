@@ -1,0 +1,96 @@
+/*
+XOWA: the XOWA Offline Wiki Application
+Copyright (C) 2012-2017 gnosygnu@gmail.com
+
+XOWA is licensed under the terms of the General Public License (GPL) Version 3,
+or alternatively under the terms of the Apache License Version 2.0.
+
+You may use XOWA according to either of these licenses as is most appropriate
+for your project on a case-by-case basis.
+
+The terms of each license can be found in the source code repository:
+
+GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
+Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
+*/
+package gplx.xowa.xtns.inputbox; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
+import gplx.core.brys.*;
+import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*;
+import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*;
+public class Xtn_inputbox_nde implements Xox_xnde {
+	private Xop_root_tkn xtn_root;
+	private Bry_bfr bfr;
+	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
+		int itm_bgn = xnde.Tag_open_end(), itm_end = xnde.Tag_close_bgn();
+		if (itm_bgn == src.length)	return;  // NOTE: handle inline where there is no content to parse; EX: <inputbox/>
+		if (itm_bgn >= itm_end)		return;  // NOTE: handle inline where there is no content to parse; EX: a<inputbox/>b
+		Inputbox_xtn_mgr xtn_mgr = (Inputbox_xtn_mgr)wiki.Xtn_mgr().Get_or_fail(Inputbox_xtn_mgr.XTN_KEY);
+		byte[] inputbox_bry = Parse_lines(wiki.Utl__bfr_mkr(), src, itm_bgn, itm_end);
+		xtn_root = xtn_mgr.Parser().Parse_text_to_wdom(Xop_ctx.New__sub_and_page(wiki, ctx), inputbox_bry, true);
+		}
+	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
+		if (xtn_root == null) return;	// inline inputbox; write nothing; EX: <inputbox/>
+		html_wtr.Write_tkn_to_html(bfr, ctx, hctx, xtn_root.Root_src(), xnde, Xoh_html_wtr.Sub_idx_null, xtn_root);
+		//bfr.Add(Div_inputbox_end);			
+		}
+
+	private static byte[] Parse_lines(Bry_bfr_mkr bfr_mkr, byte[] src, int src_bgn, int src_end) {
+		mType_bgn = mType_end = mWidth_bgn = mWidth_end = mBGColor_bgn = mBGColor_end = -1;
+		//Bry_bfr bfr = bfr_mkr.Get_k004();
+		bfr = bfr_mkr.Get_k004();
+		try {
+			int line_bgn = src_bgn; boolean line_is_1st = true;
+			while (line_bgn < src_end) {																		// iterate over each \n
+				int line_end = Bry_find_.Find_fwd(src, Byte_ascii.Nl, line_bgn, src_end);						// find end "\n"
+				if (line_end == Bry_find_.Not_found) line_end = src_end;											// no "\n"; use eos;
+				int eq_pos = Bry_find_.Find_fwd(src, Byte_ascii.Eq, line_bgn, line_end);
+				if (eq_pos != Bry_find_.Not_found) {
+					if (Bry_.Has_at_bgn(src, inputbox_type, line_bgn, line_end)) {
+						mType_bgn = eq_pos+1;
+						mType_end = line_end;
+					}
+					else if (Bry_.Has_at_bgn(src, inputbox_width, line_bgn, line_end)) {
+						mWidth_bgn = eq_pos+1;
+						mWidth_end = line_end;
+					}
+					else if (Bry_.Has_at_bgn(src, inputbox_bgcolor, line_bgn, line_end)) {
+						mBGColor_bgn = eq_pos+1;
+						mBGColor_end = line_end;
+					}
+//					else
+//						bfr.Add_mid(src, line_bgn, line_end);																// add everything from line_bgn to line_end
+				}
+				line_bgn = line_end + 1;																			// +1 to skip over end "\n"
+			}
+			// work out the div here?
+			bfr.Add_bry_many(Div_bgn);
+			if (mBGColor_bgn != -1)
+				bfr.Add_mid(src, mBGColor_bgn, mBGColor_end);
+			else
+				bfr.Add_bry_many(transparent);
+			//fmt.Bld_many(bfr, itm.Id(), itm.Href(), itm_cls, itm.Atr_accesskey_and_title(), itm.Text());
+
+			return bfr.To_bry_and_clear();
+		} finally {bfr.Mkr_rls();}
+	}
+
+	private static int mType_bgn, mType_end, mWidth_bgn, mWidth_end, mBGColor_bgn, mBGColor_end;
+
+	private static byte[]
+	  Div_inputbox_bgn = Bry_.new_a7("<div class=\"mw-inputbox-centered\" style=\"background-color: #ffffff;\">")
+	, Div_inputbox_end = Bry_.new_a7("\n</div>")
+	, inputbox_type = Bry_.new_a7("type")
+	, inputbox_width = Bry_.new_a7("width")
+	, inputbox_bgcolor = Bry_.new_a7("bgcolor")
+	, Div_bgn = Bry_.new_a7("<div class=\"mw-inputbox-centered\" style=\"background-color: ")
+	, transparent = Bry_.new_a7("transparent");
+	;
+	private static final    Bry_fmt fmt = Bry_fmt.Auto_nl_skip_last
+	( "<div class=\"mw-inputbox-centered\" style=\"background-color: ~{bgcolor}\">"
+	, "  <form name=\"searchbox\" class=\"searchbox\" action=\"/wiki/Special:Search\">"
+	, "    <input class=\"~{xtra}searchboxInput mw-ui-input mw-ui-input-inline\" name=\"search\" type=\"~{mhidden}\" value=\"~{mDefaultText}\" placeholder=\"~{mPlaceholderText}\" size=\"~{mWidth}\" dir=\"~{mDir}\" />"
+	, "  </form>"
+	, "</div>"
+	, ""
+	);
+}

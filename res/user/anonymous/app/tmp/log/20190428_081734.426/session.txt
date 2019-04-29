@@ -1,0 +1,136 @@
+20190428_071733.331 env.init: version=4.6.1.1903
+20190428_071733.371 env.init: jar_url=classes\; build_date=2019-04-23 12:24:51
+20190428_071733.371 env.init: op_sys=windows64
+20190428_071733.375 
+arguments:
+  [0] = '--root_dir'
+  [1] = 'd:/des/xowa_x/'
+  [2] = '--app_mode'
+  [3] = 'http_server'
+  [4] = '--http_server_port'
+  [5] = '8002'
+
+20190428_071734.399 app.ctor.bgn
+20190428_071734.618 app.ctor.end
+20190428_071734.743 app.boot:servers
+20190428_071734.744 app.boot:app.init
+20190428_071735.110 db.schema.load.bgn: conn=data source=d:/des/xowa_x/user\xowa.user.anonymous.sqlite3;version=3;
+20190428_071735.354 db.schema.load.bgn: conn=data source=d:/des/xowa_x/bin\any\xowa\addon\app\cfg\xo.cfg.sqlite3;version=3;
+20190428_071735.409 app.boot:gfs.run
+20190428_071735.424 gfs.done: d:/des/xowa_x/user\anonymous\app\cfg\os.windows_64.gfs
+20190428_071735.455 gfs.done: d:/des/xowa_x/bin\any\xowa\cfg\app\xowa.gfs
+20190428_071735.455 app.boot:app.launch
+20190428_071735.461 wiki.db_core.v2.standard: url=d:/des/xowa_x/bin\any\xowa\wiki\home\home.xowa
+20190428_071735.485 db.schema.load.bgn: conn=data source=d:/des/xowa_x/bin\any\xowa\wiki\home\home.xowa;version=3;
+20190428_071735.498 fsdb.db_core.v2: type=all url=d:/des/xowa_x/bin\any\xowa\wiki\home\home.xowa
+20190428_071735.459 wiki.init.bgn: home
+20190428_071735.649 wiki.init.end
+20190428_071735.714 site_cfg loaded; wiki=home itm=extensiontags tid=itm
+20190428_071735.788 site_cfg loaded; wiki=home itm=interwikimap tid=itm
+20190428_071735.837 HTTP Server started: Navigate to http://localhost:8002
+20190428_071755.587 wiki.db_core.v2.standard: url=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-core.xowa
+20190428_071755.592 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-core.xowa;version=3;
+20190428_071755.601 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-core.wbase.xowa;version=3;
+20190428_071755.606 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.004.xowa;version=3;
+20190428_071755.611 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.008.xowa;version=3;
+20190428_071755.616 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000.xowa;version=3;
+20190428_071755.621 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.012.xowa;version=3;
+20190428_071755.625 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.010.xowa;version=3;
+20190428_071755.630 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.014.xowa;version=3;
+20190428_071755.635 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.1198.xowa;version=3;
+20190428_071755.639 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.002.xowa;version=3;
+20190428_071755.644 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.003.xowa;version=3;
+20190428_071755.649 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.120.xowa;version=3;
+20190428_071755.653 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.004.xowa;version=3;
+20190428_071755.658 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.005.xowa;version=3;
+20190428_071755.664 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.006.xowa;version=3;
+20190428_071755.668 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.007.xowa;version=3;
+20190428_071755.673 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.828.xowa;version=3;
+20190428_071755.678 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.008.xowa;version=3;
+20190428_071755.683 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.009.xowa;version=3;
+20190428_071755.688 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.010.xowa;version=3;
+20190428_071755.692 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.011.xowa;version=3;
+20190428_071755.697 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.2600.xowa;version=3;
+20190428_071755.703 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.012.xowa;version=3;
+20190428_071755.708 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.013.xowa;version=3;
+20190428_071755.712 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.014.xowa;version=3;
+20190428_071755.717 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.015.xowa;version=3;
+20190428_071755.722 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.016.xowa;version=3;
+20190428_071755.727 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.017.xowa;version=3;
+20190428_071755.732 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.018.xowa;version=3;
+20190428_071755.737 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.019.xowa;version=3;
+20190428_071755.742 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.020.xowa;version=3;
+20190428_071755.747 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.021.xowa;version=3;
+20190428_071755.751 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.022.xowa;version=3;
+20190428_071755.756 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.023.xowa;version=3;
+20190428_071755.761 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.024.xowa;version=3;
+20190428_071755.766 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.025.xowa;version=3;
+20190428_071755.770 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.026.xowa;version=3;
+20190428_071755.776 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.027.xowa;version=3;
+20190428_071755.780 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.028.xowa;version=3;
+20190428_071755.785 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.029.xowa;version=3;
+20190428_071755.790 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.030.xowa;version=3;
+20190428_071755.795 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.031.xowa;version=3;
+20190428_071755.799 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.032.xowa;version=3;
+20190428_071755.804 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.033.xowa;version=3;
+20190428_071755.809 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.034.xowa;version=3;
+20190428_071755.813 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.035.xowa;version=3;
+20190428_071755.818 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.036.xowa;version=3;
+20190428_071755.823 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.037.xowa;version=3;
+20190428_071755.827 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.038.xowa;version=3;
+20190428_071755.832 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.146.xowa;version=3;
+20190428_071755.837 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.039.xowa;version=3;
+20190428_071755.841 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.040.xowa;version=3;
+20190428_071755.846 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.041.xowa;version=3;
+20190428_071755.851 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-text-ns.000-db.042.xowa;version=3;
+20190428_071755.856 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-xtn.category.core.xowa;version=3;
+20190428_071755.861 db.schema.load.bgn: conn=data source=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-xtn.category.link-db.001.xowa;version=3;
+20190428_071755.865 fsdb.db_core.v2: type=lot url=d:/des/xowa_x/wiki\www.wikidata.org\www.wikidata.org-file-core.xowa
+20190428_071755.555 wiki.init.bgn: www.wikidata.org
+20190428_071755.948 wiki.init.end
+20190428_071755.963 site_cfg loaded; wiki=www.wikidata.org itm=extensiontags tid=cfg
+20190428_071755.969 site_cfg loaded; wiki=www.wikidata.org itm=interwikimap tid=cfg
+20190428_071756.078 page.load: url=www.wikidata.org/wiki/Wikidata:Main_Page?action=popup&popup_mode=init&popup_id=popup_1
+20190428_071758.460 page_load: loaded wikitext; page=Wikidata:Main_Page wikitext_len=185
+20190428_071758.747 failed to get popup: href=www.wikidata.org/wiki/Wikidata:Main_Page?action=popup&popup_mode=init&popup_id=popup_1 err=[err 0] <gplx> eos reached inside quote
+[trace]:
+  gplx.langs.jsons.Json_parser.Make_string(Json_parser.java:118)
+  gplx.langs.jsons.Json_parser.Make_kv(Json_parser.java:64)
+  gplx.langs.jsons.Json_parser.Make_nde(Json_parser.java:53)
+  gplx.langs.jsons.Json_parser.Parse(Json_parser.java:40)
+  gplx.xowa.xtns.wbases.stores.Wbase_doc_mgr.Load_wdoc_or_null(Wbase_doc_mgr.java:113)
+  gplx.xowa.xtns.wbases.stores.Wbase_doc_mgr.Get_by_exact_id_or_null(Wbase_doc_mgr.java:78)
+  gplx.xowa.xtns.wbases.Wdata_wiki_mgr.Popup_text(Wdata_wiki_mgr.java:125)
+  gplx.xowa.htmls.modules.popups.Xow_popup_parser.Parse(Xow_popup_parser.java:73)
+  gplx.xowa.htmls.modules.popups.Xow_popup_mgr.Get_popup_html(Xow_popup_mgr.java:114)
+  gplx.xowa.htmls.modules.popups.Xow_popup_mgr.Show_init(Xow_popup_mgr.java:52)
+  gplx.xowa.apps.servers.http.Http_server_mgr.Parse_page_to_html(Http_server_mgr.java:149)
+  gplx.xowa.apps.servers.http.Http_server_wkr.Write_wiki(Http_server_wkr.java:115)
+  gplx.xowa.apps.servers.http.Http_server_wkr.Process_get(Http_server_wkr.java:86)
+  gplx.xowa.apps.servers.http.Http_server_wkr.Run(Http_server_wkr.java:64)
+  gplx.xowa.apps.servers.http.Http_server_wkr.Invk(Http_server_wkr.java:348)
+  gplx.Gfo_invk_.Invk_by_msg(Gfo_invk_.java:34)
+  gplx.core.threads.Thread_adp.run(Thread_adp.java:33)
+  java.lang.Thread.run(Thread.java:748)
+20190428_071824.004 page.load: url=www.wikidata.org/wiki/Wikidata:Main_Page?action=popup&popup_mode=init&popup_id=popup_1
+20190428_071824.171 page_load: loaded wikitext; page=Wikidata:Main_Page wikitext_len=185
+20190428_071824.173 failed to get popup: href=www.wikidata.org/wiki/Wikidata:Main_Page?action=popup&popup_mode=init&popup_id=popup_1 err=[err 0] <gplx> eos reached inside quote
+[trace]:
+  gplx.langs.jsons.Json_parser.Make_string(Json_parser.java:118)
+  gplx.langs.jsons.Json_parser.Make_kv(Json_parser.java:64)
+  gplx.langs.jsons.Json_parser.Make_nde(Json_parser.java:53)
+  gplx.langs.jsons.Json_parser.Parse(Json_parser.java:40)
+  gplx.xowa.xtns.wbases.stores.Wbase_doc_mgr.Load_wdoc_or_null(Wbase_doc_mgr.java:113)
+  gplx.xowa.xtns.wbases.stores.Wbase_doc_mgr.Get_by_exact_id_or_null(Wbase_doc_mgr.java:78)
+  gplx.xowa.xtns.wbases.Wdata_wiki_mgr.Popup_text(Wdata_wiki_mgr.java:125)
+  gplx.xowa.htmls.modules.popups.Xow_popup_parser.Parse(Xow_popup_parser.java:73)
+  gplx.xowa.htmls.modules.popups.Xow_popup_mgr.Get_popup_html(Xow_popup_mgr.java:114)
+  gplx.xowa.htmls.modules.popups.Xow_popup_mgr.Show_init(Xow_popup_mgr.java:52)
+  gplx.xowa.apps.servers.http.Http_server_mgr.Parse_page_to_html(Http_server_mgr.java:149)
+  gplx.xowa.apps.servers.http.Http_server_wkr.Write_wiki(Http_server_wkr.java:115)
+  gplx.xowa.apps.servers.http.Http_server_wkr.Process_get(Http_server_wkr.java:86)
+  gplx.xowa.apps.servers.http.Http_server_wkr.Run(Http_server_wkr.java:64)
+  gplx.xowa.apps.servers.http.Http_server_wkr.Invk(Http_server_wkr.java:348)
+  gplx.Gfo_invk_.Invk_by_msg(Gfo_invk_.java:34)
+  gplx.core.threads.Thread_adp.run(Thread_adp.java:33)
+  java.lang.Thread.run(Thread.java:748)

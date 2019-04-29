@@ -1,0 +1,1305 @@
+/*XOWA:MediaWiki:Common.css*/
+/*
+==This is for all the skins==
+Remember no preview 
+*/
+
+.mobile-only {
+  display: none;
+}
+
+.votings-only-0 .votings-non-0,
+.votings-only-non-0 .votings-0 {
+  display: none;
+}
+
+abbr.dtstart {
+ border-bottom: none !important;
+}
+
+/*
+I copied some things over from [[Mediawiki:monobook.css]] that should be in here
+*/
+
+div#siteNotice {text-align:center;
+}
+/*rss icon. see [[template talk:latest news]] */
+
+*.rss {
+color: #FFFFFF; background-color: #FF5500; background-image: none !important; border-color: #FF5500; border-style: outset; text-decoration: none !important; padding-left: 0.2em; padding-right: 0.2em; border-width: 0.15em; font-size: 95%; line-height: 95%; font-family: verdana, sans-serif; font-weight: bold;
+}
+
+/*kill auto-underline in opera (hopefully) make cool hover effect. possibly change to :active for hover effect. [[user:bawolff|Bawolff]] ☺☻[[image:smile.png]] 04:59, 1 January 2006 (UTC). removed no underline, as Amgine didn't like it. [[user:bawolff|Bawolff]] ☺☻[[image:smile.png]] 05:04, 1 January 2006 (UTC) */
+*.rss:hover {border-style:inset;
+}
+
+
+div.no-bullet-list ul
+{
+    list-style-type: none;
+    list-style-image: none;
+}
+
+
+/*
+/* Interlining in titles. To prevent title overlap. Not sure if should be in monobook.css as this is diff in diff skins. yell at me if this breaks anything in any of the skins. */
+ 
+h1.firstHeading { line-height: 1em; }
+
+
+/*
+==Backgrounds==
+ */
+div#football-bg-1 { 
+background-image: url('upload.wikimedia.org/wikinews/en/5/5a/Badge_right_top.png');
+background-repeat: no-repeat;
+background-position: top left;
+background-attachment: fixed;
+}
+/************************/
+/*
+
+==Dynamic hidden boxes==
+Copied from [[w:Mediawiki:monobook.css]] (not common.css). rev: en.wikipedia.org/w/index.php?title=MediaWiki:Monobook.css&oldid=73496939 originally from german 'pedia apearently. note: proably under GFDL.
+Might make work better*/
+ div.Boxmerge,
+ div.NavFrame {
+         margin: 0px;
+         padding: 2px;
+         border: 1px solid #aaaaaa;
+         text-align: center;
+         border-collapse: collapse;
+         font-size: 95%;
+ }
+ div.Boxmerge div.NavFrame {
+         border-style: none;
+         border-style: hidden;
+ }
+ div.NavFrame + div.NavFrame {
+         border-top-style: none;
+         border-top-style: hidden;
+ }
+ div.NavPic {
+         background-color: #ffffff;
+         margin: 0px;
+         padding: 2px;
+         float: left;
+ }
+ div.NavFrame div.NavHead {
+         height: 1.6em;
+         font-weight: bold;
+         font-size: 100%;
+         background-color: #efefef;
+         position:relative;
+         padding-right:2em; /*Possibly should be in ch. stop down arrow from running together w/title */
+         overflow:hidden; /*otherwise runs into text*/
+ }
+ div.NavFrame p {
+         font-size: 100%;
+ }
+ div.NavFrame div.NavContent {
+         font-size: 100%;
+ }
+ div.NavFrame div.NavContent p {
+         font-size: 100%;
+ }
+ div.NavEnd {
+         margin: 0px;
+         padding: 0px;
+         line-height: 1px;
+         clear: both;
+ }
+ a.NavToggle {
+         position:absolute;
+         top:0px;
+         right:3px;
+         font-weight:normal;
+         font-size:smaller;
+ }
+/*
+===Ugly nav===
+*/
+ div.UglyNav div.Boxmerge,
+ div.UglyNav div.NavFrame {
+         margin: 0px;
+         padding: 2px;
+         border: none;
+         text-align: left;
+         border-collapse: inherit;
+         font-size: 100%;
+ }
+
+
+ div.UglyNav div.NavPic {
+         background-color: transparent;
+         margin: 0px;
+         padding: 2px;
+         float: none;
+ }
+ div.UglyNav div.NavFrame div.NavHead {
+         height: auto;
+         font-weight: normal;
+         font-size: medium;
+         background-color: transparent;
+         position:relative;
+ }
+ div.UglyNav div.NavFrame p {
+         font-size: medium;
+ }
+ div.UglyNav div.NavFrame div.NavContent {
+         font-size: medium;
+ }
+ div.UglyNav div.NavFrame div.NavContent p {
+         font-size: medium;
+ }
+
+/* Standard table formatting */
+/* <pre><nowiki> */
+ 
+/* wikitable/prettytable class for skinning normal tables */
+ 
+table.wikitable,
+table.prettytable {
+  margin: 1em 1em 1em 0;
+  background: #f9f9f9;
+  border: 1px #aaaaaa solid;
+  border-collapse: collapse;
+}
+ 
+table.wikitable th, table.wikitable td,
+table.prettytable th, table.prettytable td {
+  border: 1px #aaaaaa solid;
+  padding: 0.2em;
+}
+ 
+table.wikitable td,
+table.prettytable td {
+  background: #f9f9f9;
+}
+ 
+table.wikitable th,
+table.prettytable th {
+  background: #f2f2f2;
+  text-align: center;
+}
+ 
+table.wikitable caption,
+table.prettytable caption {
+  margin-left: inherit;
+  margin-right: inherit;
+}
+
+/************************* 
+ ** Score board styles  **
+ *************************  
+
+Used to be at [[user:SportsBot/common.css]] */
+
+table.sportsbotScoreboard {
+  border: 1px solid #000;
+  margin-bottom: 5px;
+}
+table.sportsbotScoreboard th {
+  background-color: #7fa3b0;
+}
+table.sportsbotScoreboard td {
+  width: 30px;
+  text-align: center;
+}
+table.sportsbotScoreboard td.team {
+  font-size: 90%;
+  width: 150px !important;
+  text-align: left !important;
+}
+
+
+
+/* == Standings table style == */
+.standingstable {
+    border: 1px solid #000000;
+    font-size: 90%;
+}
+
+.standingssection {
+    font-size: 125%;
+}
+
+.standingssubsection {
+    vertical-align: middle;
+    font-size: 110%;
+    background-color: #b4b4b4;
+}
+
+.standingsheader {
+    background-color: #c5c5c5;
+    text-align:center;
+    font-weight: bold;
+}
+
+.standingsrow {
+    background-color: #f7f7f7;
+    text-align:center;
+}
+
+.standingsrow2 {
+    background-color: #e6e6e6;
+    text-align:center;
+}
+
+.standingsrow .team, .standingsrow2 .team {
+    width:200px;
+    text-align:left;
+}
+
+.nounderlines a {
+    text-decoration: none;
+}
+
+/* Article message box template styles */
+table.ambox {
+  width: 80%; 
+  margin: 0 auto; 
+  border-collapse: collapse; 
+  background: #f8fcff; 
+  border: 1px solid #aaa; 
+  border-left: 15px solid #39f;       /* Default "notice" blue */
+}
+table.ambox th, table.ambox td {      /* The message body cell(s) */
+  padding: 0.25em 0.5em;              /* 0.5em left/right */
+}
+table.ambox td.ambox-image {          /* The left image cell */
+  width: 52px; 
+  padding: 2px 0px 2px 0.5em;         /* 0.5em left, 0px right */
+  text-align: center; 
+}
+table.ambox td.ambox-imageright {     /* The right image cell */
+  width: 52px; 
+  padding: 2px 0.5em 2px 0px;         /* 0px left, 0.5em right */
+  text-align: center; 
+}
+table.ambox-notice {
+  border-left: 15px solid #39f;       /* Blue */
+/* border-right: 10px solid #39f; */  /* If you want two blue bars */
+}
+table.ambox-serious {
+  border-left: 15px solid #c00;       /* Red */
+}
+table.ambox-content {
+  border-left: 15px solid #f63;       /* Orange */
+}
+table.ambox-style {
+  border-left: 15px solid #fc3;       /* Yellow */
+}
+table.ambox-merge {
+  border-left: 15px solid #95b;       /* Purple */
+}
+
+/* Explicit article message box template styles */
+table.xambox {
+  width: 80%; 
+  margin: 0 auto; 
+  border-collapse: collapse; 
+  background: #f8fcff; 
+  border: 1px solid #aaa; 
+  border-left: 15px solid #39f;       /* Default "notice" blue */
+}
+table.xambox th, table.xambox td {    /* The message body cell(s) */
+  padding: 0.25em 0.5em;              /* 0.5em left/right */
+}
+table.xambox td.xambox-image {        /* The left image cell */
+  width: 52px; 
+  padding: 2px 0px 2px 0.5em;         /* 0.5em left, 0px right */
+  text-align: center; 
+}
+table.xambox td.xambox-imageright {   /* The right image cell */
+  width: 52px; 
+  padding: 2px 0.5em 2px 0px;         /* 0px left, 0.5em right */
+  text-align: center; 
+}
+table.xambox-type-notice {
+  border-left: 15px solid #39f;       /* Blue */
+/* border-right: 10px solid #39f; */  /* If you want two blue bars */
+}
+table.xambox-type-serious {
+  border-left: 15px solid #c00;       /* Red */
+}
+table.xambox-type-content {
+  border-left: 15px solid #f63;       /* Orange */
+}
+table.xambox-type-style {
+  border-left: 15px solid #fc3;       /* Yellow */
+}
+table.xambox-type-merge {
+  border-left: 15px solid #95b;       /* Purple */
+}
+
+/* rounded corners class for block elements */
+.roundedCorners {
+  -moz-border-radius: 1em;
+  -webkit-border-radius: 1em;
+  border-radius: 1em;
+}
+
+.semiblanking {
+ display: none;
+}
+
+/*See [[MediaWiki:NavigationTabs.js]]. copied from wikibooks*/
+.navtabs .tabs li { list-style:none; }
+ .navtabs .tabs a {
+   text-decoration:none;
+   text-transform:uppercase;
+   outline-width:0px;
+   font-size:x-small;
+   font-weight:bold;
+   color:black;
+ }
+ 
+ .navtabs .tabs .inactive { background:#bbb; padding:1ex; }
+ .navtabs .tabs .selected { background:#999; padding:1.1ex; }
+ .navtabs .tabs .inactive:hover { background:#f75; }
+ .navtabs .contents { padding:1ex; border:3px solid #999; }
+
+/* hide the Comments_talk namespace */
+body.ns-102 #ca-talk {display:none;}
+body.ns-103 #ca-edit {display:none;}
+body.ns-103 #ca-addsection {display:none;}
+body.ns-90 #ca-talk {display: none;} /*thread pseudo ns*/
+
+/* Other comments/lqt stuff. (needs js) */
+
+.lqt_start_discussion span.ui-button-text {font-size: medium;font-weight: bold; color:black}
+.lqt-talkpage-header { text-align: center }
+.lqt-talkpage-header {border: none}
+html body .lqt-edit-introduction {display: none}
+html .lqt-post-wrapper {border-width: thin }
+html .lqt-thread-topmost > .lqt-post-wrapper {border-width: thin }
+.lqt_toc {margin-bottom: 2em;}
+.lqt_threadlevel_commands {margin-top: 0.5em;}
+.lqt_thread_heading {border-bottom: none }
+.lqt_view_options {display: none }
+html .lqt-thread-replies-interruption {border-left: thin solid silver }
+
+.lqt-command-summarize {display: none !important}
+/* end other comments lqt stuff */
+
+/*Ticker2 (animated ticker)*/
+ul.actualTicker li {list-style-type:none; list-style-image:none;}/*mostly for IE*/
+ul.actualTicker li {display:inline;}
+ul.actualTicker span.tickerIntroduction {font-weight:bold;padding-right:0.5em;}
+
+div.isATicker, div#singleTickerForPage {display:none;}
+
+
+/*###################
+##Tabber stuff. See code in mediawiki:common.js 
+################*/
+
+/*===Wikinews specific==== */
+
+/*horizTabBox*/
+
+div.horizTabBox ul.tabbernav li a {
+ background-color:#7ec9fd;
+margin-left: 15px;
+border-bottom: solid 1px #7ec9fd;
+padding-left:0.8em;
+padding-right:0.8em;
+-moz-border-radius:1em 1em 0 0; /* this should be replaced with images for browsers that don't support it somehow*/
+/*webkit doesn't like too big radii or having it in the shorthand form. Make sure radi < 1.7em */
+-webkit-border-top-left-radius:1em;
+-webkit-border-top-right-radius:1em;
+border-radius:1em 1em 0 0;
+}
+
+div.horizTabBox ul.tabbernav li.tabberactive a
+{
+ background-color: #bce1ff;
+ border-bottom: 3px solid #bce1ff;
+ margin-left:10px;
+}
+div.horizTabBox .tabbertab 
+{
+border:solid 2px #7ec9fd;
+padding:0;
+}
+div.horizTabBox ul.tabbernav li a:hover
+{
+ color: #000;
+ background: #bce1ff;
+ border-bottom: 3px solid #bce1ff;
+}
+
+div.horizTabBox ul.tabbernav li.tabberactive a:hover
+{
+ color: #000;
+
+}
+div.horizTabBox {
+ width:50%;
+ text-align:left;
+ margin-left:auto;
+ margin-right:auto;
+ /*min-width:41em;
+ max-width:47em;
+ */
+}
+
+/* IMPORTANT: keep width:80% above or it will suck on IE*/
+
+
+/* pict box */
+
+div.pictChanger ul.tabbernav {line-height: 2.4;}
+div.pictChanger ul.tabbernav li a {border: #CCC 1px solid}
+div.pictChanger {width:400px;}
+div.pictChanger div.tabbertab {text-align:left;}
+
+div.tabberNoBorder div.tabbertab, 
+div.tabberNoBorder ul.tabbernav {
+    border: none;
+}
+
+/*
+===Generic defaults===
+
+Copied from http://www.barelyfitz.com/projects/tabber/example.css used under mit license
+see http://www.barelyfitz.com/projects/tabber/
+*/
+/* $Id: example.css,v 1.5 2006/03/27 02:44:36 pat Exp $ */
+
+/*--------------------------------------------------
+  REQUIRED to hide the non-active tab content.
+  But do not hide them in the print stylesheet!
+  --------------------------------------------------*/
+.tabberlive .tabbertabhide {
+ display:none;
+}
+
+/*--------------------------------------------------
+  .tabber = before the tabber interface is set up
+  .tabberlive = after the tabber interface is set up
+  --------------------------------------------------*/
+.tabber {
+}
+.tabberlive {
+ margin-top:1em;
+}
+
+/*--------------------------------------------------
+  ul.tabbernav = the tab navigation list
+  li.tabberactive = the active tab
+  --------------------------------------------------*/
+ul.tabbernav
+{
+ margin:0;
+ padding: 3px 0;
+ border-bottom: 1px solid #CCC;
+ font: bold 12px Verdana, sans-serif;
+}
+
+ul.tabbernav li
+{
+ list-style: none;
+ margin: 0;
+ display: inline;
+}
+
+ul.tabbernav li a
+{
+ padding: 3px 0.5em;
+ margin-left: 3px;
+ border: 1px solid #ccc;
+ border-bottom: none;
+ background: #f2f7ff;
+ text-decoration: none;
+}
+
+ul.tabbernav li a:link { color: #448; }
+ul.tabbernav li a:visited { color: #667; }
+
+ul.tabbernav li a:hover
+{
+ color: #000;
+ background: #fff9f2;
+ border-color: #CCC;
+}
+
+ul.tabbernav li.tabberactive a
+{
+ background-color: #fff;
+ border-bottom: 1px solid #fff;
+}
+
+ul.tabbernav li.tabberactive a:hover
+{
+ color: #000;
+ background: white;
+ border-bottom: 1px solid white;
+}
+
+/*--------------------------------------------------
+  .tabbertab = the tab content
+  Add style only after the tabber interface is set up (.tabberlive)
+  --------------------------------------------------*/
+.tabberlive .tabbertab {
+ padding:5px;
+ border:1px solid #CCC;
+ border-top:0;
+
+ /* If you don't want the tab size changing whenever a tab is changed
+    you can set a fixed height */
+
+ /* height:200px; */
+
+ /* If you set a fix height set overflow to auto and you will get a
+    scrollbar when necessary */
+
+ /* overflow:auto; */
+}
+
+/* If desired, hide the heading since a heading is provided by the tab */
+.tabberlive .tabbertab h2 {
+ display:none;
+}
+.tabberlive .tabbertab h3 {
+ display:none;
+}
+
+/* Example of using an ID to set different styles for the tabs on the page */
+.tabberlive#tab1 {
+}
+.tabberlive#tab2 {
+}
+.tabberlive#tab2 .tabbertab {
+ height:200px;
+ overflow:auto;
+}
+
+/* Infobox templates */
+.infobox {
+   border: 1px solid #aaa;
+   background-color: #f9f9f9;
+   color: black;
+   margin-bottom: 0.5em;
+   margin-left: 1em;
+   padding: 0.2em;
+   float: right;
+   clear: right;
+}
+.infobox td,
+.infobox th {
+   vertical-align: middle;
+}
+.infobox caption {
+   font-size: larger;
+   margin-left: inherit;
+}
+.infobox.bordered {
+   border-collapse: collapse;
+}
+.infobox.bordered td,
+.infobox.bordered th {
+   border: 1px solid #aaa;
+}
+.infobox.bordered .borderless td,
+.infobox.bordered .borderless th {
+   border: 0 solid #aaa;
+}
+.infobox.sisterproject {
+   width: 20em;
+   font-size: 90%;
+}
+ 
+.archive-box {
+   border: 1px solid #aaf;
+   background-color: #f2f2f9;
+   color: #000;
+   margin-bottom: 0.5em;
+   margin-left: 1em;
+   padding: 0.2em;
+   float: right;
+   clear: right;
+   text-align: center;
+}
+
+
+/* [[Template:Lead 2.0]] */
+ .l_table {
+  border: 0px;
+  height: 100%;
+  width: 100%;
+ }
+
+ .l_table tr {
+  height: 100%;
+ }
+
+ .l_table td {
+  width: 100%;
+ }
+
+ .l_box {
+ }
+
+ .l_image {
+  vertical-align:top;
+  padding-bottom: 5px;
+  padding-right: 8px;
+  float: left;
+ }
+
+ .l_title {
+  font-size: 150%;
+  font-style: bold;
+  vertical-align: top;
+  padding-bottom: 5px;
+ }
+
+ .l_title a:link {
+  color: #000000;
+  text-decoration: none;
+ }
+ 
+ .l_title a:visited {
+  color: #000000;
+  text-decoration: none;
+ }
+
+ .l_title a:hover {
+  color: #000000;
+  text-decoration: underline;
+ }
+
+ .l_title a:active {
+  color: #000000;
+  text-decoration: none;
+ }
+
+ .l_summary {
+  vertical-align: top;
+  font-size: 100%;
+ }
+
+ .l_tail {
+  font-size: 90%;
+  height:15px;
+ }
+
+ .l_img_type {
+  /*float: left;*/
+  padding-bottom: 3px;
+ }
+
+
+ .l_edit {
+  clear: left;
+  float: right;
+ }
+/*end lead stuff */
+/* float in the title bar (Ex little FA icons in top-right corner) */
+/*! important is to overide legacy inline stuff */
+/*Vector.css overides this for vector! */
+/*This assumes that the page body is not relatively positioned (aka in everything but vector)*/
+.float_in_title { position: absolute; z-index: 100; right: 20px; top: 20px  !important;}
+
+/* Temp for google News */
+ .GoogleNews {
+  display:none;
+  font-size: 50%; 
+ }
+
+/* Remove Search box from LQT */
+.lqt-talkpage-search{
+ display: none;
+}
+
+/*Make js errors more noticeable (For EasyPeerReview) */
+#mw-js-message.mw-js-message-mwapi-error { border: thick red solid ; font-size:larger}
+
+
+/* For main page, but used elsewhere so moved here */
+/* [[Template:Main page header]] */
+/* DO NOT USE common.css/Main Page */
+/* i got annoyed this only worked on main page - bawolff */
+ .mp_header {
+  background-image:url('upload.wikimedia.org/wikipedia/commons/7/7d/Wikinews_banner_2.png');
+  background-repeat: no-repeat;
+  background-position: top right;
+  width: 100%;
+  clear: both;
+  background-color: #F0F8FF;
+  border: 1px solid #ccc;
+  padding: 1px 10px 1px 10px;
+ }
+
+ .mp_header_left {
+  width: 50%;
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle; 
+ }
+
+ .welcome_to_wn {
+  font-size: 200%;
+  font-weight: bold;
+  padding-top: 3px;
+  padding-bottom: 8px;
+  letter-spacing: 1px;
+ }
+
+ .freenews {
+  font-size: 120%;
+ }
+
+ .mp_header_center {
+  width: 2px;
+  align: center;
+  white-space: nowrap;
+ }
+
+ .mp_header_right {
+  width: 50%;
+  text-align: right;
+  white-space: nowrap;
+  vertical-align: top;
+ }
+
+ .header_left_text {
+  font-size: 90%;
+  margin-bottom: -4px;
+ }
+
+/* Stuff only for main page. Do not use common.css/Main_Page (Flash of unstyled content). */
+
+ body.page-Main_Page #firstHeading, #footer-info-lastmod {
+  display: none;
+ }
+
+/*this is also in [[mediawiki:monobook.css]] for some reason... */
+
+body.page-Main_Page #mw-revisiontag, #mw-fr-revisiontag {
+  display: none;
+ }
+
+body.page-Main_Page #catlinks {
+  display: none;
+ }
+
+/*edit links for leads that are semi-protected. The js for this only works on main page. */
+ body.notAutoconfirmed .hideFromNewbies {
+  visibility: hidden;
+ }
+
+/* [[Main Page]] */
+body.page-Main_Page .mw-js-message-readyArticles {
+  display: none !important;
+ }
+
+ .the_table {
+  width: 100%;
+  border:solid #EFEFF1;
+  -border-radius: 6px;
+  background: white;
+  padding: 0px;
+  vertical-align: top;
+ }
+
+ .lead_big {
+  padding: 3px 3px 3px 3px;
+  vertical-align: top;
+  width: 66%;
+ }
+
+ .lead_normal {
+  padding: 3px 6px 3px 6px;
+  border-top: 1px solid #cfcfbf;
+  vertical-align: top;
+  width: 33%;
+ }
+
+ .upper_lead {
+  height: 100%; /* fixes stretching of table (in firefox anyways)*/
+ }
+
+ .l_box {
+  vertical-align: top;
+  }
+
+ .latest_news {
+  vertical-align: top;
+  padding: 3px 3px 3px 3px;
+  width: 33%;
+ }
+
+ .portals {
+  padding: 5px 8px 5px 8px;
+ }
+
+ .main_popular {
+  padding: 5px 8px 5px 8px;
+  vertical-align: top;
+ }
+
+ .recent_interviews {
+  border-left: 1px solid #cfcfbf;
+  border-right: 1px solid #cfcfbf;
+  padding: 5px 8px 5px 8px;
+  vertical-align: top;
+ }
+
+ .original_stories {
+  padding: 5px 8px 5px 8px;
+  vertical-align: top;
+ }
+
+ .main_about {
+  padding: 5px 8px 5px 8px;
+  vertical-align: top;
+  width: 33%;
+  font-size: small; 
+ }
+
+ .main_write {
+  border-left: 1px solid #cfcfbf;
+  border-right: 1px solid #cfcfbf;
+  padding: 5px 8px 5px 8px;
+  vertical-align: top;
+  width: 33%;
+  font-size:small; 
+ }
+
+ .main_write input.createboxInput {
+  width: 100%;
+ }
+
+ .main_devel {
+  padding: 5px 8px 5px 8px;
+  vertical-align: top;
+  width: 33%;
+ }
+
+ .breaker {
+  padding: 5px 8px 5px 8px;
+ }
+
+
+/* [[Template:Main headlines]] */
+ .more_news {
+  font-size: 125%;
+  font-weight: bold;
+ }
+
+ .latest_news_text {
+  text-align: left;
+  font-size: 90%;
+  color: gray;
+  padding-left: 0px;
+  padding-right: 0px;
+ }
+
+ .latest_news_unchecked {
+  text-align: left;
+  font-size: 85%;
+  color: #111111;
+  padding-left: 0px;
+  padding-right: 0px;
+ }
+
+
+
+/* [[Template:Main about]] */
+ .about_floater {
+  float: right;
+  padding-left: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+  font-size: small;
+  width: 75px;
+ }
+
+/* This is for edit the templates, not the leads. */
+body.page-Main_Page .editor a {
+  background: none !important;
+  padding: 0 !important;
+  display: none;
+  /* To turn the edit links back on, add the following to your personal CSS: 
+   .editor a { display: inline !important; }
+  */
+ }
+
+ .minihead {
+  font-size: 125%;
+  font-weight: bold;
+ }
+
+ .more {
+  font-size: 75%;
+  float: right;
+ }
+
+/*Make a border when write an article is linked to */
+body.page-Main_Page #writeAnArticleCell:target {border: black medium solid}
+
+
+
+/* end stuff for main page only */
+
+/* Annoying flagged revs "you have unreviewed pages on your watchlist" */
+#mw-fr-watchlist-pending-notice { display: none }
+
+/* Make the flagged box not be a PITA for non-js clients */
+
+div#mw-fr-revisiondetails {position:static; border-top: none}
+div#mw-fr-revisiontag { border: none}
+div.flaggedrevs_short_basic { text-align:right; border: 1px solid #CCCCCC;padding:1px;}
+
+/* Clean images' borders */
+div.thumbinner { background:#FFFFFF; border:0; }
+html body div.thumbcaption { font-size:90%; padding-left:0 !important; padding-right:0 !important; padding-top:0.5em !important; }
+div.magnify { display:none; }
+
+/* make redirect categories appear as red links at bottom of the page */
+#catlinks a.mw-redirect  {color: #BA0000}
+
+/* Content below blatantly copied from en.wikipedia.org/w/index.php?title=MediaWiki:Common.css&oldid=414986853 - licensed under CC-BY-SA 3.0 , until specified */
+/* Cell sizes for ambox/tmbox/imbox/cmbox/ombox/fmbox/dmbox message boxes */
+th.mbox-text, td.mbox-text {   /* The message body cell(s) */
+    border: none; 
+    padding: 0.25em 0.9em;     /* 0.9em left/right */
+    width: 100%;               /* Make all mboxes the same width regardless of text length */
+}
+td.mbox-image {                /* The left image cell */
+    border: none; 
+    padding: 2px 0 2px 0.9em;  /* 0.9em left, 0px right */
+    text-align: center; 
+}
+td.mbox-imageright {           /* The right image cell */
+    border: none;
+    padding: 2px 0.9em 2px 0;  /* 0px left, 0.9em right */
+    text-align: center; 
+}
+td.mbox-empty-cell {           /* An empty narrow cell */
+    border: none;
+    padding: 0px;
+    width: 1px;
+}
+ 
+
+/* Image message box styles */
+table.imbox {
+    margin: 4px 10%; 
+    border-collapse: collapse; 
+    border: 3px solid #1e90ff;    /* Default "notice" blue */
+    background: #fbfbfb;
+}
+.imbox .mbox-text .imbox {  /* For imboxes inside imbox-text cells. */
+    margin: 0 -0.5em;       /* 0.9 - 0.5 = 0.4em left/right.        */
+    display: block;         /* Fix for webkit to force 100% width.  */
+}
+.mbox-inside .imbox {       /* For imboxes inside other templates.  */
+    margin: 4px;
+}
+ 
+table.imbox-notice {
+    border: 3px solid #1e90ff;    /* Blue */
+}
+table.imbox-speedy {
+    border: 3px solid #b22222;    /* Red */
+    background: #fee;             /* Pink */
+}
+table.imbox-delete {
+    border: 3px solid #b22222;    /* Red */
+}
+table.imbox-content {
+    border: 3px solid #f28500;    /* Orange */
+}
+table.imbox-style {
+    border: 3px solid #f4c430;    /* Yellow */
+}
+table.imbox-move {
+    border: 3px solid #9932cc;    /* Purple */
+}
+table.imbox-protection {
+    border: 3px solid #bba;       /* Gray-gold */
+}
+table.imbox-license {
+    border: 3px solid #88a;       /* Dark gray */
+    background: #f7f8ff;          /* Light gray */
+}
+table.imbox-featured {
+    border: 3px solid #cba135;    /* Brown-gold */
+}
+ 
+/* Category message box styles */
+table.cmbox {
+    margin: 3px 10%;
+    border-collapse: collapse;
+    border: 1px solid #aaa; 
+    background: #DFE8FF;    /* Default "notice" blue */
+}
+ 
+table.cmbox-notice {
+    background: #D8E8FF;    /* Blue */
+}
+table.cmbox-speedy {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border: 4px solid #b22222;    /* Red */
+    background: #FFDBDB;          /* Pink */
+}
+table.cmbox-delete {
+    background: #FFDBDB;    /* Red */
+}
+table.cmbox-content {
+    background: #FFE7CE;    /* Orange */
+}
+table.cmbox-style {
+    background: #FFF9DB;    /* Yellow */
+}
+table.cmbox-move {
+    background: #E4D8FF;    /* Purple */
+}
+table.cmbox-protection {
+    background: #EFEFE1;    /* Gray-gold */
+}
+ 
+/* Other pages message box styles */
+table.ombox {
+    margin: 4px 10%; 
+    border-collapse: collapse; 
+    border: 1px solid #aaa;       /* Default "notice" gray */
+    background: #f9f9f9;
+}
+ 
+table.ombox-notice {
+    border: 1px solid #aaa;       /* Gray */
+}
+table.ombox-speedy {
+    border: 2px solid #b22222;    /* Red */
+    background: #fee;             /* Pink */
+}
+table.ombox-delete {
+    border: 2px solid #b22222;    /* Red */
+}
+table.ombox-content {
+    border: 1px solid #f28500;    /* Orange */
+}
+table.ombox-style {
+    border: 1px solid #f4c430;    /* Yellow */
+}
+table.ombox-move {
+    border: 1px solid #9932cc;    /* Purple */
+}
+table.ombox-protection {
+    border: 2px solid #bba;       /* Gray-gold */
+}
+ 
+/* Talk page message box styles */
+table.tmbox {
+    margin: 4px 10%;
+    border-collapse: collapse;
+    border: 1px solid #c0c090;    /* Default "notice" gray-brown */
+    background: #f8eaba;
+}
+.mediawiki .mbox-inside .tmbox { /* For tmboxes inside other templates. The "mediawiki" class ensures that */
+    margin: 2px 0;               /* this declaration overrides other styles (including mbox-small above)   */
+    width: 100%;                 /* For Safari and Opera */
+}
+.mbox-inside .tmbox.mbox-small { /* "small" tmboxes should not be small when  */
+    line-height: 1.5em;          /* also "nested", so reset styles that are   */   
+    font-size: 100%;             /* set in "mbox-small" above.                */
+}
+ 
+table.tmbox-speedy {
+    border: 2px solid #b22222;    /* Red */
+    background: #fee;             /* Pink */
+}
+table.tmbox-delete {
+    border: 2px solid #b22222;    /* Red */
+}
+table.tmbox-content {
+    border: 2px solid #f28500;    /* Orange */
+}
+table.tmbox-style {
+    border: 2px solid #f4c430;    /* Yellow */
+}
+table.tmbox-move {
+    border: 2px solid #9932cc;    /* Purple */
+}
+table.tmbox-protection,
+table.tmbox-notice {
+    border: 1px solid #c0c090;    /* Gray-brown */
+}
+ 
+/* Disambig and set index box styles */
+table.dmbox {
+    clear: both; 
+    margin: 0.9em 1em; 
+    border-top: 1px solid #ccc; 
+    border-bottom: 1px solid #ccc; 
+    background: transparent;
+}
+ 
+/* Footer and header message box styles */
+table.fmbox {
+    clear: both;
+    margin: 0.2em 0;
+    width: 100%;
+    border: 1px solid #aaa;
+    background: #f9f9f9;     /* Default "system" gray */
+}
+table.fmbox-system {
+    background: #f9f9f9;
+}
+table.fmbox-warning {
+    border: 1px solid #bb7070;  /* Dark pink */
+    background: #ffdbdb;        /* Pink */
+}
+table.fmbox-editnotice {
+    background: transparent;
+}
+/* Div based "warning" style fmbox messages. */
+div.mw-warning-with-logexcerpt,
+div.mw-lag-warn-high,
+div.mw-cascadeprotectedwarning,
+div#mw-protect-cascadeon {
+    clear: both;
+    margin: 0.2em 0;
+    border: 1px solid #bb7070;
+    background: #ffdbdb;
+    padding: 0.25em 0.9em;
+}
+/* Div based "system" style fmbox messages. 
+   Used in [[MediaWiki:Readonly lag]]. */
+div.mw-lag-warn-normal,
+div.fmbox-system {
+    clear: both;
+    margin: 0.2em 0;
+    border: 1px solid #aaa;
+    background: #f9f9f9;
+    padding: 0.25em 0.9em;
+}
+ 
+/* These mbox-small classes must be placed after all other 
+   ambox/tmbox/ombox etc classes. "body.mediawiki" is so 
+   they override "table.ambox + table.ambox" above. */
+body.mediawiki table.mbox-small {   /* For the "small=yes" option. */
+    clear: right;
+    float: right;
+    margin: 4px 0 4px 1em;
+    width: 238px;
+    font-size: 88%;
+    line-height: 1.25em;
+}
+body.mediawiki table.mbox-small-left {   /* For the "small=left" option. */
+    margin: 4px 1em 4px 0;
+    width: 238px;
+    border-collapse: collapse;
+    font-size: 88%;
+    line-height: 1.25em;
+}
+/* Content licensed as CC-BY-SA 3.0 ends here */
+
+.template-documentation { /* for [[Template:Documentation] */
+    clear: both;
+    margin: 1em 0 0 0;
+    border: 1px solid #aaa; 
+    background-color: #ecfcf4; /* pale green */
+    padding: 5px;
+}
+
+/* for translated quotes */
+
+.lang-quote {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    color: #0645ad;
+    cursor: pointer;
+}
+
+.lang-quote .transquote {
+    visibility: hidden;
+    width: 300px;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 3;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.lang-quote:hover .transquote {
+    visibility: visible;
+    opacity: 1;
+    font-size: 100%;
+}
+
+/*XOWA:MediaWiki:Vector.css*/
+/* CSS placed here will affect users of the Vector skin */
+/*Please put any main page specific css in [[mediawiki:Common.css/Main Page]] */
+.toccolours {
+	border: 1px solid #aaa;
+	background-color: #f9f9f9;
+	padding: 5px;
+	font-size: 95%;
+}
+
+
+
+/* Jacked from Monobook.css for galleries */
+table.gallery {
+	border: 1px solid #ccc;
+	margin: 2px;
+	padding: 2px;
+	background-color: white;
+}
+ 
+table.gallery tr {
+	vertical-align: top;
+}
+ 
+table.gallery td {
+	vertical-align: top;
+	background-color: #f9f9f9;
+	border: solid 2px white;
+}
+/* Keep this temporarily so that cached pages will display right */
+table.gallery td.galleryheader {
+    text-align: center;
+	font-weight: bold;
+}
+table.gallery caption {
+	font-weight: bold;
+}
+ 
+div.gallerybox {
+	margin: 2px;
+}
+ 
+div.gallerybox div.thumb {
+	text-align: center;
+	border: 1px solid #ccc;
+	margin: 2px;
+}
+ 
+div.gallerytext {
+	overflow: hidden;
+	font-size: 94%;
+	padding: 2px 4px;
+}
+/* End Galleries section */
+
+#mw-js-message {font-size: 0.8em;}
+div#bodyContent  {line-height: 1.5em;}
+
+/* float in the title bar (Ex little FA icons in top-right corner) */
+/*! important is to overide legacy monobook stuff */
+.float_in_title { position: absolute; z-index: 100; right: 20px; top: -50px  !important;}
