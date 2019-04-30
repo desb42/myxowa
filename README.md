@@ -1,112 +1,72 @@
 ## Overview
 XOWA is an offline Wikipedia application that lets you run Wikipedia on your computer.
 
-![XOWA showing Wikipedia's article on Wikipedia](http://xowa.sourceforge.net/wiki/file_screenshot_wikipedia_xowa.png)
+## Myxowa
+This version includes all changes up to gnosygnu/xowa/commit/5db81504fb418be6a07f96eee64244127afa96fe
+and includes changes in the source code for:
 
-## Features
-* Run a complete copy of English Wikipedia from your computer.
-* Display 5.0+ million articles in full HTML formatting.
-* Show images within an article. Access 4.0+ million images using the offline image databases.
-* Set up over 800+ other wikis including: English Wiktionary, English Wikisource, English Wikiquote, English Wikivoyage, Non-English wikis (French Wiktionary, German Wikisource, Dutch Wikivoyage), Wikidata, Wikimedia Commons and many more.
-* Update your wiki whenever you want, using Wikimedia's database backups.
-* Navigate between offline wikis. Click on "Look up this word in Wiktionary" and instantly view the page in Wiktionary.
-* Edit articles to remove vandalism or errors.    
-* Install to a flash memory card for portability to other machines.
-* Run on Windows, Linux and Mac OS X. (Android Alpha available)
-* Run as an HTTP server to browse from Firefox, Chrome or Safari
-* View the HTML source for any wiki page.
-* Search for any page by title using a Wikipedia-like Search box. Search across wikis as well.
-* Browse pages by alphabetical order using Special:AllPages.
-* Find a word on a page.
-* Access a history of viewed pages.
-* Bookmark your favorite pages.
-* Preview articles by hovering over links
-* Customize any one of over 50 options
+* Some changes are just extra lines to add breakpoints more easily
+* Some changes are changing single quotes to double quotes (for html generation)
+* reseting the Len_ in Bry_bfr (used to convert Image:->File:)
+* a correction to Find_bwd__skip_ws (used to remove trailing whitespace in templates)
+* Int_ary_.java number parser allows .2c to represent a comma (used in wikisource)
+* Bry_diff ignore whitespace differences
+* Creation of Pfxtp_roman to allow access to the Roman numeral handling (mainly wikisource)
+* Change to Xoa_ttl to handle convertion of Image: to File:
+* Xomp_prog_mgr and Xomp_load_wkr display the memory usage
+* Xoh_sidebar_itm at some point in the past the class prefix has change from 'n-' to 'p-' (needed for some javascript code, wikisource)
+* Xoh_toc_htmlr change the code generation to support the new(ish) hide/show content mechanism
+* various changes to support counting the number of categories and pages (when displaying Category pages)
+* Xoctg_collation_enum add a 'numeric' collation
+* Hide the 'Hidden categories' in the frwiki
+* Srch_search_cmd check that an object is not null
+* Added some logic to tell when a startup .gfs file does not exist (currently xowa fails silently)
+* Change copywrite year (on startup)
+* Http_server_mgr various changes to support popup mode and search suggest popup (search popup does not seem to be working at the moment)
+* Http_server_wrk various changes to support some of my experimentations 
+* Http_url_parser make sure that the string returned still has the querystring - because it may be used later on (by another url parser!)
+* Xof_xfer_itm - some experimenation in using svg files directly (not fully working)
+* Various changes to support synchronous redlink processing (and colour processing for wikisource)
+* Changes to support syntax highlighting
+* Some test css minification code
+* Adding graph to top level to trigger extra javascript (this has been superceeded by other mechanisms)
+* Moved footer (including categories and footer) to its own section (necessitated by wikisource changes)
+* Some experimental code to look at removing extra space around \<h?> headers, \<li>, \<td> and \<th>
+* Thumbnail handling has a few extra +2 sprinkled about
+* "Expected newline before caption" is not a fatal error
+* Add logic to support gallery sideshow
+* Add logic to support extra web fonts (part of ULS)
+* Support graph v1 and v2 on the same page
+* Always include jquery.js
+* Xow_head_wtr when writing a quoted string try to guess the best quote (double if a single found else single)
+* Xow_portal_mgr change the navigation links depeding on namespace (used by non enwiki javascript)
+* Add alt-shift to the popup strings (does not take other OS's into consideration)
+* sychronisation around fetchLanguageNames
+* allow for chem within mathjax
+* Mwh_atr_parser change handling of dangling quotes in attributes of an element
+* Allow for vertical alignment in thumbnails
+* Xop_lnki_arg_parser bounds check
+* Allow for thumb alternate (thumb=... in thumbnail)
+* Xow_page_tid hack way to determine if Module namespace is lua or wikitext (for syntac highlight)
+* When a page is updated the length is also updated (Xowd_page_tbl and Xowd_save_mgr_sql)
+* Ref_html_wrt add an extra class if number of refs greater than 10
+* Use wiki specific citation
+* Implement mode in dynamiclist
+* Gallery_parser hack to change File:File to File:
+* Changes to imap processing
+* An implementation of \<inputbox>
+* Pft_func_formatdate expose date formater so this can be used in displaying the modifyed date on page
+* proofread pages considerable changes to Index, Page and implentation of \<pagelist> \<pages> and \<pagequality>
+* Scribe_invoke_func return error messages more in line with mediawiki
+* A lot of changes to wikidata to add Lexeme and Sense (still ongoing)
 
-## Requirements
-XOWA is written in Java and requires 1.7 or above.
+there are also changes to the bin and user directories
 
-## Installation
-* Download xowa_app_your_operating_system_name.zip from https://github.com/gnosygnu/xowa/releases/
-* Unzip to any folder on your hard drive (or flash memory card)
-* Run XOWA
-   * On '''Windows''', double-click '''C:\xowa\xowa_64.exe'''
-   * On '''Linux''', open a terminal and run <code>sh /home/your_user_name/xowa/xowa_linux_64.sh</code>
-   * On '''OS X''', open a terminal and run <code>sh /Users/your_user_name/xowa/xowa_macosx_64.sh</code>
+'bin' major changes to xowa.gfs a reworking of en.gfs, de.gfs, it.gfs
+lots of javascript rearrangement
+introduced the concept of a wiki specific javascript (eg en.wikisource.org.js)
 
-## Development Info
-### Compilation instructions (Command-line)
-#### REQUIREMENTS
-* Java JDK 1.7 (or higher): https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-* Apache Ant 1.9.13 (or higher): https://ant.apache.org/bindownload.cgi
-* A ROOT_DIR directory on your file-system
-* (Windows) cygwin: https://www.cygwin.com/
-* (Mac OS X) wget via homebrew (or just download the file manually): https://stackoverflow.com/questions/33886917/how-to-install-wget-in-macos
-
-#### PROCESS
-* Copy-paste https://github.com/gnosygnu/xowa/blob/master/xowa_get_and_make.sh to a plain-text file; EX: /cygdrive/c/xowa_dev/xowa_get_and_make.sh
-* Adjust these environment variables to your system: PLAT_NAME, ROOT_DIR, ANT_BINARY, JAVA_JDK_DIR
-* cd to your ROOT_DIR
-* Run the file using "sh xowa_get_and_make.sh"
-* Run the xowa_dev.jar
-  * (Windows)  java -jar xowa_dev.jar
-  * (Linux)    SWT_GTK3=0 && java -jar xowa_dev.jar
-  * (Mac OS X) java -Xmx256m -d64 -XstartOnFirstThread -jar xowa_dev.jar
-
-### Compilation instructions (ANT command-line)
-#### Setup the XOWA app
-* Download the latest XOWA app package for your operating system. For example, if you're on a 64-bit Linux system, "xowa_app_linux_64_v1.9.5.1.zip".
-* Unzip the XOWA app package to a directory. For the sake of simplicity, these instructions assume this directory is "/xowa/"
-* Review your directories. You should have the following:
-    * An XOWA jar: "/xowa/xowa_linux_64.jar"
-    * An XOWA "/bin/any/" directory with several jar files. For example, "/xowa/bin/any/java/apache/commons-compress-1.5.jar"
-    * An XOWA "/bin/linux_64/" directory with an SWT jar: "/xowa/bin/linux_64/swt/swt.jar"
-
-#### Setup the XOWA source
-* Download the latest XOWA source archive. For example: "xowa_source_v1.9.5.1.7z"
-* Unzip the source to "/xowa/dev". When you're done, you'll have a file called "/xowa/dev/build.xml" as well as others
-    * NOTE: if you're not on a Linux 64-bit system, overwrite the swt jar at "/xowa/dev/150_gfui/lib/swt.jar" with the copy from your "/bin/OS" directory. For example, if you're on a 64 bit Windows system, replace "/xowa/dev/150_gfui/lib/swt.jar" with "/bin/windows_64/swt/swt.jar"
-
-#### Run the ant file
-* Open up a console, and run "ant -buildfile build.xml -Dplat_name=linux_64"
-
-### IDE instructions (Eclipse)
-#### Environment
-The '''xowa_source.7z''' was built with Eclipse Indigo. There are no OS dependencies, nor are there dependencies on Eclipse.
-
-#### Setup
-* Follow the steps in these two sections from above:
-    * Setup the XOWA app
-    * Setup the XOWA source
-* Launch Eclipse. Choose a workbench folder of "/xowa/dev"
-* If the projects don't load, do File -> Import -> Existing Projects Into Workspace
-* Select all projects. Do File -> Refresh.
-* Right-click on 400_xowa in the Package Explorer. Select Debug As -> Java Application. Select Xowa_main. XOWA should launch.
-* Right-click on 400_xowa in the Package Explorer. Select Debug As -> JUnit Test. All tests should pass.
-
-#### Eclipse-specific settings
-This section documents specific project customizations that differ from the standard Eclipse defaults.
-
-##### Project properties
-Resource -> Text file encoding -> Other -> UTF-8
-
-##### Preferences
-These settings are available under Window -> Preferences
-
-* Disable Spelling
-    * General -> Editors -> Text Editors -> Spelling
-*Ignore Warnings
-    * Java -> Compiler -> Errors/Warnings
-        * Annotations -> Unhandled token in '@SuppressWarnings'
-        * Potential programming problems -> Serializable class without serialVersionUID
-        * Generic Types -> Unnecessary generic type operation (In Eclipse Luna: "Unchecked generic type operation")
-        * Generic Types -> Usage of a raw type
-        * Unnecessary Code -> Unused import
-
-##### Configuration arguments
-* Configuration arguments
-    * Run -> Debug Configurations -> Arguments
-        * <code>--root_dir /xowa/ --show_license n --show_args n</code>
+'user' contains different versions of xowa_common and xowa_wiki for the wikis I have worked with (NOT the version stored within the core database file)
 
 ## License
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
