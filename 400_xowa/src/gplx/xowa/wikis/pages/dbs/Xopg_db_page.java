@@ -35,8 +35,7 @@ public class Xopg_db_page {
 	public void Exists_(boolean v)						{this.exists = v;}
 	public Xopg_db_page Id_(int v)					{this.id = v; return this;}
 	public Xopg_db_page Score_(int v)				{this.score = v; return this;}
-	public Xopg_db_page Modified_on_(DateAdp v)		{
-            this.modified_on = v; return this;}
+	public Xopg_db_page Modified_on_(DateAdp v)		{this.modified_on = v; return this;}
 	public Xopg_db_page Html_db_id_(int v)			{this.html_db_id = v; return this;}
 
 	// wiki-related
