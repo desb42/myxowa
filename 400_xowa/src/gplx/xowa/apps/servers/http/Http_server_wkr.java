@@ -196,7 +196,7 @@ class Http_server_wkr implements Gfo_invk {
                 page_html = String_.Replace(page_html, "/fsys/file/commons.wikimedia.org/thumb/2/1/1/9/Speaker_Icon.svg/20px.png", "/fsys/file/commons.wikimedia.org/orig/2/1/1/9/Speaker_Icon.svg");
                 //page_html = page_html.replaceAll("\n +", "\n");
                 page_html = String_.Replace(page_html, ".3B", ";");
-                page_html = collapser(page_html);
+                //page_html = collapser(page_html);
                 page_html = tablecaption(page_html);
                 page_html = page_html.replaceAll("</p>\\s*<p>", "</p><p>");
                 page_html = page_html.replaceAll("</div>\\s*<div", "</div><div");
