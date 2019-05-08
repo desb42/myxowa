@@ -397,6 +397,7 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__mapframe:
 			case Xop_xnde_tag_.Tid__maplink:
 			case Xop_xnde_tag_.Tid__template_styles:
+			case Xop_xnde_tag_.Tid__categoryTree:
 				Xox_xnde xtn = xnde.Xnde_xtn();
 				xtn.Xtn_write(bfr, app, ctx, this, hctx, page, xnde, src);
 				break;

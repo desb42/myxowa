@@ -624,6 +624,7 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 					case Xop_xnde_tag_.Tid__hiero:					xnde_xtn = tkn_mkr.Xnde__hiero(); break;
 					case Xop_xnde_tag_.Tid__inputBox:				xnde_xtn = tkn_mkr.Xnde__inputbox(); break;
 					case Xop_xnde_tag_.Tid__dynamicPageList:		xnde_xtn = tkn_mkr.Xnde__dynamicPageList(); break;
+					case Xop_xnde_tag_.Tid__categoryTree:		xnde_xtn = tkn_mkr.Xnde__categorytree(); break;
 					case Xop_xnde_tag_.Tid__pages: {
 						xnde_xtn = tkn_mkr.Xnde__pages();
 						boolean enabled = ctx.Wiki().Xtn_mgr().Xtn_proofread().Enabled();

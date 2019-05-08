@@ -32,7 +32,7 @@ public class Xoh_head_mgr implements gplx.core.brys.Bfr_arg {
 	public Xoh_head_mgr() {
 		Itms_add(itm__css, itm__globals, itm__xo_elem, itm__server, itm__popups, itm__toc, itm__collapsible, itm__navframe, itm__gallery, itm__gallery_styles
 		, itm__mathjax, itm__graph, itm__hiero, itm__top_icon, itm__title_rewrite, itm__search_suggest, itm__timeline
-		, itm__dbui, itm__pgbnr, itm__tabber, itm__page_cfg, itm__css_dynamic, itm__gallery_slideshow
+		, itm__dbui, itm__pgbnr, itm__tabber, itm__page_cfg, itm__css_dynamic, itm__gallery_slideshow, itm__categorytree
 		);
 	}
 	public Xoh_head_itm__css					Itm__css() {return itm__css;} private final    Xoh_head_itm__css itm__css = new Xoh_head_itm__css();
@@ -42,6 +42,7 @@ public class Xoh_head_mgr implements gplx.core.brys.Bfr_arg {
 	public Xoh_head_itm__popups					Itm__popups() {return itm__popups;} private final    Xoh_head_itm__popups itm__popups = new Xoh_head_itm__popups();
 	public Xoh_head_itm__toc					Itm__toc() {return itm__toc;} private final    Xoh_head_itm__toc itm__toc = new Xoh_head_itm__toc();
 	public Xoh_head_itm__collapsible			Itm__collapsible() {return itm__collapsible;} private final    Xoh_head_itm__collapsible itm__collapsible = new Xoh_head_itm__collapsible();
+	public Xoh_head_itm__categorytree			Itm__categorytree() {return itm__categorytree;} private final    Xoh_head_itm__categorytree itm__categorytree = new Xoh_head_itm__categorytree();
 	public Xoh_head_itm__navframe				Itm__navframe() {return itm__navframe;} private final    Xoh_head_itm__navframe itm__navframe = new Xoh_head_itm__navframe();
 	public Xoh_head_itm__top_icon				Itm__top_icon() {return itm__top_icon;} private final    Xoh_head_itm__top_icon itm__top_icon = new Xoh_head_itm__top_icon();
 	public Xoh_head_itm__gallery				Itm__gallery() {return itm__gallery;} private final    Xoh_head_itm__gallery itm__gallery = new Xoh_head_itm__gallery();

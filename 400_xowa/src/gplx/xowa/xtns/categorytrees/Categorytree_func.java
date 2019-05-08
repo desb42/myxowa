@@ -22,10 +22,19 @@ public class Categorytree_func extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_categorytree;}
 	@Override public Pf_func New(int id, byte[] name) {return new Categorytree_func().Name_(name);}
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
+		int self_args_len = self.Args_len();
 		byte[] argx = Eval_argx(ctx, src, caller, self); if (argx == null) return;
-		Xow_wiki wiki = ctx.Wiki();
-		Xoa_ttl ctg_ttl = wiki.Ttl_parse(gplx.xowa.wikis.nss.Xow_ns_.Tid__category, argx); if (ctg_ttl == null) return;	// ignore bad titles; EX: {{#categorytree:<>}}
-		gplx.xowa.parsers.lnkis.Xop_lnki_wkr_.Write_lnki(bfr, ctg_ttl, true);
+                byte[] arg2 = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, self_args_len, 0);
+		//Categorytree_params_ params = new Categorytree_params_();
+		//Xoa_page page = ctx.Page();
+		//ctx.Wiki().Ctg__catpage_mgr().Renderchild(bfr, argx, 0, argx.length, params);
+		//page.Html_data().Head_mgr().Itm__categorytree().Enabled_y_();
+                bfr.Add_str_a7("<categorytree>");
+                bfr.Add(argx);
+                bfr.Add_str_a7("</categorytree>");
+		//Xow_wiki wiki = ctx.Wiki();
+		//Xoa_ttl ctg_ttl = wiki.Ttl_parse(gplx.xowa.wikis.nss.Xow_ns_.Tid__category, argx); if (ctg_ttl == null) return;	// ignore bad titles; EX: {{#categorytree:<>}}
+		//gplx.xowa.parsers.lnkis.Xop_lnki_wkr_.Write_lnki(bfr, ctg_ttl, true);
 	}
 	public static final    Categorytree_func Instance = new Categorytree_func(); Categorytree_func() {}
 }

@@ -232,7 +232,7 @@ public class Xoctg_catpage_mgr__basic__tst {
 			, "</div>"
 			));
 	}
-	@Test   public void Calc_col_len() {
+	/*@Test   public void Calc_col_len() {
 		fxt.Test__calc_col_len(10, 0, 4);	// for 10 items, col 0 has 4 items
 		fxt.Test__calc_col_len(10, 1, 3);	// for 10 items, col 1 has 3 items
 		fxt.Test__calc_col_len(10, 2, 3);	// for 10 items, col 2 has 3 items
@@ -242,7 +242,7 @@ public class Xoctg_catpage_mgr__basic__tst {
 		fxt.Test__calc_col_len(12, 0, 4);
 		fxt.Test__calc_col_len(12, 1, 4);
 		fxt.Test__calc_col_len(12, 2, 4);
-	}
+	}*/
 }
 class Xoctg_catpage_mgr_fxt {
 	private int grp_max;
@@ -257,7 +257,7 @@ class Xoctg_catpage_mgr_fxt {
 		grp_max = 3;	// default to 3 paer page
 		return this;
 	}	private Xoae_app app; private Xoctg_catpage_mgr ctg_html;
-	public void Test__calc_col_len(int grp_len, int col_idx, int expd) {Tfds.Eq(expd, Xoctg_fmt_itm_base.Calc_col_len(grp_len, col_idx, 3));}
+	//public void Test__calc_col_len(int grp_len, int col_idx, int expd) {Tfds.Eq(expd, Xoctg_fmt_itm_base.Calc_col_len(grp_len, col_idx, 3));}
 	public Xowe_wiki Wiki() {return wiki;} private Xowe_wiki wiki; 
 	public Xoctg_catpage_ctg Ctg() {return ctg;} private Xoctg_catpage_ctg ctg;
 	public void Init__grp_max_(int v) {this.grp_max = v;}
@@ -290,7 +290,7 @@ class Xoctg_catpage_mgr_fxt {
 		Xoctg_catpage_grp list = ctg.Grp_by_tid(tid);
 		itm_fmt.Init_from_ltr(wiki, list, ltr_extractor);
 		itm_fmt.Set_ltr_and_bgn(new byte[] {grp_char_0}, 0);
-		itm_fmt.Col_end_(0, 0);
+		//itm_fmt.Col_end_(0, 0);
 		Bry_bfr bfr = wiki.Utl__bfr_mkr().Get_b512();
 		itm_fmt.Bfr_arg__add(bfr);
 		Tfds.Eq_str_lines(expd, bfr.To_str_and_rls());

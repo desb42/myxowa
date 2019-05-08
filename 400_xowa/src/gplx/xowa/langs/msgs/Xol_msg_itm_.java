@@ -418,8 +418,10 @@ case Xol_msg_itm_.Id_ctgtree_subc_counts: return new_(Xol_msg_itm_.Id_ctgtree_su
 case Xol_msg_itm_.Id_ctgtree_subc_counts_ctg: return new_(Xol_msg_itm_.Id_ctgtree_subc_counts_ctg, "categorytree-num-categories", "~{0} C");
 case Xol_msg_itm_.Id_ctgtree_subc_counts_page: return new_(Xol_msg_itm_.Id_ctgtree_subc_counts_page, "categorytree-num-pages", "~{0} P");
 case Xol_msg_itm_.Id_ctgtree_subc_counts_file: return new_(Xol_msg_itm_.Id_ctgtree_subc_counts_file, "categorytree-num-files", "~{0} F");
-case Xol_msg_itm_.Id_prev_results: return new_(Xol_msg_itm_.Id_next_results, "prevn", "previous {{PLURAL:~{0}|~{0}}}");
-case Xol_msg_itm_.Id_next_results: return new_(Xol_msg_itm_.Id_prev_results, "nextn", "next {{PLURAL:~{0}|~{0}}}");
+case Xol_msg_itm_.Id_prev_results: return new_(Xol_msg_itm_.Id_next_results, "prev-page", "previous page");
+case Xol_msg_itm_.Id_next_results: return new_(Xol_msg_itm_.Id_prev_results, "next-page", "next page");
+//case Xol_msg_itm_.Id_prev_results: return new_(Xol_msg_itm_.Id_next_results, "prevn", "previous {{PLURAL:~{0}|~{0}}}");
+//case Xol_msg_itm_.Id_next_results: return new_(Xol_msg_itm_.Id_prev_results, "nextn", "next {{PLURAL:~{0}|~{0}}}");
 case Xol_msg_itm_.Id_list_continues: return new_(Xol_msg_itm_.Id_list_continues, "listingcontinuesabbrev", "cont.");
 case Xol_msg_itm_.Id_xowa_wikidata_languages: return new_(Xol_msg_itm_.Id_xowa_wikidata_languages, "xowa-wikidata-languages", "en");
 case Xol_msg_itm_.Id_xowa_wikidata_labels: return new_(Xol_msg_itm_.Id_xowa_wikidata_labels, "xowa-wikidata-labels", "Labels");

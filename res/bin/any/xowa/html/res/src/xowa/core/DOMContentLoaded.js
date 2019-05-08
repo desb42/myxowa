@@ -130,6 +130,13 @@ function init () {
       importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/proof/ext.proofreadpage.page.css')
     }
 
+    if (document.querySelectorAll('.CategoryTreeSection').length) {
+      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.css')
+      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/mediawiki.action.view.categoryPage.styles.css')
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.js');
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki/mediawiki.api.js');
+    }
+
     if (document.querySelectorAll('.prettyprint').length) {
       //xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/google-code-prettify/run_prettify.js?lang=lua&lang=css&lang=js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/google-code-prettify/run_prettify.js?lang=lua&lang=css');

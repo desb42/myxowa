@@ -81,6 +81,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
                 //tmp_bfr.Add_byte_apos().Add(ttl.Ns().Name_db()).Add_byte_apos();
 		wtr.Write_js_global_ini_atr_val(Key_wgCanonicalNamespace		, ttl.Ns().Name_db());
 		wtr.Write_js_global_ini_atr_val(Key_wgPageContentLanguage		, page.Lang().Key_bry());
+		wtr.Write_js_global_ini_atr_val(Key_wgUserLanguage		, page.Lang().Key_bry());
 		if (page.Url().Qargs_ary().length == 0) { // poor way to determine view mode
 			wtr.Write_js_global_ini_atr_val(Key_wgAction			, Bry_view);
 		} else {
@@ -107,6 +108,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	, Key_wgTitle				= Bry_.new_a7("wgTitle")
 	, Key_wgCanonicalNamespace			= Bry_.new_a7("wgCanonicalNamespace")
 	, Key_wgPageContentLanguage			= Bry_.new_a7("wgPageContentLanguage")
+	, Key_wgUserLanguage			= Bry_.new_a7("wgUserLanguage")
 	, Key_wgAction				= Bry_.new_a7("wgAction")
 	, Bry_view					= Bry_.new_a7("view")
 	, Bry_other					= Bry_.new_a7("other")
