@@ -14,59 +14,57 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.proofreadPage; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
-import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*;
-import gplx.xowa.parsers.*; import gplx.xowa.parsers.logs.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*;
+import gplx.xowa.htmls.core.htmls.*;
+import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import gplx.xowa.parsers.lnkis.files.*;
 public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 	private Xop_root_tkn xtn_root;
-        private Page_list lst;
-        private int maxpagecount;
+	private Page_list lst;
+	private int maxpagecount;
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {}
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
-		boolean log_wkr_enabled = Log_wkr != Xop_log_basic_wkr.Null; if (log_wkr_enabled) Log_wkr.Log_end_xnde(ctx.Page(), Xop_log_basic_wkr.Tid_hiero, src, xnde);
-                lst = Parse(src, xnde.Src_bgn()+9, xnde.Src_end()-1); // size of '<pagelist' and '/>'
-                Xoae_page page = ctx.Page();
-                xtn_root = null;
-                
-            if (page.Ttl().Ns().Id() == 106) { // Index namespace only
+		//?boolean log_wkr_enabled = Log_wkr != Xop_log_basic_wkr.Null; if (log_wkr_enabled) Log_wkr.Log_end_xnde(ctx.Page(), Xop_log_basic_wkr.Tid_hiero, src, xnde);
+		lst = Parse(xnde);
+		Xoae_page page = ctx.Page();
+		xtn_root = null;
+				
+		if (page.Ttl().Ns().Id() == 106) { // Index namespace only
 
- 		Bry_bfr full_bfr = wiki.Utl__bfr_mkr().Get_m001();
-		try {
-			Hash_adp_bry lst_page_regy = ctx.Lst_page_regy(); 
-			if (lst_page_regy == null) lst_page_regy = Hash_adp_bry.cs();	// SEE:NOTE:page_regy; DATE:2014-01-01
-			byte[] page_bry = Bld_wikitext(full_bfr, page.Ttl());
-			if (page_bry != null)
-				xtn_root = Bld_root_nde(full_bfr, lst_page_regy, ctx, wiki, page_bry);	// NOTE: this effectively reparses page twice; needed b/c of "if {| : ; # *, auto add new_line" which can build different tokens
-		} finally {
-			full_bfr.Mkr_rls();
+			Bry_bfr full_bfr = wiki.Utl__bfr_mkr().Get_m001();
+			try {
+				Hash_adp_bry lst_page_regy = ctx.Lst_page_regy(); 
+				if (lst_page_regy == null) lst_page_regy = Hash_adp_bry.cs();	// SEE:NOTE:page_regy; DATE:2014-01-01
+				byte[] page_bry = Bld_wikitext(full_bfr, page.Ttl());
+				if (page_bry != null)
+					xtn_root = Bld_root_nde(full_bfr, lst_page_regy, ctx, wiki, page_bry);	// NOTE: this effectively reparses page twice; needed b/c of "if {| : ; # *, auto add new_line" which can build different tokens
+			} finally {
+				full_bfr.Mkr_rls();
+			}
 		}
-            }
-        }
-        public static Xop_log_basic_wkr Log_wkr = Xop_log_basic_wkr.Null;
+	}
+	//public static Xop_log_basic_wkr Log_wkr = Xop_log_basic_wkr.Null;
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
-			if (xtn_root == null) return;	// xtn_root is null when Xtn_parse exits early; occurs for recursion; DATE:2014-05-21
-			html_wtr.Write_tkn_to_html(bfr, ctx, hctx, xtn_root.Root_src(), xnde, Xoh_html_wtr.Sub_idx_null, xtn_root);
-        }
+		if (xtn_root == null) return;	// xtn_root is null when Xtn_parse exits early; occurs for recursion; DATE:2014-05-21
+		html_wtr.Write_tkn_to_html(bfr, ctx, hctx, xtn_root.Root_src(), xnde, Xoh_html_wtr.Sub_idx_null, xtn_root);
+	}
 
-        // expose getFormattedPageNumber
-        public byte[] FormattedPageNumber(int i) {
-                    Page_number pagnum = lst.getNumber(i);
-                    return pagnum.getFormattedPageNumber();
-        }
-        private byte[] Bld_wikitext(Bry_bfr bfr, Xoa_ttl ttl) {
-                for (int i = 1; i <= maxpagecount; i++) {
-                    Page_number pagnum = lst.getNumber(i);
-                    bfr.Add_str_a7("[[Page:");
-                    bfr.Add(ttl.Base_txt()).Add_byte_slash().Add_long_variable(i).Add_byte_pipe();
-                    bfr.Add(pagnum.getFormattedPageNumber());
-                    bfr.Add_str_a7("]]\n");
-                    //System.out.println(String_.new_u8(pagnum.getFormattedPageNumber()));
-                    //'[[' . $pageTitle->getPrefixedText() . '|' . $view . ']]
-                }
-                return bfr.To_bry_and_clear();
-        }
+	// expose getFormattedPageNumber
+	public byte[] FormattedPageNumber(int i) {
+		Page_number pagnum = lst.getNumber(i);
+		return pagnum.getFormattedPageNumber();
+	}
+	private byte[] Bld_wikitext(Bry_bfr bfr, Xoa_ttl ttl) {
+		for (int i = 1; i <= maxpagecount; i++) {
+			Page_number pagnum = lst.getNumber(i);
+			bfr.Add_str_a7("[[Page:");
+			bfr.Add(ttl.Base_txt()).Add_byte_slash().Add_long_variable(i).Add_byte_pipe();
+			bfr.Add(pagnum.getFormattedPageNumber());
+			bfr.Add_str_a7("]]\n");
+		}
+		return bfr.To_bry_and_clear();
+	}
 	private Xop_root_tkn Bld_root_nde(Bry_bfr page_bfr, Hash_adp_bry lst_page_regy, Xop_ctx ctx, Xowe_wiki wiki, byte[] wikitext) {
 		Xop_ctx tmp_ctx = Xop_ctx.New__sub__reuse_lst(wiki, ctx, lst_page_regy);
 		tmp_ctx.Page().Ttl_(ctx.Page().Ttl());					// NOTE: must set tmp_ctx.Ttl to ctx.Ttl; EX: Flatland and First World; DATE:2013-04-29
@@ -78,34 +76,28 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 		return rv;
 	}
 
-        Page_list Parse(byte[] src, int bgn, int end) {
+	Page_list Parse(Xop_xnde_tkn xnde) {
 		List_adp rows = List_adp_.New();
-		int start;
-                maxpagecount = 0;
-		int i = bgn;
-		while (i < end) {
-			byte c = src[i];
-			i++;
-			if (c == '\n' || c == ' ' || c == '\t')
-				continue;
-			start = i - 1;
-			while (i < end) {
-				c = src[i];
-				i++;
-				if (c == '\n' || c == ' ' || c == '\t')
-					break;
-			}
-                        Page_list_row plr = new Page_list_row(src, start, i-1);
+		maxpagecount = 0;
+		Mwh_atr_itm[] atrs_ary = xnde.Atrs_ary();
+		int atrs_len = atrs_ary.length;
+		for (int i = 0; i < atrs_len; i++) {
+			Mwh_atr_itm atr = atrs_ary[i];
+						if (atr.Eql_pos()< 0)
+							continue;
+			byte[] key = atr.Key_bry();
+			byte[] val = atr.Val_as_bry();
+			Page_list_row plr = new Page_list_row(key, val);
 			rows.Add(plr);
-                        if (plr.To() > maxpagecount)
-                            maxpagecount = plr.To();
+			if (plr.To() > maxpagecount)
+				maxpagecount = plr.To();
 		}
-                return new Page_list(rows);
+		return new Page_list(rows);
 	}
 }
 
 class Page_list_row {
-        private byte[] displaytext;
+	private byte[] displaytext;
 	private int type;
 	private int display;
 	private int from, to;
@@ -123,81 +115,77 @@ class Page_list_row {
 	private boolean compare(byte[] src, int bgn, byte[] txt) {
 		return Bry_.Has_at_bgn(src, txt, bgn, bgn + txt.length);
 	}
-	Page_list_row(byte[] src, int bgn, int end) {
+	Page_list_row(byte[] key , byte[] val) {
 		displaytext = null;
 		display = Display_normal;
 		type = Mode_unknown;
-		int i;
-		int pos = bgn;
-		for (i = bgn; i < end; i++) {
-			if (!Byte_ascii.Is_num(src[i])) {
+		int i, end = key.length;
+		int pos = 0;
+		for (i = 0; i < end; i++) {
+			if (!Byte_ascii.Is_num(key[i])) {
 				break;
 			}
 		}
-		if (i >= end) return;
-		if (src[i] == '=') {
-			from = parseInt(src, bgn, i);
+		if (i >= end) {
+			from = parseInt(key, 0, i);
 			to = from;
 			type = Mode_numeric;
-			pos = i+1;
 		} else {
-			if (src[i] == 't' && src[i+1] == 'o') {
-				from = parseInt(src, bgn, i);
+			if (key[i] == 't' && key[i+1] == 'o') {
+				from = parseInt(key, 0, i);
 				pos = i+2;
 				for (i = pos; i < end; i++) {
-					if (!Byte_ascii.Is_num(src[i])) {
+					if (!Byte_ascii.Is_num(key[i])) {
 						break;
 					}
 				}
-				if (i >= end) return;
-				to = parseInt(src, pos, i);
-				if (src[i] == '=') {
+				if (i == pos) return; // no digits
+				to = parseInt(key, pos, i);
+				if (i == end) {
 					type = Mode_range;
-					pos = i+1;
 				} else {
-					if (i + 5 < end && src[i] == 'e' && src[i+1] == 'v' && src[i+2] == 'e' && src[i+3] == 'n' && src[i+4] == '=') {
+					if (i + 4 < end && key[i] == 'e' && key[i+1] == 'v' && key[i+2] == 'e' && key[i+3] == 'n') {
 						type = Mode_even;
-						pos = i+5;
 					}
-					else if (i + 4 < end && src[i] == 'o' && src[i+1] == 'd' && src[i+2] == 'd' && src[i+3] == '=') {
+					else if (i + 3 < end && key[i] == 'o' && key[i+1] == 'd' && key[i+2] == 'd') {
 						type = Mode_odd;
-						pos = i+4;
 					}
 				}
 		  }
 		}
 		if (type == Mode_unknown) return;
+		end = val.length;
 		if (type == Mode_numeric) {
-			for (i = pos; i < end; i++) {
-				if (!Byte_ascii.Is_num(src[i])) {
+			for (i = 0; i < end; i++) {
+				if (!Byte_ascii.Is_num(val[i])) {
 					break;
 				}
 			}
 			if (i >= end) {
-				offset = parseInt(src, pos, i);
+				offset = parseInt(val, 0, i);
 				return;
 			}
 			type = Mode_range;
 		}
-		if (compare(src, pos, Bry_.new_a7("normal")))
+		if (compare(val, 0, Bry_.new_a7("normal")))
 			display = Display_normal;
-		else if (compare(src, pos, Bry_.new_a7("roman")))
+		else if (compare(val, 0, Bry_.new_a7("roman")))
 			display = Display_roman;
-		else if (compare(src, pos, Bry_.new_a7("highroman")))
+		else if (compare(val, 0, Bry_.new_a7("highroman")))
 			display = Display_highroman;
-		else if (compare(src, pos, Bry_.new_a7("folio")))
+		else if (compare(val, 0, Bry_.new_a7("folio")))
 			display = Display_folio;
-		else if (compare(src, pos, Bry_.new_a7("folioroman")))
+		else if (compare(val, 0, Bry_.new_a7("folioroman")))
 			display = Display_folioroman;
-		else if (compare(src, pos, Bry_.new_a7("foliohighroman")))
+		else if (compare(val, 0, Bry_.new_a7("foliohighroman")))
 			display = Display_foliohighroman;
-		else if (compare(src, pos, Bry_.new_a7("empty")))
+		else if (compare(val, 0, Bry_.new_a7("empty")))
 			display = Display_empty;
 		else {
 			display = Display_normal;
-			displaytext = new byte[end-pos];
-			for (i = pos; i < end; i++)
-				displaytext[i-pos] = src[i];
+			displaytext = new byte[end];
+			for (i = 0; i < end; i++)
+				displaytext[i] = val[i];
 		}
 	}
 	public static final int
@@ -239,10 +227,10 @@ class Page_number {
 				Pfxtp_roman.ToRoman(displayednumber, tmp_bfr, true);
 				break;
 			case Page_list_row.Display_normal:
-                            if (displayedtext != null)
-				tmp_bfr.Add(displayedtext);
-                            else
-				tmp_bfr.Add_long_variable(displayednumber);
+				if (displayedtext != null)
+					tmp_bfr.Add(displayedtext);
+				else
+					tmp_bfr.Add_long_variable(displayednumber);
 				break;
 			case Page_list_row.Display_folio:
 				tmp_bfr.Add_long_variable(displayednumber);
@@ -315,8 +303,8 @@ class Page_list {
 					} 
 
 					if (pnum.Display() == Page_list_row.Display_folio ||
-					    pnum.Display() == Page_list_row.Display_folioroman ||
-					    pnum.Display() == Page_list_row.Display_foliohighroman) {
+						pnum.Display() == Page_list_row.Display_folioroman ||
+						pnum.Display() == Page_list_row.Display_foliohighroman) {
 						int folioStart = pnum.From();
 						displayednumber = folioStart - offset + (num - folioStart)/2;
 						isRecto = (num - folioStart) % 2 == 0;
@@ -324,9 +312,9 @@ class Page_list {
 				}
 			}
 		}
-                // displayedpagenumber check!!!
-                if (displayednumber == 0)
-                         displayednumber = num - offset;
+		// displayedpagenumber check!!!
+		if (displayednumber == 0)
+			displayednumber = num - offset;
 		return new Page_number( displayednumber, displayedpagetext, mode, isEmpty, isRecto );
 	}
 

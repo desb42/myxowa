@@ -605,12 +605,3 @@ text
 . current implmentation would include <pages index="B" from=1 to=1 /> twice
 . also, side-effect of only having Lst_page_regy only be non-null on sub_ctx, which means nothing needs to be cleared on main_ctx
 */
-class Pp_pages_file {
-	private Xoa_ttl ttl;
-	private int page_no;
-        public Pp_pages_file(Xoa_ttl ttl, int page_no) {
-            this.page_no = page_no; this.ttl = ttl;
-        }
-        Xoa_ttl Ttl() { return ttl; }
-        int Page_no() { return page_no; }
-}
