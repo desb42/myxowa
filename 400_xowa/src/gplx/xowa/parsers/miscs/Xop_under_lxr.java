@@ -74,6 +74,7 @@ public class Xop_under_lxr implements Xop_lxr {
 	, Xol_kwd_grp_.Id_notitleconvert, Xol_kwd_grp_.Id_nocontentconvert, Xol_kwd_grp_.Id_newsectionlink, Xol_kwd_grp_.Id_nonewsectionlink
 	, Xol_kwd_grp_.Id_hiddencat, Xol_kwd_grp_.Id_index, Xol_kwd_grp_.Id_noindex, Xol_kwd_grp_.Id_staticredirect
 	, Xol_kwd_grp_.Id_disambig
+	, Xol_kwd_grp_.Id_expectunusedcategory, Xol_kwd_grp_.Id_nonewsectionlink
 	};
 	private static final    Btrie_fast_mgr Hook_trie = Btrie_fast_mgr.cs()
 	.Add(Xop_under_hook.Key_std, Xop_under_hook.Itm_std)
@@ -90,8 +91,11 @@ public class Xop_under_lxr implements Xop_lxr {
 			else
 				rv = trv_ci.Pos();
 		}
-		else
+		else {
 			rv = trv_cs.Pos();
+				if (rv < src_len && src[rv] == '\n') // consume the linefeed
+					rv++;
+		}
 		Xop_under_word word_itm = (Xop_under_word)word_obj;
 		Xop_under_lxr.Make_tkn(ctx, tkn_mkr, root, src, src_len, bgn_pos, rv, word_itm.Kwd_id());
 		return rv;
