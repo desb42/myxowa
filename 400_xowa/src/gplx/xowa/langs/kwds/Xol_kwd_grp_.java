@@ -237,9 +237,8 @@ public static final int
 , Id_ttl_root_url = 217
 , Id_statements = 218
 , Id_expectunusedcategory = 219
-, Id_Id_nonewsectionlink = 220
 ;
-public static final int Id__max = 221;
+public static final int Id__max = 220;
 
 	private static byte[] ary_itm_(int id) {
 		switch (id) {
@@ -463,7 +462,6 @@ case Xol_kwd_grp_.Id_categorytree: return Bry_.new_u8("categorytree");
 case Xol_kwd_grp_.Id_assessment: return Bry_.new_u8("assessment");
 case Xol_kwd_grp_.Id_statements: return Bry_.new_u8("statements");
 case Xol_kwd_grp_.Id_expectunusedcategory: return Bry_.new_a7("expectunusedcategory");
-case Xol_kwd_grp_.Id_nonewsectionlink: return Bry_.new_a7("nonewsectionlink");
 default: throw Err_.new_unhandled(id);
 		}
 	}
