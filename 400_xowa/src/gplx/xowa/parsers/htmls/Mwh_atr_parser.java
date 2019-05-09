@@ -28,6 +28,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 	private int nde_uid, nde_tid;
 	public Bry_obj_ref Bry_obj() {return bry_ref;} private final    Bry_obj_ref bry_ref = Bry_obj_ref.New_empty();
 	public int Nde_end_tid() {return nde_end_tid;} private int nde_end_tid;
+	private static final byte ALPHANUM = 1, INVALID = 0;
 	public int Parse(Mwh_atr_wkr wkr, int nde_uid, int nde_tid, byte[] src, int src_bgn, int src_end) {
 		this.nde_uid = nde_uid; this.nde_tid = nde_tid;
 		this.nde_end_tid = Mwh_doc_parser.Nde_end_tid__invalid;
@@ -75,9 +76,32 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 				break;
 			}
 			byte b = src[pos];
+			int utf8len = 1;
+                        byte type;
+			if (b >= 0) {
+			  if (b < 2)
+			  	type = INVALID;
+				else if ((b >= Byte_ascii.Num_0 && b <= Byte_ascii.Num_9) ||
+				    (b >= Byte_ascii.Ltr_A && b <= Byte_ascii.Ltr_Z) ||
+				    (b >= Byte_ascii.Ltr_a && b <= Byte_ascii.Ltr_z))
+					type = ALPHANUM;
+				else
+					type = b;
+			}
+			else {
+				type = ALPHANUM; // strictly there are some whitespace but...
+				if (b >= -64 && b <= -33) { // 192 <= b <= 223
+					utf8len = 2;
+				} else if (b >= -32 && b <= -17) { // 224 <= b <= 239
+					utf8len = 3;
+				} else if (b >= -16 && b <= -9) { // 240 <= b <= 247
+					utf8len = 4;
+				} else
+					type = INVALID;
+			}
 			switch (area) {
 				case Area__invalid:
-					switch (b) {
+					switch (type) {
 						// ws -> end invalid area
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space:
 							Make(src, pos);
@@ -89,24 +113,13 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__atr_limbo:	// 1st area after (a) node_name, (b) attribute, (c) invalid_area
-					switch (b) {
+					switch (type) {
 						// ws -> ignore; skip any ws in atr_limbo; note that once a non-ws char is encountered, it will immediately go into another area
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space:								
 							if (atr_bgn == -1) atr_bgn = pos;	// NOTE: atr_bgn == -1 needed for multiple spaces; ALSO: cannot move above switch b/c of <nowiki>
 							break;
 						// attribFirst -> enter Area__key; REF.MW: $attribFirst = '[:A-Z_a-z0-9]';
-						case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
-						case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
-						case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
-						case Byte_ascii.Ltr_F: case Byte_ascii.Ltr_G: case Byte_ascii.Ltr_H: case Byte_ascii.Ltr_I: case Byte_ascii.Ltr_J:
-						case Byte_ascii.Ltr_K: case Byte_ascii.Ltr_L: case Byte_ascii.Ltr_M: case Byte_ascii.Ltr_N: case Byte_ascii.Ltr_O:
-						case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
-						case Byte_ascii.Ltr_U: case Byte_ascii.Ltr_V: case Byte_ascii.Ltr_W: case Byte_ascii.Ltr_X: case Byte_ascii.Ltr_Y: case Byte_ascii.Ltr_Z:
-						case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
-						case Byte_ascii.Ltr_f: case Byte_ascii.Ltr_g: case Byte_ascii.Ltr_h: case Byte_ascii.Ltr_i: case Byte_ascii.Ltr_j:
-						case Byte_ascii.Ltr_k: case Byte_ascii.Ltr_l: case Byte_ascii.Ltr_m: case Byte_ascii.Ltr_n: case Byte_ascii.Ltr_o:
-						case Byte_ascii.Ltr_p: case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
-						case Byte_ascii.Ltr_u: case Byte_ascii.Ltr_v: case Byte_ascii.Ltr_w: case Byte_ascii.Ltr_x: case Byte_ascii.Ltr_y: case Byte_ascii.Ltr_z:
+						case ALPHANUM:
 						case Byte_ascii.Colon: case Byte_ascii.Underline:
 							area = Area__key;
 							if (atr_bgn == -1) atr_bgn = pos;	// NOTE: atr_bgn == -1 needed b/c of spaces
@@ -128,22 +141,11 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__key:
-					switch (b) {
+					switch (type) {
 						// alphanum -> valid key chars; REF.MW: $attrib = '[:A-Z_a-z-.0-9]';
-						case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
-						case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
-						case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
-						case Byte_ascii.Ltr_F: case Byte_ascii.Ltr_G: case Byte_ascii.Ltr_H: case Byte_ascii.Ltr_I: case Byte_ascii.Ltr_J:
-						case Byte_ascii.Ltr_K: case Byte_ascii.Ltr_L: case Byte_ascii.Ltr_M: case Byte_ascii.Ltr_N: case Byte_ascii.Ltr_O:
-						case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
-						case Byte_ascii.Ltr_U: case Byte_ascii.Ltr_V: case Byte_ascii.Ltr_W: case Byte_ascii.Ltr_X: case Byte_ascii.Ltr_Y: case Byte_ascii.Ltr_Z:
-						case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
-						case Byte_ascii.Ltr_f: case Byte_ascii.Ltr_g: case Byte_ascii.Ltr_h: case Byte_ascii.Ltr_i: case Byte_ascii.Ltr_j:
-						case Byte_ascii.Ltr_k: case Byte_ascii.Ltr_l: case Byte_ascii.Ltr_m: case Byte_ascii.Ltr_n: case Byte_ascii.Ltr_o:
-						case Byte_ascii.Ltr_p: case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
-						case Byte_ascii.Ltr_u: case Byte_ascii.Ltr_v: case Byte_ascii.Ltr_w: case Byte_ascii.Ltr_x: case Byte_ascii.Ltr_y: case Byte_ascii.Ltr_z:
+						case ALPHANUM:
 						case Byte_ascii.Colon: case Byte_ascii.Underline: case Byte_ascii.Dash: case Byte_ascii.Dot:
-							if (key_bfr_on) key_bfr.Add_byte(b);
+							if (key_bfr_on) key_bfr.Add_mid(src, pos, pos+utf8len);
 							break;
 						// ws -> end key
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space:
@@ -172,7 +174,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__eql_limbo:
-					switch (b) {
+					switch (type) {
 						// ws -> skip
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space: // skip ws
 							break;
@@ -182,18 +184,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 							area = Area__val_limbo;
 							break;
 						// attribFirst -> enter Area__key; REF.MW: $attribFirst = '[:A-Z_a-z0-9]';
-						case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
-						case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
-						case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
-						case Byte_ascii.Ltr_F: case Byte_ascii.Ltr_G: case Byte_ascii.Ltr_H: case Byte_ascii.Ltr_I: case Byte_ascii.Ltr_J:
-						case Byte_ascii.Ltr_K: case Byte_ascii.Ltr_L: case Byte_ascii.Ltr_M: case Byte_ascii.Ltr_N: case Byte_ascii.Ltr_O:
-						case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
-						case Byte_ascii.Ltr_U: case Byte_ascii.Ltr_V: case Byte_ascii.Ltr_W: case Byte_ascii.Ltr_X: case Byte_ascii.Ltr_Y: case Byte_ascii.Ltr_Z:
-						case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
-						case Byte_ascii.Ltr_f: case Byte_ascii.Ltr_g: case Byte_ascii.Ltr_h: case Byte_ascii.Ltr_i: case Byte_ascii.Ltr_j:
-						case Byte_ascii.Ltr_k: case Byte_ascii.Ltr_l: case Byte_ascii.Ltr_m: case Byte_ascii.Ltr_n: case Byte_ascii.Ltr_o:
-						case Byte_ascii.Ltr_p: case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
-						case Byte_ascii.Ltr_u: case Byte_ascii.Ltr_v: case Byte_ascii.Ltr_w: case Byte_ascii.Ltr_x: case Byte_ascii.Ltr_y: case Byte_ascii.Ltr_z:
+						case ALPHANUM:
 						case Byte_ascii.Colon: case Byte_ascii.Underline:
 							Make(src, pos);
 							area = Area__key;
@@ -206,7 +197,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__val_limbo:
-					switch (b) {
+					switch (type) {
 						// ws -> skip
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space:
 							ws_is_before_val = true;
@@ -218,18 +209,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 							val_bgn = pos + 1;
 							break;
 						// alphanum -> enter Area_val_raw; REF.MW: [a-zA-Z0-9!#$%&()*,\\-.\\/:;<>?@[\\]^_`{|}~]+
-						case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
-						case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
-						case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
-						case Byte_ascii.Ltr_F: case Byte_ascii.Ltr_G: case Byte_ascii.Ltr_H: case Byte_ascii.Ltr_I: case Byte_ascii.Ltr_J:
-						case Byte_ascii.Ltr_K: case Byte_ascii.Ltr_L: case Byte_ascii.Ltr_M: case Byte_ascii.Ltr_N: case Byte_ascii.Ltr_O:
-						case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
-						case Byte_ascii.Ltr_U: case Byte_ascii.Ltr_V: case Byte_ascii.Ltr_W: case Byte_ascii.Ltr_X: case Byte_ascii.Ltr_Y: case Byte_ascii.Ltr_Z:
-						case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
-						case Byte_ascii.Ltr_f: case Byte_ascii.Ltr_g: case Byte_ascii.Ltr_h: case Byte_ascii.Ltr_i: case Byte_ascii.Ltr_j:
-						case Byte_ascii.Ltr_k: case Byte_ascii.Ltr_l: case Byte_ascii.Ltr_m: case Byte_ascii.Ltr_n: case Byte_ascii.Ltr_o:
-						case Byte_ascii.Ltr_p: case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
-						case Byte_ascii.Ltr_u: case Byte_ascii.Ltr_v: case Byte_ascii.Ltr_w: case Byte_ascii.Ltr_x: case Byte_ascii.Ltr_y: case Byte_ascii.Ltr_z:
+						case ALPHANUM:
 						case Byte_ascii.Bang: case Byte_ascii.Hash: case Byte_ascii.Dollar: case Byte_ascii.Percent: case Byte_ascii.Amp:
 						case Byte_ascii.Paren_bgn: case Byte_ascii.Paren_end: case Byte_ascii.Star: case Byte_ascii.Comma: case Byte_ascii.Dash: case Byte_ascii.Dot:
 						case Byte_ascii.Backslash: case Byte_ascii.Slash: case Byte_ascii.Colon: case Byte_ascii.Semic:
@@ -255,7 +235,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__val_quote: {	// EX: "'val' " in "key = 'val'"; REF.MW: \"([^<\"]*)\"
-					switch (b) {
+					switch (type) {
 						// quote: check if same as opening quote
 						case Byte_ascii.Quote: case Byte_ascii.Apos:
 							if (qte_closed)
@@ -266,7 +246,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 									val_end = pos;
 								}
 								else {					// quote is just char; EX: title="1 o'clock" or title='The "C" way'
-									prv_is_ws = false; if (val_bfr_on) val_bfr.Add_byte(b);		// INLINE: add char
+									prv_is_ws = false; if (val_bfr_on) val_bfr.Add_mid(src, pos, pos+utf8len);		// INLINE: add char
 								}
 							}
 							break;
@@ -280,7 +260,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 								if (!val_bfr_on) {val_bfr.Add_mid(src, val_bgn, pos); val_bfr_on = true;}	// INLINE: val_bfr.init
 								if (prv_is_ws) {}	// noop; only allow one ws at a time; EX: "a  b" -> "a b"; "a\n\nb" -> "a b"
 								else {
-									prv_is_ws = true; val_bfr.Add_byte(Byte_ascii.Space);									
+									prv_is_ws = true; val_bfr.Add_byte(Byte_ascii.Space);
 								}
 							}
 							break;
@@ -289,7 +269,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 							int gt_pos = Xnde_find_gt(src, pos, src_end);
 							if (gt_pos == Bry_find_.Not_found) {	
 								// area = Area__invalid;	// "<" inside quote is invalid; EX: <span title='a<b'>c</span>
-								if (val_bfr_on) val_bfr.Add_byte(b);		// INLINE: add char
+								if (val_bfr_on) val_bfr.Add_mid(src, pos, pos+utf8len);		// INLINE: add char
 							}
 							else {
 								if (qte_closed) {}
@@ -305,34 +285,23 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 							if (qte_closed)
 								area = Area__invalid;
 							else {
-								prv_is_ws = false; if (val_bfr_on) val_bfr.Add_byte(b);		// INLINE: add char
+								prv_is_ws = false; if (val_bfr_on) val_bfr.Add_mid(src, pos, pos+utf8len);		// INLINE: add char
 							}
 							break;
 					}
 					break;
 				}
 				case Area__val_naked:	// no quotes; EX:a=bcd; REF.MW:([a-zA-Z0-9!#$%&()*,\\-.\\/:;<>?@[\\]^_`{|}~]+)
-					switch (b) {
+					switch (type) {
 						// alphanum -> continue reading
-						case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
-						case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
-						case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
-						case Byte_ascii.Ltr_F: case Byte_ascii.Ltr_G: case Byte_ascii.Ltr_H: case Byte_ascii.Ltr_I: case Byte_ascii.Ltr_J:
-						case Byte_ascii.Ltr_K: case Byte_ascii.Ltr_L: case Byte_ascii.Ltr_M: case Byte_ascii.Ltr_N: case Byte_ascii.Ltr_O:
-						case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
-						case Byte_ascii.Ltr_U: case Byte_ascii.Ltr_V: case Byte_ascii.Ltr_W: case Byte_ascii.Ltr_X: case Byte_ascii.Ltr_Y: case Byte_ascii.Ltr_Z:
-						case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
-						case Byte_ascii.Ltr_f: case Byte_ascii.Ltr_g: case Byte_ascii.Ltr_h: case Byte_ascii.Ltr_i: case Byte_ascii.Ltr_j:
-						case Byte_ascii.Ltr_k: case Byte_ascii.Ltr_l: case Byte_ascii.Ltr_m: case Byte_ascii.Ltr_n: case Byte_ascii.Ltr_o:
-						case Byte_ascii.Ltr_p: case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
-						case Byte_ascii.Ltr_u: case Byte_ascii.Ltr_v: case Byte_ascii.Ltr_w: case Byte_ascii.Ltr_x: case Byte_ascii.Ltr_y: case Byte_ascii.Ltr_z:
+						case ALPHANUM:
 						case Byte_ascii.Bang: case Byte_ascii.Hash: case Byte_ascii.Dollar: case Byte_ascii.Percent: case Byte_ascii.Amp:
 						case Byte_ascii.Paren_bgn: case Byte_ascii.Paren_end: case Byte_ascii.Star: case Byte_ascii.Comma: case Byte_ascii.Dash: case Byte_ascii.Dot:
 						case Byte_ascii.Backslash: case Byte_ascii.Slash: case Byte_ascii.Colon: case Byte_ascii.Semic:
 						case Byte_ascii.Question: case Byte_ascii.At:
 						case Byte_ascii.Brack_bgn: case Byte_ascii.Brack_end: case Byte_ascii.Pow: case Byte_ascii.Underline: case Byte_ascii.Tick:
 						case Byte_ascii.Curly_bgn: case Byte_ascii.Curly_end: case Byte_ascii.Pipe: case Byte_ascii.Tilde:
-							if (val_bfr_on) val_bfr.Add_byte(b);		// INLINE: add char
+							if (val_bfr_on) val_bfr.Add_mid(src, pos, pos+utf8len);		// INLINE: add char
 							break;
 						// case Byte_ascii.Angle_end: NOTE: valid in MW; making invalid now until finding counter-example
 						// angle_bgn -> check for <nowiki>; EX: a=b<nowiki>c</nowiki>d
@@ -368,7 +337,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;			
 			}
-			++pos;
+			pos += utf8len;
 		}
 
 		// iterate atrs and notify
