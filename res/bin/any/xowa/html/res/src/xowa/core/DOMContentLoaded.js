@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function initCollapsible () {
     /* from jquery.makeCollapsible.css */
-    xowa.css.add('.mw-collapsible-toggle{float:right;}li .mw-collapsible-toggle{float:none;}.mw-collapsible-toggle-li{list-style:none;}');
+/*    xowa.css.add('.mw-collapsible-toggle{float:right;}li .mw-collapsible-toggle{float:none;}.mw-collapsible-toggle-li{list-style:none;}');
 		var options = {};
     options.collapsed = xowa.cfg.get('collapsible-collapsed');
-    $('table.collapsible, .mw-collapsible').makeCollapsible(options);
+    $('table.collapsible, .mw-collapsible').makeCollapsible(options);*/
 }
 
 function initTablesorter () {
@@ -65,6 +65,7 @@ function init () {
     }
     if (needCollapsible) {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/jquery/jquery.makeCollapsible.js', initCollapsible);
+      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery.makeCollapsible.styles.css')
     }
     if (needSortable) {
       //xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki.language/mediawiki.language.init.js');
@@ -135,6 +136,11 @@ function init () {
       importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/mediawiki.action.view.categoryPage.styles.css')
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki/mediawiki.api.js');
+    }
+
+    if (document.querySelectorAll('.oo-ui-widget').length) {
+      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/oojs-ui/oojs-ui-core-wikimediaui.css')
+      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/templatedata/ext.templateData.images.css')
     }
 
     if (document.querySelectorAll('.prettyprint').length) {
