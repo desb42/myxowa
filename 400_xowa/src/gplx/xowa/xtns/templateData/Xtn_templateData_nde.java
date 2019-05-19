@@ -216,11 +216,12 @@ public class Xtn_templateData_nde implements Xox_xnde {
 			bfr.Add(fld_label);
 		bfr.Add_str_a7("</th><td class=\"mw-templatedata-doc-param-name\"><code>");
 		bfr.Add(param_key);
+                bfr.Add_str_a7("</code>");
 		if (fld_aliases != null) {
 			Bry_bfr tmp_bfr = Bry_bfr_.New();
 			int ary_len = fld_aliases.Len();
 			for (int k = 0; k < ary_len; k++) {
-				bfr.Add(msg_mgr.Val_by_key_obj("word-separator"));
+				tmp_bfr.Add(msg_mgr.Val_by_key_obj("word-separator"));
 				tmp_bfr.Add_str_a7_null("<code class=\"mw-templatedata-doc-param-alias\">");
 				tmp_bfr.Add(fld_aliases.Get_at(k).Data_bry());
 				tmp_bfr.Add_str_a7_null("</code>");
@@ -269,7 +270,14 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		if (fld_type == Bry_.Empty) {
 			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-type-unknown"));
 		} else {
-			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-type-" + String_.new_a7(fld_type)));
+                    String stype;
+                    // check for comptibility - starting 'string/'
+                    if (Bry_.Match(fld_type, 0, 7, string_start)) {
+                        stype = String_.new_a7(Bry_.Mid(fld_type, 7));
+                    }
+                    else
+                        stype = String_.new_a7(fld_type);
+			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-type-" + stype));
 		}
 		bfr.Add_str_a7("</td><td");
 		if (statusClass != Bry_.Empty) {
@@ -292,5 +300,6 @@ public class Xtn_templateData_nde implements Xox_xnde {
 	, m_settings = Bry_.new_a7("settings")
 	, f_block = Bry_.new_a7("template-format-block")
 	, f_inline = Bry_.new_a7("template-format-inline")
+                , string_start = Bry_.new_a7("string/")
 	;
 }
