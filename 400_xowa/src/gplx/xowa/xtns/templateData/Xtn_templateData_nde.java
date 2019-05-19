@@ -22,11 +22,13 @@ import gplx.xowa.langs.msgs.*;
 public class Xtn_templateData_nde implements Xox_xnde {
 	private Json_doc jdoc = null;
 	private Xow_msg_mgr msg_mgr;
+        Xop_ctx ctx;
 	public Xop_xnde_tkn Xnde() {return xnde;} private Xop_xnde_tkn xnde;
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {}
 	// some logic from mediawiki\extensions\TemplateData\includes\TemplateDataBlob.php
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
 		this.xnde = xnde;
+                this.ctx = ctx;
 		msg_mgr = wiki.Msg_mgr();
 		int itm_bgn = xnde.Tag_open_end(), itm_end = xnde.Tag_close_bgn();
 		if (itm_bgn == src.length)	return;  // NOTE: handle inline where there is no content to parse; EX: <templatedata/>
@@ -38,6 +40,8 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		if (jdoc == null) return;
 
 		Json_nde params = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("params")));
+		Json_ary paramorder = (Json_ary)jdoc.Get_grp(Bry_.new_a7("paramOrder"));
+				// also 'sets' and 'maps'?
 		byte[] desc = jdoc.Get_val_as_bry_or(Bry_.new_a7("description"), null);
 		byte[] format = jdoc.Get_val_as_bry_or(Bry_.new_a7("format"), null);
 		byte[] icon = m_settings;
@@ -94,21 +98,47 @@ public class Xtn_templateData_nde implements Xox_xnde {
 			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-no-params-set"));
 			bfr.Add_str_a7("</td></tr>\n");
 		}
+
+		if (paramorder != null) {
+			int paramorder_len = paramorder.Len(); // should be the same as params
+			for (int i = 0; i < paramorder_len; i++) {
+				Json_itm paramord = paramorder.Get_at(i);
+				byte[] orderkey = paramord.Data_bry();
+				// find the key
+				for (int j = 0; j < param_len; j++) {
+					Json_kv param = params.Get_at_as_kv(j);
+					byte[] param_key = param.Key_as_bry();
+					if (Bry_.Eq(param_key, orderkey)) {
+						Json_nde param_val = param.Val_as_nde();
+						Make_row(bfr, param_val, param_key);
+						break;
+					}
+				}
+			}
+		} else {
+			for (int i = 0; i < param_len; i++) {
+				Json_kv param = params.Get_at_as_kv(i);
+				byte[] param_key = param.Key_as_bry();
+				Json_nde param_val = param.Val_as_nde();
+				Make_row(bfr, param_val, param_key);
+			}
+		}
+
+		bfr.Add_str_a7("</tbody></table></div>");
+
+		//jdoc.Root_grp().Print_as_json(bfr, 0);
+	}
+	private void Make_row(Bry_bfr bfr, Json_nde param_val, byte[] param_key) {
 		Json_ary fld_aliases;
 		byte[] fld_autovalue; 
 		byte[] fld_default;
-		boolean fld_deprecated;
+		boolean fld_deprecated = false;
 		byte[] fld_description;
 		byte[] fld_example;
 		byte[] fld_label;
 		boolean fld_required;
 		boolean fld_suggested;
 		byte[] fld_type;
-		for (int i = 0; i < param_len; i++) {
-			Json_kv param = params.Get_at_as_kv(i);
-			byte[] param_key = param.Key_as_bry();
-			Json_nde param_val = param.Val_as_nde();
-
 			fld_aliases = null;
 			fld_autovalue = Bry_.Empty; 
 			fld_default = Bry_.Empty;
@@ -120,137 +150,136 @@ public class Xtn_templateData_nde implements Xox_xnde {
 			fld_suggested = false;
 			fld_type = Bry_.Empty;
 
-			int param_val_len = param_val.Len();
-			for (int j = 0; j < param_val_len; j++) {
-				Json_kv itm = Json_kv.cast(param_val.Get_at(j));
-				byte[] key = itm.Key_as_bry();
-				Json_itm val = itm.Val();
-				boolean badkey = false;
-				if (key[0] == 'a') {
-					if (key[1] == 'l') // aliases
-						fld_aliases = (Json_ary)val;
-					else if (key[1] == 'u') // autovalue
-						fld_autovalue = ((Json_itm_str)val).Data_bry();
-					else
-						badkey = true;
-				} else if (key[0] == 'd') {
-					if (key[2] == 'f') // default
-						fld_default = ((Json_itm_str)val).Data_bry();
-					else if (key[2] == 'p') // deprecated
-						fld_deprecated = ((Json_itm_bool)val).Data_as_bool();
-					else if (key[2] == 's') // description
-						fld_description = ((Json_itm_str)val).Data_bry();
-					else
-						badkey = true;
-				} else if (key[0] == 'e') { // example
-					fld_example = ((Json_itm_str)val).Data_bry();
-				} else if (key[0] == 'l') { // label
-					fld_label = ((Json_itm_str)val).Data_bry();
-				} else if (key[0] == 'r') { // required
-					fld_required = ((Json_itm_bool)val).Data_as_bool();
-				} else if (key[0] == 's') { // suggested
-					fld_suggested = ((Json_itm_bool)val).Data_as_bool();
-				} else if (key[0] == 't') { // type
-					fld_type = ((Json_itm_str)val).Data_bry();
-				} else
+
+		int param_val_len = param_val.Len();
+		for (int j = 0; j < param_val_len; j++) {
+			Json_kv itm = Json_kv.cast(param_val.Get_at(j));
+			byte[] key = itm.Key_as_bry();
+			Json_itm val = itm.Val();
+			boolean badkey = false;
+			if (key[0] == 'a') {
+				if (key[1] == 'l') // aliases
+					fld_aliases = (Json_ary)val;
+				else if (key[1] == 'u') // autovalue
+					fld_autovalue = ((Json_itm_str)val).Data_bry();
+				else
 					badkey = true;
+			} else if (key[0] == 'd') {
+				if (key[2] == 'f') // default
+					fld_default = ((Json_itm_str)val).Data_bry();
+				else if (key[2] == 'p') // deprecated
+					fld_deprecated = ((Json_itm_bool)val).Data_as_bool();
+				else if (key[2] == 's') // description
+					fld_description = ((Json_itm_str)val).Data_bry();
+				else
+					badkey = true;
+			} else if (key[0] == 'e') { // example
+				fld_example = ((Json_itm_str)val).Data_bry();
+			} else if (key[0] == 'l') { // label
+				fld_label = ((Json_itm_str)val).Data_bry();
+			} else if (key[0] == 'r') { // required
+				fld_required = ((Json_itm_bool)val).Data_as_bool();
+			} else if (key[0] == 's') { // suggested
+				fld_suggested = ((Json_itm_bool)val).Data_as_bool();
+			} else if (key[0] == 't') { // type
+				fld_type = ((Json_itm_str)val).Data_bry();
+			} else
+				badkey = true;
+			if (badkey) {
+				Xoa_app_.Usr_dlg().Warn_many("", "", "bad argument to templatedata: page=~{0} arg=~{1}", ctx.Page().Url().To_str(), String_.new_u8(key));
 			}
-
-			byte[] statusClass = Bry_.Empty;
-			byte[] status;
-			if ( fld_deprecated ) {
-				status = tdps_deprecated;
-			} else if ( fld_required ) {
-				status = tdps_required;
-				statusClass = mw_tdps_required;
-			} else if ( fld_suggested ) {
-				status = tdps_suggested;
-			} else {
-				status = tdps_optional;
-			}
-
-			bfr.Add_str_a7("<tr><th>");
-			if (fld_label == Bry_.Empty) {
-				byte b = param_key[0];
-				if (b >= 'a' && b <= 'z') {
-					param_key[0] = (byte)(b - 32); // uppercase 1st letter
-				}
-				bfr.Add(param_key);
-				param_key[0] = b; // restore
-			}
-			else
-				bfr.Add(fld_label);
-			bfr.Add_str_a7("</th><td class=\"mw-templatedata-doc-param-name\"><code>");
-			bfr.Add(param_key);
-			if (fld_aliases != null) {
-				Bry_bfr tmp_bfr = Bry_bfr_.New();
-				int ary_len = fld_aliases.Len();
-				for (int k = 0; k < ary_len; k++) {
-					bfr.Add(msg_mgr.Val_by_key_obj("word-separator"));
-					tmp_bfr.Add_str_a7_null("<code class=\"mw-templatedata-doc-param-alias\">");
-					tmp_bfr.Add(fld_aliases.Get_at(k).Data_bry());
-					tmp_bfr.Add_str_a7_null("</code>");
-				}
-				bfr.Add(tmp_bfr.To_bry_and_clear());
-			}
-			bfr.Add_str_a7("</td><td");
-			if (fld_description == Bry_.Empty) {
-				bfr.Add_str_a7(" class=\"mw-templatedata-doc-muted\"");
-			}
-			bfr.Add_str_a7("><p>");
-			if (fld_description == Bry_.Empty) {
-				bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-desc-empty"));
-			} else {
-				bfr.Add(fld_description);
-			}
-			bfr.Add_str_a7("</p><dl>");
-			if (fld_default != Bry_.Empty) {
-				bfr.Add_str_a7("<dt>");
-				bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-default"));
-				bfr.Add_str_a7("</dt><dd>");
-				bfr.Add(fld_default);
-				bfr.Add_str_a7("</dd>");
-			}
-			// example
-			if (fld_example != Bry_.Empty) {
-				bfr.Add_str_a7("<dt>");
-				bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-example"));
-				bfr.Add_str_a7("</dt><dd>");
-				bfr.Add(fld_example);
-				bfr.Add_str_a7("</dd>");
-			}
-			// autovalue
-			if (fld_autovalue != Bry_.Empty) {
-				bfr.Add_str_a7("<dt>");
-				bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-autovalue"));
-				bfr.Add_str_a7("</dt><dd>");
-				bfr.Add(fld_autovalue);
-				bfr.Add_str_a7("</dd>");
-			}
-			bfr.Add_str_a7("</dl></td><td class=\"mw-templatedata-doc-param-type");
-			if (fld_type == Bry_.Empty) {
-				bfr.Add_str_a7(" mw-templatedata-doc-muted");
-			}
-			bfr.Add_str_a7("\">");
-			if (fld_type == Bry_.Empty) {
-				bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-desc-empty"));
-			} else {
-				bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-type-" + String_.new_a7(fld_type)));
-			}
-			bfr.Add_str_a7("</td><td");
-			if (statusClass != Bry_.Empty) {
-				bfr.Add_str_a7(" class=\"");
-				bfr.Add(statusClass);
-				bfr.Add_str_a7("\"");
-			}
-			bfr.Add_str_a7(">");
-			bfr.Add(msg_mgr.Val_by_key_obj(status));
-			bfr.Add_str_a7("</td></tr>");
 		}
 
-		bfr.Add_str_a7("</tbody></table></div>");
+		byte[] statusClass = Bry_.Empty;
+		byte[] status;
+		if ( fld_deprecated ) {
+			status = tdps_deprecated;
+		} else if ( fld_required ) {
+			status = tdps_required;
+			statusClass = mw_tdps_required;
+		} else if ( fld_suggested ) {
+			status = tdps_suggested;
+		} else {
+			status = tdps_optional;
+		}
 
-		//jdoc.Root_grp().Print_as_json(bfr, 0);
+		bfr.Add_str_a7("<tr><th>");
+		if (fld_label == Bry_.Empty) {
+			byte b = param_key[0];
+			if (b >= 'a' && b <= 'z') {
+				param_key[0] = (byte)(b - 32); // uppercase 1st letter
+			}
+			bfr.Add(param_key);
+			param_key[0] = b; // restore
+		}
+		else
+			bfr.Add(fld_label);
+		bfr.Add_str_a7("</th><td class=\"mw-templatedata-doc-param-name\"><code>");
+		bfr.Add(param_key);
+		if (fld_aliases != null) {
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			int ary_len = fld_aliases.Len();
+			for (int k = 0; k < ary_len; k++) {
+				bfr.Add(msg_mgr.Val_by_key_obj("word-separator"));
+				tmp_bfr.Add_str_a7_null("<code class=\"mw-templatedata-doc-param-alias\">");
+				tmp_bfr.Add(fld_aliases.Get_at(k).Data_bry());
+				tmp_bfr.Add_str_a7_null("</code>");
+			}
+			bfr.Add(tmp_bfr.To_bry_and_clear());
+		}
+		bfr.Add_str_a7("</td><td");
+		if (fld_description == Bry_.Empty) {
+			bfr.Add_str_a7(" class=\"mw-templatedata-doc-muted\"");
+		}
+		bfr.Add_str_a7("><p>");
+		if (fld_description == Bry_.Empty) {
+			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-desc-empty"));
+		} else {
+			bfr.Add(fld_description);
+		}
+		bfr.Add_str_a7("</p><dl>");
+		if (fld_default != Bry_.Empty) {
+			bfr.Add_str_a7("<dt>");
+			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-default"));
+			bfr.Add_str_a7("</dt><dd>");
+			bfr.Add(fld_default);
+			bfr.Add_str_a7("</dd>");
+		}
+		// example
+		if (fld_example != Bry_.Empty) {
+			bfr.Add_str_a7("<dt>");
+			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-example"));
+			bfr.Add_str_a7("</dt><dd>");
+			bfr.Add(fld_example);
+			bfr.Add_str_a7("</dd>");
+		}
+		// autovalue
+		if (fld_autovalue != Bry_.Empty) {
+			bfr.Add_str_a7("<dt>");
+			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-autovalue"));
+			bfr.Add_str_a7("</dt><dd><code>");
+			bfr.Add(fld_autovalue);
+			bfr.Add_str_a7("</code></dd>");
+		}
+		bfr.Add_str_a7("</dl></td><td class=\"mw-templatedata-doc-param-type");
+		if (fld_type == Bry_.Empty) {
+			bfr.Add_str_a7(" mw-templatedata-doc-muted");
+		}
+		bfr.Add_str_a7("\">");
+		if (fld_type == Bry_.Empty) {
+			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-type-unknown"));
+		} else {
+			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-type-" + String_.new_a7(fld_type)));
+		}
+		bfr.Add_str_a7("</td><td");
+		if (statusClass != Bry_.Empty) {
+			bfr.Add_str_a7(" class=\"");
+			bfr.Add(statusClass);
+			bfr.Add_str_a7("\"");
+		}
+		bfr.Add_str_a7(">");
+		bfr.Add(msg_mgr.Val_by_key_obj(status));
+		bfr.Add_str_a7("</td></tr>");
 	}
 
 	private static final byte[]
@@ -264,6 +293,4 @@ public class Xtn_templateData_nde implements Xox_xnde {
 	, f_block = Bry_.new_a7("template-format-block")
 	, f_inline = Bry_.new_a7("template-format-inline")
 	;
-
-//icon = 'settings';
 }
