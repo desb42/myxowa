@@ -30,42 +30,94 @@ class Xop_xnde_wkr_ {
 			root.Subs_move(owner, subs_bgn, subs_len);			// move everything after "|" back to root
 	}
 	public static int Find_xtn_end(Xop_ctx ctx, byte[] src, int open_end, int src_end, byte[] open_bry, byte[] close_bry) {
-		// UNIQ; DATE:2017-03-31
-		Btrie_slim_mgr xtn_end_tag_trie = ctx.Tmp_mgr().Xnde__xtn_end();
-		xtn_end_tag_trie.Clear();
-		xtn_end_tag_trie.Add_obj(open_bry, Find_xtn_end__key__bgn);
-		xtn_end_tag_trie.Add_obj(close_bry, Find_xtn_end__key__end);
+	//public static int Find_xtn_end(Xop_ctx ctx, byte[] src, int open_end, int src_end, byte[] close_bry) {
 		int depth = 0;
-		for (int i = open_end; i < src_end; ++i) {
-			Object o = xtn_end_tag_trie.Match_at(ctx.Tmp_mgr().Xnde__trv(), src, i, src_end);
-			if (o != null) {
-				int tid = ((Int_obj_val)o).Val();
-				switch (tid) {
-					case Find_xtn_end__tid__bgn:		// handle nested refs; PAGE:en.w:UK; DATE:2015-12-26
-						int angle_end_pos = Bry_find_.Find_fwd(src, Byte_ascii.Angle_end, i, src_end);
-
-						// if dangling, return not found; EX:"<ref>a</ref" PAGE:en.w:Leo_LeBlanc DATE:2017-04-10
-						if (angle_end_pos == Bry_find_.Not_found) {
-							Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1} excerpt=~{2}", ctx.Page().Url().To_str(), close_bry, String_.new_u8(src, open_end, src_end));
-							return Bry_find_.Not_found;
+		int lastclose = -1;
+		int close_end = close_bry.length;
+		int last_pos = src_end - close_end; // no point in searching after this pos
+		int i = open_end, j;
+		boolean closer;
+		int closepos;
+		while (i < last_pos) {
+			byte b = src[i];
+			if (b != Byte_ascii.Angle_bgn) {
+				i++;
+				continue;
+			}
+			closepos = i;
+			i++;
+			b = src[i];
+			if (b == Byte_ascii.Slash) {// must be a close
+				closer = true;
+				i++;
+			}
+			else
+				closer = false;
+                        // allow for different case
+			for (j = 2; j < close_end; j++) {
+                            byte c = close_bry[j];
+                            byte s = src[i];
+				if (c != s && (c | 32) != (s | 32))
+					break;
+				else
+					i++;
+			}
+			if (j == close_end) {
+				if (closer) {
+                                    // skip whitespace
+                                    byte s = src[i];
+                                    while (i < last_pos) {
+                                        if (s == ' ' || s == '\n' || s == '\t') {
+                                            i++;
+                                            s = src[i];
+                                        }
+                                        else
+                                            break;
+                                    }
+					if (s != Byte_ascii.Angle_end)
+						continue; // not what we are looking for
+					i++;
+					if (depth == 0)
+						return closepos;
+					else {
+						--depth;
+						lastclose = closepos;
+					}
+				}
+				else { // must be opener
+					// forward for close angle
+					// strictly - could be a prefix of another element
+					b = src[i];
+					if (b == Byte_ascii.Angle_end)
+						i++;
+					else {
+						if (b != ' ' && b != '\t' && b != '\n') // strictly whitespace
+							continue; // not what we ar looking for
+						while (i < src_end) { // NB whole of src
+							if (src[i++] == Byte_ascii.Angle_end)
+								break;
 						}
-						if (src[angle_end_pos -1] == Byte_ascii.Slash) {}
-						else
-							++depth;
+					}
+					if (i == src_end) { // not found at all
 						break;
-					case Find_xtn_end__tid__end:		// xtn_end found; use it
-						if (depth == 0)
-							return i;
-						else
-							--depth;
-						break;
+					}
+					if (src[i - 2] == Byte_ascii.Slash) {}
+					else
+						++depth;
 				}
 			}
 		}
+		if (lastclose > 0)
+			return lastclose; // at least there was a close somewhere
+                //if (ctx.Parse_tid() == Xop_parser_tid_.Tid__tmpl)
+                //    return src_end;
+		//Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1} excerpt=~{2}", ctx.Page().Url().To_str(), close_bry, String_.new_u8(src, open_end, src_end));
+		Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1}", ctx.Page().Url().To_str(), close_bry);
+                Gfo_usr_dlg_.Instance.Log_many("", "", "mid_bry=~{0}", String_.new_u8(src));
 		return Bry_find_.Not_found;
 	}
 	private static final int Find_xtn_end__tid__bgn = 0, Find_xtn_end__tid__end = 1;//, Find_xtn_end__tid__xtag = 2;
-	private static final    Int_obj_val 
+	private static final	Int_obj_val 
 	  Find_xtn_end__key__bgn  = new Int_obj_val(Find_xtn_end__tid__bgn)
 	, Find_xtn_end__key__end  = new Int_obj_val(Find_xtn_end__tid__end)
 	;
