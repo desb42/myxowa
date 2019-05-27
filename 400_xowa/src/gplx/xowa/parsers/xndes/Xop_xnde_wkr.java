@@ -288,6 +288,7 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 			case Byte_ascii.Backslash:	// allow <br\>; EX:w:Mosquito
 				if (tag.Inline_by_backslash())
 					src[tag_end_pos] = Byte_ascii.Slash;
+				inline = true;		
 				break;
 			case Byte_ascii.Gt:		// ">" "normal" tag; noop
 				break;
@@ -300,6 +301,9 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 				}
 				break;
 		}
+		// dont care if <references> (ie no close) or <references/>
+		if (tag.Id() == Xop_xnde_tag_.Tid__references)
+			inline = true;
 		Mwh_atr_itm[] atrs = null;
 		if (ctx.Parse_tid() == Xop_parser_tid_.Tid__wtxt) {
 			// NOWIKI;DATE:2018-01-16
