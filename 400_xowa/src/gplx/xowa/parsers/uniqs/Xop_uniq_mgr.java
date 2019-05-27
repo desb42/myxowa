@@ -16,8 +16,8 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.parsers.uniqs; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
 import gplx.core.btries.*;
 public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
-	private final    Btrie_slim_mgr general_trie = Btrie_slim_mgr.cs(); private final    Btrie_rv trv = new Btrie_rv();
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
+	private final	Btrie_slim_mgr general_trie = Btrie_slim_mgr.cs(); private final	Btrie_rv trv = new Btrie_rv();
+	private final	Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
 	private int nxt_idx = -1;
 	public void Clear() {
 		nxt_idx = -1;
@@ -25,15 +25,17 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 	}
 	public byte[] Get(byte[] key) {
 		Xop_uniq_itm itm = (Xop_uniq_itm)general_trie.Match_exact(key, 0, key.length);
+                if (itm == null)
+                    return Bry_.Empty;
 		return itm.Val();
 	}
 	public byte[] Add(boolean expand_after_template_parsing, byte[] type, byte[] val) {// "<b>" -> "\u007fUNIQ-item-1-QINU\u007f"
 		int idx = ++nxt_idx;
 		byte[] key = tmp_bfr	
-			.Add(Bry__uniq__bgn_w_dash)          // "\u007f'\"`UNIQ-"
+			.Add(Bry__uniq__bgn_w_dash)		  // "\u007f'\"`UNIQ-"
 			.Add(type).Add_byte(Byte_ascii.Dash) // "ref-"
-			.Add_int_variable(idx)               // "1"
-			.Add(Bry__uniq__add__end)            // "-QINU`\"'\u007f"
+			.Add_int_variable(idx)			   // "1"
+			.Add(Bry__uniq__add__end)			// "-QINU`\"'\u007f"
 			.To_bry_and_clear(); 
 		Xop_uniq_itm itm = new Xop_uniq_itm(expand_after_template_parsing, type, idx, key, val);
 		general_trie.Add_obj(key, itm);
@@ -41,19 +43,33 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 	}
 	public void Parse(Bry_bfr bfr) {
 		if (general_trie.Count() == 0) return;
-		byte[] rv = Parse_recurse(Bool_.Y, tmp_bfr, bfr.To_bry_and_clear());
+		//byte[] rv = Parse_recurse(Bool_.Y, tmp_bfr, bfr.To_bry_and_clear());
+		byte[] rv = Parse_recurse(Bool_.N, tmp_bfr, bfr.To_bry_and_clear());
 		bfr.Add(rv);
 	}
-	public byte[] Parse(byte[] src) {return Parse_recurse(Bool_.Y, tmp_bfr, src);}
+	public byte[] Parse(boolean template_parsing, byte[] src) {
+		if (nxt_idx < 0) // nothing to do
+			return src;
+		return Parse_recurse(template_parsing, tmp_bfr, src);
+	}
+	public byte[] Parse(byte[] src) {
+		if (general_trie.Count() == 0) // nothing to do
+			return src;
+		return Parse_recurse(Bool_.Y, tmp_bfr, src);
+	}
 	private byte[] Parse_recurse(boolean template_parsing, Bry_bfr bfr, byte[] src) {
 		int src_len = src.length;
+		int loop_end = src_len - MINKEYSIZE;
+		// the keys are a minimum of MINKEYSIZE chars
 		int pos = 0;
 		int prv_bgn = 0;
-		boolean dirty = false;
 
-		while (true) {
-			boolean is_last = pos == src_len;				
-			byte b = is_last ? Byte_ascii.Null : src[pos];
+		while (pos < loop_end) {
+			byte b = src[pos];
+			if (b != 0x7f) {
+				pos++;
+				continue;
+			}
 			Object o = general_trie.Match_at_w_b0(trv, b, src, pos, src_len);
 
 			// match not found for "\x7fUNIQ"; move on to next
@@ -73,20 +89,19 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 				// add everything from prv_bgn up to UNIQ
 				bfr.Add_mid(src, prv_bgn, pos);
 
-				// expand UNIQ (can be recursive)
-				byte[] val = Parse_recurse(template_parsing, Bry_bfr_.New(), itm.Val());
-//					val = gplx.xowa.parsers.xndes.Xop_xnde_tkn.Hack_ctx.Wiki().Parser_mgr().Main().Parse_text_to_html(gplx.xowa.parsers.xndes.Xop_xnde_tkn.Hack_ctx, val);	// CHART
+				// expand UNIQ (can be recursive but only if a UNIQ could fit)
+				byte[] val = itm.Val();
+				if (val.length > MINKEYSIZE)
+					val = Parse_recurse(template_parsing, Bry_bfr_.New(), val);
 				bfr.Add(val);
-				dirty = true;
 				pos = prv_bgn = itm_end;
 			}
-			if (is_last) {
-				if (dirty)
-					bfr.Add_mid(src, prv_bgn, src_len);
-				break;
-			}
 		}
-		return dirty ? bfr.To_bry_and_clear() : src;
+		if (prv_bgn != 0) {
+			bfr.Add_mid(src, prv_bgn, src_len);
+			return bfr.To_bry_and_clear();
+		}
+		return src;
 	}
 	public byte[] Uniq_bry_new() {
 		return Bry_.Add
@@ -107,7 +122,8 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 		return rv;
 	}
 
-	public static final    byte[] 
+	private static final int MINKEYSIZE = 18;
+	public static final	byte[] 
 	  Bry__uniq__bgn		= Bry_.new_a7("\u007f'\"`UNIQ-")
 	, Bry__uniq__bgn_w_dash	= Bry_.Add(Bry__uniq__bgn, Byte_ascii.Dash_bry)
 	, Bry__uniq__add__end	= Bry_.new_a7("-QINU`\"'\u007f")
