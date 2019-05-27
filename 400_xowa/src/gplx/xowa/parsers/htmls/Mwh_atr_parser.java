@@ -28,7 +28,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 	private int nde_uid, nde_tid;
 	public Bry_obj_ref Bry_obj() {return bry_ref;} private final    Bry_obj_ref bry_ref = Bry_obj_ref.New_empty();
 	public int Nde_end_tid() {return nde_end_tid;} private int nde_end_tid;
-	private static final byte ALPHANUM = 1, INVALID = 0;
+	private static final byte INVALID = 0, ALPHANUM = 1, MULTIBYTE = 2;
 	public int Parse(Mwh_atr_wkr wkr, int nde_uid, int nde_tid, byte[] src, int src_bgn, int src_end) {
 		this.nde_uid = nde_uid; this.nde_tid = nde_tid;
 		this.nde_end_tid = Mwh_doc_parser.Nde_end_tid__invalid;
@@ -76,32 +76,36 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 				break;
 			}
 			byte b = src[pos];
-			int utf8len = 1;
-                        byte type;
+			//int b_len = gplx.core.intls.Utf8_.Len_of_char_by_1st_byte(b);
+			int b_len = 1;
+			// reuse 'b'
 			if (b >= 0) {
-			  if (b < 2)
-			  	type = INVALID;
+			  if (b < 3)
+			  	b = INVALID;
 				else if ((b >= Byte_ascii.Num_0 && b <= Byte_ascii.Num_9) ||
 				    (b >= Byte_ascii.Ltr_A && b <= Byte_ascii.Ltr_Z) ||
 				    (b >= Byte_ascii.Ltr_a && b <= Byte_ascii.Ltr_z))
-					type = ALPHANUM;
-				else
-					type = b;
+					b = ALPHANUM;
 			}
 			else {
-				type = ALPHANUM; // strictly there are some whitespace but...
+				// strictly there are some whitespace but...
 				if (b >= -64 && b <= -33) { // 192 <= b <= 223
-					utf8len = 2;
+					b_len = 2;
+                                        b = MULTIBYTE;
 				} else if (b >= -32 && b <= -17) { // 224 <= b <= 239
-					utf8len = 3;
+					b_len = 3;
+                                        b = MULTIBYTE;
 				} else if (b >= -16 && b <= -9) { // 240 <= b <= 247
-					utf8len = 4;
+					b_len = 4;
+                                        b = MULTIBYTE;
 				} else
-					type = INVALID;
+					b = INVALID;
 			}
+			if (b == INVALID)
+                            throw Err_.new_wo_type("null byte is invalid in byte array; src=", "src", String_.new_u8(src, src_bgn, src_end));
 			switch (area) {
 				case Area__invalid:
-					switch (type) {
+					switch (b) {
 						// ws -> end invalid area
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space:
 							Make(src, pos);
@@ -113,7 +117,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__atr_limbo:	// 1st area after (a) node_name, (b) attribute, (c) invalid_area
-					switch (type) {
+					switch (b) {
 						// ws -> ignore; skip any ws in atr_limbo; note that once a non-ws char is encountered, it will immediately go into another area
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space:								
 							if (atr_bgn == -1) atr_bgn = pos;	// NOTE: atr_bgn == -1 needed for multiple spaces; ALSO: cannot move above switch b/c of <nowiki>
@@ -121,6 +125,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 						// attribFirst -> enter Area__key; REF.MW: $attribFirst = '[:A-Z_a-z0-9]';
 						case ALPHANUM:
 						case Byte_ascii.Colon: case Byte_ascii.Underline:
+						case MULTIBYTE:
 							area = Area__key;
 							if (atr_bgn == -1) atr_bgn = pos;	// NOTE: atr_bgn == -1 needed b/c of spaces
 							key_bgn = pos;
@@ -141,11 +146,14 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__key:
-					switch (type) {
+					switch (b) {
 						// alphanum -> valid key chars; REF.MW: $attrib = '[:A-Z_a-z-.0-9]';
 						case ALPHANUM:
 						case Byte_ascii.Colon: case Byte_ascii.Underline: case Byte_ascii.Dash: case Byte_ascii.Dot:
-							if (key_bfr_on) key_bfr.Add_mid(src, pos, pos+utf8len);
+							if (key_bfr_on) key_bfr.Add_byte(b);
+							break;
+						case MULTIBYTE:
+							if (key_bfr_on) key_bfr.Add_mid(src, pos, pos + b_len);
 							break;
 						// ws -> end key
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space:
@@ -174,7 +182,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__eql_limbo:
-					switch (type) {
+					switch (b) {
 						// ws -> skip
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space: // skip ws
 							break;
@@ -186,6 +194,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 						// attribFirst -> enter Area__key; REF.MW: $attribFirst = '[:A-Z_a-z0-9]';
 						case ALPHANUM:
 						case Byte_ascii.Colon: case Byte_ascii.Underline:
+						case MULTIBYTE:
 							Make(src, pos);
 							area = Area__key;
 							atr_bgn = key_bgn = pos;
@@ -197,7 +206,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__val_limbo:
-					switch (type) {
+					switch (b) {
 						// ws -> skip
 						case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Cr: case Byte_ascii.Space:
 							ws_is_before_val = true;
@@ -216,6 +225,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 						case Byte_ascii.Question: case Byte_ascii.At:
 						case Byte_ascii.Brack_bgn: case Byte_ascii.Brack_end: case Byte_ascii.Pow: case Byte_ascii.Underline: case Byte_ascii.Tick:
 						case Byte_ascii.Curly_bgn: case Byte_ascii.Curly_end: case Byte_ascii.Pipe: case Byte_ascii.Tilde:
+						case MULTIBYTE:
 							area = Area__val_naked;
 							val_bgn = pos;
 							break;
@@ -235,7 +245,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;
 				case Area__val_quote: {	// EX: "'val' " in "key = 'val'"; REF.MW: \"([^<\"]*)\"
-					switch (type) {
+					switch (b) {
 						// quote: check if same as opening quote
 						case Byte_ascii.Quote: case Byte_ascii.Apos:
 							if (qte_closed)
@@ -246,7 +256,8 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 									val_end = pos;
 								}
 								else {					// quote is just char; EX: title="1 o'clock" or title='The "C" way'
-									prv_is_ws = false; if (val_bfr_on) val_bfr.Add_mid(src, pos, pos+utf8len);		// INLINE: add char
+									prv_is_ws = false;
+									if (val_bfr_on) val_bfr.Add_byte(b);		// INLINE: add char
 								}
 							}
 							break;
@@ -269,7 +280,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 							int gt_pos = Xnde_find_gt(src, pos, src_end);
 							if (gt_pos == Bry_find_.Not_found) {	
 								// area = Area__invalid;	// "<" inside quote is invalid; EX: <span title='a<b'>c</span>
-								if (val_bfr_on) val_bfr.Add_mid(src, pos, pos+utf8len);		// INLINE: add char
+								if (val_bfr_on) val_bfr.Add_byte(b);		// INLINE: add char
 							}
 							else {
 								if (qte_closed) {}
@@ -285,14 +296,15 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 							if (qte_closed)
 								area = Area__invalid;
 							else {
-								prv_is_ws = false; if (val_bfr_on) val_bfr.Add_mid(src, pos, pos+utf8len);		// INLINE: add char
+								prv_is_ws = false;
+								if (val_bfr_on) val_bfr.Add_mid(src, pos, pos + b_len);
 							}
 							break;
 					}
 					break;
 				}
 				case Area__val_naked:	// no quotes; EX:a=bcd; REF.MW:([a-zA-Z0-9!#$%&()*,\\-.\\/:;<>?@[\\]^_`{|}~]+)
-					switch (type) {
+					switch (b) {
 						// alphanum -> continue reading
 						case ALPHANUM:
 						case Byte_ascii.Bang: case Byte_ascii.Hash: case Byte_ascii.Dollar: case Byte_ascii.Percent: case Byte_ascii.Amp:
@@ -301,7 +313,10 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 						case Byte_ascii.Question: case Byte_ascii.At:
 						case Byte_ascii.Brack_bgn: case Byte_ascii.Brack_end: case Byte_ascii.Pow: case Byte_ascii.Underline: case Byte_ascii.Tick:
 						case Byte_ascii.Curly_bgn: case Byte_ascii.Curly_end: case Byte_ascii.Pipe: case Byte_ascii.Tilde:
-							if (val_bfr_on) val_bfr.Add_mid(src, pos, pos+utf8len);		// INLINE: add char
+							if (key_bfr_on) key_bfr.Add_byte(b);
+							break;
+						case MULTIBYTE:
+							if (key_bfr_on) key_bfr.Add_mid(src, pos, pos + b_len);
 							break;
 						// case Byte_ascii.Angle_end: NOTE: valid in MW; making invalid now until finding counter-example
 						// angle_bgn -> check for <nowiki>; EX: a=b<nowiki>c</nowiki>d
@@ -337,7 +352,7 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 					}
 					break;			
 			}
-			pos += utf8len;
+			pos += b_len;
 		}
 
 		// iterate atrs and notify
