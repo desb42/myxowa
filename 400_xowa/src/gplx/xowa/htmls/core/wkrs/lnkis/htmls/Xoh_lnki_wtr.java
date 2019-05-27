@@ -104,9 +104,12 @@ public class Xoh_lnki_wtr {
 		if (Bry_.Len_eq_0(ttl_bry)) ttl_bry = lnki_ttl.Full_txt_raw();		// NOTE: handles ttls like [[fr:]] and [[:fr;]] which have an empty Page_txt, but a valued Full_txt_raw
 		if (Bry_.Eq(lnki_ttl.Full_txt_by_orig(), page.Ttl().Full_txt_by_orig())) {			// lnki is same as pagename; bold; SEE: Month widget on day pages will bold current day; PAGE:en.w:January 1
 			if (lnki_ttl.Anch_bgn() == -1 && Bry_.Eq(lnki_ttl.Wik_txt(), page.Ttl().Wik_txt())) {		// only bold if lnki is not pointing to anchor on same page; PAGE:en.w:Comet; [[Comet#Physical characteristics|ion tail]]
-				bfr.Add(Gfh_tag_.B_lhs);
+				// self link now a anchor tag
+				bfr.Add_str_a7("<a class=\"mw-selflink selflink\">");
+				//bfr.Add(Gfh_tag_.B_lhs);
 				Write_caption(bfr, ctx, hctx, src, lnki, ttl_bry, true, caption_wkr);
-				bfr.Add(Gfh_tag_.B_rhs);
+				//bfr.Add(Gfh_tag_.B_rhs);
+				bfr.Add_str_a7("</a>");
 				return;
 			}
 		}
