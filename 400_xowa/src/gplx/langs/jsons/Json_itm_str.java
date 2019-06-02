@@ -57,6 +57,18 @@ public class Json_itm_str extends Json_itm_base {
 						case Byte_ascii.Ltr_f:				bfr.Add_byte(Byte_ascii.Formfeed); break;
 						case Byte_ascii.Ltr_u:
 							int utf8_val = gplx.core.encoders.Hex_utl_.Parse_or(src, i + 1, i + 5, -1);
+							// check for UTF surrogacy
+							// D800–DBFF  high 55296, 56319
+							if (utf8_val >= 0xD800 && utf8_val <= 0xDBFF) {
+								if (i + 5 + 6 <= end && src[i+5] == Byte_ascii.Backslash && src[i+6] == Byte_ascii.Ltr_u) {
+									int utf8_val2 = gplx.core.encoders.Hex_utl_.Parse_or(src, i + 7, i + 11, -1);
+									// DC00–DFFF  low  56320, 57343
+									if (utf8_val2 >= 0xDC00 && utf8_val2 <= 0xDFFF) {
+										utf8_val = 0x10000 + (utf8_val - 0xD800) * 0x400 + (utf8_val2 - 0xDC00);
+										i += 6;
+									}
+								}
+							}
 							int len = gplx.core.intls.Utf16_.Encode_int(utf8_val, utf8_bry, 0);
 							bfr.Add_mid(utf8_bry, 0, len);
 							i += 4;
