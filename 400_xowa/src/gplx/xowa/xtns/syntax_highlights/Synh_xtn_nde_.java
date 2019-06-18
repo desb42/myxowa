@@ -16,7 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.syntax_highlights; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import gplx.langs.htmls.*; import gplx.xowa.htmls.*;
 class Synh_xtn_nde_ {
-	public static void Make(Bry_bfr bfr, Xoae_app app, byte[] src, int src_bgn, int src_end, byte[] lang, byte[] enclose, byte[] style, boolean line_enabled, int start, Int_rng_mgr highlight_idxs) {
+	public static void Make(Bry_bfr bfr, Xoae_app app, byte[] src, int src_bgn, int src_end, byte[] lang, byte[] enclose, byte[] style, boolean line_enabled, int start, boolean highlight_lines, Int_rng_mgr highlight_idxs) {
 		boolean enclose_is_none	= Bry_.Eq(enclose, Enclose_none);
 		if (enclose_is_none) {	// enclose=none -> put in <code>
 			bfr.Add(Bry__code_bgn);
@@ -27,15 +27,15 @@ class Synh_xtn_nde_ {
 			bfr.Add(Bry__div_bgn);
 			if (style != null) bfr.Add(Xoh_consts.Style_atr).Add(style).Add_byte(Byte_ascii.Quote);
 			bfr.Add_byte(Byte_ascii.Angle_end);
-			bfr.Add(Xoh_consts.Pre_bgn_overflow);
-			//bfr.Add(Xoh_consts.Pre_bgn_overflow_open);
-                        //bfr.Add(Bry_.Lcase__all(lang));
-			//bfr.Add_byte(Byte_ascii.Quote);
-			//bfr.Add_byte(Byte_ascii.Angle_end);
+			//bfr.Add(Xoh_consts.Pre_bgn_overflow);
+			bfr.Add(Xoh_consts.Pre_bgn_overflow_open);
+			bfr.Add(Bry_.Lcase__all(lang));
+			bfr.Add_byte(Byte_ascii.Quote);
+			bfr.Add_byte(Byte_ascii.Angle_end);
 		}
 		int text_bgn = src_bgn;
 		int text_end = Bry_find_.Find_bwd_while(src, src_end, -1, Byte_ascii.Space) + 1; // trim space from end; PAGE:en.w:Comment_(computer_programming) DATE:2014-06-23
-		if (line_enabled) {
+		if (line_enabled || highlight_lines) {
 			bfr.Add_byte_nl();
 			byte[][] lines = Bry_split_.Split_lines(Bry_.Mid(src, text_bgn, text_end));
 			int lines_len = lines.length;
