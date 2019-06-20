@@ -134,7 +134,10 @@ public class Scrib_lib_wikibase_srl {
 		list.Add(Keyval_.new_("mainsnak", Srl_claims_prop_itm_core(prop_mgr, visitor, pid, itm, page_url)));
 		list.Add(Keyval_.new_(Wdata_dict_claim_v1.Str_rank, Wbase_claim_rank_.Reg.Get_str_or_fail(itm.Rank_tid())));
 		list.Add(Keyval_.new_("type", itm.Prop_type()));
-		Srl_root(list, Wdata_dict_claim.Itm__qualifiers.Key_str(), Srl_qualifiers(prop_mgr, visitor, itm.Qualifiers(), base_adj, page_url));
+		if (itm.Qualifiers_order() != null) {
+			Srl_root(list, Wdata_dict_claim.Itm__qualifiers.Key_str(), Srl_qualifiers(prop_mgr, visitor, itm.Qualifiers(), base_adj, page_url));
+			Srl_root(list, Wdata_dict_claim.Itm__qualifiers_order.Key_str(), Srl_qualifiers_order(prop_mgr, visitor, itm.Qualifiers_order(), base_adj, page_url));
+		}
 		return (Keyval[])list.To_ary_and_clear(Keyval.class);
 	}
 	private static Keyval[] Srl_qualifiers(Wbase_prop_mgr prop_mgr, Scrib_lib_wikibase_srl_visitor visitor, Wbase_claim_grp_list list, int base_adj, byte[] page_url) {
@@ -152,6 +155,16 @@ public class Scrib_lib_wikibase_srl {
 				pid_list.Add(Keyval_.int_(j + base_adj, Srl_claims_prop_itm_core(prop_mgr, visitor, itm_pid, itm, page_url)));	// NOTE: was originally "+ 1"; changed to base_adj; PAGE:ru.w:Tor ru.w:Кактусовые DATE:2014-10-25
 			}
 			rv.Add(Keyval_.new_(itm_pid, (Keyval[])pid_list.To_ary_and_clear(Keyval.class)));
+		}
+		return (Keyval[])rv.To_ary_and_clear(Keyval.class);
+	}
+	private static Keyval[] Srl_qualifiers_order(Wbase_prop_mgr prop_mgr, Scrib_lib_wikibase_srl_visitor visitor, int[] list, int base_adj, byte[] page_url) {
+		if (list == null) return null;
+		int list_len = list.length; if (list_len == 0) return Keyval_.Ary_empty;
+		List_adp rv = List_adp_.New();
+		for (int i = 0; i < list_len; ++i) {
+			String itm_pid = "P" + Int_.To_str(list[i]);
+			rv.Add(Keyval_.int_(i + base_adj, itm_pid));
 		}
 		return (Keyval[])rv.To_ary_and_clear(Keyval.class);
 	}
@@ -181,6 +194,6 @@ public class Scrib_lib_wikibase_srl {
 			}
 	}
 	public static final String Key_type = "type", Key_value = "value";
-	private static final    Keyval[] Datavalue_somevalue = Keyval_.Ary_empty;	// changed to not return value-node; PAGE:it.s:Autore:Anonimo DATE:2015-12-06 // new Keyval[] {Keyval_.new_(Key_type, ""), Keyval_.new_(Key_value, "")};	// NOTE: must return ""; null fails; EX:w:Joseph-François_Malgaigne; DATE:2014-04-07
-	private static final    Keyval[] Datavalue_novalue = Keyval_.Ary_empty;
+	private static final	Keyval[] Datavalue_somevalue = Keyval_.Ary_empty;	// changed to not return value-node; PAGE:it.s:Autore:Anonimo DATE:2015-12-06 // new Keyval[] {Keyval_.new_(Key_type, ""), Keyval_.new_(Key_value, "")};	// NOTE: must return ""; null fails; EX:w:Joseph-François_Malgaigne; DATE:2014-04-07
+	private static final	Keyval[] Datavalue_novalue = Keyval_.Ary_empty;
 }
