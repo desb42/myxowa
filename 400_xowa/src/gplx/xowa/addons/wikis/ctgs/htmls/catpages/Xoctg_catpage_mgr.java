@@ -59,10 +59,10 @@ import gplx.xowa.xtns.categorytrees.*;public class Xoctg_catpage_mgr implements 
 			if (gplx.core.envs.Env_.Mode_testing()) return null;	// needed for dpl test
 			synchronized (thread_lock) {	// LOCK:used by multiple wrks; DATE:2016-09-12
 				ctg = loader.Load_ctg_or_null(wiki, page_ttl, this, catpage_url, cat_ttl, limit);
+				if (ctg == null) return null;	// not in cache or db; exit
+				if (limit == Int_.Max_value)	// only add to cache if Max_val (DynamicPageList); for regular catpages, always retrieve on demand
+					cache.Add(cat_ttl.Full_db(), ctg);
 			}
-			if (ctg == null) return null;	// not in cache or db; exit
-			if (limit == Int_.Max_value)	// only add to cache if Max_val (DynamicPageList); for regular catpages, always retrieve on demand
-				cache.Add(cat_ttl.Full_db(), ctg);
 		}
 		return ctg;
 	}
@@ -73,7 +73,10 @@ import gplx.xowa.xtns.categorytrees.*;public class Xoctg_catpage_mgr implements 
 
 			// load categories from cat dbs; exit if not found
 			Xoctg_catpage_ctg ctg = Get_or_load_or_null(page.Ttl().Page_db(), catpage_url, page.Ttl(), grp_max);
-			if (ctg == null) return;
+			if (ctg == null) {
+				bfr.Add(wiki.Msg_mgr().Val_by_key_obj("category-empty")); // strictly this is Xol_msg_itm_.Id_ctg_empty
+				return;
+			}
 
 			// write html
 			Xol_lang_itm lang = page.Lang();
@@ -269,6 +272,10 @@ import gplx.xowa.xtns.categorytrees.*;public class Xoctg_catpage_mgr implements 
 		local_tmp_bfr.Add_str_a7("Category:");
 		local_tmp_bfr.Add_mid(src, bgn, end);
 		ttl = Xoa_ttl.Parse(wiki, local_tmp_bfr.To_bry_and_clear_and_rls());
+		if (ttl == null) {
+			// report as null
+			return;
+		}
 
 		Xoctg_catpage_ctg ctg = Get_or_load_or_null(ttl.Page_db(), catpage_url, ttl, grp_max);
 		if (ctg == null) return;
@@ -277,8 +284,9 @@ import gplx.xowa.xtns.categorytrees.*;public class Xoctg_catpage_mgr implements 
 		byte[] data_ct_mode = local_tmp_bfr.To_bry_and_clear();
 
 		// write html
-		Build_cattree(local_tmp_bfr, wiki, ctg, params, data_ct_mode);
-		if (params.Hideroot() == false) {
+                if (params.Depth() != 0)
+                    Build_cattree(local_tmp_bfr, wiki, ctg, params, data_ct_mode);
+		if (params.Hideroot() == false || params.Depth() == 0) {
 			byte[] inner = local_tmp_bfr.To_bry_and_clear();
 			Bld_cat_itm(local_tmp_bfr, wiki, ctg.Subcs().Count_all(), ctg.Pages().Count_all(), ctg.Files().Count_all(), ttl, params, false, inner, data_ct_mode);
 		}
@@ -301,8 +309,8 @@ import gplx.xowa.xtns.categorytrees.*;public class Xoctg_catpage_mgr implements 
 			else
 				Bld_cat_itm(bfr, wiki, itm.Count_subcs(), itm.Count_pages(), itm.Count_files(), itm_ttl, params, false, Bry_.Empty, data_ct_mode);
 		}
-		// if mode pages  - add pages as well (but noc ounts)
-		if (params.Mode() == Categorytree_itm_.Mode__PAGES) {
+		// if mode pages  - add pages as well (but no counts)
+		if (params.Mode() == Categorytree_itm_.Mode__PAGES || params.Mode() == Categorytree_itm_.Mode__ALL) {
 			params.Showcount_(false);
 			grp = ctg.Pages();
 			grp_end = grp.Itms__len();

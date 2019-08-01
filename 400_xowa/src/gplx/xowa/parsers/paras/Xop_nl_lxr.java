@@ -63,6 +63,14 @@ public class Xop_nl_lxr implements Xop_lxr {
 				Xop_list_wkr_.Close_list_if_present(ctx, root, src, bgn_pos, cur_pos);
 				para_wkr.Process_block__bgn_n__end_y(Xop_xnde_tag_.Tag__li);
 				break;
+			case Xop_tkn_itm_.Tid_list_new:		// close new list
+                                                Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+                                                if (prev != null && prev.Src_bgn() > src.length)
+                                                    System.out.println("nl");
+				Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+				ctx.Subs_add_and_stack(root, itm);
+				ctx.Page().Prev_list_tkn_(null);
+				break;
 			case Xop_tkn_itm_.Tid_lnke:		// close lnke
 				if (ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_tmpl_invk) == -1) // only close if no tmpl; MWR: [[SHA-2]]; * {{cite journal|title=Proposed 
 					ctx.Stack_pop_til(root, src, ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_lnke), true, bgn_pos, cur_pos, Xop_tkn_itm_.Tid_newLine);

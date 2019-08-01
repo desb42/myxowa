@@ -56,10 +56,17 @@ public class Xoh_html_wtr {
 		page.Slink_list().Clear();	// HACK: always clear langs; necessary for reload
 		lnki_wtr.Init_by_page(ctx, hctx, src, ctx.Page());
 		
+		// init paragraphs
+		lastParagraph = PARA_NONE;
+		DTopen = false;
+		inPre = false;
 		// write document starting from root
 		Write_tkn(rv, ctx, hctx, src, null, -1, root);
 	}
 	public void Write_tkn_to_html(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_tkn_grp grp, int sub_idx, Xop_tkn_itm tkn) {
+		lastParagraph = PARA_NONE;
+		DTopen = false;
+		inPre = false;
 		this.Write_tkn(bfr, ctx, hctx, src, grp, sub_idx, tkn);
 	}
 	private void Write_tkn(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_tkn_grp grp, int sub_idx, Xop_tkn_itm tkn) {
@@ -73,18 +80,9 @@ public class Xoh_html_wtr {
 			case Xop_tkn_itm_.Tid_root:
 				int subs_len = tkn.Subs_len();
 				for (int i = 0; i < subs_len; i++) {
-                                    Xop_tkn_itm nxt_tkn = tkn.Subs_get(i);
-                                    // interesting idea not working correctly
-                                    /*
-                                    if (hctx.Is_Pcheck()) {
-                                        if (nxt_tkn.Tkn_tid() == Xop_tkn_itm_.Tid_txt) {
-                                            // insert <p>
-                                            bfr.Add(Gfh_tag_.P_lhs);
-                                            hctx.Pcheck_(false);
-                                        }
-                                    }*/
+					Xop_tkn_itm nxt_tkn = tkn.Subs_get(i);
 					Write_tkn(bfr, ctx, hctx, src, tkn, i, nxt_tkn);
-                                }
+				}
 				break;
 			case Xop_tkn_itm_.Tid_ignore:			break;
 			case Xop_tkn_itm_.Tid_html_ncr:			Html_ncr	(bfr, ctx, hctx, src, (Xop_amp_tkn_num)tkn); break;
@@ -110,6 +108,14 @@ public class Xoh_html_wtr {
 			case Xop_tkn_itm_.Tid_space:
 			case Xop_tkn_itm_.Tid_escape:
 				tkn.Html__write(bfr, this, wiki, page, ctx, hctx, cfg, grp, sub_idx, src); break;
+			case Xop_tkn_itm_.Tid_list_new:				List_new		(bfr, ctx, hctx, src, (Xop_list_tkn_new)tkn, grp, sub_idx); break;
+			case Xop_tkn_itm_.Tid_colon:
+				if (is_colon_inline) {
+					bfr.Add(nextItem( Byte_ascii.Colon ));
+					Trimspace(grp, sub_idx);
+					break;
+				}
+				// fall thru
 			default:
 				Xoh_html_wtr_escaper.Escape(app.Parser_amp_mgr(), bfr, src, tkn.Src_bgn(), tkn.Src_end(), true, false);	// NOTE: always escape text including (a) lnki_alt text; and (b) any other text, especially failed xndes; DATE:2013-06-18
 				break;
@@ -148,6 +154,296 @@ public class Xoh_html_wtr {
 			default: throw Err_.new_unhandled(apos.Apos_cmd());
 		}
 	}
+	private boolean is_colon_inline;
+// -------------------------------
+	private static final int PARA_NONE = 0, PARA_P = 1, PARA_PRE = 2;
+	// lastParagraph either 'p' or 'pre'
+	// pendingPTag either '<p>'or '</p><p>'
+	private static final int PENDING_NONE = 0, PENDING_P = 1, PENDING_P_P = 2;
+	private static final int PREG_OPENBLOCK = 1, PREG_CLOSEBLOCK = 2, PREG_COLON = 3, PREG_OPENA = 4, PREG_OPENL = 5, PREG_CLOSEL = 6;
+
+	private byte[] text;
+	private boolean inPre;
+	private boolean DTopen;
+	private int lastParagraph;
+	private int pendingPTag;
+
+	private static final byte[]
+	  close_p_nl = Bry_.new_a7("</p>\n")
+	, close_pre_nl = Bry_.new_a7("</pre>\n")
+	, close_p = Bry_.new_a7("</p>")
+	, close_pre = Bry_.new_a7("</pre>")
+	, open_pre = Bry_.new_a7("<pre>")
+	, open_p = Bry_.new_a7("<p>")
+	, open_p_p = Bry_.new_a7("</p><p>")
+	, br_elem = Bry_.new_a7("<br />")
+	, ol_star = Bry_.new_a7("<ul><li>")
+	, ol_hash = Bry_.new_a7("<ol><li>")
+	, ol_colon = Bry_.new_a7("<dl><dd>")
+	, ol_semi = Bry_.new_a7("<dl><dt>")
+	, ol_error = Bry_.new_a7("<!-- ERR 1 -->")
+	, ni_star = Bry_.new_a7("</li>\n<li>")
+	, ni_dt_nl = Bry_.new_a7("</dt>\n")
+	, ni_dd_nl = Bry_.new_a7("</dd>\n")
+	, ni_dt = Bry_.new_a7("<dt>")
+	, ni_dd = Bry_.new_a7("<dd>")
+	, ni_error = Bry_.new_a7("<!-- ERR 2 -->")
+	, cl_star = Bry_.new_a7("</li></ul>")
+	, cl_hash = Bry_.new_a7("</li></ol>")
+	, cl_dt = Bry_.new_a7("</dt></dl>")
+	, cl_dd = Bry_.new_a7("</dd></dl>")
+	, cl_error = Bry_.new_a7("<!-- ERR 3 -->")
+	;
+	private boolean hasOpenParagraph() {
+		return lastParagraph != PARA_NONE;
+	}
+
+	/**
+	 * If a pre or p is open, return the corresponding close tag and update
+	 * the state. If no tag is open, return an empty string.
+	 * @param bool $atTheEnd Omit trailing newline if we've reached the end.
+	 * @return string
+	 */
+	private byte[] closeParagraph() { return closeParagraph(false); }
+	private byte[] closeParagraph( boolean atTheEnd ) {
+		byte[] result = Bry_.Empty;
+		if ( hasOpenParagraph() ) {
+			if (atTheEnd) {
+				if (lastParagraph == PARA_P)
+					result = close_p_nl;
+				else
+					result = close_pre_nl;
+			}
+			else {
+				if (lastParagraph == PARA_P)
+					result = close_p;
+				else
+					result = close_pre;
+			}
+		}
+		inPre = false;
+		lastParagraph = PARA_NONE;
+		return result;
+	}
+
+	/**
+	 * getCommon() returns the length of the longest common substring
+	 * of both arguments, starting at the beginning of both.
+	 *
+	 * @param string $st1
+	 * @param string $st2
+	 *
+	 * @return int
+	 */
+	private int getCommon( int st1_bgn, int st1_len, int st2_bgn, int st2_end) {
+		int shorter = st1_len < st2_end - st2_bgn ? st1_len : st2_end - st2_bgn;
+		int i;
+		for ( i = 0; i < shorter; ++i ) {
+                    byte a = text[st1_bgn + i]; // prefix
+                    byte b = text[st2_bgn + i]; // lastprefix
+                    if (b == ';') // treat ':' and ';' same in lastprefix
+                        b = ':';
+			if ( a != b ) {
+				break;
+			}
+		}
+		return i;
+	}
+	/**
+	 * Open the list item element identified by the prefix character.
+	 *
+	 * @param string $char
+	 *
+	 * @return string
+	 */
+	private byte[] openList( byte chr ) {
+		Bry_bfr result = Bry_bfr_.New();
+		result.Add(closeParagraph());
+		if ( chr == '*' ) {
+			result.Add(ol_star);
+		} else if ( chr == '#' ) {
+			result.Add(ol_hash);
+		} else if ( chr == ':' ) {
+			result.Add(ol_colon);
+		} else if ( chr == ';' ) {
+			result.Add(ol_semi);
+			DTopen = true;
+		} else {
+			result.Add(ol_error);
+		}
+		return result.To_bry_and_clear();
+	}
+	/**
+	 * Close the current list item and open the next one.
+	 * @param string $char
+	 *
+	 * @return string
+	 */
+	private byte[] nextItem( byte chr ) {
+		if ( chr == '*' || chr == '#' ) {
+			return ni_star;
+		} else if ( chr == ':' || chr == ';' ) {
+			Bry_bfr close = Bry_bfr_.New();
+			if ( DTopen ) {
+				close.Add(ni_dt_nl);
+			}
+			else {
+				close.Add(ni_dd_nl);
+			}
+			if ( chr == ';' ) {
+				DTopen = true;
+				close.Add(ni_dt);
+			} else {
+				DTopen = false;
+				close.Add(ni_dd);
+			}
+			return close.To_bry_and_clear();
+		}
+		return ni_error;
+	}
+	/**
+	 * Close the current list item identified by the prefix character.
+	 * @param string $char
+	 *
+	 * @return string
+	 */
+	private byte[] closeList( byte chr ) {
+		byte[] text;
+		if ( chr == '*' ) {
+			text = cl_star;
+		} else if ( chr == '#' ) {
+			text = cl_hash;
+		} else if ( chr == ':' || chr == ';') {
+			if ( DTopen ) {
+				DTopen = false;
+				text = cl_dt;
+			} else {
+				text = cl_dd;
+			}
+		} else {
+			return cl_error;
+		}
+		return text;
+	}
+
+	private boolean compare_prefix(int lastPrefix_bgn, int lastPrefix_end, int prefix_bgn, int prefixLength) {
+		if (lastPrefix_end - lastPrefix_bgn != prefixLength)
+			return false;
+		for (int i = 0; i < prefixLength; i++) {
+			byte l = text[lastPrefix_bgn + i];
+			byte p = text[prefix_bgn + i];
+			if (l != p) {
+				if ((l == ';' && p == ':') || (l == ':' && p == ';'))
+					continue;
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void Trimspace(Xop_tkn_grp grp, int sub_idx) {
+		int subs_len = grp.Subs_len();
+		Xop_tkn_itm nxt_tkn;
+			if (sub_idx + 1 < subs_len) {
+				nxt_tkn = grp.Subs_get(sub_idx + 1);
+				if (nxt_tkn.Tkn_tid() == Xop_tkn_itm_.Tid_space)
+					nxt_tkn.Ignore_y_();
+			}
+			// try to find the other end - should be another list_new
+			for (int i = sub_idx + 1; i < subs_len; i++) {
+				nxt_tkn = grp.Subs_get(i);
+				if (nxt_tkn.Tkn_tid() == Xop_tkn_itm_.Tid_list_new) {
+					// found the end look at the previous
+					nxt_tkn = grp.Subs_get(i - 1);
+					if (nxt_tkn.Tkn_tid() == Xop_tkn_itm_.Tid_space) {
+						nxt_tkn.Ignore_y_();
+					}
+				}
+			}
+	}
+	private void List_new(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_list_tkn_new list, Xop_tkn_grp grp, int sub_idx) {
+		// List generation
+		is_colon_inline = false;
+		int linestart = list.Src_bgn();
+		int prefixLength = list.Src_end() - linestart;
+		this.text = src;
+		Bry_bfr output = bfr; // do at formal params
+
+		int lastPrefix_bgn = 0;
+		int lastPrefix_end = 0;
+		int lastPrefixLength = 0;
+		Xop_list_tkn_new prev_link_tkn = list.Prev_list();
+		if (prev_link_tkn != null) {
+			lastPrefix_bgn = prev_link_tkn.Src_bgn();
+                        if (lastPrefix_bgn > src.length) {
+                            Xoa_app_.Usr_dlg().Warn_many("", "", "strange new link; wiki=~{0} page=~{1}", ctx.Wiki().Domain_bry(), ctx.Page().Ttl().Full_db());
+                            return;
+                        }
+				lastPrefix_end = prev_link_tkn.Src_end();
+                        if (lastPrefix_bgn < linestart || linestart == 0) {// extra check
+				lastPrefixLength = lastPrefix_end - lastPrefix_bgn;
+                        } else {
+                            lastPrefix_bgn = lastPrefix_end = 0;
+                        }
+		}
+
+		if (prefixLength > 0 && compare_prefix(lastPrefix_bgn, lastPrefix_end, linestart, prefixLength) ) {
+			// Same as the last item, so no need to deal with nesting or opening stuff
+			byte lastprefixchar = src[linestart + prefixLength - 1];
+			output.Add(nextItem( lastprefixchar ));
+			pendingPTag = PENDING_NONE;
+			if ( lastprefixchar == ';' ) {
+				// The one nasty exception: definition lists work like this:
+				// ; title : definition text
+				// So we check for : in the remainder text to split up the
+				// title and definition, without b0rking links.
+				is_colon_inline = true;
+			}
+		} else if ( prefixLength > 0 || lastPrefixLength > 0 ) {
+			// We need to open or close prefixes, or both.
+			// Either open or close a level...
+			int commonPrefixLength = getCommon( linestart, prefixLength, lastPrefix_bgn, lastPrefix_end );
+			pendingPTag = PENDING_NONE;
+			// Close all the prefixes which aren't shared.
+			while ( commonPrefixLength < lastPrefixLength ) {
+                            if (lastPrefix_bgn + lastPrefixLength - 1 > text.length) {
+                                int a = 1;
+                                a += 1;
+                                System.out.println("eek");
+                            }
+				output.Add(closeList( text[lastPrefix_bgn + lastPrefixLength - 1] ));
+				--lastPrefixLength;
+			}
+			// Continue the current prefix if appropriate.
+			if ( prefixLength <= commonPrefixLength && commonPrefixLength > 0 ) {
+				output.Add(nextItem( text[linestart + commonPrefixLength - 1] ));
+			}
+			// Close an open <dt> if we have a <dd> (":") starting on this line
+			if ( DTopen && commonPrefixLength > 0 && text[linestart + commonPrefixLength - 1] == ':' ) {
+				output.Add(nextItem( Byte_ascii.Colon ));
+			}
+			// Open prefixes where appropriate.
+			if ( lastPrefix_end - lastPrefix_bgn > 0 && prefixLength > commonPrefixLength ) {
+				output.Add_byte(Byte_ascii.Nl);
+			}
+			while ( prefixLength > commonPrefixLength ) {
+				byte c = text[linestart + commonPrefixLength];
+				output.Add(openList( c ));
+				if ( c == ';' ) {
+					// @todo FIXME: This is dupe of code above
+					//t = colon_semicolon(output, t);
+					is_colon_inline = true;
+				}
+				++commonPrefixLength;
+			}
+			if ( prefixLength == 0 && lastPrefix_end - lastPrefix_bgn > 0 ) {
+				output.Add_byte(Byte_ascii.Nl);
+			}
+		}
+		// do some trimming
+		Trimspace(grp, sub_idx);
+	}
+// -------------------------------
 	private void List(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_list_tkn list) {
 		if (hctx.Mode_is_alt()) {					// alt; add literally; EX: "*" for "\n*"; note that \n is added in New_line()
 			if (list.List_bgn() == Bool_.Y_byte) {	// bgn tag
@@ -302,27 +598,12 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__q:
 				Write_xnde(bfr, ctx, hctx, xnde, tag, tag_id, src);
 				break;
-                        case Xop_xnde_tag_.Tid__blockquote:
+			case Xop_xnde_tag_.Tid__blockquote:
 				Write_xnde(bfr, ctx, hctx, xnde, tag, tag_id, src);
-/*                            Bry_bfr tmp_bfr = Bry_bfr_.New();
-				Write_xnde(tmp_bfr, ctx, hctx, xnde, tag, tag_id, src);
-                                String str = String_.new_u8(tmp_bfr.To_bry_and_clear_and_rls());
-                                bfr.Add(Bry_.new_a7(str));*/
 				break;
-                        case Xop_xnde_tag_.Tid__dl:
+			case Xop_xnde_tag_.Tid__dl:
 			case Xop_xnde_tag_.Tid__div:
-				// if opener
-				// is it preceeded by <p> - if so remove, if preceeded by text add a </p>
-				// if closer
-				// is it suceeded by text - add <p>, if succeeded by </p> - remove
-				//if (opener)
-				//	bfr.P_check();
-				//else
-				  // some how set a flag for the writer to decide at next step
-				//	checkp = true;
-                                bfr.P_check();
 				Write_xnde(bfr, ctx, hctx, xnde, tag, tag_id, src);
-                                hctx.Pcheck_(true);
 				break;
 			case Xop_xnde_tag_.Tid__pre: {
 				if (xnde.Tag_open_end() == xnde.Tag_close_bgn()) return; // ignore empty tags, else blank pre line will be printed; DATE:2014-03-12
@@ -438,6 +719,7 @@ public class Xoh_html_wtr {
 		int subs_len = xnde.Subs_len();
 		for (int i = 0; i < subs_len; i++) {
 			Xop_tkn_itm sub = xnde.Subs_get(i);
+			if (sub.Ignore()) continue;
 			byte tkn_tid = sub.Tkn_tid();
 			switch (tkn_tid) {
 				case Xop_tkn_itm_.Tid_space:									// space; add to ws_bfr;
@@ -567,8 +849,11 @@ public class Xoh_html_wtr {
 			++indent_level;
 		}
 		int subs_len = tkn.Subs_len();
-		for (int i = 0; i < subs_len; i++)
-			Write_tkn(bfr, ctx, hctx, src, tkn, i, tkn.Subs_get(i));
+		for (int i = 0; i < subs_len; i++) {
+			Xop_tkn_itm sub = tkn.Subs_get(i);
+			if (sub.Ignore()) continue;
+			Write_tkn(bfr, ctx, hctx, src, tkn, i, sub);
+		}
 		if (hctx.Mode_is_alt()) {
 			if (tblw_bgn)			// only add \s for closing table; |} -> "\s"
 				bfr.Add_byte_space();

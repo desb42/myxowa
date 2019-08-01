@@ -44,7 +44,6 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 		if (msg_file_enlarge == null) this.msg_file_enlarge = wiki.Msg_mgr().Val_by_id(Xol_msg_itm_.Id_file_enlarge);
 	}
 	public void Write_file(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_lnki_tkn lnki, Xof_file_itm xfer_itm, byte[] img_alt) {
-                bfr.P_check();
 		// init
 		int uid = xfer_itm.Html_uid();
 		Xof_ext orig_ext = xfer_itm.Orig_ext();
@@ -124,8 +123,6 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 				page.Stat_itm().Image_count++;
 			}
 		}
-                // possibly insert a <p> 
-                hctx.Pcheck_(true);
 	}
 	private void Write_file_audio(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_lnki_tkn lnki, byte[] img_orig_src, int uid, int div_width, byte[] lnki_halign_bry, byte[] lnki_href, byte[] alt, byte[] lnki_ttl) {
 		// init

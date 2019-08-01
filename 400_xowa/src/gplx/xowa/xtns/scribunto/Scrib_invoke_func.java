@@ -55,7 +55,7 @@ public class Scrib_invoke_func extends Pf_func_base {
 		if (mod == null) {
 			Xow_ns module_ns = wiki.Ns_mgr().Ids_get_or_null(Xow_ns_.Tid__module);
 			Xoa_ttl mod_ttl = Xoa_ttl.Parse(wiki, Bry_.Add(module_ns.Name_db_w_colon(), mod_name));
-			mod_raw = wiki.Cache_mgr().Page_cache().Get_or_load_as_src(mod_ttl);
+			mod_raw = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(mod_ttl);
 			if (mod_raw == null) {
 				String Err_mod_missing = String_.new_u8(wiki.Msg_mgr().Val_by_key_args(Key_nosuchmodule, null, mod_name));
 				Local_error(bfr, wiki.Msg_mgr(), Err_mod_missing); // EX: "{{#invoke:missing_mod}}"
@@ -68,6 +68,15 @@ public class Scrib_invoke_func extends Pf_func_base {
                 //System.out.println(String_.new_u8(Bry_.Replace_nl_w_tab(src, self.Src_bgn(), self.Src_end())));
 		try {
 //                    Gfo_usr_dlg_.Instance.Prog_many("", "", "mod ~{0} fnc ~{1}", String_.new_u8(mod_name), String_.new_u8(fnc_name));
+/*
+int alen = self.Args_len();
+String args = "";
+for (int i = 0; i < alen; i++) {
+    Arg_nde_tkn ant = self.Args_get_by_idx(i);
+    args += String_.new_u8(Bry_.Mid(src, ant.Src_bgn(), ant.Src_end())) + ",";
+}
+System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + " " + args);
+*/
 			core.Invoke(wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
 			if (invoke_wkr != null)
 				invoke_wkr.Eval_end(ctx.Page(), mod_name, fnc_name, log_time_bgn);

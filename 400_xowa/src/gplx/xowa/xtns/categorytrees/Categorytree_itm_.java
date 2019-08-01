@@ -18,7 +18,8 @@ import gplx.*;
 public class Categorytree_itm_ {
 public static final int
   Mode__CATEGORIES = 0
-, Mode__PAGES = 1
+, Mode__PAGES = 10
+, Mode__ALL = 20
 
 , Hide__NEVER = 0
 , Hide__ALWAYS = 10

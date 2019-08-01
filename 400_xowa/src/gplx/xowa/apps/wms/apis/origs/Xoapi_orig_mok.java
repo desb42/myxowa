@@ -27,7 +27,7 @@ public class Xoapi_orig_mok extends Xoapi_orig_base {
 		if (!String_.Eq(wiki_str, String_.new_a7(repo_wiki_key))) return false;
 		if (fail) return false;
 		byte[] orig_page = String_.Eq(redirect_str, "") ? ttl : Bry_.new_u8(redirect_str);
-		rv.Init_all(repo_wiki_key, orig_page, orig_w, orig_h);
+		rv.Init_all(repo_wiki_key, orig_page, orig_w, orig_h, 0); // fake the size
 		return true;
 	}
 	public static final    Xoapi_orig_mok Instance = new Xoapi_orig_mok(); Xoapi_orig_mok() {}

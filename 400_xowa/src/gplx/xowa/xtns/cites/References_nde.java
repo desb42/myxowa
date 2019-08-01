@@ -19,12 +19,14 @@ import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*;
 public class References_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	public byte[] Group() {return group;} public References_nde Group_(byte[] v) {group = v; return this;} private byte[] group = Bry_.Empty;
+	public byte[] Responsive() {return responsive;} public References_nde Responsive_(byte[] v) {responsive = v; return this;} private byte[] responsive = Bry_.Empty;
 	public int List_idx() {return list_idx;} public References_nde List_idx_(int v) {list_idx = v; return this;} private int list_idx;
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {
 		if (xatr_id_obj == null) return;
 		Byte_obj_val xatr_id = (Byte_obj_val)xatr_id_obj;
 		switch (xatr_id.Val()) {
 			case Xatr_id_group:		group = xatr.Val_as_bry(); break;
+			case Xatr_id_responsive:		responsive = xatr.Val_as_bry(); break;
 		}
 	}
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
@@ -54,8 +56,9 @@ public class References_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		if (xnde.Tag_visible())
 			html_wtr.Ref_wtr().Xnde_references(html_wtr, ctx, hctx, wpg, bfr, src, xnde);
 	}
-	private static final byte Xatr_id_group = 0;
+	private static final byte Xatr_id_group = 0, Xatr_id_responsive = 1;
 	public static boolean Enabled = true;
 	private static final    Hash_adp_bry xatrs_hash = Hash_adp_bry.ci_a7()
-	.Add_str_obj("group", Byte_obj_val.new_(References_nde.Xatr_id_group));
+	.Add_str_obj("group", Byte_obj_val.new_(References_nde.Xatr_id_group))
+	.Add_str_obj("responsive", Byte_obj_val.new_(References_nde.Xatr_id_responsive));
 }

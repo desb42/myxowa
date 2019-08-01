@@ -17,7 +17,7 @@ package gplx;
 public class Byte_ascii {
 	public static final byte
 	      Null			=   0												 , Backfeed         =   8, Tab				=   9
-		, Nl			=  10, Formfeed			=  12, Cr				=  13
+		, Nl			=  10, Vertical_tab     =  11, Formfeed			=  12, Cr				=  13
 		,					   Escape			=  27
 													 , Space			=  32, Bang				=  33, Quote			=  34
 		, Hash			=  35, Dollar           =  36, Percent			=  37, Amp				=  38, Apos				=  39
@@ -127,3 +127,11 @@ public class Byte_ascii {
 	, Num_1_bry				= new byte[] {Byte_ascii.Num_1}
 	;
 }
+/*
+SYMBOLS
+-------
+Byte_ascii.Bang      | Byte_ascii.Slash |  33 ->  47 | !"#$%&'()*+,-./
+Byte_ascii.Colon     | Byte_ascii.At    |  58 ->  64 | :;<=>?@
+Byte_ascii.Brack_bgn | Byte_ascii.Tick  |  91 ->  96 | [\]^_`
+Byte_ascii.Curly_bgn | Byte_ascii.Tilde | 123 -> 126 | {|}~
+*/

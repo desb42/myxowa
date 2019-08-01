@@ -69,32 +69,51 @@ class Wdata_fmtr__slink_tbl implements gplx.core.brys.Bfr_arg {
 		for (int i = 0; i < Wdata_slink_grp.Idx__len; ++i) {
 			Wdata_slink_grp grp = grps[i];
 			int itms_count = grp.Rows().Count();
-			if (itms_count == 0) continue;
 			grp.Toc_data().Make(itms_count);
+			if (itms_count == 0) continue;
 			grp.Rows().Sort_by(lang_sorter);
 		}
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		for (int i = 0; i < Wdata_slink_grp.Idx__len; ++i) {
 			Wdata_slink_grp grp = grps[i];
-			if (grp.Rows().Count() == 0) continue;
+                        int len = grp.Rows().Count();
+			//if (len == 0) continue;
 			fmtr_row.Init_by_page(grp.Rows());
-			Xoapi_toggle_itm toggle_itm = grp.Toggle_itm();
-			fmtr.Bld_bfr_many(bfr, grp.Toc_data().Href(), grp.Toc_data().Text(), msgs.Langtext_col_lang_name(), msgs.Langtext_col_lang_code(), msgs.Slink_col_hdr_text(), toggle_itm.Html_toggle_btn(), toggle_itm.Html_toggle_hdr(), fmtr_row);
+			//Xoapi_toggle_itm toggle_itm = grp.Toggle_itm();
+                        //byte[] lcase = Bry_.Mid(grp.Toc_data().Href(), 0);
+                        //lcase[0] += 32; // eeek
+                        byte[] entries;
+                        if (len == 1)
+                            entries = Bry_.new_a7("entry");
+                        else
+                            entries = Bry_.new_a7("entries");
+                        byte[] collapse;
+                        if (len > 1)
+                            collapse = Bry_.new_a7(" mw-collapsible");
+                        else
+                            collapse = Bry_.Empty;
+                        fmtr.Bld_bfr_many(bfr, grp.Toc_data().Href(), grp.Toc_data().Href(), len, fmtr_row, Wdata_slink_grp.Name_by_tid(i), collapse, entries);
 		}
 	}
 	private final    Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "      <div class='wikibase-sitelinkgroupview' data-wb-sitelinks-group='wikipedia'>"
-	, "        <div class='wikibase-sitelinkgroupview-heading-container'>"
-	, "          <h2 class='wb-section-heading wikibase-sitelinkgroupview-heading' dir='auto' id='~{hdr_href}'>~{hdr_text}~{toggle_btn}</h2>"
-	, "        </div>"
-	, "        <div class='wikibase-sitelinklistview'~{toggle_hdr}>"			
-	, "          <ul class='wikibase-sitelinklistview-listview'>~{rows}"
-	, "          </ul>"
-	, "        </div>"
-	, "      </div>"
-	), "hdr_href", "hdr_text", "hdr_lang", "hdr_wiki", "hdr_page", "toggle_btn", "toggle_hdr", "rows"
+	, "<div class=\"wikibase-sitelinkgroupview~{collapse}\" data-wb-sitelinks-group=\"~{hdr_ltext}\">"
+	, "  <div class=\"wikibase-sitelinkgroupview-heading-section\">"
+	, "    <div class=\"wikibase-sitelinkgroupview-heading-container\">"
+	, "      <h3 class=\"wb-sitelinks-heading\" dir=\"auto\" id=\"~{hdr_href}\">~{hdr_text}<span class=\"wikibase-sitelinkgroupview-counter\">(~{len} ~{entries})</span></h3>"
+//	, "      <!-- wikibase-toolbar -->"
+	, "    </div>"
+	, "  </div>"
+	, "  <div class=\"mw-collapsible-content\">"
+	, "    <div class=\"wikibase-sitelinklistview\">"
+	, "      <ul class=\"wikibase-sitelinklistview-listview\">"  //<!-- [0,*] wikibase-sitelinkview -->$1</ul>
+	, "    ~{rows}" // <!-- wikibase-sitelinklistview -->
+	, "      </ul>"
+	, "    </div>"
+	, "  </div>"
+	, "</div>"
+	), "hdr_href", "hdr_text", "len", "rows", "hdr_ltext", "collapse", "entries"
 	);
 }
 class Wdata_fmtr__slink_row implements gplx.core.brys.Bfr_arg {
@@ -124,19 +143,23 @@ class Wdata_fmtr__slink_row implements gplx.core.brys.Bfr_arg {
 	private static final    byte[] Href_site_xowa = Bry_.new_a7("/site/"), Href_site_http = Bry_.new_a7("https://");
 	private final    Bry_fmtr fmtr_row = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "            <li class='wikibase-sitelinkview'>"																// wikibase-sitelinkview-~{wmf_key} data-wb-siteid='~{wmf_key}'
-	, "              <span class='wikibase-sitelinkview-siteid-container'>"
-	, "                <span class='wikibase-sitelinkview-siteid'>~{lang_code}"
-	, "                </span>"
-	, "              </span>"
-	, "              <span class='wikibase-sitelinkview-link' lang='~{lang_code}' dir='auto'>"						// wikibase-sitelinkview-link-~{wmf_key}
+	, "<li class=\"wikibase-sitelinkview wikibase-sitelinkview-~{wmf_key}\" data-wb-siteid=\"~{wmf_key}\">"
+	, "  <span class=\"wikibase-sitelinkview-siteid-container\">"
+	, "    <span class=\"wikibase-sitelinkview-siteid wikibase-sitelinkview-siteid-~{wmf_key}\" title=\"~{lang_name}\">~{lang_code}</span>"
+	, "  </span><span class=\"wikibase-sitelinkview-link wikibase-sitelinkview-link-~{wmf_key}\">"
+//	, "            <li class='wikibase-sitelinkview'>"																// wikibase-sitelinkview-~{wmf_key} data-wb-siteid='~{wmf_key}'
+//	, "              <span class='wikibase-sitelinkview-siteid-container'>"
+//	, "                <span class='wikibase-sitelinkview-siteid'>~{lang_code}"
+//	, "                </span>"
+//	, "              </span>"
+//	, "              <span class='wikibase-sitelinkview-link' lang='~{lang_code}' dir='auto'>"						// wikibase-sitelinkview-link-~{wmf_key}
 	, "                <span class='wikibase-sitelinkview-page'>"
 	, "                  <a href='~{href_site}~{href_domain}/wiki/~{href_page}' hreflang='~{lang_code}' dir='auto'>~{page_name}</a>"
 	, "                </span>"
 	, "                <span class='wikibase-badgeselector wikibase-sitelinkview-badges'>~{badges}"
 	, "                </span>"
-	, "              </span>"
-	, "            </li>"
+	, "  </span>"
+	, "</li>"
 	), "lang_name", "lang_code", "wmf_key", "href_site", "href_domain", "href_page", "page_name", "badges"
 	);
 }

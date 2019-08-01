@@ -16,16 +16,19 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.wbases.claims.enums; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.wbases.*; import gplx.xowa.xtns.wbases.claims.*;
 public class Wbase_claim_entity_type_ {
 	public static final byte
-	  Tid__item									=  0
+                Tid__unknown = -1
+	, Tid__item									=  0
 	, Tid__property								=  1
 	, Tid__lexeme								=  2
 	, Tid__sense								=  3
+	, Tid__form								=  4
 	;
-	public static final    Wbase_enum_hash Reg = new Wbase_enum_hash("claim.entity_type", 4);
+	public static final    Wbase_enum_hash Reg = new Wbase_enum_hash("claim.entity_type", 5);
 	public static final    Wbase_enum_itm
 	  Itm__item						= Reg.Add(Tid__item				, "item")
 	, Itm__property					= Reg.Add(Tid__property			, "property")
 	, Itm__lexeme					= Reg.Add(Tid__lexeme			, "lexeme")
 	, Itm__sense					= Reg.Add(Tid__sense			, "sense")
+	, Itm__form					= Reg.Add(Tid__form			, "form")
 	;
 }

@@ -51,9 +51,10 @@ public class Xoctg_double_itm implements gplx.core.brys.Bfr_arg {
 		}
 	}
 	private static final    Bry_fmt Fmt__itm = Bry_fmt.Auto_nl_skip_last
-	( ""
-	,     "<li>"
-	,       "<a~{lnki_cls} href=\"~{lnki_href}\" title=\"~{lnki_ttl}\">~{lnki_text}</a>"
-	,     "</li>"
+//	( ""
+//	,     "<li>"
+//	,       "<a~{lnki_cls} href=\"~{lnki_href}\" title=\"~{lnki_ttl}\">~{lnki_text}</a>"
+//	,     "</li>"
+	( "<li><a~{lnki_cls} href=\"~{lnki_href}\" title=\"~{lnki_ttl}\">~{lnki_text}</a></li>"
 	);
 }

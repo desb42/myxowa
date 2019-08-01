@@ -22,7 +22,10 @@ import gplx.xowa.parsers.*; import gplx.xowa.wikis.pages.lnkis.*; import gplx.xo
 import gplx.xowa.parsers.logs.stats.*;
 import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.addons.htmls.tocs.*; import gplx.xowa.htmls.modules.popups.*;
 import gplx.xowa.wikis.pages.wtxts.*; import gplx.xowa.wikis.pages.dbs.*; import gplx.xowa.wikis.pages.redirects.*; import gplx.xowa.wikis.pages.hdumps.*; import gplx.xowa.wikis.pages.htmls.*;
+import gplx.xowa.parsers.lists.*;
 public class Xoae_page implements Xoa_page {
+    public Xop_list_tkn_new Prev_list_tkn() { return prev_list_tkn; }
+    public void Prev_list_tkn_(Xop_list_tkn_new prev_list_tkn) { this.prev_list_tkn = prev_list_tkn; } private Xop_list_tkn_new prev_list_tkn;
 	Xoae_page(Xowe_wiki wiki, Xoa_ttl ttl) {
 		this.wiki = wiki; this.ttl = ttl;
 		this.lang = wiki.Lang();	// default to wiki.lang; can be override later by wikitext
@@ -50,7 +53,8 @@ public class Xoae_page implements Xoa_page {
 	public boolean						Xtn__timeline_exists() {return false;}	// drd always sets timeline
 	public boolean					Xtn__gallery_exists() {return false;}	// drd does not need to set gallery.style.css
 	public int						Xtn__math_uid__next() {return xtn__math_uid++;}	private int xtn__math_uid;
-	public Xoa_kv_hash              Kv_data() {return kv_data;} private final    Xoa_kv_hash kv_data = new Xoa_kv_hash();
+	public Xoa_kv_hash              Kv_data() {return kv_data;} private Xoa_kv_hash kv_data = new Xoa_kv_hash();
+	public void Kv_data_(Xoa_kv_hash v) {kv_data = v;}
 	private Guid_adp page_guid;
 	public Guid_adp Page_guid() {
 		if (page_guid == null) {

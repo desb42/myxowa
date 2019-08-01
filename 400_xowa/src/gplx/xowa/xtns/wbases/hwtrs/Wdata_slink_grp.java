@@ -76,6 +76,15 @@ class Wdata_slink_grp {
 			default:	throw Err_.new_unhandled(idx);
 		}
 	}
+	public static byte[] Sitename_by_tid(int idx, byte[] langcode) {
+		Bry_bfr bfr = Bry_bfr_.New();
+                bfr.Add(langcode);
+            if (idx == Idx_w)
+                bfr.Add(Bry_.new_a7("wiki"));
+            else
+                bfr.Add(Name_by_tid(idx));
+		return bfr.To_bry_and_clear();
+        }
 	public static final int Idx__len = 9, Idx_w = 0, Idx_d = 1, Idx_s = 2, Idx_v = 3, Idx_q = 4, Idx_b = 5, Idx_u = 6, Idx_n = 7, Idx_x = 8;
 	private static final    byte[] Name_special = Bry_.new_a7("special");
 }

@@ -122,23 +122,23 @@ class Wdata_fmtr__claim_row implements gplx.core.brys.Bfr_arg {
 	}
 	private Bry_fmtr row_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "          <div class='wikibase-statementlistview'>"
-	, "            <div class='wikibase-statementlistview-listview'>"
-	, "              <div class='wikibase-statementview wikibase-statement'>"
-	, "                <div class='wikibase-statementview-rankselector'>"
-	, "                  <div class='wikibase-rankselector ui-state-disabled'>"
-	, "                    <span class='ui-icon ui-icon-rankselector wikibase-rankselector-~{rank_name}' title='~{rank_name} rank'/>"
+	, "          <div class=\"wikibase-statementlistview\">"
+	, "            <div class=\"wikibase-statementlistview-listview\">"
+	, "              <div class=\"wikibase-statementview wikibase-statement\">"
+	, "                <div class=\"wikibase-statementview-rankselector\">"
+	, "                  <div class=\"wikibase-rankselector ui-state-disabled\">"
+	, "                    <span class=\"ui-icon ui-icon-rankselector wikibase-rankselector-~{rank_name}\" title=\"~{rank_name} rank\"/>"
 	, "                  </div>"
 	, "                </div>"
-	, "                <div class='wikibase-statementview-mainsnak-container'>"	// omit -Q2$e8ba1188-4aec-9e37-a75e-f79466c1913e
-	, "                  <div class='wikibase-statementview-mainsnak' dir='auto'>"
-	, "                    <div class='wikibase-snakview'>"
-	, "                      <div class='wikibase-snakview-property-container'>"
-	, "                        <div class='wikibase-snakview-property' dir='auto'></div>"
+	, "                <div class=\"wikibase-statementview-mainsnak-container\">"	// omit -Q2$e8ba1188-4aec-9e37-a75e-f79466c1913e
+	, "                  <div class=\"wikibase-statementview-mainsnak\" dir=\"auto\">"
+	, "                    <div class=\"wikibase-snakview\">"
+	, "                      <div class=\"wikibase-snakview-property-container\">"
+	, "                        <div class=\"wikibase-snakview-property\" dir=\"auto\"></div>"
 	, "                      </div>"
-	, "                      <div class='wikibase-snakview-value-container' dir='auto'>"
-	, "                        <div class='wikibase-snakview-typeselector'></div>"
-	, "                        <div class='wikibase-snakview-value wikibase-snakview-variation-valuesnak'>~{value}"
+	, "                      <div class=\"wikibase-snakview-value-container\" dir=\"auto\">"
+	, "                        <div class=\"wikibase-snakview-typeselector\"></div>"
+	, "                        <div class=\"wikibase-snakview-value wikibase-snakview-variation-valuesnak\">~{value}"
 	, "                        </div>"
 	, "                      </div>"
 	, "                    </div>"
@@ -270,13 +270,15 @@ class Wdata_fmtr__ref_row implements gplx.core.brys.Bfr_arg {
 					Wbase_claim_base itm = grp2.Get_at(k);
 					itm.Welcome(claim_html_wtr);
 					byte[] val = tmp_bfr.To_bry_and_clear();
-					row_fmtr.Bld_bfr_many(bfr, grp2.Id(), lbl_mgr.Get_text__pid(grp2.Id()), val);
+                                        String snakViewCssClass = Wbase_claim_value_type_.Reg.Get_str_or_fail(itm.Snak_tid());
+					row_fmtr.Bld_bfr_many(bfr, grp2.Id(), lbl_mgr.Get_text__pid(grp2.Id()), val, snakViewCssClass);
 				}
 			}
 		}
 	}
 	private Bry_fmtr row_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
+/*
 	, "                            <div class='wikibase-snakview'>"
 	, "                              <div class='wikibase-snakview-property-container'>"
 	, "                                <div class='wikibase-snakview-property' dir='auto'>"
@@ -290,5 +292,21 @@ class Wdata_fmtr__ref_row implements gplx.core.brys.Bfr_arg {
 	, "                              </div>"
 	, "                            </div>"
 	), "pid", "pid_lbl", "value"
+*/
+	, "<div class=\"wikibase-snakview wikibase-snakview-~{hash}\">"
+	, "  <div class=\"wikibase-snakview-property-container\">"
+	, "    <div class=\"wikibase-snakview-property\" dir=\"auto\">"
+	, "      <a href=\"/wiki/Property:P~{pid}\" title=\"Property:P~{pid}\">~{pid_lbl}</a>"
+	, "    </div>"
+	, "  </div>"
+	, "  <div class=\"wikibase-snakview-value-container\" dir=\"auto\">"
+	, "    <div class=\"wikibase-snakview-typeselector\"></div>"
+	, "    <div class=\"wikibase-snakview-body\">"
+	, "      <div class=\"wikibase-snakview-value ~{cssclass}\">~{value}</div>"
+	, "      <div class=\"wikibase-snakview-indicators\"></div>"
+	, "    </div>"
+	, "  </div>"
+	, "</div>"
+	), "pid", "pid_lbl", "value", "cssclass", "hash"
 	);
 }

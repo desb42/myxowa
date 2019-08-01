@@ -176,7 +176,7 @@ public class Gallery_parser {
                                     cur_itm.Ttl_bgn_(bgn + 5);
 
 				byte[] ttl_bry = Bry_.Mid(src, cur_itm.Ttl_bgn(), fld_end);
-                            System.out.println(String_.new_u8(ttl_bry));
+//                            System.out.println(String_.new_u8(ttl_bry));
 				ttl_bry = gplx.langs.htmls.encoders.Gfo_url_encoder_.Http_url_ttl.Decode(ttl_bry);	// NOTE: must decode url-encoded entries; EX: "A%28b%29.png" -> "A(b).png"; DATE:2014-01-01
 				if (gplx.core.envs.Env_.Mode_testing() && wiki == null) return; // TEST: else one test will throw benign null ref exception; DATE:2017-03-01
 				Xoa_ttl ttl = Xoa_ttl.Parse(wiki, ttl_bry);

@@ -113,7 +113,7 @@ class Xop_xnde_wkr_ {
                 //    return src_end;
 		//Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1} excerpt=~{2}", ctx.Page().Url().To_str(), close_bry, String_.new_u8(src, open_end, src_end));
 		Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1}", ctx.Page().Url().To_str(), close_bry);
-                Gfo_usr_dlg_.Instance.Log_many("", "", "mid_bry=~{0}", String_.new_u8(src));
+                //Gfo_usr_dlg_.Instance.Log_many("", "", "mid_bry=~{0}", String_.new_u8(src));
 		return Bry_find_.Not_found;
 	}
 	private static final int Find_xtn_end__tid__bgn = 0, Find_xtn_end__tid__end = 1;//, Find_xtn_end__tid__xtag = 2;

@@ -81,12 +81,22 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 		maxpagecount = 0;
 		Mwh_atr_itm[] atrs_ary = xnde.Atrs_ary();
 		int atrs_len = atrs_ary.length;
+                    byte[] key, val;
 		for (int i = 0; i < atrs_len; i++) {
 			Mwh_atr_itm atr = atrs_ary[i];
 						if (atr.Eql_pos()< 0)
 							continue;
-			byte[] key = atr.Key_bry();
-			byte[] val = atr.Val_as_bry();
+                        if (atr.Valid()) {
+                            key = atr.Key_bry();
+                            val = atr.Val_as_bry();
+                        } else {
+                            if (atr.Eql_pos() > 0) {
+                                key = Bry_.Mid(atr.Src(), atr.Atr_bgn(), atr.Eql_pos());
+                                val = Bry_.Mid(atr.Src(), atr.Eql_pos() + 1, atr.Atr_end());
+                            }
+                            else
+                                continue;
+                        }
 			Page_list_row plr = new Page_list_row(key, val);
 			rows.Add(plr);
 			if (plr.To() > maxpagecount)
@@ -113,6 +123,7 @@ class Page_list_row {
 		return Bry_.To_int_or(src, bgn, end, 0);
 	}
 	private boolean compare(byte[] src, int bgn, byte[] txt) {
+            if (src.length < txt.length) return false; // exact match
 		return Bry_.Has_at_bgn(src, txt, bgn, bgn + txt.length);
 	}
 	Page_list_row(byte[] key , byte[] val) {

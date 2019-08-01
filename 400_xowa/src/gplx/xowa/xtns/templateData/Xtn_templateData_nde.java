@@ -166,21 +166,22 @@ public class Xtn_templateData_nde implements Xox_xnde {
 					badkey = true;
 			} else if (key[0] == 'd') {
 				if (key[2] == 'f') // default
-					fld_default = ((Json_itm_str)val).Data_bry();
+					fld_default = get_text_value(val); //((Json_itm_str)val).Data_bry();
 				else if (key[2] == 'p') // deprecated
-					fld_deprecated = ((Json_itm_bool)val).Data_as_bool();
+					//fld_deprecated = ((Json_itm_bool)val).Data_as_bool();
+					fld_deprecated = get_boolean_value(val); //(Json_itm_str)val).Data_bry();
 				else if (key[2] == 's') // description
-					fld_description = ((Json_itm_str)val).Data_bry();
+					fld_description = get_text_value(val); //((Json_itm_str)val).Data_bry();
 				else
 					badkey = true;
 			} else if (key[0] == 'e') { // example
-				fld_example = ((Json_itm_str)val).Data_bry();
+				fld_example = get_text_value(val); //((Json_itm_str)val).Data_bry();
 			} else if (key[0] == 'l') { // label
-				fld_label = ((Json_itm_str)val).Data_bry();
+				fld_label = get_text_value(val); //((Json_itm_str)val).Data_bry();
 			} else if (key[0] == 'r') { // required
-				fld_required = ((Json_itm_bool)val).Data_as_bool();
+				fld_required = get_boolean_value(val); //((Json_itm_bool)val).Data_as_bool();
 			} else if (key[0] == 's') { // suggested
-				fld_suggested = ((Json_itm_bool)val).Data_as_bool();
+				fld_suggested = get_boolean_value(val); //((Json_itm_bool)val).Data_as_bool();
 			} else if (key[0] == 't') { // type
 				fld_type = ((Json_itm_str)val).Data_bry();
 			} else
@@ -205,12 +206,14 @@ public class Xtn_templateData_nde implements Xox_xnde {
 
 		bfr.Add_str_a7("<tr><th>");
 		if (fld_label == Bry_.Empty) {
+                    if (param_key != Bry_.Empty) {
 			byte b = param_key[0];
 			if (b >= 'a' && b <= 'z') {
 				param_key[0] = (byte)(b - 32); // uppercase 1st letter
 			}
 			bfr.Add(param_key);
 			param_key[0] = b; // restore
+                    }
 		}
 		else
 			bfr.Add(fld_label);
@@ -290,6 +293,33 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		bfr.Add_str_a7("</td></tr>");
 	}
 
+        private byte[] get_text_value(Json_itm itm) {
+            if (itm == null) return Bry_.Empty;
+            // ((Json_itm_str)val).Data_bry();
+            if (itm instanceof Json_itm_str)
+                return ((Json_itm_str)itm).Data_bry();
+            Json_nde langs = Json_nde.cast(itm);
+            int langs_len = langs.Len();
+            for (int j = 0; j < langs_len; j++) {
+                    Json_kv kv = Json_kv.cast(langs.Get_at(j));
+                    byte[] key = kv.Key_as_bry();
+                    Json_itm val = kv.Val();
+                    if (key[0] == 'e' && key[1] == 'n')
+                        return ((Json_itm_str)val).Data_bry();
+            }
+            return Bry_.Empty;
+        }
+        private boolean get_boolean_value(Json_itm itm) { // should be with a language tag
+            if (itm == null) return false;
+            if (itm instanceof Json_itm_bool)
+                return ((Json_itm_bool)itm).Data_as_bool();
+            byte[] word = ((Json_itm_str)itm).Data_bry();
+            if (word.length > 0) {
+                if (word[0] == 'Y' || word[0] == 'y') return true;
+                if (word[0] == '1') return true;
+            }
+            return false;
+        }
 	private static final byte[]
 	  tdps_deprecated = Bry_.new_a7("templatedata-doc-param-status-deprecated")
 	, tdps_required = Bry_.new_a7("templatedata-doc-param-status-required")

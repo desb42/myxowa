@@ -70,11 +70,16 @@ public class Ref_html_wtr {
 		Ref_itm_lst lst = wpg.Ref_mgr().Lst_get(references.Group(), references.List_idx());	// get group; EX: <references group="note"/>
 		if (lst == null) return;	// NOTE: possible to have a grouped references without references; EX: Infobox planet; <references group=note> in sidebar, but no refs 
 		if (lst.Itms_len() == 0) return;
+                boolean response_wrap = true; // default case
+                if (references.Responsive() != Bry_.Empty && references.Responsive()[0] == '0')
+                    response_wrap = false;
+                if (response_wrap) {
 		bfr.Add(Bry_.new_a7("<div class=\"mw-references-wrap"));
 		if (lst.Itms_len() > 10) {
 			bfr.Add(Bry_.new_a7(" mw-references-columns"));
 		}
 		bfr.Add(Bry_.new_a7("\">"));
+                }
 		bfr.Add(cfg.Grp_bgn());
 		int itms_len = lst.Itms_len();
 		for (int j = 0; j < itms_len; j++) {	// iterate over itms in grp
@@ -112,6 +117,7 @@ public class Ref_html_wtr {
 			}
 		}
 		bfr.Add(cfg.Grp_end());
+                if (response_wrap)
                 bfr.Add(Bry_.new_a7("</div>\n"));
 	}
 /*	private static byte[] GN_decimal = Bry_.new_a7("decimal")

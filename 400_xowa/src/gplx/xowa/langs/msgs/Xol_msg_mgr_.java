@@ -89,7 +89,7 @@ public class Xol_msg_mgr_ {
 			if (msg_in_lang == null) {
 				msg_val = tmp_bfr.Add_byte(Byte_ascii.Lt).Add(msg_key).Add_byte(Byte_ascii.Gt).To_bry_and_clear();	// set val to <msg_key>
 				msg_in_wiki.Defined_in_(Xol_msg_itm.Defined_in__none);
-                                System.out.println("None: " + String_.new_u8(msg_key));
+                                //System.out.println("None: " + String_.new_u8(msg_key));
 			}
 			else {
 				msg_val = msg_in_lang.Val();

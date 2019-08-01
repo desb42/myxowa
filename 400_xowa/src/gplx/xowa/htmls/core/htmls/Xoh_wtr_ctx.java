@@ -32,7 +32,6 @@ public class Xoh_wtr_ctx {
 	public boolean Mode_is_alt()                  {return mode == Mode_alt;}
 	public boolean Mode_is_display_title()        {return mode == Mode_display_title;}
 	public boolean Mode_is_popup()                {return mode == Mode_popup;}
-	public boolean Is_Pcheck()                {return pcheck;}  public void Pcheck_(boolean v) {pcheck = v;} private boolean pcheck;
 
 	public static final int Mode_basic = 0, Mode_alt = 1, Mode_display_title = 2, Mode_popup = 3, Mode_hdump = 4, Mode_file_dump = 5;
 

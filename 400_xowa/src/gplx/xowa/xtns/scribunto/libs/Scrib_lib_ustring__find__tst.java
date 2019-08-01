@@ -28,6 +28,9 @@ public class Scrib_lib_ustring__find__tst {
 		fxt.Test__find("abcd"          , ""     ,  2, Bool_.Y, "2;1"); // empty find should return values; EX:w:Fool's_mate; DATE:2014-03-04
 		fxt.Test__find("a€b"           , "€"    ,  1, Bool_.Y, "2;2"); // find is bytes=3
 	}
+	@Test   public void Plain_u8() {
+		fxt.Test__find("𤭢-a-"         , "-"    ,  3, Bool_.Y, "4;4"); // starts at cp=3 which should be a, not 1st dash; ISSUE#:506; DATE:2019-06-30
+	}
 	@Test   public void Bgn__negative() {
 		fxt.Test__find("abab"          , "b"    , -1, Bool_.Y, "4;4"); // search from back of String
 		fxt.Test__find("abab"          , "b"    , -9, Bool_.Y, "2;2"); // do not throw error if negative index > text.length; ISSUE#:366; DATE:2019-02-23
@@ -87,19 +90,8 @@ class Scrib_lib_ustring__find__fxt {
 		fxt.Test__proc__kvps__flat(lib, Scrib_lib_ustring.Invk_find, Scrib_kv_utl_.base1_many_(text, regx, bgn, plain), expd);
 	}
 	private String Bld_test_string(Object text, String regx, int bgn, boolean plain, String expd) {
-		/*
-		{| class=wikitable
-		! rslt !! expd !! actl !! code
-		|}
-		*/
 		String invk = "{{" + String_.Format("#invoke:Sandbox/Gnosygnu|ustring_find|{0}|{1}|{2}|{3}", Object_.Xto_str_strict_or_empty(text), regx, bgn, plain ? Bool_.True_str : Bool_.False_str) + "}}";
-		Bry_bfr bfr = Bry_bfr_.New();
-		bfr.Add_str_a7("|-\n");
-		bfr.Add_str_u8("| {{#ifeq:" + invk + "|" + expd + "|<span style='color:green'>pass</span>|<span style='color:red'>fail</span>}}\n");
-		bfr.Add_str_u8("| " + expd + "\n");
-		bfr.Add_str_u8("| " + invk + "\n");
-		bfr.Add_str_u8("| <nowiki>" + invk + "</nowiki>\n");
-		return bfr.To_str();
+		return fxt.Parser_fxt().Make__test_string(invk, expd);
 	}
 }
 /*

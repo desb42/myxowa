@@ -54,12 +54,16 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 		// get page
 		byte[] ttl_in_data_ns = Bry_.Add(gplx.xowa.wikis.nss.Xow_ns_.Bry__data, Byte_ascii.Colon_bry, ttl_bry);
 		byte[] page = Scrib_lib_title.GetContentInternal(core, commons_wiki, ttl_in_data_ns);
+                Keyval[] rv;
 		if (page == null) {
-			throw Err_.new_wo_type("bad argument #1 to 'get' (not a valid title) " + String_.new_u8(ttl_bry));
-		}
+                    rv = Keyval_.Ary_empty;
+                    // possibly a warning message? 20190730
+			//throw Err_.new_wo_type("bad argument #1 to 'get' (not a valid title) " + String_.new_u8(ttl_bry));
+		} else {
 
-		Keyval[] rv = Scrib_lib_text.JsonDecodeStatic(args, core, json_util, page, Scrib_lib_text__json_util.Opt__force_assoc, Scrib_lib_text__json_util.Flag__none);
+		rv = Scrib_lib_text.JsonDecodeStatic(args, core, json_util, page, Scrib_lib_text__json_util.Opt__force_assoc, Scrib_lib_text__json_util.Flag__none);
 		rv = localizer.Localize(core.Wiki().Lang(), page, rv);
+                }
 		return rslt.Init_obj(rv);
 	}
 }

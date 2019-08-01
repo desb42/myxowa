@@ -18,10 +18,27 @@ import gplx.langs.phps.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.kwds.*; import gplx.xowa.langs.msgs.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
 public class Pfunc_int extends Pf_func_base {
+    // cache lang value (as it is used frequently)
+    private byte[] cached_lang = Bry_.Empty;
 	@Override public int Id() {return Xol_kwd_grp_.Id_i18n_int;}
 	@Override public boolean Func_require_colon_arg() {return true;}
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
 		byte[] msg_key = Eval_argx(ctx, src, caller, self);
+                boolean langflag = false;
+                if ((msg_key[0] == 'l' || msg_key[0] == 'L') && msg_key.length == 4) {
+                    if (msg_key[1] == 'a' || msg_key[1] == 'A') {
+                        if (msg_key[2] == 'n' || msg_key[2] == 'N') {
+                            if (msg_key[3] == 'g' || msg_key[3] == 'G') {
+                                if (cached_lang != Bry_.Empty) {
+                                    bfr.Add(cached_lang);
+                                    return;
+                                }
+                                else
+                                    langflag = true;
+                            }
+                        }
+                    }
+                }
 		Xowe_wiki wiki = ctx.Wiki();
 		Xol_lang_itm page_lang = ctx.Page().Lang();
 		byte[][] args_ary = Bry_.Ary_empty;
@@ -32,6 +49,9 @@ public class Pfunc_int extends Pf_func_base {
 				args_ary[i] = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, self.Args_len(), i);
 		}
 		byte[] msg_val = Xol_msg_mgr_.Get_msg_val(wiki, page_lang, msg_key, args_ary);
+                //System.out.println("int - " + String_.new_a7(msg_key) + " : " + String_.new_a7(msg_val));
+                if (langflag)
+                    cached_lang = msg_val;
 		bfr.Add(msg_val);
 	}
 	@Override public Pf_func New(int id, byte[] name) {return new Pfunc_int().Name_(name);}

@@ -19,7 +19,7 @@ public class Wbase_claim_entity extends Wbase_claim_base {
 	public Wbase_claim_entity(int pid, byte snak_tid, byte entity_tid, byte[] entity_id_bry) {super(pid, snak_tid);
 		this.entity_tid = entity_tid;
 		this.entity_id_bry = entity_id_bry;
-                if (entity_tid == Wbase_claim_entity_type_.Tid__sense) // only a string for 'sense'
+                if (entity_tid == Wbase_claim_entity_type_.Tid__sense || entity_tid == Wbase_claim_entity_type_.Tid__form) // only a string for 'sense' and 'form'
                     this.entity_id = -1;
                 else
                     this.entity_id = Bry_.To_int(entity_id_bry);

@@ -36,7 +36,7 @@ public class Categorytree_nde implements Xox_xnde {
 			byte[] val = atr.Val_as_bry();
 			if (Bry_.Eq(key, Categorytree_itm_.Attr_showcount)) {
 				if (val.length > 0) {
-					if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || val[0] == 'o') // constants!! (true or yes or on)
+					if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || val[0] == 'o') // constants!! (true or yes or on/false no off)
 						params.Showcount_(true);
 				}
 			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_mode)) {
@@ -45,8 +45,10 @@ public class Categorytree_nde implements Xox_xnde {
 					// only supporting categories and pages
 					if (val[0] == 'c')
 						params.Mode_(Categorytree_itm_.Mode__CATEGORIES);
-					if (val[0] == 'p')
+					else if (val[0] == 'p')
 						params.Mode_(Categorytree_itm_.Mode__PAGES);
+					else if (val[0] == 'a')
+						params.Mode_(Categorytree_itm_.Mode__ALL);
 				}
 			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_hideprefix)) {
 				if (val.length > 1) {
@@ -65,15 +67,20 @@ public class Categorytree_nde implements Xox_xnde {
 					if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || val[0] == 'o') // constants!! (true or yes or on)
 						params.Hideroot_(true);
 				}
+			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_depth)) {
+				int d = val[0] - '0'; // TODO: should check values
+				params.Depth_(d);
 			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_namespaces)) {
-				// space separated list of namespaces
+				// TODO: space separated list of namespaces
 				// params.Namespaces_(true);
 				// params.Namespacelist_ somehow
 			}
 		}
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
-		cat_mgr.Renderchild(bfr, src, xnde.Tag_open_end(), xnde.Tag_close_bgn(), params);
+		int bgn = xnde.Tag_open_end(), end = xnde.Tag_close_bgn();
+		if (bgn >= end) return; //nothing to do
+		cat_mgr.Renderchild(bfr, src, bgn, end, params);
 		page.Html_data().Head_mgr().Itm__categorytree().Enabled_y_();
 	}
 

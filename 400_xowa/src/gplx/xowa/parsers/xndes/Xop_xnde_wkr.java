@@ -16,7 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.parsers.xndes; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
 import gplx.core.btries.*; import gplx.core.envs.*; import gplx.xowa.apps.progs.*;
 import gplx.xowa.wikis.domains.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.pfuncs.strings.*;
-import gplx.langs.htmls.entitys.*;
+import gplx.langs.htmls.entitys.*; import gplx.xowa.parsers.paras.*;
 import gplx.xowa.parsers.logs.*; import gplx.xowa.parsers.tblws.*; import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.miscs.*; import gplx.xowa.parsers.htmls.*;
 public class Xop_xnde_wkr implements Xop_ctx_wkr {
 	public void Ctor_ctx(Xop_ctx ctx) {}
@@ -207,6 +207,10 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 				switch (tag.Id()) {
 					case Xop_xnde_tag_.Tid__noinclude:
 						ctx.Subs_add(root, tkn_mkr.Ignore(bgn_pos, end_pos, Xop_ignore_tkn.Ignore_tid_include_tmpl));
+						if (end_pos+2 < src_len && src[end_pos] == '{' && src[end_pos+1] == '|') {
+							Xop_fake_nl_tkn nl_tkn = new Xop_fake_nl_tkn();
+							ctx.Subs_add(root, nl_tkn);
+						}
 						return end_pos;
 					case Xop_xnde_tag_.Tid__nowiki:		// if encountered in page_tmpl stage, mark nowiki as xtn; added for nowiki_xnde_frag; DATE:2013-01-27
 					case Xop_xnde_tag_.Tid__includeonly:	// includeonly should be resolved during template stage; EX: =<io>=</io>A=<io>=</io>; DATE:2014-02-12
@@ -274,6 +278,10 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 				end_rhs = src_len;
 		}
 		ctx.Subs_add(root, tkn_mkr.Ignore(bgn_pos, end_rhs, Xop_ignore_tkn.Ignore_tid_include_tmpl));
+                if (end_rhs+2 < src_len && src[end_rhs] == '{' && src[end_rhs+1] == '|') {
+                        Xop_fake_nl_tkn nl_tkn = new Xop_fake_nl_tkn();
+                        ctx.Subs_add(root, nl_tkn);
+                }
 		return end_rhs;
 	}
 	private boolean pre2_pending = false;
@@ -283,12 +291,12 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 		// calc (a) inline; (b) atrs
 		switch (tag_end_byte) {	// look at last char of tag; EX: for b, following are registered: "b/","b>","b\s","b\n","b\t"
 			case Byte_ascii.Slash:	// "/" EX: "<br/"; // NOTE: <pre/a>, <pre//> are allowed
-				inline = true;		
+				inline = true;
 				break;
 			case Byte_ascii.Backslash:	// allow <br\>; EX:w:Mosquito
 				if (tag.Inline_by_backslash())
 					src[tag_end_pos] = Byte_ascii.Slash;
-				inline = true;		
+				inline = true;
 				break;
 			case Byte_ascii.Gt:		// ">" "normal" tag; noop
 				break;
@@ -301,19 +309,19 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 				}
 				break;
 		}
-		// dont care if <references> (ie no close) or <references/>
-		if (tag.Id() == Xop_xnde_tag_.Tid__references)
-			inline = true;
+                // dont care if <references> (ie no close) or <references/>
+                if (tag.Id() == Xop_xnde_tag_.Tid__references)
+                    inline = true;
 		Mwh_atr_itm[] atrs = null;
 		if (ctx.Parse_tid() == Xop_parser_tid_.Tid__wtxt) {
 			// NOWIKI;DATE:2018-01-16
-			// if (atrs_bgn < atrs_end) {
-			//	byte[] converted = ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(Bool_.N, Bry_.Mid(src, atrs_bgn, atrs_end));
-			//	atrs = ctx.App().Parser_mgr().Xnde__parse_atrs(converted, 0, converted.length);
-			// }
-			// else
-			//	atrs = ctx.App().Parser_mgr().Xnde__parse_atrs(src, atrs_bgn, atrs_end);
-			atrs = ctx.App().Parser_mgr().Xnde__parse_atrs(src, atrs_bgn, atrs_end);
+			 if (atrs_bgn < atrs_end) {
+				byte[] converted = ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(Bool_.N, Bry_.Mid(src, atrs_bgn, atrs_end));
+				atrs = ctx.App().Parser_mgr().Xnde__parse_atrs(converted, 0, converted.length);
+			 }
+			 else
+				atrs = ctx.App().Parser_mgr().Xnde__parse_atrs(src, atrs_bgn, atrs_end);
+			//atrs = ctx.App().Parser_mgr().Xnde__parse_atrs(src, atrs_bgn, atrs_end);
 		}
 		if ((	(	tag.Xtn() 
 				&&	(	ctx.Parse_tid() != Xop_parser_tid_.Tid__defn	// do not gobble up rest if in tmpl; handle <poem>{{{1}}}</poem>; DATE:2014-03-03
@@ -598,6 +606,9 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 			xnde.Atrs_rng_(atrs_bgn, atrs_end);
 			xnde.Atrs_ary_(atrs);
 			if (close_bgn - open_end > 0)
+//                            if (tag.Id() == Xop_xnde_tag_.Tid__nowiki)
+//				xnde.Subs_add(new Xop_nowiki_tkn(open_end, close_bgn));
+//                        else
 				xnde.Subs_add(tkn_mkr.Txt(open_end, close_bgn));
 		}
 		switch (ctx.Parse_tid()) {
@@ -691,7 +702,7 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 						xnde_xtn.Xtn_parse(ctx.Wiki(), ctx, root, src, xnde);
 					}
 					catch (Exception e) {
-						String err_msg = String_.Format("failed to render extension: title={0} excerpt={1} err={2}", ctx.Page().Ttl().Full_txt_w_ttl_case()
+						String err_msg = String_.Format("failed to render extension: title={0} excerpt={1} err={2}", ctx.Page().Ttl().Full_db() //.Full_txt_w_ttl_case()
 							, Bry_.Mid(src, xnde.Tag_open_end(), xnde.Tag_close_bgn())
 							, Err_.Message_gplx_log(e));
 						if (Env_.Mode_testing()) 

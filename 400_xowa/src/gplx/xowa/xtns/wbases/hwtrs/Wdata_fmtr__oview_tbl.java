@@ -49,9 +49,6 @@ class Wdata_fmtr__oview_tbl implements gplx.core.brys.Bfr_arg {
 	( ""
 	, "      <div class='wikibase-entitytermsview'>"
 	, "        <div class='wikibase-entitytermsview-heading'>"
-	, "          <h1 class='wikibase-entitytermsview-heading-label'>~{ttl_label}"
-	, "            <span class='wikibase-entitytermsview-heading-label-id'>(~{ttl})</span>"
-	, "          </h1>"
 	, "          <div class='wikibase-entitytermsview-heading-description '>~{ttl_descr}"
 	, "          </div>"
 	, "          <div class='wikibase-entitytermsview-heading-aliases'>"
@@ -81,12 +78,16 @@ class Wdata_fmtr__oview_alias_itm implements gplx.core.brys.Bfr_arg {
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		if (ary == null) return;
 		int len = ary.length;
-		for (int i = 0; i < len; ++i)
-			row_fmtr.Bld_bfr_many(bfr, ary[i]);
+		for (int i = 0; i < len; ++i) {
+                    bfr.Add_str_a7_null("<li class=\"wikibase-entitytermsview-aliases-alias\" data-aliases-separator=\"|\">");
+                    bfr.Add(ary[i]);
+                    bfr.Add_str_a7_null("</li>");
+//			row_fmtr.Bld_bfr_many(bfr, ary[i]);
+                }
 	}
-	private Bry_fmtr row_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
-	( ""
-	, "              <li class='wikibase-entitytermsview-aliases-alias'>~{itm}</li>"
-	), "itm"
-	);
+//	private Bry_fmtr row_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
+//	( ""
+//	, "              <li class=\"wikibase-entitytermsview-aliases-alias\" data-aliases-separator=\"|\">~{itm}</li>"
+//	), "itm"
+//	);
 }

@@ -71,11 +71,15 @@ public class Luaj_engine implements Scrib_engine {
 		while (true) {
 			LuaTable rsp = server.Dispatch(msg);
 			String op = Luaj_value_.Get_val_as_str(rsp, "op");
-			if		(String_.Eq(op, "return"))
+                        char firstchr = op.charAt(0);
+			//if		(String_.Eq(op, "return"))
+			if		(firstchr == 'r')
 				return Luaj_value_.Get_val_as_kv_ary(server, rsp, "values");
-			else if (String_.Eq(op, "call"))
+			//else if (String_.Eq(op, "call"))
+			else if (firstchr == 'c')
 				msg = Server_recv_call(rsp);
-			else if (String_.Eq(op, "error")) {
+			//else if (String_.Eq(op, "error")) {
+			else if (firstchr == 'e') {
 				String err = Luaj_value_.Get_val_as_str(rsp, "value");
 				core.Handle_error(err);
 				return Keyval_.Ary_empty;

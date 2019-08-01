@@ -63,6 +63,7 @@ public class Xot_defn_tmpl implements Xot_defn {
 	public boolean Tmpl_evaluate(Xop_ctx ctx, Xot_invk caller, Bry_bfr bfr) {
 		if (root == null) Parse_tmpl(ctx);
 		Xoae_page page = ctx.Page();
+//                System.out.println(String_.new_u8(full_name));
 		if (!ctx.Wiki().Parser_mgr().Tmpl_stack_add(full_name)) {
 			bfr.Add_str_a7("<!-- template loop detected:" + gplx.langs.htmls.Gfh_utl.Escape_html_as_str(String_.new_u8(name)) + " -->");
 			Xoa_app_.Usr_dlg().Log_many("", "", "template loop detected: url=~{0} name=~{1}", ctx.Page().Url().To_str(), name);

@@ -56,6 +56,16 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 				case Tblw_type_tb: {							// "{|";
 					// close para when table starts; needed for TRAILING_TBLW fix; PAGE:en.w:Template_engine_(web) DATE:2017-04-08
 					ctx.Para().Process_block__bgn__nl_w_symbol(ctx, root, src, bgn_pos, cur_pos - 1, Xop_xnde_tag_.Tag__table);	// -1 b/c cur_pos includes sym_byte; EX: \n{
+					// any outstanding list?
+					if (ctx.Page().Prev_list_tkn() != null) {
+						// inject a list close
+                                                Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+                                                if (prev != null && prev.Src_bgn() > src.length)
+                                                    System.out.println("tbl");
+						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+						ctx.Subs_add_and_stack(root, itm);
+						ctx.Page().Prev_list_tkn_(null);
+					}
 					break;										//	noop; by definition "{|" does not need to have a previous "{|"
 				}
 				case Tblw_type_td:								// "|"
@@ -117,8 +127,10 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 					break;
 			}
 		}
-		if (wlxr_type == Tblw_type_te)
+		if (wlxr_type == Tblw_type_te) {
+                    ctx.Page().Prev_list_tkn_(null); // reset list new
 			return Make_tkn_end(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, Xop_tkn_itm_.Tid_tblw_te, wlxr_type, prv_tkn, prv_tid, tbl_is_xml);
+                }
 		else
 			return Make_tkn_bgn_tblw(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, wlxr_type, tbl_is_xml, atrs_bgn, atrs_end, prv_tkn, prv_tid);
 	}

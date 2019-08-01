@@ -16,7 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.parsers; import gplx.*; import gplx.xowa.*;
 import gplx.core.btries.*;
 import gplx.xowa.langs.*; import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.wikis.nss.*;
-import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.tmpls.*;
+import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.tmpls.*; import gplx.xowa.parsers.lists.*;
 public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-write state
 	private final    Xowe_wiki wiki;
 	private final    Btrie_fast_mgr tmpl_trie, wtxt_trie;
@@ -119,7 +119,10 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 		ctx.Parse_tid_(parse_type);
 		ctx.Parser__page_init(root, src);
 		ctx.App().Parser_mgr().Core__uniq_mgr().Clear();
+                Xop_list_tkn_new saved_tkn = ctx.Page().Prev_list_tkn();
+                ctx.Page().Prev_list_tkn_(null); // reset list new
 		Parse_to_src_end(root, ctx, tkn_mkr, src, trie, doc_bgn_pos, len);
+                ctx.Page().Prev_list_tkn_(saved_tkn);
 		ctx.Parser__page_term(root, src, len);
 		ctx.Parse_tid_(parse_tid_old);
 	}

@@ -87,6 +87,9 @@ public class Xop_ctx {
 		if (lst_page_regy != null) lst_page_regy.Clear();
 		tmpl_args_parsing = false;
 		page_data.Clear();
+                if (cur_page.Prev_list_tkn() != null)
+                    Xoa_app_.Usr_dlg().Warn_many("", "", "notclear; wiki=~{0} page=~{1}", wiki.Domain_bry(), cur_page.Ttl().Full_db());
+                cur_page.Prev_list_tkn_(null);
 		return this;
 	}
 	public String Page_url_str() {
@@ -338,5 +341,6 @@ public class Xop_ctx {
 		trg.ref_ignore = src.ref_ignore;					// copy ref_ignore; needed for refs inside poem else duplicate refs; it.s:La_Secchia_rapita/Canto_primo; DATE:2015-12-03
 		trg.references_group = src.references_group;
 		trg.cur_page.Ref_mgr_(src.cur_page.Ref_mgr());
+		trg.cur_page.Kv_data_(src.cur_page.Kv_data());
 	}		
 }

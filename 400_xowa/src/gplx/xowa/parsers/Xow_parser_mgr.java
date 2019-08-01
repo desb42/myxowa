@@ -20,6 +20,7 @@ import gplx.xowa.files.*;
 import gplx.xowa.xtns.scribunto.*; import gplx.xowa.xtns.wbases.hwtrs.*; import gplx.xowa.xtns.pfuncs.ifs.*; import gplx.xowa.xtns.pfuncs.times.*; import gplx.xowa.xtns.pfuncs.ttls.*;
 import gplx.xowa.xtns.math.*; import gplx.xowa.parsers.uniqs.*; import gplx.xowa.parsers.hdrs.sections.*;
 public class Xow_parser_mgr {
+	private final    Object thread_lock = new Object();
 	private final    Xowe_wiki wiki; private final    Xop_tkn_mkr tkn_mkr;
 	public Xow_parser_mgr(Xowe_wiki wiki) {
 		this.wiki = wiki; this.tkn_mkr = wiki.Appe().Parser_mgr().Tkn_mkr();
@@ -53,7 +54,8 @@ public class Xow_parser_mgr {
 	public void						Tmpl_stack_del() {--tmpl_stack_ary_len;}
 	public boolean						Tmpl_stack_add(byte[] key) {
 		for (int i = 0; i < tmpl_stack_ary_len; i++) {
-			if (Bry_.Match(key, tmpl_stack_ary[i])) return false;
+			if (Bry_.Match(key, tmpl_stack_ary[i]))
+                            return false;
 		}
 		int new_len = tmpl_stack_ary_len + 1;
 		if (new_len > tmpl_stack_ary_max) {
@@ -64,17 +66,16 @@ public class Xow_parser_mgr {
 		tmpl_stack_ary_len = new_len;
 		return true;
 	}	private byte[][] tmpl_stack_ary = Bry_.Ary_empty; private int tmpl_stack_ary_len = 0, tmpl_stack_ary_max = 0;
-	public Pfunc_anchorencode_mgr Anchor_encoder_mgr__dflt_or_new(Xop_ctx calling_ctx) {
-		// lazy-instantiate anchor_encoder_mgr
-		if (anchor_encoder_mgr == null) anchor_encoder_mgr = new Pfunc_anchorencode_mgr(wiki);
-
-		// default to member instance
-		Pfunc_anchorencode_mgr rv = anchor_encoder_mgr;
-		// if used, create a new one; only occurs if {{anchorencode}} is nested
-		if (rv.Used()) rv = new Pfunc_anchorencode_mgr(wiki);
-		rv.Used_(Bool_.Y);
-		return rv;
-	}	private Pfunc_anchorencode_mgr anchor_encoder_mgr;
+	public Xop_parser Anchor_encoder_parser_or_new() {
+		synchronized (thread_lock) {
+			if (anchor_encoder_parser == null) {
+				anchor_encoder_parser = Xop_parser.new_(wiki, wiki.Parser_mgr().Main().Tmpl_lxr_mgr(), Xop_lxr_mgr.new_anchor_encoder());
+				anchor_encoder_parser.Init_by_wiki(wiki);
+				anchor_encoder_parser.Init_by_lang(wiki.Lang());
+			}
+			return anchor_encoder_parser;
+		}
+	}   private Xop_parser anchor_encoder_parser;
 	public void Init_by_wiki() {
 		math__core.Init_by_wiki(wiki);
 		hdr__section_editable__mgr.Init_by_wiki(wiki);
@@ -96,6 +97,8 @@ public class Xow_parser_mgr {
 		Xoa_ttl ttl = page.Ttl();
 		if (	Xow_page_tid.Identify(wiki.Domain_tid(), ttl.Ns().Id(), ttl.Page_db()) == Xow_page_tid.Tid_wikitext) {	// only parse page if wikitext; skip .js, .css, Module; DATE:2013-11-10
 			byte[] data_raw = page.Db().Text().Text_bry();
+//                        Db_parser dbp = new Db_parser();
+//                        data_raw = dbp.firstpass(ctx, data_raw);
 			parser.Parse_text_to_wdom(root, ctx, tkn_mkr, data_raw , Xop_parser_.Doc_bgn_bos);
 		}
 		page.Root_(root);

@@ -80,7 +80,7 @@ public class Pp_pagequality_nde implements Xox_xnde {
 	}
 
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
-		if (xtn_root == null) return;	// xtn_root is null when Xtn_parse exits early; occurs for recursion; DATE:2014-05-21
+		if (xtn_root == null) return;	// xtn_root is null when Xtn_write exits early; occurs for recursion; DATE:2014-05-21
 		html_wtr.Write_tkn_to_html(bfr, ctx, hctx, xtn_root.Root_src(), xnde, Xoh_html_wtr.Sub_idx_null, xtn_root);
 		bfr.Add_str_a7_null("<div class=\"pagetext\"><div class=\"mw-parser-output\">");
 		// set a flag (shomehow/somewhere?)

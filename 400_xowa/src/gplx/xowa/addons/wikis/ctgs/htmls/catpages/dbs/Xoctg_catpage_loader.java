@@ -56,13 +56,12 @@ public class Xoctg_catpage_loader {
 				grp.Next_sortkey_(url_sortkey);	// next sortkey is always sortkey of until url arg;
 			}
 
-			// load links
-			Xoctg_catlink_loader loader = new Xoctg_catlink_loader();
-			if (cat_core_itm.File_idx() == -1)	// v3 or v4: loop over all cat_link dbs {
-				loader.Make_attach_mgr__v3_v4	(db_mgr, cat_core_tbl.Conn());
-			else								// v2: use cat_link_db
-				loader.Make_attach_mgr__v2		(db_mgr, cat_core_itm.File_idx());
-			loader.Run(rv, wiki, catpage_mgr, page_tbl, cat_id, grp_tid, url_is_from, url_sortkey, limit);
+				Xoctg_catlink_loader loader = new Xoctg_catlink_loader();
+				if (cat_core_itm.File_idx() == -1)	// v3 or v4: loop over all cat_link dbs {
+					loader.Make_attach_mgr__v3_v4	(db_mgr, cat_core_tbl.Conn());
+				else								// v2: use cat_link_db
+					loader.Make_attach_mgr__v2		(db_mgr, cat_core_itm.File_idx());
+				loader.Run(rv, wiki, catpage_mgr, page_tbl, cat_id, grp_tid, url_is_from, url_sortkey, limit);
 		}
 		return rv;
 	}

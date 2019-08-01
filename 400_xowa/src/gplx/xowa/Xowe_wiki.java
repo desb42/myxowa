@@ -20,7 +20,7 @@ import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.langs.
 import gplx.xowa.wikis.*; import gplx.xowa.wikis.domains.*; import gplx.xowa.wikis.xwikis.*; import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.metas.*; import gplx.xowa.wikis.data.site_stats.*; import gplx.xowa.wikis.ttls.*; import gplx.xowa.wikis.data.*; import gplx.xowa.wikis.data.tbls.*; import gplx.xowa.wikis.caches.*; import gplx.xowa.wikis.fsys.*;
 import gplx.xowa.users.*; import gplx.xowa.htmls.*; import gplx.xowa.users.history.*; import gplx.xowa.specials.*; import gplx.xowa.xtns.*; import gplx.xowa.wikis.dbs.*;
 import gplx.xowa.files.*; import gplx.xowa.files.repos.*; import gplx.xowa.files.origs.*; import gplx.xowa.files.bins.*; import gplx.fsdb.*; import gplx.fsdb.meta.*; import gplx.xowa.files.exts.*;		
-import gplx.xowa.htmls.heads.*; import gplx.xowa.htmls.core.htmls.utls.*; import gplx.xowa.htmls.core.hzips.*; import gplx.xowa.htmls.core.*; import gplx.xowa.htmls.ns_files.*; import gplx.xowa.htmls.bridges.dbuis.tbls.*;	import gplx.xowa.htmls.hrefs.*;
+import gplx.xowa.htmls.heads.*; import gplx.xowa.htmls.core.htmls.utls.*; import gplx.xowa.htmls.core.hzips.*; import gplx.xowa.htmls.core.*; import gplx.xowa.htmls.ns_files.*; import gplx.xowa.htmls.bridges.dbuis.tbls.*;	import gplx.xowa.htmls.hrefs.*; import gplx.xowa.htmls.hxtns.pages.*; 
 import gplx.xowa.bldrs.xmls.*; import gplx.xowa.bldrs.installs.*; import gplx.xowa.bldrs.setups.maints.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.utils.*;
 import gplx.xowa.addons.wikis.ctgs.*;
@@ -125,7 +125,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public Xop_sanitizer			Sanitizer() {return sanitizer;} private final    Xop_sanitizer sanitizer;
 	public byte[]					Wtxt__expand_tmpl(byte[] src) {return parser_mgr.Main().Expand_tmpl(src);}
 	public boolean                  Embeddable_enabled() {return embeddable_enabled;} public void Embeddable_enabled_(boolean v) {this.embeddable_enabled = v;} private boolean embeddable_enabled;
-
+	public Hxtn_page_mgr            Hxtn_mgr() {return hxtn_mgr;} private final    Hxtn_page_mgr hxtn_mgr = new Hxtn_page_mgr();
 
 	public Xow_hdump_mgr			Html__hdump_mgr() {return html__hdump_mgr;} private final    Xow_hdump_mgr html__hdump_mgr;
 	public Xoae_app					Appe() {return app;} private Xoae_app app;
@@ -149,6 +149,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public byte[]					Wdata_wiki_lang() {return wdata_wiki_lang;} private byte[] wdata_wiki_lang;
 	public void						Wdata_wiki_lang_(byte[] v) {this.wdata_wiki_lang = v; Wdata_wiki_abrv_();}	// TEST:
 	public byte[]					Wdata_wiki_abrv() {return wdata_wiki_abrv;} private byte[] wdata_wiki_abrv;
+	public boolean				Is_Html_page() {return is_html_page;} public void Is_html_page_(boolean v) {is_html_page = v;} private boolean is_html_page; // added 20190731
 	private void Wdata_wiki_abrv_() {
 		Bry_bfr bfr = utl__bry_bfr_mkr.Get_b128();
 		Xow_abrv_wm_.To_abrv(bfr, wdata_wiki_lang, Int_obj_ref.New(wdata_wiki_tid));

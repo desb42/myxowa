@@ -31,6 +31,7 @@ public class Xop_curly_wkr implements Xop_ctx_wkr {
 		int lxr_end_pos = Bry_find_.Find_fwd_while(src, lxr_cur_pos, src_len, Byte_ascii.Curly_end);	// NOTE: can be many consecutive }; EX: {{a|{{{1}}}}}
 		int end_tkn_len = lxr_end_pos - lxr_bgn_pos;
 		boolean vnt_enabled = ctx.Wiki().Lang().Vnt_mgr().Enabled();
+                int open_curl_pos = -1;
 		while (end_tkn_len > 0) {
 			int acs_pos = -1, acs_len = ctx.Stack_len();
 			for (int i = acs_len - 1; i > -1; i--) {		// find auto-close pos
@@ -38,6 +39,7 @@ public class Xop_curly_wkr implements Xop_ctx_wkr {
 				switch (stack_tkn.Tkn_tid()) {
 					case Xop_tkn_itm_.Tid_tmpl_curly_bgn:	// found curly_bgn; mark and exit
 						acs_pos = i;
+                                                open_curl_pos = stack_tkn.Src_bgn();
 						i = -1;
 						break;
 					case Xop_tkn_itm_.Tid_brack_bgn:		// found no curly_bgn, but found brack_bgn; note that extra }} should not close any frames beyond lnki; EX:w:Template:Cite wikisource; w:John Fletcher (playwright)
@@ -143,6 +145,38 @@ public class Xop_curly_wkr implements Xop_ctx_wkr {
 				++lxr_bgn_pos;
 			}
 		}
+                // is the template on one line?
+                if (open_curl_pos >= 0) {
+                    if (lxr_end_pos + 3 < src_len) {
+                        if (false && src[lxr_end_pos] == '\n' && (open_curl_pos == 0 || src[open_curl_pos-1] == '\n')) {
+                            // make sure no interior '\n'
+                            byte nxt;
+                            boolean interior_lf = false;
+                            for (int j = open_curl_pos; j < lxr_end_pos; j++) {
+                                if (src[j] == '\n') {
+                                    interior_lf = true;
+                                    break;
+                                }
+                            }
+                            if (!interior_lf) {
+                            /*// except tables and lists dont work proper
+                            nxt = src[lxr_end_pos+1];
+                            if (nxt == '{') {
+                                if (src[lxr_end_pos+2] != '|')
+                                    lxr_end_pos++;
+                            }
+                            else if (nxt == '*' || nxt == '#' || nxt == ':' || nxt == ';') {
+                                // do not trim
+                            }
+                            else
+                                lxr_end_pos++;*/
+                            // check for \n{{
+                            if (src[lxr_end_pos+1] == '{' && src[lxr_end_pos+2] == '{')
+                                lxr_end_pos++;
+                            }
+                        }
+                    }
+                }
 		return lxr_end_pos;
 	}
 	private Xot_prm_wkr prm_wkr = Xot_prm_wkr.Instance;

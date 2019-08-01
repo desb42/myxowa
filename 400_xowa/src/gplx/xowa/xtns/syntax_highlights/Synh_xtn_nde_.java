@@ -16,7 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.syntax_highlights; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import gplx.langs.htmls.*; import gplx.xowa.htmls.*;
 class Synh_xtn_nde_ {
-	public static void Make(Bry_bfr bfr, Xoae_app app, byte[] src, int src_bgn, int src_end, byte[] lang, byte[] enclose, byte[] style, boolean line_enabled, int start, boolean highlight_lines, Int_rng_mgr highlight_idxs) {
+	public static void Make(Bry_bfr bfr, Xoae_app app, byte[] src, int src_bgn, int src_end, byte[] lang, byte[] enclose, byte[] style, boolean line_enabled, int start, Int_rng_mgr highlight_idxs) {
 		boolean enclose_is_none	= Bry_.Eq(enclose, Enclose_none);
 		if (enclose_is_none) {	// enclose=none -> put in <code>
 			bfr.Add(Bry__code_bgn);
@@ -27,15 +27,16 @@ class Synh_xtn_nde_ {
 			bfr.Add(Bry__div_bgn);
 			if (style != null) bfr.Add(Xoh_consts.Style_atr).Add(style).Add_byte(Byte_ascii.Quote);
 			bfr.Add_byte(Byte_ascii.Angle_end);
-			//bfr.Add(Xoh_consts.Pre_bgn_overflow);
-			bfr.Add(Xoh_consts.Pre_bgn_overflow_open);
-			bfr.Add(Bry_.Lcase__all(lang));
-			bfr.Add_byte(Byte_ascii.Quote);
-			bfr.Add_byte(Byte_ascii.Angle_end);
+			Gfh_tag_.Bld_lhs_bgn(bfr, Gfh_tag_.Id__pre);
+			Gfh_atr_.Add(bfr, Gfh_atr_.Bry__style, Bry__style__overflow__auto);
+			if (Bry_.Len_gt_0(lang)) {
+				Gfh_atr_.Add(bfr, Gfh_atr_.Bry__class, Bry_.Add(Bry__pretty_print, lang));
+			}
+			Gfh_tag_.Bld_lhs_end_nde(bfr);
 		}
 		int text_bgn = src_bgn;
 		int text_end = Bry_find_.Find_bwd_while(src, src_end, -1, Byte_ascii.Space) + 1; // trim space from end; PAGE:en.w:Comment_(computer_programming) DATE:2014-06-23
-		if (line_enabled || highlight_lines) {
+		if (line_enabled || highlight_idxs != Int_rng_mgr_null.Instance) { // NOTE: if "highlight" specified without "line" highlight_idxs will not be null instance; add '<span style="background-color: #FFFFCC;">' below; ISSUE#:498; DATE:2019-06-22
 			bfr.Add_byte_nl();
 			byte[][] lines = Bry_split_.Split_lines(Bry_.Mid(src, text_bgn, text_end));
 			int lines_len = lines.length;
@@ -44,7 +45,7 @@ class Synh_xtn_nde_ {
 			int digits_max = Int_.DigitCount(line_end);
 			for (int i = 0; i < lines_len; i++) {
 				byte[] line = lines[i]; if (i == 0 && Bry_.Len_eq_0(line)) continue;
-				if (line_enabled) {
+				if (line_enabled) { // add '<span style="-moz-user-select:none;">1 </span>' if "line" is enabled
 					bfr.Add(Xoh_consts.Span_bgn_open).Add(Xoh_consts.Style_atr).Add(Style_line).Add(Xoh_consts.__end_quote);
 					int pad = digits_max - Int_.DigitCount(line_idx);
 					if (pad > 0) bfr.Add_byte_repeat(Byte_ascii.Space, pad);
@@ -71,9 +72,11 @@ class Synh_xtn_nde_ {
 			bfr.Add(Gfh_bldr_.Bry__div_rhs);
 		}
 	}
-	private static final byte[] 
+	private static final    byte[] 
 	  Enclose_none = Bry_.new_a7("none")
 	, Style_line = Bry_.new_a7("-moz-user-select:none;"), Style_highlight = Bry_.new_a7("background-color: #FFFFCC;")
+	, Bry__style__overflow__auto = Bry_.new_a7("overflow:auto")
+	, Bry__pretty_print = Bry_.new_a7("prettyprint lang-")
 	, Bry__div_bgn = Bry_.new_a7("<div class=\"mw-highlight\"")
 	, Bry__code_bgn = Bry_.new_a7("<code class=\"mw-highlight\"")
 	;

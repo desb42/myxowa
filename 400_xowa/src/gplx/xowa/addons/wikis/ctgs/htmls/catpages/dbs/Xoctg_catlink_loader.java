@@ -17,13 +17,17 @@ package gplx.xowa.addons.wikis.ctgs.htmls.catpages.dbs; import gplx.*; import gp
 import gplx.dbs.*; import gplx.xowa.wikis.data.*; import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.langs.*;
 class Xoctg_catlink_loader {
+	private final    Object thread_lock = new Object();
 	private byte version;
 	private int link_dbs_len;
 	private Db_attach_mgr attach_mgr;
 	private final    Bry_bfr sortkey_val_bfr = Bry_bfr_.New();
 	public void Run(Xoctg_catpage_ctg rv, Xow_wiki wiki, Xoctg_catpage_mgr catpage_mgr, Xowd_page_tbl page_tbl, int cat_id, byte grp_tid, boolean url_is_from, byte[] url_sortkey, int limit) {
+			// load links (only one thread at a time - trys to do an attach table)
+			synchronized (thread_lock) {
 		String sql = Bld_sql(catpage_mgr, cat_id, grp_tid, url_is_from, url_sortkey, limit);
 		Load_catlinks(rv, wiki, page_tbl, rv.Grp_by_tid(grp_tid), sql, url_is_from, limit);
+                        }
 	}
 	public void Make_attach_mgr__v2(Xow_db_mgr db_mgr, int cat_link_db_idx) {
 		this.version = 2;

@@ -39,12 +39,14 @@ public class Wbase_claim_factory {
 				case Wbase_claim_entity_.Tid__entity_type:		entity_tid = Wbase_claim_entity_type_.Reg.Get_tid_or_fail(sub.Val().Data_bry()); break;
 				case Wbase_claim_entity_.Tid__numeric_id:		entity_id_bry = sub.Val().Data_bry(); break;
 				case Wbase_claim_entity_.Tid__id:
-                                    if (entity_tid == Wbase_claim_entity_type_.Tid__sense && entity_id_bry == null)
+                                    if ((entity_tid == Wbase_claim_entity_type_.Tid__sense || entity_tid == Wbase_claim_entity_type_.Tid__form)
+                                            && entity_id_bry == null)
                                         entity_id_bry = sub.Val().Data_bry();
                                     break;	// ignore
 			}
 		}
-		if (entity_id_bry == null) throw Err_.new_wo_type("pid is invalid entity", "pid", pid);
+		if (entity_id_bry == null) 
+                    throw Err_.new_wo_type("pid is invalid entity", "pid", pid);
 		return new Wbase_claim_entity(pid, snak_tid, entity_tid, entity_id_bry);
 	}
 	private Wbase_claim_monolingualtext Parse_datavalue_monolingualtext(byte[] qid, int pid, byte snak_tid, Json_nde nde) {

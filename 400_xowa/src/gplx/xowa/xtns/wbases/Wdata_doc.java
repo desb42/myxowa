@@ -17,24 +17,54 @@ package gplx.xowa.xtns.wbases; import gplx.*; import gplx.xowa.*; import gplx.xo
 import gplx.core.primitives.*;
 import gplx.langs.jsons.*;
 import gplx.xowa.langs.*;
-import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.parsers.*;
+import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*;import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_entity_type_;
+ import gplx.xowa.xtns.wbases.parsers.*;
 public class Wdata_doc {
 	private Wdata_wiki_mgr mgr; private Int_obj_ref tmp_key;
-	public Wdata_doc(byte[] qid, Wdata_wiki_mgr mgr, Json_doc jdoc) {this.qid = qid; this.mgr = mgr; this.jdoc = jdoc;}
+	public Wdata_doc(byte[] qid, Wdata_wiki_mgr mgr, Json_doc jdoc) {this.qid = qid; this.mgr = mgr; this.jdoc = jdoc;Set_type_();}
 	public Wdata_doc(byte[] qid, Ordered_hash slink_list, Ordered_hash label_list, Ordered_hash descr_list, Ordered_hash alias_list, Ordered_hash claim_list) {	// TEST
 		this.qid = qid;
 		this.slink_list = slink_list; this.label_list = label_list; this.descr_list = descr_list; this.alias_list = alias_list; this.claim_list = claim_list;
+                Set_type_();
 	}
 	public Json_doc Jdoc() {return jdoc;} private Json_doc jdoc;
 	public int Jdoc_size() {return jdoc == null ? 1 : jdoc.Src().length;}
 	public byte[] Qid() {return qid;} private byte[] qid;
+	public int Name_ofs() {return name;} private int name; // byte offset for Name
+	public byte Type() {return type;} private byte type = Wbase_claim_entity_type_.Tid__unknown;
+        private void Set_type_() {
+            if (qid != null && qid.length > 0) {
+                byte b = qid[0];
+                switch (b) {
+                    //case 'q': 
+                    case 'Q':
+                        type = Wbase_claim_entity_type_.Tid__item;
+                        name = 0;
+                        break;
+                    //case 'p':
+                    case 'P':
+                        type = Wbase_claim_entity_type_.Tid__property;
+                        name = 9; // Property:
+                        break;
+                    //case 'l':
+                    case 'L':
+                        type = Wbase_claim_entity_type_.Tid__lexeme;
+                        name = 7; // Lexeme:
+                        break;
+                }
+            }
+        }
 	public byte[][] Sort_langs() {return sort_langs;} public void Sort_langs_(byte[][] v) {sort_langs = v;} private byte[][] sort_langs = Bry_.Ary_empty;
 	public Ordered_hash Slink_list()	{if (slink_list == null) slink_list = mgr.Wdoc_parser(jdoc).Parse_sitelinks(qid, jdoc);			return slink_list;} private Ordered_hash slink_list;
 	public Ordered_hash Label_list()	{if (label_list == null) label_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_labels); return label_list;} private Ordered_hash label_list;
-	public Ordered_hash Lemma_list()	{if (lemma_list == null) lemma_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_lemmas); return lemma_list;} private Ordered_hash lemma_list;
 	public Ordered_hash Descr_list()	{if (descr_list == null) descr_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_descriptions); return descr_list;} private Ordered_hash descr_list;
 	public Ordered_hash Alias_list()	{if (alias_list == null) alias_list = mgr.Wdoc_parser(jdoc).Parse_aliases(qid, jdoc);			return alias_list;} private Ordered_hash alias_list;
 	public Ordered_hash Claim_list()	{if (claim_list == null) claim_list = mgr.Wdoc_parser(jdoc).Parse_claims(qid, jdoc);			return claim_list;} private Ordered_hash claim_list;
+
+	public Ordered_hash Lemma_list()	{if (lemma_list == null) lemma_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_lemmas); return lemma_list;} private Ordered_hash lemma_list;
+	public Ordered_hash Sense_list()	{if (sense_list == null) sense_list = mgr.Wdoc_parser(jdoc).Parse_sense(qid, jdoc); return sense_list;} private Ordered_hash sense_list;
+	public Ordered_hash Form_list()	{if (form_list == null) form_list = mgr.Wdoc_parser(jdoc).Parse_form(qid, jdoc); return form_list;} private Ordered_hash form_list;
+
 	public Wbase_claim_grp Claim_list_get(int pid) {
 		if (tmp_key == null) tmp_key = Int_obj_ref.New_neg1();			
 		Object o = this.Claim_list().Get_by(tmp_key.Val_(pid));

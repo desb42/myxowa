@@ -123,6 +123,47 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 	public Wbase_claim_grp_list Parse_qualifiers(byte[] qid, Json_nde nde) {return claims_parser.Parse_qualifiers(qid, nde);}
 	public Wbase_references_grp[] Parse_references(byte[] qid, Json_ary owner) {return claims_parser.Parse_references(qid, owner);}
 	public int[] Parse_pid_order(byte[] qid, Json_ary ary) {return claims_parser.Parse_pid_order(ary);}
+
+	public Ordered_hash Parse_sense(byte[] qid, Json_doc doc) { // id, glosses, claims
+		synchronized (this) {// ?
+/*			try {
+				Json_nde list_nde = Json_nde.cast(doc.Get_grp(Bry_senses));
+				if (list_nde == null)
+					return Wdata_doc_parser_v1.Empty_ordered_hash_generic;
+				List_adp temp_list = List_adp_.New();
+				byte[] src = doc.Src();
+				int len = list_nde.Len();
+				for (int i = 0; i < len; i++) {
+					Json_nde sense_nde			= Json_nde.cast(list_nde.Get_at(i));
+					sense_parser.Make_sense_itms(qid, temp_list, src, sense_nde);
+				}
+				return Wdata_doc_parser_v1.Claims_list_to_hash(temp_list);
+			} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse sense", "qid", String_.new_u8(doc.Src()));}*/
+			Ordered_hash rv = Ordered_hash_.New();
+			return rv;
+		}
+	}
+	public Ordered_hash Parse_form(byte[] qid, Json_doc doc) {
+		synchronized (this) {// ?
+/*			try {
+				Json_nde list_nde = Json_nde.cast(doc.Get_grp(Bry_forms));
+				if (list_nde == null)
+					return Wdata_doc_parser_v1.Empty_ordered_hash_generic;
+				List_adp temp_list = List_adp_.New();
+				byte[] src = doc.Src();
+				int len = list_nde.Len();
+				for (int i = 0; i < len; i++) {
+					Json_nde form_grp			= Json_nde.cast(list_nde.Get_at(i));
+					Wdata_forms wf = new Wdata_forms(form_grp, qid, src);
+					temp_list.Add(wf);
+				}
+				return Wdata_doc_parser_v1.Claims_list_to_hash(temp_list);
+			} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse form", "qid", String_.new_u8(doc.Src()));}*/
+			Ordered_hash rv = Ordered_hash_.New();
+			return rv;
+		}
+	}
+
 	public static final String
 	  Str_id									= "id"
 	, Str_sitelinks								= "sitelinks"
@@ -132,6 +173,8 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 	, Str_claims								= "claims"
 	, Str_type									= "type"
 	, Str_lemmas								= "lemmas"
+	, Str_senses								= "senses"
+	, Str_forms								= "forms"
 	;
 	public static final    byte[] 
 	  Bry_id									= Bry_.new_a7(Str_id)
@@ -142,5 +185,7 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 	, Bry_claims								= Bry_.new_a7(Str_claims)
 	, Bry_type									= Bry_.new_a7(Str_type)
 	, Bry_lemmas								= Bry_.new_a7(Str_lemmas)
+	, Bry_senses								= Bry_.new_a7(Str_senses)
+	, Bry_forms								= Bry_.new_a7(Str_forms)
 	;
 }

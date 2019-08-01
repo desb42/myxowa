@@ -21,5 +21,6 @@ public class Categorytree_params_ {
 	private byte[][] namespacelist;
 	public boolean Hideroot() { return hideroot; } public void Hideroot_(boolean v) {hideroot = v; } private boolean hideroot;
 	public int Mode() { return mode; } public void Mode_(int v) {mode = v; } private int mode = Categorytree_itm_.Mode__CATEGORIES;
+	public int Depth() { return depth; } public void Depth_(int v) {depth = v; } private int depth = 1;
 }
  

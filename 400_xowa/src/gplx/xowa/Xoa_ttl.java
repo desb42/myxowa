@@ -456,7 +456,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		full_txt = bfr.To_bry_and_clear();
 		if (	ns.Case_match() == Xow_ns_case_.Tid__1st
 			&&	wik_bgn == -1 ) {	// do not check case if xwiki; EX: "fr:" would have a wik_bgn of 0 (and a wik_end of 3); "A" (and any non-xwiki ttl) would have a wik_bgn == -1
-			byte char_1st = full_txt[page_bgn];
+/*			byte char_1st = full_txt[page_bgn];
 			int char_1st_len = gplx.core.intls.Utf8_.Len_of_char_by_1st_byte(char_1st);
 			int page_end = page_bgn + char_1st_len;
 			if (	char_1st_len > 1) {			// 1st char is multi-byte char
@@ -475,6 +475,15 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 			}
 			else
 				full_txt = case_mgr.Case_reuse_upper(full_txt, page_bgn, page_end);
+*/
+			byte char_1st = full_txt[page_bgn];
+			int char_1st_len = gplx.core.intls.Utf8_.Len_of_char_by_1st_byte(char_1st);
+			int full_txt_len = full_txt.length;
+			int page_end = page_bgn + char_1st_len;
+			if (page_end > full_txt_len)	// ttl is too too short for 1st multi-byte char; EX: [[%D0]] is 208 but in utf8, 208 requires at least another char; DATE:2013-11-11
+				return false;				// ttl is invalid
+
+			full_txt = DB_case_cvt.Upper_1st(full_txt, page_bgn, full_txt_len, char_1st_len);
 		}
 		Xow_ns tors_ns = ns.Id_is_talk() ? ns_mgr.Ords_get_at(ns.Ord_subj_id()) : ns_mgr.Ords_get_at(ns.Ord_talk_id());
 		tors_txt = tors_ns.Name_ui_w_colon();

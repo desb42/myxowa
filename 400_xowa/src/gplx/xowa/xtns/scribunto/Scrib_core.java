@@ -22,6 +22,7 @@ import gplx.xowa.xtns.scribunto.procs.*;
 public class Scrib_core {
 	private Hash_adp_bry mods = Hash_adp_bry.cs();
 	private int expensive_function_count;
+        private int luaid_ExecuteModule, luaid_ExecuteFunction;
 	public Scrib_core(Xoae_app app, Xop_ctx ctx) {// NOTE: ctx needed for language reg
 		this.app = app; this.ctx = ctx;
 		this.wiki = ctx.Wiki(); this.page = ctx.Page();	// NOTE: wiki / page needed for title reg; DATE:2014-02-05
@@ -82,6 +83,8 @@ public class Scrib_core {
 		);
 		Init_register(script_dir, lib_mw, lib_uri, lib_ustring, lib_language, lib_site, lib_title, lib_text, lib_html, lib_message, lib_wikibase, lib_wikibase_entity);
 		xtn_mgr.Lib_mgr().Init_for_core(this, script_dir);
+                luaid_ExecuteModule = lib_mw.Mod().Fncs_get_id("executeModule");
+                luaid_ExecuteFunction = lib_mw.Mod().Fncs_get_id("executeFunction");
 		return this;
 	}
 	private void Init_register(Io_url script_dir, Scrib_lib... ary) {
@@ -178,11 +181,15 @@ public class Scrib_core {
 		try {
 			Scrib_lua_mod mod = Mods_get_or_new(mod_name, mod_text);
 			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), String_.new_u8(fnc_name));
-			Keyval[] func_rslt = engine.CallFunction(lib_mw.Mod().Fncs_get_id("executeModule"), func_args);			// call init_chunk to get proc dynamically; DATE:2014-07-12
-			if (func_rslt == null || func_rslt.length < 2) throw Err_.new_wo_type("lua.error:function did not return a value", "fnc_name", String_.new_u8(fnc_name)); // must return at least 2 items for func_rslt[1] below; DATE:2014-09-22
+			Keyval[] func_rslt = engine.CallFunction(luaid_ExecuteModule, func_args);			// call init_chunk to get proc dynamically; DATE:2014-07-12
+			if (func_rslt == null || func_rslt.length < 2) {
+                            String errmsg = String_.new_u8(ctx.Wiki().Msg_mgr().Val_by_key_args(Bry_.new_a7("scribunto-common-nosuchfunction"), fnc_name, Scrib_kv_utl_.Val_to_str(func_args, 1)));
+                            //throw Err_.new_wo_type("lua.error:" + errmsg, "fnc_name", String_.new_u8(fnc_name)); // must return at least 2 items for func_rslt[1] below; DATE:2014-09-22
+                            throw Err_.new_wo_type(errmsg, "fnc_name", String_.new_u8(fnc_name)); // must return at least 2 items for func_rslt[1] below; DATE:2014-09-22
+                        }
 			Scrib_lua_proc proc = (Scrib_lua_proc)func_rslt[1].Val();												// note that init_chunk should have: [0]:true/false result; [1]:proc
 			func_args = Scrib_kv_utl_.base1_many_(proc);
-			func_rslt = engine.CallFunction(lib_mw.Mod().Fncs_get_id("executeFunction"), func_args);				// call function now
+			func_rslt = engine.CallFunction(luaid_ExecuteFunction, func_args);				// call function now
 			String rslt = Scrib_kv_utl_.Val_to_str(func_rslt, 0);													// rslt expects an array with 1 scalar value
 			bfr.Add_str_u8(rslt);
 			//byte[] rslt_bry = Bry_.new_u8(rslt);	// CHART

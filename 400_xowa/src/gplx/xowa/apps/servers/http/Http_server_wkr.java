@@ -184,9 +184,9 @@ class Http_server_wkr implements Gfo_invk {
 	private static String Convert_page(String page_html, String root_dir_http, String wiki_domain) {
 		page_html = String_.Replace(page_html, root_dir_http		, "/fsys/");
 		page_html = String_.Replace(page_html, "xowa-cmd:"			, "/exec/");
-		page_html = String_.Replace(page_html, "<a href=\"/wiki/"	, "<a href=\"/" + wiki_domain + "/wiki/");
-		page_html = String_.Replace(page_html, "<a href='/wiki/"	, "<a href='/" + wiki_domain + "/wiki/");
-		page_html = String_.Replace(page_html, "<area href=\"/wiki/"	, "<area href=\"/" + wiki_domain + "/wiki/");
+		page_html = String_.Replace(page_html, " href=\"/wiki/"	, " href=\"/" + wiki_domain + "/wiki/");
+		page_html = String_.Replace(page_html, " href='/wiki/"	, " href='/" + wiki_domain + "/wiki/");
+		//page_html = String_.Replace(page_html, "<area href=\"/wiki/"	, "<area href=\"/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, "action=\"/wiki/"	, "action=\"/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, "/site"				, "");
                 // should check to see if these have been downloaded somehow
@@ -200,6 +200,7 @@ class Http_server_wkr implements Gfo_invk {
                 page_html = tablecaption(page_html);
                 page_html = page_html.replaceAll("</p>\\s*<p>", "</p><p>");
                 page_html = page_html.replaceAll("</div>\\s*<div", "</div><div");
+                page_html = filelink(page_html, wiki_domain);
                 //page_html = blockquote(page_html);
 		//page_html = String_.Replace(page_html, "\"mw-parser-output\">", karto);
                 //Xoh_css_minify mini = new Xoh_css_minify();
@@ -208,6 +209,21 @@ class Http_server_wkr implements Gfo_invk {
                 perform();
 		return page_html;
 	}
+        private static String filelink(String html, String wiki_domain)
+        {
+            String typ;
+            String rep;
+            String ptn = "\"file\\:.*?/" + wiki_domain.replaceAll("\\.", "\\\\.") + "/";
+            Pattern p = Pattern.compile(ptn);
+            Matcher m = p.matcher(html);
+            StringBuffer sb = new StringBuffer();
+            while (m.find())
+            {
+                m.appendReplacement(sb, "/" + wiki_domain + "/");
+            }
+            m.appendTail(sb);
+            return sb.toString();
+        }
         private static String collapser(String html)
         {
             String typ;

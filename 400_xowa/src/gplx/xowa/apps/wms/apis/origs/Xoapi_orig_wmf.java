@@ -35,12 +35,15 @@ public class Xoapi_orig_wmf extends Xoapi_orig_base {
 			if (pos == Bry_find_.Not_found) {usr_dlg.Log_many(GRP_KEY, "api_failed", "api failed: ~{0}", String_.new_u8(xml)); return false;}
 			pos += Bry_xml_ii.length;
 
-			byte[] orig_wiki = null, orig_page = null; int orig_w = 0, orig_h = 0;
+			byte[] orig_wiki = null, orig_page = null; int orig_w = 0, orig_h = 0, orig_size = 0;
 			if (Parse_xml_val(tmp_rng, usr_dlg, xml, xml_len, pos, Bry_xml_width))
 				orig_w = Bry_.To_int_or(xml, tmp_rng.Val_0(), tmp_rng.Val_1(), 0);
 
 			if (Parse_xml_val(tmp_rng, usr_dlg, xml, xml_len, pos, Bry_xml_height))
 				orig_h = Bry_.To_int_or(xml, tmp_rng.Val_0(), tmp_rng.Val_1(), 0);
+
+			if (Parse_xml_val(tmp_rng, usr_dlg, xml, xml_len, pos, Bry_xml_size))
+				orig_size = Bry_.To_int_or(xml, tmp_rng.Val_0(), tmp_rng.Val_1(), 0);
 
 			if (Parse_xml_val(tmp_rng, usr_dlg, xml, xml_len, pos, Bry_xml_descriptionurl)) {
 				byte[] file_url = Bry_.Mid(xml, tmp_rng.Val_0(), tmp_rng.Val_1());
@@ -52,7 +55,7 @@ public class Xoapi_orig_wmf extends Xoapi_orig_base {
 					page = Bry_.Mid(page, colon_pos + 1, page.length);
 				orig_page = page;
 			}
-			rv.Init_all(orig_wiki, orig_page, orig_w, orig_h);
+			rv.Init_all(orig_wiki, orig_page, orig_w, orig_h, orig_size);
 			return true;
 		}
 	}
@@ -89,6 +92,7 @@ public class Xoapi_orig_wmf extends Xoapi_orig_base {
 	, Bry_xml_ii				= Bry_.new_a7("<ii ")
 	, Bry_xml_width				= Bry_.new_a7("width=\"")
 	, Bry_xml_height			= Bry_.new_a7("height=\"")
+	, Bry_xml_size				= Bry_.new_a7("size=\"")
 	, Bry_xml_descriptionurl	= Bry_.new_a7("descriptionurl=\"")
 	;
 	public static final String GRP_KEY = "xowa.file.wmf.api";

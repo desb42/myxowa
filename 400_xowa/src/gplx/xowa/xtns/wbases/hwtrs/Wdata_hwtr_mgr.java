@@ -18,6 +18,8 @@ import gplx.core.brys.fmtrs.*;
 import gplx.langs.htmls.encoders.*;
 import gplx.xowa.langs.*;
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.apps.apis.xowa.html.*; import gplx.xowa.wikis.xwikis.*; import gplx.xowa.apps.apis.xowa.xtns.*;
+import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_entity_type_;
+import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_entity_;
 public class Wdata_hwtr_mgr {
 	private final    Bry_bfr bfr = Bry_bfr_.Reset(Io_mgr.Len_mb);
 	@gplx.Internal protected Wdata_fmtr__toc_div	Fmtr_toc() {return fmtr_toc;} private final    Wdata_fmtr__toc_div fmtr_toc = new Wdata_fmtr__toc_div();
@@ -29,6 +31,7 @@ public class Wdata_hwtr_mgr {
 	private final    Wdata_fmtr__langtext_tbl fmtr_alias = new Wdata_fmtr__langtext_tbl();
 	private final    Wdata_fmtr__slink_grp fmtr_slink = new Wdata_fmtr__slink_grp();
 	private final    Wdata_fmtr__oview_tbl fmtr_oview = new Wdata_fmtr__oview_tbl();
+	private final    Wdata_fmtr__lemma_oview_tbl fmtr_lemma_oview = new Wdata_fmtr__lemma_oview_tbl();
 	private Wdata_lang_sorter lang_sorter = new Wdata_lang_sorter();		
 	public Bry_fmtr Fmtr_main() {return fmtr_main;} private final    Bry_fmtr fmtr_main = Bry_fmtr.new_("~{oview}~{toc}~{claims}~{links}~{labels}~{descriptions}~{aliases}~{json}", "oview", "toc", "claims", "links", "labels", "descriptions", "aliases", "json");
 	public Wdata_hwtr_msgs Msgs() {return msgs;} private Wdata_hwtr_msgs msgs;
@@ -36,6 +39,7 @@ public class Wdata_hwtr_mgr {
 	public void Init_by_ctor(Xoapi_wikibase wikibase_api, Wdata_wiki_mgr wdata_mgr, Wdata_lbl_wkr lbl_wkr, Gfo_url_encoder href_encoder, Xoapi_toggle_mgr toggle_mgr, Xow_xwiki_mgr xwiki_mgr) {
 		lbl_mgr.Wkr_(lbl_wkr);
 		fmtr_oview.Init_by_ctor(wikibase_api, href_encoder);
+		fmtr_lemma_oview.Init_by_ctor(wikibase_api, wdata_mgr);
 		fmtr_claim.Init_by_ctor(wdata_mgr, new Wdata_toc_data(fmtr_toc, href_encoder), toggle_mgr, lbl_mgr);
 		fmtr_slink.Init_by_ctor(lang_sorter, toggle_mgr, lbl_mgr, href_encoder, fmtr_toc, xwiki_mgr);
 		fmtr_label.Init_by_ctor(new Wdata_toc_data(fmtr_toc, href_encoder), lang_sorter, toggle_mgr, "wikidatawiki-label", new Wdata_fmtr__langtext_row_base());
@@ -50,6 +54,7 @@ public class Wdata_hwtr_mgr {
 		this.msgs = msgs;
 		fmtr_toc.Init_by_lang(msgs);
 		fmtr_oview.Init_by_lang(lang_sorter.Langs()[0], msgs);
+		fmtr_lemma_oview.Init_by_lang(lang_sorter.Langs()[0], msgs);
 		fmtr_claim.Init_by_lang(lang, msgs);
 		fmtr_slink.Init_by_lang(msgs);
 		fmtr_label.Init_by_lang(msgs, msgs.Label_tbl_hdr(), msgs.Label_col_hdr());
@@ -62,6 +67,7 @@ public class Wdata_hwtr_mgr {
 		lang_sorter.Init_by_wdoc(wdoc);
 		fmtr_toc  .Init_by_wdoc(wdoc);
 		fmtr_oview.Init_by_wdoc(wdoc);
+		fmtr_lemma_oview.Init_by_wdoc(wdoc);
 		fmtr_claim.Init_by_wdoc(wdoc.Qid(), wdoc.Claim_list());
 		fmtr_slink.Init_by_wdoc(wdoc.Slink_list());
 		fmtr_label.Init_by_wdoc(wdoc.Label_list());
@@ -72,21 +78,39 @@ public class Wdata_hwtr_mgr {
 		lbl_mgr.Gather_labels(wdoc, lang_sorter);
 	}
 	public byte[] Popup(Wdata_doc wdoc) {
-		fmtr_oview  .Init_by_wdoc(wdoc);
-		fmtr_label.Init_by_wdoc(wdoc.Label_list());
-		fmtr_descr.Init_by_wdoc(wdoc.Descr_list());
-		fmtr_alias.Init_by_wdoc(wdoc.Alias_list());
+		Object fmtr;
+		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme) {
+			fmtr_lemma_oview.Init_by_wdoc(wdoc);
+                        fmtr = fmtr_lemma_oview;
+                }
+		else {
+			fmtr_oview.Init_by_wdoc(wdoc);
+			//fmtr_label.Init_by_wdoc(wdoc.Label_list());
+			//fmtr_descr.Init_by_wdoc(wdoc.Descr_list());
+			//fmtr_alias.Init_by_wdoc(wdoc.Alias_list());
+                        fmtr = fmtr_oview;
+		}
 		bfr.Add_str_a7("<div id='wb-item' class='wikibase-entityview wb-item' lang='en' dir='ltr'>");
 		bfr.Add_str_a7("<div class='wikibase-entityview-main'>");
-		fmtr_main.Bld_bfr_many(bfr, fmtr_oview, "", "", "", "", "", "", "");
+		fmtr_main.Bld_bfr_many(bfr, fmtr, "", "", "", "", "", "", "");
 		bfr.Add_str_a7("</div>");
 		bfr.Add_str_a7("</div>");
 		return bfr.To_bry_and_clear();
 	}
 	public byte[] Write(Wdata_doc wdoc) {
-		bfr.Add_str_a7("<div id='wb-item' class='wikibase-entityview wb-item' lang='en' dir='ltr'>");
-		bfr.Add_str_a7("<div class='wikibase-entityview-main'>");
-		fmtr_main.Bld_bfr_many(bfr, fmtr_oview, fmtr_toc, fmtr_claim, fmtr_slink, fmtr_label, fmtr_descr, fmtr_alias, fmtr_json);
+		bfr.Add_str_a7("<div id=\"wb-");
+		byte[] item = Wbase_claim_entity_type_.Reg.Get_bry_or_fail(wdoc.Type());
+		bfr.Add(item);
+		bfr.Add_byte(Byte_ascii.Dash);
+		bfr.Add_mid(wdoc.Qid(), wdoc.Name_ofs(), wdoc.Qid().length);
+		bfr.Add_str_a7("\" class=\"wikibase-entityview wb-");
+		bfr.Add(item);
+		bfr.Add_str_a7("\" lang=\"en\" dir=\"ltr\">");
+		bfr.Add_str_a7("<div class=\"wikibase-entityview-main\">");
+		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme)
+			fmtr_main.Bld_bfr_many(bfr, fmtr_lemma_oview, fmtr_toc, fmtr_claim, fmtr_slink, fmtr_json); // senses and forms?
+		else
+			fmtr_main.Bld_bfr_many(bfr, fmtr_oview, fmtr_toc, fmtr_claim, fmtr_slink, fmtr_label, fmtr_descr, fmtr_alias, fmtr_json);
 		bfr.Add_str_a7("</div>");
 		bfr.Add_str_a7("</div>");
 		return bfr.To_bry_and_clear();

@@ -31,6 +31,10 @@ public class Scrib_lib_title_tst {
 	@Test  public void NewTitle_int() {
 		fxt.Test__proc__objs__nest(lib, Scrib_lib_title.Invk_newTitle, Object_.Ary(1234)					, ttl_fast(0	, "", "1234", "", "", "1234"));
 	}
+	@Test  public void NewTitle_ns() {// ns in title takes precedence over argument; ISSUE#:473 DATE:2019-05-22
+		fxt.Test__proc__objs__nest(lib, Scrib_lib_title.Invk_newTitle, Object_.Ary("Template:A", "Template"), ttl_fast(10   , "Template", "A"));
+		fxt.Test__proc__objs__nest(lib, Scrib_lib_title.Invk_newTitle, Object_.Ary("Help:A"    , "Template"), ttl_fast(12   , "Help", "A"));
+	}
 	@Test  public void NewTitle__foreign() {// PURPOSE: must be local language's version; Russian "Шаблон" not English "Template"; PAGE:ru.w:Королевство_Нидерландов DATE:2016-11-23
 		fxt.Core().Wiki().Ns_mgr().Ns_template().Name_bry_(Bry_.new_a7("Template_in_nonenglish_name"));
 		fxt.Test__proc__objs__nest(lib, Scrib_lib_title.Invk_newTitle, Object_.Ary("A", "Template")			, ttl_fast(10	, "Template_in_nonenglish_name", "A"));	// "Template_in_nonenglish_name" not "Template"
@@ -44,6 +48,19 @@ public class Scrib_lib_title_tst {
 	}
 	@Test  public void GetUrl__args_many() {	// PUPROSE: GetUrl sometimes passes in kvs for qry_args; fr.w:Wikipédia:Image_du_jour/Date; DATE:2013-12-24
 		fxt.Test__proc__objs__flat(lib, Scrib_lib_title.Invk_getUrl, Object_.Ary("Main_Page", "canonicalUrl", Keyval_.Ary(Keyval_.new_("action", "edit"), Keyval_.new_("preload", "b"))), "https://en.wikipedia.org/wiki/Main_Page?action=edit&preload=b");
+	}
+	@Test  public void GetUrl__args_encode() {	// PUPROSE: GetUrl should url-encode arguments; ISSUE#:465 DATE:2019-05-18
+		// NOTE: tested with following
+		// =mw.title.makeTitle("Template", "A"):fullUrl{"a / b", "c / d"}
+		// //en.wikipedia.org/w/index.php?title=Template:A&1=a+%2F+b&2=c+%2F+d
+		// =mw.title.makeTitle("Template", "A"):fullUrl("a / b=c / d")
+		// //en.wikipedia.org/w/index.php?title=Template:A&a / b=c / d
+
+		// encode if array
+		fxt.Test__proc__objs__flat(lib, Scrib_lib_title.Invk_getUrl, Object_.Ary("Main_Page", "fullUrl", Keyval_.Ary(Keyval_.new_("a / b", "c / d"))), "//en.wikipedia.org/wiki/Main_Page?a+%2F+b=c+%2F+d");
+
+		// do not encode if String
+		fxt.Test__proc__objs__flat(lib, Scrib_lib_title.Invk_getUrl, Object_.Ary("Main_Page", "fullUrl", "a / b=c / d"), "//en.wikipedia.org/wiki/Main_Page?a / b=c / d");
 	}
 	@Test   public void MakeTitle() {
 		fxt.Test__proc__objs__nest(lib, Scrib_lib_title.Invk_makeTitle, Object_.Ary("Module", "A")								, ttl_fast(828, "Module", "A"));

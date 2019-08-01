@@ -17,6 +17,7 @@ package gplx.xowa.xtns.scribunto.libs; import gplx.*; import gplx.xowa.*; import
 import org.junit.*;
 import gplx.langs.jsons.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.langs.numbers.*;
+import gplx.xowa.xtns.cldrs.*;
 public class Scrib_lib_language_tst {
 	@Before public void init() {
 		fxt.Clear_for_lib();
@@ -33,6 +34,11 @@ public class Scrib_lib_language_tst {
 	@Test  public void IsKnownLanguageTag() {
 		fxt.Test_scrib_proc_bool(lib, Scrib_lib_language.Invk_isKnownLanguageTag, Object_.Ary("fr"), true);
 		fxt.Test_scrib_proc_bool(lib, Scrib_lib_language.Invk_isKnownLanguageTag, Object_.Ary("qq"), false);
+	}
+	@Test  public void IsKnownLanguageTag_cldr() {
+		Io_mgr.Instance.InitEngine_mem();
+		Cldr_name_loader_fxt.Create_file_w_langs(fxt.Core().Lang().Key_str(), Keyval_.Ary(Keyval_.new_("goh", "goh_name")));
+		fxt.Test_scrib_proc_bool(lib, Scrib_lib_language.Invk_isKnownLanguageTag, Object_.Ary("goh"), true);
 	}
 	@Test  public void IsValidCode() {
 		fxt.Test_scrib_proc_bool(lib, Scrib_lib_language.Invk_isValidCode, Object_.Ary("a,b"), true);
@@ -102,6 +108,9 @@ public class Scrib_lib_language_tst {
 	}
 	@Test   public void FormatDate__utc() {
 		fxt.Test_scrib_proc_str(lib, Scrib_lib_language.Invk_formatDate, Object_.Ary("en", "Y-m-d", "+00000002010-05-01T00:00:00Z", false), "2010-05-01");		// handle Wikidata style dates; PAGE:en.w:Mountain_Province; DATE:2015-07-29
+	}
+	@Test   public void FormatDate__bce() {
+		fxt.Test_scrib_proc_str(lib, Scrib_lib_language.Invk_formatDate, Object_.Ary("en", "Y-m-d", "+0065-12-08T00:00:00Z", false), "0065-12-08"); // ISSUE#:500
 	}
 	@Test  public void FormatDate_date_omitted() {	// PURPOSE: some calls skip the date; retrieve arg_4 by int; EX: pl.w:L._Frank_Baum
 		Datetime_now.Manual_y_();

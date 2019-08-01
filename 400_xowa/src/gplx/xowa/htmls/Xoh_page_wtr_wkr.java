@@ -27,11 +27,11 @@ import gplx.xowa.wikis.pages.lnkis.Xopg_redlink_mgr;
 import gplx.xowa.xtns.pfuncs.times.Pft_func_formatdate;
 import gplx.langs.jsons.*;
 public class Xoh_page_wtr_wkr {
-	private final    Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(255); 
-	private final    Xoh_page_wtr_mgr mgr; private final    byte page_mode;
-	private final    Wdata_xwiki_link_wtr wdata_lang_wtr = new Wdata_xwiki_link_wtr();	// In other languages
-	private final    gplx.xowa.addons.apps.scripts.Xoscript_mgr scripting_mgr = new gplx.xowa.addons.apps.scripts.Xoscript_mgr();
+	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
+	private final	Bry_bfr tmp_bfr = Bry_bfr_.Reset(255); 
+	private final	Xoh_page_wtr_mgr mgr; private final	byte page_mode;
+	private final	Wdata_xwiki_link_wtr wdata_lang_wtr = new Wdata_xwiki_link_wtr();	// In other languages
+	private final	gplx.xowa.addons.apps.scripts.Xoscript_mgr scripting_mgr = new gplx.xowa.addons.apps.scripts.Xoscript_mgr();
 	private Xoae_app app; private Xowe_wiki wiki; private Xoae_page page; private byte[] root_dir_bry;
 	public Xoh_page_wtr_wkr(Xoh_page_wtr_mgr mgr, byte page_mode) {this.mgr = mgr; this.page_mode = page_mode;}		
 	public Xoh_page_wtr_wkr Ctgs_enabled_(boolean v) {ctgs_enabled = v; return this;} private boolean ctgs_enabled = true;		
@@ -87,11 +87,11 @@ public class Xoh_page_wtr_wkr {
 		DateAdp modified_on = page.Db().Page().Modified_on();
 //		byte[] modified_on_msg = wiki.Msg_mgr().Val_by_id_args(Xol_msg_itm_.Id_portal_lastmodified, modified_on.XtoStr_fmt_yyyy_MM_dd(), modified_on.XtoStr_fmt_HHmm());
 // show date if valid
-                byte[] modified_on_msg = Bry_.Empty;
-                if (modified_on != DateAdp_.MinValue) {
-                    wiki.Parser_mgr().Date_fmt_bldr().Format(tmp_bfr, wiki, wiki.Lang(), modified_on, Pft_func_formatdate.Fmt_dmy);
-                    modified_on_msg = wiki.Msg_mgr().Val_by_key_args(Key_lastmodifiedat, tmp_bfr.To_bry_and_clear(), modified_on.XtoStr_fmt_HHmm());
-                }
+				byte[] modified_on_msg = Bry_.Empty;
+				if (modified_on != DateAdp_.MinValue) {
+					wiki.Parser_mgr().Date_fmt_bldr().Format(tmp_bfr, wiki, wiki.Lang(), modified_on, Pft_func_formatdate.Fmt_dmy);
+					modified_on_msg = wiki.Msg_mgr().Val_by_key_args(Key_lastmodifiedat, tmp_bfr.To_bry_and_clear(), modified_on.XtoStr_fmt_HHmm());
+				}
 		byte[] page_body_class = Xoh_page_body_cls.Calc(tmp_bfr, page_ttl, page_tid);
 		// byte[] html_content_editable = wiki.Gui_mgr().Cfg_browser().Content_editable() ? Content_editable_bry : Bry_.Empty;
 		byte[] html_content_editable = Bry_.Empty;
@@ -105,18 +105,22 @@ public class Xoh_page_wtr_wkr {
 			page_ttl = Xoa_ttl.Parse(wiki, page_ttl.Ns().Id(), converted_title);
 		}
 		byte[] page_name = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, null);		// NOTE: page_name does not show display_title (<i>). always pass in null
-		byte[] page_display_title = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, page.Html_data().Display_ttl());
+		byte[] page_display_title;
+		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikidata)
+			page_display_title = app.Wiki_mgr().Wdata_mgr().Page_display_title();
+		else
+			page_display_title = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, page.Html_data().Display_ttl());
 		page.Html_data().Custom_tab_name_(page_name);	// set tab_name to page_name; note that if null, gui code will ignore and use Ttl.Page_txt; PAGE: zh.w:釣魚臺列嶼主權問題 DATE:2015-10-05
 		Xow_portal_mgr portal_mgr = wiki.Html_mgr().Portal_mgr().Init_assert();
 		boolean nightmode_enabled = app.Gui_mgr().Nightmode_mgr().Enabled();
-                
-                byte[] redlinks = null;
-                if (wiki.App().Mode().Tid_is_http()) {
-                Xopg_redlink_mgr red_mgr = new Xopg_redlink_mgr(page, null);
-                red_mgr.Redlink(tmp_bfr);
-                redlinks = tmp_bfr.To_bry_and_clear();
-                }
-                
+				
+				byte[] redlinks = null;
+				if (wiki.App().Mode().Tid_is_http()) {
+				Xopg_redlink_mgr red_mgr = new Xopg_redlink_mgr(page, null);
+				red_mgr.Redlink(tmp_bfr);
+				redlinks = tmp_bfr.To_bry_and_clear();
+				}
+				
 		fmtr.Bld_bfr_many(bfr
 		, root_dir_bry, Xoa_app_.Version, Xoa_app_.Build_date, app.Tcp_server().Running_str()
 		, page.Db().Page().Id(), page.Ttl().Full_db()
@@ -139,8 +143,8 @@ public class Xoh_page_wtr_wkr {
 		, portal_mgr.Div_wikis_bry(wiki.Utl__bfr_mkr())
 		, portal_mgr.Sidebar_mgr().Html_bry()
 		, mgr.Edit_rename_div_bry(page_ttl), page.Html_data().Edit_preview_w_dbg(), js_edit_toolbar_bry
-                        , redlinks
-                        , printfooter(app, wiki, ctx, hctx, page)
+						, redlinks
+						, printfooter(app, wiki, ctx, hctx, page)
 		);
 		Xoh_page_wtr_wkr_.Bld_head_end(bfr, tmp_bfr, page);	// add after </head>
 		Xoh_page_wtr_wkr_.Bld_html_end(bfr, tmp_bfr, page);	// add after </html>			
@@ -167,30 +171,30 @@ public class Xoh_page_wtr_wkr {
 					case Xow_page_tid.Tid_js:
 					case Xow_page_tid.Tid_css:
 					case Xow_page_tid.Tid_lua:
-                                            Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
-                                            page_tid_uses_pre = true;
-                                            break;
+											Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
+											page_tid_uses_pre = true;
+											break;
 					case Xow_page_tid.Tid_json:
-                                            if (page_ns_id != Xow_ns_.Tid__data)
-                                                app.Wiki_mgr().Wdata_mgr().Write_json_as_html(bfr, page_ttl, data_raw);
-                                            else {
-                                                Json_doc jdoc = app.Utl__json_parser().Parse(data_raw);
-                                                Jdoc_data_writer(bfr, jdoc);
-                                                bfr.Add_str_a7("<pre>\n");
-                                                jdoc.Root_grp().Print_as_json(bfr, 0);
-                                                bfr.Add_str_a7("</pre>\n");
-                                            //Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
-                                            //page_tid_uses_pre = true;
-                                                //Write_body_wikitext(bfr, app, wiki, wikitext, ctx, hctx, page, page_tid, page_ns_id);
-                                            }
-                                            break;
+											if (page_ns_id != Xow_ns_.Tid__data)
+												app.Wiki_mgr().Wdata_mgr().Write_json_as_html(bfr, page_ttl, data_raw);
+											else {
+												Json_doc jdoc = app.Utl__json_parser().Parse(data_raw);
+												Jdoc_data_writer(bfr, jdoc);
+												bfr.Add_str_a7("<pre>\n");
+												jdoc.Root_grp().Print_as_json(bfr, 0);
+												bfr.Add_str_a7("</pre>\n");
+											//Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
+											//page_tid_uses_pre = true;
+												//Write_body_wikitext(bfr, app, wiki, wikitext, ctx, hctx, page, page_tid, page_ns_id);
+											}
+											break;
 					case Xow_page_tid.Tid_wikitext:
-                                            Write_body_wikitext(bfr, app, wiki, data_raw, ctx, hctx, page, page_tid, page_ns_id);
-                                            break;
+											Write_body_wikitext(bfr, app, wiki, data_raw, ctx, hctx, page, page_tid, page_ns_id);
+											break;
 				}
 			}
 			if (	wiki.Domain_tid() != Xow_domain_tid_.Tid__home	// allow home wiki to use javascript
-				&&  !page.Html_data().Js_enabled()                  // allow special pages to use js
+				&&  !page.Html_data().Js_enabled()				  // allow special pages to use js
 				&&  !page_tid_uses_pre) {							// if .js, .css or .lua, skip test; may have js fragments, but entire text is escaped and put in pre; don't show spurious warning; DATE:2013-11-21
 				wiki.Html_mgr().Js_cleaner().Clean_bfr(wiki, page_ttl, bfr, bfr_page_bgn);
 			}
@@ -215,7 +219,7 @@ public class Xoh_page_wtr_wkr {
 
 		// get separate bfr; note that bfr already has <html> and <head> written to it, so this can't be passed to tidy; DATE:2014-06-11
 		Bry_bfr tidy_bfr = wiki.Utl__bfr_mkr().Get_m001();
-                //tidy_bfr.Add_str_a7("<body>");
+				//tidy_bfr.Add_str_a7("<body>");
 
 		try {
 			// write wikitext
@@ -225,20 +229,20 @@ public class Xoh_page_wtr_wkr {
 			else {
 				if (page.Root() != null) {	// NOTE: will be null if blank; occurs for one test: Logo_has_correct_main_page; DATE:2015-09-29
 					page.Html_data().Toc_mgr().Clear();	// NOTE: always clear tocs before writing html; toc_itms added when writing html_hdr; DATE:2016-07-17
-                                        if (ns_id == 104) { // Page (where is the constant for this?
-                                            tidy_bfr.Add_str_a7("<div class=\"prp-page-container\"><div class=\"prp-page-content\"><div class=\"mw-parser-output\">");
-                                        }
-                                        else
-                                            tidy_bfr.Add_str_a7("<div class=\"mw-parser-output\">");
+										if (ns_id == 104) { // Page (where is the constant for this?
+											tidy_bfr.Add_str_a7("<div class=\"prp-page-container\"><div class=\"prp-page-content\"><div class=\"mw-parser-output\">");
+										}
+										else
+											tidy_bfr.Add_str_a7("<div class=\"mw-parser-output\">");
 					wiki.Html_mgr().Html_wtr().Write_doc(tidy_bfr, ctx, hctx, page.Root().Data_mid(), page.Root());
 					if (wiki.Html_mgr().Html_wtr().Cfg().Toc__show())
 						gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_toc(tidy_bfr, page, hctx);
-                                        if (ns_id == 104) { // Page (where is the constant for this?
-                                            tidy_bfr.Add_str_a7("</div></div>");
-                                            tidy_bfr.Add_str_a7("</div></div><div class=\"prp-page-image\">");
-                                            //Pp_image_page(...);
-                                        }
-                                        tidy_bfr.Add_str_a7("</div>");
+										if (ns_id == 104) { // Page (where is the constant for this?
+											tidy_bfr.Add_str_a7("</div></div>");
+											tidy_bfr.Add_str_a7("</div></div><div class=\"prp-page-image\">");
+											//Pp_image_page(...);
+										}
+										tidy_bfr.Add_str_a7("</div>");
 				}
 			}
 			
@@ -258,7 +262,7 @@ public class Xoh_page_wtr_wkr {
 		} finally {
 			tidy_bfr.Mkr_rls();
 		}
-                
+				
 		// translate if variants are enabled
 		Xol_vnt_mgr vnt_mgr = wiki.Lang().Vnt_mgr();
 		if (vnt_mgr.Enabled()) bfr.Add(vnt_mgr.Convert_lang().Parse_page(vnt_mgr.Cur_itm(), page.Db().Page().Id(), bfr.To_bry_and_clear()));
@@ -270,18 +274,18 @@ public class Xoh_page_wtr_wkr {
 		Xoh_html_wtr_escaper.Escape(app.Parser_amp_mgr(), tmp_bfr, data_raw, 0, data_raw.length, false, false);
 		if (hctx.Mode_is_hdump())
 			bfr.Add(data_raw);
-                else {
-                    byte[] lang = Bry_.Empty;
-                    switch (page_tid) {
-                            case Xow_page_tid.Tid_msg: lang = Bry_.new_a7("msg"); break;
-                            case Xow_page_tid.Tid_js: lang = Bry_.new_a7("js"); break;
-                            case Xow_page_tid.Tid_css: lang = Bry_.new_a7("css"); break;
-                            case Xow_page_tid.Tid_lua: lang = Bry_.new_a7("lua"); break;
-                    }
-                    Bry_fmt content_code_fmt = Bry_fmt.Auto("<pre class=\"prettyprint lang-~{lang} linenums\">~{page_text}</pre>");
+				else {
+					byte[] lang = Bry_.Empty;
+					switch (page_tid) {
+							case Xow_page_tid.Tid_msg: lang = Bry_.new_a7("msg"); break;
+							case Xow_page_tid.Tid_js: lang = Bry_.new_a7("js"); break;
+							case Xow_page_tid.Tid_css: lang = Bry_.new_a7("css"); break;
+							case Xow_page_tid.Tid_lua: lang = Bry_.new_a7("lua"); break;
+					}
+					Bry_fmt content_code_fmt = Bry_fmt.Auto("<pre class=\"prettyprint lang-~{lang} linenums\">~{page_text}</pre>");
 			content_code_fmt.Bld_many(bfr, lang, tmp_bfr);
 			//app.Html_mgr().Page_mgr().Content_code_fmt().Bld_many(bfr, tmp_bfr);
-                }
+				}
 		tmp_bfr.Clear();
 	}
 	private void Write_body_edit(Bry_bfr bfr, byte[] data_raw, int ns_id, byte page_tid) {
@@ -300,13 +304,13 @@ public class Xoh_page_wtr_wkr {
 		if (data_raw_len > 0)		// do not add nl if empty String
 			bfr.Add_byte_nl();		// per MW:EditPage.php: "Ensure there's a newline at the end, otherwise adding lines is awkward."
 	}
-	// private static final    byte[] Content_editable_bry = Bry_.new_a7(" contenteditable=\"true\"");
-        private static final byte[] aref = Bry_.new_a7("<a href=\"")
-        , aref2 = Bry_.new_a7("\">")
-        , endaref = Bry_.new_a7("</a>")
+	// private static final	byte[] Content_editable_bry = Bry_.new_a7(" contenteditable=\"true\"");
+		private static final byte[] aref = Bry_.new_a7("<a href=\"")
+		, aref2 = Bry_.new_a7("\">")
+		, endaref = Bry_.new_a7("</a>")
 	, Key_lastmodifiedat = Bry_.new_a7("lastmodifiedat")
 	, Key_retrieved = Bry_.new_a7("retrievedfrom")
-        ;
+		;
 
 	private byte[] printfooter(Xoae_app app, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
@@ -333,59 +337,59 @@ public class Xoh_page_wtr_wkr {
 		}
 		return tmp_bfr.To_bry_and_clear();
 	}
-        private byte[] Get_text(Json_nde titles_nde) {
-            int titles_len = titles_nde.Len();
-            for (int k = 0; k < titles_len; ++k) {
-                Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(k));
-                String langkey = title_itm.Key_as_str();
-                if (langkey.equals("en"))
-                    return title_itm.Val_as_bry();
-            }
-            if (titles_len > 0) {
-                Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(0));
-                return title_itm.Val_as_bry();
-            }
-            return Bry_.Empty;
-        }
+		private byte[] Get_text(Json_nde titles_nde) {
+			int titles_len = titles_nde.Len();
+			for (int k = 0; k < titles_len; ++k) {
+				Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(k));
+				String langkey = title_itm.Key_as_str();
+				if (langkey.equals("en"))
+					return title_itm.Val_as_bry();
+			}
+			if (titles_len > 0) {
+				Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(0));
+				return title_itm.Val_as_bry();
+			}
+			return Bry_.Empty;
+		}
 // logic from https://github.com/wikimedia/mediawiki-extensions-JsonConfig/includes/JCTabularContentView.php
-        public void Jdoc_data_writer(Bry_bfr bfr, Json_doc jdoc) {
-            Json_nde desc_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("description")));
-            if (desc_nde == null)
-                return;
-            Json_nde list_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("schema")));
-            if (list_nde == null)
-                return;
-            Json_ary data_ary = Json_ary.cast(jdoc.Get_grp(Bry_.new_a7("data")));
-            if (data_ary == null)
-                return;
-            int data_rows_len = data_ary.Len();
-            // check enough keys
-            Json_kv fields_nde = Json_kv.cast(list_nde.Get_at(0));
-            // check key is 'fields'
-            //String key = fields_nde.Key_as_str();
-            Json_ary fields_itms_ary = Json_ary.cast_or_null(fields_nde.Val());
-            int fields_itms_len = fields_itms_ary.Len();
-            data_head[] dh = new data_head[fields_itms_len];
-            for (int i = 0; i < fields_itms_len; ++i) {
-                dh[i] = new data_head();
-                Json_nde field_itm_nde = Json_nde.cast(fields_itms_ary.Get_at(i));
-                int field_itm_len = field_itm_nde.Len();
-                for (int j = 0; j < field_itm_len; ++j) {
-                    Json_kv itm_nde = Json_kv.cast(field_itm_nde.Get_at(j));
-                    String itmkey = itm_nde.Key_as_str();
-                    if (itmkey.equals("name"))
-                        dh[i].Name_(itm_nde.Val_as_bry());
-                    else if (itmkey.equals("type"))
-                        dh[i].type = itm_nde.Val_as_bry();
-                    else if (itmkey.equals("title")) {
-                        Json_nde title_nde = itm_nde.Val_as_nde();
-                        dh[i].title = Get_text(title_nde);
-                    }
-                }
+		public void Jdoc_data_writer(Bry_bfr bfr, Json_doc jdoc) {
+			Json_nde desc_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("description")));
+			if (desc_nde == null)
+				return;
+			Json_nde list_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("schema")));
+			if (list_nde == null)
+				return;
+			Json_ary data_ary = Json_ary.cast(jdoc.Get_grp(Bry_.new_a7("data")));
+			if (data_ary == null)
+				return;
+			int data_rows_len = data_ary.Len();
+			// check enough keys
+			Json_kv fields_nde = Json_kv.cast(list_nde.Get_at(0));
+			// check key is 'fields'
+			//String key = fields_nde.Key_as_str();
+			Json_ary fields_itms_ary = Json_ary.cast_or_null(fields_nde.Val());
+			int fields_itms_len = fields_itms_ary.Len();
+			data_head[] dh = new data_head[fields_itms_len];
+			for (int i = 0; i < fields_itms_len; ++i) {
+				dh[i] = new data_head();
+				Json_nde field_itm_nde = Json_nde.cast(fields_itms_ary.Get_at(i));
+				int field_itm_len = field_itm_nde.Len();
+				for (int j = 0; j < field_itm_len; ++j) {
+					Json_kv itm_nde = Json_kv.cast(field_itm_nde.Get_at(j));
+					String itmkey = itm_nde.Key_as_str();
+					if (itmkey.equals("name"))
+						dh[i].Name_(itm_nde.Val_as_bry());
+					else if (itmkey.equals("type"))
+						dh[i].type = itm_nde.Val_as_bry();
+					else if (itmkey.equals("title")) {
+						Json_nde title_nde = itm_nde.Val_as_nde();
+						dh[i].title = Get_text(title_nde);
+					}
+				}
 
-                //String jtxt = field_itm_nde.Print_as_json();
-                //System.out.print(jtxt);
-            }
+				//String jtxt = field_itm_nde.Print_as_json();
+				//System.out.print(jtxt);
+			}
 		bfr.Add_str_a7("<p class=\"mw-jsonconfig-description\">");
 		bfr.Add(Get_text(desc_nde));
 		bfr.Add_str_a7("</p>\n<table class=\"mw-tabular sortable\">\n");
@@ -428,27 +432,27 @@ public class Xoh_page_wtr_wkr {
 				bfr.Add_str_a7("<td data-type=\"");
 				bfr.Add(dh[i].type);
 				bfr.Add_str_a7("\">");
-                                byte[] val = itm.Data_bry();
-                                if (val.length != 0)
-                                    bfr.Add(itm.Data_bry());
+								byte[] val = itm.Data_bry();
+								if (val.length != 0)
+									bfr.Add(itm.Data_bry());
 				bfr.Add_str_a7("</td>");
 			}
 			bfr.Add_str_a7("</tr>\n");
 		}
 		bfr.Add_str_a7("</table>\n");
-                
-                //String oput = bfr.To_str_and_clear();
-                //System.out.print(oput);
-        }
+				
+				//String oput = bfr.To_str_and_clear();
+				//System.out.print(oput);
+		}
 }
 class data_head {
-    public void Name_(byte[] val) {name = val;}; byte[] name;
-    public byte[] type;
-    public byte[] title;
-    public data_head() {
-        name = null; type = null; title = null;
-    }
-    public void Init() {
-        name = null; type = null; title = null;
-    }
+	public void Name_(byte[] val) {name = val;}; byte[] name;
+	public byte[] type;
+	public byte[] title;
+	public data_head() {
+		name = null; type = null; title = null;
+	}
+	public void Init() {
+		name = null; type = null; title = null;
+	}
 }

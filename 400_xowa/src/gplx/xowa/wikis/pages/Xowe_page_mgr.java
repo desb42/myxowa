@@ -73,6 +73,7 @@ public class Xowe_page_mgr {
 			page = wiki.Data_mgr().Load_page_and_parse(url, ttl, wiki.Lang(), tab, false);
 		}
 
+                wiki.Is_html_page_(false);
 		// load from html_db
 		boolean from_html_db = page.Db().Page().Html_db_id() != -1;
 		boolean read_from_html_db_preferred = wiki.Html__hdump_mgr().Load_mgr().Read_preferred();
@@ -82,6 +83,7 @@ public class Xowe_page_mgr {
 				int html_len = Bry_.Len(page.Db().Html().Html_bry());
 				from_html_db = html_len > 0;	// NOTE: archive.org has some wtxt_dbs which included page|html_db_id without actual html_dbs; DATE:2016-06-22
 				Gfo_usr_dlg_.Instance.Log_many("", "", "page_load: loaded html; page=~{0} html_len=~{1}", ttl.Full_db(), html_len);
+                                wiki.Is_html_page_(true);
 			}
 			else
 				from_html_db = false;

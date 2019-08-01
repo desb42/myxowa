@@ -60,6 +60,7 @@ public class Xop_lxr_mgr {
 		, Xop_xnde_lxr.Instance	// needed for xtn, noinclude, etc.
 		, Xop_under_lxr.Instance
 		, gplx.xowa.xtns.translates.Xop_tvar_lxr.Instance
+//		, Xop_uniq_lxr.Instance
 		, Xop_cr_lxr.Instance		// always ignore \r; DATE:2014-03-02
 		});
 	}
@@ -77,6 +78,7 @@ public class Xop_lxr_mgr {
 		, Xop_pre_lxr.Instance, Xop_nl_tab_lxr.Instance
 		, Xop_comm_lxr.Instance
 		, Xop_under_lxr.Instance
+//		, Xop_uniq_lxr.Instance
 		// , Xop_uniq_lxr.Instance // NOWIKI;DATE:2018-01-16
 		});
 	}

@@ -1,4 +1,4 @@
-f/*******************************************************************************
+/*******************************************************************************
 This file uses the following conventions:
 - End of line character: char(10) (Unix style)
 - Encoding: UTF-8 (without Byte Order Mark)
@@ -142,6 +142,7 @@ app.wikis.get('~{wiki_key}').html.portal {
 <:["
   <div id="p-personal" class="">
     <h3>~{<>msgs.get('personaltools');<>}</h3>
+    <ul><li>~{pagetype}</li></ul>
   </div>
 "]:>
 ;
