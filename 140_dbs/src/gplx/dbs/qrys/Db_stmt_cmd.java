@@ -147,16 +147,28 @@ public class Db_stmt_cmd implements Db_stmt {
 		}
 	}
 	public DataRdr Exec_select() {
-		try {DataRdr rv = engine.New_rdr(stmt.executeQuery(), sql); return rv;} catch (Exception e) {throw Err_.new_exc(e, "db", "failed to exec prepared statement", "sql", sql);}	
+		try {
+                //Thread currentThread = Thread.currentThread();
+                //System.out.println(currentThread.getName()+"-1-"+sql);
+                    DataRdr rv = engine.New_rdr(stmt.executeQuery(), sql); return rv;} catch (Exception e) {throw Err_.new_exc(e, "db", "failed to exec prepared statement", "sql", sql);}	
 	}
 	public Db_rdr Exec_select__rls_auto() {
-		try {return engine.Exec_as_rdr__rls_auto(this, stmt.executeQuery(), sql);}	catch (Exception e) {throw Err_.new_exc(e, "db", "select failed", "sql", sql);}	
+		try {
+                //Thread currentThread = Thread.currentThread();
+                //System.out.println(currentThread.getName()+"-2-"+sql);
+                    return engine.Exec_as_rdr__rls_auto(this, stmt.executeQuery(), sql);}	catch (Exception e) {throw Err_.new_exc(e, "db", "select failed", "sql", sql);}	
 	}
 	public Db_rdr Exec_select__rls_manual() {
-		try {return engine.Exec_as_rdr__rls_manual(stmt.executeQuery(), sql);}	catch (Exception e) {throw Err_.new_exc(e, "db", "select failed", "sql", sql);}	
+		try {
+                //Thread currentThread = Thread.currentThread();
+                //System.out.println(currentThread.getName()+"-3-"+sql);
+                    return engine.Exec_as_rdr__rls_manual(stmt.executeQuery(), sql);}	catch (Exception e) {throw Err_.new_exc(e, "db", "select failed", "sql", sql);}	
 	}
 	public Object Exec_select_val() {
-		try {Object rv = DataRdr_.Read_1st_row_and_1st_fld(engine.New_rdr(stmt.executeQuery(), sql)); return rv;} catch (Exception e) {throw Err_.new_exc(e, "db", "failed to exec prepared statement", "sql", sql);}	
+		try {
+                //Thread currentThread = Thread.currentThread();
+                //System.out.println(currentThread.getName()+"-4-"+sql);
+                    Object rv = DataRdr_.Read_1st_row_and_1st_fld(engine.New_rdr(stmt.executeQuery(), sql)); return rv;} catch (Exception e) {throw Err_.new_exc(e, "db", "failed to exec prepared statement", "sql", sql);}	
 	}
 	public Db_stmt Clear() {
 		val_idx = 0;

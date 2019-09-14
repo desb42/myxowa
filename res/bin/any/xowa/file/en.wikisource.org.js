@@ -748,3 +748,10 @@ jQuery( document ).ready( function ( $ ) {
 } );
 
 // </source>
+
+// add some xowa specific code to move the image on Page
+jQuery( document ).ready( function ( $ ) {
+	if ( mediaWiki.config.get( 'wgNamespaceNumber' ) === 104 ) {
+		$( '#xowa_pp_image' ).appendTo( $( '.prp-page-image' ) );
+	}
+} );

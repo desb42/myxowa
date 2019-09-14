@@ -65,6 +65,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 		boolean subst_found = false;
 		boolean name_had_subst = false;
 		boolean template_prefix_found = false;
+		byte tmpl_case_match = wiki.Ns_mgr().Ns_template().Case_match();
 
 		// tmpl_name does not exist in db; may be dynamic, subst, transclusion, etc..
 		if (defn == Xot_defn_.Null) {
@@ -188,7 +189,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 				if (ctx.Tid_is_popup()) {	// popup && cur_tmpl > tmpl_max
 					if (Popup_skip(ctx, name_ary, bfr)) return false;
 				}
-				defn = wiki.Cache_mgr().Defn_cache().Get_by_key(name_ary);
+				defn = wiki.Cache_mgr().Defn_cache().Get_by_key(name_ary, tmpl_case_match);
 				if (defn == null) {
 					if (name_ary_len != 0 ) {	// name_ary_len != 0 for direct template inclusions; PAGE:en.w:Human evolution and {{:Human evolution/Species chart}}; && ctx.Tmpl_whitelist().Has(name_ary)
 						Xoa_ttl ttl = Xoa_ttl.Parse(wiki, Bry_.Add(wiki.Ns_mgr().Ns_template().Name_db_w_colon(), name_ary));
@@ -212,7 +213,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 							}
 						}
 						else {	// some templates produce null ttls; EX: "Citation needed{{subst"
-							defn = wiki.Cache_mgr().Defn_cache().Get_by_key(ttl.Page_db());
+							defn = wiki.Cache_mgr().Defn_cache().Get_by_key(name_ary, tmpl_case_match);
 							if (defn == null && ctx.Tmpl_load_enabled())
 								defn = Xot_invk_tkn_.Load_defn(wiki, ctx, this, ttl, name_ary);
 						}
@@ -231,7 +232,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 					bfr.Add(Xop_curly_bgn_lxr.Hook).Add(name_ary).Add(Xop_curly_end_lxr.Hook);
 					return false;
 				}
-				defn = wiki.Cache_mgr().Defn_cache().Get_by_key(name_ary);
+				defn = wiki.Cache_mgr().Defn_cache().Get_by_key(name_ary, tmpl_case_match);
 				if (defn == null && ctx.Tmpl_load_enabled())
 					defn = Xot_invk_tkn_.Load_defn(wiki, ctx, this, ttl, name_ary);
 				if (defn == null) defn = Xot_defn_.Null;
@@ -285,11 +286,13 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 						bfr.Add(rslt);
 					}
 					else {
-						rv = defn_tmpl.Tmpl_evaluate(Xop_ctx.New__sub(wiki, ctx, ctx.Page()), invk_tmpl, rslt_bfr); // create new ctx so __NOTOC__ only applies to template, not page; PAGE:de.w:13._Jahrhundert DATE:2017-06-17
+						//rv = defn_tmpl.Tmpl_evaluate(Xop_ctx.New__sub(wiki, ctx, ctx.Page()), invk_tmpl, rslt_bfr); // create new ctx so __NOTOC__ only applies to template, not page; PAGE:de.w:13._Jahrhundert DATE:2017-06-17
+						rv = defn_tmpl.Tmpl_evaluate(ctx, invk_tmpl, rslt_bfr);
 						prepend_mgr.End(ctx, bfr, rslt_bfr.Bfr(), rslt_bfr.Len(), Bool_.Y);
 						if (name_had_subst) {	// current invk had "subst:"; parse incoming invk again to remove effects of subst; PAGE:pt.w:Argentina DATE:2014-09-24
 							byte[] tmp_src = rslt_bfr.To_bry_and_clear();
-							rslt_bfr.Add(wiki.Parser_mgr().Main().Expand_tmpl(tmp_src));	// this could be cleaner / more optimized
+                                                        if (tmp_src.length != 0)
+                                                            rslt_bfr.Add(wiki.Parser_mgr().Main().Expand_tmpl(tmp_src));	// this could be cleaner / more optimized
 						}
 						if (Cache_enabled) {
 							byte[] rslt_val = rslt_bfr.To_bry_and_clear();
@@ -329,7 +332,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 		Xoa_ttl page_ttl = Xoa_ttl.Parse(wiki, name_ary); if (page_ttl == null) return false;	// ttl not valid; EX: {{:[[abc]]}}
 		byte[] transclude_src = null;
 		if (page_ttl.Ns().Id_is_tmpl()) {							// ttl is template; check tmpl_regy first before going to data_mgr
-			Xot_defn_tmpl tmpl = (Xot_defn_tmpl)wiki.Cache_mgr().Defn_cache().Get_by_key(page_ttl.Page_db());
+			Xot_defn_tmpl tmpl = (Xot_defn_tmpl)wiki.Cache_mgr().Defn_cache().Get_by_key(page_ttl.Page_db(), wiki.Ns_mgr().Ns_template().Case_match());
 			if (tmpl != null) transclude_src = tmpl.Data_raw();
 		}
 		if (transclude_src == null && ctx.Tmpl_load_enabled()) {	// ttl is template not in cache, or some other ns; do load
@@ -366,7 +369,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 		Xot_defn_tmpl transclude_tmpl = null;
 		switch (page_ttl.Ns().Id()) {
 			case Xow_ns_.Tid__template:	// ttl is template not in cache, or some other ns; do load
-				Xot_defn_tmpl tmpl = (Xot_defn_tmpl)wiki.Cache_mgr().Defn_cache().Get_by_key(page_ttl.Page_db());
+				Xot_defn_tmpl tmpl = (Xot_defn_tmpl)wiki.Cache_mgr().Defn_cache().Get_by_key(page_ttl.Page_db(), wiki.Ns_mgr().Ns_template().Case_match());
 				if (tmpl != null) {
 					if (tmpl.Root() == null) tmpl.Parse_tmpl(ctx);
 					transclude_tmpl = tmpl;

@@ -15,7 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.wbases.hwtrs; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.wbases.*;
 import gplx.core.brys.fmtrs.*;
-import gplx.langs.htmls.encoders.*;
+import gplx.langs.htmls.encoders.*; import gplx.xowa.langs.*; import gplx.langs.htmls.*;
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.apps.apis.xowa.xtns.*;
 class Wdata_fmtr__lemma_oview_tbl implements gplx.core.brys.Bfr_arg {
 	private Xoapi_wikibase wikibase_api; private Gfo_url_encoder href_encoder;
@@ -30,9 +30,21 @@ class Wdata_fmtr__lemma_oview_tbl implements gplx.core.brys.Bfr_arg {
 	public void Init_by_wdoc(Wdata_doc wdoc) {
 		this.wdoc = wdoc;
 	}
+	private byte[] Build_lemma_widget() {
+		Ordered_hash list = wdoc.Lemma_list();
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		int len = list.Count();
+		for (int i = 0; i < len; ++i) {
+			Wdata_langtext_itm itm = (Wdata_langtext_itm)list.Get_at(i);
+			Xol_lang_stub lang_itm = Xol_lang_stub_.Get_by_key_or_intl(itm.Lang());
+			lemma_widget_fmtr.Bld_bfr_many(tmp_bfr, itm.Lang(), Gfh_utl.Escape_html_as_bry(lang_itm.Canonical_name()), Gfh_utl.Escape_html_as_bry(itm.Text()));
+		}
+		return tmp_bfr.To_bry_and_clear();
+	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
-		byte[] lang_code = Bry_.new_a7("en");
-		byte[] name = wdata_mgr.Doc_name(wdoc);
+		//byte[] lang_code = Bry_.new_a7("en");
+		//byte[] name = wdata_mgr.Doc_name(wdoc);
+		byte[] lemma_widget = Build_lemma_widget();
 		byte[] lang_qcode = wdoc.Jdoc().Get_val_as_bry_or(Bry_.new_a7("language"), Bry_.Empty);
 		Wdata_doc lang_wdoc = wdata_mgr.Doc_mgr.Get_by_xid_or_null(lang_qcode);
 		byte[] lang_name = wdata_mgr.Doc_name(lang_wdoc);
@@ -40,7 +52,7 @@ class Wdata_fmtr__lemma_oview_tbl implements gplx.core.brys.Bfr_arg {
 		Wdata_doc lexcat_wdoc = wdata_mgr.Doc_mgr.Get_by_xid_or_null(lexcat);
 		byte[] lexcat_name = wdata_mgr.Doc_name(lexcat_wdoc);
 
-		row_fmtr.Bld_bfr_many(bfr, wdoc.Qid(), lang_code, name, lang_qcode, lang_name, lexcat, lexcat_name);
+		row_fmtr.Bld_bfr_many(bfr, Bry_.Mid(wdoc.Qid(), wdoc.Name_ofs()), lemma_widget, lang_qcode, lang_name, lexcat, lexcat_name);
 	}
 	private Bry_fmtr row_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
@@ -51,10 +63,7 @@ class Wdata_fmtr__lemma_oview_tbl implements gplx.core.brys.Bfr_arg {
 	, "      <div id=\"lemmas-widget\">"
 	, "        <div class=\"lemma-widget\">"
 	, "          <ul class=\"lemma-widget_lemma-list\">"
-	, "            <li class=\"lemma-widget_lemma\">"
-	, "              <span class=\"lemma-widget_lemma-value\" lang=\"~{lang_code}\">~{name}</span>"
-	, "              <span class=\"lemma-widget_lemma-language\">~{lang_code}</span>"
-	, "            </li>"
+	, "~{lemma_widget}"
 	, "          </ul>"
 	, "        </div>"
 	, "      </div>"
@@ -75,6 +84,14 @@ class Wdata_fmtr__lemma_oview_tbl implements gplx.core.brys.Bfr_arg {
 	, "    </div>"
 	, "  </div>"
 	, "</div>"
-	), "id", "lang_code", "name", "lang_qcode", "lang_name", "lexcat", "lexcat_name"
+	), "id", "lemma_widget", "lang_qcode", "lang_name", "lexcat", "lexcat_name"
+	);
+	private Bry_fmtr lemma_widget_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
+	( ""
+	, "            <li class=\"lemma-widget_lemma\">"
+	, "              <span class=\"lemma-widget_lemma-value\" lang=\"~{lang_code}\">~{name}</span>"
+	, "              <span class=\"lemma-widget_lemma-language\">~{lang_code}</span>"
+	, "            </li>"
+	), "lang_code", "lang_name", "name"
 	);
 }

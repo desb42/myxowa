@@ -20,6 +20,7 @@ import gplx.xowa.xtns.pfuncs.times.*; import gplx.xowa.langs.numbers.*; import g
 import gplx.xowa.xtns.scribunto.procs.*;
 public class Scrib_lib_language implements Scrib_lib {
 	public Scrib_lib_language(Scrib_core core) {this.core = core;} private Scrib_core core;
+	public String Key() {return "mw.language";}
 	public Scrib_lua_mod Mod() {return mod;} private Scrib_lua_mod mod;
 	public Scrib_lib Init() {procs.Init_by_lib(this, Proc_names); return this;}
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_language(core);}
@@ -180,7 +181,8 @@ public class Scrib_lib_language implements Scrib_lib {
 			return rslt.Init_obj(lang.Case_mgr().Case_build_1st(bfr, upper, word, 0, word.length));
 		} finally {bfr.Mkr_rls();}
 */
-		return rslt.Init_obj(DB_case_cvt.Up_low_1st(word, 0, word.length, upper));
+                byte[] copy_word = Bry_.Mid(word, 0);
+		return rslt.Init_obj(DB_case_cvt.Up_low_1st(copy_word, 0, word.length, upper));
 	}
 	public boolean Lc(Scrib_proc_args args, Scrib_proc_rslt rslt) {return Case_all(args, rslt, Bool_.N);}
 	public boolean Uc(Scrib_proc_args args, Scrib_proc_rslt rslt) {return Case_all(args, rslt, Bool_.Y);}

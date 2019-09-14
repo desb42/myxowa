@@ -161,7 +161,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 	public void Page__mode_edit_() {	// only called from by link
 		// HACK: when "edit" is clicked, always reload page from database; handles rarely-reproducible issue of "edit-after-rename" causing older versions to show up
 		Xog_tab_itm tab = tab_mgr.Active_tab(); Xoae_page page = tab.Page(); Xowe_wiki wiki = tab.Wiki();
-		page = wiki.Page_mgr().Load_page(page.Url(), page.Ttl(), tab);
+		page = wiki.Page_mgr().Load_page(page.Url(), page.Ttl(), tab, (byte)0);
 		Page__mode_(Xopg_view_mode_.Tid__edit);
 	}
 	public void Page__mode_(byte new_mode_tid) {
@@ -191,8 +191,26 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 	}
 	private void Page__navigate_by_href(Xog_tab_itm tab, String href) {	// NOTE: different from Navigate_by_url_bar in that it handles "file:///" and other @gplx.Internal protected formats; EX: "/site/", "about:blank"; etc..
 		Xoa_url url = Xog_url_wkr.Exec_url(this, href);
-		if (url != Xog_url_wkr.Rslt_handled)
+		if (url != Xog_url_wkr.Rslt_handled) {
+		// set View_mode based on "action="; DATE:2018-11-03
+		byte[] action_val = url.Qargs_mgr().Get_val_bry_or(Xoa_url_.Qarg__action, Xoa_url_.Qarg__action__read);
+		byte view_mode = Xopg_view_mode_.Tid__read;
+		byte display_mode = Xopg_display_mode_.Tid__none;
+		if      (Bry_.Eq(action_val, Xoa_url_.Qarg__action__read))
+			view_mode = Xopg_view_mode_.Tid__read;
+		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__edit))
+			view_mode = Xopg_view_mode_.Tid__edit;
+		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__html))
+			view_mode = Xopg_view_mode_.Tid__html;
+		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__wikitextver))
+			display_mode = Xopg_display_mode_.Tid__wikitextver;
+		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__htmlver))
+			display_mode = Xopg_display_mode_.Tid__htmlver;
+		tab.View_mode_(view_mode);
+		tab.Display_mode_(display_mode);
+
 			tab.Show_url_bgn(url);
+                }
 	}
 	public void Page__navigate_by_history(boolean fwd) {
 		Xog_tab_itm tab = tab_mgr.Active_tab();
@@ -207,7 +225,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 			// fixes bug wherein dump_html points images to wrong repo and causes images to be blank when going backwards / forwards
 			// note that this workaround will cause Wikitext Wikinews pages to reload page when going bwd / fwd, but this should be a smalldifference
 			if (new_page.Wiki().Domain_tid() == gplx.xowa.wikis.domains.Xow_domain_tid_.Tid__wikinews)
-				new_page = new_page.Wikie().Page_mgr().Load_page(new_page.Url(), new_page.Ttl(), tab);
+				new_page = new_page.Wikie().Page_mgr().Load_page(new_page.Url(), new_page.Ttl(), tab, (byte)0);
 		}
 		byte history_nav_type = fwd ? Xog_history_stack.Nav_fwd : Xog_history_stack.Nav_bwd;
 		boolean new_page_is_same = Bry_.Eq(cur_page.Ttl().Full_txt_by_orig(), new_page.Ttl().Full_txt_by_orig());
@@ -218,7 +236,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 		Xog_tab_itm tab = tab_mgr.Active_tab();
 		Xoae_page page = tab.History_mgr().Cur_page(tab.Wiki());	// NOTE: must set to CurPage() else changes will be lost when going Bwd,Fwd
 		tab.Page_(page);
-		page = page.Wikie().Page_mgr().Load_page(page.Url(), page.Ttl(), tab);	// NOTE: must reparse page if (a) Edit -> Read; or (b) "Options" save
+		page = page.Wikie().Page_mgr().Load_page(page.Url(), page.Ttl(), tab, (byte)0);	// NOTE: must reparse page if (a) Edit -> Read; or (b) "Options" save
 		Page__refresh();
 	}
 	public void Page__refresh() {
@@ -226,7 +244,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 	}
 	public void Page__refresh(Xog_tab_itm tab) {
 		Xoae_page page = tab.Page(); Xog_html_itm html_itm = tab.Html_itm();
-		page = page.Wikie().Page_mgr().Load_page(page.Url(), page.Ttl(), tab);	// NOTE: refresh should always reload and regen page; DATE:2017-02-15
+		page = page.Wikie().Page_mgr().Load_page(page.Url(), page.Ttl(), tab, (byte)0);	// NOTE: refresh should always reload and regen page; DATE:2017-02-15
 		page.Html_data().Bmk_pos_(html_itm.Html_box().Html_js_eval_proc_as_str(Xog_js_procs.Win__vpos_get));
 		html_itm.Show(page);
 		if (page.Url().Anch_str() == null)
@@ -298,7 +316,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 			Xog_tab_itm tab = tab_mgr.Active_tab();
 
 			// get page
-			Xoae_page new_page = wiki.Page_mgr().Load_page(url, ttl, tab);
+			Xoae_page new_page = wiki.Page_mgr().Load_page(url, ttl, tab, (byte)0);
 			if (new_page.Db().Page().Exists_n()) {return Bry_.Empty;}
 
 			// update tab-specific vars

@@ -56,7 +56,7 @@ public class Xoh_hdoc_wkr__make implements Xoh_hdoc_wkr {
 		}
 
 		// increment html_uid and add "id=xolnki_"
-		byte[] ttl_bry = data.Href_itm().Ttl_page_db();
+		byte[] ttl_bry = data.Href_itm().Ttl_full_txt();//Ttl_page_db();
 		this.html_uid = Lnki_redlink_reg(hpg, hctx, ttl_bry, html_uid);
 		int src_bgn_lhs = data.Src_bgn();
 		int src_bgn_rhs = src_bgn_lhs + 3; // +3 to skip over "<a "
@@ -71,7 +71,7 @@ public class Xoh_hdoc_wkr__make implements Xoh_hdoc_wkr {
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "anchor hook should start with <a; url=~{0}", hpg.Url_bry_safe());
 		}
 	}
-	public void On_thm(gplx.xowa.htmls.core.wkrs.thms.Xoh_thm_data data) {
+	public boolean On_thm(gplx.xowa.htmls.core.wkrs.thms.Xoh_thm_data data) {
 		Xoh_img_data img_data = (gplx.xowa.htmls.core.wkrs.imgs.Xoh_img_data)data.Img_data();
 		// add thm html before img
 		bfr.Add_mid(src, data.Src_bgn(), img_data.Src_bgn());
@@ -79,6 +79,7 @@ public class Xoh_hdoc_wkr__make implements Xoh_hdoc_wkr {
 		wkr__img.Init_by_parse(bfr, hpg, hctx, src, img_data);
 		// add thm html after img
 		bfr.Add_mid(src, img_data.Src_end(), data.Src_end());
+		return true;
 	}
 	public void On_gly		(gplx.xowa.htmls.core.wkrs.glys.Xoh_gly_grp_data data) {
 		// <gallery> section; loop itms and call wkr__img on each image while concatenating anything inbetween

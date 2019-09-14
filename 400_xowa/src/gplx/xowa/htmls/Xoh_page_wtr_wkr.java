@@ -106,7 +106,8 @@ public class Xoh_page_wtr_wkr {
 		}
 		byte[] page_name = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, null);		// NOTE: page_name does not show display_title (<i>). always pass in null
 		byte[] page_display_title;
-		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikidata)
+		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikidata && page_data.length > 40 &&
+                        (page_ttl.Ns().Id_is_main() || page_ttl.Ns().Id() == 120 || page_ttl.Ns().Id() == 146)) // short pages use orig title, main, property or lexeme
 			page_display_title = app.Wiki_mgr().Wdata_mgr().Page_display_title();
 		else
 			page_display_title = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, page.Html_data().Display_ttl());
@@ -134,7 +135,7 @@ public class Xoh_page_wtr_wkr {
 		, portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date)
 
 		// sidebar divs
-		, portal_mgr.Div_personal_bry()
+		, portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid)
 		//, portal_mgr.Div_ns_bry(wiki.Utl__bfr_mkr(), page_ttl, wiki.Ns_mgr())
 		, portal_mgr.Div_ns_bry(wiki, page_ttl)
 		, portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl)
@@ -229,20 +230,20 @@ public class Xoh_page_wtr_wkr {
 			else {
 				if (page.Root() != null) {	// NOTE: will be null if blank; occurs for one test: Logo_has_correct_main_page; DATE:2015-09-29
 					page.Html_data().Toc_mgr().Clear();	// NOTE: always clear tocs before writing html; toc_itms added when writing html_hdr; DATE:2016-07-17
-										if (ns_id == 104) { // Page (where is the constant for this?
-											tidy_bfr.Add_str_a7("<div class=\"prp-page-container\"><div class=\"prp-page-content\"><div class=\"mw-parser-output\">");
-										}
-										else
-											tidy_bfr.Add_str_a7("<div class=\"mw-parser-output\">");
+					if (ns_id == 104) { // Page (where is the constant for this?
+						tidy_bfr.Add_str_a7("<div class=\"prp-page-container\"><div class=\"prp-page-content\"><div class=\"mw-parser-output\">");
+					}
+					else
+						tidy_bfr.Add_str_a7("<div class=\"mw-parser-output\">");
 					wiki.Html_mgr().Html_wtr().Write_doc(tidy_bfr, ctx, hctx, page.Root().Data_mid(), page.Root());
 					if (wiki.Html_mgr().Html_wtr().Cfg().Toc__show())
 						gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_toc(tidy_bfr, page, hctx);
-										if (ns_id == 104) { // Page (where is the constant for this?
-											tidy_bfr.Add_str_a7("</div></div>");
-											tidy_bfr.Add_str_a7("</div></div><div class=\"prp-page-image\">");
-											//Pp_image_page(...);
-										}
-										tidy_bfr.Add_str_a7("</div>");
+					if (ns_id == 104) { // Page (where is the constant for this?
+						tidy_bfr.Add_str_a7("</div></div>");
+						tidy_bfr.Add_str_a7("</div></div><div class=\"prp-page-image\">");
+						//Pp_image_page(...);
+					}
+					tidy_bfr.Add_str_a7("</div>");
 				}
 			}
 			
@@ -314,9 +315,10 @@ public class Xoh_page_wtr_wkr {
 
 	private byte[] printfooter(Xoae_app app, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		// Add retireved from for printing and as a hook for wikisource (and others)
+		// Add retrieved from for printing and as a hook for wikisource (and others)
 		tmp_bfr.Add(aref);
-		tmp_bfr.Add(page.Ttl().Raw());
+		tmp_bfr.Add(gplx.xowa.htmls.hrefs.Xoh_href_.Bry__wiki);
+		tmp_bfr.Add(page.Ttl().Full_db_w_anch());
 		tmp_bfr.Add(aref2);
 		tmp_bfr.Add(page.Ttl().Full_url());
 		tmp_bfr.Add(endaref);

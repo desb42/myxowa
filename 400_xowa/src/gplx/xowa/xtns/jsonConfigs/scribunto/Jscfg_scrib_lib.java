@@ -20,6 +20,7 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 	private final    Scrib_lib_text__json_util json_util = new Scrib_lib_text__json_util();
 	private final    Jscfg_localizer localizer = new Jscfg_localizer();
 	private Scrib_core core;
+	public String Key() {return "JCLuaLibrary";}
 	public Scrib_lua_mod Mod() {return mod;} private Scrib_lua_mod mod;
 	public Scrib_lib Init() {procs.Init_by_lib(this, Proc_names); return this;}
 	public void Core_(Scrib_core v) {this.core = v;} // TEST:
@@ -54,16 +55,16 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 		// get page
 		byte[] ttl_in_data_ns = Bry_.Add(gplx.xowa.wikis.nss.Xow_ns_.Bry__data, Byte_ascii.Colon_bry, ttl_bry);
 		byte[] page = Scrib_lib_title.GetContentInternal(core, commons_wiki, ttl_in_data_ns);
-                Keyval[] rv;
+		Keyval[] rv;
 		if (page == null) {
-                    rv = Keyval_.Ary_empty;
-                    // possibly a warning message? 20190730
+			rv = Keyval_.Ary_empty;
+			// possibly a warning message? 20190730
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "bad argument #1 to 'get' (not a valid title): ~{0}", ttl_bry);
 			//throw Err_.new_wo_type("bad argument #1 to 'get' (not a valid title) " + String_.new_u8(ttl_bry));
 		} else {
-
-		rv = Scrib_lib_text.JsonDecodeStatic(args, core, json_util, page, Scrib_lib_text__json_util.Opt__force_assoc, Scrib_lib_text__json_util.Flag__none);
-		rv = localizer.Localize(core.Wiki().Lang(), page, rv);
-                }
+			rv = Scrib_lib_text.JsonDecodeStatic(args, core, json_util, page, Scrib_lib_text__json_util.Opt__force_assoc, Scrib_lib_text__json_util.Flag__none);
+			rv = localizer.Localize(core.Wiki().Lang(), page, rv);
+		}
 		return rslt.Init_obj(rv);
 	}
 }

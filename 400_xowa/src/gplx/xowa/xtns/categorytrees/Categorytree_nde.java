@@ -36,7 +36,7 @@ public class Categorytree_nde implements Xox_xnde {
 			byte[] val = atr.Val_as_bry();
 			if (Bry_.Eq(key, Categorytree_itm_.Attr_showcount)) {
 				if (val.length > 0) {
-					if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || val[0] == 'o') // constants!! (true or yes or on/false no off)
+					if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || (val[0] == 'o' && val.length > 1 && val[1] == 'n')) // constants!! (true or yes or on/false no off)
 						params.Showcount_(true);
 				}
 			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_mode)) {
@@ -64,7 +64,7 @@ public class Categorytree_nde implements Xox_xnde {
 				}
 			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_hideroot)) {
 				if (val.length > 0) {
-					if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || val[0] == 'o') // constants!! (true or yes or on)
+					if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || (val[0] == 'o' && val.length > 1 && val[1] == 'n')) // constants!! (true or yes or on)
 						params.Hideroot_(true);
 				}
 			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_depth)) {

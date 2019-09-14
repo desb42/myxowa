@@ -16,7 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.wikis.data.tbls; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*; import gplx.xowa.wikis.data.*;
 import gplx.core.primitives.*; import gplx.core.criterias.*;
 import gplx.dbs.*; import gplx.xowa.*; import gplx.xowa.wikis.dbs.*; import gplx.dbs.qrys.*;
-import gplx.xowa.wikis.nss.*;
+import gplx.xowa.wikis.nss.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*;
 public class Xowd_page_tbl implements Db_tbl {
 	private final    Object thread_lock = new Object();		
 	public final    boolean schema_is_1;
@@ -121,7 +121,8 @@ public class Xowd_page_tbl implements Db_tbl {
 	public boolean Select_by_ttl(Xowd_page_itm rv, Xoa_ttl ttl) {return Select_by_ttl(rv, ttl.Ns(), ttl.Page_db());}
 	public boolean Select_by_ttl(Xowd_page_itm rv, Xow_ns ns, byte[] ttl) {
 		if (stmt_select_all_by_ttl == null) stmt_select_all_by_ttl = conn.Stmt_select(tbl_name, flds, String_.Ary(fld_ns, fld_title));
-		synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
+		try { //synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
+			Xoctg_catpage_mgr.rwl.writeLock().lock();
 			Db_rdr rdr = stmt_select_all_by_ttl.Clear().Crt_int(fld_ns, ns.Id()).Crt_bry_as_str(fld_title, ttl).Exec_select__rls_manual();
 			try {
 				if (rdr.Move_next()) {
@@ -130,8 +131,12 @@ public class Xowd_page_tbl implements Db_tbl {
 				}
 			}
 			finally {rdr.Rls();}
-			return false;
+                }
+		finally {
+			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 		}
+			return false;
+		
 	}
 	public Xowd_page_itm Select_by_id_or_null(int page_id) {
 		Xowd_page_itm rv = new Xowd_page_itm();
@@ -266,6 +271,40 @@ public class Xowd_page_tbl implements Db_tbl {
 		Db_stmt stmt = conn.Stmt_new(qry).Crt_int(fld_ns, ns_id).Crt_str(fld_title, ttl_frag_str).Crt_int(fld_len, min_page_len);
 		if (!include_redirects)
 			stmt.Crt_bool_as_byte(fld_is_redirect, include_redirects);
+		return stmt.Exec_select__rls_auto();
+	}
+	public void Select_for_languages(List_adp rslt_list, Int_obj_ref rslt_count, Xow_ns ns, byte[] key) {
+		int rslt_idx = 0;
+		Db_rdr rdr = Load_ttls_language_range_rdr(ns.Id(), key);
+		try {
+			while (rdr.Move_next()) {
+				Xowd_page_itm page = new Xowd_page_itm();
+				Read_page__idx(page, rdr);
+				rslt_list.Add(page);
+				++rslt_idx;
+			}
+		}
+		finally {rdr.Rls();}
+		rslt_count.Val_(rslt_idx);
+	}
+	private Db_rdr Load_ttls_language_range_rdr(int ns_id, byte[] ttl_frag) {
+		String ttl_frag_str = String_.new_u8(ttl_frag);
+		String bgn_str = ttl_frag_str + "/";
+		String end_str = ttl_frag_str + "0";
+		Criteria crt = Criteria_.And_many(
+				  Db_crt_.New_eq(fld_ns, ns_id) 
+				, Db_crt_.New_mte(fld_title, bgn_str)
+				, Db_crt_.New_lt(fld_title, end_str)
+				, Db_crt_.New_eq(fld_is_redirect, Byte_.Zero)
+				, Db_crt_.New_lt("length(" + fld_title + ")", Byte_.Zero));
+		String[] cols = flds_select_idx;
+		Db_qry__select_cmd qry = Db_qry_.select_cols_(tbl_name, crt, cols).Order_(fld_title, true);
+		Db_stmt stmt = conn.Stmt_new(qry)
+				.Crt_int(fld_ns, ns_id)
+				.Crt_str(fld_title, bgn_str)
+				.Crt_str(fld_title, end_str)
+				.Crt_bool_as_byte(fld_is_redirect, false)
+				.Crt_int("length(" + fld_title + ")", bgn_str.length() + 7); // max size of a language eg 'zh-hans'
 		return stmt.Exec_select__rls_auto();
 	}
 	public void Select_for_special_all_pages(Cancelable cancelable, List_adp rslt_list, Xowd_page_itm rslt_nxt, Xowd_page_itm rslt_prv, Int_obj_ref rslt_count, Xow_ns ns, byte[] key, int max_results, int min_page_len, int browse_len, boolean include_redirects, boolean fetch_prv_item) {

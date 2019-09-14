@@ -119,14 +119,16 @@ public class Xoh_lnki_wtr {
 		if (hctx.Mode_is_alt())
 			Write_caption(bfr, ctx, hctx, src, lnki, ttl_bry, true, caption_wkr);
 		else {
-			bfr.Add(Gfh_bldr_.Bry__a_lhs_w_href);					// '<a href="'
-			wiki.Html__href_wtr().Build_to_bfr(bfr, app, hctx, wiki.Domain_bry(), lnki_ttl);	// '/wiki/A'
+			bfr.Add(Gfh_bldr_.Bry__a_lhs_bgn);					// '<a'
 			if (cfg.Lnki__id()) {
 				int lnki_html_id = lnki.Html_uid();
 				if (lnki_html_id > Lnki_id_ignore)					// html_id=0 for skipped lnkis; EX:anchors and interwiki
-					bfr	.Add(Xoh_consts.A_mid_id)					// '" id=\"xowa_lnki_'
-						.Add_int_variable(lnki_html_id);			// '1234'
+					bfr.Add(Bry__id_xolnki)					// ' id=\"xolnki_'
+						.Add_int_variable(lnki_html_id)
+                                                .Add_byte_quote();			// '1234"'
 			}
+			bfr.Add(Bry__href); // '" href="'
+			wiki.Html__href_wtr().Build_to_bfr(bfr, app, hctx, wiki.Domain_bry(), lnki_ttl);	// '/wiki/A'
 			if (cfg.Lnki__title()) {
 				byte[] title_bry = lnki_ttl.Full_txt_w_ttl_case();	// NOTE: use Full_txt to (a) replace underscores with spaces; (b) get title casing; EX:[[roman_empire]] -> Roman empire; (c) include ns_name; EX: Help:A -> "title='Help:A'" not "title='A'"; DATE:2015-11-16
 				int title_len = title_bry.length;
@@ -200,6 +202,8 @@ public class Xoh_lnki_wtr {
 	}	private static final    byte[] Lnki_cls_visited_bry = Bry_.new_a7(" class=\"xowa-visited\"");
 	private static final    byte[] Bry_xowa_visited = Bry_.new_a7("\" class=\"xowa-visited"); 
 	private static final    byte[] Bry__selflink = Bry_.new_a7("mw-selflink selflink");
+	private static final    byte[] Bry__href = Bry_.new_a7(" href=\"");
+	private static final    byte[] Bry__id_xolnki = Bry_.new_a7(" id=\"xolnki_");
 	public static final int Lnki_id_ignore = 0, Lnki_id_min = 1;
 }
 interface Xop_lnki_caption_wtr {

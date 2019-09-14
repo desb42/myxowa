@@ -39,6 +39,8 @@ public class Xow_popup_html_mkr {
 			.Encode(page.Ttl().Full_db()))	// NOTE: was page.Url().Raw(), but that doesn't work for Special:Search; PAGE:en.w:Earth and "Quotations"; DATE:2014-06-29
 			.To_str_and_clear()
 		;
+		if (popup_itm.Popup_link().length() > 0)
+			page_url +=  "#" + popup_itm.Popup_link();
 		fmtr_popup.Bld_bfr_many
 		( wrdx_bfr
 		, hdom_bry

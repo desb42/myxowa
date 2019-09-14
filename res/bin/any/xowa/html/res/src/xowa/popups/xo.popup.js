@@ -92,8 +92,8 @@ var XoPopupMgr = (function(){
       var $anch = $(elems[i]);
       var href = $anch.attr('href');
       if (!href || href.length == 0) continue; // ignore empty anch; EX: '<a>'
-      //if (href.charAt(0) === '#') continue;   // ignore "#" which is used for javascript; DATE:2014-08-21
-      if (/#/.test(href)) continue;   // ignore any "#" 
+      if (href.charAt(0) === '#') continue;   // ignore "#" which is used for javascript; DATE:2014-08-21
+      //if (/#/.test(href)) continue;   // ignore any "#" 
       if (/\?/.test(href)) continue;   // ignore any "?" - no querystrings
       if (XoPopupMgr.ProtocolPattern.test(href)) continue;  // ignore hrefs with absolute protocol of "http:", etc. which won't point to XOWA content
       if ($anch.hasClass('xowa-hover-off')) continue; // ignore href if "xowa-hover-off" (for sidebar itms)  
@@ -147,6 +147,8 @@ var XoPopupMgr = (function(){
   }
 
   XoPopupMgr.prototype.ShowConfirmed = function($anch, popupItm) {
+    var href = $anch.attr('href');
+    
     if (this.Cfg.WriteLogEnabled) this.WriteLogByAnch($anch, 'XoPopupMgr.ShowConfirmed.Bgn');
     
     // set mode to shown
@@ -159,14 +161,19 @@ var XoPopupMgr = (function(){
     
     // no cached html; call XOWA
     if (!popupItm.Html) {
-      var href = $anch.attr('href');
       var mgr = this;
       var showMode = 'init';
       switch (xowa.app.mode) {
         case 'http_server':
           var req = new XMLHttpRequest();
           if (href.startsWith('/wiki/')) href = xowa.page.wiki + href; // Special:XowaCfg and other pages use AJAX to update page content which won't pass through Convert_page; DATE:2018-11-11
-          var path = href + '?action=popup&popup_mode=init&popup_id=' + popupItm.Id;
+          var s = href.search('#');
+          var linktext = '';
+          if (s > 0) { // extra check for hash
+            linktext = href.substring(s+1, href.length).replace(/#/g, "%23");
+            href = href.substring(0, s);
+          }
+          var path = href + '?action=popup&popup_mode=init&popup_id=' + popupItm.id + '&popup_link=' + linktext;
           req.onload = function(e) {
             mgr.UpdatePopupHtml(popupItm.Id, showMode, req.responseText);
           }

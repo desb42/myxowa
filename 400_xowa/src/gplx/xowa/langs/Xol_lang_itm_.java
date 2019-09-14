@@ -277,5 +277,6 @@ kwd_mgr.New(Bool_.N, Xol_kwd_grp_.Id_statements, "#statements");
 kwd_mgr.New(Bool_.N, Xol_kwd_grp_.Id_translation, "#translation");
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_expectunusedcategory, "__EXPECTUNUSEDCATEGORY__");
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_nonewsectionlink, "__NONEWSECTIONLINK__");
+kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_shortdesc, "SHORTDESC");
 	}
 }

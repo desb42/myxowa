@@ -27,4 +27,5 @@ public class Hash_adp__int {
 	public void Add_if_dupe_use_1st(int key, Object obj)			{hash.Add_if_dupe_use_1st(Int_obj_ref.New(key), obj);}
 	public void Add_if_dupe_use_nth(Int_obj_ref key, Object obj)	{hash.Add_if_dupe_use_nth(key, obj);}
 	public Hash_adp__int Add_as_bry(int key, String val) {hash.Add(Int_obj_ref.New(key), Bry_.new_u8(val)); return this;}
+	public void Del(int key)	{hash.Del(tmp_key.Val_(key));}
 }

@@ -19,12 +19,44 @@ import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
 public class Db_parser {
 	private byte[] m_src;
 	private int m_src_end, m_pos, m_start, m_tail;
-	private Bry_bfr m_newsrc;
-        private Xop_ctx ctx;
+	private Bry_bfr m_newsrc = Bry_bfr_.New();
+	private Xop_ctx ctx;
+
+	public byte[] stripcomments(byte[] src) {
+		m_src = src;
+		m_src_end = src.length;
+		m_newsrc.Clear();
+		m_pos = 0;
+		byte[] nsrc = removecomments();
+		return nsrc;
+	}
+	private byte[] removecomments() {
+		int start_text = m_pos;
+		while (m_pos < m_src_end) {
+			byte b = m_src[m_pos];
+			if (b == '<') {
+				int curpos = m_pos;
+				if (match_opencomment()) {
+					addtext(start_text, curpos);
+					// skip the comment
+					start_text = m_pos;
+				}
+				else
+					m_pos++;
+			}
+			else
+				m_pos++;
+		}
+		if (start_text > 0) {
+			addtext(start_text, m_src_end);
+			return m_newsrc.To_bry_and_clear();
+		}
+		return m_src;
+	}
 
 	public byte[] firstpass(Xop_ctx ctx, byte[] src) {
 		m_src = src;
-                this.ctx = ctx;
+		this.ctx = ctx;
 		m_src_end = src.length;
 		m_newsrc = Bry_bfr_.New();
 		m_pos = 0;
@@ -32,17 +64,17 @@ public class Db_parser {
 		m_src = nsrc;
 		m_src_end = nsrc.length;
 		m_pos = 0;
-                m_newsrc.Clear();
+		m_newsrc.Clear();
 		nsrc = pass2();
 		return nsrc;
 	}
 	
 	private boolean match_opencomment() {
 		int savedpos = m_pos;
-                m_pos++;
+		m_pos++;
 		m_start = -1;
 		if (m_pos + 3 >= m_src_end) return false;
-		if (m_src[m_pos+1] == '!' && m_src[m_pos+2] == '-' && m_src[m_pos+3] == '-') {
+		if (m_src[m_pos] == '!' && m_src[m_pos+1] == '-' && m_src[m_pos+2] == '-') {
 			m_pos += 3;
 			m_start = m_pos;
 			while (m_pos < m_src_end) {
@@ -53,6 +85,7 @@ public class Db_parser {
 						m_pos += 3;
 						return true;
 					}
+                                        m_pos++;
 				}
 				else
 					m_pos++;
@@ -190,11 +223,11 @@ public class Db_parser {
         ;
 	private boolean match_it(byte[] element) {
 		int savedpos = m_pos;
-                m_pos++; // skip '<'
+		m_pos++; // skip '<'
 		m_start = -1;
 		if (m_pos + element.length + 1 >= m_src_end) return false;
 
-                if (match(element)) {
+		if (match(element)) {
 			if (scan_for(element))
 				return true;
 		}
@@ -225,33 +258,33 @@ public class Db_parser {
 		return false;
 	}
 
-        private void addtext(int start_pos, int end_pos) {
-            m_newsrc.Add_mid(m_src, start_pos, end_pos);
-        }
-        private void adduniq(int start_pos, int end_pos) {
-            m_newsrc.Add_mid(m_src, start_pos, end_pos);
-        }
+	private void addtext(int start_pos, int end_pos) {
+		m_newsrc.Add_mid(m_src, start_pos, end_pos);
+	}
+	private void adduniq(int start_pos, int end_pos) {
+		m_newsrc.Add_mid(m_src, start_pos, end_pos);
+	}
 	private byte[] pass1() {
 		int start_text = m_pos;
 		while (m_pos < m_src_end) {
 			byte b = m_src[m_pos];
 			if (b == '<') {
-                            int curpos = m_pos;
+				int curpos = m_pos;
 				if (match_opencomment()) {
-				addtext(start_text, curpos);
-						// skip the comment
-						start_text = m_pos;
+					addtext(start_text, curpos);
+					// skip the comment
+					start_text = m_pos;
 				}
 				else if (match_it(bry_nowiki)) {
-				addtext(start_text, curpos);
-						adduniq(m_start, m_tail);
-						start_text = m_pos;
+					addtext(start_text, curpos);
+					adduniq(m_start, m_tail);
+					start_text = m_pos;
 				}
-                                else
-                                    m_pos++;
+				else
+					m_pos++;
 			}
-                        else
-                            m_pos++;
+			else
+				m_pos++;
 		}
 		if (start_text > 0) {
 			addtext(start_text, m_src_end);
@@ -265,24 +298,24 @@ public class Db_parser {
 		while (m_pos < m_src_end) {
 			byte b = m_src[m_pos];
 			if (b == '<') {
-                            int curpos = m_pos;
+				int curpos = m_pos;
 				if (match_it(bry_noinclude)) {
-				addtext(start_text, curpos);
-						adduniq(m_start, m_tail);
-						start_text = m_pos;
+					addtext(start_text, curpos);
+					adduniq(m_start, m_tail);
+					start_text = m_pos;
 				}
 				else if (match_it(bry_includeonly)) {
-				addtext(start_text, curpos);
-						adduniq(m_start, m_tail);
-						start_text = m_pos;
+					addtext(start_text, curpos);
+					adduniq(m_start, m_tail);
+					start_text = m_pos;
 				}
 				else if (match_it(bry_onlyinclude)) {
-				addtext(start_text, curpos);
-						adduniq(m_start, m_tail);
-						start_text = m_pos;
+					addtext(start_text, curpos);
+					adduniq(m_start, m_tail);
+					start_text = m_pos;
 				}
-                                else
-                                    m_pos++; // no matching element
+				else
+					m_pos++; // no matching element
 			}
 			else
 				m_pos++;
@@ -292,17 +325,17 @@ public class Db_parser {
 			return m_newsrc.To_bry_and_clear();
 		}
 		return m_src;
-        }
+	}
 
-        private void gentext(int start_pos, int end_pos) {
-            m_newsrc.Add_mid(m_src, start_pos, end_pos);
-        }
-        private void gencomment(int start_pos, int end_pos) {
-            m_newsrc.Add_mid(m_src, start_pos, end_pos);
-        }
-        private void gennowiki(int start_pos, int end_pos) {
-            m_newsrc.Add_mid(m_src, start_pos, end_pos);
-        }
+	private void gentext(int start_pos, int end_pos) {
+		m_newsrc.Add_mid(m_src, start_pos, end_pos);
+	}
+	private void gencomment(int start_pos, int end_pos) {
+		m_newsrc.Add_mid(m_src, start_pos, end_pos);
+	}
+	private void gennowiki(int start_pos, int end_pos) {
+		m_newsrc.Add_mid(m_src, start_pos, end_pos);
+	}
 	private byte[] genpass1() {
 		int start_text = m_pos;
 		while (m_pos < m_src_end) {
@@ -310,12 +343,12 @@ public class Db_parser {
 			if (b == '<') {
 				gentext(start_text, m_pos);
 				if (match_opencomment()) {
-						gencomment(m_start, m_tail);
-						start_text = m_pos;
+					gencomment(m_start, m_tail);
+					start_text = m_pos;
 				}
 				else if (match_nowiki()) {
-						gennowiki(m_start, m_tail);
-						start_text = m_pos;
+					gennowiki(m_start, m_tail);
+					start_text = m_pos;
 				}
 			}
 			else
@@ -345,6 +378,6 @@ public class Db_parser {
 				 else across multiple ones (multi keyspan)
 			}*/
 		}
-                return m_src;
+		return m_src;
 	}
 }

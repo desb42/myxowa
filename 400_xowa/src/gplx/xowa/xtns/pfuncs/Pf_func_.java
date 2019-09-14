@@ -258,6 +258,7 @@ public class Pf_func_ {
 	, Xol_kwd_grp_.Id_assessment
 	, Xol_kwd_grp_.Id_statements
 	, Xol_kwd_grp_.Id_translation
+	, Xol_kwd_grp_.Id_shortdesc
 	};
 	public static Xot_defn Get_prototype(int id) {
 		switch (id) {
@@ -441,6 +442,8 @@ public class Pf_func_ {
 			case Xol_kwd_grp_.Id_bang:							return Pf_func_bang.Instance;
 			case Xol_kwd_grp_.Id_assessment:					return gplx.xowa.xtns.assessments.Assessment_func.Instance;
 			case Xol_kwd_grp_.Id_translation:					return gplx.xowa.xtns.translates.Translation_func.Instance;
+			
+			case Xol_kwd_grp_.Id_shortdesc:					return Pfunc_wiki_shortdesc.Instance;
 			default:											throw Err_.new_unhandled(id);
 		}
 	}

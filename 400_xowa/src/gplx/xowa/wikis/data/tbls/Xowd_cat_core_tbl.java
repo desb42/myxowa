@@ -14,7 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.wikis.data.tbls; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*; import gplx.xowa.wikis.data.*;
-import gplx.dbs.*;
+import gplx.dbs.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*;
 public class Xowd_cat_core_tbl implements Db_tbl {
 	private final    String tbl_name; private final    Dbmeta_fld_list flds = new Dbmeta_fld_list();
 	private final    String fld_id, fld_pages, fld_subcats, fld_files, fld_hidden, fld_link_db_id;
@@ -74,10 +74,17 @@ public class Xowd_cat_core_tbl implements Db_tbl {
 	}
 	public Xowd_category_itm Select(int id) {
 		if (stmt_select == null) stmt_select = conn.Stmt_select(tbl_name, flds, fld_id);
-		synchronized (thread_lock) {// THREAD: pagesincategory can call this from multiple threads which can cause db-locking; ERROR:"database link_db_1 is already in use"; PAGE:en.d:Category:Clothing; ISSUE#:389; DATE:2019-03-20
+                        Xowd_category_itm rv = Xowd_category_itm.Null;
+		try { //synchronized (thread_lock) {// THREAD: pagesincategory can call this from multiple threads which can cause db-locking; ERROR:"database link_db_1 is already in use"; PAGE:en.d:Category:Clothing; ISSUE#:389; DATE:2019-03-20
+			Xoctg_catpage_mgr.rwl.writeLock().lock();
 			Db_rdr rdr = stmt_select.Clear().Crt_int(fld_id, id).Exec_select__rls_manual();
-			try {return rdr.Move_next() ? Load_itm(rdr) : Xowd_category_itm.Null;} finally {rdr.Rls();}
+			try {
+                            rv = rdr.Move_next() ? Load_itm(rdr) : Xowd_category_itm.Null;} finally {rdr.Rls();}
+                }
+		finally {
+			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 		}
+                        return rv;
 	}
 	public void Select_by_cat_id_in(Cancelable cancelable, Ordered_hash rv, int bgn, int end) {
 		synchronized (thread_lock) {// THREAD: locking pre-emptively; ISSUE#:389; DATE:2019-03-20

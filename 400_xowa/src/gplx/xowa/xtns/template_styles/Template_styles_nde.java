@@ -79,7 +79,12 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		}
 
 		if (!css_ignore) {
-			Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
+                    // works for enwikisource BUT NOT frwiki
+			//Hash_adp__int css_page_ids = (Hash_adp__int)ctx.Page().Kv_data().Get_or_make(Template_styles_kv_itm.Instance);
+			//if (css_page_ids.Get_by_or_null(css_page_id) == null) return;
+                        //css_page_ids.Del(css_page_id);
+
+                        Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
 			try {
 				html_head.Bld_many(tmp_bfr, css_page_id, css_src);
 				Xoh_head_itm__css_dynamic css_dynamic = ctx.Page().Html_data().Head_mgr().Itm__css_dynamic();

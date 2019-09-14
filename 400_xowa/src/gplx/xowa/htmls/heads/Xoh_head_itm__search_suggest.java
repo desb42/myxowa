@@ -28,10 +28,7 @@ public class Xoh_head_itm__search_suggest extends Xoh_head_itm__base {
 	@Override public void Write_js_include(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Xoh_head_wtr wtr) {
 		if (Url_js == null)
 		{
-			if (app.Mode().Tid_is_http())
-				Url_js = app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "html", "res", "src", "xowa", "search-suggest", "mysearch-suggest.js").To_http_file_bry();
-			else
-				Url_js = app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "html", "res", "src", "xowa", "search-suggest", "search-suggest.js").To_http_file_bry();
+			Url_js = app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "html", "res", "src", "xowa", "search-suggest", "search-suggest.js").To_http_file_bry();
 		}
 		wtr.Write_js_include(Url_js);
 	}

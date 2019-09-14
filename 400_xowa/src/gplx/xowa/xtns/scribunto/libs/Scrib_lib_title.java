@@ -23,6 +23,7 @@ import gplx.xowa.xtns.scribunto.procs.*;
 import gplx.xowa.wikis.pages.redirects.*;
 public class Scrib_lib_title implements Scrib_lib {
 	public Scrib_lib_title(Scrib_core core) {this.core = core;} private Scrib_core core;
+	public String Key() {return "mw.title";}
 	public Scrib_lua_mod Mod() {return mod;} private Scrib_lua_mod mod;
 	public Scrib_lib Init() {procs.Init_by_lib(this, Proc_names); return this;}
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_title(core);}
@@ -195,6 +196,9 @@ public class Scrib_lib_title implements Scrib_lib {
 	}
 	public static byte[] GetContentInternal(Scrib_core core, Xowe_wiki wiki, byte[] ttl_bry) {
 		Xoa_ttl ttl = wiki.Ttl_parse(ttl_bry); if (ttl == null) return null;
+		Xoae_page page = core.Page();
+		if (Bry_.Eq(page.Ttl().Full_db(), ttl.Full_db()))
+			return page.Db().Text().Text_bry();
 		Xow_page_cache_itm page_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(ttl);
 		byte[] rv = null;
 		if (page_itm != null) {

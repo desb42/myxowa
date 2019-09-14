@@ -54,7 +54,8 @@ public class Xop_lnki_type {
 				)
 			return false;
 		else											// should not happen
-			throw Err_.new_unhandled(id);
+                    return false;
+                    /*throw Err_.new_unhandled(id);*/
 	}
 	public static boolean Id_limits_large_size(byte id) {	// Linker.php|makeThumbLink2|Do not present an image bigger than the source, for bitmap-style images; assuming original of 400,200
 		if		(	Bitmask_.Has_int(id, Id_thumb)		// [[File:A.png|600px|thumb]]      -> 400,200

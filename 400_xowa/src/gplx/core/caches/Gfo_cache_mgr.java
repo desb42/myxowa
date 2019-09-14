@@ -27,30 +27,31 @@ public class Gfo_cache_mgr {
 		}
 	}
 	public Object Get_by_key(byte[] key) {
+                //System.out.println("Get " + String_.new_u8(key));
 		Object o = hash.Get_by(key);
 		return o == null ? null : ((Gfo_cache_data)o).Val_and_update();
 	}
 	public void Add_replace(byte[] key, Rls_able val, int size) {
-		Object o = hash.Get_by(key);
-		if (o == null)
-			Add(key, val, size);
-		else {
-			Gfo_cache_data itm = (Gfo_cache_data)o;
-			synchronized (itm) {
-				cur_size -= itm.Size();
-				cur_size += size;
-				itm.Val_(val, size);
+		synchronized (this) {
+			Object o = hash.Get_by(key);
+			if (o == null)
+				Add(key, val, size);
+			else {
+				Gfo_cache_data itm = (Gfo_cache_data)o;
+					cur_size -= itm.Size();
+					cur_size += size;
+					itm.Val_(val, size);
 			}
 		}
 	}
-	public void Add(byte[] key, Rls_able val, int size) {
-		synchronized (tmp_delete) {
-			if (hash.Has(key)) return;	// THREAD: since Get is not locked, it's possible to Add the same item twice
-			cur_size += size;
-			Gfo_cache_data itm = new Gfo_cache_data(key, val, size);
-			hash.Add(key, itm);
-			if (cur_size > max_size) this.Reduce();
-		}
+	private void Add(byte[] key, Rls_able val, int size) {
+		if (hash.Has(key)) return;	// THREAD: since Get is not locked, it's possible to Add the same item twice
+                //Dump();
+                //System.out.println("Add " + String_.new_u8(key));
+		cur_size += size;
+		Gfo_cache_data itm = new Gfo_cache_data(key, val, size);
+		hash.Add(key, itm);
+		if (cur_size > max_size) this.Reduce();
 	}
 	private void Reduce() {
 		hash.Sort();
@@ -71,6 +72,13 @@ public class Gfo_cache_mgr {
 			hash.Del(itm.Key());
 		}
 		tmp_delete.Clear();
+	}
+	public void Dump() {
+		int len = hash.Len();
+		for (int i = 0; i < len; ++i) {
+			Gfo_cache_data itm = (Gfo_cache_data)hash.Get_at(i);
+			System.out.println(String_.new_u8(itm.Key()));
+		}
 	}
 	public int Test__len()		{return hash.Len();}
 	public Object Test__get_at(int i) {

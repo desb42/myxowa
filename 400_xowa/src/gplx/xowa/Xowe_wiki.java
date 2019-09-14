@@ -149,7 +149,6 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public byte[]					Wdata_wiki_lang() {return wdata_wiki_lang;} private byte[] wdata_wiki_lang;
 	public void						Wdata_wiki_lang_(byte[] v) {this.wdata_wiki_lang = v; Wdata_wiki_abrv_();}	// TEST:
 	public byte[]					Wdata_wiki_abrv() {return wdata_wiki_abrv;} private byte[] wdata_wiki_abrv;
-	public boolean				Is_Html_page() {return is_html_page;} public void Is_html_page_(boolean v) {is_html_page = v;} private boolean is_html_page; // added 20190731
 	private void Wdata_wiki_abrv_() {
 		Bry_bfr bfr = utl__bry_bfr_mkr.Get_b128();
 		Xow_abrv_wm_.To_abrv(bfr, wdata_wiki_lang, Int_obj_ref.New(wdata_wiki_tid));

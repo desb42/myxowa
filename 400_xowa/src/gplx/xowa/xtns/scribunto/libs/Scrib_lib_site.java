@@ -21,6 +21,7 @@ import gplx.xowa.xtns.scribunto.procs.*;
 import gplx.xowa.wikis.domains.*; import gplx.xowa.wikis.xwikis.interwikis.*;
 public class Scrib_lib_site implements Scrib_lib {
 	public Scrib_lib_site(Scrib_core core) {this.core = core;} private final    Scrib_core core;
+	public String Key() {return "mw.site";}
 	public Scrib_lua_mod Mod() {return mod;} private Scrib_lua_mod mod;
 	public Scrib_lib Init() {procs.Init_by_lib(this, Proc_names); return this;}
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_site(core);}
@@ -51,10 +52,16 @@ public class Scrib_lib_site implements Scrib_lib {
 		return ns_obj == null ? rslt.Init_ary_empty() : rslt.Init_obj(((Xow_ns)ns_obj).Id());
 	}
 	public boolean PagesInCategory(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		// args
 		byte[] ctg_name = args.Pull_bry(0);
 		String ctg_type = args.Cast_str_or(1, "all");
+
+		// get ttl
 		Xoa_ttl ctg_ttl = core.Wiki().Ttl_parse(Xow_ns_.Tid__category, ctg_name);
 		if (ctg_ttl == null) return rslt.Init_obj(0);
+		// replace space with underlines (and possibly other normalizations) else TOC will not show; PAGE:en.wiktionary.org/wiki/Category:English_conjunctions; ISSUE#:557; DATE:2019-08-22
+		ctg_name = ctg_ttl.Page_db();
+
 		Xoax_ctg_addon ctg_mgr = Xoax_ctg_addon.Get(core.Wiki());
 		Xoctg_ctg_itm ctg_itm = ctg_mgr.Itms__get_or_null(ctg_name);
 		if (ctg_itm == null) {

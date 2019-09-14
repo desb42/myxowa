@@ -21,6 +21,7 @@ import gplx.xowa.xtns.scribunto.procs.*;
 public class Scrib_lib_mw implements Scrib_lib {
 	private Scrib_core core; private Scrib_fsys_mgr fsys_mgr;
 	public Scrib_lib_mw(Scrib_core core) {this.core = core; this.fsys_mgr = core.Fsys_mgr();}
+	public String Key() {return "mwInit";}
 	public Scrib_lua_mod Mod() {return mod;} public void Mod_(Scrib_lua_mod v) {this.mod = v;} private Scrib_lua_mod mod;
 	public boolean Allow_env_funcs() {return allow_env_funcs;} private boolean allow_env_funcs = true;
 	public Scrib_lib Init() {procs.Init_by_lib(this, Proc_names); return this;}
@@ -320,7 +321,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 		byte[] sub_src = null;
 		// ttl is template; check tmpl_regy first before going to data_mgr
 		if (ttl.Ns().Id_is_tmpl()) {
-			Xot_defn_tmpl tmpl = (Xot_defn_tmpl)core.Wiki().Cache_mgr().Defn_cache().Get_by_key(ttl.Page_db());
+			Xot_defn_tmpl tmpl = (Xot_defn_tmpl)core.Wiki().Cache_mgr().Defn_cache().Get_by_key(ttl.Page_db(), cur_wiki.Ns_mgr().Ns_template().Case_match());
 			if (tmpl != null)
 				sub_src = tmpl.Data_raw();
 		}

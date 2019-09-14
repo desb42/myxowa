@@ -39,7 +39,9 @@ public class Wdata_hwtr_msgs {
 		lemma_tbl_hdr							= brys[offset +  6];
 		lemma_col_hdr							= brys[offset +  7];
 		claim_tbl_hdr							= brys[offset +  8];
-		json_div_hdr							= brys[offset +  9]; offset += 10;
+		wiki_no_label							= brys[offset +  9];
+		wiki_no_desc							= brys[offset + 10];
+		json_div_hdr							= brys[offset + 11]; offset += 12;
 		sym_list_comma							= brys[offset +  0];
 		sym_list_word							= brys[offset +  1];
 		sym_time_spr							= brys[offset +  2];
@@ -127,6 +129,8 @@ public class Wdata_hwtr_msgs {
 	public byte[] Slink_tbl_hdr_x() {return slink_tbl_hdr_x;} private final    byte[] slink_tbl_hdr_x;
 	public byte[] Slink_col_hdr_text() {return slink_col_hdr_text;} private final    byte[] slink_col_hdr_text;
 	public byte[] Claim_tbl_hdr() {return claim_tbl_hdr;} private final    byte[] claim_tbl_hdr;
+	public byte[] Wiki_no_label() {return wiki_no_label;} private final    byte[] wiki_no_label;
+	public byte[] Wiki_no_desc() {return wiki_no_desc;} private final    byte[] wiki_no_desc;
 	public byte[] Json_div_hdr() {return json_div_hdr;} private final    byte[] json_div_hdr;
 	public byte[] Val_tid_novalue() {return val_tid_novalue;} private final    byte[] val_tid_novalue;
 	public byte[] Val_tid_somevalue() {return val_tid_somevalue;} private final    byte[] val_tid_somevalue;
@@ -182,7 +186,7 @@ public class Wdata_hwtr_msgs {
 		, "Labels", "Label"
 		, "Aliases", "Alias"
 		, "Descriptions", "Description"
-		, "Statements"
+		, "Statements", "No label defined", "No description defined"
 		, "JSON"
 		, ",&#32;", "&#32;", ":"
 		, "+", "-", "±", "(~{0})"
@@ -206,12 +210,12 @@ public class Wdata_hwtr_msgs {
 		, "xowa-wikidata-aliases-hdr"					, "xowa-wikidata-aliases-col"
 		, "xowa-wikidata-descriptions-hdr"				, "xowa-wikidata-descriptions-col"
 		, "xowa-wikidata-lemmas-hdr"				, "xowa-wikidata-lemmas-col"
-		, "wikibase-statements"						
+		, "wikibase-statements"						, "wikibase-label-empty", "wikibase-description-empty"
 		, "xowa-wikidata-json"
 		, "comma-separator", "word-separator", "xowa-wikidata-time-spr"
 		, "xowa-wikidata-plus", "xowa-wikidata-minus", "xowa-wikidata-plusminus"
 		, "parentheses"
-		, "wikibase-snakview-snaktypeselector-novalue", "wikibase-snakview-snaktypeselector-somevalue"
+		, "wikibase-snakview-variations-novalue-label", "wikibase-snakview-variations-somevalue-label"
 		, "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"
 		, "xowa-wikidata-year", "xowa-wikidata-decade", "xowa-wikidata-century", "xowa-wikidata-millenium", "xowa-wikidata-years1e4", "xowa-wikidata-years1e5", "xowa-wikidata-years1e6", "xowa-wikidata-years1e7", "xowa-wikidata-years1e8", "xowa-wikidata-years1e9"
 		, "ago", "xowa-wikidata-bc", "xowa-wikidata-inTime"

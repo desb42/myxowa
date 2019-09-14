@@ -28,8 +28,9 @@ public class Xoh_html_wtr_escaper {
 	public static void Escape(Xop_amp_mgr amp_mgr, Bry_bfr bfr, byte[] src, int bgn, int end, boolean interpret_amp, boolean nowiki_skip) {
 		Btrie_slim_mgr amp_trie = amp_mgr.Amp_trie();
 		Btrie_rv trv = new Btrie_rv();
+                byte b = 0;
 		for (int i = bgn; i < end; i++) {
-			byte b = src[i];
+			b = src[i];
 			switch (b) {
 				case Byte_ascii.Lt:
 					if (nowiki_skip) {
@@ -91,6 +92,9 @@ public class Xoh_html_wtr_escaper {
 					break;
 			}
 		}
+                // cope with trailing '%' 
+                if (b == Byte_ascii.Percent)
+                    bfr.Add_byte(Byte_ascii.Num_2).Add_byte(Byte_ascii.Num_5);
 	}
 	private static int Escape_nowiki_skip(Bry_bfr bfr, byte[] src, int bgn, int end, byte[] nowiki_name, int nowiki_name_len) {
 		try {

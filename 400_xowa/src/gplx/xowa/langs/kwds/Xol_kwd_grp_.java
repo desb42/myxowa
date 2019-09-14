@@ -238,8 +238,9 @@ public static final int
 , Id_statements = 218
 , Id_translation = 219
 , Id_expectunusedcategory = 220
+, Id_shortdesc = 221
 ;
-public static final int Id__max = 221;
+public static final int Id__max = 222;
 
 	private static byte[] ary_itm_(int id) {
 		switch (id) {
@@ -464,6 +465,7 @@ case Xol_kwd_grp_.Id_assessment: return Bry_.new_u8("assessment");
 case Xol_kwd_grp_.Id_statements: return Bry_.new_u8("statements");
 case Xol_kwd_grp_.Id_translation: return Bry_.new_a7("translation");
 case Xol_kwd_grp_.Id_expectunusedcategory: return Bry_.new_a7("expectunusedcategory");
+case Xol_kwd_grp_.Id_shortdesc: return Bry_.new_a7("shortdesc");
 default: throw Err_.new_unhandled(id);
 		}
 	}

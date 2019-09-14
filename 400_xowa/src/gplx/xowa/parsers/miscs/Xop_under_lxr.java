@@ -102,16 +102,16 @@ public class Xop_under_lxr implements Xop_lxr {
 	}
 	public static void Make_tkn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, int kwd_id) {
 		switch (kwd_id) {
+			case Xol_kwd_grp_.Id_noeditsection:		break;	// ignore; not handling edit sections
 			case Xol_kwd_grp_.Id_toc:
 				ctx.Page_data().Hdr_toc_y_();
 				ctx.Para().Process_block_lnki_div();							// NOTE: __TOC__ will manually place <div toc> here; simulate div in order to close any pres; EX:\n\s__TOC__; PAGE:de.w:  DATE:2014-07-05
-				ctx.Subs_add(root, tkn_mkr.Under(bgn_pos, cur_pos, kwd_id));	// NOTE: only save under_tkn for TOC (b/c its position is needed for insertion); DATE:2013-07-01
+			case Xol_kwd_grp_.Id_forcetoc:
+			case Xol_kwd_grp_.Id_notoc:
+			case Xol_kwd_grp_.Id_nocontentconvert:
+			case Xol_kwd_grp_.Id_notitleconvert:
+				ctx.Subs_add(root, tkn_mkr.Under(bgn_pos, cur_pos, kwd_id));
 				break;	
-			case Xol_kwd_grp_.Id_forcetoc:			ctx.Page_data().Hdr_forcetoc_y_(); break;
-			case Xol_kwd_grp_.Id_notoc:				ctx.Page_data().Hdr_notoc_y_(); break;
-			case Xol_kwd_grp_.Id_noeditsection:		break;	// ignore; not handling edit sections
-			case Xol_kwd_grp_.Id_nocontentconvert:	ctx.Page_data().Lang_convert_content_(false); break;
-			case Xol_kwd_grp_.Id_notitleconvert:	ctx.Page_data().Lang_convert_title_(false); break;
 			default:								break;	// ignore anything else
 		}				
 	}

@@ -22,10 +22,29 @@ public class Xoh_toc_mgr {
 	private final    Xoh_toc_htmlr htmlr = new Xoh_toc_htmlr();
 	public boolean Exists() {return exists && Enabled;} private boolean exists;
 	public void Exists_y_() {exists = true;}
-	public int Toc_bgn() {return toc_bgn;} private int toc_bgn;
-	public void Toc_bgn_(int v) {this.toc_bgn = v;}
+        private int default_pos;
+        public void Toc_default_(int pos) { default_pos = pos;}
+        private boolean notocseen;
+        public void Hdr_notoc_y_() {notocseen = true;}
+        private boolean forcetoc;
+        public void Hdr_forcetoc_y_() {forcetoc = true;}
+	public int Toc_bgn() {
+            if (forcetoc) return default_pos;
+            //if (exists) return toc_bgn;
+            if (exists) return default_pos;
+            if (notocseen) return -1;
+            return default_pos;
+        }
+        private int toc_bgn;
+	public void Toc_bgn_(int v) {
+            this.toc_bgn = v;
+            if (default_pos < 0)
+                default_pos = v;
+        }
 	public void Clear() {
 		this.exists = false;
+                this.notocseen = false;
+                this.default_pos = -1;
 		itms.Clear();
 		lvl_wkr.Clear();
 		txt_wkr.Clear();

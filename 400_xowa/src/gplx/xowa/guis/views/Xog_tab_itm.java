@@ -115,6 +115,12 @@ public class Xog_tab_itm implements Gfo_invk {
 		if (view_mode != Xopg_view_mode_.Tid__read) // if read, don't bother adding "action=read"
 			page.Url().Qargs_mgr().Set_val_by_bry(Xoa_url_.Qarg__action, Xopg_view_mode_.To_bry(v));
 	}
+	public byte Display_mode() {return display_mode;} private byte display_mode = Xopg_display_mode_.Tid__none;
+	public void Display_mode_(byte v) {
+		display_mode = v;
+		if (display_mode != Xopg_display_mode_.Tid__none)
+			page.Url().Qargs_mgr().Set_val_by_bry(Xoa_url_.Qarg__action, Xopg_display_mode_.To_bry(v));
+	}
 	public void Pin_toggle() {}
 	public void Show_url_bgn(Xoa_url url) {
 		this.tab_is_loading = true;

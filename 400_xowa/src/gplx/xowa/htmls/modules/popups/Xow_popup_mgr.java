@@ -44,21 +44,21 @@ public class Xow_popup_mgr implements Gfo_invk, Gfo_evt_itm {
 		, Cfg__ns_allowed, Cfg__xnde_ignore_ids, Cfg__scan_len, Cfg__scan_max
 		);
 	}
-	public String Show_init(String popup_id, byte[] href, byte[] tooltip) {
+	public byte[] Show_init(String popup_id, byte[] href, byte[] tooltip, String popup_link) {
 		Xoae_page cur_page = Cur_page();
 		Xog_tab_itm tab = cur_page.Tab_data().Tab();
-		if (tab != null && tab.Tab_is_loading()) return "";	// NOTE: tab is null when previewing
-		Xow_popup_itm itm = new Xow_popup_itm(popup_id, href, tooltip, show_init_word_count);
-		String rv = String_.new_u8(Get_popup_html(Cur_wiki(), cur_page, itm));
-		return tab != null && tab.Tab_is_loading() ? "" : rv;
+		if (tab != null && tab.Tab_is_loading()) return Bry_.Empty;	// NOTE: tab is null when previewing
+		Xow_popup_itm itm = new Xow_popup_itm(popup_id, href, tooltip, show_init_word_count, popup_link);
+		byte[] rv = Get_popup_html(Cur_wiki(), cur_page, itm);
+		return tab != null && tab.Tab_is_loading() ? Bry_.Empty : rv;
 	}
-	public String Show_more(String popup_id) {
+	public byte[] Show_more(String popup_id) {
 		Xoae_page cur_page = Cur_page();
 		Xow_popup_itm popup_itm = Itms_get_or_null(cur_page, popup_id).Mode_more_(show_more_word_count);
 		byte[] html = Get_popup_html(Cur_wiki(), cur_page, popup_itm);
 		popup_itm.Popup_html_(html);
 		Show_popup_html(popup_itm, Cbk_update_popup_html, Mode_show_more);
-		return String_.new_u8(html);
+		return html;
 	}
 	public void Show_all(String popup_id) {
 		Xoae_page cur_page = Cur_page();

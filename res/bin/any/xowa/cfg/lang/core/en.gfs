@@ -6480,7 +6480,7 @@ xowa-wikidata-labels-col|Label
 xowa-wikidata-labels-hdr|Labels
 xowa-wikidata-millenium|~{0}. millenium
 xowa-wikidata-sitelinks-hdr-special|other wikis
-xowa-wikidata-sitelinks-hdr|Links (~{0})
+xowa-wikidata-sitelinks-hdr|~{0}
 xowa-wikidata-time-spr|:
 xowa-wikidata-toc|Contents
 xowa-wikidata-years1e4|~{0}0,000 years
@@ -6527,6 +6527,11 @@ zip-bad|The file is a corrupt or otherwise unreadable ZIP file.\nIt cannot be pr
 zip-file-open-error|An error was encountered when opening the file for ZIP checks.
 zip-unsupported|The file is a ZIP file that uses ZIP features not supported by MediaWiki.\nIt cannot be properly checked for security.
 zip-wrong-format|The specified file was not a ZIP file.
+code-rev-purge-link|purge
+group-checkuser|Check users
+group-oversight|Oversighters
+group-upwizcampeditors|Upload Wizard campaign editors
+grouppage-upwizcampeditors|{{ns:project}}:Upload Wizard campaign editors
 ']:>
 ).lang
 ;

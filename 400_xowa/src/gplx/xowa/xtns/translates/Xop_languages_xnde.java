@@ -38,7 +38,8 @@ public class Xop_languages_xnde implements Xox_xnde {
 		List_adp rslts = List_adp_.New(); 
 		Int_obj_ref rslt_count = Int_obj_ref.New(0);
 		Xow_ns page_ns = root_ttl.Ns();
-		wiki.Db_mgr().Load_mgr().Load_ttls_for_all_pages(Cancelable_.Never, rslts, null, null, rslt_count, page_ns, root_ttl.Page_db(), Int_.Max_value, 0, Int_.Max_value, true, false);
+		wiki.Db_mgr().Load_mgr().Load_ttls_for_langs(rslts, rslt_count, page_ns, root_ttl.Page_db());
+                //.Load_ttls_for_all_pages(Cancelable_.Never, rslts, null, null, rslt_count, page_ns, root_ttl.Page_db(), Int_.Max_value, 0, Int_.Max_value, true, false);
 		int len = rslt_count.Val();
 		if (len == 0) return List_adp_.Noop;				// no lang pages; return;
 		List_adp rv = List_adp_.New();

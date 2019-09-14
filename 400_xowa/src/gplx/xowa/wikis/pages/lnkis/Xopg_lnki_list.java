@@ -29,6 +29,7 @@ public class Xopg_lnki_list {
 		if (disabled) return;
 		Xoa_ttl ttl = lnki.Ttl(); if (ttl == null) return;		// ttl is null for invalid links
 		Xow_ns ns = ttl.Ns();
+                //System.out.println(String_.new_u8(ttl.Full_db()));
 		lnki.Html_uid_(++lnki_idx);								// NOTE: set html_id in order html to print out "id='xowa_lnki_1'; want to print out id for consistency's sake, even if these links won't be check for redlinks; DATE:2015-05-07
 		if (	ns.Id_is_file_or_media()						// ignore files which will usually not be in local wiki (most are in commons), and whose html is built up separately
 			||	(ns.Id_is_ctg() && !ttl.ForceLiteralLink())		// ignore ctgs which have their own html builder, unless it is literal; EX: [[:Category:A]]; DATE:2014-02-24

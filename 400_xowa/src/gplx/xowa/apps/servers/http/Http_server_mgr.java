@@ -38,11 +38,12 @@ import gplx.xowa.specials.*; import gplx.xowa.specials.xowa.errors.*;
 public class Http_server_mgr implements Gfo_invk {
 	private final    Object thread_lock = new Object();
 	private final    Gfo_usr_dlg usr_dlg;
-	private Http_server_socket wkr;
+	private final    Http_server_socket wkr;
 	private byte retrieve_mode = File_retrieve_mode.Mode_wait;
-	private boolean running, init_gui_needed = true;
+	private boolean running = true;
 	public Http_server_mgr(Xoae_app app) {
 		this.app = app;
+		this.wkr = new Http_server_socket(this);
 		this.usr_dlg = app.Usr_dlg();
 		this.request_parser = new Http_request_parser(server_wtr, false);
 	}
@@ -59,7 +60,8 @@ public class Http_server_mgr implements Gfo_invk {
 		}
 		port = v; 
 		return this;
-	} private int port = Port__default;
+	}
+	private int port = Port__default;
 	public Http_server_wkr_pool Wkr_pool() {return wkr_pool;} private final    Http_server_wkr_pool wkr_pool = new Http_server_wkr_pool();
 	public Int_pool Uid_pool() {return uid_pool;} private final    Int_pool uid_pool = new Int_pool();
 	public byte[] Home() {return home;} public void Home_(byte[] v) {home = Bry_.Add(Byte_ascii.Slash_bry, v);} private byte[] home = Bry_.new_a7("/home/wiki/Main_Page");
@@ -74,7 +76,6 @@ public class Http_server_mgr implements Gfo_invk {
 		else {
 			if (running) {
 				wkr.Canceled_(true);
-				wkr = null;
 				Note("HTTP Server stopped");
 			}
 			else
@@ -84,7 +85,11 @@ public class Http_server_mgr implements Gfo_invk {
 	}
 	public void Run() {
 		app.Cfg().Bind_many_app(this, Cfg__port, Cfg__file_retrieve_mode);
-		if (wkr == null) wkr = new Http_server_socket(this);
+
+		// create a shim gui to automatically handle default XOWA gui JS calls
+		Gxw_html_server.Init_gui_for_server(app, null);
+
+		// launch listener
 		Thread_adp_.Start_by_key("thread:xowa.http_server.server", wkr, Http_server_socket.Invk_run);
 		Note("HTTP Server started: Navigate to http://localhost:" + Int_.To_str(port));
 	}
@@ -93,27 +98,21 @@ public class Http_server_mgr implements Gfo_invk {
 		String cmd = url_converter.Decode_str(url_encoded_str);
 		app.Gfs_mgr().Run_str(cmd);
 	}
+
 	public String Parse_page_to_html(Http_data__client data__client, Http_url_parser url_parser) {
 		synchronized (thread_lock) {
-                    byte[] ttl_bry = url_parser.Page();
-                    byte mode = url_parser.Action();
-			// create a shim gui to automatically handle default XOWA gui JS calls
-			if (init_gui_needed) {
-				init_gui_needed = false;
-				Gxw_html_server.Init_gui_for_server(app, null);
-			}
+			byte[] ttl_bry = url_parser.Page();
+			byte mode = url_parser.Action();
+			byte[] qarg = url_parser.Qarg();
 
 			// get the wiki
 			Xowe_wiki wiki = (Xowe_wiki)app.Wiki_mgr().Get_by_or_make_init_y(url_parser.Wiki());			// assert init for Main_Page; EX:click zh.w on wiki sidebar; DATE:2015-07-19
-			if (Runtime_.Memory_total() > Io_mgr.Len_gb)	Xowe_wiki_.Rls_mem(wiki, true);			// release memory at 1 GB; DATE:2015-09-11
+			if (Runtime_.Memory_total() > Io_mgr.Len_gb_2)	Xowe_wiki_.Rls_mem(wiki, true);			// release memory at 1 GB; DATE:2015-09-11
 
-			// check for dropdown search
-			if (Bry_.Has_at_bgn(ttl_bry, searcher, 0, ttl_bry.length)) {
-				byte[] search_term = Bry_.Mid(ttl_bry, 7);
-				Srch_htmlbar_mgr itm = app.Addon_mgr().Itms__search__htmlbar();
-				itm.Search(wiki, search_term, Bry_.new_a7("search_result"));
-				return itm.Get_js_rslt();
-			}
+			// check for special page (dont know how to integrate this)
+/*			if (Bry_.Has_at_bgn(ttl_bry, api, 0, ttl_bry.length)) {
+				return apispecial();
+			}*/
 
 			// get the url / ttl
 			// empty title returns main page; EX: "" -> "Main_Page"
@@ -123,12 +122,12 @@ public class Http_server_mgr implements Gfo_invk {
 			else {
 				Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_m001();
 				try {
+					//tmp_bfr.Add(wiki.Domain_bry()).Add(gplx.xowa.htmls.hrefs.Xoh_href_.Bry__wiki).Add(ttl_bry).Add_safe(qarg);
 					tmp_bfr.Add(wiki.Domain_bry()).Add(gplx.xowa.htmls.hrefs.Xoh_href_.Bry__wiki).Add(ttl_bry);
 					ttl_bry = tmp_bfr.To_bry_and_clear();
 				} finally {tmp_bfr.Mkr_rls();}
 			}
 			Xoa_url url = wiki.Utl__url_parser().Parse(ttl_bry);
-			//Xoa_ttl ttl = Xoa_ttl.Parse(wiki, url.To_bry_page_w_anch()); // changed from ttl_bry to page_w_anch; DATE:2017-07-24
 			Xoa_ttl ttl = wiki.Ttl_parse(url.To_bry_page_w_anch()); // changed from ttl_bry to page_w_anch; DATE:2017-07-24
 
 			// handle invalid titles like "Earth]"; ISSUE#:480; DATE:2019-06-02
@@ -139,7 +138,7 @@ public class Http_server_mgr implements Gfo_invk {
 
 			// get the page
 			gplx.xowa.guis.views.Xog_tab_itm tab = Gxw_html_server.Assert_tab2(app, wiki);	// HACK: assert tab exists
-			Xoae_page page = wiki.Page_mgr().Load_page(url, ttl, tab);
+			Xoae_page page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display());
 			app.Gui_mgr().Browser_win().Active_page_(page);	// HACK: init gui_mgr's page for output (which server ordinarily doesn't need)
 			if (page.Db().Page().Exists_n()) { // if page does not exist, replace with message; else null_ref error; DATE:2014-03-08
 				page.Db().Text().Text_bry_(Bry_.new_a7("'''Page not found.'''"));
@@ -150,14 +149,19 @@ public class Http_server_mgr implements Gfo_invk {
 			// generate html
 			String rv = null;
 			if (url_parser.Popup()) {
-                                String popup_id = url_parser.Popup_id();
+				String popup_id = url_parser.Popup_id();
+				byte[] page_html;
 				if (String_.Eq(url_parser.Popup_mode(), "more"))
-					rv = wiki.Html_mgr().Head_mgr().Popup_mgr().Show_more(popup_id);
+					page_html = wiki.Html_mgr().Head_mgr().Popup_mgr().Show_more(popup_id);
 				else
-					rv = wiki.Html_mgr().Head_mgr().Popup_mgr().Show_init(popup_id, ttl_bry, ttl_bry);
+					page_html = wiki.Html_mgr().Head_mgr().Popup_mgr().Show_init(popup_id, ttl_bry, ttl_bry, url_parser.Popup_link());
+				page_html = Http_server_wkr.Replace_fsys_hack(page_html);
+				rv = String_.new_u8(page_html);
 			}
 			else {
-				rv = String_.new_u8(wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode)); // NOTE: must generate HTML now in order for "wait" and "async_server" to work with text_dbs; DATE:2016-07-10
+				byte[] page_html = wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode);
+				page_html = Http_server_wkr.Replace_fsys_hack(page_html);
+				rv = String_.new_u8(page_html); // NOTE: must generate HTML now in order for "wait" and "async_server" to work with text_dbs; DATE:2016-07-10
 				boolean rebuild_html = false;
 				switch (retrieve_mode) {
 					case File_retrieve_mode.Mode_skip:	// noop
@@ -179,11 +183,6 @@ public class Http_server_mgr implements Gfo_invk {
 	}
 	public String Preview_page_to_html(Http_data__client data__client, byte[] wiki_domain, byte[] ttl_bry, byte[] new_text) {
 		synchronized (thread_lock) {
-			// create a shim gui to automatically handle default XOWA gui JS calls
-			if (init_gui_needed) {
-				init_gui_needed = false;
-				Gxw_html_server.Init_gui_for_server(app, null);
-			}
 			// get the wiki
 			Xowe_wiki wiki = (Xowe_wiki)app.Wiki_mgr().Get_by_or_make_init_y(wiki_domain);			// assert init for Main_Page; EX:click zh.w on wiki sidebar; DATE:2015-07-19
 			if (Runtime_.Memory_total() > Io_mgr.Len_gb)	Xowe_wiki_.Rls_mem(wiki, true);			// release memory at 1 GB; DATE:2015-09-11
@@ -193,19 +192,20 @@ public class Http_server_mgr implements Gfo_invk {
 			Xoa_url url = wiki.Utl__url_parser().Parse(ttl_bry);
 			Xoa_ttl ttl = Xoa_ttl.Parse(wiki, url.To_bry_page_w_anch()); // changed from ttl_bry to page_w_anch; DATE:2017-07-24
 
-                        // from Xog_tab_itm_edit_mgr.java
-                        Xoa_ttl page = Xoa_ttl.Parse(wiki, ttl_bry, 0, ttl_bry.length);
-		Xoae_page new_page = Xoae_page.New(wiki, page);
-		new_page.Db().Page().Id_(0);	// NOTE: page_id needed for sqlite (was not needed for xdat)
-		new_page.Db().Text().Text_bry_(new_text);
-		wiki.Parser_mgr().Parse(new_page, true);			// refresh html
+			// from Xog_tab_itm_edit_mgr.java
+			Xoa_ttl page = Xoa_ttl.Parse(wiki, ttl_bry, 0, ttl_bry.length);
+			Xoae_page new_page = Xoae_page.New(wiki, page);
+			new_page.Db().Page().Id_(0);	// NOTE: page_id needed for sqlite (was not needed for xdat)
+			new_page.Db().Text().Text_bry_(new_text);
+			wiki.Parser_mgr().Parse(new_page, true);			// refresh html
+	
+			Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_m001();
+			Xoh_page_wtr_wkr wkr = wiki.Html_mgr().Page_wtr_mgr().Wkr(Xopg_view_mode_.Tid__read);
+			wkr.Write_body(tmp_bfr, wiki.Parser_mgr().Ctx(), Xoh_wtr_ctx.Basic, new_page);
+			byte[] new_html = tmp_bfr.To_bry_and_rls();
 
-		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_m001();
-		Xoh_page_wtr_wkr wkr = wiki.Html_mgr().Page_wtr_mgr().Wkr(Xopg_view_mode_.Tid__read);
-		wkr.Write_body(tmp_bfr, wiki.Parser_mgr().Ctx(), Xoh_wtr_ctx.Basic, new_page);
-		byte[] new_html = tmp_bfr.To_bry_and_rls();
-
-                        String rv = String_.new_u8(new_html);
+			new_html = Http_server_wkr.Replace_fsys_hack(new_html);
+			String rv = String_.new_u8(new_html);
 			return rv;
 		}
 	}
@@ -226,7 +226,7 @@ public class Http_server_mgr implements Gfo_invk {
 	, Cfg__file_retrieve_mode	= "xowa.addon.http_server.file_retrieve_mode";
 	private static final int Port__default = 8080;
 
-        private static byte[]
-	  searcher = Bry_.new_a7("search")
-        ;
+	private static byte[]
+	  api = Bry_.new_a7("Search:Api")
+	;
 }

@@ -68,7 +68,7 @@ public class Imap_map implements Xoh_file_fmtr, Js_img_wkr {
 		Imap_map_arg map_arg = null;
 		if (shapes.length > 0) {
 			imap_im = Gen_imap_im(html_uid);
-			this.imap_um = Gen_imap_um(html_uid);
+			this.imap_um = Gen_imap_um(id);
 			map_arg = new Imap_map_arg(id, shapes, Calc_scale(orig_w, orig_h, html_w, html_h));
 		}
 		Imap_img_arg img_arg = new Imap_img_arg(hctx, xtn_mgr, this, html_uid, img_alt, img_src, html_w, html_h, Xoh_img_cls_.To_html(img_cls_tid, img_cls_other), a_href, lnki_ttl, orig_exists);

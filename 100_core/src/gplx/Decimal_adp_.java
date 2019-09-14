@@ -14,7 +14,10 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx;
-import java.math.BigDecimal;import java.math.MathContext;import java.math.RoundingMode;import java.text.DecimalFormat;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -53,11 +56,18 @@ public class Decimal_adp_ {
 		return Decimal_adp_.float_(Float_.Div(dividend, divisor) * 100).To_str(fmt) + "%";
 	}
 	public static Decimal_adp divide_safe_(long lhs, long rhs) {return rhs == 0 ? Zero : divide_(lhs, rhs);}
-		public static Decimal_adp divide_(long lhs, long rhs) {		return new Decimal_adp(new BigDecimal(lhs).divide(new BigDecimal(rhs), Gplx_rounding_context));	}	public static Decimal_adp int_(int v) {return new Decimal_adp(new BigDecimal(v));}	public static Decimal_adp long_(long v) {return new Decimal_adp(new BigDecimal(v));}
-	public static Decimal_adp float_(float v) {return new Decimal_adp(new BigDecimal(v));}	public static Decimal_adp double_(double v) {return new Decimal_adp(new BigDecimal(v));}
+		public static Decimal_adp divide_(long lhs, long rhs) {
+		return new Decimal_adp(new BigDecimal(lhs).divide(new BigDecimal(rhs), Gplx_rounding_context));
+	}
+	public static Decimal_adp int_(int v) {return new Decimal_adp(new BigDecimal(v));}
+	public static Decimal_adp long_(long v) {return new Decimal_adp(new BigDecimal(v));}
+	public static Decimal_adp float_(float v) {return new Decimal_adp(new BigDecimal(v));}
+	public static Decimal_adp double_(double v) {return new Decimal_adp(new BigDecimal(v));}
 	public static Decimal_adp double_thru_str_(double v) {return new Decimal_adp(BigDecimal.valueOf(v));}
-	public static Decimal_adp db_(Object v) {return new Decimal_adp((BigDecimal)v);}	public static Decimal_adp parse(String raw) {
+	public static Decimal_adp db_(Object v) {return new Decimal_adp((BigDecimal)v);}
+	public static Decimal_adp parse(String raw) {
 		try {
+                    raw = raw.replace('e', 'E'); // engineering format must be uppercase 'E'
 	        DecimalFormat nf = (DecimalFormat)NumberFormat.getInstance(Locale.US);	// always parse as US format; EX:".9" should not be ",9" in german; DATE:2016-01-31
 	        nf.setParseBigDecimal(true);
 	        BigDecimal bd = (BigDecimal)nf.parse(raw);
@@ -65,5 +75,8 @@ public class Decimal_adp_ {
 		} catch (ParseException e) {
 			throw Err_.new_("Decimal_adp_", "parse to decimal failed", "raw", raw);
 		}
-	}	public static Decimal_adp pow_10_(int v) {return new Decimal_adp(new BigDecimal(1).scaleByPowerOfTen(v));}
-	public static final MathContext RoundDownContext = new MathContext(0, RoundingMode.DOWN);	public static final MathContext Gplx_rounding_context = new MathContext(14, RoundingMode.HALF_UP);	// changed from 28 to 14; DATE:2015-07-31	}
+	}
+	public static Decimal_adp pow_10_(int v) {return new Decimal_adp(new BigDecimal(1).scaleByPowerOfTen(v));}
+	public static final MathContext RoundDownContext = new MathContext(0, RoundingMode.DOWN);
+	public static final MathContext Gplx_rounding_context = new MathContext(14, RoundingMode.HALF_UP);	// changed from 28 to 14; DATE:2015-07-31
+	}

@@ -27,13 +27,19 @@ public class Xog_tab_itm_read_mgr {
 		// set View_mode based on "action="; DATE:2018-11-03
 		byte[] action_val = new_page.Url().Qargs_mgr().Get_val_bry_or(Xoa_url_.Qarg__action, Xoa_url_.Qarg__action__read);
 		byte view_mode = Xopg_view_mode_.Tid__read;
+		byte display_mode = Xopg_display_mode_.Tid__none;
 		if      (Bry_.Eq(action_val, Xoa_url_.Qarg__action__read))
 			view_mode = Xopg_view_mode_.Tid__read;
 		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__edit))
 			view_mode = Xopg_view_mode_.Tid__edit;
 		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__html))
 			view_mode = Xopg_view_mode_.Tid__html;
+		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__wikitextver))
+			display_mode = Xopg_display_mode_.Tid__wikitextver;
+		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__htmlver))
+			display_mode = Xopg_display_mode_.Tid__htmlver;
 		tab.View_mode_(view_mode);
+		tab.Display_mode_(display_mode);
 
 		Xoae_page cur_page = tab.Page(); Xog_html_itm html_itm = tab.Html_itm(); Gfui_html html_box = html_itm.Html_box();
 		Xog_win_itm win = tab.Tab_mgr().Win();

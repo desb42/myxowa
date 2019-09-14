@@ -32,6 +32,8 @@ public class Xoa_url_ {
 	, Qarg__action__read        = Xopg_view_mode_.Bry__read
 	, Qarg__action__edit        = Xopg_view_mode_.Bry__edit
 	, Qarg__action__html        = Xopg_view_mode_.Bry__html
+	, Qarg__action__wikitextver = Xopg_display_mode_.Bry__wikitextver
+	, Qarg__action__htmlver     = Xopg_display_mode_.Bry__htmlver
 	, Qarg__curid               = Bry_.new_a7("curid")
 	;
 }

@@ -45,19 +45,23 @@ public abstract class Db_engine_sql_base implements Db_engine {
             //System.out.println(sql);
 		try {
 			Statement cmd = New_stmt_exec(sql);	
+                //Thread currentThread = Thread.currentThread();
+                //System.out.println(currentThread.getName()+"-"+sql);
 			return cmd.executeUpdate(sql);			
 		}
-		catch (Exception e) {throw Err_.new_exc(e, "db", "db.engine:exec failed", "url", conn_info.Db_api(), "sql", sql);}
+		catch (Exception e) {
+                    throw Err_.new_exc(e, "db", "db.engine:exec failed", "url", conn_info.Db_api(), "sql", sql);}
 	}
 	private DataRdr Exec_as_rdr(String sql) {
-            //System.out.println(sql);
+            System.out.println(sql);
 		try {
 			Statement cmd = New_stmt_exec(sql);	
 			cmd.execute(sql);										
 			ResultSet rdr = cmd.getResultSet();	
 			return New_rdr(rdr, sql);
 		}
-		catch (Exception e) {throw Err_.new_exc(e, "db", "db.engine:rdr failed", "url", conn_info.Db_api(), "sql", sql);}
+		catch (Exception e) {
+                    throw Err_.new_exc(e, "db", "db.engine:rdr failed", "url", conn_info.Db_api(), "sql", sql);}
 	}
 	public void Meta_tbl_create(Dbmeta_tbl_itm tbl) {Exec_as_int(tbl.To_sql_create(this.Sql_wtr()));				this.Meta_mgr().Load_all();}
 	public void Meta_tbl_delete(String tbl)			{Exec_as_int(this.Sql_wtr().Schema_wtr().Bld_drop_tbl(tbl));	this.Meta_mgr().Load_all();}

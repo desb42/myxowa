@@ -26,8 +26,4 @@ public class Wbase_claim_value_type_ {
 	, Itm__value					= Reg.Add(Tid__value			, "value")
 	, Itm__somevalue				= Reg.Add(Tid__somevalue		, "somevalue")
 	;
-	public static final byte[]
-	  Bry__novalue = Bry_.new_a7("no value")
-	, Bry__somevalue = Bry_.new_a7("unknown value")
-	;
 }

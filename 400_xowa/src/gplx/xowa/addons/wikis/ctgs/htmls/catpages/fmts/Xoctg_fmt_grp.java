@@ -32,27 +32,27 @@ public class Xoctg_fmt_grp {	// subc|page|file
 	public Xoctg_fmt_itm_base Itm_fmt() {return itm_fmt;} private final    Xoctg_fmt_itm_base itm_fmt;
 	public void Write_catpage_grp(Bry_bfr bfr, Xow_wiki wiki, Xol_lang_itm lang, Uca_ltr_extractor ltr_extractor, Xoctg_catpage_ctg dom_ctg, int grp_max) {	// TEST:
 		Xoctg_catpage_grp dom_grp = dom_ctg.Grp_by_tid(tid);
-                int count = dom_grp.Count_all();
+		int count = dom_grp.Count_all();
 		if (count == 0) return;	// no items in grp; EX: 0 items in File
 
 		// get msgs
 		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
 		byte[] msg_label_bry = msg_mgr.Val_by_id_args(msg_label_id, dom_ctg.Name());
-		byte[] msg_stats_bry = msg_mgr.Val_by_id_args(msg_stats_id, dom_grp.Itms__len(), dom_grp.Count_all());
+		byte[] msg_stats_bry = msg_mgr.Val_by_id_args(msg_stats_id, dom_grp.Itms__len(), lang.Num_mgr().Format_num(dom_grp.Count_all()));
 
 		// get nav html; next / previous 200
 		Xoa_ttl ctg_ttl = wiki.Ttl_parse(Xow_ns_.Tid__category, dom_ctg.Name());
 		byte[] nav_html = this.Bld_bwd_fwd(wiki, ctg_ttl, dom_grp, grp_max);
 
-                // according to mediawiki/includes/CategoryViewer.php cutoff default is 6
-                byte[] startdiv, enddiv;
-                if (count > 6) {
-                    startdiv = Bry_.new_a7("<div class=\"mw-category\">");
-                    enddiv = Bry_.new_a7("</div>");
-                } else {
-                    startdiv = Bry_.Empty;
-                    enddiv = Bry_.Empty;
-                }
+		// according to mediawiki/includes/CategoryViewer.php cutoff default is 6
+		byte[] startdiv, enddiv;
+		if (count > 6) {
+			startdiv = Bry_.new_a7("<div class=\"mw-category\">");
+			enddiv = Bry_.new_a7("</div>");
+		} else {
+			startdiv = Bry_.Empty;
+			enddiv = Bry_.Empty;
+		}
 		// init grp; write
 		itms_fmt.Init_from_grp(wiki, dom_grp, ltr_extractor);
 		Fmt__ctg.Bld_many(bfr, div_id, msg_label_bry, msg_stats_bry, nav_html, lang.Key_bry(), lang.Dir_ltr_bry(), startdiv, itms_fmt, enddiv);

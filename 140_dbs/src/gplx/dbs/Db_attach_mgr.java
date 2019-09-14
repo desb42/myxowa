@@ -40,14 +40,18 @@ public class Db_attach_mgr {
 	}
 	public void Attach() {
 		int len = attach_list.Len();
-		for (int i = 0; i < len; ++i) {
+		//for (int i = 0; i < len; ++i) {
+                if (len > 0)
+		for (int i = len-1; i >= 0; i--) {
 			Db_attach_itm itm = (Db_attach_itm)attach_list.Get_at(i);
 			main_conn.Env_db_attach(itm.Key, itm.Url);
 		}
 	}
 	public void Detach() {
 		int len = attach_list.Len();
-		for (int i = 0; i < len; ++i) {
+		//for (int i = 0; i < len; ++i) {
+                if (len > 0)
+		for (int i = len-1; i >= 0; i--) {
 			Db_attach_itm itm = (Db_attach_itm)attach_list.Get_at(i);
 			main_conn.Env_db_detach(itm.Key);
 		}

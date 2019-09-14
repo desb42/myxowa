@@ -15,20 +15,22 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.wbases; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import gplx.core.primitives.*;
-import gplx.langs.jsons.*;
+import gplx.xowa.langs.msgs.*; import gplx.langs.jsons.*;
 import gplx.xowa.wikis.nss.*;
 import gplx.xowa.langs.*;
+import gplx.xowa.parsers.*;
 import gplx.xowa.wikis.domains.*; import gplx.xowa.htmls.*; import gplx.xowa.parsers.logs.*; import gplx.xowa.apps.apis.xowa.xtns.*; import gplx.xowa.apps.apis.xowa.html.*; import gplx.xowa.users.*;
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.claims.enums.*; import gplx.xowa.xtns.wbases.claims.itms.*; import gplx.xowa.xtns.wbases.parsers.*; import gplx.xowa.xtns.wbases.pfuncs.*; import gplx.xowa.xtns.wbases.hwtrs.*; import gplx.xowa.xtns.wbases.stores.*;
-import gplx.xowa.parsers.*;
+import gplx.xowa.xtns.wbases.mediawiki.client.includes.dataAccess.scribunto.*;
 import gplx.core.brys.fmtrs.*;
 public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	private final    Xoae_app app;
 	private final    Wdata_prop_val_visitor prop_val_visitor;
 	private final    Wdata_doc_parser wdoc_parser_v1 = new Wdata_doc_parser_v1(), wdoc_parser_v2 = new Wdata_doc_parser_v2();
-	private final    Object thread_lock = new Object();		
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);		
-        private byte[] page_display_title;
+	private final    Object thread_lock = new Object();
+	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
+	private final    WikibaseLanguageIndependentLuaBindings lua_bindings;
+	private byte[]   page_display_title, no_label;
 	public Wdata_wiki_mgr(Xoae_app app) {
 		this.app = app;
 		this.evt_mgr = new Gfo_evt_mgr(this);
@@ -37,6 +39,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		this.Doc_mgr = new Wbase_doc_mgr(this, this.Qid_mgr);
 		this.prop_mgr = new Wbase_prop_mgr(Wbase_prop_mgr_loader_.New_db(this));
 		this.prop_val_visitor = new Wdata_prop_val_visitor(app, this);
+		this.lua_bindings = new WikibaseLanguageIndependentLuaBindings(Doc_mgr);
 		this.Enabled_(true);
 	}
 	public Gfo_evt_mgr Evt_mgr() {return evt_mgr;} private final    Gfo_evt_mgr evt_mgr;
@@ -44,6 +47,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	public final    Wbase_pid_mgr		Pid_mgr;
 	public final    Wbase_doc_mgr		Doc_mgr;
 	public Wbase_prop_mgr				Prop_mgr() {return prop_mgr;} private final    Wbase_prop_mgr prop_mgr;
+	public WikibaseLanguageIndependentLuaBindings Lua_bindings() {return lua_bindings;}
 	public boolean Enabled() {return enabled;} private boolean enabled;
 	public void Enabled_(boolean v) {
 		this.enabled = v;
@@ -86,7 +90,8 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	public byte[] Get_claim_or(Xow_domain_itm domain, Xoa_ttl page_ttl, int pid, byte[] or) {
 		byte[] qid = this.Qid_mgr.Get_qid_or_null(domain.Abrv_wm(), page_ttl); if (qid == null) return or;
 		Wdata_doc wdoc = Doc_mgr.Get_by_loose_id_or_null(qid); if (wdoc == null) return or;
-		Wbase_claim_grp claim_grp = wdoc.Claim_list_get(pid); if (claim_grp == null || claim_grp.Len() == 0) return or;
+		Wbase_claim_grp claim_grp = wdoc.Get_claim_grp_or_null(pid);
+		if (claim_grp == null || claim_grp.Len() == 0) return or;
 		Wbase_claim_base claim_itm = claim_grp.Get_at(0);
 		Resolve_claim(tmp_bfr, domain, claim_itm);
 		return tmp_bfr.To_bry_and_clear();
@@ -98,7 +103,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 			claim_itm.Welcome(prop_val_visitor);
 		}
 	}
-	public void Resolve_to_bfr(Bry_bfr bfr, Wbase_claim_grp prop_grp, byte[] lang_key, boolean mode_is_statements) {
+	public void Resolve_to_bfr(Bry_bfr bfr, Xowe_wiki wiki, Wbase_claim_grp prop_grp, byte[] lang_key, boolean mode_is_statements) {
 		synchronized (thread_lock) {	// LOCK:must synchronized b/c prop_val_visitor has member bfr which can get overwritten; DATE:2016-07-06
 			if (hwtr_mgr == null) Hwtr_mgr_assert();
 			int len = prop_grp.Len();
@@ -112,8 +117,12 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 				}
 			}
 			switch (selected.Snak_tid()) {
-				case Wbase_claim_value_type_.Tid__novalue	: bfr.Add(Wbase_claim_value_type_.Bry__novalue); break;
-				case Wbase_claim_value_type_.Tid__somevalue	: bfr.Add(Wbase_claim_value_type_.Bry__somevalue); break;
+				case Wbase_claim_value_type_.Tid__novalue:
+					bfr.Add(wiki.Msg_mgr().Val_by_id(Xol_msg_itm_.Id_wikibase_snakview_variations_novalue_label));
+					break;
+				case Wbase_claim_value_type_.Tid__somevalue:
+					bfr.Add(wiki.Msg_mgr().Val_by_id(Xol_msg_itm_.Id_wikibase_snakview_variations_somevalue_label));
+					break;
 				default: {
 					prop_val_visitor.Init(bfr, hwtr_mgr.Msgs(), lang_key, mode_is_statements);
 					selected.Welcome(prop_val_visitor);
@@ -129,43 +138,18 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		return hwtr_mgr.Popup(wdoc);
 	}
 	public void Write_json_as_html(Bry_bfr bfr, Xoa_ttl page_ttl, byte[] data_raw) {
-                if (data_raw[0] == Byte_ascii.Apos)
-                    bfr.Add(data_raw);
-                else {
-                    Hwtr_mgr_assert();
-                    Wdata_doc wdoc = Doc_mgr.Get_by_exact_id_or_null(page_ttl.Full_db());
-		if (wdoc == null) return;
-                    hwtr_mgr.Init_by_wdoc(wdoc);
-                    bfr.Add(hwtr_mgr.Write(wdoc));
-                    // build page_display title for later
-                    page_display_title = Wdata_display_title(wdoc);
-                }
+		if (data_raw[0] == Byte_ascii.Apos)
+			bfr.Add(data_raw);
+		else {
+			Hwtr_mgr_assert();
+			Wdata_doc wdoc = Doc_mgr.Get_by_exact_id_or_null(page_ttl.Full_db());
+			if (wdoc == null) return;
+			hwtr_mgr.Init_by_wdoc(wdoc);
+			bfr.Add(hwtr_mgr.Write(wdoc));
+			// build page_display title for later
+			page_display_title = Wdata_display_title(wdoc);
+		}
 	}
-        public byte[] Page_display_title() { return page_display_title; }
-	public byte[] Doc_name(Wdata_doc wdoc) {
-		Xoapi_wikibase wikibase_api = app.Api_root().Xtns().Wikibase();
-		byte[][] core_langs		= wikibase_api.Core_langs();
-		Ordered_hash list;
-		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme)
-			list = wdoc.Lemma_list();
-		else
-			list = wdoc.Label_list();
-		return Wdata_langtext_itm.Get_text_or_empty(list, core_langs);
-	}
-	private byte[] Wdata_display_title(Wdata_doc wdoc) {
-                byte[] oview_label = Doc_name(wdoc);
-		Bry_bfr bfr = Bry_bfr_.New();
-		display_fmtr.Bld_bfr_many(bfr, null, oview_label, Bry_.Mid(wdoc.Qid(), wdoc.Name_ofs()));
-		return bfr.To_bry_and_clear();
-	}
-	private Bry_fmtr display_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
-	( ""
-	, "<span class=\"wikibase-title ~{cls}\">"
-	, "<span class=\"wikibase-title-label\">~{ttl_label}</span>"
-	, "<span class=\"wikibase-title-id\">(~{ttl_id})</span>"
-	, "</span>"
-	), "cls", "ttl_label", "ttl_id"
-	);
 	private void Hwtr_mgr_assert() {
 		if (hwtr_mgr != null) return;
 		Xoapi_toggle_mgr toggle_mgr = app.Api_root().Html().Page().Toggle_mgr();
@@ -182,6 +166,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		cur_wiki.Xtn_mgr().Xtn_wikibase().Load_msgs(cur_wiki, new_lang);
 		Wdata_hwtr_msgs hwtr_msgs = Wdata_hwtr_msgs.new_(cur_wiki.Msg_mgr());
 		hwtr_mgr.Init_by_lang(new_lang, hwtr_msgs);
+		this.no_label = hwtr_msgs.Wiki_no_label();
 	}
 	public static void Write_json_as_html(Json_parser jdoc_parser, Bry_bfr bfr, byte[] data_raw) {
 		bfr.Add(Xoh_consts.Span_bgn_open).Add(Xoh_consts.Id_atr).Add(Html_json_id).Add(Xoh_consts.__end_quote);	// <span id="xowa-wikidata-json">
@@ -236,6 +221,45 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	}
 	public static void Log_missing_qid(Xop_ctx ctx, String type, byte[] id) {
 		if (id == null) id = Bry_.Empty;
+		// if a single letter - ignore
+		if (id.length == 1) return;
 		ctx.Wiki().Appe().Usr_dlg().Log_many("", "", "Unknown id in wikidata; type=~{0} id=~{1} page=~{2}", type, id, ctx.Page().Url_bry_safe());
 	}
+	public byte[] Page_display_title() { return page_display_title; }
+	public byte[] Doc_name(Wdata_doc wdoc) {
+		Xoapi_wikibase wikibase_api = app.Api_root().Xtns().Wikibase();
+		byte[][] core_langs		= wikibase_api.Core_langs();
+		Ordered_hash list;
+		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme)
+			list = wdoc.Lemma_list();
+		else
+			list = wdoc.Label_list();
+		return Wdata_langtext_itm.Get_text_or_empty(list, core_langs);
+	}
+	private byte[] Wdata_display_title(Wdata_doc wdoc) {
+		byte[] oview_label = Doc_name(wdoc);
+		byte[] cls = Bry_.Empty;
+		if (oview_label.length == 0) {
+			oview_label = no_label;
+			cls = Bry_.new_a7("wb-empty");
+		}
+		Bry_bfr bfr = Bry_bfr_.New();
+		display_fmtr.Bld_bfr_many(bfr, cls, oview_label, Bry_.Mid(wdoc.Qid(), wdoc.Name_ofs()));
+		return bfr.To_bry_and_clear();
+	}
+	private Bry_fmtr display_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
+	( ""
+	, "<span class=\"wikibase-title ~{cls}\">"
+	, "<span class=\"wikibase-title-label\">~{ttl_label}</span>"
+	, "<span class=\"wikibase-title-id\">(~{ttl_id})</span>"
+	, "</span>"
+	), "cls", "ttl_label", "ttl_id"
+	);
 }
+/*
+NOTE:novalue/somevalue
+Rough approximation of wikibase logic which is more involved with its different SnakFormatters
+* https://github.com/wikimedia/mediawiki-extensions-Wikibase/blob/master/lib/includes/Formatters/OutputFormatSnakFormatterFactory.php: formatter factory; note lines for somevalue / novalue
+* https://github.com/wikimedia/mediawiki-extensions-Wikibase/blob/master/lib/includes/Formatters/MessageSnakFormatter.php: formatter definition
+* https://github.com/wikimedia/mediawiki-extensions-Wikibase/blob/master/repo/i18n/en.json: message definitions
+*/

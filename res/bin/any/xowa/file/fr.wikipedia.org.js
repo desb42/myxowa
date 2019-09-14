@@ -1,25 +1,25 @@
-/* jshint scripturl:true, laxbreak:true, loopfunc:true */
+ï»¿/* jshint scripturl:true, laxbreak:true, loopfunc:true */
 /* global mw, $, importScript */
 /**
- * N'importe quel JavaScript ici sera chargé pour n'importe quel utilisateur et pour chaque page accédée.
+ * N'importe quel JavaScript ici sera chargÃ© pour n'importe quel utilisateur et pour chaque page accÃ©dÃ©e.
  *
  * ATTENTION : Avant de modifier cette page, veuillez tester vos changements avec votre propre
- * vector.js. Une erreur sur cette page peut faire bugger le site entier (et gêner l'ensemble des
- * visiteurs), même plusieurs heures après la modification !
+ * vector.js. Une erreur sur cette page peut faire bugger le site entier (et gÃªner l'ensemble des
+ * visiteurs), mÃªme plusieurs heures aprÃ¨s la modification !
  *
- * Prière de ranger les nouvelles fonctions dans les sections adaptées :
+ * PriÃ¨re de ranger les nouvelles fonctions dans les sections adaptÃ©es :
  * - Fonctions JavaScript
- * - Fonctions spécifiques pour MediaWiki
- * - Applications spécifiques à la fenêtre d'édition
- * - Applications qui peuvent être utilisées sur toute page
- * - Applications spécifiques à un espace de nom ou une page
+ * - Fonctions spÃ©cifiques pour MediaWiki
+ * - Applications spÃ©cifiques Ã  la fenÃªtre d'Ã©dition
+ * - Applications qui peuvent Ãªtre utilisÃ©es sur toute page
+ * - Applications spÃ©cifiques Ã  un espace de nom ou une page
  *
  * <nowiki> /!\ Ne pas retirer cette balise
  */
 
 
 /**********************************************************************************************************/
-/* Fonctions générales MediaWiki (pallient les limitations du logiciel)                                   */
+/* Fonctions gÃ©nÃ©rales MediaWiki (pallient les limitations du logiciel)                                   */
 /* Surveiller : https://git.wikimedia.org/history/mediawiki%2Fcore.git/HEAD/skins%2Fcommon%2Fwikibits.js  */
 /**********************************************************************************************************/
 
@@ -35,12 +35,12 @@ window.obtenir = function ( name ) {
 };
 
 /**
- * Transformer les pages du Bistro, du BA et les pages spécifiées en page de discussion
+ * Transformer les pages du Bistro, du BA et les pages spÃ©cifiÃ©es en page de discussion
  */
 if ( mw.config.get( 'wgNamespaceNumber' ) >= 2 ) {
 	$( function ( $ ) {
 		if (
-			/^Wikipédia:(Le_Bistro|Bulletin_des_administrateurs|Questions_techniques)/.test( mw.config.get( 'wgPageName' ) ) ||
+			/^WikipÃ©dia:(Le_Bistro|Bulletin_des_administrateurs|Questions_techniques)/.test( mw.config.get( 'wgPageName' ) ) ||
 			$( '#transformeEnPageDeDiscussion' ).length
 		) {
 			$( 'body' ).removeClass( 'ns-subject' ).addClass( 'ns-talk' );
@@ -54,15 +54,15 @@ if ( mw.config.get( 'wgNamespaceNumber' ) >= 2 ) {
 /****************************************/
 
 /**
- * Tout ce qui concerne la page d'édition
+ * Tout ce qui concerne la page d'Ã©dition
  */
 if ( [ 'edit', 'submit' ].indexOf( mw.config.get( 'wgAction' ) ) !== -1 ) {
 
 	// chargement de [[MediaWiki:Gadget-CommonEdit.js]]
 	mw.loader.load( 'ext.gadget.CommonEdit' );
 
-	// pour que les fonctions soient définies dès maintenant,
-	// mais l'exécution réelle ne se fait qu'une fois le module chargé
+	// pour que les fonctions soient dÃ©finies dÃ¨s maintenant,
+	// mais l'exÃ©cution rÃ©elle ne se fait qu'une fois le module chargÃ©
 	window.addSpecialCharset = function ( title, chars ) {
 		mw.loader.using( 'ext.gadget.CommonEdit', function () {
 			window.realAddSpecialCharset( title, chars );
@@ -74,8 +74,8 @@ if ( [ 'edit', 'submit' ].indexOf( mw.config.get( 'wgAction' ) ) !== -1 ) {
 		} );
 	};
 
-	// fonction pour ajouter un bouton à la fin de la barre d'outils
-	// permet d'utiliser [[MediaWiki:Gadget-MonobookToolbar.js]] sans se préoccuper de son chargement
+	// fonction pour ajouter un bouton Ã  la fin de la barre d'outils
+	// permet d'utiliser [[MediaWiki:Gadget-MonobookToolbar.js]] sans se prÃ©occuper de son chargement
 	window.addCustomButton = ( function () {
 		var promise;
 
@@ -93,24 +93,24 @@ if ( [ 'edit', 'submit' ].indexOf( mw.config.get( 'wgAction' ) ) !== -1 ) {
 	} )();
 
 } else {
-	// pour que les fonctions soient toujours définies,
-	// afin d'éviter aux scripts utilisateur de planter
+	// pour que les fonctions soient toujours dÃ©finies,
+	// afin d'Ã©viter aux scripts utilisateur de planter
 	window.addSpecialCharset = function () {};
 	window.addSpecialCharsetHTML = function () {};
 	window.addCustomButton = function () {};
 }
 
 /**
- * Réécriture des titres
+ * RÃ©Ã©criture des titres
  *
- * Fonction utilisée par [[Modèle:Titre incorrect]]
+ * Fonction utilisÃ©e par [[ModÃ¨le:Titre incorrect]]
  *
  * La fonction cherche un bandeau de la forme
  * <div id="RealTitleBanner">
  *   <span id="RealTitle">titre</span>
  * </div>
  *
- * Un élément comportant id="DisableRealTitle" désactive la fonction
+ * Un Ã©lÃ©ment comportant id="DisableRealTitle" dÃ©sactive la fonction
  */
 function rewritePageTitle( $ ) {
 	var $realTitle, titleHtml, $h1,
@@ -126,14 +126,14 @@ function rewritePageTitle( $ ) {
 				$h1.html( titleHtml );
 				if ( mw.config.get( 'wgAction' ) === 'view' ) {
 					// using a callback for replacement, to prevent interpreting "$" characters that realTitle might contain
-					document.title = document.title.replace( /^.+( [—–-] Wikipédia)$/, function ( match, p1 ) {
+					document.title = document.title.replace( /^.+( [â€”â€“-] WikipÃ©dia)$/, function ( match, p1 ) {
 						return $realTitle.text() + p1;
 					} );
 				}
 			}
 			$realTitleBanner.hide();
 			$( '<p>' ).css( 'font-size', '80%' )
-				.append( 'Titre à utiliser pour créer un lien interne : ', $( '<b>' ).text( mw.config.get( 'wgPageName' ).replace( /_/g, ' ' ) ) )
+				.append( 'Titre Ã  utiliser pour crÃ©er un lien interne : ', $( '<b>' ).text( mw.config.get( 'wgPageName' ).replace( /_/g, ' ' ) ) )
 				.insertAfter( $h1 );
 		}
 	}
@@ -144,9 +144,9 @@ $( rewritePageTitle );
 /**
  * Ajout d'un sous-titre
  *
- * Fonction utilisée par [[Modèle:Sous-titre]]
+ * Fonction utilisÃ©e par [[ModÃ¨le:Sous-titre]]
  *
- * La fonction cherche un élément de la forme
+ * La fonction cherche un Ã©lÃ©ment de la forme
  * <span id="sous_titre_h1">Sous-titre</span>
  */
 
@@ -162,9 +162,9 @@ mw.hook( 'wikipage.content' ).add( sousTitreH1 );
 
 
 /**
- * Boîtes déroulantes
+ * BoÃ®tes dÃ©roulantes
  *
- * Pour [[Modèle:Méta palette de navigation]]
+ * Pour [[ModÃ¨le:MÃ©ta palette de navigation]]
  */
 
 var Palette_Derouler = '[afficher]';
@@ -193,8 +193,8 @@ function Palette( $content ) {
 		var autoCollapse = groups[group] > Palette_max;
 		var collapsed = $table.hasClass( 'collapsed' ) || ( autoCollapse && $table.hasClass( 'autocollapse' ) );
 
-		// le modèle dispose d'une classe "navbox-title",
-		// sauf que les palettes "inlinées" (e.g. « {| class="navbox collapsible collapsed" ») n'ont pas cette classe
+		// le modÃ¨le dispose d'une classe "navbox-title",
+		// sauf que les palettes "inlinÃ©es" (e.g. Â« {| class="navbox collapsible collapsed" Â») n'ont pas cette classe
 		$table.find( 'tr:first th:first' ).prepend(
 			$( '<span class="navboxToggle">\u00a0</span>' ).append(
 				$( '<a href="javascript:">' + (collapsed ? Palette_Derouler : Palette_Enrouler) + '</a>' ).click( function ( e ) {
@@ -213,8 +213,8 @@ function Palette( $content ) {
 		}
 	} );
 
-	// permet de dérouler/enrouler les palettes en cliquant n'importe où sur l'entête
-	// (utilisation de la classe "navbox-title", comme ça seules les vraies palettes utilisant le modèle sont ciblées)
+	// permet de dÃ©rouler/enrouler les palettes en cliquant n'importe oÃ¹ sur l'entÃªte
+	// (utilisation de la classe "navbox-title", comme Ã§a seules les vraies palettes utilisant le modÃ¨le sont ciblÃ©es)
 	$content.find( '.navbox-title' )
 		.click( function ( e ) {
 			if ( $( e.target ).closest( 'a' ).length ) {
@@ -228,7 +228,7 @@ mw.hook( 'wikipage.content' ).add( Palette );
 
 
 /**
- * Pour [[Modèle:Boîte déroulante]]
+ * Pour [[ModÃ¨le:BoÃ®te dÃ©roulante]]
  */
 
 var BoiteDeroulante_Derouler = '[afficher]';
@@ -283,7 +283,7 @@ function BoiteDeroulante( $content ) {
 		BoiteDeroulante_toggle(NavToggle);
 	} );
 
-	// permet de dérouler/enrouler les boîtes en cliquant n'importe où sur l'entête
+	// permet de dÃ©rouler/enrouler les boÃ®tes en cliquant n'importe oÃ¹ sur l'entÃªte
 	$content.find( '.NavHead' )
 		.click( function ( e ) {
 			if ( $( e.target ).closest( 'a' ).length ) {
@@ -301,7 +301,7 @@ mw.hook( 'wikipage.content' ).add( BoiteDeroulante );
 
 
 /**
- * Fonctionnement du [[Modèle:Animation]]
+ * Fonctionnement du [[ModÃ¨le:Animation]]
  * Le JavaScript principal se situe dans [[MediaWiki:Gadget-Diaporama.js]]
  */
 mw.hook( 'wikipage.content' ).add( function ( $content ) {
@@ -314,7 +314,7 @@ mw.hook( 'wikipage.content' ).add( function ( $content ) {
 
 
 /**
- * Permet d'afficher les catégories cachées pour les contributeurs enregistrés, en ajoutant un (+) à la manière des boîtes déroulantes
+ * Permet d'afficher les catÃ©gories cachÃ©es pour les contributeurs enregistrÃ©s, en ajoutant un (+) Ã  la maniÃ¨re des boÃ®tes dÃ©roulantes
  */
 function hiddencat( $ ) {
 	//if (mw.util.getParamValue('printable') === 'yes') {
@@ -339,16 +339,16 @@ function hiddencat( $ ) {
 		var catline = document.createElement('div');
 		catline.id = 'mw-normal-catlinks';
 		var a = document.createElement('a');
-		a.href = '/wiki/Catégorie:Accueil';
-		a.title = 'Catégorie:Accueil';
-		a.appendChild(document.createTextNode('Catégories'));
+		a.href = '/wiki/CatÃ©gorie:Accueil';
+		a.title = 'CatÃ©gorie:Accueil';
+		a.appendChild(document.createTextNode('CatÃ©gories'));
 		catline.appendChild(a);
 		catline.appendChild(document.createTextNode(' : '));
 		nc = cl.insertBefore(catline, cl.firstChild);
 	}
 	var lnk = document.createElement('a');
 	lnk.id = 'mw-hidden-cats-link';
-	lnk.title = 'Cet article contient des catégories cachées';
+	lnk.title = 'Cet article contient des catÃ©gories cachÃ©es';
 	lnk.style.cursor = 'pointer';
 	lnk.style.color = 'black';
 	lnk.style.marginLeft = '0.3em';
@@ -362,7 +362,7 @@ function toggleHiddenCats(e) {
 	if ( $hc.hasClass('mw-hidden-cats-hidden') ) {
 		$hc.removeClass('mw-hidden-cats-hidden');
 		$hc.addClass('mw-hidden-cat-user-shown');
-		$(e.target).text('[–]');
+		$(e.target).text('[â€“]');
 	} else {
 		$hc.removeClass('mw-hidden-cat-user-shown');
 		$hc.addClass('mw-hidden-cats-hidden');
@@ -377,7 +377,7 @@ xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki/mediawiki.
 
 
 /**
- * Script pour alterner entre plusieurs cartes de géolocalisation
+ * Script pour alterner entre plusieurs cartes de gÃ©olocalisation
  */
 
 function GeoBox_Init($content){
@@ -442,8 +442,8 @@ mw.hook( 'wikipage.content' ).add( GeoBox_Init );
 
 
 /**
- * permet d'ajouter un petit lien (par exemple d'aide) à la fin du titre d'une page.
- * utilisé par [[Modèle:Aide contextuelle]]
+ * permet d'ajouter un petit lien (par exemple d'aide) Ã  la fin du titre d'une page.
+ * utilisÃ© par [[ModÃ¨le:Aide contextuelle]]
  * known bug : conflit avec le changement de titre classique.
  * Pour les commentaires, merci de contacter [[user:Plyd|Plyd]].
  */
@@ -461,7 +461,7 @@ $( rewritePageH1bis );
 /**
  * Configuration du tri des diacritique dans les tables de class "sortable"
  */
-//mw.config.set( 'tableSorterCollation', {'à':'a', 'â':'a', 'æ':'ae', 'é':'e', 'è':'e', 'ê':'e', 'î':'i', 'ï':'i', 'ô':'o', 'œ':'oe', 'û':'u', 'ç':'c',  } );
+//mw.config.set( 'tableSorterCollation', {'Ã ':'a', 'Ã¢':'a', 'Ã¦':'ae', 'Ã©':'e', 'Ã¨':'e', 'Ãª':'e', 'Ã®':'i', 'Ã¯':'i', 'Ã´':'o', 'Å“':'oe', 'Ã»':'u', 'Ã§':'c',  } );
 
 /**
  * Direct imagelinks to Commons
@@ -471,7 +471,7 @@ $( rewritePageH1bis );
  * @source www.mediawiki.org/wiki/Snippets/Direct_imagelinks_to_Commons
  * @author Krinkle
  * @version 2015-06-23
- * Ajouté le 'uselang' ce 18 janvier 2016 — Ltrlg
+ * AjoutÃ© le 'uselang' ce 18 janvier 2016 â€” Ltrlg
  */
 //if ( mw.config.get( 'wgNamespaceNumber' ) >= 0 ) {
 //	mw.loader.using( [ 'mediawiki.RegExp', 'mediawiki.util', 'user.options' ] ).done(function(){
@@ -504,7 +504,7 @@ $( rewritePageH1bis );
 //}
 
 /**
- * Ajout d'un lien « ajouter une section » en bas de page
+ * Ajout d'un lien Â« ajouter une section Â» en bas de page
  */
 if ( mw.config.get( 'wgAction' ) === 'view' ) {
 	$( function( $ ) {
@@ -520,8 +520,8 @@ if ( mw.config.get( 'wgAction' ) === 'view' ) {
 }
 
 /**
- * Repositionnement de la page sur l'ancre avec laquelle elle a été appelée
- * après le repli des boîtes déroulantes, entre autres.
+ * Repositionnement de la page sur l'ancre avec laquelle elle a Ã©tÃ© appelÃ©e
+ * aprÃ¨s le repli des boÃ®tes dÃ©roulantes, entre autres.
  */
 if ( window.location.hash ) {
 	$( function ( $ ) {
@@ -536,14 +536,14 @@ if ( window.location.hash ) {
 
 
 /************************************************************/
-/* Function Strictement spécifiques à un espace de nom ou à une page */
+/* Function Strictement spÃ©cifiques Ã  un espace de nom ou Ã  une page */
 /************************************************************/
 
 // ESPACE DE NOM 'SPECIAL'
 if ( mw.config.get( 'wgNamespaceNumber' ) === -1 ) {
 
 /**
- * Ajoute le namespace aux filtres personnalisés sur [[Spécial:Pages liées]]
+ * Ajoute le namespace aux filtres personnalisÃ©s sur [[SpÃ©cial:Pages liÃ©es]]
  * Voir aussi [[MediaWiki:Linkshere]]
  */
 if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'Whatlinkshere' ) {
@@ -566,7 +566,7 @@ if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'Whatlinkshere' ) {
 }
 
 /**
- * Affiche un modèle Information sur la page de téléchargement de fichiers [[Spécial:Téléchargement]]
+ * Affiche un modÃ¨le Information sur la page de tÃ©lÃ©chargement de fichiers [[SpÃ©cial:TÃ©lÃ©chargement]]
  * Voir aussi [[MediaWiki:Onlyifuploading.js]]
  */
 if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'Upload' ) {
@@ -575,7 +575,7 @@ if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'Upload' ) {
 
 /**
  * Supprime de la liste des balises disponibles et de la liste des balises supprimables
- * certaines balises réservées à des outils automatiques
+ * certaines balises rÃ©servÃ©es Ã  des outils automatiques
  */
 if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'EditTags' ) {
 	importScript( 'MediaWiki:Common.js/EditTags.js' );
@@ -588,7 +588,7 @@ if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'EditTags' ) {
 if ( mw.config.get( 'wgNamespaceNumber' ) === 2 ) {
 
 /*
- * Fonctionnement du [[Modèle:Cadre à onglets]]
+ * Fonctionnement du [[ModÃ¨le:Cadre Ã  onglets]]
  * Le JavaScript principal se situe dans [[MediaWiki:Gadget-CadreOnglets.js]]
  */
 mw.hook( 'wikipage.content' ).add( function ( $content ) {
@@ -602,12 +602,12 @@ mw.hook( 'wikipage.content' ).add( function ( $content ) {
 } // Fin du code concernant l'espace de nom 'Utilisateur'
 
 
-// ESPACE DE NOM 'RÉFÉRENCE'
+// ESPACE DE NOM 'RÃ‰FÃ‰RENCE'
 if ( mw.config.get( 'wgNamespaceNumber' ) === 104 ) {
 
 /*
- * Choix du mode d'affichage des références
- * @note L'ordre de cette liste doit correspondre a celui de Modèle:Édition !
+ * Choix du mode d'affichage des rÃ©fÃ©rences
+ * @note L'ordre de cette liste doit correspondre a celui de ModÃ¨le:Ã‰dition !
  */
 
 var addBibSubsetMenu = function ( $content ) {
@@ -646,13 +646,13 @@ var addBibSubsetMenu = function ( $content ) {
 
 mw.hook( 'wikipage.content' ).add( addBibSubsetMenu );
 
-} // Fin du code concernant l'espace de nom 'Référence'
+} // Fin du code concernant l'espace de nom 'RÃ©fÃ©rence'
 
 
-// PAGES SPÉCIFIQUES
+// PAGES SPÃ‰CIFIQUES
 
-// Personnalisation des liens dans les pages d'aide selon un paramètre de l'URL.
-// Utilisé par [[Aide:Comment créer un article/publier]].
+// Personnalisation des liens dans les pages d'aide selon un paramÃ¨tre de l'URL.
+// UtilisÃ© par [[Aide:Comment crÃ©er un article/publier]].
 function ReplaceSourcePageInLinks() {
 	var match = window.location.search.match( /[?&]sourcepage=([^&]*)/ );
 	if ( !match ) {
@@ -666,7 +666,7 @@ function ReplaceSourcePageInLinks() {
 	} );
 }
 
-if ( mw.config.get( 'wgPageName' ) === 'Aide:Comment_créer_un_article/publier' ) {
+if ( mw.config.get( 'wgPageName' ) === 'Aide:Comment_crÃ©er_un_article/publier' ) {
 	$( ReplaceSourcePageInLinks );
 }
 
@@ -674,10 +674,10 @@ if ( mw.config.get( 'wgPageName' ) === 'Aide:Comment_créer_un_article/publier' )
 
 /* fr.wikipedia.org/wiki/MediaWiki:Gadget-ArchiveLinks.js */
 /**
- * Application de [[Wikipédia:Prise de décision/Système de cache]].
- * Un <span class="noarchive"> autour d'un lien l'empêche d'être pris en compte.
+ * Application de [[WikipÃ©dia:Prise de dÃ©cision/SystÃ¨me de cache]].
+ * Un <span class="noarchive"> autour d'un lien l'empÃªche d'Ãªtre pris en compte.
  *
- * {{Catégorisation JS|ArchiveLinks}}
+ * {{CatÃ©gorisation JS|ArchiveLinks}}
  */
 
 if ( !window.no_external_cache && ( mw.config.get( 'wgNamespaceNumber' ) === 0 || mw.user.options.get( 'gadget-ExtendedCache' ) ) ) {
@@ -705,7 +705,7 @@ if ( !window.no_external_cache && ( mw.config.get( 'wgNamespaceNumber' ) === 0 |
 				return;
 			}
 
-			// sécurité : attention à échapper les quotes dans les attributs
+			// sÃ©curitÃ© : attention Ã  Ã©chapper les quotes dans les attributs
 
 			var href = 'http://archive.wikiwix.com/cache/?url=' + encodeURIComponent( chemin );
 			var title = 'archive sur Wikiwix';

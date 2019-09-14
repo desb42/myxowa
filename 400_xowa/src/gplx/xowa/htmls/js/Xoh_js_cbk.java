@@ -77,10 +77,10 @@ public class Xoh_js_cbk implements Gfo_invk {
 			if      (String_.Eq(mode, "init")) {
 				byte[] href_bry		= m.Args_getAt(2).Val_to_bry();
 				byte[] tooltip_bry	= m.Args_getAt(3).Val_to_bry();
-				return popup_mgr.Show_init(popups_id, href_bry, tooltip_bry);
+				return String_.new_u8(popup_mgr.Show_init(popups_id, href_bry, tooltip_bry, ""));
 			}
 			else if (String_.Eq(mode, "more")) 
-				return popup_mgr.Show_more(popups_id);
+				return String_.new_u8(popup_mgr.Show_more(popups_id));
 			else if (String_.Eq(mode, "all")) 
 				popup_mgr.Show_all(popups_id);
 			return "";
@@ -127,7 +127,7 @@ public class Xoh_js_cbk implements Gfo_invk {
 		Xowe_wiki wiki = html_itm.Owner_tab().Wiki();
 		byte[] search_str = Bry_.new_u8((String)m.ReadValAt(0));
 		byte[] cbk_func = Bry_.new_u8((String)m.ReadValAt(1));
-		app.Addon_mgr().Itms__search__htmlbar().Search(wiki, search_str, cbk_func);
+		app.Addon_mgr().Itms__search__htmlbar().Search_by_swt(wiki, search_str, cbk_func);
 		return "";
 	}
 	private String[] Wikidata_get_label(GfoMsg m) {
@@ -152,7 +152,7 @@ public class Xoh_js_cbk implements Gfo_invk {
 						if		(Bry_.Eq(lang_key, Wikidata_get_label_xowa_title))
 							val_bry = ttl_bry;
 						else {
-							val_bry = page.Label_list__get(lang_key);
+							val_bry = page.Get_label_bry_or_null(lang_key);
 						}
 						if (val_bry == null) continue;
 						rv[i - 1] = String_.new_u8(val_bry);

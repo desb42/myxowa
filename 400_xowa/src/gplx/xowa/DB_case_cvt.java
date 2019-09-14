@@ -20,10 +20,12 @@ public class DB_case_cvt {
 
 	public static byte[] Upper_1st(byte[] src, int pos, int src_len) { return Up_low_1st(src, pos, src_len, Bool_.Y); }
 	public static byte[] Lower_1st(byte[] src, int pos, int src_len) { return Up_low_1st(src, pos, src_len, Bool_.N); }
-		
+
 	public static byte[] Up_low_1st(byte[] src, int pos, int src_len, boolean upper) {
+		if (src_len == 0) return Bry_.Empty;
 		byte b = src[pos];
 		int b_len = gplx.core.intls.Utf8_.Len_of_char_by_1st_byte(b);
+		if (b_len > src_len) return Bry_.Empty; // bad unicode
 		return Upper_Lower_1st(src, pos, src_len, b_len, upper);
 	}
 	public static byte[] Upper_1st(byte[] src, int pos, int src_len, int b_len) {
@@ -55,13 +57,13 @@ public class DB_case_cvt {
 		}
 	}
 
-		public static byte[] Uppercase(byte[] src, int src_len) {
-			return Case_cvt(src, src_len, Bool_.Y);
-		}
-		public static byte[] Lowercase(byte[] src, int src_len) {
-			return Case_cvt(src, src_len, Bool_.N);
-		}
-		public static byte[] Case_cvt(byte[] src, int src_len, boolean upper) {
+	public static byte[] Uppercase(byte[] src, int src_len) {
+		return Case_cvt(src, src_len, Bool_.Y);
+	}
+	public static byte[] Lowercase(byte[] src, int src_len) {
+		return Case_cvt(src, src_len, Bool_.N);
+	}
+	public static byte[] Case_cvt(byte[] src, int src_len, boolean upper) {
 		Bry_bfr tmp_bfr = null;
 		int pos = 0;
 		while (pos < src_len) {
@@ -88,11 +90,11 @@ public class DB_case_cvt {
 				if (ucase != DB_case_cvt_.byte_NOCHANGE) {
 					tmp_bfr.Add(ucase);
 				} else {
-                                    if (b_len == 1)
-                                        tmp_bfr.Add_byte(b);
-                                    else
-					tmp_bfr.Add_mid(src, pos, pos + b_len);
-                                }
+					if (b_len == 1)
+						tmp_bfr.Add_byte(b);
+					else
+						tmp_bfr.Add_mid(src, pos, pos + b_len);
+				}
 			}
 			pos += b_len;
 		}

@@ -85,4 +85,7 @@ public class Xodb_load_mgr_sql implements Xodb_load_mgr {
 		return pid_tbl.Select_pid(lang_key, pid_name);
 	}
 	public void Clear() {}
+	public void Load_ttls_for_langs(List_adp rslt_list, Int_obj_ref rslt_count, Xow_ns ns, byte[] key) {
+		db_mgr.Core_data_mgr().Tbl__page().Select_for_languages(rslt_list, rslt_count, ns, key);
+	}
 }

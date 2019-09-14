@@ -67,6 +67,7 @@ public class Xoh_html_wtr {
 		lastParagraph = PARA_NONE;
 		DTopen = false;
 		inPre = false;
+                is_colon_inline = false;
 		this.Write_tkn(bfr, ctx, hctx, src, grp, sub_idx, tkn);
 	}
 	private void Write_tkn(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_tkn_grp grp, int sub_idx, Xop_tkn_itm tkn) {
@@ -549,10 +550,20 @@ public class Xoh_html_wtr {
 		switch (under.Under_tid()) {
 			case Xol_kwd_grp_.Id_toc:
 				if (cfg.Toc__show())
-					gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_placeholder(page, bfr);
+                                    page.Html_data().Toc_mgr().Toc_bgn_(bfr.Len());
+                                    page.Html_data().Toc_mgr().Exists_y_();
 				break;
-			case Xol_kwd_grp_.Id_notoc:	case Xol_kwd_grp_.Id_forcetoc:	// NOTE: skip output; changes flag on page only
-				break;
+			case Xol_kwd_grp_.Id_forcetoc:
+                            ctx.Page_data().Hdr_forcetoc_y_();
+                            page.Html_data().Toc_mgr().Hdr_forcetoc_y_();
+                            break;
+			case Xol_kwd_grp_.Id_notoc:
+                            ctx.Page_data().Hdr_notoc_y_();
+                            page.Html_data().Toc_mgr().Hdr_notoc_y_();
+                            break;
+			case Xol_kwd_grp_.Id_noeditsection:		break;	// ignore; not handling edit sections
+			case Xol_kwd_grp_.Id_nocontentconvert:	ctx.Page_data().Lang_convert_content_(false); break;
+			case Xol_kwd_grp_.Id_notitleconvert:	ctx.Page_data().Lang_convert_title_(false); break;
 		}
 	}
 	private void Xnde(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_xnde_tkn xnde) {

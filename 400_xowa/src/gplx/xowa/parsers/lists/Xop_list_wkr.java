@@ -35,9 +35,8 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		// Multiple prefixes may abut each other for nested lists.
 		while (cur_pos < src_len) {
 			byte b = src[cur_pos];
-			if (b == Byte_ascii.Star || b == Byte_ascii.Hash || b == Byte_ascii.Semic || b == Byte_ascii.Colon) {
-                            cur_pos++;
-                        }
+			if (b == Byte_ascii.Star || b == Byte_ascii.Hash || b == Byte_ascii.Semic || b == Byte_ascii.Colon)
+				cur_pos++;
 			else
 				break;
 		}
@@ -46,6 +45,19 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		Xop_list_tkn_new itm = new Xop_list_tkn_new(bgn_pos + 1, cur_pos, ctx.Page().Prev_list_tkn());
 		ctx.Subs_add_and_stack(root, itm);
 		ctx.Page().Prev_list_tkn_(itm);
+/*		// peek ahead for a table eg :{|
+		int peek_pos = cur_pos;
+		while (peek_pos < src_len) {
+			byte b = src[peek_pos];
+			if (b == Byte_ascii.Space || b == Byte_ascii.Tab)
+				cur_pos++;
+			else
+				break;
+		}
+		if (peek_pos + 2 < src_len) {
+			if (src[peek_pos] == '{' && src[peek_pos+1] == '|')
+				cur_pos = make_table()
+		}*/
 		return cur_pos;
 	}
 }

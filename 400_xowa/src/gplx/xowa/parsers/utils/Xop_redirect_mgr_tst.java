@@ -62,7 +62,7 @@ class Xop_redirect_mgr_fxt {
 		fxt.Init_page_create(redirect_ttl, "test");										// create redirect_trg
 		fxt.Test_parse_page_tmpl_tkn("{{" + tmpl_ttl_str + "}}");						// parse {{redirect_src}}
 		Xoa_ttl tmpl_ttl = Xoa_ttl.Parse(fxt.Wiki(), Bry_.new_u8(tmpl_ttl_str));
-		Xot_defn_tmpl defn_tmpl = (Xot_defn_tmpl)fxt.Wiki().Cache_mgr().Defn_cache().Get_by_key(tmpl_ttl.Page_db());	// get defn (which parse should have created)
+		Xot_defn_tmpl defn_tmpl = (Xot_defn_tmpl)fxt.Wiki().Cache_mgr().Defn_cache().Get_by_key(tmpl_ttl.Page_db(), (byte)1/*Xow_ns_case_.Tid__1st*/);	// get defn (which parse should have created)
 		Tfds.Eq(expd_frame_ttl, String_.new_u8(defn_tmpl.Frame_ttl()));				// check frame_ttl
 	}
 	public void Test_redirect(String raw_str, String expd_str) {

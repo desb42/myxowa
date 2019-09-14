@@ -230,6 +230,17 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		try		{return rv.Parse(bfr, amp_mgr, case_mgr, xwiki_mgr, ns_mgr, src, bgn, end) ? rv : null;}
 		finally {bfr.Mkr_rls();}
 	}
+	private int stripwhitespace(Bry_bfr bfr, int txt_bb_len) {
+		byte[] buf = bfr.Bfr();
+		while (txt_bb_len > 0) {
+			if (buf[txt_bb_len - 1] == Byte_ascii.Space)
+				txt_bb_len--;
+			else
+				break;
+		}
+		bfr.Len_(txt_bb_len);
+		return txt_bb_len;
+	}
 	private boolean Parse(Bry_bfr bfr, Xop_amp_mgr amp_mgr, Xol_case_mgr case_mgr, Xow_xwiki_mgr xwiki_mgr, Xow_ns_mgr ns_mgr, byte[] src, int bgn, int end) {
 		/* This proc will
 		- identify all parts: Wiki, Namespace, Base/Leaf, Anchor; it will also identify Subject/Talk ns 
@@ -248,6 +259,15 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		Gfo_url_encoder anchor_encoder = null;
 		Bry_bfr anchor_encoder_bfr = null;
 		bfr.Clear();
+/*		// quick trailing whitespace removal (or &#32;)
+		while (end > 0) {
+			if (src[end-1] == ' ')
+				end--;
+			else if (end > 4 && src[end-5] == '&' && src[end-4] == '#' && src[end-3] == '3' && src[end-2] == '2' && src[end-1] == ';')
+				end -= 5;
+			else
+				break;
+		}*/
 		if (end - bgn == 0) return false;
 		this.raw = src;
 		ns = ns_mgr.Ns_main();
@@ -311,8 +331,11 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 						break;
 					}
 				case Byte_ascii.Hash: 
-					if (anch_bgn == -1)	// anchor begins at 1st #, not last #; EX:A#B#C has anchor of "B#C" not "C" PAGE:en.w:Grand_Central_Terminal; DATE:2015-12-31
+					if (anch_bgn == -1) {	// anchor begins at first #, not last #; EX:A#B#C has anchor of "B#C" not "C" PAGE:en.w:Grand_Central_Terminal; DATE:2015-12-31
+						// remove any trailing whitespace from the bfr
+						txt_bb_len = stripwhitespace(bfr, txt_bb_len);
 						anch_bgn = (txt_bb_len) + 1; 
+					}
 					break;
 				case Byte_ascii.Slash:
 					if (root_bgn == -1)
@@ -336,7 +359,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 					else {
 						if (trv == null) trv = new Btrie_rv();
 						Object html_ent_obj = amp_trie.Match_at(trv, src, cur2, end);
-						if (html_ent_obj != null) {									
+						if (html_ent_obj != null) {
 							Gfh_entity_itm amp_itm = (Gfh_entity_itm)html_ent_obj;
 							match_pos = trv.Pos();
 							if (amp_itm.Tid() == Gfh_entity_itm.Tid_name_std) {
@@ -357,7 +380,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 										int end_pos = Bry_find_.Find_fwd(src, Byte_ascii.Semic, match_pos, end);
 										if (end_pos == Bry_find_.Not_found) {} // &# but no terminating ";" noop: defaults to current_byte which will be added below;
 										else {
-											b_ary = amp_itm.Xml_name_bry();									
+											b_ary = amp_itm.Xml_name_bry();
 											match_pos = end_pos + 1;
 										}
 										break;
@@ -371,8 +394,13 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 								amp_mgr.Parse_ncr(amp_rv, amp_itm.Tid() == Gfh_entity_itm.Tid_num_hex, src, end, cur2, match_pos);
 								if (amp_rv.Pass()) {
 									b_ary = gplx.core.intls.Utf16_.Encode_int_to_bry(amp_rv.Val());
-									if (b_ary.length == 1 && b_ary[0] == Byte_ascii.Hash)	// NOTE: A&#x23;B should be interpreted as A#b; PAGE:en.s:The_English_Constitution_(1894) DATE:2014-09-07
-										anch_bgn = (txt_bb_len) + 1; 
+									if (b_ary.length == 1 && b_ary[0] == Byte_ascii.Hash) {	// NOTE: A&#x23;B should be interpreted as A#b; PAGE:en.s:The_English_Constitution_(1894) DATE:2014-09-07
+										// provided there is no anchor already
+										if (anch_bgn == -1) {
+											txt_bb_len = stripwhitespace(bfr, txt_bb_len);
+											anch_bgn = (txt_bb_len) + 1; 
+										}
+									}
 									match_pos = amp_rv.Pos();
 								}
 							}
@@ -451,6 +479,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				ltr_bgn = -1;
 			}
 		}
+		txt_bb_len = stripwhitespace(bfr, txt_bb_len);
 		if (txt_bb_len == 0) return false;
 		if (wik_bgn == -1 && page_bgn == txt_bb_len) return false;	// if no wiki, but page_bgn is at end, then ttl is ns only; EX: "Help:"; NOTE: "fr:", "fr:Help" is allowed 
 		full_txt = bfr.To_bry_and_clear();

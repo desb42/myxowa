@@ -25,7 +25,7 @@ import java.io.OutputStream; import java.io.FileOutputStream; import java.io.Fil
 import java.io.BufferedReader; import java.io.*;
 import java.util.Stack;
 import gplx.xowa.htmls.*;
-class Http_server_wkr implements Gfo_invk {
+public class Http_server_wkr implements Gfo_invk {
 	private final    int uid;
 	private final    Http_server_mgr server_mgr;
 	private final    Http_server_wtr server_wtr;
@@ -35,7 +35,7 @@ class Http_server_wkr implements Gfo_invk {
 	private final    Gfo_url_encoder url_encoder;
 	private final    Xoae_app app;
 	private final    String root_dir_http;
-	private final    byte[] root_dir_fsys;
+	private static   byte[] root_dir_fsys;
 	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(64);
 	private Socket_adp socket;
 	private Http_data__client data__client;
@@ -113,29 +113,29 @@ class Http_server_wkr implements Gfo_invk {
 		}
 		else {
 			page_html = app.Http_server().Parse_page_to_html(data__client, url_parser);
-                        if (page_html == null) {
-                            page_html = "Strange! no data";
-                        } else {
-			page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()));
-			if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // chage some more things
-				page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
-				page_html = String_.Replace(page_html, "<a href=\"/exec/app.gui.main_win.page_edit_preview;\""	, "<input type='submit' tabindex='4' title='Preview your changes. Please use this before saving.' name='wpPreview' id='wpPreview' value='Show preview' class='oo-ui-inputWidget-input oo-ui-buttonElement-button' /><a href=\"/exec/app.gui.main_win.page_edit_preview;\"");
-				page_html = String_.Replace(page_html, "<textarea", "<textarea name=\"wpTextbox1\"");
+			if (page_html == null) {
+				page_html = "Strange! no data";
+			} else {
+				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()));
+				if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // chage some more things
+					page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
+					page_html = String_.Replace(page_html, "<a href=\"/exec/app.gui.main_win.page_edit_preview;\""	, "<input type='submit' tabindex='4' title='Preview your changes. Please use this before saving.' name='wpPreview' id='wpPreview' value='Show preview' class='oo-ui-inputWidget-input oo-ui-buttonElement-button' /><a href=\"/exec/app.gui.main_win.page_edit_preview;\"");
+					page_html = String_.Replace(page_html, "<textarea", "<textarea name=\"wpTextbox1\"");
+				}
 			}
-                        }
 		}
-                writeFile(page_html, "d:/des/xowa_x/html.htm");
+		writeFile(page_html, "d:/des/xowa_x/html.htm");
 		Xosrv_http_wkr_.Write_response_as_html(client_wtr, Bool_.N, page_html);
 	}
 	private void Process_post(Http_request_itm request, byte[] url_bry) {
 		int question_pos = Bry_find_.Find_fwd(url_bry, Byte_ascii.Question);
-                if (question_pos == Bry_find_.Not_found)
-                    Process_exec_post(request);
-                else
-                    Process_other_post(request, url_bry, question_pos);
-        }
+		if (question_pos == Bry_find_.Not_found)
+			Process_exec_post(request);
+		else
+			Process_other_post(request, url_bry, question_pos);
+	}
 	private void Process_other_post(Http_request_itm request, byte[] url_bry, int question_pos) {
-                byte[] msg = request.Post_data_hash().Get_by(Key__tbox).Val();
+		byte[] msg = request.Post_data_hash().Get_by(Key__tbox).Val();
 		url_encoder.Decode(tmp_bfr, Bool_.N, url_bry, 0, question_pos);
 		byte[] req = tmp_bfr.To_bry_and_clear();
 		String wiki_domain = ""; String page_name = "";
@@ -143,17 +143,17 @@ class Http_server_wkr implements Gfo_invk {
 		if(req_split.length >= 1){
 			wiki_domain = req_split[1];
 		}
-		if(req_split.length >= 4){
+		if (req_split.length >= 4) {
 			page_name = req_split[3];
 			for(int i = 4; i <= req_split.length-1; i++){
 				page_name += "/" + req_split[i];
 			}
 		}
-                server_wtr.Write_str_w_nl(String_.new_u8(request.Host()) + "|POST|" + page_name);
- 		String page_html = app.Http_server().Preview_page_to_html(data__client, Bry_.new_u8(wiki_domain), Bry_.new_u8(page_name), msg);
+		server_wtr.Write_str_w_nl(String_.new_u8(request.Host()) + "|POST|" + page_name);
+		String page_html = app.Http_server().Preview_page_to_html(data__client, Bry_.new_u8(wiki_domain), Bry_.new_u8(page_name), msg);
 		page_html = Convert_page(page_html, root_dir_http, wiki_domain);
 		Xosrv_http_wkr_.Write_response_as_html(client_wtr, Bool_.N, page_html);
-        }
+	}
 	private static final    byte[] Key__tbox = Bry_.new_a7("wpTextbox1");
 	private void Process_exec_post(Http_request_itm request) {
 		byte[] msg = request.Post_data_hash().Get_by(Key__msg).Val();
@@ -180,50 +180,39 @@ class Http_server_wkr implements Gfo_invk {
 	.Add_str_int("/exec/json"	, Tid_post_url_json)
 	.Add_str_int("/exec/gfs"	, Tid_post_url_gfs)
 	;
-        private static String karto = "<span title=\"Map for this &#39;listing&#39; marker\"><a class=\"mw-kartographer-maplink mw-kartographer-autostyled\" mw-data=\"interface\" data-style=\"osm-intl\" href=\"/wiki/Special:Map/17/37.8013/-122.3988/en\" data-zoom=\"17\" data-lat=\"37.8013\" data-lon=\"-122.3988\" style=\"background: #228B22;\" data-overlays=\"[&quot;mask&quot;,&quot;around&quot;,&quot;buy&quot;,&quot;city&quot;,&quot;do&quot;,&quot;drink&quot;,&quot;eat&quot;,&quot;go&quot;,&quot;listing&quot;,&quot;other&quot;,&quot;see&quot;,&quot;sleep&quot;,&quot;vicinity&quot;,&quot;view&quot;,&quot;black&quot;,&quot;blue&quot;,&quot;brown&quot;,&quot;chocolate&quot;,&quot;forestgreen&quot;,&quot;gold&quot;,&quot;gray&quot;,&quot;grey&quot;,&quot;lime&quot;,&quot;magenta&quot;,&quot;maroon&quot;,&quot;mediumaquamarine&quot;,&quot;navy&quot;,&quot;red&quot;,&quot;royalblue&quot;,&quot;silver&quot;,&quot;steelblue&quot;,&quot;teal&quot;,&quot;fuchsia&quot;]\">1</a>&#32;</span>";
+	private static String karto = "<span title=\"Map for this &#39;listing&#39; marker\"><a class=\"mw-kartographer-maplink mw-kartographer-autostyled\" mw-data=\"interface\" data-style=\"osm-intl\" href=\"/wiki/Special:Map/17/37.8013/-122.3988/en\" data-zoom=\"17\" data-lat=\"37.8013\" data-lon=\"-122.3988\" style=\"background: #228B22;\" data-overlays=\"[&quot;mask&quot;,&quot;around&quot;,&quot;buy&quot;,&quot;city&quot;,&quot;do&quot;,&quot;drink&quot;,&quot;eat&quot;,&quot;go&quot;,&quot;listing&quot;,&quot;other&quot;,&quot;see&quot;,&quot;sleep&quot;,&quot;vicinity&quot;,&quot;view&quot;,&quot;black&quot;,&quot;blue&quot;,&quot;brown&quot;,&quot;chocolate&quot;,&quot;forestgreen&quot;,&quot;gold&quot;,&quot;gray&quot;,&quot;grey&quot;,&quot;lime&quot;,&quot;magenta&quot;,&quot;maroon&quot;,&quot;mediumaquamarine&quot;,&quot;navy&quot;,&quot;red&quot;,&quot;royalblue&quot;,&quot;silver&quot;,&quot;steelblue&quot;,&quot;teal&quot;,&quot;fuchsia&quot;]\">1</a>&#32;</span>";
 	private static String Convert_page(String page_html, String root_dir_http, String wiki_domain) {
-		page_html = String_.Replace(page_html, root_dir_http		, "/fsys/");
+		//page_html = String_.Replace(page_html, root_dir_http		, "/fsys/");
 		page_html = String_.Replace(page_html, "xowa-cmd:"			, "/exec/");
 		page_html = String_.Replace(page_html, " href=\"/wiki/"	, " href=\"/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, " href='/wiki/"	, " href='/" + wiki_domain + "/wiki/");
 		//page_html = String_.Replace(page_html, "<area href=\"/wiki/"	, "<area href=\"/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, "action=\"/wiki/"	, "action=\"/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, "/site"				, "");
-                // should check to see if these have been downloaded somehow
+		// should check to see if these have been downloaded somehow
 		page_html = String_.Replace(page_html, "https://www.wikidata.org"	, "/www.wikidata.org");
 		page_html = String_.Replace(page_html, "https://commons.wikimedia.org"	, "/commons.wikimedia.org");
+		page_html = String_.Replace(page_html, "https://" + wiki_domain	, "/" + wiki_domain);
 
-                page_html = String_.Replace(page_html, "/fsys/file/commons.wikimedia.org/thumb/2/1/1/9/Speaker_Icon.svg/20px.png", "/fsys/file/commons.wikimedia.org/orig/2/1/1/9/Speaker_Icon.svg");
-                //page_html = page_html.replaceAll("\n +", "\n");
-                page_html = String_.Replace(page_html, ".3B", ";");
-                //page_html = collapser(page_html);
-                page_html = tablecaption(page_html);
-                page_html = page_html.replaceAll("</p>\\s*<p>", "</p><p>");
-                page_html = page_html.replaceAll("</div>\\s*<div", "</div><div");
-                page_html = filelink(page_html, wiki_domain);
-                //page_html = blockquote(page_html);
+		//page_html = String_.Replace(page_html, "/fsys/file/commons.wikimedia.org/thumb/2/1/1/9/Speaker_Icon.svg/20px.png", "/fsys/file/commons.wikimedia.org/orig/2/1/1/9/Speaker_Icon.svg");
+		//page_html = page_html.replaceAll("\n +", "\n");
+		page_html = String_.Replace(page_html, ".3B", ";");
+		//page_html = collapser(page_html);
+		page_html = tablecaption(page_html);
+		page_html = page_html.replaceAll("</p>\\s*<p>", "</p><p>");
+		page_html = page_html.replaceAll("</div>\\s*<div", "</div><div");
+		//[replaced]page_html = page_html.replaceAll("\"file\\:.*?/file/", "\"/fsys/file/");
+
+		page_html = page_html.replaceAll("\"/fsys/file/([^\"]*?\\.svg)/([0-9]*)px.*?\"", "\"/SVG/$1\"");
+
+		//page_html = blockquote(page_html);
 		//page_html = String_.Replace(page_html, "\"mw-parser-output\">", karto);
-                //Xoh_css_minify mini = new Xoh_css_minify();
-                //String css = mini.readFileAsString("d:/des/xowa_x/csstest.txt");
-                //System.out.println(mini.cssmin(css, 0));
-                perform();
+		//Xoh_css_minify mini = new Xoh_css_minify();
+		//String css = mini.readFileAsString("d:/des/xowa_x/csstest.txt");
+		//System.out.println(mini.cssmin(css, 0));
+		//perform();
 		return page_html;
 	}
-        private static String filelink(String html, String wiki_domain)
-        {
-            String typ;
-            String rep;
-            String ptn = "\"file\\:.*?/" + wiki_domain.replaceAll("\\.", "\\\\.") + "/";
-            Pattern p = Pattern.compile(ptn);
-            Matcher m = p.matcher(html);
-            StringBuffer sb = new StringBuffer();
-            while (m.find())
-            {
-                m.appendReplacement(sb, "/" + wiki_domain + "/");
-            }
-            m.appendTail(sb);
-            return sb.toString();
-        }
         private static String collapser(String html)
         {
             String typ;
@@ -360,14 +349,89 @@ class Http_server_wkr implements Gfo_invk {
                 System.out.println(c1.equals(c2));
                 System.out.println(c1);
         }
-        public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
+
+	private static final    byte[]
+	  Bry__file_lhs = Bry_.new_a7("file:///")
+	, Bry__file_mid = Bry_.new_a7("/file/")
+	, Bry__file_fsys = Bry_.new_a7("/fsys")
+	;
+
+	public static byte[] Replace_fsys_hack(byte[] html_bry) {
+		// init
+		Bry_bfr bfr = Bry_bfr_.New();
+		int len = html_bry.length;
+		int pos = 0;
+		//writeFile(String_.new_u8(html_bry), "d:/des/xowa_x/xxhtml.htm");
+
+		// loop while finding "file:///.*/file/"
+		// or root_dir_fsys
+		while (true) {
+			// find "file:"
+			int lhs_bgn = Bry_find_.Find_fwd(html_bry, Bry__file_lhs, pos);
+
+			// exit if nothing found
+			if (lhs_bgn == Bry_find_.Not_found) 
+				break;
+
+			// set lhs_end (after "file:///")
+			int lhs_end = lhs_bgn + Bry__file_lhs.length;
+
+			// skip if page literally starts with "file:///"
+			if (lhs_bgn == 0) {
+				bfr.Add_mid(html_bry, pos, lhs_end);
+				pos = lhs_end;
+				continue;
+			}
+
+			int mid_bgn;
+			// is this the local root
+			if (Bry_.Has_at_bgn(html_bry, root_dir_fsys, lhs_end, len)) {
+				mid_bgn = lhs_end + root_dir_fsys.length - 1;
+			} else {
+				// find "/file/"
+				mid_bgn = Bry_find_.Find_fwd(html_bry, Bry__file_mid, lhs_bgn, len);
+				
+				// skip if no "/file/"
+				if (mid_bgn == Bry_find_.Not_found) {
+					mid_bgn = -2;
+				}
+				// skip if "'file:/// ... '" is too long. should be no more than 300
+				if (mid_bgn - lhs_end > 300) {
+					mid_bgn = -2;
+				}
+			}
+
+			// add everything up to "file:"
+			bfr.Add_mid(html_bry, pos, lhs_bgn);
+
+			// have we a valid mid_bgn
+			if (mid_bgn == -2) {
+				bfr.Add_mid(html_bry, lhs_bgn, lhs_end);
+				pos = lhs_end;
+			} else {
+				// add "/fsys/"
+				bfr.Add(Bry__file_fsys);
+				
+				// move pos forward
+				pos = mid_bgn;
+			}
+		}
+
+		// add rest
+		bfr.Add_mid(html_bry, pos, len);
+		return bfr.To_bry_and_clear();
+	}
+	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_run)) {this.Run();}
 		else	return Gfo_invk_.Rv_unhandled;
 		return this;
 	}	public static final String Invk_run = "run";
 	private static final    byte[] 
-	  Url__home = Bry_.new_a7("/"), Url__fsys = Bry_.new_a7("/fsys/")
+	  Url__home = Bry_.new_a7("/")
 	, Url__exec = Bry_.new_a7("/exec/"), Url__exec_2 = Bry_.new_a7("/xowa-cmd:")
+	;
+	public static final    byte[]
+	  Url__fsys = Bry_.new_a7("/fsys/")
 	;
 	private static final    int Url__fsys_len = Url__fsys.length;
 }

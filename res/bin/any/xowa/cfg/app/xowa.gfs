@@ -142,7 +142,7 @@ app.wikis.get('~{wiki_key}').html.portal {
 <:["
   <div id="p-personal" class="">
     <h3>~{<>msgs.get('personaltools');<>}</h3>
-    <ul><li>~{pagetype}</li></ul>
+    ~{portal_indicators_pagesource}
   </div>
 "]:>
 ;

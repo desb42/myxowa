@@ -63,7 +63,7 @@ public class Pfunc_filepath extends Pf_func_base {
 
 		// add to cache
 		cache_itm = new Pfunc_filepath_itm(page.Db().Page().Exists(), cache_key);
-		cache_mgr.Add(cache_key, cache_itm, 1);
+		cache_mgr.Add_replace(cache_key, cache_itm, 1);
 		return cache_itm;
 	}
 }

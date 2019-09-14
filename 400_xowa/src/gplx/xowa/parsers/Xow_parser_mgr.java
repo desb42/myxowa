@@ -22,6 +22,7 @@ import gplx.xowa.xtns.math.*; import gplx.xowa.parsers.uniqs.*; import gplx.xowa
 public class Xow_parser_mgr {
 	private final    Object thread_lock = new Object();
 	private final    Xowe_wiki wiki; private final    Xop_tkn_mkr tkn_mkr;
+        private        Db_parser dbp = new Db_parser();
 	public Xow_parser_mgr(Xowe_wiki wiki) {
 		this.wiki = wiki; this.tkn_mkr = wiki.Appe().Parser_mgr().Tkn_mkr();
 		this.ctx = Xop_ctx.New__top(wiki);
@@ -95,10 +96,11 @@ public class Xow_parser_mgr {
 			page.Clear_all();
 		}
 		Xoa_ttl ttl = page.Ttl();
+                //Thread currentThread = Thread.currentThread();
+                //System.out.println(currentThread.getName()+"-"+String_.new_u8(ttl.Full_db()));
 		if (	Xow_page_tid.Identify(wiki.Domain_tid(), ttl.Ns().Id(), ttl.Page_db()) == Xow_page_tid.Tid_wikitext) {	// only parse page if wikitext; skip .js, .css, Module; DATE:2013-11-10
 			byte[] data_raw = page.Db().Text().Text_bry();
-//                        Db_parser dbp = new Db_parser();
-//                        data_raw = dbp.firstpass(ctx, data_raw);
+			data_raw = dbp.stripcomments(data_raw);
 			parser.Parse_text_to_wdom(root, ctx, tkn_mkr, data_raw , Xop_parser_.Doc_bgn_bos);
 		}
 		page.Root_(root);

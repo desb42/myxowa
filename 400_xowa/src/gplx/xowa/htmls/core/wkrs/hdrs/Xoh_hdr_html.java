@@ -40,7 +40,8 @@ public class Xoh_hdr_html {
 			&&	cfg.Toc__show() 
 			&&	page.Wtxt().Toc().Enabled()
 			&&	!page.Wtxt().Toc().Flag__toc())	// __TOC__ not specified; place at top; NOTE: if __TOC__ was specified, then it would be placed wherever __TOC__ appears
-			gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_placeholder(page, bfr);
+			//gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_placeholder(page, bfr.Len());
+                    page.Html_data().Toc_mgr().Toc_default_(bfr.Len());
 
 		// write <h#><span>
 		if (hdr_is_valid) {													// NOTE: need to check hdr_num b/c it could be dangling

@@ -79,7 +79,7 @@ public class Srl__tst {// see also FOOTNOTE:VIEWING_WIKIDATA_JSON
 		,	"  }"
 		,	"}"
 		);
-		Wdata_doc wdoc = new Wdata_doc(Bry_.new_a7("q2"), fxt.Wdata_fxt().App().Wiki_mgr().Wdata_mgr(), jdoc);
+		Wdata_doc wdoc = new Wdata_doc(fxt.Wdata_fxt().App().Wiki_mgr().Wdata_mgr(), jdoc, Bry_.new_a7("q2"));
 		fxt.Test
 		(	wdoc
 		,	"sitelinks:"
@@ -328,7 +328,7 @@ public class Srl__tst {// see also FOOTNOTE:VIEWING_WIKIDATA_JSON
 	}
 	@Test   public void Qualifiers() {
 		Wdata_wiki_mgr_fxt wdata_fxt = fxt.Wdata_fxt();
-		/*fxt.Init_prop
+		fxt.Init_prop
 		(	wdata_fxt.Make_claim_string(2, "Earth")
 			.Qualifiers_
 			(	wdata_fxt.Make_qualifiers
@@ -342,7 +342,7 @@ public class Srl__tst {// see also FOOTNOTE:VIEWING_WIKIDATA_JSON
 			)
 			.Qualifiers_order_(Int_ary_.New(3, 1))
 		)
-		;*/
+		;
 		fxt.Test
 		(	"claims:"
 		,	"  P2:"

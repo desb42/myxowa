@@ -393,6 +393,7 @@ public class Xodb_load_mgr_txt implements Xodb_load_mgr {
 		return tmp_xdat_itm.Found_exact() ? tmp_xdat_itm : null;
 	}
 	public Xodb_page_rdr Get_page_rdr(Xowe_wiki wiki) {return new Xodb_page_rdr__tdb(wiki);}
+	public void Load_ttls_for_langs(List_adp rslt_list, Int_obj_ref rslt_count, Xow_ns ns, byte[] key) {}
 	static final String GRP_KEY = "xowa.wiki.db.load";
 }
 class Xob_random_itm {

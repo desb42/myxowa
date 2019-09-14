@@ -15,11 +15,12 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.htmls.modules.popups; import gplx.*; import gplx.xowa.*; import gplx.xowa.htmls.*; import gplx.xowa.htmls.modules.*;
 public class Xow_popup_itm implements Cancelable {
-	public Xow_popup_itm(String popup_id, byte[] page_href, byte[] tooltip, int init_words_needed) {
+	public Xow_popup_itm(String popup_id, byte[] page_href, byte[] tooltip, int init_words_needed, String popup_link) {
 		this.popup_id = popup_id;
 		this.words_needed = init_words_needed;
 		this.page_href = page_href;
 		this.tooltip = tooltip;
+                this.popup_link = popup_link;
 	}
 	public boolean Canceled() {return canceled;} private boolean canceled = false;
 	public void Cancel() {canceled = true;}
@@ -36,6 +37,7 @@ public class Xow_popup_itm implements Cancelable {
 		return this;
 	}
 	public String Popup_id() {return popup_id;} private String popup_id;
+	public String Popup_link() {return popup_link;} private String popup_link;
 	public byte[] Popup_html() {return popup_html;} public void Popup_html_(byte[] v) {popup_html = v;} private byte[] popup_html;
 	public byte[] Tooltip() {return tooltip;} private byte[] tooltip;
 	public byte[] Wiki_domain() {return wiki_domain;} private byte[] wiki_domain;

@@ -43,10 +43,10 @@ class Wdata_fmtr__claim_grp implements gplx.core.brys.Bfr_arg {
 	}
 	private Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "  <h2 class='wb-section-heading' dir='auto' id='~{hdr_href}'>~{hdr_text}~{toggle_btn}</h2>"
-	, "  <div class='wb-claimlistview'~{toggle_hdr}>"
-	, "    <div class='wikibase-statementgrouplistview'>"
-	, "      <div class='wikibase-listview'>~{tbls}"
+	, "  <h2 class=\"wb-section-heading\" dir=\"auto\" id=\"~{hdr_href}\">~{hdr_text}~{toggle_btn}</h2>"
+	, "  <div class=\"wb-claimlistview\"~{toggle_hdr}>"
+	, "    <div class=\"wikibase-statementgrouplistview\">"
+	, "      <div class=\"wikibase-listview\">~{tbls}"
 	, "      </div>"
 	, "    </div>"
 	, "  </div>"
@@ -76,10 +76,10 @@ class Wdata_fmtr__claim_tbl implements gplx.core.brys.Bfr_arg {
 	}
 	private Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "            <div id='P~{pid}' class='wikibase-statementgroupview'>"
-	, "              <div class='wikibase-statementgroupview-property'>"
-	, "                <div class='wikibase-statementgroupview-property-label' dir='auto'>"
-	, "                  P~{pid}&nbsp;-&nbsp;<a href='/wiki/Property:P~{pid}' title='Property:P~{pid}'>~{pid_lbl}</a>"
+	, "            <div id=\"P~{pid}\" class=\"wikibase-statementgroupview\">"
+	, "              <div class=\"wikibase-statementgroupview-property\">"
+	, "                <div class=\"wikibase-statementgroupview-property-label\" dir=\"auto\">"
+	, "                  P~{pid}&nbsp;-&nbsp;<a href=\"/wiki/Property:P~{pid}\" title=\"Property:P~{pid}\">~{pid_lbl}</a>"
 	, "                </div>"
 	, "              </div>~{itms}"
 	, "            </div>"
@@ -166,8 +166,8 @@ class Wdata_fmtr__qual_tbl implements gplx.core.brys.Bfr_arg {
 	}
 	private Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "                  <div class='wikibase-statementview-qualifiers'>"
-	, "                    <div class='wikibase-listview'>~{itms}"
+	, "                  <div class=\"wikibase-statementview-qualifiers\">"
+	, "                    <div class=\"wikibase-listview\">~{itms}"
 	, "                    </div>"
 	, "                  </div>"
 	), "itms");
@@ -196,17 +196,17 @@ class Wdata_fmtr__qual_row implements gplx.core.brys.Bfr_arg {
 	}
 	private Bry_fmtr row_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "                      <div class='wikibase-snaklistview'>"
-	, "                        <div class='wikibase-snaklistview-listview'>"
-	, "                          <div class='wikibase-snakview'>"
-	, "                            <div class='wikibase-snakview-property-container'>"
-	, "                              <div class='wikibase-snakview-property' dir='auto'>"
-	, "                                <a href='/wiki/Property:P~{pid}' title='Property:P~{pid}'>~{pid_lbl}</a>"
+	, "                      <div class=\"wikibase-snaklistview\"'>"
+	, "                        <div class=\"wikibase-snaklistview-listview\">"
+	, "                          <div class=\"wikibase-snakview\">"
+	, "                            <div class=\"wikibase-snakview-property-container\">"
+	, "                              <div class=\"wikibase-snakview-property\" dir=\"auto\">"
+	, "                                <a href=\"/wiki/Property:P~{pid}\" title=\"Property:P~{pid}\">~{pid_lbl}</a>"
 	, "                              </div>"
 	, "                            </div>"
-	, "                            <div class='wikibase-snakview-value-container' dir='auto'>"
-	, "                              <div class='wikibase-snakview-typeselector'></div>"
-	, "                              <div class='wikibase-snakview-value wikibase-snakview-variation-valuesnak'>~{value}"
+	, "                            <div class=\"wikibase-snakview-value-container\" dir=\"auto\">"
+	, "                              <div class=\"wikibase-snakview-typeselector\"></div>"
+	, "                              <div class=\"wikibase-snakview-value wikibase-snakview-variation-valuesnak\">~{value}"
 	, "                              </div>"
 	, "                            </div>"
 	, "                          </div>"
@@ -232,13 +232,13 @@ class Wdata_fmtr__ref_tbl implements gplx.core.brys.Bfr_arg {
 	private Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
 //		, "                <div class='wb-statement-references-heading'>1 reference</div>"
-	, "                <div class='wikibase-statementview-references'>"
-	, "                  <div class='wikibase-listview'>"
-	, "                    <div class='wikibase-referenceview'>"	// OMIT: wb-referenceview-8e7d51e38606193465d2a1e9d41ba490e06682a6
-	, "                      <div class='wikibase-referenceview-heading'></div>"
-	, "                      <div class='wikibase-referenceview-listview'>"
-	, "                        <div class='wikibase-snaklistview'>"
-	, "                          <div class='wikibase-snaklistview-listview'>~{itms}"
+	, "                <div class=\"wikibase-statementview-references\">"
+	, "                  <div class=\"wikibase-listview\">"
+	, "                    <div class=\"wikibase-referenceview\">"	// OMIT: wb-referenceview-8e7d51e38606193465d2a1e9d41ba490e06682a6
+	, "                      <div class=\"wikibase-referenceview-heading\"></div>"
+	, "                      <div class=\"wikibase-referenceview-listview\">"
+	, "                        <div class=\"wikibase-snaklistview\">"
+	, "                          <div class=\"wikibase-snaklistview-listview\">~{itms}"
 	, "                          </div>"
 	, "                        </div>"
 	, "                      </div>"

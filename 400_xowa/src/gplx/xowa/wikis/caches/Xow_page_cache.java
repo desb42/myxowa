@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.wikis.caches; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*;
 import gplx.core.caches.*;
 public class Xow_page_cache {
+        private Db_parser dbp = new Db_parser();
 	private final    Object thread_lock = new Object(); // NOTE: thread-safety needed for xomp since one page-cache is shared across all wkrs
 	private final    Xowe_wiki wiki;
 	private final    Lru_cache cache;
@@ -32,7 +33,7 @@ public class Xow_page_cache {
 
 	public void Add_itm(String ttl_full_db, Xow_page_cache_itm itm) {
 		synchronized (thread_lock) {
-			cache.Set(ttl_full_db, itm, itm.Cache_len());
+			cache.Set(ttl_full_db, itm, 20/*itm.Cache_len()*/);
 		}
 	}
 	public Xow_page_cache_itm Get_itm_or_null(String ttl_full_db) {
@@ -50,8 +51,10 @@ public class Xow_page_cache {
 				cache_misses++;
 				return Load_page(ttl);
 			}
-			else
+			else {
+				rv.Access_count_increment();
 				return rv;
+			}
 		}
 	}
 	public byte[] Get_src_else_load_or_null(Xoa_ttl ttl) {
@@ -64,6 +67,7 @@ public class Xow_page_cache {
 		synchronized (thread_lock) {	// LOCK:app-level; DATE:2016-07-06
 			if (clear_permanent_itms) {
 				cache.Clear_all();
+				Xow_page_cache_itm.Reset();
 			}
 		}
 	}
@@ -98,6 +102,7 @@ public class Xow_page_cache {
 
 		// create item
 		if (page_exists) {
+			//page_text = dbp.stripcomments(page_text);
 			rv = new Xow_page_cache_itm(false, page_id, page_ttl, page_text, page_redirect_from);
 			Add_itm(ttl.Full_db_as_str(), rv);
 		}

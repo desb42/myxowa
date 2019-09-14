@@ -102,6 +102,7 @@ public class Pgbnr_func extends Pf_func_base {
 		page.Html_data().Xtn_pgbnr_(itm);
 		page.Html_data().Head_mgr().Itm__pgbnr().Enabled_y_();	// register css / js during parse stage
 		page.Wtxt().Toc().Flag__toc_(true);	// NOTE: must mark toc_manual else will show 2nd TOC in edit mode; DATE:2016-07-10
+                ctx.Wiki().Html_mgr().Html_wtr().Cfg().Toc__show_(false);
 	}
 	public static void Add_banner(Bry_bfr bfr, Xoae_page wpg, Xop_ctx ctx, Xoh_wtr_ctx hctx, Pgbnr_itm itm) {
 		Xowe_wiki wiki = ctx.Wiki(); Xoae_app app = wiki.Appe();

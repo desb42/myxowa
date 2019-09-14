@@ -42,7 +42,7 @@ class Gfo_cache_mgr_fxt {
 		for (int i = 0; i < len; ++i) {
 			String itm = ary[i];
 			byte[] key = Bry_.new_u8(itm);
-			mgr.Add(key, new Gfo_cache_itm_mock(itm), key.length);
+			mgr.Add_replace(key, new Gfo_cache_itm_mock(itm), key.length);
 		}
 		return this;
 	}

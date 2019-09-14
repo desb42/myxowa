@@ -24,6 +24,8 @@ public class Geoc_isin_func extends Pf_func_base {
 		byte[] ttl_bry = Eval_argx(ctx, src, caller, self);
 		Xowe_wiki wiki = ctx.Wiki();
 		Xoa_ttl ttl = Xoa_ttl.Parse(wiki, ttl_bry); if (ttl == null) return;
+                Gfo_usr_dlg_.Instance.Warn_many("", "", "#isin: ttl=~{0} parent=~{1}", ctx.Page().Ttl().Full_db(), ttl_bry);
+
 		byte[] lnki_ttl = Bry_.Add(Xop_tkn_.Lnki_bgn, ttl_bry, Xop_tkn_.Lnki_end);		// make "[[ttl]]"
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b128();
 		wiki.Parser_mgr().Main().Parse_text_to_html(tmp_bfr, ctx, ctx.Page(), false, lnki_ttl);

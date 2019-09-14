@@ -76,6 +76,7 @@ public class Wdata_lbl_mgr {
 	public void Gather_labels(Wdata_doc wdoc, Wdata_lang_sorter sorter) {
 		Ordered_hash claim_list = wdoc.Claim_list();
 		int len = claim_list.Count();
+                if (len == 0) return; // Lexemes dont have labels
 		for (int i = 0; i < len; ++i) {
 			Wbase_claim_grp grp = (Wbase_claim_grp)claim_list.Get_at(i);
 			int grp_len = grp.Len();

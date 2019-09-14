@@ -34,8 +34,6 @@ public class Ref_html_wtr {
 			, Grp_id(itm)
 			, mgr.getLinkLabel(itm.Idx_major() + 1, itm.Group())
 			);
-                //cfg.Build_ref(itm, true, mgr.getLinkLabel(itm.Idx_major() + 1, itm.Group()));
-
 	}
 	public Ref_html_wtr_cfg Cfg() {return cfg;} private Ref_html_wtr_cfg cfg;
 	public void Init_by_wiki(Xowe_wiki wiki) {
@@ -70,16 +68,17 @@ public class Ref_html_wtr {
 		Ref_itm_lst lst = wpg.Ref_mgr().Lst_get(references.Group(), references.List_idx());	// get group; EX: <references group="note"/>
 		if (lst == null) return;	// NOTE: possible to have a grouped references without references; EX: Infobox planet; <references group=note> in sidebar, but no refs 
 		if (lst.Itms_len() == 0) return;
-                boolean response_wrap = true; // default case
-                if (references.Responsive() != Bry_.Empty && references.Responsive()[0] == '0')
-                    response_wrap = false;
-                if (response_wrap) {
-		bfr.Add(Bry_.new_a7("<div class=\"mw-references-wrap"));
-		if (lst.Itms_len() > 10) {
-			bfr.Add(Bry_.new_a7(" mw-references-columns"));
+		boolean response_wrap = true; // default case
+		if (references.Responsive() != Bry_.Empty && references.Responsive()[0] == '0') {
+			response_wrap = false;
 		}
-		bfr.Add(Bry_.new_a7("\">"));
-                }
+		if (response_wrap) {
+			bfr.Add(Bry_.new_a7("<div class=\"mw-references-wrap"));
+			if (lst.Itms_len() > 10) {
+				bfr.Add(Bry_.new_a7(" mw-references-columns"));
+			}
+			bfr.Add(Bry_.new_a7("\">"));
+		}
 		bfr.Add(cfg.Grp_bgn());
 		int itms_len = lst.Itms_len();
 		for (int j = 0; j < itms_len; j++) {	// iterate over itms in grp
@@ -87,16 +86,20 @@ public class Ref_html_wtr {
 			Bry_bfr tmp = Bry_bfr_.New();
 			int list_len = List_len(head_itm);
 			grp_list_fmtr.Init(ctx.Wiki(), cfg, head_itm);
-			Ref_nde text_itm = grp_list_fmtr.IdentifyTxt();	// find the item that has the text (there should only be 0 or 1)
-			if (text_itm.Body() != null)
+			Ref_nde text_itm = grp_list_fmtr.Identify_main_ref();// find the item that has the text (there should only be 0 or 1)
+			if (text_itm.Body() != null) {
 				wtr.Write_tkn_to_html(tmp, ctx, opts, text_itm.Body().Root_src(), null, Xoh_html_wtr.Sub_idx_null, text_itm.Body());
+			}
 
 			// add follows
 			int related_len = head_itm.Related_len();
 			for (int k = 0; k < related_len; k++) {
 				Ref_nde related_itm = head_itm.Related_get(k);
 				if (related_itm.Follow_y()) {	// NOTE: both follow and related are in the related list; only add follow
-					tmp.Add_byte_space();	// always add space; REF.MW:Cite_body.php;$this->mRefs[$group][$follow]['text'] = $this->mRefs[$group][$follow]['text'] . ' ' . $str;
+					// add a space if...
+					if (tmp.Len_gt_0() // tmp has text; (ignores 0th)
+						&& related_itm.Body() != null && related_itm.Body().Subs_len() > 0) // this item has text (ignore blank items)
+						tmp.Add_byte_space();// add space; REF.MW:Cite_body.php;$this->mRefs[$group][$follow]['text'] = $this->mRefs[$group][$follow]['text'] . ' ' . $str;
 					wtr.Write_tkn_to_html(tmp, ctx, opts, related_itm.Body().Root_src(), null, Xoh_html_wtr.Sub_idx_null, related_itm.Body());
 				}
 			}
@@ -117,39 +120,8 @@ public class Ref_html_wtr {
 			}
 		}
 		bfr.Add(cfg.Grp_end());
-                if (response_wrap)
-                bfr.Add(Bry_.new_a7("</div>\n"));
+		if (response_wrap) {
+			bfr.Add(Bry_.new_a7("</div>\n"));
+		}
 	}
-/*	private static byte[] GN_decimal = Bry_.new_a7("decimal")
-	, GN_upper_alpha = Bry_.new_a7("upper-alpha")
-	, GN_lower_alpha = Bry_.new_a7("lower-alpha")
-	, GN_upper_latin = Bry_.new_a7("upper-latin")
-	, GN_lower_latin = Bry_.new_a7("lower-latin")
-	, GN_upper_roman = Bry_.new_a7("upper-roman")
-	, GN_lower_roman = Bry_.new_a7("lower-roman")
-	, GN_lower_greek = Bry_.new_a7("lower-greek")
-	;
-	public Object make_counter(Ref_nde itm) {
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-                int n = itm.Idx_major() + 1;
-		if (Bry_.Eq(itm.Group(), Bry_.Empty) || Bry_.Eq(itm.Group(), GN_decimal))
-                        tmp_bfr.Add_int_variable(n);
-                else if (Bry_.Eq(itm.Group(), GN_upper_alpha) || Bry_.Eq(itm.Group(), GN_upper_latin)) {
-                        n  = (n % 26) + 97 - 1 - 32;
-                        tmp_bfr.Add_byte((byte)n);
-                }
-                else if (Bry_.Eq(itm.Group(), GN_lower_alpha) || Bry_.Eq(itm.Group(), GN_lower_latin)) {
-                        n  = (n % 26) + 'a' - 1;
-                        tmp_bfr.Add_byte((byte)n);
-                }
-                else if (Bry_.Eq(itm.Group(), GN_upper_roman))
-                        Pfxtp_roman.ToRoman(n, tmp_bfr, false);
-                else if (Bry_.Eq(itm.Group(), GN_lower_roman))
-                        Pfxtp_roman.ToRoman(n, tmp_bfr, true);
-                else if (Bry_.Eq(itm.Group(), GN_lower_greek))
-                        tmp_bfr.Add(gplx.core.intls.Utf16_.Encode_int_to_bry(n % 24 + 944));
-                else
-                    return grp_key_fmtr.Set(cfg.Itm_grp_text(), itm.Group(), itm.Idx_major() + 1);
-		return tmp_bfr.To_bry_and_clear_and_rls();
-	}*/
 }

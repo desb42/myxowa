@@ -79,7 +79,7 @@ public class Xow_ifexist_cache {
 		}
 
 		// add
-		cache_mgr.Add(key, itm, key.length);
+		cache_mgr.Add_replace(key, itm, key.length);
 		return itm.Exists();
 	}
 }

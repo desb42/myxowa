@@ -35,8 +35,9 @@ public class Wbase_claim_type_ {
 	, Tid__lexeme								= 15
 	, Tid__sense								= 16
 	, Tid__form								= 17
+	, Tid__musical_notation		= 18
 	;
-	public static final    Wbase_enum_hash Reg = new Wbase_enum_hash("claim.data_type", 18);
+	public static final    Wbase_enum_hash Reg = new Wbase_enum_hash("claim.data_type", 19);
 	public static final    Wbase_enum_itm
 	  Itm__unknown					= New(Tid__unknown			, "unknown")
 	, Itm__bad						= New(Tid__bad				, "bad")				// NOTE: wikidata identifies several entries as "bad"; Q1615351|'s-Graveland, Q107538|Baco; DATE:2013-10-20
@@ -56,6 +57,7 @@ public class Wbase_claim_type_ {
 	, Itm__lexeme					= New(Tid__lexeme			, "wikibase-lexeme")				// EX:wd:Property:P5188
 	, Itm__sense					= New(Tid__sense			, "wikibase-sense")				// EX:wd:Property:P5972
 	, Itm__form					= New(Tid__form			, "wikibase-form")				// EX:wd:Property:P5193
+	, Itm__musical_notation		= New(Tid__musical_notation			, "musical-notation")				// EX:wd:Property:P6604
 	;
 	private static Wbase_enum_itm New(byte tid, String key)						{return New(tid, key, key);}
 	private static Wbase_enum_itm New(byte tid, String key, String scrib)		{return Reg.Add(new Wbase_claim_type(tid, key, scrib));}

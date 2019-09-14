@@ -51,6 +51,9 @@ public class Pp_pagequality_nde implements Xox_xnde {
 			bfr.Add(divtween);
 			bfr.Add(ctx.Wiki().Msg_mgr().Val_by_key_args(tmp_bfr.To_bry_and_clear_and_rls()));
 			bfr.Add(divclose);
+			bfr.Add(catopen);
+			bfr.Add(catpr);  // why does this work?
+			bfr.Add(catclose);
 			// from title extract name up to / (if any)
 			// if .djvu/ or .pdf/ then build the getter else?
 			// strictly should be width of 1024px (but this is supposedly offline copy - keep small)
@@ -113,5 +116,8 @@ public class Pp_pagequality_nde implements Xox_xnde {
 	, qualitystart = Bry_.new_a7("proofreadpage_quality")
 	, qualityend = Bry_.new_a7("_message")
                 , attr_level = Bry_.new_a7("level")
+                , catopen = Bry_.new_a7("[[Category:")
+                , catclose = Bry_.new_a7("]]")
+                , catpr = Bry_.new_a7("Proofread")
 	;
 }

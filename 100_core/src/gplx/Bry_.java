@@ -438,9 +438,9 @@ public class Bry_ {
 		return rv;
 	}
 	public static final    byte[] Trim_ary_ws = mask_(256, Byte_ascii.Tab, Byte_ascii.Nl, Byte_ascii.Cr, Byte_ascii.Space);
-	public static byte[] Trim(byte[] src) {return Trim(src, 0, src.length, true, true, Trim_ary_ws);}
-	public static byte[] Trim(byte[] src, int bgn, int end) {return Trim(src, bgn, end, true, true, Trim_ary_ws);}
-	public static byte[] Trim(byte[] src, int bgn, int end, boolean trim_bgn, boolean trim_end, byte[] trim_ary) {
+	public static byte[] Trim(byte[] src) {return Trim(src, 0, src.length, true, true, Trim_ary_ws, true);}
+	public static byte[] Trim(byte[] src, int bgn, int end) {return Trim(src, bgn, end, true, true, Trim_ary_ws, true);}
+	public static byte[] Trim(byte[] src, int bgn, int end, boolean trim_bgn, boolean trim_end, byte[] trim_ary, boolean reuse_bry_if_noop) {
 		int txt_bgn = bgn, txt_end = end;
 		boolean all_ws = true;
 		if (trim_bgn) {
@@ -466,7 +466,8 @@ public class Bry_ {
 			if (all_ws) return Bry_.Empty;
 		}
 
-		if (	bgn == 0       && end == src.length	 // Trim is called on entire bry, not subset
+		if (	reuse_bry_if_noop
+			&&  bgn == 0       && end == src.length	 // Trim is called on entire bry, not subset
 			&&	bgn == txt_bgn && end == txt_end     // Trim hasn't trimmed anything
 			) {	
 			return src;
@@ -977,6 +978,43 @@ public class Bry_ {
 			}
 		}
 		return bfr.To_bry_and_clear();
+	}
+	public static byte[] Replace_many(byte[] src, byte[] find, byte[] repl) {
+		Bry_bfr bfr = null;
+		int src_len = src.length;
+		int find_len = find.length;
+
+		int pos = 0;
+		while (true) {
+			// find find_bgn
+			int find_bgn = Bry_find_.Find_fwd(src, find, pos, src_len);
+
+			// exit if nothing found
+			if (find_bgn == Bry_find_.Not_found) 
+				break;
+
+			// lazy-instantiation
+			if (bfr == null)
+				bfr = Bry_bfr_.New();
+
+			// add everything up to find_bgn
+			bfr.Add_mid(src, pos, find_bgn);
+
+			// add repl
+			bfr.Add(repl);
+
+			// move pos forward
+			pos = find_bgn + find_len;
+		}
+
+		// nothing found; return src
+		if (bfr == null)
+			return src;
+		else {
+			// add rest
+			bfr.Add_mid(src, pos, src_len);
+			return bfr.To_bry_and_clear();
+		}
 	}
 	public static int Trim_end_pos(byte[] src, int end) {
 		for (int i = end - 1; i > -1; i--) {
