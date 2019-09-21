@@ -56,11 +56,43 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 		return pagnum.getFormattedPageNumber();
 	}
 	private byte[] Bld_wikitext(Bry_bfr bfr, Xoa_ttl ttl) {
+		int countsize;
+		if (maxpagecount < 10)
+			countsize = 1;
+		else if (maxpagecount < 100)
+			countsize = 2;
+		else if (maxpagecount < 1000)
+			countsize = 3;
+		else
+			countsize = 4;
+
 		for (int i = 1; i <= maxpagecount; i++) {
 			Page_number pagnum = lst.getNumber(i);
 			bfr.Add_str_a7("[[Page:");
 			bfr.Add(ttl.Base_txt()).Add_byte_slash().Add_long_variable(i).Add_byte_pipe();
-			bfr.Add(pagnum.getFormattedPageNumber());
+			byte[] view = pagnum.getFormattedPageNumber();
+			switch(pagnum.Mode()) {
+				case Page_list_row.Display_highroman:
+				case Page_list_row.Display_roman:
+					bfr.Add_byte((byte)160); // &#160;
+					break;
+				case Page_list_row.Display_normal:
+					int paddingSize = countsize - view.length;
+					boolean isNumeric = true;
+					for (int j = 0; j < view.length; j++) {
+						if (view[j] < Byte_ascii.Num_0 || view[j] > Byte_ascii.Num_9)
+							isNumeric = false;
+					}
+					if (isNumeric && paddingSize > 0) {
+						bfr.Add_str_a7("<span style=\"visibility:hidden;\">");
+						for (int j = 0; j < paddingSize; j++)
+							bfr.Add_byte(Byte_ascii.Num_0); // strictly this should be wiki language dependent
+						bfr.Add_str_a7("</span>");
+					}
+					break;
+			}
+
+			bfr.Add(view);
 			bfr.Add_str_a7("]]\n");
 		}
 		return bfr.To_bry_and_clear();
@@ -81,22 +113,22 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 		maxpagecount = 0;
 		Mwh_atr_itm[] atrs_ary = xnde.Atrs_ary();
 		int atrs_len = atrs_ary.length;
-                    byte[] key, val;
+		byte[] key, val;
 		for (int i = 0; i < atrs_len; i++) {
 			Mwh_atr_itm atr = atrs_ary[i];
-						if (atr.Eql_pos()< 0)
-							continue;
-                        if (atr.Valid()) {
-                            key = atr.Key_bry();
-                            val = atr.Val_as_bry();
-                        } else {
-                            if (atr.Eql_pos() > 0) {
-                                key = Bry_.Mid(atr.Src(), atr.Atr_bgn(), atr.Eql_pos());
-                                val = Bry_.Mid(atr.Src(), atr.Eql_pos() + 1, atr.Atr_end());
-                            }
-                            else
-                                continue;
-                        }
+			if (atr.Eql_pos()< 0)
+				continue;
+			if (atr.Valid()) {
+				key = atr.Key_bry();
+				val = atr.Val_as_bry();
+			} else {
+				if (atr.Eql_pos() > 0) {
+					key = Bry_.Mid(atr.Src(), atr.Atr_bgn(), atr.Eql_pos());
+					val = Bry_.Mid(atr.Src(), atr.Eql_pos() + 1, atr.Atr_end());
+				}
+				else
+					continue;
+			}
 			Page_list_row plr = new Page_list_row(key, val);
 			rows.Add(plr);
 			if (plr.To() > maxpagecount)
@@ -123,7 +155,7 @@ class Page_list_row {
 		return Bry_.To_int_or(src, bgn, end, 0);
 	}
 	private boolean compare(byte[] src, int bgn, byte[] txt) {
-            if (src.length < txt.length) return false; // exact match
+			if (src.length < txt.length) return false; // exact match
 		return Bry_.Has_at_bgn(src, txt, bgn, bgn + txt.length);
 	}
 	Page_list_row(byte[] key , byte[] val) {
@@ -215,11 +247,13 @@ class Page_list_row {
 	;
 }
 class Page_number {
-	int displayednumber;
-	byte[] displayedtext;
-	int mode;
-	boolean isEmpty;
-	boolean isRecto;
+	private int displayednumber;
+	private byte[] displayedtext;
+	private int mode;
+	private boolean isEmpty;
+	private boolean isRecto;
+	public int Mode() { return mode; }
+
 	Page_number( int displayednumber, byte[] displayedtext, int mode, boolean isEmpty, boolean isRecto ) {
 		this.displayednumber = displayednumber;
 		this.displayedtext = displayedtext;

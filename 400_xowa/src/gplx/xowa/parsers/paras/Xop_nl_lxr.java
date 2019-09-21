@@ -92,6 +92,18 @@ public class Xop_nl_lxr implements Xop_lxr {
 			Xop_nl_tkn nl_tkn = tkn_mkr.NewLine(bgn_pos, cur_pos, Xop_nl_tkn.Tid_char, 1);
 			ctx.Subs_add(root, nl_tkn);
 		}
+                // check for whitespace followed by \n
+                int test_pos = cur_pos;
+                byte b = 0;
+                while (test_pos < src_len) {
+                    b = src[test_pos];
+                    if (b == Byte_ascii.Space || b == Byte_ascii.Tab)
+                        test_pos++;
+                    else
+                        break;
+                }
+                if (test_pos != cur_pos && b == Byte_ascii.Nl)
+                    cur_pos = test_pos;
 		return cur_pos;
 	}
 	public static int Scan_fwd_for_ctg(Xop_ctx ctx, byte[] src, int cur_pos, int src_len) {

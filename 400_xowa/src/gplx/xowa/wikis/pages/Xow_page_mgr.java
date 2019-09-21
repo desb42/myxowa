@@ -58,7 +58,7 @@ public class Xow_page_mgr implements Gfo_invk {
 					}
 					break;
 			}
-			Xoa_ttl redirect_ttl = Load_from_db(rv, ns, ttl, url.Qargs_mgr().Match(Xoa_url_.Qarg__redirect, Xoa_url_.Qarg__redirect__no));
+			Xoa_ttl redirect_ttl = Load_from_db(rv, ns, ttl, url.Qargs_mgr().IsNoRedirect());
 			// GOTO_BY_LOOP: handle redirect to special
 			if (redirect_ttl != null && redirect_ttl.Ns().Id_is_special()) {
 				ttl = redirect_ttl;
@@ -178,14 +178,14 @@ public class Xow_page_mgr implements Gfo_invk {
 		Xoa_url trg_url = Xoa_url.New(wiki.Domain_bry(), page_bry);
 		page.Ttl_(trg_ttl).Url_(trg_url);
 		page.Redirect_trail().Itms__add__article(trg_url, trg_ttl, null);
-		wiki.Data_mgr().Load_from_db(page, trg_ttl.Ns(), trg_ttl, trg_url.Qargs_mgr().Match(Xoa_url_.Qarg__redirect, Xoa_url_.Qarg__redirect__no));
+		wiki.Data_mgr().Load_from_db(page, trg_ttl.Ns(), trg_ttl, trg_url.Qargs_mgr().IsNoRedirect());
 	}
 	public void Redirect2(Xowe_wiki wiki2, Xoae_page page, byte[] page_bry) {
 		Xoa_ttl trg_ttl = Xoa_ttl.Parse(wiki2, page_bry);
 		Xoa_url trg_url = Xoa_url.New(wiki2.Domain_bry(), page_bry);
 		page.Ttl_(trg_ttl).Url_(trg_url);
 		page.Redirect_trail().Itms__add__article(trg_url, trg_ttl, null);
-		wiki2.Data_mgr().Load_from_db(page, trg_ttl.Ns(), trg_ttl, trg_url.Qargs_mgr().Match(Xoa_url_.Qarg__redirect, Xoa_url_.Qarg__redirect__no));
+		wiki2.Data_mgr().Load_from_db(page, trg_ttl.Ns(), trg_ttl, trg_url.Qargs_mgr().IsNoRedirect());
 	}
 
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

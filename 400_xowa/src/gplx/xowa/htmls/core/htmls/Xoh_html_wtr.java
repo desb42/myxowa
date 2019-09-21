@@ -376,16 +376,16 @@ public class Xoh_html_wtr {
 		Xop_list_tkn_new prev_link_tkn = list.Prev_list();
 		if (prev_link_tkn != null) {
 			lastPrefix_bgn = prev_link_tkn.Src_bgn();
-                        if (lastPrefix_bgn > src.length) {
-                            Xoa_app_.Usr_dlg().Warn_many("", "", "strange new link; wiki=~{0} page=~{1}", ctx.Wiki().Domain_bry(), ctx.Page().Ttl().Full_db());
-                            return;
-                        }
-				lastPrefix_end = prev_link_tkn.Src_end();
-                        if (lastPrefix_bgn < linestart || linestart == 0) {// extra check
+			if (lastPrefix_bgn > src.length) {
+				Xoa_app_.Usr_dlg().Warn_many("", "", "strange new link; wiki=~{0} page=~{1}", ctx.Wiki().Domain_bry(), ctx.Page().Ttl().Full_db());
+				return;
+			}
+			lastPrefix_end = prev_link_tkn.Src_end();
+			if (lastPrefix_bgn < linestart || linestart == 0) {// extra check
 				lastPrefixLength = lastPrefix_end - lastPrefix_bgn;
-                        } else {
-                            lastPrefix_bgn = lastPrefix_end = 0;
-                        }
+			} else {
+				lastPrefix_bgn = lastPrefix_end = 0;
+			}
 		}
 
 		if (prefixLength > 0 && compare_prefix(lastPrefix_bgn, lastPrefix_end, linestart, prefixLength) ) {
@@ -407,11 +407,9 @@ public class Xoh_html_wtr {
 			pendingPTag = PENDING_NONE;
 			// Close all the prefixes which aren't shared.
 			while ( commonPrefixLength < lastPrefixLength ) {
-                            if (lastPrefix_bgn + lastPrefixLength - 1 > text.length) {
-                                int a = 1;
-                                a += 1;
+				if (lastPrefix_bgn + lastPrefixLength - 1 > text.length) {
                                 System.out.println("eek");
-                            }
+				}
 				output.Add(closeList( text[lastPrefix_bgn + lastPrefixLength - 1] ));
 				--lastPrefixLength;
 			}

@@ -74,7 +74,7 @@ class Xowh_portal_mgr_fxt {
 		Tfds.Eq(expd, String_.new_a7(wiki.Html_mgr().Portal_mgr().Div_ns_bry(wiki, Xoa_ttl.Parse(wiki, Bry_.new_a7(ttl)))));
 	}
 	public void Test_div_personal_bry(String expd) {
-		Tfds.Eq(expd, String_.new_a7(wiki.Html_mgr().Portal_mgr().Div_personal_bry(false, null, (byte)0)));
+		Tfds.Eq(expd, String_.new_a7(wiki.Html_mgr().Portal_mgr().Div_personal_bry(false, null, (byte)0, false)));
 	}
 	public void Test_missing_ns_cls(String expd) {
 		Tfds.Eq(expd, String_.new_a7(wiki.Html_mgr().Portal_mgr().Missing_ns_cls()));

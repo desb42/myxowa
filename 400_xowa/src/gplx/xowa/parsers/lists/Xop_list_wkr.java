@@ -45,19 +45,19 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		Xop_list_tkn_new itm = new Xop_list_tkn_new(bgn_pos + 1, cur_pos, ctx.Page().Prev_list_tkn());
 		ctx.Subs_add_and_stack(root, itm);
 		ctx.Page().Prev_list_tkn_(itm);
-/*		// peek ahead for a table eg :{|
+		// peek ahead for a table eg :{|
 		int peek_pos = cur_pos;
 		while (peek_pos < src_len) {
 			byte b = src[peek_pos];
 			if (b == Byte_ascii.Space || b == Byte_ascii.Tab)
-				cur_pos++;
+				peek_pos++;
 			else
 				break;
 		}
 		if (peek_pos + 2 < src_len) {
 			if (src[peek_pos] == '{' && src[peek_pos+1] == '|')
-				cur_pos = make_table()
-		}*/
+				cur_pos = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, peek_pos+2, false, Xop_tblw_wkr.Tblw_type_tb, Xop_tblw_wkr.Called_from_list, -1, -1);
+		}
 		return cur_pos;
 	}
 }

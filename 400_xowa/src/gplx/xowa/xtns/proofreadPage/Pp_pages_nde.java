@@ -36,16 +36,16 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	private Xoae_app app; private Xowe_wiki wiki; private Xop_ctx ctx; private Gfo_usr_dlg usr_dlg;
 	private byte[] src; private Xop_xnde_tkn xnde_tkn;
 	private Xoa_ttl cur_page_ttl;
-        private int[] qualitycount;
-        private int qualitytot;
-        private boolean badindex = false;
+	private int[] qualitycount;
+	private int qualitytot;
+	private boolean badindex = false;
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {
 		if (xatr_id_obj == null) return;
 		Byte_obj_val xatr_id = (Byte_obj_val)xatr_id_obj;
 		switch (xatr_id.Val()) {
 			case Xatr_index_ttl:
-                            index_ttl_bry = checkquotes(xatr.Val_as_bry());
-                            break;
+				index_ttl_bry = checkquotes(xatr.Val_as_bry());
+				break;
 			case Xatr_bgn_page:		bgn_page_bry	= xatr.Val_as_bry(); break;
 			case Xatr_end_page:		end_page_bry	= xatr.Val_as_bry(); break;
 			case Xatr_bgn_sect:		bgn_sect_bry	= xatr.Val_as_bry(); break;
@@ -425,7 +425,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				else
 					continue;
 				// check for quality
-                                int quality = Pp_quality.getQualityFromCatlink(ttl);
+                                int quality = Pp_quality.getQualityFromCatlink(ttl, wiki);
                                 if (quality >= 0)
                                     qualitycount[quality]++;
                                 else

@@ -92,9 +92,6 @@ public class Xoh_html_wtr_escaper {
 					break;
 			}
 		}
-                // cope with trailing '%' 
-                if (b == Byte_ascii.Percent)
-                    bfr.Add_byte(Byte_ascii.Num_2).Add_byte(Byte_ascii.Num_5);
 	}
 	private static int Escape_nowiki_skip(Bry_bfr bfr, byte[] src, int bgn, int end, byte[] nowiki_name, int nowiki_name_len) {
 		try {

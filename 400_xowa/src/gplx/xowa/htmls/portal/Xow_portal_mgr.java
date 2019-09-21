@@ -107,7 +107,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 
         // assuming Div_personal_bry is followed by Div_ns_bry is followed by Div_view_bry
         private byte[] subj_href = null;
-	public byte[] Div_personal_bry(boolean from_hdump, Xoa_ttl ttl, byte html_gen_tid) {
+	public byte[] Div_personal_bry(boolean from_hdump, Xoa_ttl ttl, byte html_gen_tid, boolean isnoredirect) {
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
 		byte[] wiki_user_name = wiki.User().Name();
 		byte[] rv = Init_fmtr(tmp_bfr, wiki.Eval_mgr(), div_personal_fmtr
@@ -170,7 +170,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 		Xow_ns ns = ns_mgr.Ids_get_or_null(ns_id);
 		return ns == null || ns.Exists() ? Bry_.Empty : missing_ns_cls;			
 	}
-	public byte[] Div_view_bry(Bry_bfr_mkr bfr_mkr, byte output_tid, byte[] search_text, Xoa_ttl ttl) {
+	public byte[] Div_view_bry(Bry_bfr_mkr bfr_mkr, byte output_tid, byte[] search_text, Xoa_ttl ttl, boolean isnoredirect) {
 		Bry_bfr tmp_bfr = bfr_mkr.Get_k004();
 		byte[] read_cls = Bry_.Empty, edit_cls = Bry_.Empty, html_cls = Bry_.Empty;
 		switch (output_tid) {
@@ -182,10 +182,13 @@ public class Xow_portal_mgr implements Gfo_invk {
 		// build url_fragment with action query argument; EX: "/wiki/Page_name?action="
 		//byte[] url_frag_w_action_qarg = Bry_.Add(Xoh_href_.Bry__wiki, ttl.Full_db(), Byte_ascii.Question_bry, Xoa_url_.Qarg__action, Byte_ascii.Eq_bry);
 		byte[] url_frag_w_action_qarg = Bry_.Add(subj_href, Byte_ascii.Question_bry, Xoa_url_.Qarg__action, Byte_ascii.Eq_bry);
+                byte[] noredirect = isnoredirect 
+                                        ? Bry_.Add(Byte_ascii.Amp_bry, Xoa_url_.Qarg__redirect, Byte_ascii.Eq_bry, Xoa_url_.Qarg__redirect__no)
+                                        : Bry_.Empty;
 		div_view_fmtr.Bld_bfr_many(tmp_bfr, read_cls, edit_cls, html_cls, search_text
 			, subj_href //Bry_.Add(Xoh_href_.Bry__wiki, ttl.Full_db())
-			, Bry_.Add(url_frag_w_action_qarg, Xoa_url_.Qarg__action__edit)
-			, Bry_.Add(url_frag_w_action_qarg, Xoa_url_.Qarg__action__html)
+			, Bry_.Add(url_frag_w_action_qarg, Xoa_url_.Qarg__action__edit, noredirect)
+			, Bry_.Add(url_frag_w_action_qarg, Xoa_url_.Qarg__action__html, noredirect)
 			, wiki.Props().Site_name()
 			);
 		return tmp_bfr.To_bry_and_rls();
@@ -221,10 +224,11 @@ public class Xow_portal_mgr implements Gfo_invk {
 		return lang_is_rtl ? Xoh_rtl_utl.Reverse_li(bry) : bry;
 	}
 	private byte[] display_type(boolean from_hdump, Xoa_ttl ttl, byte html_gen_tid) {
-		if (html_gen_tid != 0) return Bry_.Empty; // edit & html are irrelevant
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		boolean read_from_html_db_preferred = wiki.Html__hdump_mgr().Load_mgr().Read_preferred();
 		subj_href = Xoh_html_wtr_escaper.Escape(Xop_amp_mgr.Instance, tmp_bfr, Bry_.Add(Xoh_href_.Bry__wiki, ttl.Subj_url()));
+                subj_href = Bry_.Replace(subj_href, Bry_.new_a7("%"), Bry_.new_a7("%25"));
+		if (html_gen_tid != 0) return Bry_.Empty; // edit & html are irrelevant
+		boolean read_from_html_db_preferred = wiki.Html__hdump_mgr().Load_mgr().Read_preferred();
 		if (from_hdump) {
 			//html
 			tmp_bfr.Add_str_a7( "<ul><li>" );

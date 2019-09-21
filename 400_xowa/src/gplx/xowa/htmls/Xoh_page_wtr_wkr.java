@@ -79,6 +79,7 @@ public class Xoh_page_wtr_wkr {
 	private void Write_page_by_tid(Xop_ctx ctx, Xoh_wtr_ctx hctx, byte html_gen_tid, Bry_bfr bfr, Bry_fmtr fmtr, byte[] page_data) {
 		// if custom_html, use it and exit; needed for Default_tab
 		byte[] custom_html = page.Html_data().Custom_html();
+                boolean isnoredirect = page.Url().Qargs_mgr().IsNoRedirect();
 		if (custom_html != null) {bfr.Add(custom_html); return;}
 		// temp variables
 		if (root_dir_bry == null) this.root_dir_bry = app.Fsys_mgr().Root_dir().To_http_file_bry();
@@ -135,15 +136,16 @@ public class Xoh_page_wtr_wkr {
 		, portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date)
 
 		// sidebar divs
-		, portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid)
+		, portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect)
 		//, portal_mgr.Div_ns_bry(wiki.Utl__bfr_mkr(), page_ttl, wiki.Ns_mgr())
 		, portal_mgr.Div_ns_bry(wiki, page_ttl)
-		, portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl)
+		, portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect)
 		, portal_mgr.Div_logo_bry(nightmode_enabled), portal_mgr.Div_home_bry(), new Xopg_xtn_skin_fmtr_arg(page, Xopg_xtn_skin_itm_tid.Tid_sidebar)
 		, portal_mgr.Div_sync_bry(tmp_bfr, wiki.Page_mgr().Sync_mgr().Manual_enabled(), wiki, page)
 		, portal_mgr.Div_wikis_bry(wiki.Utl__bfr_mkr())
 		, portal_mgr.Sidebar_mgr().Html_bry()
 		, mgr.Edit_rename_div_bry(page_ttl), page.Html_data().Edit_preview_w_dbg(), js_edit_toolbar_bry
+		, page.Lang().Key_bry()
 						, redlinks
 						, printfooter(app, wiki, ctx, hctx, page)
 		);
@@ -217,6 +219,9 @@ public class Xoh_page_wtr_wkr {
 
 		// if [[File]], add boilerplate header; note that html is XOWA-generated so does not need to be tidied
 		if (ns_id == Xow_ns_.Tid__file) app.Ns_file_page_mgr().Bld_html(wiki, ctx, page, bfr, page.Ttl(), wiki.Cfg_file_page(), page.File_queue());
+                boolean ispage_in_wikisource = false;
+                if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && ns_id == 104) //wikisource and Page: (frwiki has Référence: which is also 104)
+                    ispage_in_wikisource = true;
 
 		// get separate bfr; note that bfr already has <html> and <head> written to it, so this can't be passed to tidy; DATE:2014-06-11
 		Bry_bfr tidy_bfr = wiki.Utl__bfr_mkr().Get_m001();
@@ -230,7 +235,7 @@ public class Xoh_page_wtr_wkr {
 			else {
 				if (page.Root() != null) {	// NOTE: will be null if blank; occurs for one test: Logo_has_correct_main_page; DATE:2015-09-29
 					page.Html_data().Toc_mgr().Clear();	// NOTE: always clear tocs before writing html; toc_itms added when writing html_hdr; DATE:2016-07-17
-					if (ns_id == 104) { // Page (where is the constant for this?
+					if (ispage_in_wikisource) { // Page:
 						tidy_bfr.Add_str_a7("<div class=\"prp-page-container\"><div class=\"prp-page-content\"><div class=\"mw-parser-output\">");
 					}
 					else
@@ -238,7 +243,7 @@ public class Xoh_page_wtr_wkr {
 					wiki.Html_mgr().Html_wtr().Write_doc(tidy_bfr, ctx, hctx, page.Root().Data_mid(), page.Root());
 					if (wiki.Html_mgr().Html_wtr().Cfg().Toc__show())
 						gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_toc(tidy_bfr, page, hctx);
-					if (ns_id == 104) { // Page (where is the constant for this?
+					if (ispage_in_wikisource) { // Page:
 						tidy_bfr.Add_str_a7("</div></div>");
 						tidy_bfr.Add_str_a7("</div></div><div class=\"prp-page-image\">");
 						//Pp_image_page(...);

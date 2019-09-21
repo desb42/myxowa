@@ -93,7 +93,7 @@ public class Xopg_redlink_mgr implements Gfo_invk {
                         }
 		}
                 if (colouring)
-                    Pp_pagelist_colour.Colour(lnki_ids, bfr); // should be a variabl pointing to a function
+                    Pp_pagelist_colour.Colour(lnki_ids, bfr, wiki); // should be a variabl pointing to a function
 		usr_dlg.Log_many("", "", "redlink.redlink_end: redlinks_run=~{0}", redlink_count);
 	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

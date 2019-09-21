@@ -117,8 +117,9 @@ public class Http_server_wkr implements Gfo_invk {
 				page_html = "Strange! no data";
 			} else {
 				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()));
-				if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // chage some more things
-					page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
+				if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // change some more things
+					//page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
+					page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\">");
 					page_html = String_.Replace(page_html, "<a href=\"/exec/app.gui.main_win.page_edit_preview;\""	, "<input type='submit' tabindex='4' title='Preview your changes. Please use this before saving.' name='wpPreview' id='wpPreview' value='Show preview' class='oo-ui-inputWidget-input oo-ui-buttonElement-button' /><a href=\"/exec/app.gui.main_win.page_edit_preview;\"");
 					page_html = String_.Replace(page_html, "<textarea", "<textarea name=\"wpTextbox1\"");
 				}
@@ -193,6 +194,7 @@ public class Http_server_wkr implements Gfo_invk {
 		page_html = String_.Replace(page_html, "https://www.wikidata.org"	, "/www.wikidata.org");
 		page_html = String_.Replace(page_html, "https://commons.wikimedia.org"	, "/commons.wikimedia.org");
 		page_html = String_.Replace(page_html, "https://" + wiki_domain	, "/" + wiki_domain);
+		page_html = String_.Replace(page_html, "//upload.wikimedia.org" , "/fsys/file/upload.wikimedia.org");
 
 		//page_html = String_.Replace(page_html, "/fsys/file/commons.wikimedia.org/thumb/2/1/1/9/Speaker_Icon.svg/20px.png", "/fsys/file/commons.wikimedia.org/orig/2/1/1/9/Speaker_Icon.svg");
 		//page_html = page_html.replaceAll("\n +", "\n");

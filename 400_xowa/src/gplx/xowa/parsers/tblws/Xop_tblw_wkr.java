@@ -31,7 +31,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			bgn_pos = 0;	// do not allow -1 pos
 		}
 
-		int list_tkn_idx = ctx.Stack_idx_find_but_stop_at_tbl(Xop_tkn_itm_.Tid_list);
+		int list_tkn_idx = ctx.Stack_idx_find_but_stop_at_tbl(Xop_tkn_itm_.Tid_list_new);
 		if (	list_tkn_idx != -1								// list is in effect; DATE:2014-05-05
 			&& !tbl_is_xml										// tbl is wiki-syntax; ie: auto-close if "{|" but do not close if "<table>"; DATE:2014-02-05
 			&& called_from != Called_from_list					// do not close if called from list; EX: consider "{|"; "* a {|" is called from list_wkr, and should not close; "* a\n{|" is called from tblw_lxr and should close; DATE:2014-02-14
@@ -57,11 +57,11 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 					// close para when table starts; needed for TRAILING_TBLW fix; PAGE:en.w:Template_engine_(web) DATE:2017-04-08
 					ctx.Para().Process_block__bgn__nl_w_symbol(ctx, root, src, bgn_pos, cur_pos - 1, Xop_xnde_tag_.Tag__table);	// -1 b/c cur_pos includes sym_byte; EX: \n{
 					// any outstanding list?
-					if (ctx.Page().Prev_list_tkn() != null) {
+					if (ctx.Page().Prev_list_tkn() != null && called_from != Called_from_list) {
 						// inject a list close
-                                                Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-                                                if (prev != null && prev.Src_bgn() > src.length)
-                                                    System.out.println("tbl");
+						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+						if (prev != null && prev.Src_bgn() > src.length)
+							System.out.println("tbl");
 						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
 						ctx.Subs_add_and_stack(root, itm);
 						ctx.Page().Prev_list_tkn_(null);
@@ -128,7 +128,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			}
 		}
 		if (wlxr_type == Tblw_type_te) {
-                    ctx.Page().Prev_list_tkn_(null); // reset list new
+//??                    ctx.Page().Prev_list_tkn_(null); // reset list new
 			return Make_tkn_end(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, Xop_tkn_itm_.Tid_tblw_te, wlxr_type, prv_tkn, prv_tid, tbl_is_xml);
                 }
 		else
@@ -450,6 +450,13 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			switch (wlxr_type) {
 				case Tblw_type_tb:
 					ctx.Para().Process_block__bgn_n__end_y(Xop_xnde_tag_.Tag__table);
+					/*	// inject a list close
+						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+                                                if (prev != null) {
+						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+						ctx.Subs_add_and_stack(root, itm);
+						ctx.Page().Prev_list_tkn_(null);
+                                                }*/
 					break;
 				case Tblw_type_td:
 				case Tblw_type_th:
@@ -495,6 +502,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 				case Xop_tkn_itm_.Tid_newLine:							// nl stops; EX: "{| a b c \nd"; bgn at {| and pick up " a b c " as atrs
 				case Xop_tkn_itm_.Tid_hdr: case Xop_tkn_itm_.Tid_hr:	// hdr/hr incorporate nl into tkn so include these as well; EX: "{|a\n==b==" becomes tblw,txt,hdr (note that \n is part of hdr
 				case Xop_tkn_itm_.Tid_list:								// list stops; EX: "{| a b c\n* d"; "*d" ends atrs; EX: ru.d: DATE:2014-02-22
+				case Xop_tkn_itm_.Tid_list_new:
 					loop = false;
 					break;
 				default:

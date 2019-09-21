@@ -39,6 +39,10 @@ class Xoh_ref_list_fmtr implements gplx.core.brys.Bfr_arg {
 		for (int i = 0; i < related_len; i++) {
 			Ref_nde link_itm = itm.Related_get(i);
 			if (link_itm.Nested()) continue;
+			if (i == related_len-1)
+				bfr.Add_str_u8(cfg.Grp_many_and());
+			else
+				bfr.Add_str_u8(cfg.Grp_many_sep());
 			Fmt(itm_fmtr, wiki, bfr, link_itm);
 		}
 	}
@@ -51,7 +55,9 @@ class Xoh_ref_list_fmtr implements gplx.core.brys.Bfr_arg {
 			: wiki.Parser_mgr().Main().Parse_text_to_html(wiki.Parser_mgr().Ctx(), wiki.Msg_mgr().Val_by_key_args(Ref_html_wtr_cfg.Msg_backlabels_err, itm.Idx_minor()))
 			;
 		itm_fmtr.Bld_bfr_many(trg
-			, fmtr.Set(cfg.Itm_id_key_one(), itm.Name(), itm.Idx_major(), itm.Idx_minor())
+			, fmtr.Set(cfg.Itm_id_key_one(), cfg.Itm_crlp(), itm.Name(), itm.Idx_major(), itm.Idx_minor(), cfg.Itm_crls())
+			, Bry_.Empty // extra field see https://github.com/wikimedia/mediawiki-extensions-Cite/includes/Cite.php
+			             // $this->referencesFormatEntryNumericBacklinkLabel( $val['number'], $i, $val['count'] ),
 			, backlabel
 			);
 	}

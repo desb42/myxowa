@@ -23,33 +23,33 @@ import gplx.xowa.parsers.*; import gplx.xowa.parsers.amps.*; import gplx.xowa.pa
 import gplx.xowa.parsers.lnkis.files.*;
 import gplx.xowa.wikis.pages.lnkis.Xopg_colour;
 public class Pp_pagelist_colour {
-	public static void Colour(List_adp list, Bry_bfr bfr) {
-            // only check on Page: pages
-            int len = list.Count();
-            for (int i = 0; i < len; i++) {
-                Xopg_colour colour = (Xopg_colour)list.Get_at(i);
-                Xowd_page_itm page_row = colour.Page_row();
-                if (page_row.Ns_id() != 104) // Namespace Page:
-                    continue;
-                // either here or in Xopg_colour
-                //  should lookup pagequality in cat_link table
-                //
-                String quality;
-                int catqual = Pp_quality.getQualityFromCatlink(page_row.Id());
-                if (catqual >= 0 && catqual <= 4)
-                    quality = String.valueOf(catqual);
-                else
-                    continue;
-                String colour_class = "prp-pagequality-" + quality + " quality" + quality;
-                //String colour_class = colour.Class();
-                //colour_class = "prp-pagequality-4 quality4";
-                if (colour_class != "") {
-                    bfr.Add_byte_comma().Add_byte(Byte_ascii.Brack_bgn);
-                    bfr.Add_byte_quote().Add_str_u8(colour.Html_uid()).Add_byte_quote();
-                    bfr.Add_byte_comma();
-                    bfr.Add_byte_quote().Add_str_u8(colour_class).Add_byte_quote();
-                    bfr.Add_byte(Byte_ascii.Brack_end);
-                }
-            }
+	public static void Colour(List_adp list, Bry_bfr bfr, Xow_wiki wiki) {
+		// only check on Page: pages
+		int len = list.Count();
+		for (int i = 0; i < len; i++) {
+			Xopg_colour colour = (Xopg_colour)list.Get_at(i);
+			Xowd_page_itm page_row = colour.Page_row();
+			if (page_row.Ns_id() != 104) // Namespace Page:
+				continue;
+			// either here or in Xopg_colour
+			//  should lookup pagequality in cat_link table
+			//
+			String quality;
+			int catqual = Pp_quality.getQualityFromCatlink(page_row.Id(), wiki);
+			if (catqual >= 0 && catqual <= 4)
+				quality = String.valueOf(catqual);
+			else
+				continue;
+			String colour_class = "prp-pagequality-" + quality + " quality" + quality;
+			//String colour_class = colour.Class();
+			//colour_class = "prp-pagequality-4 quality4";
+			if (colour_class != "") {
+				bfr.Add_byte_comma().Add_byte(Byte_ascii.Brack_bgn);
+				bfr.Add_byte_quote().Add_str_u8(colour.Html_uid()).Add_byte_quote();
+				bfr.Add_byte_comma();
+				bfr.Add_byte_quote().Add_str_u8(colour_class).Add_byte_quote();
+				bfr.Add_byte(Byte_ascii.Brack_end);
+			}
+		}
 	}
 }
