@@ -38,6 +38,7 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		//ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_end);
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
+            if (text != null)
 		bfr.Add(Bry_.Replace(text, Byte_ascii.Underline, Byte_ascii.Space));
 	}
 	public static Xop_log_basic_wkr Log_wkr = Xop_log_basic_wkr.Null;

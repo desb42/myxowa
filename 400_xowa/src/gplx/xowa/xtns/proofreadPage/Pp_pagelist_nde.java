@@ -74,7 +74,8 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 			switch(pagnum.Mode()) {
 				case Page_list_row.Display_highroman:
 				case Page_list_row.Display_roman:
-					bfr.Add_byte((byte)160); // &#160;
+					//bfr.Add_byte((byte)160); // &#160;
+					bfr.Add_str_a7("&#160;");
 					break;
 				case Page_list_row.Display_normal:
 					int paddingSize = countsize - view.length;

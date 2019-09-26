@@ -22,11 +22,14 @@ public class Pfunc_wiki_shortdesc extends Pf_func_base {
 		byte[] argx = Eval_argx(ctx, src, caller, self); if (argx == null) return; // no argx; return empty
 		// get second part if any
 		byte[] second = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, args_len, 0);
+                //Xoae_page page = ctx.Page();
                 // if shortdesc has already been set
                 //  and if second is 'noreplace' - ignore
+                //if (page.Short_desc() != null && second[0] == 'n') return;
                 // else
-                // add to shortdesc holder and shortdesc flag
+                // add to shortdesc holder
                 // something needs to convert the wikitext to html (here or elsewhere)
+                //page.Short_desc_(argx);
 	}
 	public Pfunc_wiki_shortdesc(int id) {this.id = id;}
 	@Override public int Id() {return id;} private int id;

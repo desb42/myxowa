@@ -238,8 +238,9 @@ public class Xoh_page_wtr_wkr {
 					if (ispage_in_wikisource) { // Page:
 						tidy_bfr.Add_str_a7("<div class=\"prp-page-container\"><div class=\"prp-page-content\"><div class=\"mw-parser-output\">");
 					}
-					else
+					else {
 						tidy_bfr.Add_str_a7("<div class=\"mw-parser-output\">");
+					}
 					wiki.Html_mgr().Html_wtr().Write_doc(tidy_bfr, ctx, hctx, page.Root().Data_mid(), page.Root());
 					if (wiki.Html_mgr().Html_wtr().Cfg().Toc__show())
 						gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_toc(tidy_bfr, page, hctx);

@@ -425,7 +425,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				else
 					continue;
 				// check for quality
-                                int quality = Pp_quality.getQualityFromCatlink(ttl, wiki);
+                                int quality = wiki.Quality().getQualityFromCatlink(ttl, wiki);
                                 if (quality >= 0)
                                     qualitycount[quality]++;
                                 else

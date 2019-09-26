@@ -191,10 +191,12 @@ public class Http_server_wkr implements Gfo_invk {
 		page_html = String_.Replace(page_html, "action=\"/wiki/"	, "action=\"/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, "/site"				, "");
 		// should check to see if these have been downloaded somehow
-		page_html = String_.Replace(page_html, "https://www.wikidata.org"	, "/www.wikidata.org");
-		page_html = String_.Replace(page_html, "https://commons.wikimedia.org"	, "/commons.wikimedia.org");
-		page_html = String_.Replace(page_html, "https://" + wiki_domain	, "/" + wiki_domain);
-		page_html = String_.Replace(page_html, "//upload.wikimedia.org" , "/fsys/file/upload.wikimedia.org");
+		page_html = page_html.replaceAll("https?://(commons\\.wikimedia|de\\.wikipedia|en\\.wikibooks|en\\.wikinews|en\\.wikipedia|en\\.wikiquote|en\\.wikisource|en\\.wikiversity|en\\.wikivoyage|en\\.wiktionary|fr\\.wikipedia|he\\.wikipedia|it\\.wikipedia|simple\\.wikipedia|www\\.wikidata)\\.org" , "/$1.org");
+		//page_html = String_.Replace(page_html, "https://www.wikidata.org"	, "/www.wikidata.org");
+		//page_html = String_.Replace(page_html, "https://commons.wikimedia.org"	, "/commons.wikimedia.org");
+		//page_html = String_.Replace(page_html, "https://en.wikipedia.org"	, "/en.wikipedia.org"); // eg en.wikiquote.org/wiki/Leo_Varadkar
+		//page_html = String_.Replace(page_html, "https://" + wiki_domain	, "/" + wiki_domain);
+		page_html = page_html.replaceAll("(https?:)?//upload.wikimedia.org" , "/fsys/file/upload.wikimedia.org");
 
 		//page_html = String_.Replace(page_html, "/fsys/file/commons.wikimedia.org/thumb/2/1/1/9/Speaker_Icon.svg/20px.png", "/fsys/file/commons.wikimedia.org/orig/2/1/1/9/Speaker_Icon.svg");
 		//page_html = page_html.replaceAll("\n +", "\n");
@@ -205,7 +207,7 @@ public class Http_server_wkr implements Gfo_invk {
 		page_html = page_html.replaceAll("</div>\\s*<div", "</div><div");
 		//[replaced]page_html = page_html.replaceAll("\"file\\:.*?/file/", "\"/fsys/file/");
 
-		page_html = page_html.replaceAll("\"/fsys/file/([^\"]*?\\.svg)/([0-9]*)px.*?\"", "\"/SVG/$1\"");
+		//page_html = page_html.replaceAll("\"/fsys/file/([^\"]*?\\.svg)/([0-9]*)px.*?\"", "\"/SVG/$1\"");
 
 		//page_html = blockquote(page_html);
 		//page_html = String_.Replace(page_html, "\"mw-parser-output\">", karto);

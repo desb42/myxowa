@@ -113,4 +113,6 @@ public class Xoae_page implements Xoa_page {
 		rv.edit_mode = Xoa_page_.Edit_mode_create;
 		return rv;
 	}
+
+	public byte[]		Short_desc() { return short_desc; } public void Short_desc_(byte[] v) {short_desc=v;} private byte[] short_desc;
 }

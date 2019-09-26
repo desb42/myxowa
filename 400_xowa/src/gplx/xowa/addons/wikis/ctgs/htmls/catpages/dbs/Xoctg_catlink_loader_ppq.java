@@ -32,7 +32,8 @@ public class Xoctg_catlink_loader_ppq {
 		List_adp catlink_list = List_adp_.New();
 		for (int i = 0; i < link_dbs_len; i++) {
 			String sql = Generate_sql_ppq(page_id, i + 1);
-			Load_catlinks_ppq(catlink_list, sql);
+			if (Load_catlinks_ppq(catlink_list, sql) > 0)
+                            break;
 		}
 
 		// no catlinks; exit
@@ -45,7 +46,8 @@ public class Xoctg_catlink_loader_ppq {
 		List_adp catlink_list = List_adp_.New();
 		for (int i = 0; i < link_dbs_len; i++) {
 			String sql = Generate_sql_ppq_ttl(ttl, i + 1);
-			Load_catlinks_ppq(catlink_list, sql);
+			if (Load_catlinks_ppq(catlink_list, sql) > 0)
+                            break;
 		}
 
 		// no catlinks; exit
@@ -62,6 +64,7 @@ public class Xoctg_catlink_loader_ppq {
 		, ",       cl_from"
 		, "FROM    <link_db_{0}>cat_link cl"
 		, "WHERE   cl_from={1}"
+		, "AND cl_to_id in (476128,143843,143846,143844,143845)"
 		), link_db_id, cat_id);
 		return attach_mgr.Resolve_sql(bfr.To_str_and_clear());
 	}
@@ -74,10 +77,11 @@ public class Xoctg_catlink_loader_ppq {
 		, "FROM    <link_db_{0}>cat_link cl"
                 , "JOIN <page_db>page p ON p.page_id = cl.cl_from"
 		, "WHERE   page_namespace=104 AND page_title='{1}'"
+		, "AND cl_to_id in (476128,143843,143846,143844,143845)"
 		), link_db_id, ttl.Full_db_as_str().substring(5));
 		return attach_mgr.Resolve_sql(bfr.To_str_and_clear());
 	}
-	private void Load_catlinks_ppq(List_adp catlink_list, String sql) {
+	private int Load_catlinks_ppq(List_adp catlink_list, String sql) {
 		Db_rdr rdr = Db_rdr_.Empty;
 		int count = 0;
 		try {
@@ -95,6 +99,7 @@ public class Xoctg_catlink_loader_ppq {
 			rdr.Rls();
 			attach_mgr.Detach();
 		}
+                return count;
 	}
 	public static Xoctg_catlink_loader_ppq Create(Xow_wiki wiki, Xowd_page_tbl page_tbl, Xow_db_mgr db_mgr, Db_conn cat_core_conn) {
 		// init db vars

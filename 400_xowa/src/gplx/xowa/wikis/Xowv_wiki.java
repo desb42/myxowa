@@ -28,7 +28,7 @@ import gplx.xowa.apps.urls.*;
 import gplx.fsdb.*; import gplx.fsdb.meta.*;
 import gplx.xowa.specials.mgrs.*;
 import gplx.xowa.addons.wikis.htmls.css.bldrs.*; import gplx.xowa.addons.wikis.htmls.css.mgrs.*; import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*;
-import gplx.xowa.htmls.hxtns.pages.*;
+import gplx.xowa.htmls.hxtns.pages.*; import gplx.xowa.xtns.proofreadPage.*;
 public class Xowv_wiki implements Xow_wiki, Xow_ttl_parser, Gfo_invk {
 	private final    Xof_fsdb_mgr__sql fsdb_mgr; private Fsdb_db_mgr db_core_mgr;
 	private boolean init_needed = true;
@@ -130,6 +130,8 @@ public class Xowv_wiki implements Xow_wiki, Xow_ttl_parser, Gfo_invk {
 		data_mgr__core_mgr.Rls();
 		fsdb_mgr.Rls();
 	}
+        public Pp_quality Quality() {return null;} // nothing
+        public Db_breadcrumb Bread() {return null;} // nothing
 	public void Pages_get(Xoh_page rv, Gfo_url url, Xoa_ttl ttl) {
 		if (init_needed) Init_by_wiki();
 		if (ttl.Ns().Id_is_special())

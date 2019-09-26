@@ -19,9 +19,6 @@ import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.langs.vnts.*; import gplx.xowa.xtns.proofreadPage.*;
 public class Xopg_redlink_mgr implements Gfo_invk {
 	private final    Xoa_page page; private final    Xog_js_wkr js_wkr;
-        private boolean colouring = true;
-        public void Colouring_Y_() {colouring = true;}
-        public void Colouring_N_() {colouring = false;}
 	public Xopg_redlink_mgr(Xoa_page page, Xog_js_wkr js_wkr) {this.page = page; this.js_wkr = js_wkr;	}
 	public void Redlink(Bry_bfr bfr) {
 		// init; exit if redlink disabled (on Module pages)
@@ -92,8 +89,7 @@ public class Xopg_redlink_mgr implements Gfo_invk {
 			++redlink_count;
                         }
 		}
-                if (colouring)
-                    Pp_pagelist_colour.Colour(lnki_ids, bfr, wiki); // should be a variabl pointing to a function
+                Pp_pagelist_colour.Colour(lnki_ids, bfr, wiki); // check for page colour (only wikisource)
 		usr_dlg.Log_many("", "", "redlink.redlink_end: redlinks_run=~{0}", redlink_count);
 	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

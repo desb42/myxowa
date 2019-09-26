@@ -24,6 +24,7 @@ import gplx.xowa.parsers.lnkis.files.*;
 import gplx.xowa.wikis.pages.lnkis.Xopg_colour;
 public class Pp_pagelist_colour {
 	public static void Colour(List_adp list, Bry_bfr bfr, Xow_wiki wiki) {
+            if (wiki.Quality().Not_colouring()) return;
 		// only check on Page: pages
 		int len = list.Count();
 		for (int i = 0; i < len; i++) {
@@ -35,7 +36,7 @@ public class Pp_pagelist_colour {
 			//  should lookup pagequality in cat_link table
 			//
 			String quality;
-			int catqual = Pp_quality.getQualityFromCatlink(page_row.Id(), wiki);
+			int catqual = wiki.Quality().getQualityFromCatlink(page_row.Id(), wiki);
 			if (catqual >= 0 && catqual <= 4)
 				quality = String.valueOf(catqual);
 			else

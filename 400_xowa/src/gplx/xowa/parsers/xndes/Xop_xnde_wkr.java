@@ -593,25 +593,32 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 			int close_bgn = Find_xtn_end_lhs(ctx, tag, src, src_len, open_bgn, open_end, tag.Xtn_bgn_tag(), close_bry);
 			if (close_bgn == Bry_find_.Not_found) auto_close = true;	// auto-close if end not found; verified with <poem>, <gallery>, <imagemap>, <hiero>, <references> DATE:2014-08-23
 			int close_end = -1;
-			if (auto_close) {
-				return ctx.Lxr_make_txt_(open_end);	// dangling tags are now escaped; used to gobble up rest of page with "xnde_end = close_bgn = close_end = src_len;"; DATE:2017-01-10
+			if (tag.Id() == Xop_xnde_tag_.Tid__references && auto_close) {
+				// treat as inline
+				xnde = Xnde_bgn(ctx, tkn_mkr, root, tag, Xop_xnde_tkn.CloseMode_inline, src, open_bgn, open_end, atrs_bgn, atrs_end, atrs);
+				xnde.Tag_close_rng_(open_end, open_end);
 			}
 			else {
-				close_end = Find_end_tag_pos(src, src_len, close_bgn + close_bry.length);
-				if (close_end == Bry_find_.Not_found) return ctx.Lxr_make_log_(Xop_xnde_log.Xtn_end_not_found, src, open_bgn, open_end);
-				xnde_end = close_end;
+				if (auto_close) {
+					return ctx.Lxr_make_txt_(open_end);	// dangling tags are now escaped; used to gobble up rest of page with "xnde_end = close_bgn = close_end = src_len;"; DATE:2017-01-10
+				}
+				else {
+					close_end = Find_end_tag_pos(src, src_len, close_bgn + close_bry.length);
+					if (close_end == Bry_find_.Not_found) return ctx.Lxr_make_log_(Xop_xnde_log.Xtn_end_not_found, src, open_bgn, open_end);
+					xnde_end = close_end;
+				}
+	
+				if (pre2_hack)
+					return ctx.Lxr_make_txt_(close_end);
+				xnde = New_xnde_pair(ctx, root, tkn_mkr, tag, open_bgn, open_end, close_bgn, close_end);
+				xnde.Atrs_rng_(atrs_bgn, atrs_end);
+				xnde.Atrs_ary_(atrs);
+				if (close_bgn - open_end > 0)
+	//                            if (tag.Id() == Xop_xnde_tag_.Tid__nowiki)
+	//				xnde.Subs_add(new Xop_nowiki_tkn(open_end, close_bgn));
+	//                        else
+					xnde.Subs_add(tkn_mkr.Txt(open_end, close_bgn));
 			}
-
-			if (pre2_hack)
-				return ctx.Lxr_make_txt_(close_end);
-			xnde = New_xnde_pair(ctx, root, tkn_mkr, tag, open_bgn, open_end, close_bgn, close_end);
-			xnde.Atrs_rng_(atrs_bgn, atrs_end);
-			xnde.Atrs_ary_(atrs);
-			if (close_bgn - open_end > 0)
-//                            if (tag.Id() == Xop_xnde_tag_.Tid__nowiki)
-//				xnde.Subs_add(new Xop_nowiki_tkn(open_end, close_bgn));
-//                        else
-				xnde.Subs_add(tkn_mkr.Txt(open_end, close_bgn));
 		}
 		switch (ctx.Parse_tid()) {
 			case Xop_parser_tid_.Tid__tmpl: {

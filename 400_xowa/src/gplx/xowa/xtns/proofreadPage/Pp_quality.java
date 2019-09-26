@@ -18,24 +18,25 @@ import gplx.xowa.*; import gplx.*; import gplx.dbs.*; import gplx.xowa.wikis.dbs
 import gplx.xowa.addons.wikis.ctgs.htmls.catpages.dbs.*;
 import gplx.xowa.wikis.data.*; import gplx.xowa.wikis.data.tbls.*; import gplx.xowa.addons.wikis.ctgs.dbs.*;
 import gplx.xowa.wikis.data.*;
-class Pp_quality {
+public class Pp_quality {
 /*
 get page_ids for  Mediawiki:proofreadpage_quality0_category to proofreadpage_quality4_category
 enwikisource
 	
- 0 - Without text	476128
- 1 - Not proofread   143843
- 2 - Problematic	 143846
- 3 - Proofread	   143844
- 4 - Validated	   143845
+ Mediawiki:proofreadpage_quality0_category - Without text - 476128
+ Mediawiki:proofreadpage_quality1_category - Not proofread - 143843
+ Mediawiki:proofreadpage_quality2_category - Problematic - 143846
+ Mediawiki:proofreadpage_quality3_category - Proofread - 143844
+ Mediawiki:proofreadpage_quality4_category - Validated - 143845
 
 */
-	private static boolean initialised = false;
-	private static int qual0 = 476128;
-	private static int qual1 = 143843;
-	private static int qual2 = 143846;
-	private static int qual3 = 143844;
-	private static int qual4 = 143845;
+	private boolean initialised = false;
+	private int qual0;
+	private int qual1;
+	private int qual2;
+	private int qual3;
+	private int qual4;
+        public boolean Not_colouring() { return !colouring; } private boolean colouring;
 	
 	public static final int
 	  Quality_unknown = -1
@@ -46,8 +47,10 @@ enwikisource
 	, Quality_validated = 4
 	;
 
-	public static void initialiseit(Xow_wiki wiki) {
-            Init(wiki);
+        public Pp_quality(boolean iswikisource) {
+            colouring = iswikisource;
+        }
+	public void initialiseit(Xow_wiki wiki) {
 /*
 		qual0 = getmedia("Mediawiki:proofreadpage_quality0_category")
 		qual1 = getmedia("Mediawiki:proofreadpage_quality1_category")
@@ -55,10 +58,17 @@ enwikisource
 		qual3 = getmedia("Mediawiki:proofreadpage_quality3_category")
 		qual4 = getmedia("Mediawiki:proofreadpage_quality4_category")
 */
+	qual0 = 476128;
+	qual1 = 143843;
+	qual2 = 143846;
+	qual3 = 143844;
+	qual4 = 143845;
+            Init(wiki);
+			initialised = true;
 	}
 
-	private static Xoctg_catlink_loader_ppq loader;
-	public static void Init(Xow_wiki wiki) {
+	private Xoctg_catlink_loader_ppq loader;
+	private void Init(Xow_wiki wiki) {
 		// get cat_id from page_tbl
 		Xow_db_mgr db_mgr = wiki.Data__core_mgr();
 		Xowd_page_tbl page_tbl = db_mgr.Db__core().Tbl__page();
@@ -67,10 +77,9 @@ enwikisource
 
 		loader = Xoctg_catlink_loader_ppq.Create(wiki, page_tbl, db_mgr, cat_core_tbl.Conn());
 	}
-	public static int getQualityFromCatlink(int page_id, Xow_wiki wiki) {
+	public int getQualityFromCatlink(int page_id, Xow_wiki wiki) {
 		if (!initialised) {
 			initialiseit(wiki);
-			initialised = true;
 		}
 		//int catqual = getsql("select cl_to_id from cat_link where cl_from=?", page_id);
 		//int catqual = 143845;
@@ -78,10 +87,9 @@ enwikisource
 		return cvtqual(catqual);
 	}
 
-	public static int getQualityFromCatlink(Xoa_ttl ttl, Xow_wiki wiki) {
+	public int getQualityFromCatlink(Xoa_ttl ttl, Xow_wiki wiki) {
 		if (!initialised) {
 			initialiseit(wiki);
-			initialised = true;
 		}
 		//int catqual = getsql("select cl_to_id, cl_from from cat_link cl join page p on p.page_id=cl.cl_from where page_namespace=104 and page_title=?", ttl.Base_txt());
 		//int catqual = 143845;
@@ -89,7 +97,7 @@ enwikisource
 		return cvtqual(catqual);
 	}
 
-	private static int cvtqual(int catqual) {
+	private int cvtqual(int catqual) {
 			if (catqual == qual0)
 				return Quality_without_text;
 			else if (catqual == qual1)
@@ -103,23 +111,4 @@ enwikisource
 			else
 				return Quality_unknown;
 	}
-	/*public int getsql(int page_id) {
-		String sql = String_.Format
-		( "SELECT cl_from_id, cl_to_id FROM cat_link WHERE cl_from={0}"
-		, page_id
-		);
-		Xow_db_mgr db_mgr = wiki.Data__core_mgr();
-		Db_qry qry = Db_qry_sql.rdr_(sql);
-		Xow_db_file cat_link_db = db_mgr.Dbs__get_by_id_or_fail(cat_link_db_idx);
-		Db_rdr rdr = cat_link_db.Conn().Stmt_new(qry).Exec_select__rls_auto();
-		try {
-			while (rdr.Move_next()) {
-				Xowd_page_itm page = new Xowd_page_itm();
-				Read_page__idx(page, rdr);
-				rslt_list.Add(page);
-			}
-			rslt_list.Sort_by(Xowd_page_itm_sorter.TitleAsc);
-		}
-		finally {rdr.Rls();}
-	}*/
 }

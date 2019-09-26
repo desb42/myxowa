@@ -39,7 +39,7 @@ public class Xoh_file_mgr {
 		catch (Exception e) { // do not let fatal exceptions during link_parse break page; DATE:2017-12-02
 			String link_text = String_.new_u8(src, lnki.Src_bgn(), lnki.Src_end());
 			bfr.Add_str_u8("<span style='color:red'>FAIL.PARSER.LINK:" + link_text + "</span>");
-			Gfo_usr_dlg_.Instance.Warn_many("", "", "fatal err when parsing link; link=~{0} err=~{1}", link_text, Err_.Message_gplx_log(e));			
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "fatal err when parsing link; page=~{0} link=~{1} err=~{2}", page.Ttl().Full_db_as_str(), link_text, Err_.Message_gplx_log(e));			
 		}
 	}
 	public Xof_file_itm Lnki_eval(int exec_tid, Xop_ctx ctx, Xoae_page page, Xop_lnki_tkn lnki) {return Lnki_eval(exec_tid, ctx, page, page.File_queue(), lnki.Ttl().Page_url(), lnki.Lnki_type(), lnki.Upright(), lnki.W(), lnki.H(), lnki.Time(), lnki.Page(), lnki.Ns_id() == Xow_ns_.Tid__media);}

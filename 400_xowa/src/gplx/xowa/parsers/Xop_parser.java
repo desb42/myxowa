@@ -122,6 +122,14 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
                 Xop_list_tkn_new saved_tkn = ctx.Page().Prev_list_tkn();
                 ctx.Page().Prev_list_tkn_(null); // reset list new
 		Parse_to_src_end(root, ctx, tkn_mkr, src, trie, doc_bgn_pos, len);
+					// any outstanding list?
+					Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+					if (prev != null) {
+						// inject a list close
+						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, prev);
+						ctx.Subs_add_and_stack(root, itm);
+						ctx.Page().Prev_list_tkn_(null);
+					}
                 ctx.Page().Prev_list_tkn_(saved_tkn);
 		ctx.Parser__page_term(root, src, len);
 		ctx.Parse_tid_(parse_tid_old);
