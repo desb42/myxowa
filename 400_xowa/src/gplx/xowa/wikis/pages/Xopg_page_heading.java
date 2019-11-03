@@ -43,5 +43,5 @@ public class Xopg_page_heading implements Bfr_arg {
 		fmtr.Bld_many(bfr, display_title, edit_lead_section);
 	}
 	private static final    byte[] Bry__lead_section_hint = Bry_.new_u8("(Lead)");
-	private final    Bry_fmt fmtr = Bry_fmt.Auto_nl_apos("<h1 id='firstHeading' class='firstHeading'>~{page_title}~{edit_lead_section}</h1>");	// <span>~{page_title}</span>
+	private final    Bry_fmt fmtr = Bry_fmt.Auto_nl_apos("<h1 id=\"firstHeading\" class=\"firstHeading\">~{page_title}~{edit_lead_section}</h1>");	// <span>~{page_title}</span>
 }

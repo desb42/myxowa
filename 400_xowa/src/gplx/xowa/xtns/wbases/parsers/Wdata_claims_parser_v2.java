@@ -64,18 +64,20 @@ class Wdata_claims_parser_v2 {
 		return rv;
 	}
 	private Wbase_references_grp Parse_references_grp(byte[] qid, Json_nde owner) {
+		byte[] hash = null;
+		Wbase_claim_grp_list snaks = null;
+		int[] snaks_order = null;
 		int len = owner.Len();
-		Wbase_claim_grp_list snaks = null; int[] snaks_order = null;
 		for (int i = 0; i < len; ++i) {
 			Json_kv sub = Json_kv.cast(owner.Get_at(i));
 			byte tid = Wdata_dict_reference.Reg.Get_tid_or_max_and_log(qid, sub.Key().Data_bry()); if (tid == Byte_.Max_value_127) continue;
 			switch (tid) {
-				case Wdata_dict_reference.Tid__hash:	break;	// ignore: "b923b0d68beb300866b87ead39f61e63ec30d8af"
+				case Wdata_dict_reference.Tid__hash:            hash = sub.Val_as_bry(); break;
 				case Wdata_dict_reference.Tid__snaks:			snaks = Parse_qualifiers(qid, Json_nde.cast(sub.Val())); break;
 				case Wdata_dict_reference.Tid__snaks_order:		snaks_order = Parse_pid_order(Json_ary.cast_or_null(sub.Val())); break;
 			}
 		}
-		return new Wbase_references_grp(snaks, snaks_order);
+		return new Wbase_references_grp(hash, snaks, snaks_order);
 	}
 	public Wbase_claim_grp_list Parse_qualifiers(byte[] qid, Json_nde qualifiers_nde) {
 		Wbase_claim_grp_list rv = new Wbase_claim_grp_list();
@@ -111,6 +113,7 @@ class Wdata_claims_parser_v2 {
 	public Wbase_claim_base Parse_mainsnak(byte[] qid, Json_nde nde, int pid) {
 		int len = nde.Len();
 		byte snak_tid = Byte_.Max_value_127;
+		byte[] hash = null;
 		for (int i = 0; i < len; ++i) {
 			Json_kv sub = Json_kv.cast(nde.Get_at(i));
 			byte tid = Wdata_dict_mainsnak.Reg.Get_tid_or_max_and_log(qid, sub.Key().Data_bry()); if (tid == Byte_.Max_value_127) continue;
@@ -119,10 +122,10 @@ class Wdata_claims_parser_v2 {
 				case Wdata_dict_mainsnak.Tid__datavalue:	return Parse_datavalue(qid, pid, snak_tid, Json_nde.cast(sub.Val()));
 				case Wdata_dict_mainsnak.Tid__datatype:		break;		// ignore: has values like "wikibase-property"; EX: www.wikidata.org/wiki/Property:P397; DATE:2015-06-12
 				case Wdata_dict_mainsnak.Tid__property:		break;		// ignore: pid already available above
-				case Wdata_dict_mainsnak.Tid__hash:			break;		// ignore: "84487fc3f93b4f74ab1cc5a47d78f596f0b49390"
+				case Wdata_dict_mainsnak.Tid__hash:			hash = sub.Val().Data_bry(); break;
 			}
 		}
-		return new Wbase_claim_value(pid, Wbase_claim_type_.Tid__unknown, snak_tid); // NOTE: mainsnak can be null, especially for qualifiers; PAGE:Q2!P576; DATE:2014-09-20
+		return new Wbase_claim_value(pid, Wbase_claim_type_.Tid__unknown, snak_tid, hash); // NOTE: mainsnak can be null, especially for qualifiers; PAGE:Q2!P576; DATE:2014-09-20
 	}
 	public Wbase_claim_base Parse_datavalue(byte[] qid, int pid, byte snak_tid, Json_nde nde) {
 		int len = nde.Len();

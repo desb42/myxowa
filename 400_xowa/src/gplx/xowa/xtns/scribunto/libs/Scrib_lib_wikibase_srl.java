@@ -138,6 +138,7 @@ public class Scrib_lib_wikibase_srl {
 			Srl_root(list, Wdata_dict_claim.Itm__qualifiers.Key_str(), Srl_qualifiers(prop_mgr, visitor, itm.Qualifiers(), base_adj, page_url));
 			Srl_root(list, Wdata_dict_claim.Itm__qualifiers_order.Key_str(), Srl_qualifiers_order(prop_mgr, visitor, itm.Qualifiers_order(), base_adj, page_url));
 		}
+		Srl_root(list, Wdata_dict_claim.Itm__references.Key_str(), Srl_references(prop_mgr, visitor, itm.References(), base_adj, page_url));
 		return (Keyval[])list.To_ary_and_clear(Keyval.class);
 	}
 	private static Keyval[] Srl_qualifiers(Wbase_prop_mgr prop_mgr, Scrib_lib_wikibase_srl_visitor visitor, Wbase_claim_grp_list list, int base_adj, byte[] page_url) {
@@ -165,6 +166,20 @@ public class Scrib_lib_wikibase_srl {
 		for (int i = 0; i < list_len; ++i) {
 			String itm_pid = "P" + Int_.To_str(list[i]);
 			rv.Add(Keyval_.int_(i + base_adj, itm_pid));
+		}
+		return (Keyval[])rv.To_ary_and_clear(Keyval.class);
+	}
+	private static Keyval[] Srl_references(Wbase_prop_mgr prop_mgr, Scrib_lib_wikibase_srl_visitor visitor, Wbase_references_grp[] list, int base_adj, byte[] page_url) {
+		if (list == null) return null;
+		int list_len = list.length; if (list_len == 0) return Keyval_.Ary_empty;
+		List_adp rv = List_adp_.New();
+		for (int i = 0; i < list_len; ++i) {
+			Wbase_references_grp references_grp = list[i];
+			Keyval[] references_kvs = new Keyval[3];
+			references_kvs[0] = Keyval_.new_("hash", references_grp.Hash());
+			references_kvs[1] = Keyval_.new_("snaks", Srl_qualifiers(prop_mgr, visitor, references_grp.Snaks(), base_adj, page_url));
+			references_kvs[2] = Keyval_.new_("snaks-order", Srl_qualifiers_order(prop_mgr, visitor, references_grp.Snaks_order(), base_adj, page_url));
+			rv.Add(Keyval_.int_(i + base_adj, references_kvs));
 		}
 		return (Keyval[])rv.To_ary_and_clear(Keyval.class);
 	}

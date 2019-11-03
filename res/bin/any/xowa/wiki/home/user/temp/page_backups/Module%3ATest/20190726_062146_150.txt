@@ -1,0 +1,148 @@
+local p={}
+
+function p.test4(frame)
+  local phonData = '𣂁脁晁'
+--  local phonData = '𣂁ab'
+--  local phonData = '脁ab'
+--local phonData = 'abc'
+  dbg(phonData);
+  for item in mw.text.gsplit(phonData, "") do
+    dbg(item);
+  end
+
+end
+
+function p.test5(frame)
+  local captures = {mw.ustring.match("dejstvítelʹnoje pričástije nastojáščevo vrémeni", "(.-)([ %-]+)()", 1)}
+  dbg(mw.dump_table(captures));
+end
+
+function p.test6(frame)
+  local c = "𑅶-𑅐"
+  return mw.ustring.match("民", c);
+end
+
+function p.test9(frame)
+    local rv = ""
+    rv = mw.ustring.gsub("abcabc", "."
+    , function(m) 
+        if m == 'a' then
+          return "A"
+        end
+      end
+    )
+    return rv
+end
+
+function p.test10(frame)
+    local rv = "abc"
+    rv = rv:match('')
+    return rv
+end
+
+function p.test11(frame)
+dbg('test11');
+  return frame:preprocess('{{#Invoke:Test|test_nested_sub}}')
+end
+
+function p.test_nested_sub(frame)
+  if _G.global_increment == nil then
+    _G.global_increment = 'a'
+  end
+  _G.global_increment = _G.global_increment .. 'a';
+  dbg('test_nested_sub', _G.global_increment);
+  return _G.global_increment
+end
+
+function p.test12(frame)
+dbg(tonumber('-'));
+end
+
+function p.test14(frame)
+  local key = "foreign_lang_source_2en!"
+  key = key:gsub ('(foreign_lang_source_?2?)%a%a%a?', '%1');
+  return key;
+end
+function p.test14c(frame)
+ return mw.language.fetchLanguageName( "enx")
+end
+
+function p.test15(frame)
+local v = '[[b]]'
+local pattern = '[\000-\008\011\012\014-\031]'
+  dbg(v, pattern);
+  position, dummy, capture = mw.ustring.find (v, pattern)
+  dbg(position, dummy, capture);
+end
+
+function p.test18(frame)
+  return mw.language.fetchLanguageName(frame.args[1]);
+end
+
+function p.test19(frame)
+local word = 'ðaða';
+		word = mw.ustring.gsub(
+			word,
+			'()([ˈˌ]?)([βðɣʝ])',
+			function (pos, stress, fricative)
+				local before = pos > 1 and mw.ustring.sub(word, pos - 1, pos - 1)
+				if not before or (fricative == 'ɣ' or fricative == 'β') and ('mnɲ'):find(before)
+						or (fricative == 'ð' or fricative == 'ʝ') and ('lʎmnɲ'):find(before) then
+					return stress .. 'fricative_to_stop'
+				end -- else no change
+			end)
+
+return word;
+end
+
+function p.test21(frame)
+   local var = mw.language.new('gl'):isRTL();
+   dbg(var);
+end
+
+
+function p.test22(frame)
+local exc = 'sajhdsgkjgdkhagdjhsgdkjashgdkashdgkjsdgjhdgkjadgksdjhskjhk'
+return mw.ustring.find(exc, "('''%b[]''')$", -350)
+end
+
+
+function p.test23(frame)
+  local title = mw.title.new("abcdefgh")
+  local raw = title:getContent()
+  return raw.length --fails with attempt to index local 'raw' (a nil value).
+end
+
+function p.test24(frame)
+  local raw = nil
+  return mw.text.split( raw , '\n') --fails with bad argument #1 to 'len' (string expected, got nil).
+end
+
+
+function p.test22a(frame)
+  local args = frame.args;
+  local rv = mw.ustring.find(args[1], args[2], tonumber(args[3]), args[4] == 'true')
+--  dbg(mw.dump_table(rv));
+  return rv;
+end
+
+function p.ustring_find(frame)
+  local args = frame.args;
+  local rslt = {mw.ustring.find(args[1], args[2], tonumber(args[3]), args[4] == 'true')};
+
+  local rv = '';
+  local rslt_len = #rslt;
+  for i=1,rslt_len do
+    if i ~= 1 then
+      rv = rv .. ';'
+    end
+    rv = rv .. rslt[i]
+  end
+  return rv;
+end
+
+function p.string_upper(frame)
+   return mw.ustring.upper(frame.args[1])
+end
+
+return p

@@ -67,4 +67,5 @@ public class References_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	private static final    Hash_adp_bry xatrs_hash = Hash_adp_bry.ci_a7()
 	.Add_str_obj("group", Byte_obj_val.new_(References_nde.Xatr_id_group))
 	.Add_str_obj("responsive", Byte_obj_val.new_(References_nde.Xatr_id_responsive));
+	public static final    byte[] ESCAPED_TAG_BGN = Bry_.new_a7("&lt;references>");
 }

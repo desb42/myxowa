@@ -568,6 +568,8 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
                 open_bgn += 1;
 		return Xop_xnde_wkr_.Find_xtn_end(ctx, src, open_end, src_len, open_bry, close_bry); // UNIQ; DATE:2017-03-31
 	}
+
+	private static final byte XTN_CLOSE_MODE__MAKE = 0, XTN_CLOSE_MODE__ESCAPE = 1, XTN_CLOSE_MODE__AUTO_INLINE = 2;
 	private int Make_xnde_xtn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, Xop_xnde_tag tag, int open_bgn, int open_end, int name_bgn, int name_end, int atrs_bgn, int atrs_end, Mwh_atr_itm[] atrs, boolean inline, boolean pre2_hack) {
 		// NOTE: find end_tag that exactly matches bgnTag; must be case sensitive;
 		int xnde_end = open_end;
@@ -577,46 +579,72 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 			xnde.Tag_close_rng_(open_end, open_end);			// NOTE: inline tag, so set TagClose to open_end; should noop
 		}
 		else {
+			// build </xtn> for search
 			byte[] close_bry = tag.Xtn_end_tag_tmp();			// get tmp bry (so as not to new)
-			if (tag.Langs() != null) {							// cur tag has langs; EX:<section>; DATE:2014-07-18
+
+			// handle tag with lang translations; EX:<section> is <trecho> in pt; DATE:2014-07-18
+			if (tag.Langs() != null) {
 				Xop_xnde_tag_lang tag_lang = tag.Langs_get(ctx.Lang().Case_mgr(), ctx.Page().Lang().Lang_id(), src, name_bgn, name_end);
-				if (tag_lang == null)							// tag does not match lang; EX:<trecho> and lang=de;
+				if (tag_lang == null) // tag does not match lang; EX:<trecho> tag but current lang is de;
 					return ctx.Lxr_make_txt_(open_end);
-				if (tag_lang != Xop_xnde_tag_lang.Instance)		// tag matches; note Xop_xnde_tag_lang._ is a wildcard match; EX:<section>
+				if (tag_lang != Xop_xnde_tag_lang.Instance) // tag matches; note Xop_xnde_tag_lang.Instance is a wildcard match; EX:<section>
 					close_bry = tag_lang.Xtn_end_tag_tmp();
 			}
+
+			// fill </xtn>
 			int src_offset = open_bgn - 1;						// open bgn to start at <; -2 to ignore </ ; +1 to include <
 			int close_ary_len = close_bry.length;
 			for (int i = 2; i < close_ary_len; i++)				// 2 to ignore </
 				close_bry[i] = src[src_offset + i];
-			boolean auto_close = false;
+
+			// search for </xtn>
+			byte close_mode = XTN_CLOSE_MODE__MAKE;
 			int close_bgn = Find_xtn_end_lhs(ctx, tag, src, src_len, open_bgn, open_end, tag.Xtn_bgn_tag(), close_bry);
-			if (close_bgn == Bry_find_.Not_found) auto_close = true;	// auto-close if end not found; verified with <poem>, <gallery>, <imagemap>, <hiero>, <references> DATE:2014-08-23
+			if (close_bgn == Bry_find_.Not_found) {// </xtn> not found
+				close_mode = (tag.Id() == Xop_xnde_tag_.Tag__references.Id()) // dangling <references> has partial auto-close behavior; ISSUE#:583; DATE:2019-10-05
+					? XTN_CLOSE_MODE__AUTO_INLINE
+					: XTN_CLOSE_MODE__ESCAPE; // escape if end not found; verified with <poem>, <gallery>, <imagemap>, <hiero>; DATE:2014-08-23; DATE:2019-10-05
+			}
+
+			// handle close_mode
 			int close_end = -1;
-			if (tag.Id() == Xop_xnde_tag_.Tid__references && auto_close) {
-				// treat as inline
+			switch (close_mode) {
+				case XTN_CLOSE_MODE__AUTO_INLINE: // <references> is converted to auto-inline; ISSUE#:583; DATE:2019-10-05
+					xnde_end = close_bgn = close_end = open_end;
+					break;
+				case XTN_CLOSE_MODE__ESCAPE: // dangling tags are escaped; used to gobble up rest of page with "xnde_end = close_bgn = close_end = src_len;"; DATE:2017-01-10
+					return ctx.Lxr_make_txt_(open_end);
+				case XTN_CLOSE_MODE__MAKE:
+					close_end = Find_end_tag_pos(src, src_len, close_bgn + close_bry.length); // search for ">"
+					if (close_end == Bry_find_.Not_found)
+						return ctx.Lxr_make_log_(Xop_xnde_log.Xtn_end_not_found, src, open_bgn, open_end);
+					xnde_end = close_end;
+					break;
+				default: throw Err_.new_unhandled_default(close_mode);
+			}
+
+			// pre2_hack
+			if (pre2_hack)
+				return ctx.Lxr_make_txt_(close_end);
+
+			if (   close_mode == XTN_CLOSE_MODE__AUTO_INLINE) {
+				// add &lt;references
+				if (ctx.Parse_tid() == Xop_parser_tid_.Tid__wtxt) { // do not add if tmpl mode;
+					byte[] escaped_tag_bgn = gplx.xowa.xtns.cites.References_nde.ESCAPED_TAG_BGN;
+					root.Subs_add(tkn_mkr.Bry_raw(0, escaped_tag_bgn.length, escaped_tag_bgn));
+				}
+
+				// fake inline
 				xnde = Xnde_bgn(ctx, tkn_mkr, root, tag, Xop_xnde_tkn.CloseMode_inline, src, open_bgn, open_end, atrs_bgn, atrs_end, atrs);
-				xnde.Tag_close_rng_(open_end, open_end);
+				xnde.Tag_close_rng_(open_end, open_end); // NOTE: inline tag, so set TagClose to open_end; should noop
+				root.Subs_add(tkn_mkr.Bry_mid(src, open_end, open_end));
 			}
 			else {
-				if (auto_close) {
-					return ctx.Lxr_make_txt_(open_end);	// dangling tags are now escaped; used to gobble up rest of page with "xnde_end = close_bgn = close_end = src_len;"; DATE:2017-01-10
-				}
-				else {
-					close_end = Find_end_tag_pos(src, src_len, close_bgn + close_bry.length);
-					if (close_end == Bry_find_.Not_found) return ctx.Lxr_make_log_(Xop_xnde_log.Xtn_end_not_found, src, open_bgn, open_end);
-					xnde_end = close_end;
-				}
-	
-				if (pre2_hack)
-					return ctx.Lxr_make_txt_(close_end);
+				// create xnde tag which will be everything between <xtn></xtn>
 				xnde = New_xnde_pair(ctx, root, tkn_mkr, tag, open_bgn, open_end, close_bgn, close_end);
 				xnde.Atrs_rng_(atrs_bgn, atrs_end);
 				xnde.Atrs_ary_(atrs);
 				if (close_bgn - open_end > 0)
-	//                            if (tag.Id() == Xop_xnde_tag_.Tid__nowiki)
-	//				xnde.Subs_add(new Xop_nowiki_tkn(open_end, close_bgn));
-	//                        else
 					xnde.Subs_add(tkn_mkr.Txt(open_end, close_bgn));
 			}
 		}

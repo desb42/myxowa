@@ -33,7 +33,7 @@ abstract class Wdata_doc_parser_fxt_base {
 	public Wbase_claim_base Make_claim_globecoordinate	(int pid, String lat, String lng, String prc) {return new Wbase_claim_globecoordinate(pid, Wbase_claim_value_type_.Tid__value, Bry_.new_u8(lat), Bry_.new_u8(lng), Object_.Bry__null, Bry_.new_u8(prc), Bry_.new_a7("http://www.wikidata.org/entity/Q2"));}
 	public Wbase_claim_base Make_claim_quantity			(int pid, int val, int unit, int ubound, int lbound) {return new Wbase_claim_quantity(pid, Wbase_claim_value_type_.Tid__value, Bry_.new_u8(Int_.To_str(val)), Bry_.new_u8(Int_.To_str(unit)), Bry_.new_u8(Int_.To_str(ubound)), Bry_.new_u8(Int_.To_str(lbound)));}
 	public Wbase_claim_base Make_claim_time				(int pid, String val) {return new Wbase_claim_time(pid, Wbase_claim_value_type_.Tid__value, Wbase_claim_time_.To_bry(tmp_time_bfr, val), Wbase_claim_time_.Dflt__timezone.Val_bry(), Wbase_claim_time_.Dflt__before.Val_bry(), Wbase_claim_time_.Dflt__after.Val_bry(), Wbase_claim_time_.Dflt__precision.Val_bry(), Wbase_claim_time_.Dflt__calendarmodel.Val_bry());}
-	public Wbase_claim_base Make_claim_novalue			(int pid) {return new Wbase_claim_value(pid, Wbase_claim_type_.Tid__unknown, Wbase_claim_value_type_.Tid__novalue);}
+	public Wbase_claim_base Make_claim_novalue			(int pid) {return new Wbase_claim_value(pid, Wbase_claim_type_.Tid__unknown, Wbase_claim_value_type_.Tid__novalue, null);}
 
 	public void Test_entity(String raw, String expd)		{Tfds.Eq(expd, String_.new_u8(wdoc_parser.Parse_qid(json_parser.Parse_by_apos(raw))));}
 	public void Test_sitelinks(String raw, Wdata_sitelink_itm... expd) {
@@ -71,8 +71,8 @@ abstract class Wdata_doc_parser_fxt_base {
 		Json_ary owner = Json_ary.cast_or_null(Json_kv.cast(jdoc.Root_nde().Get_at(0)).Val());
 		Wbase_references_grp[] actl = wdoc_parser.Parse_references(Q1_bry, owner);
 		Wbase_references_grp actl_grp = actl[0];
-		Tfds.Eq_ary(expd_order, actl_grp.References_order());
-		Tfds.Eq_ary_str(expd_itms, To_ary(actl_grp.References()));
+		Tfds.Eq_ary(expd_order, actl_grp.Snaks_order());
+		Tfds.Eq_ary_str(expd_itms, To_ary(actl_grp.Snaks()));
 	}
 	public void Test_pid_order(String raw, int... expd) {
 		Json_doc jdoc = json_parser.Parse_by_apos(raw);

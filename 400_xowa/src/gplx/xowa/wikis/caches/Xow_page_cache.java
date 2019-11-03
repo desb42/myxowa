@@ -80,6 +80,7 @@ public class Xow_page_cache {
 		byte[] page_redirect_from = null;
 		int page_id = -1;
 
+//System.out.println("ttl " + String_.new_u8(ttl.Full_db()));
 		// load_page if load_wkr exists; only for Xop_mediawiki_mgr
 		// gplx.core.consoles.Console_adp__sys.Instance.Write_str("page_cache:" + String_.new_u8(ttl_full_db));
 		if (load_wkr != null) {

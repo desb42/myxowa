@@ -352,6 +352,13 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 	public int Make_tkn_end(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, int typeId, byte wlxr_type, Xop_tblw_tkn prv_tkn, int prv_tid, boolean tbl_is_xml) {
 		if (!tbl_is_xml)													// only for "\n|}" not </table>
 			ctx.Para().Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);	// simulate "\n"; process para (which will create paras for cells) 2012-12-08
+
+		Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+		if (prev != null && typeId == Xop_tkn_itm_.Tid_tblw_te) {
+			Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+			ctx.Subs_add_and_stack(root, itm);
+			ctx.Page().Prev_list_tkn_(null);
+		}
                 // trim trailing whitespace
                 root.Subs_ignore_whitespace();
 		if (tbl_is_xml && typeId == Xop_tkn_itm_.Tid_tblw_tb	// tblx: </table>
@@ -450,13 +457,6 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			switch (wlxr_type) {
 				case Tblw_type_tb:
 					ctx.Para().Process_block__bgn_n__end_y(Xop_xnde_tag_.Tag__table);
-					/*	// inject a list close
-						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-                                                if (prev != null) {
-						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-						ctx.Subs_add_and_stack(root, itm);
-						ctx.Page().Prev_list_tkn_(null);
-                                                }*/
 					break;
 				case Tblw_type_td:
 				case Tblw_type_th:

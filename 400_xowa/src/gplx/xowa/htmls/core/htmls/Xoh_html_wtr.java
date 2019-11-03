@@ -581,7 +581,7 @@ public class Xoh_html_wtr {
                                     bfr.Add(Gfh_tag_.Br_inl); 
                                 else 
                                     bfr.Add_mid(src, xnde.Src_bgn(), xnde.Src_end()); break;
-			case Xop_xnde_tag_.Tid__hr: bfr.Add(Gfh_tag_.Hr_inl); break;
+//			case Xop_xnde_tag_.Tid__hr: bfr.Add(Gfh_tag_.Hr_inl); break;
 			case Xop_xnde_tag_.Tid__includeonly:	// NOTE: do not write tags or content
 				break;
 			case Xop_xnde_tag_.Tid__noinclude:		// NOTE: do not write tags
@@ -591,6 +591,7 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__nowiki:
 				Xnde_subs_escape(bfr, ctx, hctx, src, xnde, false, false);
 				break;
+                        case Xop_xnde_tag_.Tid__hr:
 			case Xop_xnde_tag_.Tid__b: case Xop_xnde_tag_.Tid__strong:
 			case Xop_xnde_tag_.Tid__i: case Xop_xnde_tag_.Tid__em: case Xop_xnde_tag_.Tid__cite: case Xop_xnde_tag_.Tid__dfn: case Xop_xnde_tag_.Tid__var:
 			case Xop_xnde_tag_.Tid__u: case Xop_xnde_tag_.Tid__ins: case Xop_xnde_tag_.Tid__abbr:
@@ -613,6 +614,8 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__dl:
 			case Xop_xnde_tag_.Tid__div:
 				Write_xnde(bfr, ctx, hctx, xnde, tag, tag_id, src);
+                                // (re)set para start
+                                ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_bgn);
 				break;
 			case Xop_xnde_tag_.Tid__pre: {
 				if (xnde.Tag_open_end() == xnde.Tag_close_bgn()) return; // ignore empty tags, else blank pre line will be printed; DATE:2014-03-12

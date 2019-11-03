@@ -35,6 +35,7 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		Xow_hdump_mode.Cfg__reg_type(cfg_mgr.Type_mgr());
 		cfg_mgr.Bind_many_wiki(this, wiki, Cfg__read_preferred, Cfg__html_mode);
 		wiki.Hxtn_mgr().Init_by_wiki(wiki, Bool_.N);
+		make_mgr.Init_by_wiki(wiki);
 	}
 	public void Load_by_xowe(Xoae_page wpg) {
 		tmp_hpg.Ctor_by_hview(wpg.Wiki(), wpg.Url(), wpg.Ttl(), wpg.Db().Page().Id());
@@ -62,15 +63,15 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 			if (!html_db.Tbl__html().Select_by_page(hpg)) return Load__fail(hpg);			// nothing in "html" table
 			byte[] src = Parse(hpg, hpg.Db().Html().Zip_tid(), hpg.Db().Html().Hzip_tid(), hpg.Db().Html().Html_bry());
 
-			// write ctgs
-			if (load_ctg) {
+			// write ctgs (do this in Xoh_page_wtr_wkr.java)
+			/*if (load_ctg) {
 				Xoctg_pagebox_itm[] pagebox_itms = wiki.Ctg__pagebox_wtr().Get_catlinks_by_page(wiki, hpg);
 				if (pagebox_itms.length > 0) {
 					tmp_bfr.Add(src);					
 					wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, wiki, hpg, pagebox_itms);
 					src = tmp_bfr.To_bry_and_clear();
 				}
-			}
+			}*/
 
 			hpg.Db().Html().Html_bry_(src);
 			wiki.Hxtn_mgr().Load_by_page(hpg, ttl);
@@ -82,14 +83,14 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		if (zip_tid > gplx.core.ios.streams.Io_stream_tid_.Tid__raw)
 			src = zip_mgr.Unzip((byte)zip_tid, src);
 		switch (hzip_tid) {
-			case Xoh_hzip_dict_.Hzip__none:
+			case Xoh_hzip_dict_.Hdb__htxt:
 				src = make_mgr.Parse(src, hpg.Wiki(), hpg);
 				break;
-			case Xoh_hzip_dict_.Hzip__plain:
+			case Xoh_hzip_dict_.Hdb__page_sync:
 				gplx.xowa.addons.wikis.pages.syncs.core.loaders.Xosync_page_loader page_loader = new gplx.xowa.addons.wikis.pages.syncs.core.loaders.Xosync_page_loader();
 				src = page_loader.Parse(wiki, hpg, src);
 				break;
-			case Xoh_hzip_dict_.Hzip__v1:
+			case Xoh_hzip_dict_.Hdb__hzip:
 				if (override_mgr__html != null)	// null when Parse is called directly
 					src = override_mgr__html.Get_or_same(hpg.Ttl().Page_db(), src);
 				hpg.Section_mgr().Add(0, 2, Bry_.Empty, Bry_.Empty).Content_bgn_(0);	// +1 to skip \n
@@ -99,7 +100,7 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		}
 		return src;
 	}
-	private void Fill_page(Xoae_page wpg, Xoh_page hpg) {
+	public void Fill_page(Xoae_page wpg, Xoh_page hpg) {
 		Xopg_html_data html_data = wpg.Html_data();
 		html_data.Display_ttl_(tmp_hpg.Display_ttl());
 		html_data.Content_sub_(tmp_hpg.Content_sub());			
@@ -126,9 +127,9 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		int len = src_imgs.Len();
 		for (int i = 0; i < len; ++i) {
 			gplx.xowa.files.Xof_fsdb_itm itm = src_imgs.Get_at(i);
-                        if (itm.Orig_ttl() == null) continue;
+			if (itm.Orig_ttl() == null) continue; // skip any images without a src; occurs for <score> when lilypond not available; ISSUE#:577 DATE:2019-09-30
 			wpg.Hdump_mgr().Imgs().Add(itm);
-			if (!Io_mgr.Instance.ExistsFil(itm.Html_view_url()))	// if exists, don't add to file_queue; needed for packed; PAGE:en.w:Mexico; DATE:2016-08-14
+			if (!Io_mgr.Instance.ExistsFil(itm.Html_view_url()))// if exists, don't add to file_queue; needed for packed; PAGE:en.w:Mexico; DATE:2016-08-14
 				wpg.File_queue().Add(itm);	// add to file_queue for http_server
 		}
 

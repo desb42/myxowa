@@ -215,7 +215,7 @@ public class Scrib_lib_language implements Scrib_lib {
 
 		// init vars
 		int date_bry_len = date_bry.length;
-		Pft_fmt_itm[] fmt_ary = Pft_fmt_itm_.Parse(core.Ctx(), fmt_bry);
+		Pft_fmt_itm[] fmt_ary = Pft_fmt_itm_.Parse(fmt_bry);
 		Xowe_wiki wiki = core.Wiki();
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
 

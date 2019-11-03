@@ -29,7 +29,7 @@ public class Xoerror_special implements Xow_special_page {
 		String msg = data;
 		if (String_.Eq(type, "InvalidTitle")) {
 			title = "Invalid title";
-			msg = "The title has invalid characters: <span style='color:red;font-weight:bold'>" + data + "</span>";
+			msg = "The title has invalid characters: <span style=\"color:red;font-weight:bold\">" + data + "</span>";
 		}
 
 		page.Db().Text().Text_bry_(fmt.Bld_many_to_bry(Bry_bfr_.New(), title, msg));

@@ -36,20 +36,20 @@ public class Xop_para_tkn extends Xop_tkn_itm_base {
 		}
 		switch (para_end) {
 			case Xop_para_tkn.Tid_none:		break;
-			case Xop_para_tkn.Tid_para:		Para_end(bfr); break;		// '<p>'
-			case Xop_para_tkn.Tid_pre:		bfr.Add(Gfh_tag_.Pre_rhs).Add_byte_nl(); break;	// '<pre>'
+			case Xop_para_tkn.Tid_para:		Para_end(bfr, Gfh_tag_.P_lhs, Gfh_tag_.P_rhs); break;		// '</p>'
+			case Xop_para_tkn.Tid_pre:		Para_end(bfr, Gfh_tag_.Pre_lhs, Gfh_tag_.Pre_rhs); bfr.Add_byte_nl(); break;	// '</pre>'
 			default:						throw Err_.new_unhandled(para_end);
 		}
 		switch (para_bgn) {
 			case Xop_para_tkn.Tid_none:		break;
-			case Xop_para_tkn.Tid_para:		Xoh_html_wtr_.Para__assert_tag_starts_on_nl(bfr, this.Src_bgn()); bfr.Add(Gfh_tag_.P_lhs); break;		// '</p>'
-			case Xop_para_tkn.Tid_pre:		Xoh_html_wtr_.Para__assert_tag_starts_on_nl(bfr, this.Src_bgn()); bfr.Add(Gfh_tag_.Pre_lhs); break;	// '</pre>'
+			case Xop_para_tkn.Tid_para:		Xoh_html_wtr_.Para__assert_tag_starts_on_nl(bfr, this.Src_bgn()); bfr.Add(Gfh_tag_.P_lhs); break;		// '<p>'
+			case Xop_para_tkn.Tid_pre:              Xoh_html_wtr_.Para__assert_tag_starts_on_nl(bfr, this.Src_bgn()); bfr.Add(Gfh_tag_.Pre_lhs); break;	// '<pre>'
 			default:						throw Err_.new_unhandled(para_bgn);
 		}
 		if (space_bgn > 0)
 			bfr.Add_byte_repeat(Byte_ascii.Space, space_bgn);
 	}
-        private void Para_end(Bry_bfr bfr) {
-            bfr.Add_close_tag_or_empty(Gfh_tag_.P_lhs, Gfh_tag_.P_rhs);
+        private void Para_end(Bry_bfr bfr, byte[] open_term, byte[] close_term) {
+            bfr.Add_close_tag_or_empty(open_term, close_term);
         }
 }

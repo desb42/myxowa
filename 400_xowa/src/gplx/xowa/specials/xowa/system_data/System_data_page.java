@@ -62,7 +62,7 @@ public class System_data_page implements Xow_special_page {
 	private Bry_fmtr fmtr_all = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( "<p><b>Path</b>: <code>~{path}</code>"
 	, "</p>"
-	, "<pre style='overflow:auto;'>"
+	, "<pre style=\"overflow:auto;\">"
 	, "~{text}</pre>"
 	), "path", "text");
 

@@ -6532,6 +6532,36 @@ group-checkuser|Check users
 group-oversight|Oversighters
 group-upwizcampeditors|Upload Wizard campaign editors
 grouppage-upwizcampeditors|{{ns:project}}:Upload Wizard campaign editors
+cx-contributions-upload|Upload media
 ']:>
 ).lang
+.time_formats
+  .load_text(
+<:['
+dmy
+time|H:i
+date|j F Y
+both|H:i, j F Y
+monthonly|F Y
+pretty|j F
+mdy
+time|H:i
+date|F j, Y
+both|H:i, F j, Y
+monthonly|F Y
+pretty|F j
+ymd
+time|H:i
+date|Y F j
+both|H:i, Y F j
+monthonly|Y F
+pretty|F j
+ISO 8601
+time|xnH:xni:xns
+date|xnY-xnm-xnd
+both|xnY-xnm-xnd"T"xnH:xni:xns
+monthonly|xnY-xnm
+pretty|xnm-xnd
+']:>
+)
 ;

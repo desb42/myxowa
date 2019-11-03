@@ -29,9 +29,9 @@ public class Vnt_mnu_grp_fmtr implements gplx.core.brys.Bfr_arg {
 	}
 	private static final    Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "    <div id='p-variants' role='navigation' class='vectorMenu' aria-labelledby='p-variants-label'>"
-	, "      <h3 id='p-variants-label'><span>~{grp_text}</span><a href='#'></a></h3>"
-	, "      <div class='menu'>"
+	, "    <div id=\"p-variants\" role=\"navigation\" class=\"vectorMenu\" aria-labelledby=\"p-variants-label\">"
+	, "      <h3 id=\"p-variants-label\"><span>~{grp_text}</span><a href=\"#\"></a></h3>"
+	, "      <div class=\"menu\">"
 	, "        <ul>~{itms}"
 	, "        </ul>"
 	, "      </div>"
@@ -51,10 +51,10 @@ class Xolg_vnt_itm_fmtr implements gplx.core.brys.Bfr_arg {
 			fmtr.Bld_bfr_many(bfr, i, itm_cls_selected, wiki_domain, itm.Key(), itm.Name(), page_href);
 		}
 	}
-	private static final    byte[] Itm_cls_selected_y = Bry_.new_a7(" class='selected'");
+	private static final    byte[] Itm_cls_selected_y = Bry_.new_a7(" class=\"selected\"");
 	private static final    Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last	// NOTE: using "/site/zh.w/zh-hans/A" instead of "/zh-hans/A" b/c it is easier for href_parser; if /site/ ever needs to truly mean "not-this-site", then change this to "/lang/"; DATE:2015-07-30
 	( ""
-	, "          <li id='ca-varlang-~{itm_idx}'~{itm_cls_selected}><a href='/site/~{wiki_domain}/~{itm_lang}/~{itm_href}' lang='~{itm_lang}' hreflang='~{itm_lang}' class='xowa-hover-off'>~{itm_text}</a></li>"
+	, "          <li id=\"ca-varlang-~{itm_idx}\"~{itm_cls_selected}><a href=\"/site/~{wiki_domain}/~{itm_lang}/~{itm_href}\" lang=\"~{itm_lang}\" hreflang=\"~{itm_lang}\" class=\"xowa-hover-off\">~{itm_text}</a></li>"
 	), "itm_idx", "itm_cls_selected", "wiki_domain", "itm_lang", "itm_text", "itm_href"
 	);
 }

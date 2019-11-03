@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.parsers.paras; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
 import gplx.xowa.parsers.tblws.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.miscs.*;
 import gplx.core.btries.*; 
+import gplx.xowa.parsers.lists.Xop_list_tkn_new;
 public class Xop_para_wkr implements Xop_ctx_wkr {
 	private boolean para_enabled;
 	private byte cur_mode;
@@ -78,6 +79,12 @@ public class Xop_para_wkr implements Xop_ctx_wkr {
 		if (!para_enabled) return;
 		Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);
 		Process_block__bgn_y__end_n(tag);
+		Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+		if (prev != null) {
+			Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+			ctx.Subs_add_and_stack(root, itm);
+			ctx.Page().Prev_list_tkn_(null);
+		}
 	}
 	public void Process_nl(Xop_ctx ctx, Xop_root_tkn root, byte[] src, int bgn_pos, int cur_pos) {// REF.MW:Parser.php|doBlockLevels
 		Dd_clear(ctx);

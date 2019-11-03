@@ -22,7 +22,7 @@ import gplx.xowa.xtns.scribunto.procs.*;
 public class Scrib_core {
 	private Hash_adp_bry mods = Hash_adp_bry.cs();
 	private int expensive_function_count;
-        private int luaid_ExecuteModule, luaid_ExecuteFunction;
+	private int luaid_ExecuteModule, luaid_ExecuteFunction;
 	public Scrib_core(Xoae_app app, Xop_ctx ctx) {// NOTE: ctx needed for language reg
 		this.app = app; this.ctx = ctx;
 		this.wiki = ctx.Wiki(); this.page = ctx.Page();	// NOTE: wiki / page needed for title reg; DATE:2014-02-05
@@ -39,6 +39,7 @@ public class Scrib_core {
  		lib_message = new Scrib_lib_message(this);
  		lib_text = new Scrib_lib_text(this);
 		lib_html = new Scrib_lib_html(this);
+		lib_hash = new Scrib_lib_hash(this);
 		lib_wikibase = new Scrib_lib_wikibase(this);
 		lib_wikibase_entity = new Scrib_lib_wikibase_entity(this);
 	}
@@ -68,6 +69,7 @@ public class Scrib_core {
 	public Scrib_lib_message Lib_message() {return lib_message;} private Scrib_lib_message lib_message;
 	public Scrib_lib_text Lib_text() {return lib_text;} private Scrib_lib_text lib_text;
 	public Scrib_lib_html Lib_html() {return lib_html;} private Scrib_lib_html lib_html;
+	public Scrib_lib_hash Lib_hash() {return lib_hash;} private Scrib_lib_hash lib_hash;
 	public Scrib_lib_wikibase Lib_wikibase() {return lib_wikibase;} private Scrib_lib_wikibase lib_wikibase;
 	public Scrib_lib_wikibase_entity Lib_wikibase_entity() {return lib_wikibase_entity;} private Scrib_lib_wikibase_entity lib_wikibase_entity;
 	public Scrib_core Init() {	// REF:LuaCommon.php!Load
@@ -81,10 +83,11 @@ public class Scrib_core {
 		,	root_dir.GenSubFil_nest("engines", "LuaStandalone", "mw_main.lua").Raw()
 		,	root_dir.Raw()
 		);
-		Init_register(script_dir, lib_mw, lib_uri, lib_ustring, lib_language, lib_site, lib_title, lib_text, lib_html, lib_message, lib_wikibase, lib_wikibase_entity);
+		Init_register(script_dir, lib_mw, lib_uri, lib_ustring, lib_language, lib_site, lib_title, lib_text, lib_html, lib_message, lib_hash
+			, lib_wikibase, lib_wikibase_entity);
 		xtn_mgr.Lib_mgr().Init_for_core(this, script_dir);
-                luaid_ExecuteModule = lib_mw.Mod().Fncs_get_id("executeModule");
-                luaid_ExecuteFunction = lib_mw.Mod().Fncs_get_id("executeFunction");
+		luaid_ExecuteModule = lib_mw.Mod().Fncs_get_id("executeModule");
+		luaid_ExecuteFunction = lib_mw.Mod().Fncs_get_id("executeFunction");
 		return this;
 	}
 	private void Init_register(Io_url script_dir, Scrib_lib... ary) {
@@ -183,10 +186,10 @@ public class Scrib_core {
 			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), String_.new_u8(fnc_name));
 			Keyval[] func_rslt = engine.CallFunction(luaid_ExecuteModule, func_args);			// call init_chunk to get proc dynamically; DATE:2014-07-12
 			if (func_rslt == null || func_rslt.length < 2) {
-                            String errmsg = String_.new_u8(ctx.Wiki().Msg_mgr().Val_by_key_args(Bry_.new_a7("scribunto-common-nosuchfunction"), fnc_name, Scrib_kv_utl_.Val_to_str(func_args, 1)));
-                            //throw Err_.new_wo_type("lua.error:" + errmsg, "fnc_name", String_.new_u8(fnc_name)); // must return at least 2 items for func_rslt[1] below; DATE:2014-09-22
-                            throw Err_.new_wo_type(errmsg, "fnc_name", String_.new_u8(fnc_name)); // must return at least 2 items for func_rslt[1] below; DATE:2014-09-22
-                        }
+				String errmsg = String_.new_u8(ctx.Wiki().Msg_mgr().Val_by_key_args(Bry_.new_a7("scribunto-common-nosuchfunction"), fnc_name, Scrib_kv_utl_.Val_to_str(func_args, 1)));
+				//throw Err_.new_wo_type("lua.error:" + errmsg, "fnc_name", String_.new_u8(fnc_name)); // must return at least 2 items for func_rslt[1] below; DATE:2014-09-22
+				throw Err_.new_wo_type(errmsg, "fnc_name", String_.new_u8(fnc_name)); // must return at least 2 items for func_rslt[1] below; DATE:2014-09-22
+			}
 			Scrib_lua_proc proc = (Scrib_lua_proc)func_rslt[1].Val();												// note that init_chunk should have: [0]:true/false result; [1]:proc
 			func_args = Scrib_kv_utl_.base1_many_(proc);
 			func_rslt = engine.CallFunction(luaid_ExecuteFunction, func_args);				// call function now

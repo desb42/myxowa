@@ -85,6 +85,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		this.ctg_catpage_mgr = new Xoctg_catpage_mgr(this);
                 this.quality = new Pp_quality(domain_itm.Domain_type_id() == Xow_domain_tid_.Tid__wikisource);
                 this.bread = new Db_breadcrumb(this);
+                this.maxpage = new Db_maxpage(this);
 	}
 	public Gfo_evt_mgr				Evt_mgr() {return ev_mgr;} private final    Gfo_evt_mgr ev_mgr;
 	public Xow_ns_mgr				Ns_mgr() {return ns_mgr;} private final    Xow_ns_mgr ns_mgr;
@@ -153,6 +154,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public byte[]					Wdata_wiki_abrv() {return wdata_wiki_abrv;} private byte[] wdata_wiki_abrv;
 	public Pp_quality				Quality() {return quality;} private Pp_quality quality;
 	public Db_breadcrumb				Bread() {return bread;} private Db_breadcrumb bread;
+        public Db_maxpage                               Maxpage() {return maxpage;} private Db_maxpage maxpage;
 	private void Wdata_wiki_abrv_() {
 		Bry_bfr bfr = utl__bry_bfr_mkr.Get_b128();
 		Xow_abrv_wm_.To_abrv(bfr, wdata_wiki_lang, Int_obj_ref.New(wdata_wiki_tid));
@@ -216,6 +218,12 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 			}
 		}
 	}
+	private boolean init_once_done = false;
+	public void Init_once() {
+		if (init_once_done) return;
+		init_once_done = true;
+		app.Addon_mgr().Load_by_wiki(this);
+	}
 	private void Init_wiki(Xoue_user user) {	// NOTE: (a) one-time initialization for all wikis; (b) not called by tests
 		if (init_in_process) {
 			app.Usr_dlg().Log_many("", "", "wiki.init: circular call canceled: ~{0}", domain_str);
@@ -258,7 +266,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		init_in_process = false;
 //			app.Api_root().Wikis().Get(domain_bry).Subscribe(this);
 		app.Site_cfg_mgr().Load(this);
-		app.Addon_mgr().Load_by_wiki(this);
+		Init_once();
 		ctg_pagebox_wtr.Init_by_wiki(this);
 		ctg_catpage_mgr.Init_by_wiki(this);
 

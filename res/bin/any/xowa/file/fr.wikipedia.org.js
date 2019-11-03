@@ -680,7 +680,7 @@ if ( mw.config.get( 'wgPageName' ) === 'Aide:Comment_créer_un_article/publier' 
  * {{Catégorisation JS|ArchiveLinks}}
  */
 
-if ( !window.no_external_cache && ( mw.config.get( 'wgNamespaceNumber' ) === 0 || mw.user.options.get( 'gadget-ExtendedCache' ) ) ) {
+if ( !window.no_external_cache && ( mw.config.get( 'wgNamespaceNumber' ) === 0 /*|| mw.user.options.get( 'gadget-ExtendedCache' )*/ ) ) {
 	mw.hook( 'wikipage.content' ).add( function ( $content ) {
 
 		$content.find( '.external' ).each( function ( _, link ) {

@@ -24,6 +24,7 @@ public class Xoh_hdoc_wkr__make implements Xoh_hdoc_wkr {
 	private final    Xoh_page_bfr page_bfr = new Xoh_page_bfr();
 	private boolean toc_enabled;
 	private int html_uid;
+	public Bry_bfr Bfr() {return bfr;}
 	public void On_page_bgn(Bry_bfr bfr, Xoh_page hpg, Xoh_hdoc_ctx hctx, byte[] src, int src_bgn, int src_end) {
 		this.bfr = bfr; this.hpg = hpg; this.hctx = hctx; this.src = src;
 		this.html_uid = 0;
@@ -56,8 +57,7 @@ public class Xoh_hdoc_wkr__make implements Xoh_hdoc_wkr {
 		}
 
 		// increment html_uid and add "id=xolnki_"
-		byte[] ttl_bry = data.Href_itm().Ttl_full_txt();//Ttl_page_db();
-		this.html_uid = Lnki_redlink_reg(hpg, hctx, ttl_bry, html_uid);
+		this.html_uid = Lnki_redlink_reg(hpg, hctx, data.Href_itm().Ttl_full_txt(), html_uid);
 		int src_bgn_lhs = data.Src_bgn();
 		int src_bgn_rhs = src_bgn_lhs + 3; // +3 to skip over "<a "
 		if (Bry_.Match(src, src_bgn_lhs, src_bgn_rhs, Bry__a__bgn)) {

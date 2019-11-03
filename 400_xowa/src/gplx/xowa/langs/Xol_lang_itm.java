@@ -18,7 +18,7 @@ import gplx.core.envs.*;
 import gplx.gfui.draws.*;
 import gplx.xowa.langs.cases.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.langs.kwds.*; import gplx.xowa.langs.grammars.*; import gplx.xowa.langs.genders.*; import gplx.xowa.langs.plurals.*; import gplx.xowa.langs.vnts.*; import gplx.xowa.langs.vnts.converts.*; import gplx.xowa.langs.numbers.*; import gplx.xowa.langs.durations.*; import gplx.xowa.langs.lnki_trails.*; import gplx.xowa.langs.funcs.*; import gplx.xowa.langs.specials.*; import gplx.xowa.langs.bldrs.*; import gplx.xowa.langs.commas.*;
 import gplx.xowa.apps.gfs.*; import gplx.xowa.apps.fsys.*; import gplx.core.intls.*; import gplx.xowa.wikis.nss.*; import gplx.xowa.xtns.lst.*; import gplx.xowa.wikis.caches.*; import gplx.xowa.parsers.lnkis.*;
-import gplx.xowa.guis.langs.*;
+import gplx.xowa.guis.langs.*; import gplx.xowa.langs.timeformats.*;
 public class Xol_lang_itm implements Gfo_invk {
 	private boolean loaded = false;
 	private final    Object thread_lock = new Object();
@@ -38,6 +38,7 @@ public class Xol_lang_itm implements Gfo_invk {
 		this.gender = Xol_gender_.new_by_lang_id(lang_id);
 		this.plural = Xol_plural_.new_by_lang_id(lang_id);
 		this.duration_mgr = new Xol_duration_mgr(this);
+		this.time_format_mgr = new Xol_time_format_mgr();
 		if (lang_id != Xol_lang_stub_.Id_en) fallback_bry_ary = Fallback_bry_ary__en;	// NOTE: do not set fallback_ary for en to en, else recursive loop
 	}
 	public Xoa_lang_mgr			Lang_mgr() {return lang_mgr;} private final    Xoa_lang_mgr lang_mgr; 
@@ -93,6 +94,7 @@ public class Xol_lang_itm implements Gfo_invk {
 	public Xol_func_regy		Func_regy() {return func_regy;} private final    Xol_func_regy func_regy;
 	public int					Img_thumb_halign_default() {return img_thumb_halign_default;} private int img_thumb_halign_default = Xop_lnki_align_h_.Right;
 	public Hash_adp_bry			Xatrs_section() {if (xatrs_section == null) xatrs_section = Lst_section_nde.new_xatrs_(this); return xatrs_section;} private Hash_adp_bry xatrs_section;
+	public Xol_time_format_mgr		Time_format_mgr() {return time_format_mgr;} private final    Xol_time_format_mgr time_format_mgr;
 	public void Evt_lang_changed() {
 		lnki_arg_parser.Evt_lang_changed(this);
 		func_regy.Evt_lang_changed(this);
@@ -115,14 +117,17 @@ public class Xol_lang_itm implements Gfo_invk {
 		else if	(ctx.Match(k, Invk_numbers))				return num_mgr;
 		else if	(ctx.Match(k, Invk_link_trail))				return lnki_trail_mgr;
 		else if	(ctx.Match(k, Invk_x_axis_end))				return String_.new_u8(X_axis_end());
+		else if	(ctx.Match(k, Invk_time_formats))			return time_format_mgr;
 		else if	(ctx.Match(k, Invk_this))					return this;
 		else if	(ctx.Match(k, Xoae_app.Invk_app))			return lang_mgr.Gfs_mgr().Root_invk();
 		else												return Gfo_invk_.Rv_unhandled;
 		return this;
 	}
 	public static final String Invk_ns_names = "ns_names", Invk_ns_aliases = "ns_aliases"
-	, Invk_keywords = "keywords", Invk_messages = "messages", Invk_specials = "specials", Invk_casings = "casings", Invk_converts = "converts", Invk_variants = "variants"
+	, Invk_keywords = "keywords", Invk_messages = "messages", Invk_specials = "specials"
+	, Invk_casings = "casings", Invk_converts = "converts", Invk_variants = "variants"
 	, Invk_numbers = "numbers"
+	, Invk_time_formats = "time_formats"
 	, Invk_dir_rtl_ = "dir_rtl_", Invk_gui_font_ = "gui_font_"
 	, Invk_fallback_load = "fallback_load", Invk_this = "this", Invk_dir_str = "dir_str", Invk_link_trail = "link_trail"
 	, Invk_x_axis_end = "x_axis_end"

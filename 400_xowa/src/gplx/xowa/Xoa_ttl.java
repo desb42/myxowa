@@ -48,6 +48,11 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);
 		return rv;
 	}
+	public byte[] Full_db_wo_ns()	{
+		byte[] rv = Bry_.Mid(full_txt, ns_bgn == -1 ? 0 : page_bgn, full_txt.length);
+		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);
+		return rv;
+	}
 	public byte[] Page_txt_w_anchor()	{return Bry_.Mid(full_txt, page_bgn, qarg_bgn == -1 ? full_txt.length : qarg_bgn - 1);}
 	public byte[] Page_txt()			{return Bry_.Mid(full_txt, page_bgn, anch_bgn == -1 ? full_txt.length : anch_bgn - 1);}
 	public byte[] Page_db() {
@@ -269,6 +274,8 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				break;
 		}*/
 		if (end - bgn == 0) return false;
+                src = firstpass(src, bfr, amp_mgr);
+                end = src.length; // hope this is ok
 		this.raw = src;
 		ns = ns_mgr.Ns_main();
 		boolean add_ws = false, ltr_bgn_reset = false;
@@ -520,7 +527,99 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		tors_txt = tors_ns.Name_ui_w_colon();
 		// tors_txt = tors_ns == null ? Bry_.Empty : tors_ns.Name_ui_w_colon();
 		return true;
-	}		
+	}
+// convert &...; ->
+// convert multiwhitespace to one space
+// convert %xx to one char
+	private byte[] firstpass(byte[] src, Bry_bfr buf, Xop_amp_mgr amp_mgr) {
+		boolean whitespace = false;
+		int cur = 0, end = src.length;
+                int match_pos = 0;
+                Btrie_slim_mgr amp_trie = amp_mgr.Amp_trie();
+		while (cur < end) {
+			byte b = src[cur++];
+			byte[] b_ary = null;
+			Btrie_rv trv = null;
+			if (b == Byte_ascii.Amp) {
+				if (cur == end) {}	// guards against terminating &; EX: [[Bisc &]]; NOTE: needed b/c Match_bgn does not do bounds checking for cur in src; src[src.length] will be called when & is last character;
+				else {
+					if (trv == null) trv = new Btrie_rv();
+					Object html_ent_obj = amp_trie.Match_at(trv, src, cur, end);
+					if (html_ent_obj != null) {
+						Gfh_entity_itm amp_itm = (Gfh_entity_itm)html_ent_obj;
+						match_pos = trv.Pos();
+						if (amp_itm.Tid() == Gfh_entity_itm.Tid_name_std) {
+							switch (amp_itm.Char_int()) {
+								case 160:	// NOTE: &nbsp must convert to space; EX:w:United States [[Image:Dust Bowl&nbsp;- Dallas, South Dakota 1936.jpg|220px|alt=]]
+									b = ' '; // apply same ws rules as Space, NewLine; needed for converting multiple ws into one; EX:" &nbsp; " -> " " x> "   "; PAGEen.w:Greek_government-debt_crisis; DATE:2014-09-25
+									cur = match_pos; // set cur after ";"
+                                                                        break;
+								case Byte_ascii.Amp:
+									b_ary = Byte_ascii.Amp_bry;		// NOTE: if &amp; convert to &; PAGE:en.w:Amadou Bagayoko?redirect=n; DATE:2014-09-23
+									break;
+								case Byte_ascii.Quote:
+								case Byte_ascii.Lt:
+								case Byte_ascii.Gt:
+									b_ary = amp_itm.Xml_name_bry();
+									break;
+								case Gfh_entity_itm.Char_int_null:	// &#xx;
+									int end_pos = Bry_find_.Find_fwd(src, Byte_ascii.Semic, match_pos, end);
+									if (end_pos == Bry_find_.Not_found) {} // &# but no terminating ";" noop: defaults to current_byte which will be added below;
+									else {
+										b_ary = amp_itm.Xml_name_bry();
+										match_pos = end_pos + 1;
+									}
+									break;
+								default:
+									b_ary = amp_itm.U8_bry();
+									break;
+							}
+						}
+						else {
+							Xop_amp_mgr_rslt amp_rv = new Xop_amp_mgr_rslt();
+							amp_mgr.Parse_ncr(amp_rv, amp_itm.Tid() == Gfh_entity_itm.Tid_num_hex, src, end, cur, match_pos);
+							if (amp_rv.Pass()) {
+								match_pos = amp_rv.Pos();
+								b_ary = gplx.core.intls.Utf16_.Encode_int_to_bry(amp_rv.Val());
+								if (b_ary.length == 1 && (b_ary[0] == ' ' || b_ary[0] == 160)) {
+									b = ' ';
+									b_ary = null;
+									cur = match_pos;
+								}
+							}
+						}
+					}
+				}
+			}
+			else if (b == Byte_ascii.Percent) {
+				if (cur + 2 < end) {
+					int b1 = Int_.By_hex_byte(src[cur]);
+					int b2 = Int_.By_hex_byte(src[cur+1]);
+					if (b1 >= 0 && b2 >= 0) {
+						b = (byte)(b1*16 + b2);
+						cur += 2;
+					}
+				}
+			}
+
+			if (b_ary != null) {
+				buf.Add(b_ary);
+				cur = match_pos;
+			}
+			else {
+				if (b == ' ' || b == '\n' || b == '\r') {
+					whitespace = true;
+				} else {
+					if (whitespace) {
+						buf.Add_byte(Byte_ascii.Space);
+						whitespace = false;
+					}
+					buf.Add_byte(b);
+				}
+			}
+		}
+		return buf.To_bry_and_clear();
+	}
 }
 class Xoa_ttl_trie {
 	public static Btrie_fast_mgr new_() {

@@ -19,23 +19,7 @@ import gplx.xowa.addons.wikis.ctgs.htmls.catpages.dbs.*;
 import gplx.xowa.wikis.data.*; import gplx.xowa.wikis.data.tbls.*; import gplx.xowa.addons.wikis.ctgs.dbs.*;
 import gplx.xowa.wikis.data.*;
 public class Pp_quality {
-/*
-get page_ids for  Mediawiki:proofreadpage_quality0_category to proofreadpage_quality4_category
-enwikisource
-	
- Mediawiki:proofreadpage_quality0_category - Without text - 476128
- Mediawiki:proofreadpage_quality1_category - Not proofread - 143843
- Mediawiki:proofreadpage_quality2_category - Problematic - 143846
- Mediawiki:proofreadpage_quality3_category - Proofread - 143844
- Mediawiki:proofreadpage_quality4_category - Validated - 143845
-
-*/
 	private boolean initialised = false;
-	private int qual0;
-	private int qual1;
-	private int qual2;
-	private int qual3;
-	private int qual4;
         public boolean Not_colouring() { return !colouring; } private boolean colouring;
 	
 	public static final int
@@ -51,18 +35,6 @@ enwikisource
             colouring = iswikisource;
         }
 	public void initialiseit(Xow_wiki wiki) {
-/*
-		qual0 = getmedia("Mediawiki:proofreadpage_quality0_category")
-		qual1 = getmedia("Mediawiki:proofreadpage_quality1_category")
-		qual2 = getmedia("Mediawiki:proofreadpage_quality2_category")
-		qual3 = getmedia("Mediawiki:proofreadpage_quality3_category")
-		qual4 = getmedia("Mediawiki:proofreadpage_quality4_category")
-*/
-	qual0 = 476128;
-	qual1 = 143843;
-	qual2 = 143846;
-	qual3 = 143844;
-	qual4 = 143845;
             Init(wiki);
 			initialised = true;
 	}
@@ -81,34 +53,13 @@ enwikisource
 		if (!initialised) {
 			initialiseit(wiki);
 		}
-		//int catqual = getsql("select cl_to_id from cat_link where cl_from=?", page_id);
-		//int catqual = 143845;
-		int catqual = loader.Run_ppq_id(page_id);
-		return cvtqual(catqual);
+		return loader.Run_ppq_id(page_id);
 	}
 
 	public int getQualityFromCatlink(Xoa_ttl ttl, Xow_wiki wiki) {
 		if (!initialised) {
 			initialiseit(wiki);
 		}
-		//int catqual = getsql("select cl_to_id, cl_from from cat_link cl join page p on p.page_id=cl.cl_from where page_namespace=104 and page_title=?", ttl.Base_txt());
-		//int catqual = 143845;
-		int catqual = loader.Run_ppq_ttl(ttl);
-		return cvtqual(catqual);
-	}
-
-	private int cvtqual(int catqual) {
-			if (catqual == qual0)
-				return Quality_without_text;
-			else if (catqual == qual1)
-				return Quality_not_proofread;
-			else if (catqual == qual2)
-				return Quality_problematic;
-			else if (catqual == qual3)
-				return Quality_proofread;
-			else if (catqual == qual4)
-				return Quality_validated;
-			else
-				return Quality_unknown;
+		return loader.Run_ppq_ttl(ttl);
 	}
 }

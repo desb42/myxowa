@@ -101,4 +101,5 @@ public class Xoh_page implements Xoa_page {
 		rv.Db().Page().Exists_n_();
 		return rv;
 	}
+        public Db_quality_tots Quality_tots() { return null; }
 }

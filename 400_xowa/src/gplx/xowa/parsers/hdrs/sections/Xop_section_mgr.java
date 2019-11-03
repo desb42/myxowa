@@ -23,7 +23,7 @@ public class Xop_section_mgr implements Gfo_invk {
 	private byte[] bry__edit_text;
 	private final    Bry_fmt fmt__edit_hint = Bry_fmt.New("")
 	, fmt__section_editable = Bry_fmt.Auto_nl_apos
-	( "<span class='mw-editsection'><span class='mw-editsection-bracket'>[</span><a href='/wiki/~{page_ttl}?action=edit&section_key=~{section_key}' title='~{edit_hint}' class='xowa-hover-off'>~{edit_text}</a><span class='mw-editsection-bracket'>]</span></span>"
+	( "<span class=\"mw-editsection\"><span class=\"mw-editsection-bracket\">[</span><a href=\"/wiki/~{page_ttl}?action=edit&section_key=~{section_key}\" title=\"~{edit_hint}\" class=\"xowa-hover-off\">~{edit_text}</a><span class=\"mw-editsection-bracket\">]</span></span>"
 	)
 	;
 	public boolean Enabled() {return enabled;} private boolean enabled;

@@ -21,7 +21,7 @@ import gplx.xowa.langs.*;
 import gplx.xowa.parsers.*;
 import gplx.xowa.wikis.domains.*; import gplx.xowa.htmls.*; import gplx.xowa.parsers.logs.*; import gplx.xowa.apps.apis.xowa.xtns.*; import gplx.xowa.apps.apis.xowa.html.*; import gplx.xowa.users.*;
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.claims.enums.*; import gplx.xowa.xtns.wbases.claims.itms.*; import gplx.xowa.xtns.wbases.parsers.*; import gplx.xowa.xtns.wbases.pfuncs.*; import gplx.xowa.xtns.wbases.hwtrs.*; import gplx.xowa.xtns.wbases.stores.*;
-import gplx.xowa.xtns.wbases.mediawiki.client.includes.dataAccess.scribunto.*;
+import gplx.xowa.mediawiki.extensions.Wikibase.client.includes.dataAccess.scribunto.*;
 import gplx.core.brys.fmtrs.*;
 public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	private final    Xoae_app app;
@@ -116,12 +116,12 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 					break;
 				}
 			}
-			switch (selected.Snak_tid()) {
+			switch (selected.Snak_tid()) { // SEE:NOTE:novalue/somevalue
 				case Wbase_claim_value_type_.Tid__novalue:
-					bfr.Add(wiki.Msg_mgr().Val_by_id(Xol_msg_itm_.Id_wikibase_snakview_variations_novalue_label));
+					bfr.Add(wiki.Msg_mgr().Val_by_id(Xol_msg_itm_.Id_xowa_wikidata_novalue));
 					break;
 				case Wbase_claim_value_type_.Tid__somevalue:
-					bfr.Add(wiki.Msg_mgr().Val_by_id(Xol_msg_itm_.Id_wikibase_snakview_variations_somevalue_label));
+					bfr.Add(wiki.Msg_mgr().Val_by_id(Xol_msg_itm_.Id_xowa_wikidata_somevalue));
 					break;
 				default: {
 					prop_val_visitor.Init(bfr, hwtr_mgr.Msgs(), lang_key, mode_is_statements);

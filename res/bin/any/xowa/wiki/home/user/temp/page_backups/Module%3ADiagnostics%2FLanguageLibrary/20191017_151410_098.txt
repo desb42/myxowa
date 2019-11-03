@@ -1,0 +1,83 @@
+local p = {}
+
+function p.formatSpecificDate(lang, format)
+  return mw.getLanguage(lang):formatDate( format, "20190701000000" )
+end
+
+function p.getContLangCode(frame)
+  return mw.getContentLanguage().code
+end
+ 
+function p.isKnownLanguageTag(frame)
+  return mw.language.isKnownLanguageTag(frame.args[1])
+end
+
+function p.isValidCode(frame)
+  return mw.language.isValidCode(frame.args[1])
+end
+
+function p.isValidBuiltInCode(frame)
+  return mw.language.isValidBuiltInCode(frame.args[1])
+end
+
+function p.fetchLanguageName(frame)
+  return mw.language.fetchLanguageName(frame.args[1], frame.args[2])
+end
+
+function p.fetchLanguageNames_get(frame)
+  local lang_names = mw.language.fetchLanguageNames()
+  return lang_names[frame.args[1]]
+end
+
+function p.new_lang_code(frame)
+  local lang = mw.language.new(frame.args[1])
+  return lang.code
+end
+
+function p.formatNum(frame)
+  local lang_code = frame.args[2] or "en"
+  local lang = mw.language.new(lang_code)
+  return lang:formatNum(frame.args[1])
+end
+
+function p.parseFormattedNum(frame)
+  local lang_code = frame.args[2] or "en"
+  local lang = mw.language.new(lang_code)
+  return lang:formatNum(frame.args[1])
+end
+
+function p.formatDate_valid(frame)
+  local lang = mw.language.new("en")
+  if (pcall(formatDate_exec, lang, frame.args[1], frame.args[2])) then
+    return 'y'
+  else
+    return 'n'
+  end
+end
+
+function formatDate_exec(lang, fmt, date)
+  return lang:formatDate(fmt, date)
+end
+
+function p.convertGrammar(frame)
+    local lang = mw.language.new(frame.args[1])
+    return lang:convertGrammar(frame.args[2], frame.args[3])
+end
+
+function p.isRTL(frame)
+    local lang = mw.language.new(frame.args[1])
+    return lang:isRTL()
+end
+
+function p.format_durations_hms(frame)
+  local lang = mw.language.getContentLanguage()
+  return lang:formatDuration(tonumber(frame.args[1]), {'hours', 'minutes', 'seconds'})
+end
+
+function p.get_duration_intervals_hms(frame)
+  local lang = mw.language.getContentLanguage()
+  local intervals = lang:getDurationIntervals(tonumber(frame.args[1]), {'hours', 'minutes', 'seconds'})
+  return (intervals['hours'] or '') .. ',' .. (intervals['minutes'] or '') .. ',' .. (intervals['seconds'] or '')
+end
+
+return p

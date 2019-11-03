@@ -61,7 +61,7 @@ public class Xof_fsdb_itm implements Xof_file_itm {
 		this.lnki_exec_tid = exec_tid; this.lnki_wiki_abrv = wiki_abrv;
 		this.lnki_type = lnki_type; this.lnki_upright = lnki_upright; this.lnki_upright_patch = lnki_upright_patch;
 		this.lnki_w = lnki_w; this.lnki_h = lnki_h; this.lnki_time = lnki_time; this.lnki_page = lnki_page;			
-		this.lnki_ttl = lnki_ttl;
+		this.lnki_ttl = Cvtpercent(lnki_ttl);
 		this.Orig_ttl_(lnki_ttl);	// default orig_ttl to lnki_ttl, since there are some classes that don't call Ctor_by_orig
 		this.orig_ext = Xof_ext_.new_by_ttl_(lnki_ttl);
 	}
@@ -125,7 +125,7 @@ public class Xof_fsdb_itm implements Xof_file_itm {
 		this.hdump_mode = Hdump_mode__v2;
 
 		// lnki
-		this.lnki_ttl = file_ttl_bry;
+		this.lnki_ttl = Cvtpercent(file_ttl_bry);
 		this.lnki_w = file_w;
 		this.lnki_h = -1;
 		this.lnki_type = file_is_orig ? Xop_lnki_type.Id_none : Xop_lnki_type.Id_thumb;
@@ -189,6 +189,41 @@ public class Xof_fsdb_itm implements Xof_file_itm {
 		bfr.Add_byte_pipe().Add_double(lnki_time);
 		bfr.Add_byte_pipe().Add_int_variable(lnki_page);
 		bfr.Add_byte_nl();
+	}
+	private byte[] Cvtpercent(byte[] src) {
+		// search for '%'
+		// if followed by two valid hex chars (upper or lowercase) - convert
+		// else ignore
+		boolean changed = false;
+		int len = src.length;
+		int bgn = 0;
+		int pos = 0;
+		Bry_bfr tmp_bfr = null;
+		while (pos < len) {
+			if (src[pos++] == '%') {
+				if (pos + 2 < len) {
+					int b1 = Int_.By_hex_byte(src[pos]);
+					int b2 = Int_.By_hex_byte(src[pos+1]);
+					if (b1 >= 0 && b2 >= 0) {
+						byte b = (byte)(b1*16 + b2);
+						if (!changed) {
+							tmp_bfr = Bry_bfr_.New();
+							changed = true;
+						}
+						tmp_bfr.Add_mid(src, bgn, pos-1);
+						tmp_bfr.Add_byte(b);
+						pos += 2;
+						bgn = pos;
+					}
+				}
+			}
+		}
+		if (changed) {
+			tmp_bfr.Add_mid(src, bgn, len);
+			return tmp_bfr.To_bry_and_clear();
+		}
+		else
+			return src;
 	}
 	public static final int Hdump_mode__null = 0, Hdump_mode__v2 = 2;
 }

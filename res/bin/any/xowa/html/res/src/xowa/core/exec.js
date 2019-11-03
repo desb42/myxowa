@@ -1,3 +1,4 @@
+/*
 function obj__merge(lhs, rhs) {
   var rv = lhs;
   for (prop in rhs) {
@@ -179,3 +180,4 @@ function Xonotify() {
   }
 }
 window.xowa.cmds.add('xowa.notify', new Xonotify());
+*/

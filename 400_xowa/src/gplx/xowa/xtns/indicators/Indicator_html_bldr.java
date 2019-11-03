@@ -37,7 +37,7 @@ public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 	private static final    Bry_fmtr
 	  fmtr_grp = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "  <div class='mw-indicators'>~{itms}"
+	, "  <div class=\"mw-indicators\">~{itms}"
 	, "  </div>"
 	), "itms")
 	;
@@ -47,7 +47,8 @@ class Indicator_html_bldr_itm implements gplx.core.brys.Bfr_arg {
 	public void Init(Ordered_hash list) {this.list = list;}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		int list_len = list.Count();
-		for (int i = list_len - 1; i > -1; --i) {	// reverse order
+		//for (int i = list_len - 1; i > -1; --i) {	// reverse order
+		for (int i = 0; i < list_len; i++) {
 			Indicator_xnde xnde = (Indicator_xnde)list.Get_at(i);
 			fmtr_itm.Bld_bfr_many(bfr, xnde.Name(), xnde.Html());
 		}

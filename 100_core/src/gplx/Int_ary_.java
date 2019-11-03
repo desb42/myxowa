@@ -25,6 +25,15 @@ public class Int_ary_ {//RF:DATE:2017-10-09
 			trg[i] = src[i];
 	}
 
+	public static int[] Mid(int[] src, int bgn, int end) {
+		int len = end - bgn + 1;
+		int[] rv = new int[len];
+		for (int i = 0; i < len; i++) {
+			rv[i] = src[i + bgn];
+		}
+		return rv;
+	}
+
 	public static String To_str(String spr, int... ary) {
 		Bry_bfr bfr = Bry_bfr_.New();
 		int len = ary.length;
@@ -149,12 +158,6 @@ public class Int_ary_ {//RF:DATE:2017-10-09
 					if (rng_bgn == Int_.Min_value) return or;
 					num_bgn = -1;
 					itm_is_rng = true;
-					break;
-				case Byte_ascii.Dot: // assume '.2c' !!
-					pos += 2;
-					if (pos == raw_len -1) return or;	// eos; EX: "1,"
-					if (num_bgn == -1) return or;		// empty itm; EX: ","; "1,,2"
-					itm_done = true;
 					break;
 				default:
 					return or;

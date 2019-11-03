@@ -3652,6 +3652,7 @@ proofreadpage-indexoai-eprint-content-url|
 proofreadpage-indexoai-error-schemanotfound-text|Lo schema ~{0} non è stato trovato.
 proofreadpage-indexoai-error-schemanotfound|Schema non trovato
 proofreadpage-indexoai-repositoryName|Metadati dei libri da {{SITENAME}}
+proofreadpage-indexquality-alt|~{0} {{PLURAL:~{0}\u007Cpagina riletta\u007Cpagine rilette}}, ~{1} {{PLURAL:~{1}\u007Cpagina solo trascritta\u007Cpagine solo trascritte}} e ~{2} {{PLURAL:~{2}\u007Cpagina incompleta\u007Cpagine incomplete}}
 proofreadpage-preferences-horizontal-layout-label|Usa il layout orizzontale durante la modifica nel namespace {{ns:page}}
 proofreadpage-preferences-showheaders-label|Mostra l'intestazione ed il piè di pagina durante la modifica nel namespace {{ns:page}}
 proofreadpage-section-tools|Strumenti di correzione
@@ -4249,7 +4250,7 @@ searchresulttext|For more information about searching {{SITENAME}}, see [[{{Medi
 searchsubtitleinvalid|You searched for '''~{0}'''
 searchsubtitle|You searched for '''[[:~{0}]]''' ([[Special:Prefixindex/~{0}\u007Call pages starting with "~{0}"]]{{int:pipe-separator}}[[Special:WhatLinksHere/~{0}\u007Call pages that link to "~{0}"]])
 searchsuggest-containing|contenente...
-searchsuggest-search|Cerca in {{SITENAME}}
+searchsuggest-search|Cerca all'interno di {{SITENAME}}
 search|Ricerca
 seconds-abbrev|~{0}&nbsp;s
 seconds-ago|~{0} {{PLURAL:~{0}\u007Csecondo\u007Csecondi}} fa
@@ -6404,6 +6405,40 @@ zip-bad|Il file è un file ZIP corrotto o altrimenti illeggibile.\nNon può esse
 zip-file-open-error|Si è verificato un errore durante l'apertura del file per i controlli ZIP.
 zip-unsupported|Il file è un file ZIP che usa caratteristiche ZIP non supportate da MediaWiki.\nNon può essere adeguatamente controllato per la sicurezza.
 zip-wrong-format|Il file specificato non è un file ZIP.
+code-rev-purge-link|purge
+group-checkuser|Check users
+group-oversight|Oversighters
+group-upwizcampeditors|Upload Wizard campaign editors
+grouppage-upwizcampeditors|{{ns:project}}:Upload Wizard campaign editors
 ']:>
 ).lang
+.time_formats
+  .load_text(
+<:['
+dmy
+time|H:i
+date|j M Y
+both|H:i, j M Y
+monthonly|F Y
+pretty|j F
+mdy
+time|H:i
+date|M j, Y
+both|H:i, M j, Y
+monthonly|F Y
+pretty|F j
+ymd
+time|H:i
+date|Y M j
+both|H:i, Y M j
+monthonly|Y F
+pretty|F j
+ISO 8601
+time|xnH:xni:xns
+date|xnY-xnm-xnd
+both|xnY-xnm-xnd"T"xnH:xni:xns
+monthonly|xnY-xnm
+pretty|xnm-xnd
+']:>
+)
 ;

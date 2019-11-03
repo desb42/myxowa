@@ -33,7 +33,7 @@ class Pft_fmt_itm_roman implements Pft_fmt_itm {
 		bfr.Add_str_a7("xf");
 	}
 }
-class Pft_fmt_itm_thai implements Pft_fmt_itm {
+/*class Pft_fmt_itm_thai implements Pft_fmt_itm {
 	public int TypeId() {return Pft_fmt_itm_.Tid_thai;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
 		bfr.Add_int_variable(date.Year() + 543);
@@ -44,7 +44,7 @@ class Pft_fmt_itm_minguo implements Pft_fmt_itm {
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
 		bfr.Add_int_variable(date.Year() - 1911);
 	}
-}
+}*/
 class Pft_fmt_itm_hebrew_year_num implements Pft_fmt_itm {
 	public int TypeId() {return Pft_fmt_itm_.Tid_hebrew_year_num;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
@@ -145,5 +145,23 @@ class Pft_fmt_itm_hijiri_month_name implements Pft_fmt_itm {
 	public int TypeId() {return Pft_fmt_itm_.Tid_hijiri_month_name;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
 		bfr.Add(Pft_fmt_itm_hijiri.Get_month_name(wiki, date));
+	}
+}
+class Pft_fmt_itm_thai_year implements Pft_fmt_itm {
+	public int TypeId() {return Pft_fmt_itm_.Tid_thai_year;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		bfr.Add(Pft_fmt_itm_thai_.tsToYear(Pft_fmt_itm_thai_.Tid__thai, date));
+	}
+}
+class Pft_fmt_itm_minguo_year implements Pft_fmt_itm {
+	public int TypeId() {return Pft_fmt_itm_.Tid_minguo_year;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		bfr.Add(Pft_fmt_itm_thai_.tsToYear(Pft_fmt_itm_thai_.Tid__minguo, date));
+	}
+}
+class Pft_fmt_itm_nengo_year implements Pft_fmt_itm {
+	public int TypeId() {return Pft_fmt_itm_.Tid_nengo_year;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		bfr.Add(Pft_fmt_itm_thai_.tsToYear(Pft_fmt_itm_thai_.Tid__tenno, date));
 	}
 }

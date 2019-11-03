@@ -157,6 +157,11 @@ methodtable._build = function( t, ret )
 				if type( prop ) ~= 'table' then -- added with cssText()
 					table.insert( css, htmlEncode( prop ) )
 				else -- added with css()
+					-- xowa addition
+					if string.sub(prop.val, -1) == ';' then
+						prop.val = string.sub(prop.val, 1, prop.val:len()-1)
+					end
+					-- end xowa
 					table.insert(
 						css,
 						htmlEncode( cssEncode( prop.name ) .. ':' .. cssEncode( prop.val ) )

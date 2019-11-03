@@ -27,6 +27,7 @@ import gplx.xowa.wikis.pages.lnkis.Xopg_redlink_mgr;
 import gplx.xowa.xtns.pfuncs.times.Pft_func_formatdate;
 import gplx.langs.jsons.*;
 public class Xoh_page_wtr_wkr {
+	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
 	private final	Bry_bfr tmp_bfr = Bry_bfr_.Reset(255); 
 	private final	Xoh_page_wtr_mgr mgr; private final	byte page_mode;
@@ -40,6 +41,10 @@ public class Xoh_page_wtr_wkr {
 			this.page = page; this.wiki = page.Wikie(); this.app = wiki.Appe();
 			ctx.Page_(page); // HACK: must update page for toc_mgr; WHEN: Xoae_page rewrite
 			Bry_fmtr fmtr = null;
+			if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && page.Ttl().Ns().Id() == wiki.Ns_mgr().Ns_page_id())
+				ispage_in_wikisource = true;
+			else
+				ispage_in_wikisource = false;
 			if (mgr.Html_capable()) {
 				wdata_lang_wtr.Page_(page);
 				byte view_mode = page_mode;
@@ -85,14 +90,16 @@ public class Xoh_page_wtr_wkr {
 		if (root_dir_bry == null) this.root_dir_bry = app.Fsys_mgr().Root_dir().To_http_file_bry();
 		Xoa_ttl page_ttl = page.Ttl(); int page_ns_id = page_ttl.Ns().Id();
 		byte page_tid = Xow_page_tid.Identify(wiki.Domain_tid(), page_ns_id, page_ttl.Page_db());
+
+		// write modified_on; handle invalid dates
 		DateAdp modified_on = page.Db().Page().Modified_on();
-//		byte[] modified_on_msg = wiki.Msg_mgr().Val_by_id_args(Xol_msg_itm_.Id_portal_lastmodified, modified_on.XtoStr_fmt_yyyy_MM_dd(), modified_on.XtoStr_fmt_HHmm());
-// show date if valid
-				byte[] modified_on_msg = Bry_.Empty;
-				if (modified_on != DateAdp_.MinValue) {
-					wiki.Parser_mgr().Date_fmt_bldr().Format(tmp_bfr, wiki, wiki.Lang(), modified_on, Pft_func_formatdate.Fmt_dmy);
-					modified_on_msg = wiki.Msg_mgr().Val_by_key_args(Key_lastmodifiedat, tmp_bfr.To_bry_and_clear(), modified_on.XtoStr_fmt_HHmm());
-				}
+		byte[] modified_on_msg = Bry_.Empty;
+		if (modified_on != DateAdp_.MinValue) {
+			modified_on_msg = wiki.Msg_mgr().Val_by_key_args(Key_lastmodifiedat, 
+					                       wiki.Lang().Time_format_mgr().Get_date_defaultfmt(wiki, modified_on),
+					                       wiki.Lang().Time_format_mgr().Get_time_defaultfmt(wiki, modified_on));
+			modified_on_msg = Db_expand.Extracheck(modified_on_msg, "");
+		}
 		byte[] page_body_class = Xoh_page_body_cls.Calc(tmp_bfr, page_ttl, page_tid);
 		// byte[] html_content_editable = wiki.Gui_mgr().Cfg_browser().Content_editable() ? Content_editable_bry : Bry_.Empty;
 		byte[] html_content_editable = Bry_.Empty;
@@ -138,7 +145,7 @@ public class Xoh_page_wtr_wkr {
 		// sidebar divs
 		, portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect)
 		//, portal_mgr.Div_ns_bry(wiki.Utl__bfr_mkr(), page_ttl, wiki.Ns_mgr())
-		, portal_mgr.Div_ns_bry(wiki, page_ttl)
+		, portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource)
 		, portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect)
 		, portal_mgr.Div_logo_bry(nightmode_enabled), portal_mgr.Div_home_bry(), new Xopg_xtn_skin_fmtr_arg(page, Xopg_xtn_skin_itm_tid.Tid_sidebar)
 		, portal_mgr.Div_sync_bry(tmp_bfr, wiki.Page_mgr().Sync_mgr().Manual_enabled(), wiki, page)
@@ -207,7 +214,13 @@ public class Xoh_page_wtr_wkr {
 		// dump and exit if pre-generated html from html dumps
 		byte[] hdump_data = page.Db().Html().Html_bry();
 		if (Bry_.Len_gt_0(hdump_data)) {
-			bfr.Add(hdump_data);
+//			bfr.Add(hdump_data);
+			Bry_bfr tidy_bfr = wiki.Utl__bfr_mkr().Get_m001();
+			tidy_bfr.Add(hdump_data);
+			long tidy_time = gplx.core.envs.System_.Ticks();
+			wiki.Html_mgr().Tidy_mgr().Exec_tidy(tidy_bfr, !hctx.Mode_is_hdump(), page.Url_bry_safe());
+			page.Stat_itm().Tidy_time = gplx.core.envs.System_.Ticks__elapsed_in_frac(tidy_time);
+			bfr.Add_bfr_and_clear(tidy_bfr);
 			return;
 		}
 
@@ -219,9 +232,6 @@ public class Xoh_page_wtr_wkr {
 
 		// if [[File]], add boilerplate header; note that html is XOWA-generated so does not need to be tidied
 		if (ns_id == Xow_ns_.Tid__file) app.Ns_file_page_mgr().Bld_html(wiki, ctx, page, bfr, page.Ttl(), wiki.Cfg_file_page(), page.File_queue());
-                boolean ispage_in_wikisource = false;
-                if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && ns_id == 104) //wikisource and Page: (frwiki has Référence: which is also 104)
-                    ispage_in_wikisource = true;
 
 		// get separate bfr; note that bfr already has <html> and <head> written to it, so this can't be passed to tidy; DATE:2014-06-11
 		Bry_bfr tidy_bfr = wiki.Utl__bfr_mkr().Get_m001();
@@ -246,7 +256,7 @@ public class Xoh_page_wtr_wkr {
 						gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_toc(tidy_bfr, page, hctx);
 					if (ispage_in_wikisource) { // Page:
 						tidy_bfr.Add_str_a7("</div></div>");
-						tidy_bfr.Add_str_a7("</div></div><div class=\"prp-page-image\">");
+						tidy_bfr.Add_str_a7("</div></div><div class=\"prp-page-image\"></div>");
 						//Pp_image_page(...);
 					}
 					tidy_bfr.Add_str_a7("</div>");
@@ -333,13 +343,13 @@ public class Xoh_page_wtr_wkr {
 		retreive_fmt.Bld_many(tmp_bfr, retrieved_msg);
 
 		// handle Categories at bottom of page;
-		int ctgs_len = page.Wtxt().Ctgs__len();
+		//int ctgs_len = page.Wtxt().Ctgs__len();
 		if (	ctgs_enabled
-			&&	ctgs_len > 0						// skip if no categories found while parsing wikitext
+			//&&	ctgs_len > 0						// skip if no categories found while parsing wikitext
 			&&	!wiki.Html_mgr().Importing_ctgs()	// do not show categories if importing categories, page will wait for category import to be done; DATE:2014-10-15
 			&&	!hctx.Mode_is_hdump()				// do not dump categories during hdump; DATE:2016-10-12
 			) {
-			if (app.Mode().Tid_is_gui()) app.Usr_dlg().Prog_many("", "", "loading categories: count=~{0}", ctgs_len);
+			//if (app.Mode().Tid_is_gui()) app.Usr_dlg().Prog_many("", "", "loading categories: count=~{0}", ctgs_len);
 			Xoctg_pagebox_itm[] pagebox_itms = wiki.Ctg__pagebox_wtr().Get_catlinks_by_page(wiki, page);
 			wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, wiki, page, pagebox_itms);
 		}

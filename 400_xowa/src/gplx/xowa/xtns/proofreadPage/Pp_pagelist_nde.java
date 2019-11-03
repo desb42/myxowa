@@ -22,15 +22,25 @@ import gplx.xowa.parsers.lnkis.files.*;
 public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 	private Xop_root_tkn xtn_root;
 	private Page_list lst;
+	private int rangefrom, rangeto;
 	private int maxpagecount;
+	public void Rangefrom_(int v) { rangefrom = v; }
+	public void Rangeto_(int v) { rangeto = v; }
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {}
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
 		//?boolean log_wkr_enabled = Log_wkr != Xop_log_basic_wkr.Null; if (log_wkr_enabled) Log_wkr.Log_end_xnde(ctx.Page(), Xop_log_basic_wkr.Tid_hiero, src, xnde);
-		lst = Parse(xnde);
 		Xoae_page page = ctx.Page();
+		maxpagecount = wiki.Maxpage().Get_maxpage(page.Db().Page().Id());
+		rangefrom = -1;
+		rangeto = -1;
+		lst = Parse(xnde);
+		if (rangefrom == -1)
+			rangefrom = 1;
+		if (rangeto == -1)
+			rangeto = maxpagecount;
 		xtn_root = null;
-				
-		if (page.Ttl().Ns().Id() == 106) { // Index namespace only
+
+		if (page.Ttl().Ns().Id() == wiki.Ns_mgr().Ns_index_id()) { // Index namespace only
 
 			Bry_bfr full_bfr = wiki.Utl__bfr_mkr().Get_m001();
 			try {
@@ -57,16 +67,16 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 	}
 	private byte[] Bld_wikitext(Bry_bfr bfr, Xoa_ttl ttl) {
 		int countsize;
-		if (maxpagecount < 10)
+		if (rangeto < 10)
 			countsize = 1;
-		else if (maxpagecount < 100)
+		else if (rangeto < 100)
 			countsize = 2;
-		else if (maxpagecount < 1000)
+		else if (rangeto < 1000)
 			countsize = 3;
 		else
 			countsize = 4;
 
-		for (int i = 1; i <= maxpagecount; i++) {
+		for (int i = rangefrom; i <= rangeto; i++) {
 			Page_number pagnum = lst.getNumber(i);
 			bfr.Add_str_a7("[[Page:");
 			bfr.Add(ttl.Base_txt()).Add_byte_slash().Add_long_variable(i).Add_byte_pipe();
@@ -111,7 +121,6 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 
 	Page_list Parse(Xop_xnde_tkn xnde) {
 		List_adp rows = List_adp_.New();
-		maxpagecount = 0;
 		Mwh_atr_itm[] atrs_ary = xnde.Atrs_ary();
 		int atrs_len = atrs_ary.length;
 		byte[] key, val;
@@ -130,7 +139,7 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 				else
 					continue;
 			}
-			Page_list_row plr = new Page_list_row(key, val);
+			Page_list_row plr = new Page_list_row(key, val, this);
 			rows.Add(plr);
 			if (plr.To() > maxpagecount)
 				maxpagecount = plr.To();
@@ -153,18 +162,21 @@ class Page_list_row {
 	public byte[] Displaytext() { return displaytext; }
 
 	private int parseInt(byte[] src, int bgn, int end) {
-		return Bry_.To_int_or(src, bgn, end, 0);
+		return Bry_.To_int_or(src, bgn, end, -1);
 	}
-	private boolean compare(byte[] src, int bgn, byte[] txt) {
-			if (src.length < txt.length) return false; // exact match
+	private boolean compare(byte[] src, int bgn, int end, byte[] txt) {
+		if (end - bgn != txt.length) return false; // exact match
 		return Bry_.Has_at_bgn(src, txt, bgn, bgn + txt.length);
 	}
-	Page_list_row(byte[] key , byte[] val) {
+	Page_list_row(byte[] key , byte[] val, Pp_pagelist_nde nde) {
 		displaytext = null;
 		display = Display_normal;
 		type = Mode_unknown;
+		offset = -1;
 		int i, end = key.length;
 		int pos = 0;
+		// parse nTOm
+		// eg 3to5=-
 		for (i = 0; i < end; i++) {
 			if (!Byte_ascii.Is_num(key[i])) {
 				break;
@@ -174,6 +186,28 @@ class Page_list_row {
 			from = parseInt(key, 0, i);
 			to = from;
 			type = Mode_numeric;
+		} else if (i == 0) {
+			// check for 'from=', 'to=' (global overrides)
+			int fromto = 0;
+			if (end == 2 && key[0] == 't' && key[1] == 'o') {
+				fromto = 1;
+			} 
+			else if (end == 4 && key[0] == 'f' && key[1] == 'r' && key[2] == 'o' && key[3] == 'm') {
+				fromto = 2;
+			}
+			if (fromto == 0) return;
+			int vlen = val.length;
+			for (i = 0; i < vlen; i++) {
+				if (!Byte_ascii.Is_num(val[i])) {
+					break;
+				}
+			}
+			if (i == 0 || i != vlen) return; // no digits (not all digits)
+			int ft = parseInt(val, 0, vlen);
+			if (fromto == 1)
+				nde.Rangeto_(ft);
+			else
+				nde.Rangefrom_(ft);
 		} else {
 			if (key[i] == 't' && key[i+1] == 'o') {
 				from = parseInt(key, 0, i);
@@ -195,40 +229,67 @@ class Page_list_row {
 						type = Mode_odd;
 					}
 				}
-		  }
+			}
 		}
 		if (type == Mode_unknown) return;
+		// and now the value
 		end = val.length;
-		if (type == Mode_numeric) {
-			for (i = 0; i < end; i++) {
-				if (!Byte_ascii.Is_num(val[i])) {
-					break;
-				}
+		// could be multiple params separated by ';'s
+		int bgn = 0;
+		int v;
+		for (int k = 0; k < end; k++) {
+			if (val[k] == Byte_ascii.Semic) {
+				v = getnumber_or_not(val, bgn, k);
+				if (v != -1)
+					offset = v;
+				else
+					setdisplaytype(val, bgn, k);
+				bgn = k+1;
 			}
-			if (i >= end) {
-				offset = parseInt(val, 0, i);
-				return;
-			}
+		}
+		v = getnumber_or_not(val, bgn, end);
+		if (v != -1)
+			offset = v;
+		else {
+			setdisplaytype(val, bgn, end);
+		if (bgn == 0)
 			type = Mode_range;
 		}
-		if (compare(val, 0, Bry_.new_a7("normal")))
+		if (bgn > 0)
+			type = Mode_multi; // two values (at least)
+	}
+	private int getnumber_or_not(byte[] val, int bgn, int end) {
+		int num = -1;
+                int i;
+		for (i = bgn; i < end; i++) {
+			if (!Byte_ascii.Is_num(val[i])) {
+				break;
+			}
+		}
+		if (i >= end) {
+			num = parseInt(val, 0, i);
+		}
+		return num;
+	}
+	private void setdisplaytype(byte[] val, int bgn, int end) {
+		if (compare(val, bgn, end, Bry_.new_a7("normal")))
 			display = Display_normal;
-		else if (compare(val, 0, Bry_.new_a7("roman")))
+		else if (compare(val, bgn, end, Bry_.new_a7("roman")))
 			display = Display_roman;
-		else if (compare(val, 0, Bry_.new_a7("highroman")))
+		else if (compare(val, bgn, end, Bry_.new_a7("highroman")))
 			display = Display_highroman;
-		else if (compare(val, 0, Bry_.new_a7("folio")))
+		else if (compare(val, bgn, end, Bry_.new_a7("folio")))
 			display = Display_folio;
-		else if (compare(val, 0, Bry_.new_a7("folioroman")))
+		else if (compare(val, bgn, end, Bry_.new_a7("folioroman")))
 			display = Display_folioroman;
-		else if (compare(val, 0, Bry_.new_a7("foliohighroman")))
+		else if (compare(val, bgn, end, Bry_.new_a7("foliohighroman")))
 			display = Display_foliohighroman;
-		else if (compare(val, 0, Bry_.new_a7("empty")))
+		else if (compare(val, bgn, end, Bry_.new_a7("empty")))
 			display = Display_empty;
 		else {
 			display = Display_normal;
 			displaytext = new byte[end];
-			for (i = 0; i < end; i++)
+			for (int i = 0; i < end; i++)
 				displaytext[i] = val[i];
 		}
 	}
@@ -245,6 +306,7 @@ class Page_list_row {
 	, Mode_range = 2
 	, Mode_even = 3
 	, Mode_odd = 4
+	, Mode_multi = 5 // includes Mode_numeric and another
 	;
 }
 class Page_number {
@@ -336,10 +398,11 @@ class Page_list {
 		for (int i = 0; i < len; i++) {
 			Page_list_row pnum = (Page_list_row)pagelistrows.Get_at(i);
 			if (pnum.Mode() != Page_list_row.Mode_unknown) {
-				if (pnum.Mode() == Page_list_row.Mode_numeric && pnum.From() <= num) {
+				if ((pnum.Mode() == Page_list_row.Mode_numeric ||
+				     pnum.Mode() == Page_list_row.Mode_multi) && pnum.From() <= num) {
 					offset = pnum.From() - pnum.Offset();
 				}
-				
+
 				if (numberInRange(pnum, num)) {
 					if (pnum.Display() == Page_list_row.Display_empty)
 						isEmpty = true;
@@ -369,6 +432,7 @@ class Page_list {
 		if (num < pnum.From()) return false;
 		if (pnum.To() < num) return false;
 		if (pnum.Mode() == Page_list_row.Mode_range) return true;
+		if (pnum.Mode() == Page_list_row.Mode_multi) return true;
 		// if even must be an even
 		if (pnum.Mode() == Page_list_row.Mode_even && num % 2 == 0) return true;
 		// check for odd

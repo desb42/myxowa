@@ -30,7 +30,7 @@ public class Pp_pagelist_colour {
 		for (int i = 0; i < len; i++) {
 			Xopg_colour colour = (Xopg_colour)list.Get_at(i);
 			Xowd_page_itm page_row = colour.Page_row();
-			if (page_row.Ns_id() != 104) // Namespace Page:
+			if (page_row.Ns_id() != wiki.Ns_mgr().Ns_page_id()) // Namespace Page:
 				continue;
 			// either here or in Xopg_colour
 			//  should lookup pagequality in cat_link table

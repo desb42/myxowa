@@ -1,0 +1,119 @@
+local p = {}
+--{{lnki:a}}
+--{{lnke:b}}
+--{{lnke.db:simplewiki}}
+
+function p.lnki(frame)
+  local page_type = frame.args[1];
+  local page_name = '';
+  local page_text = '';
+  if     page_type == 'import.online' then
+    page_name = 'Dashboard/Import/Online';
+    page_text = 'Import online';
+  elseif page_type == 'import.offline' then
+    page_name = 'Dashboard/Import/Offline';
+    page_text = 'Import offline';
+  else
+    page_name = 'MISSING';
+    page_text = 'Missing: ' .. page_text;
+  end
+  return '[[' .. page_name .. '|' .. page_text .. ']]';
+end
+
+function p.lnke(frame)
+  local page_type = frame.args[1];
+  local page_name = '';
+  local page_text = '';
+  if     page_type == 'wm.dumps' then
+    page_name = 'http://dumps.wikimedia.org/backup-index.html';
+    page_text = 'Wikimedia database dumps';
+  end
+  return '[' .. page_name .. ' ' .. page_text .. ']';
+end
+
+function p.lnke_db(frame)
+  local page_type = frame.args[1];
+  local page_name = '';
+  local page_text = '';
+  if     page_type == 'wm.dumps' then
+    page_name = 'http://dumps.wikimedia.org/backup-index.html';
+    page_text = 'Wikimedia database dumps';
+  end
+  return '[' .. page_name .. ' ' .. page_text .. ']';
+end
+
+function p.link(frame)
+  local page_type = frame.args[1];
+dbg('link', page_type)
+  local page_name = '';
+  local page_text = '';
+  local link_is_internal = true;
+  if     page_type == 'import.online' then
+    page_name = 'Dashboard/Import/Online';
+    page_text = 'Import online';
+  elseif page_type == 'import.offline' then
+    page_name = 'Dashboard/Import/Offline';
+    page_text = 'Import offline';
+  elseif page_type == 'download.central' then
+    page_name = 'Special:XowaDownloadCentral';
+    page_text = 'Download Central';
+  elseif page_type == 'options' then
+    page_name = 'Options';
+    page_text = 'Options';
+  elseif page_type == 'options.app.startup' then
+    page_name = 'Special:XowaCfg?grp=xowa.app.startup';
+    page_text = 'Options: App - Startup';
+  elseif page_type == 'options.gui.shortcuts' then
+    page_name = 'Special:XowaCfg?grp=xowa.gui.shortcuts';
+    page_text = 'Options: Gui - Shortcuts';
+  elseif page_type == 'options.gui.window' then
+    page_name = 'Special:XowaCfg?grp=xowa.gui.general';
+    page_text = 'Options: Gui - Window';
+  elseif page_type == 'options.gui.shortcuts' then
+    page_name = 'Special:XowaCfg?grp=xowa.gui.shortcuts';
+    page_text = 'Options: Gui - Shortcuts';
+  elseif page_type == 'options.import.general' then
+    page_name = 'Special:XowaCfg?grp=xowa.import.general';
+    page_text = 'Options: Import - General';
+  elseif page_type == 'options.html.css' then
+    page_name = 'Special:XowaCfg?grp=xowa.html.css';
+    page_text = 'Options: HTML - CSS';
+  elseif page_type == 'options.files.general' then
+    page_name = 'Special:XowaCfg?grp=xowa.files.general';
+    page_text = 'Options: Files - General';
+  elseif page_type == 'options.dev.general' then
+    page_name = 'Special:XowaCfg?grp=xowa.dev.general';
+    page_text = 'Options: Dev - General';
+  elseif page_type == 'category.overview' then
+    page_name = 'App/Category';
+    page_text = 'Category Overview';
+  elseif page_type == 'image_databases' then
+    page_name = 'Dashboard/Image_databases';
+    page_text = 'Image databases';
+  elseif page_type == 'feedback' then
+    page_name = 'Help/Feedback';
+    page_text = 'Feedback';
+  elseif page_type == 'android.setup' then
+    page_name = 'Android/Setup';
+    page_text = 'Android Setup';
+  elseif page_type == 'wm.dumps' then
+    page_name = 'http://dumps.wikimedia.org/backup-index.html';
+    page_text = 'Wikimedia database dumps';
+    link_is_internal = false;
+  elseif page_type == 'dbs.' then
+    page_name = 'http://dumps.wikimedia.org/backup-index.html';
+    page_text = 'Wikimedia database dumps';
+    link_is_internal = false;
+  else
+    page_name = 'MISSING';
+    page_text = 'Missing: ' .. page_text;
+  end
+  if link_is_internal then
+    return '[[' .. page_name .. '|' .. page_text .. ']]';
+  else
+    return '[' .. page_name .. ' ' .. page_text .. ']';
+  end
+end
+
+
+return p

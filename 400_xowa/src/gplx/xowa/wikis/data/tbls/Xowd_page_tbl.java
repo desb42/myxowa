@@ -121,8 +121,9 @@ public class Xowd_page_tbl implements Db_tbl {
 	public boolean Select_by_ttl(Xowd_page_itm rv, Xoa_ttl ttl) {return Select_by_ttl(rv, ttl.Ns(), ttl.Page_db());}
 	public boolean Select_by_ttl(Xowd_page_itm rv, Xow_ns ns, byte[] ttl) {
 		if (stmt_select_all_by_ttl == null) stmt_select_all_by_ttl = conn.Stmt_select(tbl_name, flds, String_.Ary(fld_ns, fld_title));
-		try { //synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
-			Xoctg_catpage_mgr.rwl.writeLock().lock();
+		synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
+		//try {
+		//	Xoctg_catpage_mgr.rwl.writeLock().lock();
 			Db_rdr rdr = stmt_select_all_by_ttl.Clear().Crt_int(fld_ns, ns.Id()).Crt_bry_as_str(fld_title, ttl).Exec_select__rls_manual();
 			try {
 				if (rdr.Move_next()) {
@@ -132,9 +133,9 @@ public class Xowd_page_tbl implements Db_tbl {
 			}
 			finally {rdr.Rls();}
                 }
-		finally {
-			Xoctg_catpage_mgr.rwl.writeLock().unlock();
-		}
+		//finally {
+		//	Xoctg_catpage_mgr.rwl.writeLock().unlock();
+		//}
 			return false;
 		
 	}

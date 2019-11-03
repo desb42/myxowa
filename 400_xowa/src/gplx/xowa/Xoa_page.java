@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa; import gplx.*;
+package gplx.xowa; import gplx.*; import gplx.xowa.*;
 import gplx.xowa.langs.*;
 import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.pages.lnkis.*; import gplx.xowa.wikis.pages.dbs.*; import gplx.xowa.wikis.pages.redirects.*; import gplx.xowa.wikis.pages.hdumps.*; import gplx.xowa.wikis.pages.htmls.*; import gplx.xowa.wikis.pages.wtxts.*;
 public interface Xoa_page {
@@ -31,4 +31,5 @@ public interface Xoa_page {
 	Xoa_page__commons_mgr	Commons_mgr();
 	boolean					Xtn__timeline_exists();
 	boolean					Xtn__gallery_exists();
+        Db_quality_tots Quality_tots();
 }

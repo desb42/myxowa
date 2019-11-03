@@ -62,8 +62,12 @@ public class Ordered_hash_base extends Hash_adp_base implements Ordered_hash, Gf
 		return this;
 	}
 	private void AssertCounts(String proc, Object key) {
-		if (super.Count() != ordered.Count())
+		if (super.Count() != ordered.Count()) {
+                    for (int i=0; i < ordered.Count(); i++) {
+                        System.out.println(ordered.Get_at(i).toString());
+                    }
 			throw Err_.new_wo_type("counts do not match; same key is either added twice, or delete failed", "proc", proc, "key", Object_.Xto_str_strict_or_null_mark(key), "hash", super.Count(), "list", ordered.Count());
+                }
 	}
 	public void Resize_bounds(int i) {if (locked) Lock_fail(); ordered.Resize_bounds(i);}
 	public void Lock() {locked = true;} private boolean locked = false;

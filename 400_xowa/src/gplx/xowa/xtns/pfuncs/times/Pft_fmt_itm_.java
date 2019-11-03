@@ -35,8 +35,8 @@ public class Pft_fmt_itm_ {
 	, Tid_rfc_5322						= 14
 	, Tid_raw							= 15
 	, Tid_timezone_offset				= 16
-	, Tid_thai							= 17
-	, Tid_minguo						= 18
+	, Tid_thai_year							= 17
+	, Tid_minguo_year						= 18
 	, Tid_hebrew_year_num				= 21
 	, Tid_hebrew_month_num				= 20
 	, Tid_hebrew_day_num				= 19
@@ -52,6 +52,7 @@ public class Pft_fmt_itm_ {
 	, Tid_hijiri_month_idx				= 31
 	, Tid_hijiri_day_idx				= 32
 	, Tid_hijiri_month_name				= 33
+	, Tid_nengo_year				= 34
 	;
 
 	public static final    Pft_fmt_itm 
@@ -86,8 +87,8 @@ public class Pft_fmt_itm_ {
 	, AmPm_lower				= new Pft_fmt_itm_am_pm(true)
 	, AmPm_upper				= new Pft_fmt_itm_am_pm(false)
 	, Roman						= new Pft_fmt_itm_roman()
-	, Thai						= new Pft_fmt_itm_thai()
-	, Minguo					= new Pft_fmt_itm_minguo()
+//	, Thai						= new Pft_fmt_itm_thai()
+//	, Minguo					= new Pft_fmt_itm_minguo()
 	, Hebrew_year_num			= new Pft_fmt_itm_hebrew_year_num()
 	, Hebrew_month_num			= new Pft_fmt_itm_hebrew_month_num()
 	, Hebrew_day_num			= new Pft_fmt_itm_hebrew_day_num()
@@ -107,6 +108,9 @@ public class Pft_fmt_itm_ {
 	, Hijiri_month_idx			= new Pft_fmt_itm_hijiri_month_idx()
 	, Hijiri_day_idx			= new Pft_fmt_itm_hijiri_day_idx()
 	, Hijiri_month_name			= new Pft_fmt_itm_hijiri_month_name()
+	, Thai_year				= new Pft_fmt_itm_thai_year()
+	, Minguo_year			= new Pft_fmt_itm_minguo_year()
+	, Nengo_year			= new Pft_fmt_itm_nengo_year()
 	;
 	public static final    Btrie_fast_mgr Regy = Btrie_fast_mgr.cs()
 	.Add(Byte_ascii.Ltr_Y		, Pft_fmt_itm_.Year_len4)				// 2012
@@ -140,8 +144,8 @@ public class Pft_fmt_itm_ {
 	.Add(Byte_ascii.Ltr_c		, Pft_fmt_itm_.Iso_fmt)					// 2012-01-02T03:04:05+00:00
 	.Add(Byte_ascii.Ltr_r		, Pft_fmt_itm_.Rfc_5322)				// Mon 02 Jan 2012 08:04:05 +0000
 	.Add("xr"					, Pft_fmt_itm_.Roman)					// MCXI
-	.Add("xkY"					, Pft_fmt_itm_.Thai)					// Year +=  543
-	.Add("xoY"					, Pft_fmt_itm_.Minguo)					// Year -= 1911
+	.Add("xkY"					, Pft_fmt_itm_.Thai_year)					// Year +=  543
+	.Add("xoY"					, Pft_fmt_itm_.Minguo_year)					// Year -= 1911
 	.Add("xn"					, Pft_fmt_itm_.Raw)						// NOTE: really does nothing; REF.MW: Language.php|sprintfdate does $s .= $num; DATE:2013-12-31
 	.Add("xN"					, Pft_fmt_itm_.Raw)
 	.Add("xjj"					, Pft_fmt_itm_.Hebrew_day_num)
@@ -159,11 +163,14 @@ public class Pft_fmt_itm_ {
 	.Add("xmF"					, Pft_fmt_itm_.Hijiri_month_name)
 	.Add("xmn"					, Pft_fmt_itm_.Hijiri_month_idx)
 	.Add("xmY"					, Pft_fmt_itm_.Hijiri_year_idx)
+	.Add("xtY"					, Pft_fmt_itm_.Nengo_year) // Japanese
 	// TODO_OLD: space; "
 	;
 
-	public static Pft_fmt_itm[] Parse(Xop_ctx ctx, byte[] fmt) {
-		List_adp fmt_itms = ctx.Wiki().Parser_mgr().Time_parser_itms();
+	//public static Pft_fmt_itm[] Parse(Xop_ctx ctx, byte[] fmt) {
+	public static Pft_fmt_itm[] Parse(byte[] fmt) {
+            List_adp fmt_itms = List_adp_.New();
+		//List_adp fmt_itms = ctx.Wiki().Parser_mgr().Time_parser_itms();
 		Btrie_fast_mgr trie = Pft_fmt_itm_.Regy;
 		Btrie_rv trv = new Btrie_rv();
 		int i = 0, fmt_len = fmt.length;

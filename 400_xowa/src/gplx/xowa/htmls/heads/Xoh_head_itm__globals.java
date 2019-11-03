@@ -36,7 +36,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		wtr.Write_js_include(Url_jquery);
 		wtr.Write_js_include(Url_jquery_webfont);
 		wtr.Write_js_include(Url_core_js);
-		wtr.Write_js_include(Url_exec_js);
+//		wtr.Write_js_include(Url_exec_js);
 		wtr.Write_js_include(Url_DOMContentLoaded_js);
 	}
 	@Override public void Write_js_head_script(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Xoh_head_wtr wtr) {
@@ -87,6 +87,8 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		} else {
 			wtr.Write_js_global_ini_atr_val(Key_wgAction			, Bry_other);
 		}
+		wtr.Write_js_global_ini_atr_val(Key_wgPopupsRestGatewayEndpoint, Bry_.new_a7("/api/rest_v1/page/summary/"));
+		wtr.Write_js_global_ini_atr_val(Key_wgPopupsGateway, Bry_.new_a7("restbaseHTML"));
                 wtr.Bfr().Add(Bry_.new_a7("\n \"wgArticlePath\" : \"/"));
                 wtr.Bfr().Add(page.Wiki().Domain_bry());
                 wtr.Bfr().Add(Bry_.new_a7("/wiki/$1\","));
@@ -110,6 +112,8 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	, Key_wgPageContentLanguage			= Bry_.new_a7("wgPageContentLanguage")
 	, Key_wgUserLanguage			= Bry_.new_a7("wgUserLanguage")
 	, Key_wgAction				= Bry_.new_a7("wgAction")
+	, Key_wgPopupsRestGatewayEndpoint				= Bry_.new_a7("wgPopupsRestGatewayEndpoint")
+	, Key_wgPopupsGateway				= Bry_.new_a7("wgPopupsGateway")
 	, Bry_view					= Bry_.new_a7("view")
 	, Bry_other					= Bry_.new_a7("other")
 	;

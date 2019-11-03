@@ -18,7 +18,7 @@ import gplx.langs.htmls.*; import gplx.xowa.xtns.relatedSites.*;
 import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.pages.tags.*;
 import gplx.xowa.parsers.utils.*;	
 public class Xoh_page_wtr_wkr_ {
-	private static int[] qualitycount;
+	/*private static int[] qualitycount;
 	private static int qualitytot;
 	public static void Reset_quality() {
 		qualitytot = 0;
@@ -26,11 +26,11 @@ public class Xoh_page_wtr_wkr_ {
 	public static void Set_quality(int[] counts, int tot) {
 		qualitycount = counts;
 		qualitytot = tot;
-	}
+	}*/
 	public static byte[] Bld_page_content_sub(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Bry_bfr tmp_bfr) {
 		byte[] subpages = app.Html_mgr().Page_mgr().Subpages_bldr().Bld(wiki.Ns_mgr(), page.Ttl());
 		byte[] page_content_sub = page.Html_data().Content_sub();		// contentSub exists; SEE: {{#isin}}
-		byte[] quality_table = Generate_quality(wiki);
+		byte[] quality_table = Generate_quality(wiki, page);
 		byte[] redirect_msg = Xop_redirect_mgr.Bld_redirect_msg(app, wiki, page.Redirect_trail());
 		return Bry_.Add(subpages, page_content_sub, quality_table, redirect_msg);
 	}
@@ -63,8 +63,10 @@ public class Xoh_page_wtr_wkr_ {
 		}
 		html_bfr.Insert_at(insert_pos, html_end);
 	}
-	private static byte[] Generate_quality(Xowe_wiki wiki) {
+	private static byte[] Generate_quality(Xowe_wiki wiki, Xoae_page page) {
+		int qualitytot = page.Quality_tots().Qualitycount();
 		if (qualitytot == 0) return null;
+		int[] qualitycount = page.Quality_tots().Qualitycounts();
 		Bry_bfr bfr = Bry_bfr_.New();
 		int q0 = qualitycount[0] * 100 / qualitytot;
 		int q1 = qualitycount[1] * 100 / qualitytot;

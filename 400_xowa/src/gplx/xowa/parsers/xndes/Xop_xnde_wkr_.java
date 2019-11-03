@@ -53,10 +53,10 @@ class Xop_xnde_wkr_ {
 			}
 			else
 				closer = false;
-                        // allow for different case
+			// allow for different case
 			for (j = 2; j < close_end; j++) {
-                            byte c = close_bry[j];
-                            byte s = src[i];
+				byte c = close_bry[j];
+				byte s = src[i];
 				if (c != s && (c | 32) != (s | 32))
 					break;
 				else
@@ -64,16 +64,16 @@ class Xop_xnde_wkr_ {
 			}
 			if (j == close_end) {
 				if (closer) {
-                                    // skip whitespace
-                                    byte s = src[i];
-                                    while (i < last_pos) {
-                                        if (s == ' ' || s == '\n' || s == '\t') {
-                                            i++;
-                                            s = src[i];
-                                        }
-                                        else
-                                            break;
-                                    }
+					// skip whitespace
+					byte s = src[i];
+					while (i < last_pos) {
+						if (s == ' ' || s == '\n' || s == '\t') {
+							i++;
+							s = src[i];
+						}
+						else
+							break;
+					}
 					if (s != Byte_ascii.Angle_end)
 						continue; // not what we are looking for
 					i++;
@@ -109,14 +109,14 @@ class Xop_xnde_wkr_ {
 		}
 		if (lastclose > 0)
 			return lastclose; // at least there was a close somewhere
-                //if (ctx.Parse_tid() == Xop_parser_tid_.Tid__tmpl)
-                //    return src_end;
-                int extra_bytes = open_end + 30;
-                if (extra_bytes > src_end)
-                    extra_bytes = src_end;
+		//if (ctx.Parse_tid() == Xop_parser_tid_.Tid__tmpl)
+		//	return src_end;
+		int extra_bytes = open_end + 30;
+		if (extra_bytes > src_end)
+			extra_bytes = src_end;
 		Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1} excerpt=~{2}", ctx.Page().Url().To_str(), close_bry, String_.new_u8(src, open_end, extra_bytes));
 		//Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1}", ctx.Page().Url().To_str(), close_bry);
-                //Gfo_usr_dlg_.Instance.Log_many("", "", "mid_bry=~{0}", String_.new_u8(src));
+		//Gfo_usr_dlg_.Instance.Log_many("", "", "mid_bry=~{0}", String_.new_u8(src));
 		return Bry_find_.Not_found;
 	}
 	private static final int Find_xtn_end__tid__bgn = 0, Find_xtn_end__tid__end = 1;//, Find_xtn_end__tid__xtag = 2;

@@ -22,7 +22,7 @@ public class Xoa_available_wikis_mgr implements Gfo_invk {
 	public Xoa_available_wikis_mgr(Xoae_app app) {this.app = app;} private Xoae_app app;
 	public String Itms_as_html() {
 		if (itms_as_html == null) {
-			String itm_cls = app.Usere().Wiki().Html_mgr().Head_mgr().Popup_mgr().Enabled() ? " class='xowa-hover-off'" : "";	// always add popup-disabled class in sidebar, even if popups aren't enabled; not worth effort to check cfg for get "current wiki"; DATE:2016-12-13
+			String itm_cls = app.Usere().Wiki().Html_mgr().Head_mgr().Popup_mgr().Enabled() ? " class=\"xowa-hover-off\"" : "";	// always add popup-disabled class in sidebar, even if popups aren't enabled; not worth effort to check cfg for get "current wiki"; DATE:2016-12-13
 			Bry_bfr tmp_bfr = Bry_bfr_.New();
 			Xow_xwiki_mgr xwiki_mgr = app.Usere().Wiki().Xwiki_mgr();
 			xwiki_mgr.Sort_by_key();

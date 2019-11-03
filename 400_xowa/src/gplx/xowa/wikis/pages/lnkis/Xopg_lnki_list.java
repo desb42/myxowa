@@ -14,6 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.wikis.pages.lnkis; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*; import gplx.xowa.wikis.pages.*;
+import gplx.core.strings.*;
 import gplx.xowa.wikis.nss.*; import gplx.xowa.parsers.lnkis.*;
 public class Xopg_lnki_list {
 	private final    List_adp list = List_adp_.New();
@@ -29,7 +30,6 @@ public class Xopg_lnki_list {
 		if (disabled) return;
 		Xoa_ttl ttl = lnki.Ttl(); if (ttl == null) return;		// ttl is null for invalid links
 		Xow_ns ns = ttl.Ns();
-                //System.out.println(String_.new_u8(ttl.Full_db()));
 		lnki.Html_uid_(++lnki_idx);								// NOTE: set html_id in order html to print out "id='xowa_lnki_1'; want to print out id for consistency's sake, even if these links won't be check for redlinks; DATE:2015-05-07
 		if (	ns.Id_is_file_or_media()						// ignore files which will usually not be in local wiki (most are in commons), and whose html is built up separately
 			||	(ns.Id_is_ctg() && !ttl.ForceLiteralLink())		// ignore ctgs which have their own html builder, unless it is literal; EX: [[:Category:A]]; DATE:2014-02-24
@@ -43,6 +43,14 @@ public class Xopg_lnki_list {
 	public void	Clear() {
 		lnki_idx = gplx.xowa.htmls.core.wkrs.lnkis.htmls.Xoh_lnki_wtr.Lnki_id_min;	// NOTE: must start at 0, so that ++lnki_idx is > 0; html_wtr checks for > 0; DATE:2014-10-09; OLD_COMMENT: NOTE: should be 0, but for historical reasons, 1st lnki starts at 2; EX: id='xowa_lnki_2'
 		list.Clear();
+	}
+	@Override public String toString() {
+		String_bldr sb = String_bldr_.new_();
+		int len = list.Len();
+		for (int i = 0; i < len; i++) {
+			sb.Add(Object_.Xto_str_strict_or_null_mark(list.Get_at(i))).Add_char_nl();
+		}
+		return sb.toString();
 	}
 
 	public static final String Lnki_id_prefix = "xolnki_";

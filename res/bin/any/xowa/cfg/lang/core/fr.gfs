@@ -354,18 +354,18 @@ september-gen|septembre
 october-gen|octobre
 november-gen|novembre
 december-gen|décembre
-jan|janv
-feb|fév
+jan|janv.
+feb|fév.
 mar|mars
-apr|avr
+apr|avr.
 may|mai
 jun|juin
-jul|juil
+jul|juill.
 aug|août
-sep|sept
-oct|oct
-nov|nov
-dec|déc
+sep|sept.
+oct|oct.
+nov|nov.
+dec|déc.
 1movedto2_redir|moved [[~{0}]] to [[~{1}]] over redirect
 1movedto2|moved [[~{0}]] to [[~{1}]]
 aboutpage|Project:À propos de
@@ -6481,6 +6481,42 @@ zip-bad|Le fichier est une archive ZIP corrompue ou illisible.\nIl ne peut pas �
 zip-file-open-error|Une erreur s'est produite lors de l'ouverture du fichier ZIP pour contrôle.
 zip-unsupported|Le fichier est une archive ZIP qui utilise des caractéristiques non prises en charge par MediaWiki.\nSa sécurité ne peut pas être correctement vérifiée.
 zip-wrong-format|Le fichier spécifié n'est pas une archive ZIP.
+proofreadpage-indexquality-alt|~{0} {{PLURAL:~{0}\u007Cpage validée\u007Cpages validées}}, ~{1} {{PLURAL:~{1}\u007Cpage seulement corrigée\u007Cpages seulement corrigées}} et ~{2} {{PLURAL:~{2}\u007Cpage non corrigée\u007Cpages non corrigées}}
+code-rev-purge-link|purge
+group-checkuser|Check users
+group-oversight|Oversighters
+group-upwizcampeditors|Upload Wizard campaign editors
+grouppage-upwizcampeditors|{{ns:project}}:Upload Wizard campaign editors
 ']:>
 ).lang
+.time_formats
+  .load_text(
+<:['
+dmy
+time|H:i
+date|j F Y
+both|j F Y à H:i
+monthonly|F Y
+pretty|j F
+mdy
+time|H:i
+date|F j, Y
+both|F j, Y à H:i
+monthonly|F Y
+pretty|F j
+ymd
+time|H:i
+date|Y F j
+both|Y F j à H:i
+monthonly|Y F
+pretty|F j
+ISO 8601
+time|xnH:xni:xns
+date|xnY-xnm-xnd
+both|xnY-xnm-xnd"T"xnH:xni:xns
+monthonly|xnY-xnm
+pretty|xnm-xnd
+']:>
+)
 ;
+

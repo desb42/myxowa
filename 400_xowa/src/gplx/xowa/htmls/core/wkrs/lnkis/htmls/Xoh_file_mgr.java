@@ -38,7 +38,7 @@ public class Xoh_file_mgr {
 		}
 		catch (Exception e) { // do not let fatal exceptions during link_parse break page; DATE:2017-12-02
 			String link_text = String_.new_u8(src, lnki.Src_bgn(), lnki.Src_end());
-			bfr.Add_str_u8("<span style='color:red'>FAIL.PARSER.LINK:" + link_text + "</span>");
+			bfr.Add_str_u8("<span style=\"color:red\">FAIL.PARSER.LINK:" + link_text + "</span>");
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "fatal err when parsing link; page=~{0} link=~{1} err=~{2}", page.Ttl().Full_db_as_str(), link_text, Err_.Message_gplx_log(e));			
 		}
 	}

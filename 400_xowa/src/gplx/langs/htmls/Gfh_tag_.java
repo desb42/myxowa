@@ -253,7 +253,7 @@ public class Gfh_tag_ {	// NOTE: not serialized; used by tag_rdr
 	, Style_lhs_w_type			= Bry_.new_a7("<style type=\"text/css\">")
 	, Style_rhs					= Bry_.new_a7("</style>")
 	, Script_lhs				= Bry_.new_a7("<script>")		, Script_rhs				= Bry_.new_a7("</script>")
-	, Script_lhs_w_type			= Bry_.new_a7("<script type='text/javascript'>")
+	, Script_lhs_w_type			= Bry_.new_a7("<script type=\"text/javascript\">")
 	, Span_lhs					= Bry_.new_a7("<span")			, Span_rhs					= Bry_.new_a7("</span>")
 	, Strong_lhs				= Bry_.new_a7("<strong>")		, Strong_rhs				= Bry_.new_a7("</strong>")
 	, Ul_lhs					= Bry_.new_a7("<ul>")			, Ul_rhs					= Bry_.new_a7("</ul>")

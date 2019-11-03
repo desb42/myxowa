@@ -33,7 +33,7 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		}
 	}
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
-		ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_bgn);
+		//ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_bgn);
 		Xox_xnde_.Parse_xatrs(wiki, this, xatrs_hash, src, xnde);
 		// get css_ttl
 		css_ttl = css_ttl_bry == null ? null : wiki.Ttl_parse(css_ttl_bry); // must check for null ttl; EX:"<templatestyle src{{=}}A.css>"; PAGE:en.w:Switzerland; ISSUE#:416; DATE:2019-03-31
@@ -66,24 +66,22 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		}
 		if (css_src == null) {
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "Template_styles_nde.page_not_found: wiki=~{0} page=~{1} css_ttl=~{2}", wiki.Domain_bry(), ctx.Page().Url_bry_safe(), css_ttl_bry);
+			// "templatestyles-missing-src": "TemplateStyles' <code>src</code> attribute must not be empty."
 		}
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		if (css_ttl == null) {
 			bfr.Add_str_a7(formatTagError("Invalid title for TemplateStyles src attribute."));
+			// "templatestyles-invalid-src": "Invalid title for TemplateStyles' <code>src</code> attribute."
 			return;
 		}
 		if (css_src == null) {
 			bfr.Add_str_a7(formatTagError("Page " + String_.new_u8(css_ttl_bry) + " has no content."));
+			// "templatestyles-bad-src-missing": "Page [[:$1|$2]] has no content."
 			return;
 		}
 
 		if (!css_ignore) {
-                    // works for enwikisource BUT NOT frwiki
-			//Hash_adp__int css_page_ids = (Hash_adp__int)ctx.Page().Kv_data().Get_or_make(Template_styles_kv_itm.Instance);
-			//if (css_page_ids.Get_by_or_null(css_page_id) == null) return;
-                        //css_page_ids.Del(css_page_id);
-
                         Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
 			try {
 				html_head.Bld_many(tmp_bfr, css_page_id, css_src);

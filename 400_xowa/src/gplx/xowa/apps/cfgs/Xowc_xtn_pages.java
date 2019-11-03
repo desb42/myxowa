@@ -44,7 +44,7 @@ public class Xowc_xtn_pages implements Gfo_invk {
 			byte[] ns_name = ns.Name_enc();
 			if		(Bry_.Eq(ns_name, page_name))		{ns_page_id = ns.Id(); ns_mgr.Ns_page_id_(ns_page_id);}
 			else if (Bry_.Eq(ns_name, page_talk_name))	ns_page_talk_id = ns.Id();
-			else if (Bry_.Eq(ns_name, index_name))		ns_index_id = ns.Id();
+			else if (Bry_.Eq(ns_name, index_name))		{ns_index_id = ns.Id(); ns_mgr.Ns_index_id_(ns_index_id);}
 			else if (Bry_.Eq(ns_name, index_talk_name))	ns_index_talk_id = ns.Id();
 		}
 		int aliases_added = 0;

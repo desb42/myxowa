@@ -487,7 +487,7 @@ public class Xtn_inputbox_nde implements Xox_xnde {
 		bfr.Add_str_a7("<form name=\"bodySearch1\" id=\"bodySearch1\" class=\"bodySearch");
 		if (mInline_bgn != -1)
 			bfr.Add_str_a7(" mw-inputbox-inline");
-		bfr.Add_str_a7("\" action=\"Search\">");
+		bfr.Add_str_a7("\" action=\"/wiki/Special:Search\">");
 		//////
 		/*$htmlOut .= Xml::openElement( 'div',
 			[

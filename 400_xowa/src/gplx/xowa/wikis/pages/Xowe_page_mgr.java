@@ -93,7 +93,7 @@ public class Xowe_page_mgr {
 
 		// load from wtxt_db; occurs if (a) no html_db_id; (b) option says to use wtxt db; (c) html_db_id exists, but no html_db;
 		if (!from_html_db) {
-			Xoh_page_wtr_wkr_.Reset_quality(); // stop proofread pages
+			//Xoh_page_wtr_wkr_.Reset_quality(); // stop proofread pages
 			wiki.Parser_mgr().Parse(page, false);
 
 			// load from html_db if no wtxt found and option just marked as not read_preferred

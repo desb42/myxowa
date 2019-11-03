@@ -154,7 +154,8 @@ public class Bry_rdr {
 		return rv;
 	}
 	public int Chk(byte find) {
-		if (src[pos] != find) {err_wkr.Fail("failed check", "chk", Byte_.To_str(find)); return Bry_find_.Not_found;}
+		if (src[pos] != find) {
+                    err_wkr.Fail("failed check", "chk", Byte_.To_str(find)); return Bry_find_.Not_found;}
 		++pos;
 		return pos;
 	}

@@ -23,7 +23,7 @@ public class Pft_func_time extends Pf_func_base {
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {// REF.MW:ParserFunctions_body.php
 		int self_args_len = self.Args_len();
 		byte[] arg_fmt = Eval_argx(ctx, src, caller, self);
-		Pft_fmt_itm[] fmt_ary = Pft_fmt_itm_.Parse(ctx, arg_fmt);
+		Pft_fmt_itm[] fmt_ary = Pft_fmt_itm_.Parse(arg_fmt);
 		byte[] arg_date = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, self_args_len, 0);
 		byte[] arg_lang = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, self_args_len, 1);
 		Bry_bfr error_bfr = Bry_bfr_.New();

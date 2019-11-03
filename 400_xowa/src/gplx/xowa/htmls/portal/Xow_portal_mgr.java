@@ -124,7 +124,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 		return rv;
 	}
 
-	public byte[] Div_ns_bry(Xowe_wiki wiki, Xoa_ttl ttl) {
+	public byte[] Div_ns_bry(Xowe_wiki wiki, Xoa_ttl ttl, boolean ispage_in_wikisource) {
 		Bry_bfr_mkr bfr_mkr = wiki.Utl__bfr_mkr();
 		Xow_ns_mgr ns_mgr = wiki.Ns_mgr();
 		Xow_ns ns = ttl.Ns();
@@ -158,10 +158,54 @@ public class Xow_portal_mgr implements Gfo_invk {
 		// if no mapping use the Namespace name
 		if (portal_main.length == 0)
 			portal_main = ttl.Ns().Name_db();
-		
-		div_ns_fmtr.Bld_bfr_many(tmp_bfr, subj_href, subj_cls, talk_href, talk_cls, vnt_menu, portal_main, subjectId);
+
+		// if this is a wikisource Page then need to calculate next,prev and index
+		byte[] extra = Bry_.Empty;
+		if (ispage_in_wikisource) {
+			Xoa_ttl idx_ttl = Xoa_ttl.Parse(wiki, wiki.Ns_mgr().Ns_index_id(), ttl.Root_txt());
+			Xoae_page page = wiki.Data_mgr().Load_page_by_ttl(idx_ttl);
+			int maxpagecount = wiki.Maxpage().Get_maxpage(page.Db().Page().Id());
+
+			int currentpageno = Bry_.To_int(ttl.Leaf_txt());
+
+			byte[] lnk_txt, lnk;
+			Bry_bfr bfr = Bry_bfr_.New();
+			lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_image");
+		//lnk = ??
+		//Fmt__image.Bld_many(bfr, lnk, lnk_txt);
+
+			lnk = idx_ttl.Page_url(); //remove Index:
+			if (currentpageno - 1 > 0) {
+				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_prev");
+				Fmt__prev.Bld_many(bfr, lnk, currentpageno - 1, lnk_txt);
+			}
+			if (currentpageno + 1 < maxpagecount) {
+				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_next");
+				Fmt__next.Bld_many(bfr, lnk, currentpageno + 1, lnk_txt);
+			}
+
+			lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_index");
+			Fmt__index.Bld_many(bfr, lnk, lnk_txt);
+			extra = bfr.To_bry_and_clear();
+		}
+
+		div_ns_fmtr.Bld_bfr_many(tmp_bfr, subj_href, subj_cls, talk_href, talk_cls, vnt_menu, portal_main, subjectId, extra);
 		return tmp_bfr.To_bry_and_rls();
 	}
+	private static final Bry_fmt
+	 Fmt__image = Bry_fmt.Auto_nl_skip_last
+	 ( "<li id=\"ca-proofreadPageScanLink\"><span><a href=\"~{img}\" class=\"xowa-hover-off\">~{img_txt}</a></span></li>"
+	 )
+	,Fmt__prev = Bry_fmt.Auto_nl_skip_last
+	 ( "<li id=\"ca-proofreadPagePrevLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}/~{cnt}\" class=\"xowa-hover-off\">~{lnk_txt}</a></span></li>"
+	 )
+	,Fmt__next = Bry_fmt.Auto_nl_skip_last
+	 ( "<li id=\"ca-proofreadPageNextLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}/~{cnt}\" class=\"xowa-hover-off\">~{img_txt}</a></span></li>"
+	 )
+	,Fmt__index = Bry_fmt.Auto_nl_skip_last
+	 ( "<li id=\"ca-proofreadPageIndexLink\" class=\"icon\"><span><a href=\"/wiki/Index:~{lnk}\" class=\"xowa-hover-off\">~{img_txt}</a></span></li>"
+	 )
+	;
 	private byte[] Ns_cls_by_ord(Xow_ns_mgr ns_mgr, int ns_ord) {
 		Xow_ns ns = ns_mgr.Ords_get_at(ns_ord);
 		return ns == null || ns.Exists() ? Bry_.Empty : missing_ns_cls;
@@ -213,7 +257,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 	}
 	private final    Bry_fmtr 
 	  div_personal_fmtr = Bry_fmtr.new_("~{portal_personal_subj_href};~{portal_personal_subj_text};~{portal_personal_talk_cls};~{portal_personal_talk_href};~{portal_personal_talk_cls};~{portal_indicators_pagesource}", "portal_personal_subj_href", "portal_personal_subj_text", "portal_personal_subj_cls", "portal_personal_talk_href", "portal_personal_talk_cls", "portal_indicators_pagesource")
-	, div_ns_fmtr = Bry_fmtr.new_("~{portal_ns_subj_href};~{portal_ns_subj_cls};~{portal_ns_talk_href};~{portal_ns_talk_cls};~{portal_div_vnts};~{portal_main};~{portal_ca}", "portal_ns_subj_href", "portal_ns_subj_cls", "portal_ns_talk_href", "portal_ns_talk_cls", "portal_div_vnts", "portal_main", "portal_ca")
+	, div_ns_fmtr = Bry_fmtr.new_("~{portal_ns_subj_href};~{portal_ns_subj_cls};~{portal_ns_talk_href};~{portal_ns_talk_cls};~{portal_div_vnts};~{portal_main};~{portal_ca};~{portal_extra}", "portal_ns_subj_href", "portal_ns_subj_cls", "portal_ns_talk_href", "portal_ns_talk_cls", "portal_div_vnts", "portal_main", "portal_ca", "portal_extra")
 	, div_view_fmtr = Bry_fmtr.new_("", "portal_view_read_cls", "portal_view_edit_cls", "portal_view_html_cls", "search_text", "portal_view_read_href", "portal_view_edit_href", "portal_view_html_href", "sitename")
 	, div_logo_fmtr = Bry_fmtr.new_("", "portal_nav_main_href", "portal_logo_url")
 	, div_sync_fmtr = Bry_fmtr.new_("", "page_url")
@@ -223,10 +267,51 @@ public class Xow_portal_mgr implements Gfo_invk {
 	private byte[] Reverse_li(byte[] bry) {
 		return lang_is_rtl ? Xoh_rtl_utl.Reverse_li(bry) : bry;
 	}
+
+	private boolean Nothex(byte b) {
+		if (b >= Byte_ascii.Num_0 && b <= Byte_ascii.Num_9) return false;
+		if (b >= Byte_ascii.Ltr_A && b <= Byte_ascii.Ltr_F) return false;
+		if (b >= Byte_ascii.Ltr_a && b <= Byte_ascii.Ltr_f) return false;
+		return true;
+	}
+	private byte[] Checkpercent(byte[] src) {
+		// search for '%'
+		// if followed by two valid hex chars (upper  and lowercase) - ignore
+		// else insert '25'
+		boolean changed = false;
+		int len = src.length;
+		int bgn = 0;
+		int pos = 0;
+		Bry_bfr tmp_bfr = null;
+		while (pos < len) {
+			if (src[pos++] == '%') {
+				if (pos + 2 > len ||
+				    Nothex(src[pos]) ||
+				    Nothex(src[pos+1]) ) {
+					if (!changed) {
+						tmp_bfr = Bry_bfr_.New();
+						changed = true;
+					}
+					tmp_bfr.Add_mid(src, bgn, pos);
+					tmp_bfr.Add_byte(Byte_ascii.Num_2).Add_byte(Byte_ascii.Num_5);
+					bgn = pos;
+				}
+				else
+					pos += 2;
+			}
+		}
+		if (changed) {
+                    tmp_bfr.Add_mid(src, bgn, len);
+			return tmp_bfr.To_bry_and_clear();
+                }
+		else
+			return src;
+	}
 	private byte[] display_type(boolean from_hdump, Xoa_ttl ttl, byte html_gen_tid) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		subj_href = Xoh_html_wtr_escaper.Escape(Xop_amp_mgr.Instance, tmp_bfr, Bry_.Add(Xoh_href_.Bry__wiki, ttl.Subj_url()));
-                subj_href = Bry_.Replace(subj_href, Bry_.new_a7("%"), Bry_.new_a7("%25"));
+                //subj_href = Bry_.Replace(subj_href, Bry_.new_a7("%"), Bry_.new_a7("%25"));
+                subj_href = Checkpercent(subj_href);
 		if (html_gen_tid != 0) return Bry_.Empty; // edit & html are irrelevant
 		boolean read_from_html_db_preferred = wiki.Html__hdump_mgr().Load_mgr().Read_preferred();
 		if (from_hdump) {

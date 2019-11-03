@@ -108,6 +108,10 @@ var XoPopupMgr = (function(){
   XoPopupMgr.prototype.ShowConfirming = function($anch, ev) {
     if (this.Cfg.WriteLogEnabled) this.WriteLogByAnch($anch, 'XoPopupMgr.ShowConfirming.Bgn');
 
+    // any classed as "new" are red links hence no point
+    if ($anch.hasClass("new"))
+        return;
+
     // exit unless mode is hidden
     var popupItm = this.GetItmOrNew($anch);
     switch (popupItm.Mode) {

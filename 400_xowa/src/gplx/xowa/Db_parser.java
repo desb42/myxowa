@@ -70,7 +70,10 @@ public class Db_parser {
 	}
 	
 	private boolean match_opencomment() {
+		boolean startnl = false;
 		int savedpos = m_pos;
+		if (savedpos == 0 || m_src[savedpos-1] == '\n')
+			startnl = true;
 		m_pos++;
 		m_start = -1;
 		if (m_pos + 3 >= m_src_end) return false;
@@ -83,12 +86,24 @@ public class Db_parser {
 					if (m_src[m_pos+1] == '-' && m_src[m_pos+2] == '>') {
 						m_tail = m_pos;
 						m_pos += 3;
+						// is it on its own line
+						if (m_pos < m_src_end && m_src[m_pos] == '\n' && startnl) {
+							m_pos++;
+							// chew up all following blank lines???????
+							while (m_pos < m_src_end) {
+								int cur_pos = m_pos;
+								while (cur_pos < m_src_end && m_src[cur_pos] == ' ') 
+									cur_pos++;
+								if (m_src[cur_pos] == '\n')
+									m_pos = cur_pos + 1;
+								else
+									break;
+							}
+						}
 						return true;
 					}
-                                        m_pos++;
 				}
-				else
-					m_pos++;
+				m_pos++;
 			}
 		}
 		m_pos = savedpos;
