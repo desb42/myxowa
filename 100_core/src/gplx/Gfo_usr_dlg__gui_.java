@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx;
 import gplx.core.consoles.*; import gplx.core.lists.rings.*;
+import java.util.concurrent.locks.*;
 public class Gfo_usr_dlg__gui_ {
 	public static final    Gfo_usr_dlg__gui Noop		= new Gfo_usr_dlg__gui_noop();
 	public static final    Gfo_usr_dlg__gui Console		= new Gfo_usr_dlg__gui_console();
@@ -31,13 +32,46 @@ class Gfo_usr_dlg__gui_noop implements Gfo_usr_dlg__gui {
 	public void Write_stop(String text) {}
 }
 class Gfo_usr_dlg__gui_console implements Gfo_usr_dlg__gui {
+	public static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	private final    Console_adp__sys console = Console_adp__sys.Instance;
 	public void Clear() {}
 	public Ring__string Prog_msgs() {return ring;} private final    Ring__string ring = new Ring__string().Max_(0);
-	public void Write_prog(String text) {console.Write_tmp(text);}
-	public void Write_note(String text) {console.Write_str_w_nl(text);}
-	public void Write_warn(String text) {console.Write_str_w_nl(text);}
-	public void Write_stop(String text) {console.Write_str_w_nl(text);}
+	public void Write_prog(String text) {
+            try {
+		rwl.writeLock().lock();
+                console.Write_tmp(text);
+            }
+            finally {
+		rwl.writeLock().unlock();
+            }
+        }
+	public void Write_note(String text) {
+            try {
+		rwl.writeLock().lock();
+                console.Write_str_w_nl(text);
+            }
+            finally {
+		rwl.writeLock().unlock();
+            }
+        }
+	public void Write_warn(String text) {
+            try {
+		rwl.writeLock().lock();
+                console.Write_str_w_nl(text);
+            }
+            finally {
+		rwl.writeLock().unlock();
+            }
+        }
+	public void Write_stop(String text) {
+            try {
+		rwl.writeLock().lock();
+                console.Write_str_w_nl(text);
+            }
+            finally {
+		rwl.writeLock().unlock();
+            }
+        }
 }
 class Gfo_usr_dlg__gui_mem_string implements Gfo_usr_dlg__gui {
 	public String file = "";

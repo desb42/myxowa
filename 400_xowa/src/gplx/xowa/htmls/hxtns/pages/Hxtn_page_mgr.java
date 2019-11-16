@@ -98,5 +98,8 @@ public class Hxtn_page_mgr {
 		}
 	}
 	private static Io_url Make_url(Xow_wiki wiki, String file_name) {return wiki.Fsys_mgr().Root_dir().GenSubFil(wiki.Domain_str() + file_name);}
-	public static final int Id__template_styles = 0;
+	public static final int
+	  Id__template_styles = 0
+	, Id__pp_pagequality = 1
+	;
 }

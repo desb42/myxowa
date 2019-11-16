@@ -38,8 +38,10 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		make_mgr.Init_by_wiki(wiki);
 	}
 	public void Load_by_xowe(Xoae_page wpg) {
+                tmp_hpg.Quality_tots().Clear();
 		tmp_hpg.Ctor_by_hview(wpg.Wiki(), wpg.Url(), wpg.Ttl(), wpg.Db().Page().Id());
 		Load_by_xowh(tmp_hpg, wpg.Ttl(), Bool_.Y);
+                wpg.Quality_tots(tmp_hpg.Quality_tots());
 		wpg.Db().Html().Html_bry_(tmp_hpg.Db().Html().Html_bry());
 		wpg.Root_(new gplx.xowa.parsers.Xop_root_tkn());	// HACK: set root, else load page will fail
 		Fill_page(wpg, tmp_hpg);

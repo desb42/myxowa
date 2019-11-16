@@ -69,7 +69,7 @@ public abstract class Db_engine_sql_base implements Db_engine {
 		int len = ary.length;
 		for (int i = 0; i < len; ++i) {
 			Dbmeta_idx_itm idx = ary[i];
-			usr_dlg.Plog_many("", "", "creating db index (please wait); db=~{0} idx=~{1}", conn_info.Database(), idx.Name());
+			usr_dlg.Plog_many("", "", "creating db index (please wait); db=~{0} idx=~{1} wkr=~{2}", conn_info.Database(), idx.Name(), i);
 			Exec_as_int(idx.To_sql_create(Sql_wtr()));
 		}
 		this.Meta_mgr().Load_all();

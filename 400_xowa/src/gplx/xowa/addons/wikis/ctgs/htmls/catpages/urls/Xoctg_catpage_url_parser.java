@@ -18,7 +18,7 @@ import gplx.core.net.*; import gplx.core.net.qargs.*;
 import gplx.langs.htmls.encoders.*;
 public class Xoctg_catpage_url_parser {
 	public static Xoctg_catpage_url Parse(Xoa_url url) {
-            if (url == null) return Xoctg_catpage_url.New__blank();
+		if (url == null) return Xoctg_catpage_url.New__blank();
 		Gfo_qarg_itm[] args = url.Qargs_ary();
 		if (args == null) return Xoctg_catpage_url.New__blank();
 		int len = args.length;

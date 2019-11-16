@@ -124,12 +124,12 @@ class Http_url_parser {
 						break;
 				}
 			}
-			if (qarg_bfr.Len_gt_0()) {
-				qarg = qarg_bfr.To_bry_and_clear();
+			qarg = qarg_bfr.To_bry_and_clear();
+			//if (qarg_bfr.Len_gt_0()) {
 
 				// tack the querystring back on
-				bfr.Add(qarg);
-			}
+			//	bfr.Add(qarg);
+			//}
 			this.page = bfr.To_bry_and_clear();
 
 			return true;

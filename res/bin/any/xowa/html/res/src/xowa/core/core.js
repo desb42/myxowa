@@ -259,8 +259,8 @@ if (!window.xowa) {
         escapeRegExp: function (str) {
         	return str.replace('$', '\\$');
         },
-        	//$content: window.jQuery ? jQuery('#mw-content-text') : null
-        	$content: window.jQuery ? jQuery('#content') : null,
+        	$content: window.jQuery ? jQuery('#mw-content-text') : null,
+        	//$content: window.jQuery ? jQuery('#content') : null,
 		/**
 		 * Add a link to a portlet menu on the page, such as:
 		 *

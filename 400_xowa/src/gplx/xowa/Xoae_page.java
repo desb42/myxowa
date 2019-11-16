@@ -83,6 +83,7 @@ public class Xoae_page implements Xoa_page {
 	public int						Bldr__ns_ord() {return bldr__ns_ord;} public void Bldr__ns_ord_(int v) {bldr__ns_ord = v;} private int bldr__ns_ord;
 	public Xopg_tmpl_prepend_mgr	Tmpl_prepend_mgr() {return tmpl_prepend_mgr;} private Xopg_tmpl_prepend_mgr tmpl_prepend_mgr = new Xopg_tmpl_prepend_mgr();
 	public Db_quality_tots	Quality_tots() {return qualitytots;} private Db_quality_tots qualitytots = new Db_quality_tots();
+	public void	Quality_tots(Db_quality_tots tots) {qualitytots = tots;}
 	public void Clear_all() {Clear(true);}
 	public void Clear(boolean clear_scrib) { // NOTE: this is called post-fetch but pre-wtxt; do not clear items set by post-fetch, such as id, ttl, redirected_ttls, data_raw
 		db.Clear();

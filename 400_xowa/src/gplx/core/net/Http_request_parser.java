@@ -106,6 +106,8 @@ public class Http_request_parser {
 			case Tid_post	: this.type = Http_request_itm.Type_post; break;
 			default			: throw Err_.new_unimplemented();
 		}
+                if (val_bgn + 5 < url_end && line[val_bgn] == '/' && line[val_bgn+1] == 'x' && line[val_bgn+2] == 'o' && line[val_bgn+3] == 'w' && line[val_bgn+4] == 'a')
+                    val_bgn += 5;
 		this.url = Bry_.Mid(line, val_bgn, url_end);
 		this.protocol = Bry_.Mid(line, url_end + 1, line_len);
 	}

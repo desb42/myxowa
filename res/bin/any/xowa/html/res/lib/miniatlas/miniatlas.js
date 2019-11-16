@@ -658,8 +658,8 @@ jQuery(function ($) {
 
 //  var rbrtl = [ '//upload.wikimedia.org/wikipedia/commons/b/b5/Button_resize.png',
 //                '//upload.wikimedia.org/wikipedia/commons/3/30/Button_resize_rtl.png' ];
-  var rbrtl = [ '/fsys/bin/any/xowa/html/res/lib/miniatlas/Button_resize.png',
-                '/fsys/bin/any/xowa/html/res/lib/miniatlas/Button_resize_rtl.png' ];
+  var rbrtl = [ '/xowa/fsys/bin/any/xowa/html/res/lib/miniatlas/Button_resize.png',
+                '/xowa/fsys/bin/any/xowa/html/res/lib/miniatlas/Button_resize_rtl.png' ];
   wi.resizebutton = $('<img>').attr( {
    title : _msg('resize'),
    src : rbrtl[rtl?1:0]
@@ -671,7 +671,7 @@ jQuery(function ($) {
   wi.closebutton = $('<img>').attr( {
    title : _msg('close'),
    //src : '//upload.wikimedia.org/wikipedia/commons/d/d4/Button_hide.png'
-   src : '/fsys/bin/any/xowa/html/res/lib/miniatlas/Button_hide.png'
+   src : '/xowa/fsys/bin/any/xowa/html/res/lib/miniatlas/Button_hide.png'
   } ).css( {
    zIndex : 15, position : 'absolute', right : '11px', top : '9px', width : '18px', cursor : 'pointer'
   } ).click( function(e) { wi.div.hide(); } );

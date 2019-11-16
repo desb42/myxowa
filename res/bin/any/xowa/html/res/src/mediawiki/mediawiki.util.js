@@ -630,6 +630,10 @@
 			// skin and has not yet inserted bodytext yet.
 			return $( 'body' );
 		}() );
+		// this blows apart settings in core.js (why???)
+		util.escapeRegExp = function (str) {
+        	return str.replace('$', '\\$');
+        };
 	}
 
 	/**

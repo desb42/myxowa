@@ -80,7 +80,7 @@ function renderSuggestion (page_db, page_before, page_display, page_after) {
 	textNode.setAttribute('xowa_page_db', page_db);
   var href = '/wiki/' + page_db.replace(/ /g, '_');
   if (xowa_global_values.mode_is_http) {
-    href = '/' + xowa.page.wiki + href;
+    href = '/xowa/' + xowa.page.wiki + href;
   }
 	linkNode.href = href;
 	linkNode.title = page_db;

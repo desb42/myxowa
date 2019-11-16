@@ -19,13 +19,12 @@ import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.langs.htmls
 import gplx.xowa.langs.vnts.*; import gplx.xowa.htmls.core.htmls.*;
 import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.pages.skins.*; 
 import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.*; import gplx.xowa.wikis.domains.*; import gplx.xowa.parsers.*; import gplx.xowa.xtns.wbases.*;
-import gplx.xowa.xtns.pagebanners.*;
 import gplx.xowa.apps.gfs.*; import gplx.xowa.htmls.portal.*;
 import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.*;
 import gplx.xowa.htmls.core.*;
 import gplx.xowa.wikis.pages.lnkis.Xopg_redlink_mgr;
-import gplx.xowa.xtns.pfuncs.times.Pft_func_formatdate;
 import gplx.langs.jsons.*;
+import gplx.xowa.htmls.hxtns.pages.*; import gplx.xowa.htmls.hxtns.blobs.*; import gplx.xowa.htmls.hxtns.wikis.*;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
@@ -35,16 +34,13 @@ public class Xoh_page_wtr_wkr {
 	private final	gplx.xowa.addons.apps.scripts.Xoscript_mgr scripting_mgr = new gplx.xowa.addons.apps.scripts.Xoscript_mgr();
 	private Xoae_app app; private Xowe_wiki wiki; private Xoae_page page; private byte[] root_dir_bry;
 	public Xoh_page_wtr_wkr(Xoh_page_wtr_mgr mgr, byte page_mode) {this.mgr = mgr; this.page_mode = page_mode;}		
-	public Xoh_page_wtr_wkr Ctgs_enabled_(boolean v) {ctgs_enabled = v; return this;} private boolean ctgs_enabled = true;		
+	public Xoh_page_wtr_wkr Ctgs_enabled_(boolean v) {ctgs_enabled = v; return this;} private boolean ctgs_enabled = true;
 	public void Write_page(Bry_bfr rv, Xoae_page page, Xop_ctx ctx, Xoh_page_html_source page_html_source) {
 		synchronized (thread_lock_1) {
 			this.page = page; this.wiki = page.Wikie(); this.app = wiki.Appe();
 			ctx.Page_(page); // HACK: must update page for toc_mgr; WHEN: Xoae_page rewrite
 			Bry_fmtr fmtr = null;
-			if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && page.Ttl().Ns().Id() == wiki.Ns_mgr().Ns_page_id())
-				ispage_in_wikisource = true;
-			else
-				ispage_in_wikisource = false;
+                        Set_ispage_in_wikisource(page);
 			if (mgr.Html_capable()) {
 				wdata_lang_wtr.Page_(page);
 				byte view_mode = page_mode;
@@ -96,8 +92,8 @@ public class Xoh_page_wtr_wkr {
 		byte[] modified_on_msg = Bry_.Empty;
 		if (modified_on != DateAdp_.MinValue) {
 			modified_on_msg = wiki.Msg_mgr().Val_by_key_args(Key_lastmodifiedat, 
-					                       wiki.Lang().Time_format_mgr().Get_date_defaultfmt(wiki, modified_on),
-					                       wiki.Lang().Time_format_mgr().Get_time_defaultfmt(wiki, modified_on));
+						wiki.Lang().Time_format_mgr().Get_date_defaultfmt(wiki, modified_on),
+						wiki.Lang().Time_format_mgr().Get_time_defaultfmt(wiki, modified_on));
 			modified_on_msg = Db_expand.Extracheck(modified_on_msg, "");
 		}
 		byte[] page_body_class = Xoh_page_body_cls.Calc(tmp_bfr, page_ttl, page_tid);
@@ -132,13 +128,15 @@ public class Xoh_page_wtr_wkr {
 				
 		fmtr.Bld_bfr_many(bfr
 		, root_dir_bry, Xoa_app_.Version, Xoa_app_.Build_date, app.Tcp_server().Running_str()
-		, page.Db().Page().Id(), page.Ttl().Full_db()
-		, page_name, page.Html_data().Page_heading().Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), page_display_title)
+		, page.Db().Page().Id(), page.Ttl().Full_db(), page_name
+		, page.Html_data().Page_heading().Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), page_display_title)
 		, modified_on_msg
 		, mgr.Css_common_bry(), mgr.Css_wiki_bry()
 		, mgr.Css_night_bry(nightmode_enabled)
 		, page.Html_data().Head_mgr().Init(app, wiki, page).Init_dflts(html_gen_tid)
-		, page.Lang().Dir_ltr_bry(), page.Html_data().Indicators(), page_content_sub, wiki.Html_mgr().Portal_mgr().Div_jump_to(), wiki.Xtn_mgr().Xtn_pgbnr().Write_html(page, ctx, hctx), page_body_class, html_content_editable
+		, page.Lang().Dir_ltr_bry(), page.Html_data().Indicators(), page_content_sub
+		, wiki.Html_mgr().Portal_mgr().Div_jump_to(), wiki.Xtn_mgr().Xtn_pgbnr().Write_html(page, ctx, hctx)
+		, page_body_class, html_content_editable
 		, page_data, wdata_lang_wtr
 		, portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date)
 
@@ -155,15 +153,26 @@ public class Xoh_page_wtr_wkr {
 		, page.Lang().Key_bry()
 						, redlinks
 						, printfooter(app, wiki, ctx, hctx, page)
+						, page.Html_data().Pgbnr_bread()
+						, Bry_.new_a7("app_icon.png")
 		);
 		Xoh_page_wtr_wkr_.Bld_head_end(bfr, tmp_bfr, page);	// add after </head>
-		Xoh_page_wtr_wkr_.Bld_html_end(bfr, tmp_bfr, page);	// add after </html>			
+		Xoh_page_wtr_wkr_.Bld_html_end(bfr, tmp_bfr, page);	// add after </html>
 	}
 	public void Write_hdump(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page wpg) {
+		this.wiki = ctx.Wiki();
+		Set_ispage_in_wikisource(wpg);
 		if (wpg.Html_data().Xtn_pgbnr() != null) {
 			ctx.Wiki().Xtn_mgr().Xtn_pgbnr().Write_html(wpg, ctx, hctx).Bfr_arg__add(bfr);	// if pgbnr exists, write to top of html
 		}
 		this.Write_body(bfr, ctx, hctx, wpg);
+		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && page.Quality_tots().Qualitycount() > 0) {
+			int page_id = wpg.Db().Page().Id();
+			byte[] quality_table = page.Quality_tots().Serialise();
+			Hxtn_page_mgr html_data_mgr = page.Wikie().Hxtn_mgr();
+			html_data_mgr.Page_tbl__insert(page_id, Hxtn_page_mgr.Id__pp_pagequality, page_id);
+			html_data_mgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_wiki_itm.Tid__self, page_id, quality_table);
+		}
 	}
 	public void Write_body(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page) {
 		synchronized (thread_lock_2) {
@@ -181,26 +190,26 @@ public class Xoh_page_wtr_wkr {
 					case Xow_page_tid.Tid_js:
 					case Xow_page_tid.Tid_css:
 					case Xow_page_tid.Tid_lua:
-											Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
-											page_tid_uses_pre = true;
-											break;
+						Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
+						page_tid_uses_pre = true;
+						break;
 					case Xow_page_tid.Tid_json:
-											if (page_ns_id != Xow_ns_.Tid__data)
-												app.Wiki_mgr().Wdata_mgr().Write_json_as_html(bfr, page_ttl, data_raw);
-											else {
-												Json_doc jdoc = app.Utl__json_parser().Parse(data_raw);
-												Jdoc_data_writer(bfr, jdoc);
-												bfr.Add_str_a7("<pre>\n");
-												jdoc.Root_grp().Print_as_json(bfr, 0);
-												bfr.Add_str_a7("</pre>\n");
-											//Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
-											//page_tid_uses_pre = true;
-												//Write_body_wikitext(bfr, app, wiki, wikitext, ctx, hctx, page, page_tid, page_ns_id);
-											}
-											break;
+						if (page_ns_id != Xow_ns_.Tid__data)
+							app.Wiki_mgr().Wdata_mgr().Write_json_as_html(bfr, page_ttl, data_raw);
+						else {
+							Json_doc jdoc = app.Utl__json_parser().Parse(data_raw);
+							Jdoc_data_writer(bfr, jdoc);
+							bfr.Add_str_a7("<pre>\n");
+							jdoc.Root_grp().Print_as_json(bfr, 0);
+							bfr.Add_str_a7("</pre>\n");
+						//Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
+						//page_tid_uses_pre = true;
+							//Write_body_wikitext(bfr, app, wiki, wikitext, ctx, hctx, page, page_tid, page_ns_id);
+						}
+						break;
 					case Xow_page_tid.Tid_wikitext:
-											Write_body_wikitext(bfr, app, wiki, data_raw, ctx, hctx, page, page_tid, page_ns_id);
-											break;
+						Write_body_wikitext(bfr, app, wiki, data_raw, ctx, hctx, page, page_tid, page_ns_id);
+						break;
 				}
 			}
 			if (	wiki.Domain_tid() != Xow_domain_tid_.Tid__home	// allow home wiki to use javascript
@@ -291,25 +300,26 @@ public class Xoh_page_wtr_wkr {
 		Xoh_html_wtr_escaper.Escape(app.Parser_amp_mgr(), tmp_bfr, data_raw, 0, data_raw.length, false, false);
 		if (hctx.Mode_is_hdump())
 			bfr.Add(data_raw);
-				else {
-					byte[] lang = Bry_.Empty;
-					switch (page_tid) {
-							case Xow_page_tid.Tid_msg: lang = Bry_.new_a7("msg"); break;
-							case Xow_page_tid.Tid_js: lang = Bry_.new_a7("js"); break;
-							case Xow_page_tid.Tid_css: lang = Bry_.new_a7("css"); break;
-							case Xow_page_tid.Tid_lua: lang = Bry_.new_a7("lua"); break;
-					}
-					Bry_fmt content_code_fmt = Bry_fmt.Auto("<pre class=\"prettyprint lang-~{lang} linenums\">~{page_text}</pre>");
+		else {
+			byte[] lang = Bry_.Empty;
+			switch (page_tid) {
+				case Xow_page_tid.Tid_msg: lang = Bry_.new_a7("msg"); break;
+				case Xow_page_tid.Tid_js: lang = Bry_.new_a7("js"); break;
+				case Xow_page_tid.Tid_css: lang = Bry_.new_a7("css"); break;
+				case Xow_page_tid.Tid_lua: lang = Bry_.new_a7("lua"); break;
+			}
+			Bry_fmt content_code_fmt = Bry_fmt.Auto("<pre class=\"prettyprint lang-~{lang} linenums\">~{page_text}</pre>");
 			content_code_fmt.Bld_many(bfr, lang, tmp_bfr);
 			//app.Html_mgr().Page_mgr().Content_code_fmt().Bld_many(bfr, tmp_bfr);
-				}
+		}
 		tmp_bfr.Clear();
 	}
 	private void Write_body_edit(Bry_bfr bfr, byte[] data_raw, int ns_id, byte page_tid) {
 		if	(	ns_id == Xow_ns_.Tid__mediawiki			// if MediaWiki and wikitext, must be a message; convert args back to php; DATE:2014-06-13
 			&&	page_tid == Xow_page_tid.Tid_wikitext
-			)
+			) {
 			data_raw = Gfs_php_converter.Xto_php(tmp_bfr, Bool_.N, data_raw);
+		}
 		int data_raw_len = data_raw.length;
 		if (mgr.Html_capable()) {
 			data_raw = wiki.Parser_mgr().Hdr__section_editable__mgr().Slice_section(page.Url(), page.Ttl(), data_raw);
@@ -355,59 +365,59 @@ public class Xoh_page_wtr_wkr {
 		}
 		return tmp_bfr.To_bry_and_clear();
 	}
-		private byte[] Get_text(Json_nde titles_nde) {
-			int titles_len = titles_nde.Len();
-			for (int k = 0; k < titles_len; ++k) {
-				Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(k));
-				String langkey = title_itm.Key_as_str();
-				if (langkey.equals("en"))
-					return title_itm.Val_as_bry();
-			}
-			if (titles_len > 0) {
-				Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(0));
+	private byte[] Get_text(Json_nde titles_nde) {
+		int titles_len = titles_nde.Len();
+		for (int k = 0; k < titles_len; ++k) {
+			Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(k));
+			String langkey = title_itm.Key_as_str();
+			if (langkey.equals("en"))
 				return title_itm.Val_as_bry();
-			}
-			return Bry_.Empty;
 		}
+		if (titles_len > 0) {
+			Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(0));
+			return title_itm.Val_as_bry();
+		}
+		return Bry_.Empty;
+	}
 // logic from https://github.com/wikimedia/mediawiki-extensions-JsonConfig/includes/JCTabularContentView.php
-		public void Jdoc_data_writer(Bry_bfr bfr, Json_doc jdoc) {
-			Json_nde desc_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("description")));
-			if (desc_nde == null)
-				return;
-			Json_nde list_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("schema")));
-			if (list_nde == null)
-				return;
-			Json_ary data_ary = Json_ary.cast(jdoc.Get_grp(Bry_.new_a7("data")));
-			if (data_ary == null)
-				return;
-			int data_rows_len = data_ary.Len();
-			// check enough keys
-			Json_kv fields_nde = Json_kv.cast(list_nde.Get_at(0));
-			// check key is 'fields'
-			//String key = fields_nde.Key_as_str();
-			Json_ary fields_itms_ary = Json_ary.cast_or_null(fields_nde.Val());
-			int fields_itms_len = fields_itms_ary.Len();
-			data_head[] dh = new data_head[fields_itms_len];
-			for (int i = 0; i < fields_itms_len; ++i) {
-				dh[i] = new data_head();
-				Json_nde field_itm_nde = Json_nde.cast(fields_itms_ary.Get_at(i));
-				int field_itm_len = field_itm_nde.Len();
-				for (int j = 0; j < field_itm_len; ++j) {
-					Json_kv itm_nde = Json_kv.cast(field_itm_nde.Get_at(j));
-					String itmkey = itm_nde.Key_as_str();
-					if (itmkey.equals("name"))
-						dh[i].Name_(itm_nde.Val_as_bry());
-					else if (itmkey.equals("type"))
-						dh[i].type = itm_nde.Val_as_bry();
-					else if (itmkey.equals("title")) {
-						Json_nde title_nde = itm_nde.Val_as_nde();
-						dh[i].title = Get_text(title_nde);
-					}
+	public void Jdoc_data_writer(Bry_bfr bfr, Json_doc jdoc) {
+		Json_nde desc_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("description")));
+		if (desc_nde == null)
+			return;
+		Json_nde list_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("schema")));
+		if (list_nde == null)
+			return;
+		Json_ary data_ary = Json_ary.cast(jdoc.Get_grp(Bry_.new_a7("data")));
+		if (data_ary == null)
+			return;
+		int data_rows_len = data_ary.Len();
+		// check enough keys
+		Json_kv fields_nde = Json_kv.cast(list_nde.Get_at(0));
+		// check key is 'fields'
+		//String key = fields_nde.Key_as_str();
+		Json_ary fields_itms_ary = Json_ary.cast_or_null(fields_nde.Val());
+		int fields_itms_len = fields_itms_ary.Len();
+		data_head[] dh = new data_head[fields_itms_len];
+		for (int i = 0; i < fields_itms_len; ++i) {
+			dh[i] = new data_head();
+			Json_nde field_itm_nde = Json_nde.cast(fields_itms_ary.Get_at(i));
+			int field_itm_len = field_itm_nde.Len();
+			for (int j = 0; j < field_itm_len; ++j) {
+				Json_kv itm_nde = Json_kv.cast(field_itm_nde.Get_at(j));
+				String itmkey = itm_nde.Key_as_str();
+				if (itmkey.equals("name"))
+					dh[i].Name_(itm_nde.Val_as_bry());
+				else if (itmkey.equals("type"))
+					dh[i].type = itm_nde.Val_as_bry();
+				else if (itmkey.equals("title")) {
+					Json_nde title_nde = itm_nde.Val_as_nde();
+					dh[i].title = Get_text(title_nde);
 				}
-
-				//String jtxt = field_itm_nde.Print_as_json();
-				//System.out.print(jtxt);
 			}
+
+			//String jtxt = field_itm_nde.Print_as_json();
+			//System.out.print(jtxt);
+		}
 		bfr.Add_str_a7("<p class=\"mw-jsonconfig-description\">");
 		bfr.Add(Get_text(desc_nde));
 		bfr.Add_str_a7("</p>\n<table class=\"mw-tabular sortable\">\n");
@@ -458,10 +468,16 @@ public class Xoh_page_wtr_wkr {
 			bfr.Add_str_a7("</tr>\n");
 		}
 		bfr.Add_str_a7("</table>\n");
-				
-				//String oput = bfr.To_str_and_clear();
-				//System.out.print(oput);
-		}
+
+		//String oput = bfr.To_str_and_clear();
+		//System.out.print(oput);
+	}
+	private void Set_ispage_in_wikisource(Xoae_page page) {
+		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && page.Ttl().Ns().Id() == wiki.Ns_mgr().Ns_page_id())
+			ispage_in_wikisource = true;
+		else
+			ispage_in_wikisource = false;
+	}
 }
 class data_head {
 	public void Name_(byte[] val) {name = val;}; byte[] name;

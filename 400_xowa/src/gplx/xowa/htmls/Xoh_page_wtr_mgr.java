@@ -88,18 +88,31 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	public static final String Invk_page_read_ = "page_read_", Invk_page_edit_ = "page_edit_", Invk_page_html_ = "page_html_", Invk_xowa_div_edit_rename_ = "xowa_div_edit_rename_";
 	private static final    String[] Fmtr_keys = new String[] 
 	{ "app_root_dir", "app_version", "app_build_date", "xowa_mode_is_server"
-	, "page_id", "page_ttl_full", "page_name", "page_heading", "page_modified_on_msg"
-	, "html_css_common_path", "html_css_wiki_path", "html_css_night_tag", "xowa_head"
-	, "page_lang_ltr", "page_indicators", "page_content_sub", "page_jumpto", "page_pgbnr", "page_body_cls", "html_content_editable"
+	, "page_id", "page_ttl_full", "page_name"
+	, "page_heading"
+	, "page_modified_on_msg"
+	, "html_css_common_path", "html_css_wiki_path"
+	, "html_css_night_tag"
+	, "xowa_head"
+	, "page_lang_ltr", "page_indicators", "page_content_sub"
+	, "page_jumpto", "page_pgbnr"
+	, "page_body_cls", "html_content_editable"
 	, "page_data", "page_langs"
 	, "portal_div_footer"
-	, "portal_div_personal", "portal_div_ns", "portal_div_view"
+	
+	, "portal_div_personal"
+	, "portal_div_ns"
+	, "portal_div_view"
 	, "portal_div_logo", "portal_div_home", "portal_div_xtn"
-	, "portal_div_admin", "portal_div_wikis", "portal_sidebar"
+	, "portal_div_admin"
+	, "portal_div_wikis"
+	, "portal_sidebar"
 	, "edit_div_rename", "edit_div_preview", "js_edit_toolbar"
 	, "page_lang"
         , "redlinks"
         , "printfooter"
+        , "page_pgbnr_bread"
+        , "app_icon"
 	};
 	private static final String Cfg__scripting_enabled = "xowa.html.scripting.enabled";
 }

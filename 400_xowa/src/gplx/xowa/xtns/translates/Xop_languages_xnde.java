@@ -20,7 +20,9 @@ import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.htmls.hrefs.*; import gplx
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*;
 public class Xop_languages_xnde implements Xox_xnde {
 	public Xop_xnde_tkn Xnde() {return xnde;} private Xop_xnde_tkn xnde;
+        private byte[] main_leaf;
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
+                main_leaf = ctx.Page().Ttl().Leaf_txt();
 		this.xnde = xnde;
 		langs = Find_lang_pages(ctx, wiki);
 	}
@@ -70,43 +72,54 @@ public class Xop_languages_xnde implements Xox_xnde {
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		if (langs.Count() == 0) return; // no langs; don't write anything;
-		fmtr_mgr_itms.Init(langs, ctx.Wiki(), root_ttl, ctx.Page().Lang().Key_bry());
+		fmtr_mgr_itms.Init(langs, ctx.Wiki(), root_ttl, ctx.Page().Lang().Key_bry(), main_leaf);
 		fmtr_all.Bld_bfr_many(bfr, "Other languages", fmtr_mgr_itms);
 	}
 	private static final    Xop_languages_fmtr fmtr_mgr_itms = new Xop_languages_fmtr();
 	public static final    Bry_fmtr fmtr_all = Bry_fmtr.new_(String_.Concat_lines_nl
-	(	"<table>"
-	,	"  <tbody>"
-	,	"    <tr valign=\"top\">"
-	,	"		<td class=\"mw-pt-languages-label\">~{other_languages_hdr}:</td>"
-	,	"       <td class=\"mw-pt-languages-list\">~{language_itms}"
-	,	"       </td>"
-	,	"    </tr>"
-	,	"  </tbody>"
-	,	"</table>"
+//	(	"<table>"
+//	,	"  <tbody>"
+//	,	"    <tr valign=\"top\">"
+//	,	"		<td class=\"mw-pt-languages-label\">~{other_languages_hdr}:</td>"
+//	,	"       <td class=\"mw-pt-languages-list\">~{language_itms}"
+//	,	"       </td>"
+//	,	"    </tr>"
+//	,	"  </tbody>"
+//	,	"</table>"
+//	), "other_languages_hdr", "language_itms")
+	( "<div class=\"mw-pt-languages noprint\" lang=\"en\" dir=\"ltr\">"
+	, "  <div class=\"mw-pt-languages-label\">~{other_languages_hdr}:</div>"
+	, "  <div class=\"mw-pt-languages-list autonym\">~{language_itms}</div>"
+	, "</div>"
 	), "other_languages_hdr", "language_itms")
+
 	,	fmtr_itm_basic = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	(	""
-	,	"         <a href=\"~{anchor_href}\" title=\"~{anchor_title}\">~{anchor_text}</a>&#160;•"		
+//	,	"         <a href=\"~{anchor_href}\" title=\"~{anchor_title}\">~{anchor_text}</a>&#160;•"		
+	,	"         <a href=\"~{anchor_href}\" title=\"~{anchor_title}\">~{anchor_text}</a>"		
 	), "anchor_href", "anchor_title", "anchor_text")
 	,	fmtr_itm_english = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	(	""
-	,	"         <a href=\"~{anchor_href}\" title=\"~{anchor_title}\"><span class=\"mw-pt-languages-ui\">~{anchor_text}</span></a>&#160;•"
+//	,	"         <a href=\"~{anchor_href}\" title=\"~{anchor_title}\"><span class=\"mw-pt-languages-ui\">~{anchor_text}</span></a>&#160;•"
+	,	"         <a href=\"~{anchor_href}\" title=\"~{anchor_title}\"><span class=\"mw-pt-languages-ui\">~{anchor_text}</span></a>"
 	), "anchor_href", "anchor_title", "anchor_text")
 	,	fmtr_itm_selected = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	(	""
-	,	"         <span class=\"mw-pt-languages-selected\">~{anchor_text}</span>&#160;•"
+//	,	"         <span class=\"mw-pt-languages-selected\">~{anchor_text}</span>&#160;•"
+	,	"         <span class=\"mw-pt-languages-selected\">~{anchor_text}</span>"
 	), "anchor_href", "anchor_title", "anchor_text")
 	;
 	// "<img src=\"//bits.wikimedia.org/static-1.22wmf9/extensions/Translate/res/images/prog-1.png\" alt=\"~{img_alt}\" title=\"~{img_title}\" width=\"9\" height=\"9\" />&#160;•&#160;‎"
 }
 class Xop_languages_fmtr implements gplx.core.brys.Bfr_arg {
-	public void Init(List_adp langs, Xowe_wiki wiki, Xoa_ttl root_ttl, byte[] cur_lang) {
+	public void Init(List_adp langs, Xowe_wiki wiki, Xoa_ttl root_ttl, byte[] cur_lang, byte[] main_leaf) {
 		this.langs = langs;
 		this.wiki = wiki;
 		this.root_ttl = root_ttl;
 		this.cur_lang = cur_lang;
-	}	private List_adp langs; private Xowe_wiki wiki; private Xoa_ttl root_ttl; private byte[] cur_lang;
+                this.main_leaf = main_leaf;
+	}
+        private List_adp langs; private Xowe_wiki wiki; private Xoa_ttl root_ttl; private byte[] cur_lang; private byte[] main_leaf;
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		int len = langs.Count();
 		Xoh_href_wtr href_wtr = wiki.Html__href_wtr();
@@ -122,8 +135,11 @@ class Xop_languages_fmtr implements gplx.core.brys.Bfr_arg {
 			byte[] lang_title = lang_ttl.Full_txt_w_ttl_case();
 			Bry_fmtr fmtr = null;
 			if		(Bry_.Eq(lang_key, Xol_lang_itm_.Key_en)) 	fmtr = Xop_languages_xnde.fmtr_itm_english;
-			else if	(Bry_.Eq(lang_key, cur_lang))			fmtr = Xop_languages_xnde.fmtr_itm_selected;
+			//else if	(Bry_.Eq(lang_key, cur_lang))			fmtr = Xop_languages_xnde.fmtr_itm_selected;
+			else if	(Bry_.Eq(lang_key, main_leaf))			fmtr = Xop_languages_xnde.fmtr_itm_selected;
 			else 												fmtr = Xop_languages_xnde.fmtr_itm_basic;
+                        if (i > 0)
+                            bfr.Add_str_u8("&#160;•");
 			fmtr.Bld_bfr_many(bfr, lang_href, lang_title, lang.Canonical_name());
 		}
 	}

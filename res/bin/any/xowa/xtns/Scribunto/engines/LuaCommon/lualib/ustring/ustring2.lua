@@ -1,6 +1,4 @@
 local ustring = {}
-local utf8_explode__previous_string = nil; -- xowa
-local utf8_explode__previous_table = nil; -- xowa
 
 -- Copy these, just in case
 local S = {
@@ -76,14 +74,6 @@ end
 -- @param s string  utf8-encoded string to decode
 -- @return table
 local function utf8_explode( s )
-	-- xowa:PERF:if s equals previous_string, return previous_table; handles loops such as:
-	--   for idx = 1, mw.ustring.len( from ) do
-	--     if (cp == mw.ustring.codepoint( from, idx)) then
-
-	if (s == utf8_explode__previous_string) then
-	    return utf8_explode__previous_table;
-	end
-
 	local ret = {
 		len = 0,
 		codepoints = {},
@@ -157,8 +147,6 @@ local function utf8_explode( s )
 	ret.bytepos[#ret.bytepos + 1] = l + 1
 	ret.bytepos[#ret.bytepos + 1] = l + 1
 
-	utf8_explode__previous_string = s;
-	utf8_explode__previous_table = ret;
 	return ret
 end
 
@@ -854,7 +842,7 @@ function ustring.find( s, pattern, init, plain )
 		end
 		if m[1] then
 			if m[2] then
-			m[2] = cpoffset( cps, m[2] )
+				m[2] = cpoffset( cps, m[2] )
 				m[3] = cpoffset( cps, m[3] )
 			end
 			return unpack( m, 2 )

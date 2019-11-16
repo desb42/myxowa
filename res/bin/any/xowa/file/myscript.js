@@ -40,9 +40,11 @@ function getwikix(popup_itm, ev)
 }
 
 jQuery( document ).ready( function ( $ ) {
-    xowa.js.load_lib('/fsys/bin/any/xowa/file/' + x_p.wiki + '.js');
-    //xowa.js.load_lib('/fsys/bin/any/xowa/file/wikibooks.js');
-    var pageurl = '/' + x_p.wiki + '/wiki/' + xowa_global_values.wgPageName;
+	  var locjs = '/';
+    if (window.location.pathname.substring(0,5) == '/xowa')
+      locjs = '/xowa/';
+    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '.js');
+    var pageurl = locjs + x_p.wiki + '/wiki/' + xowa_global_values.wgPageName;
     //if (pageurl != location.pathname)
     //  window.history.pushState('page2', xowa_global_values.wgTitle, pageurl);
 } );

@@ -163,6 +163,14 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/miniatlas/miniatlas.js');
     }
 
+// PageBanner stuff?
+    if (document.querySelectorAll('.wpb-topbanner').length) {
+//      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.css')
+//      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.js');
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.ba-throttle-debounce.js');
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/WikidataPageBanner/resources/ext.WikidataPageBanner.positionBanner/ext.WikidataPageBanner.positionBanner.js');
+    }
+
 /*
 ????? wikibooks
 // Move icons and navigation to top of content area, which should place them right below the page title

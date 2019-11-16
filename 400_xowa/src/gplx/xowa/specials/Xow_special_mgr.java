@@ -92,10 +92,11 @@ public class Xow_special_mgr {
 		}
 	}
 	public void Special__gen(Xoa_app app, Xow_wiki wiki, Xoa_page page, Xoa_url url, Xoa_ttl ttl) {
-		int slash_pos = Bry_find_.Find_fwd(ttl.Page_txt_wo_qargs(), Xoa_ttl.Subpage_spr);	// check for slash
+            byte[] page_name = ttl.Page_txt_wo_qargs();
+		int slash_pos = Bry_find_.Find_fwd(page_name, Xoa_ttl.Subpage_spr);	// check for slash
 		byte[] special_name = slash_pos == Bry_find_.Not_found
-				? ttl.Base_txt_wo_qarg()							// slash absent; use base_txt; ignore qry args and just get page_names; EX: Search/Earth?fulltext=y; Allpages?from=Earth...
-				: Bry_.Mid(ttl.Page_txt_wo_qargs(), 0, slash_pos);	// slash exists; use root page; EX: Special:ItemByTitle/enwiki/Earth
+				? page_name				// slash absent; use base_txt; ignore qry args and just get page_names; EX: Search/Earth?fulltext=y; Allpages?from=Earth...
+				: Bry_.Mid(page_name, 0, slash_pos);	// slash exists; use root page; EX: Special:ItemByTitle/enwiki/Earth
 		special_name = Xoa_ttl.Replace_spaces(special_name);		// handle spaces; EX:Spezial:Zufällige_Seite
 
 		Xow_special_page special = (Xow_special_page)hash.Get_by_bry(special_name);

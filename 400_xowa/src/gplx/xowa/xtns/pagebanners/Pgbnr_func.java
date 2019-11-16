@@ -28,7 +28,8 @@ public class Pgbnr_func extends Pf_func_base {
 		Xoa_ttl ttl = page.Ttl();
 		if (!cfg.Chk_pgbnr_allowed(ttl, wiki)) return;
 		byte[] tooltip = ttl.Page_txt(), title = ttl.Page_txt(), toc = Bry_.Empty, origin_x = Bry_.Empty;
-		boolean bottomtoc = false;;
+		boolean bottomtoc = false;
+		boolean enabletoc = false;
 		double data_pos_x = 0, data_pos_y = 0;
 		List_adp icons_list = null;
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
@@ -47,8 +48,10 @@ public class Pgbnr_func extends Pf_func_base {
 				tooltip = val;
 			if (tid == Arg__bottomtoc	&& Bry_.Eq(val, Bry__yes))
 				bottomtoc = true;
-			if (tid == Arg__toc			&& Bry_.Eq(val, Bry__yes))						// REF.MW:addToc
+			if (tid == Arg__toc			&& Bry_.Eq(val, Bry__yes)) {						// REF.MW:addToc
 				toc = Bry_.Empty;						// note that "" will be overwritten later by actual toc html
+				enabletoc = true;
+			}
 			if (	tid == -1							// note that "icon-*" won't have a tid 
 				&&	Bry_.Has_at_bgn(key, Bry__icon)		// if (substr($key, 0, 5) === 'icon-')
 				&&	Bry_.Len(key)	> 5					// if ( !isset( $iconname) )
@@ -98,7 +101,7 @@ public class Pgbnr_func extends Pf_func_base {
 		Xof_file_itm banner_file_itm = File__make_tkn(ctx, Xop_file_logger_.Tid__pgbnr_main, banner_ttl, Xop_lnki_tkn.Width_null, Xop_lnki_tkn.Height_null);
 
 		Pgbnr_itm itm = new Pgbnr_itm();
-		itm.Init_from_wtxt(banner_ttl, banner_file_itm, tooltip, title, bottomtoc, toc, data_pos_x, data_pos_y, origin_x, icons_list == null ? Pgbnr_icon.Ary_empty : (Pgbnr_icon[])icons_list.To_ary_and_clear(Pgbnr_icon.class));
+		itm.Init_from_wtxt(banner_ttl, banner_file_itm, tooltip, title, bottomtoc, toc, data_pos_x, data_pos_y, origin_x, icons_list == null ? Pgbnr_icon.Ary_empty : (Pgbnr_icon[])icons_list.To_ary_and_clear(Pgbnr_icon.class), enabletoc);
 		page.Html_data().Xtn_pgbnr_(itm);
 		page.Html_data().Head_mgr().Itm__pgbnr().Enabled_y_();	// register css / js during parse stage
 		page.Wtxt().Toc().Flag__toc_(true);	// NOTE: must mark toc_manual else will show 2nd TOC in edit mode; DATE:2016-07-10
@@ -127,7 +130,7 @@ public class Pgbnr_func extends Pf_func_base {
 				banner_ttl = wiki.Ttl_parse(cfg.dflt_img_title);
 			Xof_file_itm banner_file_itm = File__make_tkn(ctx, Xop_file_logger_.Tid__pgbnr_main, banner_ttl, Xop_lnki_tkn.Width_null, Xop_lnki_tkn.Height_null);
 			itm = new Pgbnr_itm();
-			itm.Init_from_wtxt(banner_ttl, banner_file_itm, Bry_.Empty, Bry_.Empty, false, Bry_.Empty, 0, 0, Bry_.Empty, Pgbnr_icon.Ary_empty);
+			itm.Init_from_wtxt(banner_ttl, banner_file_itm, Bry_.Empty, Bry_.Empty, false, Bry_.Empty, 0, 0, Bry_.Empty, Pgbnr_icon.Ary_empty, false);
 			itm.Init_hdump(hctx.Mode_is_hdump());
 			banner_html = Get_banner_html(wiki, ctx, hctx, cfg, banner_ttl, itm);
 		}

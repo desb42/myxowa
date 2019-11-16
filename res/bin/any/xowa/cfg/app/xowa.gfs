@@ -248,8 +248,8 @@ app.wikis.get('~{wiki_key}').html.article {
 <html dir="~{page_lang_ltr}" class="client-js" lang="~{page_lang}">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>~{page_name} - XOWA</title>
-  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/app_icon.png" />
+  <title>~{page_name} - XOWA ~{wiki_key}</title>
+  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/~{app_icon}" />
   <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
   <link rel="stylesheet" href="~{html_css_wiki_path}" type="text/css">
   ~{html_css_night_tag}<!--XOWA.SCRIPT.HEAD.TOP-->~{xowa_head}<!--XOWA.SCRIPT.HEAD.BOT-->
@@ -268,8 +268,9 @@ app.wikis.get('~{wiki_key}').html.article {
 <body class="mediawiki ~{page_lang_ltr} sitedir-~{page_lang_ltr} mw-hide-empty-elt ~{page_body_cls} skin-vector action-view vector-animateLayout"~{html_content_editable} spellcheck="false">
 <div id="mw-page-base" class="noprint"></div>
 <div id="mw-head-base" class="noprint"></div>
-<div id="content" class="mw-body" role="main"><a id="top"></a>~{page_indicators}~{page_pgbnr}
-  <div id="xowa_err_div" class="xowa_err" style="display:none; color:red; white-space:pre; display:block; unicode-bidi:embed;"></div>~{page_heading}  
+<div id="content" class="mw-body" role="main"><a id="top"></a>~{page_indicators}
+  <div id="xowa_err_div" class="xowa_err" style="display:none; color:red; white-space:pre; display:block; unicode-bidi:embed;"></div>
+~{page_heading}~{page_pgbnr_bread}~{page_pgbnr}
   <div id="bodyContent" class="mw-body-content">
     <div id="siteSub">From XOWA: the free, open-source, offline wiki application</div>
     <div id="contentSub" class="visible">~{page_content_sub}</div>~{page_jumpto}
@@ -335,7 +336,7 @@ for (var i = 0; i < redlinks.length; i++) {
 <html dir="~{page_lang_ltr}" class="client-js" lang="~{page_lang}">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>~{page_name} - XOWA</title>
+  <title>~{page_name} - XOWA ~{wiki}</title>
   <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/app_icon.png" />
   <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
   <link rel="stylesheet" href="~{html_css_wiki_path}" type="text/css">
@@ -367,7 +368,7 @@ for (var i = 0; i < redlinks.length; i++) {
 <body class="mediawiki ~{page_lang_ltr} sitedir-~{page_lang_ltr} ~{page_body_cls} skin-vector action-edit vector-animateLayout"~{html_content_editable} spellcheck="false">
 <div id="mw-page-base" class="noprint"></div>
 <div id="mw-head-base" class="noprint"></div>
-<div id="content" class="mw-body">~{page_indicators}~{page_pgbnr}
+<div id="content" class="mw-body">~{page_indicators}
   <div id="xowa_err_div" class="xowa_err"></div>~{page_heading}  
   <div id="bodyContent" class="mw-body-content">
     <div id="siteSub">From XOWA: the free, open-source, offline wiki application</div>
@@ -422,7 +423,7 @@ for (var i = 0; i < redlinks.length; i++) {
 <html dir="~{page_lang_ltr}" lang="~{page_lang}">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>~{page_name} - XOWA</title>
+  <title>~{page_name} - XOWA ~{wiki}</title>
   <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/app_icon.png" />
   <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
   <link rel="stylesheet" href="~{html_css_wiki_path}" type="text/css">

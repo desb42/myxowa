@@ -61,6 +61,7 @@ public class Db_breadcrumb {
 		}
 
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		tmp_bfr.Add_str_a7("<div class=\"ext-wpb-pagebanner-subtitle\">");
 		int len = breadcrumb_list.Count();
 		for (int i = 0; i < len; i++) {
 			byte[] parent = (byte[])breadcrumb_list.Get_at(i);
@@ -72,6 +73,7 @@ public class Db_breadcrumb {
 		if (len > 0)
 			tmp_bfr.Add_str_a7( " > " );
 		tmp_bfr.Add(ttl);
+		tmp_bfr.Add_str_a7("</div>");
 		return tmp_bfr.To_bry_and_clear();
 	}
 	public void Insert(byte[] ttl, byte[] isin) {

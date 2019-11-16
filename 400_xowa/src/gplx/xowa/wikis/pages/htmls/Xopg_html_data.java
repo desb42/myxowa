@@ -36,6 +36,7 @@ public class Xopg_html_data {
 	public boolean				Mode_wtxt_shown() {synchronized (this) {return mode_wtxt_shown;}} public void Mode_wtxt_shown_y_() {synchronized (this) {this.mode_wtxt_shown = true;}} private boolean mode_wtxt_shown; 
 	public byte[]				Display_ttl_vnt() {return display_ttl_vnt;} public void Display_ttl_vnt_(byte[] v) {display_ttl_vnt = v;} private byte[] display_ttl_vnt;
 	public byte[]				Content_sub() {return content_sub;} public void Content_sub_(byte[] v) {content_sub = v;} private byte[] content_sub;
+	public byte[]				Pgbnr_bread() {return pgbnr_bread;} public void Pgbnr_bread_(byte[] v) {pgbnr_bread = v;} private byte[] pgbnr_bread;
 	public Xopg_page_heading	Page_heading() {return page_heading;} private final    Xopg_page_heading page_heading = new Xopg_page_heading();
 	public String				Bmk_pos() {return html_bmk_pos;} public void Bmk_pos_(String v) {html_bmk_pos = v;} private String html_bmk_pos;
 	public Bry_bfr				Portal_div_xtn() {return portal_div_xtn;} private Bry_bfr portal_div_xtn = Bry_bfr_.Reset(255);

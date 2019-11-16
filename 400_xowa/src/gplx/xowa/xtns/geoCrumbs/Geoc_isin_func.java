@@ -33,7 +33,7 @@ public class Geoc_isin_func extends Pf_func_base {
 			byte[] bread = wiki.Bread().Get_breadcrumbs(ctx.Page().Ttl().Full_txt_raw(), ttl_bry);
 			Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b128();
 			wiki.Parser_mgr().Main().Parse_text_to_html(tmp_bfr, ctx, ctx.Page(), false, bread);
-			ctx.Page().Html_data().Content_sub_(tmp_bfr.To_bry_and_rls());
+			ctx.Page().Html_data().Pgbnr_bread_(tmp_bfr.To_bry_and_rls());
 		}
 	}
 	public static final    Geoc_isin_func Instance = new Geoc_isin_func();

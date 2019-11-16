@@ -87,11 +87,16 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		} else {
 			wtr.Write_js_global_ini_atr_val(Key_wgAction			, Bry_other);
 		}
-		wtr.Write_js_global_ini_atr_val(Key_wgPopupsRestGatewayEndpoint, Bry_.new_a7("/api/rest_v1/page/summary/"));
 		wtr.Write_js_global_ini_atr_val(Key_wgPopupsGateway, Bry_.new_a7("restbaseHTML"));
-                wtr.Bfr().Add(Bry_.new_a7("\n \"wgArticlePath\" : \"/"));
-                wtr.Bfr().Add(page.Wiki().Domain_bry());
-                wtr.Bfr().Add(Bry_.new_a7("/wiki/$1\","));
+
+		//wtr.Write_js_global_ini_atr_val(Key_wgPopupsRestGatewayEndpoint, Bry_.new_a7("/api/rest_v1/page/summary/"));
+		wtr.Bfr().Add(Bry_.new_a7("\n \"wgPopupsRestGatewayEndpoint\" : \"/xowa/api/"));
+		wtr.Bfr().Add(page.Wiki().Domain_bry());
+		wtr.Bfr().Add(Bry_.new_a7("/rest_v1/page/summary/\","));
+
+		wtr.Bfr().Add(Bry_.new_a7("\n \"wgArticlePath\" : \"/xowa/"));
+		wtr.Bfr().Add(page.Wiki().Domain_bry());
+		wtr.Bfr().Add(Bry_.new_a7("/wiki/$1\","));
 	}
 	public static final    byte[]	// NOTE: most of these are for the table-sorter
 	  Key_mode_is_gui					= Bry_.new_a7("mode_is_gui")

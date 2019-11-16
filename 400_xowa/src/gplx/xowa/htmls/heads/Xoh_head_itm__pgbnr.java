@@ -22,12 +22,12 @@ public class Xoh_head_itm__pgbnr extends Xoh_head_itm__base {
 		if (Url__css__styles == null) {
 			Url__css__oojs_ui	= app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "html", "res", "lib", "oojs-ui", "oojs-ui-core-mediawiki.css").To_http_file_bry();	// needed for icons; should move to own file
 			Io_url resources_dir = app.Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "WikidataPageBanner", "resources");
-			Url__css__styles	= resources_dir.GenSubFil_nest("ext.WikidataPageBanner.styles"		, "ext.WikidataPageBanner.css").To_http_file_bry();
+//			Url__css__styles	= resources_dir.GenSubFil_nest("ext.WikidataPageBanner.styles"		, "ext.WikidataPageBanner.css").To_http_file_bry();
 			Url__css__toc		= resources_dir.GenSubFil_nest("ext.WikidataPageBanner.toc.styles"	, "ext.WikidataPageBanner.toc.css").To_http_file_bry();
 			Url__css__bottomtoc = resources_dir.GenSubFil_nest("ext.WikidataPageBanner.toc.styles"	, "ext.WikidataPageBanner.bottomtoc.css").To_http_file_bry();
 		}
 		wtr.Write_css_include(Url__css__oojs_ui);
-		wtr.Write_css_include(Url__css__styles);
+//		wtr.Write_css_include(Url__css__styles);
 		wtr.Write_css_include(Url__css__toc);
 		wtr.Write_css_include(Url__css__bottomtoc);
 	}

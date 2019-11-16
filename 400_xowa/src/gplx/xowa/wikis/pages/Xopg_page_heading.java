@@ -31,7 +31,10 @@ public class Xopg_page_heading implements Bfr_arg {
 		return this;
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
-		if (html_data.Xtn_pgbnr() != null) return;	// pgbnr exists; don't add title
+		if (html_data.Xtn_pgbnr() != null) {
+			fmtr.Bld_many(bfr, Bry_.Empty, Bry_.Empty);
+			return;
+		}	// pgbnr exists; don't add title
 		byte[] edit_lead_section = Bry_.Empty;
 		if (	wiki.Parser_mgr().Hdr__section_editable__mgr().Enabled()
 			&&	mode_is_read) {

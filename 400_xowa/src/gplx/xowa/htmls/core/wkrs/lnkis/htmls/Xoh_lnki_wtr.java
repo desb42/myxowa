@@ -189,8 +189,17 @@ public class Xoh_lnki_wtr {
 					bfr.Add_byte(Byte_ascii.Slash).Add(leaf_txt);
 				return true;
 			case Pfunc_rel2abs.Id_dot_dot_slash:
-				if (subpage_slash_at_end)		// "/" at end; only add text;		EX: [[../A/]] -> A
-					bfr.Add(leaf_txt);
+				if (subpage_slash_at_end) {		// "/" at end; only add text;		EX: [[../A/]] -> A
+					// search backwards for "/"
+					int i;
+					for (i = leaf_txt.length - 1; i >= 0; i--)
+						if (leaf_txt[i] == '/')
+							break;
+					if (i > 0)
+						bfr.Add_mid(leaf_txt, i + 1, leaf_txt.length);
+					else
+						bfr.Add(leaf_txt);
+				}
 				else							// "/" absent; add page;			EX: [[../A]]  -> Page/A
 					bfr.Add(lnki.Ttl().Page_txt());
 				return true;

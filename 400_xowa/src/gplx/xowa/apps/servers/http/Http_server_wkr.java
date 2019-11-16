@@ -112,7 +112,14 @@ public class Http_server_wkr implements Gfo_invk {
 			page_html = url_parser.Err_msg();
 		}
 		else {
-			page_html = app.Http_server().Parse_page_to_html(data__client, url_parser);
+			Http_server_page page = app.Http_server().Parse_page_to_html(data__client, url_parser);
+			if (page.Redirect() != null) {
+				Xosrv_http_wkr_.Write_redirect(client_wtr, page.Redirect());
+				return;
+			}
+			else {
+				page_html = page.Html();
+			}
 			if (page_html == null) {
 				page_html = "Strange! no data";
 			} else {
@@ -182,21 +189,24 @@ public class Http_server_wkr implements Gfo_invk {
 	.Add_str_int("/exec/gfs"	, Tid_post_url_gfs)
 	;
 	private static String karto = "<span title=\"Map for this &#39;listing&#39; marker\"><a class=\"mw-kartographer-maplink mw-kartographer-autostyled\" mw-data=\"interface\" data-style=\"osm-intl\" href=\"/wiki/Special:Map/17/37.8013/-122.3988/en\" data-zoom=\"17\" data-lat=\"37.8013\" data-lon=\"-122.3988\" style=\"background: #228B22;\" data-overlays=\"[&quot;mask&quot;,&quot;around&quot;,&quot;buy&quot;,&quot;city&quot;,&quot;do&quot;,&quot;drink&quot;,&quot;eat&quot;,&quot;go&quot;,&quot;listing&quot;,&quot;other&quot;,&quot;see&quot;,&quot;sleep&quot;,&quot;vicinity&quot;,&quot;view&quot;,&quot;black&quot;,&quot;blue&quot;,&quot;brown&quot;,&quot;chocolate&quot;,&quot;forestgreen&quot;,&quot;gold&quot;,&quot;gray&quot;,&quot;grey&quot;,&quot;lime&quot;,&quot;magenta&quot;,&quot;maroon&quot;,&quot;mediumaquamarine&quot;,&quot;navy&quot;,&quot;red&quot;,&quot;royalblue&quot;,&quot;silver&quot;,&quot;steelblue&quot;,&quot;teal&quot;,&quot;fuchsia&quot;]\">1</a>&#32;</span>";
+	//private static Pattern pwiki = Pattern.compile("https?://(commons\\.wikimedia|de\\.wikipedia|en\\.wikibooks|en\\.wikinews|en\\.wikipedia|en\\.wikiquote|en\\.wikisource|en\\.wikiversity|en\\.wikivoyage|en\\.wiktionary|fr\\.wikipedia|fr\\.wikisource|he\\.wikipedia|it\\.wikipedia|it\\.wikisource|ja\\.wikipedia|simple\\.wikipedia|species\\.wikimedia|www\\.wikidata)\\.org");
+	//private static Matcher mwiki = pwiki.matcher("");
 	private static String Convert_page(String page_html, String root_dir_http, String wiki_domain) {
 		//page_html = String_.Replace(page_html, root_dir_http		, "/fsys/");
 		page_html = String_.Replace(page_html, "xowa-cmd:"			, "/exec/");
-		page_html = String_.Replace(page_html, " href=\"/wiki/"	, " href=\"/" + wiki_domain + "/wiki/");
-		page_html = String_.Replace(page_html, " href='/wiki/"	, " href='/" + wiki_domain + "/wiki/");
+		page_html = String_.Replace(page_html, " href=\"/wiki/"	, " href=\"/xowa/" + wiki_domain + "/wiki/");
+		page_html = String_.Replace(page_html, " href='/wiki/"	, " href='/xowa/" + wiki_domain + "/wiki/");
 		//page_html = String_.Replace(page_html, "<area href=\"/wiki/"	, "<area href=\"/" + wiki_domain + "/wiki/");
-		page_html = String_.Replace(page_html, "action=\"/wiki/"	, "action=\"/" + wiki_domain + "/wiki/");
-		page_html = String_.Replace(page_html, "/site"				, "");
+		page_html = String_.Replace(page_html, "action=\"/wiki/"	, "action=\"/xowa/" + wiki_domain + "/wiki/");
+		page_html = String_.Replace(page_html, "/site"				, "/xowa");
 		// should check to see if these have been downloaded somehow
-		page_html = page_html.replaceAll("https?://(commons\\.wikimedia|de\\.wikipedia|en\\.wikibooks|en\\.wikinews|en\\.wikipedia|en\\.wikiquote|en\\.wikisource|en\\.wikiversity|en\\.wikivoyage|en\\.wiktionary|fr\\.wikipedia|he\\.wikipedia|it\\.wikipedia|simple\\.wikipedia|www\\.wikidata)\\.org" , "/$1.org");
+		//page_html = page_html.replaceAll("https?://(commons\\.wikimedia|de\\.wikipedia|en\\.wikibooks|en\\.wikinews|en\\.wikipedia|en\\.wikiquote|en\\.wikisource|en\\.wikiversity|en\\.wikivoyage|en\\.wiktionary|fr\\.wikipedia|fr\\.wikisource|he\\.wikipedia|it\\.wikipedia|it\\.wikisource|ja\\.wikipedia|simple\\.wikipedia|species\\.wikimedia|www\\.wikidata)\\.org" , "/xowa/$1.org");
+		//page_html = mwiki.reset(page_html).replaceAll("/xowa/$1.org");
 		//page_html = String_.Replace(page_html, "https://www.wikidata.org"	, "/www.wikidata.org");
 		//page_html = String_.Replace(page_html, "https://commons.wikimedia.org"	, "/commons.wikimedia.org");
 		//page_html = String_.Replace(page_html, "https://en.wikipedia.org"	, "/en.wikipedia.org"); // eg en.wikiquote.org/wiki/Leo_Varadkar
 		//page_html = String_.Replace(page_html, "https://" + wiki_domain	, "/" + wiki_domain);
-		page_html = page_html.replaceAll("(https?:)?//upload.wikimedia.org" , "/fsys/file/upload.wikimedia.org");
+		page_html = page_html.replaceAll("(https?:)?//upload.wikimedia.org" , "/xowa/fsys/file/upload.wikimedia.org");
 
 		//page_html = String_.Replace(page_html, "/fsys/file/commons.wikimedia.org/thumb/2/1/1/9/Speaker_Icon.svg/20px.png", "/fsys/file/commons.wikimedia.org/orig/2/1/1/9/Speaker_Icon.svg");
 		//page_html = page_html.replaceAll("\n +", "\n");
@@ -357,10 +367,11 @@ public class Http_server_wkr implements Gfo_invk {
 	private static final    byte[]
 	  Bry__file_lhs = Bry_.new_a7("file:///")
 	, Bry__file_mid = Bry_.new_a7("/file/")
-	, Bry__file_fsys = Bry_.new_a7("/fsys")
+	, Bry__file_fsys = Bry_.new_a7("/xowa/fsys")
+                , Bry__xowa_bit = Bry_.new_a7("/xowa/")
 	;
 
-	public static byte[] Replace_fsys_hack(byte[] html_bry) {
+	public static byte[] Replace_fsys_hack1(byte[] html_bry) {
 		// init
 		Bry_bfr bfr = Bry_bfr_.New();
 		int len = html_bry.length;
@@ -425,6 +436,193 @@ public class Http_server_wkr implements Gfo_invk {
 		bfr.Add_mid(html_bry, pos, len);
 		return bfr.To_bry_and_clear();
 	}
+	public static byte[] Replace_fsys_hack(byte[] html_bry) {
+		// init
+		Bry_bfr bfr = Bry_bfr_.New();
+		int len = html_bry.length;
+		int pos = 0;
+	  int bgn = 0;
+          byte b;
+		while (pos < len) {
+			b = html_bry[pos++];
+			if (b == 'f') { // check for file:/// et al
+				if (pos + 7 < len && html_bry[pos] == 'i' && html_bry[pos+1] == 'l' && html_bry[pos+2] == 'e' && html_bry[pos+3] == ':' && html_bry[pos+4] == '/' && html_bry[pos+5] == '/' && html_bry[pos+6] == '/') {
+	
+					// set lhs_end (after "file:///")
+					int lhs_end = pos + 7;
+		
+					int mid_bgn;
+					// is this the local root
+					if (Bry_.Has_at_bgn(html_bry, root_dir_fsys, lhs_end, len)) {
+						mid_bgn = lhs_end + root_dir_fsys.length - 1;
+					} else {
+						// find "/file/"
+						mid_bgn = Bry_find_.Find_fwd(html_bry, Bry__file_mid, lhs_end, len);
+						
+						// skip if no "/file/"
+						if (mid_bgn == Bry_find_.Not_found) {
+							mid_bgn = -2;
+						}
+						// skip if "'file:/// ... '" is too long. should be no more than 300
+						if (mid_bgn - lhs_end > 300) {
+							mid_bgn = -2;
+						}
+					}
+		
+					// have we a valid mid_bgn
+					if (mid_bgn == -2) {
+						pos = lhs_end;
+					} else {
+						// add everything up to "file:"
+						bfr.Add_mid(html_bry, bgn, pos - 1);
+	
+						// add [/xowa/]/fsys/
+						bfr.Add(Bry__file_fsys);
+						
+						// move pos forward
+						pos = mid_bgn;
+						bgn = mid_bgn;
+					}
+				}
+	
+			} else if (b == 'h') { // check for https?:// et al
+				if (pos + 6 < len && html_bry[pos] == 't' && html_bry[pos+1] == 't' && html_bry[pos+2] == 'p') {
+					int ofs = -1;
+					if (html_bry[pos+3] == 's' && html_bry[pos+4] == ':' && html_bry[pos+5] == '/' && html_bry[pos+6] == '/')
+						ofs = pos+7;
+					else if (html_bry[pos+3] == ':' && html_bry[pos+4] == '/' && html_bry[pos+5] == '/')
+						ofs = pos+6;
+					if (ofs > 0) {
+						int found = -1;
+						b = html_bry[ofs++];
+/* xxx bgn */
+	switch (b) {
+		case 'c':
+			if (html_bry[ofs] == 'o' && html_bry[ofs+1] == 'm' && html_bry[ofs+2] == 'm' && html_bry[ofs+3] == 'o' && html_bry[ofs+4] == 'n' && html_bry[ofs+5] == 's' && html_bry[ofs+6] == '.' && html_bry[ofs+7] == 'w' && html_bry[ofs+8] == 'i' && html_bry[ofs+9] == 'k' && html_bry[ofs+10] == 'i' && html_bry[ofs+11] == 'm' && html_bry[ofs+12] == 'e' && html_bry[ofs+13] == 'd' && html_bry[ofs+14] == 'i' && html_bry[ofs+15] == 'a')
+				found = ofs + 16;
+			break;
+		case 'd':
+			if (html_bry[ofs] == 'e' && html_bry[ofs+1] == '.' && html_bry[ofs+2] == 'w' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'k' && html_bry[ofs+5] == 'i' && html_bry[ofs+6] == 'p' && html_bry[ofs+7] == 'e' && html_bry[ofs+8] == 'd' && html_bry[ofs+9] == 'i' && html_bry[ofs+10] == 'a')
+				found = ofs + 11;
+			break;
+		case 'e':
+			if (html_bry[ofs] == 'n' && html_bry[ofs+1] == '.' && html_bry[ofs+2] == 'w' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'k') {
+				switch (html_bry[ofs+5]) {
+					case 'i':
+							switch (html_bry[ofs+6]) {
+								case 'b':
+									if (html_bry[ofs+7] == 'o' && html_bry[ofs+8] == 'o' && html_bry[ofs+9] == 'k' && html_bry[ofs+10] == 's')
+										found = ofs + 11;
+									break;
+								case 'n':
+									if (html_bry[ofs+7] == 'e' && html_bry[ofs+8] == 'w' && html_bry[ofs+9] == 's')
+										found = ofs + 10;
+									break;
+								case 'p':
+									if (html_bry[ofs+7] == 'e' && html_bry[ofs+8] == 'd' && html_bry[ofs+9] == 'i' && html_bry[ofs+10] == 'a')
+										found = ofs + 11;
+									break;
+								case 'q':
+									if (html_bry[ofs+7] == 'u' && html_bry[ofs+8] == 'o' && html_bry[ofs+9] == 't' && html_bry[ofs+10] == 'e')
+										found = ofs + 11;
+									break;
+								case 's':
+									if (html_bry[ofs+7] == 'o' && html_bry[ofs+8] == 'u' && html_bry[ofs+9] == 'r' && html_bry[ofs+10] == 'c' && html_bry[ofs+11] == 'e')
+										found = ofs + 12;
+									break;
+								case 'v':
+										switch (html_bry[ofs+7]) {
+											case 'e':
+												if (html_bry[ofs+8] == 'r' && html_bry[ofs+9] == 's' && html_bry[ofs+10] == 'i' && html_bry[ofs+11] == 't' && html_bry[ofs+12] == 'y')
+													found = ofs + 13;
+												break;
+											case 'o':
+												if (html_bry[ofs+8] == 'y' && html_bry[ofs+9] == 'a' && html_bry[ofs+10] == 'g' && html_bry[ofs+11] == 'e')
+													found = ofs + 12;
+												break;
+										}
+							}
+					case 't':
+						if (html_bry[ofs+6] == 'i' && html_bry[ofs+7] == 'o' && html_bry[ofs+8] == 'n' && html_bry[ofs+9] == 'a' && html_bry[ofs+10] == 'r' && html_bry[ofs+11] == 'y')
+							found = ofs + 12;
+						break;
+				}
+			}
+		case 'f':
+			if (html_bry[ofs] == 'r' && html_bry[ofs+1] == '.' && html_bry[ofs+2] == 'w' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'k' && html_bry[ofs+5] == 'i') {
+				switch (html_bry[ofs+6]) {
+					case 'p':
+						if (html_bry[ofs+7] == 'e' && html_bry[ofs+8] == 'd' && html_bry[ofs+9] == 'i' && html_bry[ofs+10] == 'a')
+							found = ofs + 11;
+						break;
+					case 's':
+						if (html_bry[ofs+7] == 'o' && html_bry[ofs+8] == 'u' && html_bry[ofs+9] == 'r' && html_bry[ofs+10] == 'c' && html_bry[ofs+11] == 'e')
+							found = ofs + 12;
+						break;
+				}
+			}
+		case 'h':
+			if (html_bry[ofs] == 'e' && html_bry[ofs+1] == '.' && html_bry[ofs+2] == 'w' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'k' && html_bry[ofs+5] == 'i' && html_bry[ofs+6] == 'p' && html_bry[ofs+7] == 'e' && html_bry[ofs+8] == 'd' && html_bry[ofs+9] == 'i' && html_bry[ofs+10] == 'a')
+				found = ofs + 11;
+			break;
+		case 'i':
+			if (html_bry[ofs] == 't' && html_bry[ofs+1] == '.' && html_bry[ofs+2] == 'w' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'k' && html_bry[ofs+5] == 'i') {
+				switch (html_bry[ofs+6]) {
+					case 'p':
+						if (html_bry[ofs+7] == 'e' && html_bry[ofs+8] == 'd' && html_bry[ofs+9] == 'i' && html_bry[ofs+10] == 'a')
+							found = ofs + 11;
+						break;
+					case 's':
+						if (html_bry[ofs+7] == 'o' && html_bry[ofs+8] == 'u' && html_bry[ofs+9] == 'r' && html_bry[ofs+10] == 'c' && html_bry[ofs+11] == 'e')
+							found = ofs + 12;
+						break;
+				}
+			}
+		case 'j':
+			if (html_bry[ofs] == 'a' && html_bry[ofs+1] == '.' && html_bry[ofs+2] == 'w' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'k' && html_bry[ofs+5] == 'i' && html_bry[ofs+6] == 'p' && html_bry[ofs+7] == 'e' && html_bry[ofs+8] == 'd' && html_bry[ofs+9] == 'i' && html_bry[ofs+10] == 'a')
+				found = ofs + 11;
+			break;
+		case 's':
+				switch (html_bry[ofs+0]) {
+					case 'i':
+						if (html_bry[ofs+1] == 'm' && html_bry[ofs+2] == 'p' && html_bry[ofs+3] == 'l' && html_bry[ofs+4] == 'e' && html_bry[ofs+5] == '.' && html_bry[ofs+6] == 'w' && html_bry[ofs+7] == 'i' && html_bry[ofs+8] == 'k' && html_bry[ofs+9] == 'i' && html_bry[ofs+10] == 'p' && html_bry[ofs+11] == 'e' && html_bry[ofs+12] == 'd' && html_bry[ofs+13] == 'i' && html_bry[ofs+14] == 'a')
+							found = ofs + 15;
+						break;
+					case 'p':
+						if (html_bry[ofs+1] == 'e' && html_bry[ofs+2] == 'c' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'e' && html_bry[ofs+5] == 's' && html_bry[ofs+6] == '.' && html_bry[ofs+7] == 'w' && html_bry[ofs+8] == 'i' && html_bry[ofs+9] == 'k' && html_bry[ofs+10] == 'i' && html_bry[ofs+11] == 'm' && html_bry[ofs+12] == 'e' && html_bry[ofs+13] == 'd' && html_bry[ofs+14] == 'i' && html_bry[ofs+15] == 'a')
+							found = ofs + 16;
+						break;
+				}
+		case 'w':
+			if (html_bry[ofs] == 'w' && html_bry[ofs+1] == 'w' && html_bry[ofs+2] == '.' && html_bry[ofs+3] == 'w' && html_bry[ofs+4] == 'i' && html_bry[ofs+5] == 'k' && html_bry[ofs+6] == 'i' && html_bry[ofs+7] == 'd' && html_bry[ofs+8] == 'a' && html_bry[ofs+9] == 't' && html_bry[ofs+10] == 'a')
+				found = ofs + 11;
+			break;
+	}
+/* xxx end */
+						if (found > 0) {
+							if (html_bry[found] == '.' && html_bry[found+1] == 'o' && html_bry[found+2] == 'r' && html_bry[found+3] == 'g') {
+								// add everything up to "http"
+								bfr.Add_mid(html_bry, bgn, pos - 1);
+			
+								// add [/xowa/]
+								bfr.Add(Bry__xowa_bit);
+								
+								// move pos forward
+								pos = found + 4;
+								bgn = ofs - 1; // back to '/'
+							}
+						}
+					}
+				}
+			}
+		}
+		if (bgn > 0) {
+			// add rest
+			bfr.Add_mid(html_bry, bgn, len);
+			return bfr.To_bry_and_clear();
+		} else
+			return html_bry;
+	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_run)) {this.Run();}
 		else	return Gfo_invk_.Rv_unhandled;
@@ -458,8 +656,27 @@ class Xosrv_http_wkr_ {
 			client_wtr.Rls();
 		}		
 	}
+	public static void Write_redirect(Http_client_wtr client_wtr, byte[] redirect) {
+		try{
+			client_wtr.Write_bry
+			(   Bry_.Add
+				( Rsp__http_redirect
+				, Rsp__location
+                                        , Bry_.new_a7("xowa/")
+				, redirect
+				, Byte_ascii.Nl_bry
+				, Byte_ascii.Nl_bry
+				)
+			);
+		} catch (Exception err) {
+			client_wtr.Write_str("Redirect failed. Check address please, or see console log.\n" + Err_.Message_lang(err));
+			client_wtr.Rls();
+		}
+	}
 	public static final    byte[]
 	  Rsp__http_ok				= Bry_.new_a7("HTTP/1.1 200 OK:\n")
 	, Rsp__content_type_html	= Bry_.new_a7("Content-Type: text/html; charset=utf-8\n")
+	, Rsp__http_redirect        = Bry_.new_a7("HTTP/1.1 302 Found:\n")
+	, Rsp__location             = Bry_.new_a7("Location: /") // "/" to start from root
 	;
 }

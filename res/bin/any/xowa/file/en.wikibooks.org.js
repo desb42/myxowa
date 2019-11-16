@@ -227,7 +227,9 @@ jQuery( function() {
 // Move icons and navigation to top of content area, which should place them right below the page title
 
 mw.hook('wikipage.content').add(function($where) {
-	var $content = mw.util.$content, $what = $where.find('.topicon').css('display', 'inline');
+	//var $content = mw.util.$content,  // more hackery
+	var $content = jQuery('.mw-body'), 
+		$what = $where.find('.topicon').css('display', 'inline');
 	
 	if ( $what.length ) {
 		$content.find(':header').eq(0).wrapInner('<span />').append( $('<span id="page-status" />').append($what) );
