@@ -169,7 +169,6 @@ function wikibase.setupInterface()
 		checkType( funcName, 2, propertyId, 'string' )
 
 		local statements = php.getEntityStatements( entityId, propertyId, rank )
-
 		if statements and statements[propertyId] then
 			return statements[propertyId]
 		end
@@ -401,6 +400,14 @@ function wikibase.setupInterface()
 		end
 
 		return php.getReferencedEntityId( fromEntityId, propertyId, toIds )
+	end
+
+	-- Returns the current site's global id
+	function wikibase.getGlobalSiteId()
+--		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.getGlobalSiteId.call' )
+
+--		return php.getSetting( 'siteGlobalID' )
+		return php.getGlobalSiteId()
 	end
 
 	mw = mw or {}

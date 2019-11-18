@@ -147,6 +147,7 @@ public class Scrib_lib_language implements Scrib_lib {
 		String lang_code = args.Pull_str(0);
 		String inLanguage = args.Cast_str_or_null(1);
 		String include = args.Cast_str_or(2, null);
+                //System.out.println("fln " + lang_code + ":" + inLanguage);
 		String rv = core.App().Lang_mgr().Name_mgr().fetchLanguageName(lang_code, inLanguage, include, core.Page().Url_bry_safe());
 		return rslt.Init_obj(rv);
 		/*

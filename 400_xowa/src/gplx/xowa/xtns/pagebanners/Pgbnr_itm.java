@@ -25,10 +25,13 @@ public class Pgbnr_itm implements Mustache_doc_itm {
 	private byte[] banner_anch_title, banner_hdr_text, originx, banner_anch_href, srcset;
 	private double data_pos_x, data_pos_y;
 	private int max_width;
-	private boolean bottomtoc, isHeadingOverrideEnabled, enabletoc;
+	private boolean bottomtoc, isHeadingOverrideEnabled;
 	private byte[] file_ttl;
 	private Pgbnr_icon[] icons;
 	private byte[] img_id_atr, img_xottl_atr, img_xoimg_atr;
+	private boolean isPanorama;
+	private boolean enable_toc = true;
+	private boolean hasPosition = false;
 
 	// NOTE: used by hdump
 	public boolean Exists() {return exists;} private boolean exists;
@@ -58,21 +61,22 @@ public class Pgbnr_itm implements Mustache_doc_itm {
 		this.exists = true;
 	}
 	public void Init_from_wtxt(Xoa_ttl banner_ttl, Xof_file_itm banner_file_itm, byte[] banner_anch_title, byte[] banner_hdr_text, boolean bottomtoc
-		, byte[] toc, double data_pos_x, double data_pos_y, byte[] originx, Pgbnr_icon[] icons, boolean enabletoc) {
+		, byte[] toc, double data_pos_x, double data_pos_y, byte[] originx, Pgbnr_icon[] icons, boolean enable_toc) {
 		this.banner_ttl = banner_ttl; this.banner_file_itm = banner_file_itm;
 		this.banner_anch_title = banner_anch_title; this.banner_hdr_text = banner_hdr_text; this.bottomtoc = bottomtoc; this.toc = toc; this.icons = icons;
 		this.data_pos_x = data_pos_x; this.data_pos_y = data_pos_y; this.originx = originx;
 		this.banner_img_src = banner_file_itm.Html_view_url().To_http_file_bry();
 		this.file_ttl = Gfo_url_encoder_.Href_quotes.Encode(banner_file_itm.Lnki_ttl());	// NOTE: Encode(Lnki_ttl) not Orig_ttl; else "%27s" instead of "'s" PAGE:en.v:'s-Hertogenbosch; DATE:2016-07-12
-		this.enabletoc = enabletoc;
+		this.enable_toc = enable_toc;
 	}
-	public void Init_from_html(int max_width, byte[] banner_anch_href, byte[] banner_img_src, byte[] srcset, boolean isHeadingOverrideEnabled, byte[] toc) {
+	public void Init_from_html(int max_width, byte[] banner_anch_href, byte[] banner_img_src, byte[] srcset, boolean isHeadingOverrideEnabled, byte[] toc, boolean isPanorama) {
 		this.max_width = max_width;
 		this.banner_anch_href = banner_anch_href;
 		this.banner_img_src = banner_img_src;
 		this.srcset = srcset;
 		this.isHeadingOverrideEnabled = isHeadingOverrideEnabled;
 		this.toc = toc;
+		this.isPanorama = isPanorama;
 	}
 	public void Init_hdump(boolean mode_is_hdump) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
@@ -110,8 +114,9 @@ public class Pgbnr_itm implements Mustache_doc_itm {
 		else if	(String_.Eq(key, "hasIcons"))						return Mustache_doc_itm_.Ary__bool(icons.length > 0);
 		else if	(String_.Eq(key, "bottomtoc"))						return Mustache_doc_itm_.Ary__bool(bottomtoc);
 		else if	(String_.Eq(key, "isHeadingOverrideEnabled"))		return Mustache_doc_itm_.Ary__bool(isHeadingOverrideEnabled);
-		else if	(String_.Eq(key, "isPanorama"))						return Mustache_doc_itm_.Ary__bool(true);	// until something more substantive
-		else if	(String_.Eq(key, "enable-toc"))						return Mustache_doc_itm_.Ary__bool(enabletoc);
+		else if	(String_.Eq(key, "isPanorama"))                     return Mustache_doc_itm_.Ary__bool(isPanorama);
+		else if	(String_.Eq(key, "enable-toc"))                     return Mustache_doc_itm_.Ary__bool(enable_toc);
+		else if	(String_.Eq(key, "hasPosition"))                    return Mustache_doc_itm_.Ary__bool(hasPosition);
 		return Mustache_doc_itm_.Ary__empty;
 	}
 	private static final    byte[] Bry__anch_atr_id = Bry_.new_a7(" id=\"xoimg_");

@@ -347,14 +347,14 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 					}
 					break;
 				case Byte_ascii.Slash:
-					if (leaf_bgn == -1) { // only if we have not already found one
+//					if (leaf_bgn == -1) { // only if we have not already found one
 						if (root_bgn == -1)
 							root_bgn = (txt_bb_len) + 1;
 						if (anch_bgn == -1) {	// only set leaf if anchor found; guards against A#B/C and / setting leaf; DATE:2014-01-14
 							leaf_bgn = (txt_bb_len) + 1;
 							qarg_bgn = -1;	// always reset qarg; handles ttls which have question_mark which are premptively assumed to be qarg; PAGE:en.w:Portal:Organized_Labour/Did_You_Know?/1 DATE:2014-06-08
 						}
-					}
+//					}
 					break;	// flag last leaf_bgn
 				case Byte_ascii.Nl:	// NOTE: for now, treat nl just like space; not sure if it should accept "a\nb" or "\nab"; need to handle trailing \n for "Argentina\n\n" in {{Infobox settlement|pushpin_map=Argentina|pushpin_label_position=|pushpin_map_alt=|pushpin_map_caption=Location of Salta in Argentina}};
 				case Byte_ascii.Space: case Byte_ascii.Tab: case Byte_ascii.Cr:	// added \t, \r; DATE:2013-03-27

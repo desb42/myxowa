@@ -79,10 +79,17 @@ public class Xows_page_allpages implements gplx.core.brys.Bfr_arg, Gfo_invk, Xow
 		Build_html(page);
 	}
 	private static byte[] Get_from(Gfo_qarg_mgr_old arg_hash, Xowe_wiki wiki, Xoa_url url, Xoa_ttl ttl) {
-		return ttl.Leaf_bgn() == -1
-			? arg_hash.Get_val_bry_or(Bry_arg_from, null)
-			: ttl.Leaf_url()
-			;
+            byte[] pagename = ttl.Full_txt_wo_qarg();
+            int pos = Bry_find_.Find_fwd(pagename, Byte_ascii.Slash, 0, pagename.length);
+            if (pos > 0)
+                return Bry_.Mid(pagename, pos+1);
+            else
+		return arg_hash.Get_val_bry_or(Bry_arg_from, null);
+            
+//		return ttl.Leaf_bgn() == -1
+//			? arg_hash.Get_val_bry_or(Bry_arg_from, null)
+//			: ttl.Leaf_url()
+//			;
 	}
 	public boolean Build_data(Xoa_url url, Xoa_ttl ttl) {
 		init_ns = wiki.Ns_mgr().Ns_main();

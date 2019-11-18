@@ -90,7 +90,7 @@ public class Xoh_page_wtr_wkr {
 		// write modified_on; handle invalid dates
 		DateAdp modified_on = page.Db().Page().Modified_on();
 		byte[] modified_on_msg = Bry_.Empty;
-		if (modified_on != DateAdp_.MinValue) {
+		if (modified_on != DateAdp_.MinValue && wiki.Installed()) {
 			modified_on_msg = wiki.Msg_mgr().Val_by_key_args(Key_lastmodifiedat, 
 						wiki.Lang().Time_format_mgr().Get_date_defaultfmt(wiki, modified_on),
 						wiki.Lang().Time_format_mgr().Get_time_defaultfmt(wiki, modified_on));
@@ -358,6 +358,7 @@ public class Xoh_page_wtr_wkr {
 			//&&	ctgs_len > 0						// skip if no categories found while parsing wikitext
 			&&	!wiki.Html_mgr().Importing_ctgs()	// do not show categories if importing categories, page will wait for category import to be done; DATE:2014-10-15
 			&&	!hctx.Mode_is_hdump()				// do not dump categories during hdump; DATE:2016-10-12
+                        && page.Ttl().Ns().Id() >= 0 // not Special
 			) {
 			//if (app.Mode().Tid_is_gui()) app.Usr_dlg().Prog_many("", "", "loading categories: count=~{0}", ctgs_len);
 			Xoctg_pagebox_itm[] pagebox_itms = wiki.Ctg__pagebox_wtr().Get_catlinks_by_page(wiki, page);

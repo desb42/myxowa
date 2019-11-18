@@ -665,7 +665,7 @@ class Xosrv_http_wkr_ {
                                         , Bry_.new_a7("xowa/")
 				, redirect
 				, Byte_ascii.Nl_bry
-				, Byte_ascii.Nl_bry
+				, Byte_ascii.Nl_bry // proxy servers like nginx require 2 line breaks; ISSUE#:600; DATE:2019-11-05
 				)
 			);
 		} catch (Exception err) {
