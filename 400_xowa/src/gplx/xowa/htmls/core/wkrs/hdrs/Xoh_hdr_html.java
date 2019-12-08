@@ -18,7 +18,6 @@ import gplx.core.brys.*;
 import gplx.langs.htmls.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.hdrs.*;
 import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.addons.htmls.tocs.*;
-import gplx.xowa.parsers.lists.Xop_list_tkn_new;
 public class Xoh_hdr_html {
 	private final    Bry_bfr hdr_text_bfr = Bry_bfr_.New();
 	private final    Xoh_toc_itm invalid_toc_itm = new Xoh_toc_itm().Set__txt(Bry_.Empty, Bry_.Empty);
@@ -38,11 +37,10 @@ public class Xoh_hdr_html {
 
 		// write TOC tag if (a) TOC enabled and (b) 1st hdr
 		if (	hdr.First_in_doc() 
-			&&	cfg.Toc__show() 
+			&&	cfg.Toc__show()
 			&&	page.Wtxt().Toc().Enabled()
 			&&	!page.Wtxt().Toc().Flag__toc())	// __TOC__ not specified; place at top; NOTE: if __TOC__ was specified, then it would be placed wherever __TOC__ appears
-			//gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_placeholder(page, bfr.Len());
-                    page.Html_data().Toc_mgr().Toc_default_(bfr.Len());
+			gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_placeholder(page, bfr);
 
 		// write <h#><span>
 		if (hdr_is_valid) {													// NOTE: need to check hdr_num b/c it could be dangling

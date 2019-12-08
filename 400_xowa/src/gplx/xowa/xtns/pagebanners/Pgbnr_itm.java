@@ -40,6 +40,16 @@ public class Pgbnr_itm implements Mustache_doc_itm {
 	public byte[] Style() {return style;} private byte[] style;
 	public double Data_pos_x() {return data_pos_x;}
 	public double Data_pos_y() {return data_pos_y;}
+	public boolean Show_toc_in_html() {return show_toc_in_html;} private boolean show_toc_in_html = false; // default to false so that TOC does not show up in both PageBanner and HTML body; DATE:2019-11-17
+
+	// hdump serialised info
+	public boolean Precoded() {return precoded;} private boolean precoded = false;
+	public byte[] Pgbnr_bry() {return pgbnr_bry;} private byte[] pgbnr_bry;
+	public void Pgbnr_bry_(byte[] v) {
+		if (v == null) return;
+		pgbnr_bry = v;
+		precoded = true;
+	}
 
 	public void Clear_by_hdump() {
 		this.exists = false;

@@ -142,7 +142,8 @@ public class Xow_portal_mgr implements Gfo_invk {
 
 		// NOTE: need to escape args href for Search page b/c user can enter in quotes and apos; EX:localhost:8080/en.wikipedia.org/wiki/Special:XowaSearch?search=title:(%2Breturn%20%2B"abc") ; DATE:2017-07-16
 		Bry_bfr tmp_bfr = bfr_mkr.Get_k004();
-		byte[] talk_href = Xoh_html_wtr_escaper.Escape(Xop_amp_mgr.Instance, tmp_bfr, Bry_.Add(Xoh_href_.Bry__wiki, ttl.Talk_txt()));
+		//byte[] talk_href = Xoh_html_wtr_escaper.Escape(Xop_amp_mgr.Instance, tmp_bfr, Bry_.Add(Xoh_href_.Bry__wiki, ttl.Talk_txt()));
+		byte[] talk_href = Bry_.Add(Xoh_href_.Bry__wiki, ttl.Talk_href());
 
 		// Adds namespace links
 		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
@@ -166,7 +167,9 @@ public class Xow_portal_mgr implements Gfo_invk {
 			Xoae_page page = wiki.Data_mgr().Load_page_by_ttl(idx_ttl);
 			int maxpagecount = wiki.Maxpage().Get_maxpage(page.Db().Page().Id());
 
-			int currentpageno = Bry_.To_int(ttl.Leaf_txt());
+			int currentpageno = 1;
+			if (ttl.Leaf_bgn() > 0)
+				currentpageno = Bry_.To_int(ttl.Leaf_txt());
 
 			byte[] lnk_txt, lnk;
 			Bry_bfr bfr = Bry_bfr_.New();
@@ -174,13 +177,13 @@ public class Xow_portal_mgr implements Gfo_invk {
 		//lnk = ??
 		//Fmt__image.Bld_many(bfr, lnk, lnk_txt);
 
-			lnk = idx_ttl.Page_url(); //remove Index:
+			lnk = idx_ttl.Page_href(); //remove Index: (that is, not the Leaf)
 			if (currentpageno - 1 > 0) {
-				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_prev");
+				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_prevpage");
 				Fmt__prev.Bld_many(bfr, lnk, currentpageno - 1, lnk_txt);
 			}
 			if (currentpageno + 1 < maxpagecount) {
-				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_next");
+				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_nextpage");
 				Fmt__next.Bld_many(bfr, lnk, currentpageno + 1, lnk_txt);
 			}
 
@@ -189,6 +192,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 			extra = bfr.To_bry_and_clear();
 		}
 
+		// "portal_ns_subj_href", "portal_ns_subj_cls", "portal_ns_talk_href", "portal_ns_talk_cls", "portal_div_vnts", "portal_main", "portal_ca", "portal_extra"
 		div_ns_fmtr.Bld_bfr_many(tmp_bfr, subj_href, subj_cls, talk_href, talk_cls, vnt_menu, portal_main, subjectId, extra);
 		return tmp_bfr.To_bry_and_rls();
 	}
@@ -197,13 +201,13 @@ public class Xow_portal_mgr implements Gfo_invk {
 	 ( "<li id=\"ca-proofreadPageScanLink\"><span><a href=\"~{img}\" class=\"xowa-hover-off\">~{img_txt}</a></span></li>"
 	 )
 	,Fmt__prev = Bry_fmt.Auto_nl_skip_last
-	 ( "<li id=\"ca-proofreadPagePrevLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}/~{cnt}\" class=\"xowa-hover-off\">~{lnk_txt}</a></span></li>"
+	 ( "<li id=\"ca-proofreadPagePrevLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}/~{cnt}\" class=\"xowa-hover-off\" rel=\"prev\" title=\"~{lnk_txt}\">~{lnk_txt}</a></span></li>"
 	 )
 	,Fmt__next = Bry_fmt.Auto_nl_skip_last
-	 ( "<li id=\"ca-proofreadPageNextLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}/~{cnt}\" class=\"xowa-hover-off\">~{img_txt}</a></span></li>"
+	 ( "<li id=\"ca-proofreadPageNextLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}/~{cnt}\" class=\"xowa-hover-off\" rel=\"next\" title=\"~{lnk_txt}\">~{lnk_txt}</a></span></li>"
 	 )
 	,Fmt__index = Bry_fmt.Auto_nl_skip_last
-	 ( "<li id=\"ca-proofreadPageIndexLink\" class=\"icon\"><span><a href=\"/wiki/Index:~{lnk}\" class=\"xowa-hover-off\">~{img_txt}</a></span></li>"
+	 ( "<li id=\"ca-proofreadPageIndexLink\" class=\"icon\"><span><a href=\"/wiki/Index:~{lnk}\" class=\"xowa-hover-off\" title=\"~{img_txt}\">~{img_txt}</a></span></li>"
 	 )
 	;
 	private byte[] Ns_cls_by_ord(Xow_ns_mgr ns_mgr, int ns_ord) {
@@ -236,7 +240,8 @@ public class Xow_portal_mgr implements Gfo_invk {
 			, wiki.Props().Site_name()
 			);
 		return tmp_bfr.To_bry_and_rls();
-	}	public static final    byte[] Cls_selected_y = Bry_.new_a7("selected"), Cls_new = Bry_.new_a7("new"), Cls_display_none = Bry_.new_a7("xowa_display_none");
+	}
+	public static final    byte[] Cls_selected_y = Bry_.new_a7("selected"), Cls_new = Bry_.new_a7("new"), Cls_display_none = Bry_.new_a7("xowa_display_none");
 	public byte[] Div_logo_bry(boolean nightmode) {return nightmode ? div_logo_night : div_logo_day;} private byte[] div_logo_day = Bry_.Empty, div_logo_night = Bry_.Empty;
 	public byte[] Div_home_bry() {return sidebar_enabled ? div_home_bry : Bry_.Empty;} private byte[] div_home_bry = Bry_.Empty;
 	public byte[] Div_sync_bry(Bry_bfr tmp_bfr, boolean manual_enabled, Xow_wiki wiki, Xoa_page page) {
@@ -309,9 +314,10 @@ public class Xow_portal_mgr implements Gfo_invk {
 	}
 	private byte[] display_type(boolean from_hdump, Xoa_ttl ttl, byte html_gen_tid) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		subj_href = Xoh_html_wtr_escaper.Escape(Xop_amp_mgr.Instance, tmp_bfr, Bry_.Add(Xoh_href_.Bry__wiki, ttl.Subj_url()));
-                //subj_href = Bry_.Replace(subj_href, Bry_.new_a7("%"), Bry_.new_a7("%25"));
-                subj_href = Checkpercent(subj_href);
+		//subj_href = Xoh_html_wtr_escaper.Escape(Xop_amp_mgr.Instance, tmp_bfr, Bry_.Add(Xoh_href_.Bry__wiki, ttl.Subj_url()));
+		subj_href = Bry_.Add(Xoh_href_.Bry__wiki, ttl.Full_url());
+		//subj_href = Bry_.Replace(subj_href, Bry_.new_a7("%"), Bry_.new_a7("%25"));
+		subj_href = Checkpercent(subj_href);
 		if (html_gen_tid != 0) return Bry_.Empty; // edit & html are irrelevant
 		boolean read_from_html_db_preferred = wiki.Html__hdump_mgr().Load_mgr().Read_preferred();
 		if (from_hdump) {

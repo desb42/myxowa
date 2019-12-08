@@ -34,13 +34,65 @@ public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 		bldr_itm.Init(list);
 		fmtr_grp.Bld_bfr_many(bfr, bldr_itm);
 	}
-	private static final    Bry_fmtr
+	private static final	Bry_fmtr
 	  fmtr_grp = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
 	, "  <div class=\"mw-indicators\">~{itms}"
 	, "  </div>"
 	), "itms")
 	;
+	public byte[] Serialise() {
+		int list_len = list.Count();
+		if (list_len == 0) return null;
+
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		for (int i = 0; i < list_len; i++) {
+			Indicator_xnde xnde = (Indicator_xnde)list.Get_at(i);
+			tmp_bfr.Add(Binlen(xnde.Name().length()));
+			tmp_bfr.Add_str_u8(xnde.Name());
+			tmp_bfr.Add(Binlen(xnde.Html().length));
+			tmp_bfr.Add(xnde.Html());
+		}
+		return tmp_bfr.To_bry();
+	}
+	private byte[] Binlen(int v) {
+		byte[] result = new byte[4];
+		for (int i = 0; i < 4; i++) {
+			result[i] = (byte)(v & 0xff);
+			v >>= 8;
+		}
+		return result;
+	}
+	private int Lenbin(byte[] bin, int ofs) {
+		int result = 0;
+		for (int i = 3; i >= 0; i--) {
+			result <<= 8;
+                        int c = bin[ofs + i];
+                        // 2s compliment
+                        if (c < 0)
+                            c += 256;
+			result += c;
+		}
+		return result;
+	}
+	public void Deserialise(byte[] serial) {
+		Clear();
+                if (serial == null) return;
+		int len = serial.length;
+		int i = 0;
+		while (i < len) {
+			Indicator_xnde xnde = new Indicator_xnde();
+			int fsize = Lenbin(serial, i);
+			i += 4;
+			xnde.Name_(String_.new_u8(serial, i, i+fsize));
+			i += fsize;
+			fsize = Lenbin(serial, i);
+			i += 4;
+			xnde.Html_(Bry_.Mid(serial, i, i+fsize));
+			i += fsize;
+			list.Add_if_dupe_use_nth(xnde.Name(), xnde);
+		}
+	}
 }
 class Indicator_html_bldr_itm implements gplx.core.brys.Bfr_arg {
 	private Ordered_hash list;
@@ -53,10 +105,10 @@ class Indicator_html_bldr_itm implements gplx.core.brys.Bfr_arg {
 			fmtr_itm.Bld_bfr_many(bfr, xnde.Name(), xnde.Html());
 		}
 	}
-	private static final    Bry_fmtr
+	private static final	Bry_fmtr
 	 fmtr_itm = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "    <div id='mw-indicator-~{name}' class='mw-indicator'>~{html}</div>"
+	, "	<div id='mw-indicator-~{name}' class='mw-indicator'>~{html}</div>"
 	), "name", "html")
 	;
 }

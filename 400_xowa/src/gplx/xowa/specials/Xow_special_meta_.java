@@ -33,6 +33,7 @@ public class Xow_special_meta_ {
 	, Ttl__bookmarks			= "XowaBookmarks"
 	, Ttl__diag					= "XowaDiag"
 	, Ttl__error				= "XowaError"
+	, Ttl__api				= "Api"
 	;
 	public static final    Xow_special_meta
 	  Itm__all_pages			= new Xow_special_meta(Src__mw		, Ttl__all_pages)

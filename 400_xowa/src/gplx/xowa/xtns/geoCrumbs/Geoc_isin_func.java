@@ -23,18 +23,16 @@ public class Geoc_isin_func extends Pf_func_base {
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
 		byte[] ttl_bry = Eval_argx(ctx, src, caller, self);
 		Xowe_wiki wiki = ctx.Wiki();
+		Xoa_ttl page_ttl = ctx.Page().Ttl();
+		if (!page_ttl.Ns().Id_is_main())
+			ttl_bry = Bry_.Add(page_ttl.Ns().Name_db_w_colon(), ttl_bry);
 		Xoa_ttl ttl = Xoa_ttl.Parse(wiki, ttl_bry); if (ttl == null) return;
 		if (wiki.App().Mode().Tid_is_cmd()) {
 			// insert into parent table
 			wiki.Bread().Insert(ctx.Page().Ttl().Full_txt_raw(), ttl_bry);
-			Gfo_usr_dlg_.Instance.Warn_many("", "", "#isin: ttl=~{0} parent=~{1}", ctx.Page().Ttl().Full_db(), ttl_bry);
-			// flag as #isin [assumes only one #isin per page]
-		} else {
-			byte[] bread = wiki.Bread().Get_breadcrumbs(ctx.Page().Ttl().Full_txt_raw(), ttl_bry);
-			Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b128();
-			wiki.Parser_mgr().Main().Parse_text_to_html(tmp_bfr, ctx, ctx.Page(), false, bread);
-			ctx.Page().Html_data().Pgbnr_bread_(tmp_bfr.To_bry_and_rls());
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "#isin: ttl=~{0} parent=~{1}", page_ttl.Full_db(), ttl_bry);
 		}
+		ctx.Page().Html_data().Pgbnr_isin_(ttl_bry);
 	}
 	public static final    Geoc_isin_func Instance = new Geoc_isin_func();
 }

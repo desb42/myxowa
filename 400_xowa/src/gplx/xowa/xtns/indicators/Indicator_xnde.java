@@ -17,8 +17,8 @@ package gplx.xowa.xtns.indicators; import gplx.*; import gplx.xowa.*; import gpl
 import gplx.core.primitives.*; import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.wikis.pages.skins.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*;
 public class Indicator_xnde implements Xox_xnde, Mwh_atr_itm_owner1 {
-	public String Name() {return name;} private String name;
-	public byte[] Html() {return html;} private byte[] html;
+	public String Name() {return name;} public void Name_(String v) {name = v;} private String name;
+	public byte[] Html() {return html;} public void Html_(byte[] v) {html = v;} private byte[] html;
 	public void Init_for_test(String name, byte[] html) {this.name = name; this.html = html;}	// TEST
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {
 		if (xatr_id_obj == null) return;

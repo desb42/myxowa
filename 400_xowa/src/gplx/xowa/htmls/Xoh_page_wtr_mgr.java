@@ -33,7 +33,7 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	public Bry_fmtr Page_read_fmtr() {return page_read_fmtr;} private Bry_fmtr page_read_fmtr = Bry_fmtr.new_("", Fmtr_keys);
 	public Bry_fmtr Page_edit_fmtr() {return page_edit_fmtr;} private Bry_fmtr page_edit_fmtr = Bry_fmtr.new_("", Fmtr_keys);
 	public Bry_fmtr Page_html_fmtr() {return page_html_fmtr;} private Bry_fmtr page_html_fmtr = Bry_fmtr.new_("", Fmtr_keys);
-	public byte[] Edit_rename_div_bry(Xoa_ttl ttl) {return div_edit_rename_fmtr.Bld_bry_many(tmp_bfr, ttl.Full_db());}
+	public byte[] Edit_rename_div_bry(Xoa_ttl ttl) {return div_edit_rename_fmtr.Bld_bry_many(tmp_bfr, ttl.Full_db_href());}
 	public void Init_css_urls(Xoa_app app, String wiki_domain, Io_url css_common_url, Io_url css_wiki_url) {
 		this.css_common_bry = css_common_url.To_http_file_bry();
 		this.css_wiki_bry = css_wiki_url.To_http_file_bry();
@@ -113,6 +113,7 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
         , "printfooter"
         , "page_pgbnr_bread"
         , "app_icon"
+        , "tagline"
 	};
 	private static final String Cfg__scripting_enabled = "xowa.html.scripting.enabled";
 }

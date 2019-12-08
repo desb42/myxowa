@@ -106,6 +106,8 @@ class Http_url_parser {
 							this.display = Xopg_display_mode_.Tid__wikitextver;
 						else if (Bry_.Eq(qarg_val, Xoa_url_.Qarg__action__htmlver))
 							this.display = Xopg_display_mode_.Tid__htmlver;
+						else
+							Add_qarg(qarg_bfr, qarg_key, qarg_val); // pass it on
 						break;
 					case Tid__popup_id:
 						this.popup_id = String_.new_u8(qarg_val);
@@ -117,10 +119,7 @@ class Http_url_parser {
 						this.popup_link = String_.new_u8(qarg_val);
 						break;
 					default:
-						qarg_bfr.Add_byte(qarg_bfr.Len_eq_0() ? Byte_ascii.Question : Byte_ascii.Amp);
-						qarg_bfr.Add(qarg_key);
-						qarg_bfr.Add_byte_eq();
-						qarg_bfr.Add(qarg_val);
+						Add_qarg(qarg_bfr, qarg_key, qarg_val);
 						break;
 				}
 			}
@@ -138,6 +137,12 @@ class Http_url_parser {
 			this.err_msg = Err_.Message_gplx_log(e);
 			return false;
 		}
+	}
+	private void Add_qarg(Bry_bfr qarg_bfr, byte[] qarg_key, byte[] qarg_val) {
+		qarg_bfr.Add_byte(qarg_bfr.Len_eq_0() ? Byte_ascii.Question : Byte_ascii.Amp);
+		qarg_bfr.Add(qarg_key);
+		qarg_bfr.Add_byte_eq();
+		qarg_bfr.Add(qarg_val);
 	}
 	private boolean Fail(byte[] url, String err_msg) {
 		this.wiki = null;

@@ -40,7 +40,7 @@ public class Xoh_page_wtr_wkr {
 			this.page = page; this.wiki = page.Wikie(); this.app = wiki.Appe();
 			ctx.Page_(page); // HACK: must update page for toc_mgr; WHEN: Xoae_page rewrite
 			Bry_fmtr fmtr = null;
-                        Set_ispage_in_wikisource(page);
+			Set_ispage_in_wikisource(page);
 			if (mgr.Html_capable()) {
 				wdata_lang_wtr.Page_(page);
 				byte view_mode = page_mode;
@@ -128,14 +128,14 @@ public class Xoh_page_wtr_wkr {
 				
 		fmtr.Bld_bfr_many(bfr
 		, root_dir_bry, Xoa_app_.Version, Xoa_app_.Build_date, app.Tcp_server().Running_str()
-		, page.Db().Page().Id(), page.Ttl().Full_db(), page_name
+		, page.Db().Page().Id(), page.Ttl().Full_db_href(), page_name
 		, page.Html_data().Page_heading().Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), page_display_title)
 		, modified_on_msg
 		, mgr.Css_common_bry(), mgr.Css_wiki_bry()
 		, mgr.Css_night_bry(nightmode_enabled)
 		, page.Html_data().Head_mgr().Init(app, wiki, page).Init_dflts(html_gen_tid)
 		, page.Lang().Dir_ltr_bry(), page.Html_data().Indicators(), page_content_sub
-		, wiki.Html_mgr().Portal_mgr().Div_jump_to(), wiki.Xtn_mgr().Xtn_pgbnr().Write_html(page, ctx, hctx)
+		, wiki.Html_mgr().Portal_mgr().Div_jump_to(), Pagebanner(ctx, hctx)
 		, page_body_class, html_content_editable
 		, page_data, wdata_lang_wtr
 		, portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date)
@@ -152,27 +152,48 @@ public class Xoh_page_wtr_wkr {
 		, mgr.Edit_rename_div_bry(page_ttl), page.Html_data().Edit_preview_w_dbg(), js_edit_toolbar_bry
 		, page.Lang().Key_bry()
 						, redlinks
-						, printfooter(app, wiki, ctx, hctx, page)
-						, page.Html_data().Pgbnr_bread()
+						, Printfooter(app, wiki, ctx, hctx, page, html_gen_tid)
+						, Breadcrumb(page, ctx)
 						, Bry_.new_a7("app_icon.png")
+						, wiki.Tagline()
 		);
 		Xoh_page_wtr_wkr_.Bld_head_end(bfr, tmp_bfr, page);	// add after </head>
 		Xoh_page_wtr_wkr_.Bld_html_end(bfr, tmp_bfr, page);	// add after </html>
 	}
 	public void Write_hdump(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page wpg) {
 		this.wiki = ctx.Wiki();
+		int page_id = wpg.Db().Page().Id();
+		Hxtn_page_mgr html_data_mgr = wpg.Wikie().Hxtn_mgr();
 		Set_ispage_in_wikisource(wpg);
-		if (wpg.Html_data().Xtn_pgbnr() != null) {
-			ctx.Wiki().Xtn_mgr().Xtn_pgbnr().Write_html(wpg, ctx, hctx).Bfr_arg__add(bfr);	// if pgbnr exists, write to top of html
+		// also add isin (if it exists)
+		byte[] isin = wpg.Html_data().Pgbnr_isin();
+		if (isin != null) {
+			html_data_mgr.Page_tbl__insert(page_id, Hxtn_page_mgr.Id__geocrumb, page_id);
+			html_data_mgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Itm__geocrumb, page_id, isin);
 		}
 		this.Write_body(bfr, ctx, hctx, wpg);
-		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && page.Quality_tots().Qualitycount() > 0) {
-			int page_id = wpg.Db().Page().Id();
-			byte[] quality_table = page.Quality_tots().Serialise();
-			Hxtn_page_mgr html_data_mgr = page.Wikie().Hxtn_mgr();
-			html_data_mgr.Page_tbl__insert(page_id, Hxtn_page_mgr.Id__pp_pagequality, page_id);
-			html_data_mgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_wiki_itm.Tid__self, page_id, quality_table);
+		if (wpg.Html_data().Xtn_pgbnr() != null) {
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			ctx.Wiki().Xtn_mgr().Xtn_pgbnr().Write_html(wpg, ctx, hctx).Bfr_arg__add(tmp_bfr);
+			byte[] pgbnr = tmp_bfr.To_bry_and_clear();
+			html_data_mgr.Page_tbl__insert(page_id, Hxtn_page_mgr.Id__pgbnr, page_id);
+			html_data_mgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Itm__pgbnr, page_id, pgbnr);
 		}
+		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && page.Quality_tots().Qualitycount() > 0) {
+			byte[] quality_table = page.Quality_tots().Serialise();
+			html_data_mgr.Page_tbl__insert(page_id, Hxtn_page_mgr.Id__pp_pagequality, page_id);
+			html_data_mgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Itm__pp_pagequality, page_id, quality_table);
+		}
+		if (page.Html_data().Indicators().Count() > 0) {
+			byte[] indicators = page.Html_data().Indicators().Serialise();
+			html_data_mgr.Page_tbl__insert(page_id, Hxtn_page_mgr.Id__indicators, page_id);
+			html_data_mgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Itm__indicators, page_id, indicators);
+		}
+		byte[] index_page = page.Pp_indexpage();
+		if (index_page != null) {
+			html_data_mgr.Page_tbl__insert(page_id, Hxtn_page_mgr.Id__pp_indexpage, page_id);
+			html_data_mgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Itm__pp_indexpage, page_id, index_page);
+                }
 	}
 	public void Write_body(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page) {
 		synchronized (thread_lock_2) {
@@ -261,7 +282,8 @@ public class Xoh_page_wtr_wkr {
 						tidy_bfr.Add_str_a7("<div class=\"mw-parser-output\">");
 					}
 					wiki.Html_mgr().Html_wtr().Write_doc(tidy_bfr, ctx, hctx, page.Root().Data_mid(), page.Root());
-					if (wiki.Html_mgr().Html_wtr().Cfg().Toc__show())
+					if (wiki.Html_mgr().Html_wtr().Cfg().Toc__show()
+						&& (page.Html_data().Xtn_pgbnr() == null || page.Html_data().Xtn_pgbnr().Show_toc_in_html())) // do not write TOC in HTML body if pageBanner is enabled
 						gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_toc(tidy_bfr, page, hctx);
 					if (ispage_in_wikisource) { // Page:
 						tidy_bfr.Add_str_a7("</div></div>");
@@ -339,7 +361,7 @@ public class Xoh_page_wtr_wkr {
 	, Key_retrieved = Bry_.new_a7("retrievedfrom")
 		;
 
-	private byte[] printfooter(Xoae_app app, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page) {
+	private byte[] Printfooter(Xoae_app app, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page, byte html_gen_tid) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		// Add retrieved from for printing and as a hook for wikisource (and others)
 		tmp_bfr.Add(aref);
@@ -358,11 +380,13 @@ public class Xoh_page_wtr_wkr {
 			//&&	ctgs_len > 0						// skip if no categories found while parsing wikitext
 			&&	!wiki.Html_mgr().Importing_ctgs()	// do not show categories if importing categories, page will wait for category import to be done; DATE:2014-10-15
 			&&	!hctx.Mode_is_hdump()				// do not dump categories during hdump; DATE:2016-10-12
-                        && page.Ttl().Ns().Id() >= 0 // not Special
+			&& page.Ttl().Ns().Id() >= 0 // not Special
+			&& html_gen_tid != Xopg_view_mode_.Tid__edit // not Edit page
 			) {
 			//if (app.Mode().Tid_is_gui()) app.Usr_dlg().Prog_many("", "", "loading categories: count=~{0}", ctgs_len);
 			Xoctg_pagebox_itm[] pagebox_itms = wiki.Ctg__pagebox_wtr().Get_catlinks_by_page(wiki, page);
-			wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, wiki, page, pagebox_itms);
+			if (pagebox_itms.length > 0)
+				wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, wiki, page, pagebox_itms);
 		}
 		return tmp_bfr.To_bry_and_clear();
 	}
@@ -479,6 +503,25 @@ public class Xoh_page_wtr_wkr {
 		else
 			ispage_in_wikisource = false;
 	}
+	private byte[] Breadcrumb(Xoae_page page, Xop_ctx ctx) {
+		byte[] isin = page.Html_data().Pgbnr_isin();
+		if (isin == null) return Bry_.Empty;
+		byte[] bread = wiki.Bread().Get_breadcrumbs(page.Ttl().Full_txt_raw(), isin);
+		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b128();
+		wiki.Parser_mgr().Main().Parse_text_to_html(tmp_bfr, ctx, ctx.Page(), false, bread);
+		return tmp_bfr.To_bry_and_rls();
+	}
+        private byte[] Pagebanner(Xop_ctx ctx, Xoh_wtr_ctx hctx) {
+            
+            if (page.Html_data().Xtn_pgbnr() == null) return Bry_.Empty;
+            if (page.Html_data().Xtn_pgbnr().Precoded())
+                return page.Html_data().Xtn_pgbnr().Pgbnr_bry();
+            else {
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			ctx.Wiki().Xtn_mgr().Xtn_pgbnr().Write_html(page, ctx, hctx).Bfr_arg__add(tmp_bfr);
+			return tmp_bfr.To_bry_and_clear();
+            }
+        }
 }
 class data_head {
 	public void Name_(byte[] val) {name = val;}; byte[] name;

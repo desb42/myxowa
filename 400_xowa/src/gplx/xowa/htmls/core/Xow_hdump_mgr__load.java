@@ -19,6 +19,7 @@ import gplx.xowa.htmls.heads.*; import gplx.xowa.htmls.core.makes.*; import gplx
 import gplx.xowa.wikis.*; import gplx.xowa.wikis.data.*; import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.pages.skins.*; import gplx.xowa.wikis.pages.lnkis.*; import gplx.xowa.wikis.pages.htmls.*;
 import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.*;
+import gplx.xowa.xtns.pagebanners.*;
 public class Xow_hdump_mgr__load implements Gfo_invk {
 	private final    Xow_wiki wiki; private final    Xoh_hzip_mgr hzip_mgr; private final    Io_stream_zip_mgr zip_mgr;
 	private final    Xoh_page tmp_hpg; private final    Bry_bfr tmp_bfr; private final    Xowd_page_itm tmp_dbpg = new Xowd_page_itm();		
@@ -38,11 +39,23 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		make_mgr.Init_by_wiki(wiki);
 	}
 	public void Load_by_xowe(Xoae_page wpg) {
-                tmp_hpg.Quality_tots().Clear();
 		tmp_hpg.Ctor_by_hview(wpg.Wiki(), wpg.Url(), wpg.Ttl(), wpg.Db().Page().Id());
 		Load_by_xowh(tmp_hpg, wpg.Ttl(), Bool_.Y);
-                wpg.Quality_tots(tmp_hpg.Quality_tots());
+		// copy to 'real' page
+		wpg.Quality_tots().Deserialise(tmp_hpg.Quality_tots_serial());
 		wpg.Db().Html().Html_bry_(tmp_hpg.Db().Html().Html_bry());
+		byte[] pgbnr = null;
+		if (tmp_hpg.Pgbnr_bry() != null)
+			pgbnr = Parse(tmp_hpg, 1, Xoh_hzip_dict_.Hdb__htxt, tmp_hpg.Pgbnr_bry());
+		wpg.Html_data().Pgbnr_bry_(pgbnr);
+		wpg.Html_data().Pgbnr_isin_(tmp_hpg.Pgbnr_isin());
+		wpg.Html_data().Indicators().Deserialise(tmp_hpg.Indicators_serial());
+		if (tmp_hpg.Pgbnr_bry() != null) {
+			Pgbnr_itm itm = new Pgbnr_itm();
+			itm.Pgbnr_bry_( tmp_hpg.Pgbnr_bry() );
+			wpg.Html_data().Xtn_pgbnr_(itm);
+		}
+                wpg.Pp_indexpage_(tmp_hpg.Pp_indexpage());
 		wpg.Root_(new gplx.xowa.parsers.Xop_root_tkn());	// HACK: set root, else load page will fail
 		Fill_page(wpg, tmp_hpg);
 	}

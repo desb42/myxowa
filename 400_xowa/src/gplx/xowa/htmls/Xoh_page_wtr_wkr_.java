@@ -28,7 +28,7 @@ public class Xoh_page_wtr_wkr_ {
 		qualitytot = tot;
 	}*/
 	public static byte[] Bld_page_content_sub(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Bry_bfr tmp_bfr) {
-		byte[] subpages = app.Html_mgr().Page_mgr().Subpages_bldr().Bld(wiki.Ns_mgr(), page.Ttl());
+		byte[] subpages = app.Html_mgr().Page_mgr().Subpages_bldr().Bld(wiki, page.Ttl());
 		byte[] page_content_sub = page.Html_data().Content_sub();		// contentSub exists;
 		byte[] quality_table = Db_quality_tots.Generate_quality(wiki, page);
 		byte[] redirect_msg = Xop_redirect_mgr.Bld_redirect_msg(app, wiki, page.Redirect_trail());

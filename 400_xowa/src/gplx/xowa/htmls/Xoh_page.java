@@ -61,6 +61,12 @@ public class Xoh_page implements Xoa_page {
 		this.Clear();
 		html.Redlink_list().Disabled_(page_ttl.Ns().Id_is_module());	// never redlink in Module ns; particularly since Lua has multi-line comments for [[ ]]
 		html.Toc_mgr().Init(gplx.xowa.htmls.core.htmls.tidy.Xow_tidy_mgr_interface_.Noop, page_url, wiki.Lang().Msg_mgr().Itm_by_id_or_null(gplx.xowa.langs.msgs.Xol_msg_itm_.Id_toc).Val());
+		this.Quality_tots_serial_(null);
+		this.Db().Html().Html_bry_(null);
+		this.Pgbnr_bry_(null);
+		this.Pgbnr_isin_(null);
+		this.Indicators_serial_(null);
+		this.Pp_indexpage_(null);
 	}
 	public Xoh_page Ctor_by_hdiff(Bry_bfr tmp_bfr, Xoae_page page, byte[] toc_label) {
 		this.wiki = page.Wiki(); this.page_url = page.Url(); this.page_ttl = page.Ttl(); this.page_id = page.Db().Page().Id();			
@@ -101,5 +107,10 @@ public class Xoh_page implements Xoa_page {
 		rv.Db().Page().Exists_n_();
 		return rv;
 	}
-	public Db_quality_tots	Quality_tots() {return qualitytots;} private Db_quality_tots qualitytots = new Db_quality_tots();
+
+	public byte[]	Pgbnr_isin() {return pgbnr_isin;} public void Pgbnr_isin_(byte[] v) {pgbnr_isin = v;} private byte[] pgbnr_isin = null;
+	public byte[] Quality_tots_serial() {return qts;} public void Quality_tots_serial_(byte[] v) {qts = v;} private byte[] qts = null;
+	public byte[] Pgbnr_bry() {return pgbnr_bry;} public void Pgbnr_bry_(byte[] v) {pgbnr_bry = v;} private byte[] pgbnr_bry = null;
+	public byte[] Indicators_serial() {return indicators;} public void Indicators_serial_(byte[] v) {indicators = v;} private byte[] indicators = null;
+	public byte[] Pp_indexpage() {return pp_indexpage; } public void Pp_indexpage_(byte[] v) {pp_indexpage = v;} private byte[] pp_indexpage = null;
 }

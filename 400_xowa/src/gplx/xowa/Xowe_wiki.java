@@ -129,7 +129,8 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public byte[]					Wtxt__expand_tmpl(byte[] src) {return parser_mgr.Main().Expand_tmpl(src);}
 	public boolean                  Embeddable_enabled() {return embeddable_enabled;} public void Embeddable_enabled_(boolean v) {this.embeddable_enabled = v;} private boolean embeddable_enabled;
 	public Hxtn_page_mgr            Hxtn_mgr() {return hxtn_mgr;} private final    Hxtn_page_mgr hxtn_mgr = new Hxtn_page_mgr();
-	public boolean                  Installed() {return this.Data__core_mgr() != null;} // not sure if this is the best way
+	public boolean                  Installed() {return installed_by_test || this.Data__core_mgr() != null;} // not sure if this is the best way
+	public void                     Installed_by_test_(boolean v) {installed_by_test = v;} private boolean installed_by_test = false; // HACK:need to manually mark installed for TEST; DATE:2019-11-17
 
 	public Xow_hdump_mgr			Html__hdump_mgr() {return html__hdump_mgr;} private final    Xow_hdump_mgr html__hdump_mgr;
 	public Xoae_app					Appe() {return app;} private Xoae_app app;
@@ -156,6 +157,14 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public Pp_quality				Quality() {return quality;} private Pp_quality quality;
 	public Db_breadcrumb				Bread() {return bread;} private Db_breadcrumb bread;
         public Db_maxpage                               Maxpage() {return maxpage;} private Db_maxpage maxpage;
+        private byte[] tagline = null;
+        public byte[] Tagline() {
+            //if (tagline == null)
+                   tagline = msg_mgr.Val_by_key_obj("tagline");
+                   if (tagline.length > 0)
+                       tagline = Bry_.Add(tagline, Bry_.new_a7(" (XOWA)"));
+            return tagline;
+        }
 	private void Wdata_wiki_abrv_() {
 		Bry_bfr bfr = utl__bry_bfr_mkr.Get_b128();
 		Xow_abrv_wm_.To_abrv(bfr, wdata_wiki_lang, Int_obj_ref.New(wdata_wiki_tid));

@@ -61,11 +61,33 @@ class Tag_html_wkr_basic implements Tag_html_wkr {
 
 		// write val
 		tmp_bfr.Add_byte(Byte_ascii.Quote);
-		if (atrs_encode)
-			Gfo_url_encoder_.Id.Encode(tmp_bfr, val, 0, val_len);
+		if (atrs_encode) {
+			// BIG HACK - convert '"' to .22
+			val = convert22(val);
+			Gfo_url_encoder_.Id.Encode(tmp_bfr, val, 0, val.length);
+                }
 		else
 			tmp_bfr.Add(val);
 		tmp_bfr.Add_byte(Byte_ascii.Quote);
+	}
+	private byte[] convert22(byte[] val) {
+		int len = val.length;
+		int pos = 0;
+		int sect = 0;
+		Bry_bfr tmp_bfr = null;
+		while (pos < len) {
+			if (val[pos++] != '"') continue;
+			if (tmp_bfr == null)
+				tmp_bfr = Bry_bfr_.New();
+			tmp_bfr.Add_mid(val, sect, pos-1);
+			tmp_bfr.Add_str_a7(".22");
+			sect = pos;
+		}
+		if (sect > 0) {
+			tmp_bfr.Add_mid(val, sect, len);
+			return tmp_bfr.To_bry();
+		}
+		return val;
 	}
 	public void Tag__process_body(byte[] body) {
 		tmp_bfr.Add_byte(Byte_ascii.Gt);

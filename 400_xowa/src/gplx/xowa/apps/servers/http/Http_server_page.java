@@ -17,6 +17,7 @@ package gplx.xowa.apps.servers.http; import gplx.*; import gplx.xowa.*; import g
 import gplx.core.envs.*;
 import gplx.xowa.guis.views.*;
 import gplx.xowa.specials.*; import gplx.xowa.specials.xowa.errors.*;
+import gplx.xowa.wikis.nss.*;
 public class Http_server_page {
 	private final    Xoae_app app;
 	private Http_url_parser url_parser;
@@ -32,10 +33,19 @@ public class Http_server_page {
 	public Xoae_page Page() {return page;} private Xoae_page page;
 	public String Html() {return html;} private String html;
 	public byte[] Redirect() {return redirect;} private byte[] redirect;
+	public byte[] Content_type() {return content_type;} private byte[] content_type = Bry_.new_a7("Content-Type: text/html; charset=utf-8\n"); // default
 	public static Http_server_page Make(Xoae_app app, Http_data__client data__client, Http_url_parser url_parser, byte retrieve_mode) {
 	//Http_data__client data__client, byte[] wiki_domain, byte[] ttl_bry, byte[] qarg, byte retrieve_mode, byte mode, boolean popup_enabled, String popup_mode, String popup_id) {
 		Http_server_page page = new Http_server_page(app, url_parser);
 		if (!page.Make_url(url_parser.Wiki())) return page; // exit early if xwiki
+                // check for Special:Api
+                if (page.ttl.Ns().Id() == Xow_ns_.Tid__special) {
+                    if (Bry_.Has_at_bgn(page.ttl.Base_txt(), Bry_.new_a7("Api"))) {
+                        page.html = String_.new_u8(Db_special_api.Gen(page));
+                        page.content_type = Bry_.new_a7("Content-Type: application/json; charset=utf-8\n");
+                        return page;
+                    }
+                }
 		page.Make_page(data__client);
 		page.Make_html(retrieve_mode);
 		return page;

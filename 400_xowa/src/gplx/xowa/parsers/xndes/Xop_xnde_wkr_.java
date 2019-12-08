@@ -114,7 +114,7 @@ class Xop_xnde_wkr_ {
 		int extra_bytes = open_end + 30;
 		if (extra_bytes > src_end)
 			extra_bytes = src_end;
-		Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1} excerpt=~{2}", ctx.Page().Url().To_str(), close_bry, String_.new_u8(src, open_end, extra_bytes));
+		Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1} excerpt=~{2}", ctx.Page().Url().To_str(), close_bry, String_.new_u8(src, open_end, extra_bytes).replace("\n", "\\n"));
 		//Xoa_app_.Usr_dlg().Warn_many("", "", "parser.xtn: could not find angle_end: page=~{0} close_bry=~{1}", ctx.Page().Url().To_str(), close_bry);
 		//Gfo_usr_dlg_.Instance.Log_many("", "", "mid_bry=~{0}", String_.new_u8(src));
 		return Bry_find_.Not_found;

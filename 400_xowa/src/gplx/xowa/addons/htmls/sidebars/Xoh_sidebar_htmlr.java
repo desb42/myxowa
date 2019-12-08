@@ -25,6 +25,9 @@ class Xoh_sidebar_htmlr {
 			itms_fmtr.Init_by_grp(popups_enabled, grp);
 			fmt.Bld_many(bfr, grp.Id(), grp.Text(), itms_fmtr);
 		}
+		// dummy toolbox
+		// id="p-tb" used by some js
+		bfr.Add_str_a7("<div class=\"portal\" id=\"p-tb\"></div>");
 		return bfr.To_bry_and_clear();
 	}
 	private static final    Bry_fmt fmt = Bry_fmt.Auto_nl_skip_last

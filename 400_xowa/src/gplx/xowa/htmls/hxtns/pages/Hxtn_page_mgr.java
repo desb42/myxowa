@@ -101,5 +101,16 @@ public class Hxtn_page_mgr {
 	public static final int
 	  Id__template_styles = 0
 	, Id__pp_pagequality = 1
+	, Id__indicators = 2
+	, Id__geocrumb = 3
+	, Id__pgbnr = 4
+                , Id__pp_indexpage = 5
+	;
+	public static final int
+	  Itm__pp_pagequality = 0
+	, Itm__indicators = 1
+	, Itm__geocrumb =2
+	, Itm__pgbnr = 3
+                , Itm__pp_indexpage = 4;
 	;
 }

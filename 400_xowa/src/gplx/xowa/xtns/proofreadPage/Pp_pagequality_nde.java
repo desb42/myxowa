@@ -60,13 +60,16 @@ public class Pp_pagequality_nde implements Xox_xnde {
 			Xoa_ttl ttl = ctx.Page().Ttl();
 			byte[] base = ttl.Base_txt();
 			int len = base.length;
-			if ((len > 5 && base[len-5] == '.' && base[len-1] == 'u') || (len > 4 && base[len-4] == '.' && base[len-1] == 'f')) {
+			//if ((len > 5 && base[len-5] == '.' && base[len-1] == 'u') || (len > 4 && base[len-4] == '.' && base[len-1] == 'f')) {
 				bfr.Add_str_a7("<div id=\"xowa_pp_image\">[[File:");
 				bfr.Add(base);
-				bfr.Add_str_a7("|page=");
-				bfr.Add(ttl.Leaf_txt());
+				// only if we have a page
+				if (ttl.Leaf_bgn() > 0) {
+					bfr.Add_str_a7("|page=");
+					bfr.Add(ttl.Leaf_txt());
+				}
 				bfr.Add_str_a7("|frameless|440px|class=ws-cover]]</div>");
-			}
+			//}
 		}
 		return bfr.To_bry_and_clear();
 	}

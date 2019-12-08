@@ -755,3 +755,4 @@ jQuery( document ).ready( function ( $ ) {
 		$( '#xowa_pp_image' ).appendTo( $( '.prp-page-image' ) );
 	}
 } );
+

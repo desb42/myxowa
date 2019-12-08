@@ -24,6 +24,10 @@ public class Hxtn_wkr_mgr {
 			wkr_tbl.Create_tbl();
 			Reg_wkr(new gplx.xowa.xtns.template_styles.Hxtn_page_wkr__template_styles(null)); // TODO:do formal registration of extensions; WHEN: rework tkn_mkr
 			Reg_wkr(new gplx.xowa.xtns.proofreadPage.Hxtn_page_wkr__pagequality(null));
+			Reg_wkr(new gplx.xowa.xtns.geoCrumbs.Hxtn_page_wkr__geocrumb(null));
+			Reg_wkr(new gplx.xowa.xtns.indicators.Hxtn_page_wkr__indicators(null));
+			Reg_wkr(new gplx.xowa.xtns.pagebanners.Hxtn_page_wkr__pgbnr(null));
+			Reg_wkr(new gplx.xowa.xtns.proofreadPage.Hxtn_page_wkr__indexpage(null));
 		}
 	}
 	private void Reg_wkr(Hxtn_page_wkr wkr) {

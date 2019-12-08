@@ -46,8 +46,8 @@ public class Xoh_toc_wtr implements gplx.core.brys.Bfr_arg, Xoh_wtr_itm {
 		Gfh_tag_.Bld_lhs_end_nde(bfr);
 		bfr.Add(Gfh_tag_.Div_rhs);
 	}
-	public static void Write_placeholder(Xoa_page pg, int ofs) {
-		pg.Html_data().Toc_mgr().Toc_bgn_(ofs);
+	public static void Write_placeholder(Xoa_page pg, Bry_bfr bfr) {
+		pg.Html_data().Toc_mgr().Toc_bgn_(bfr.Len());
 	}
 	public static void Write_toc(Bry_bfr rv, Xoa_page pg, Xoh_wtr_ctx hctx) {
 		int toc_bgn = pg.Html_data().Toc_mgr().Toc_bgn(); if (toc_bgn == Bry_find_.Not_found) return; // no TOC

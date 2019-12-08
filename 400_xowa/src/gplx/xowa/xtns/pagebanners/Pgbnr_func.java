@@ -107,7 +107,6 @@ public class Pgbnr_func extends Pf_func_base {
 		page.Html_data().Xtn_pgbnr_(itm);
 		page.Html_data().Head_mgr().Itm__pgbnr().Enabled_y_();	// register css / js during parse stage
 		page.Wtxt().Toc().Flag__toc_(true);	// NOTE: must mark toc_manual else will show 2nd TOC in edit mode; DATE:2016-07-10
-//			wiki.Html_mgr().Html_wtr().Cfg().Toc__show_(false); // disable toc, else it will show twice (once in page banner; once in html); DATE:2019-11-11
 	}
 	public static void Add_banner(Bry_bfr bfr, Xoae_page wpg, Xop_ctx ctx, Xoh_wtr_ctx hctx, Pgbnr_itm itm) {
 		Xowe_wiki wiki = ctx.Wiki(); Xoae_app app = wiki.Appe();
@@ -138,7 +137,6 @@ public class Pgbnr_func extends Pf_func_base {
 		}
 		if (banner_html != null) {
 			bfr.Add(banner_html);
-			wiki.Html_mgr().Html_wtr().Cfg().Toc__show_(false); // disable toc, else it will show twice (once in page banner; once in html); DATE:2019-11-11
 		}
 	}
 	public static byte[] Get_banner_html(Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Pgbnr_cfg cfg, Xoa_ttl banner_ttl, Pgbnr_itm itm) {
@@ -160,16 +158,16 @@ public class Pgbnr_func extends Pf_func_base {
 		byte[] banner_file = null;   // $bannerfile->getLocalUrl();
 
 		byte[] toc_html = null;
-		if (hctx.Mode_is_hdump()) {
-			gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_tag(tmp_bfr, true);
-			toc_html = tmp_bfr.To_bry_and_clear();
-			banner_file = Bry_.Add(gplx.xowa.htmls.hrefs.Xoh_href_.Bry__wiki, gplx.xowa.wikis.nss.Xow_ns_.Bry__file, Byte_ascii.Colon_bry
-				, Gfo_url_encoder_.Href.Encode(banner_ttl.Full_db()));	// NOTE: must encode so "'" becomes "%27", not "&#39;"; PAGE:en.v:'s-Hertogenbosch; DATE:2016-07-12
-		}
-		else {
+		//if (hctx.Mode_is_hdump()) {
+		//	gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_tag(tmp_bfr, true);
+		//	toc_html = tmp_bfr.To_bry_and_clear();
+		//	banner_file = Bry_.Add(gplx.xowa.htmls.hrefs.Xoh_href_.Bry__wiki, gplx.xowa.wikis.nss.Xow_ns_.Bry__file, Byte_ascii.Colon_bry
+		//		, Gfo_url_encoder_.Href.Encode(banner_ttl.Full_db()));	// NOTE: must encode so "'" becomes "%27", not "&#39;"; PAGE:en.v:'s-Hertogenbosch; DATE:2016-07-12
+		//}
+		//else {
 			ctx.Page().Html_data().Toc_mgr().To_html(tmp_bfr, Xoh_wtr_ctx.Basic, true);
 			toc_html = tmp_bfr.To_bry_and_clear();
-		}
+		//}
 		itm.Init_from_html(max_width, banner_file, banner_url, srcset, cfg.enable_heading_override, toc_html, isPanorama);
 
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(itm);

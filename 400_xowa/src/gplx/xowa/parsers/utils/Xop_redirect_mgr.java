@@ -78,8 +78,10 @@ public class Xop_redirect_mgr {
 			if (!redirect_itm.By_wikitext()) continue;	// ignore Special:Redirects else Special:Random will always show "redirected from"; DATE:2016-07-05
 			dirty = true;
 			if (i != 0) redirect_bfr.Add(Bry_redirect_dlm);
-			byte[] ttl_unders = redirect_itm.Ttl().Full_db();
-			byte[] ttl_spaces = Xoa_ttl.Replace_unders(ttl_unders);
+			//byte[] ttl_unders = redirect_itm.Ttl().Full_db();
+			//byte[] ttl_spaces = Xoa_ttl.Replace_unders(ttl_unders);
+			byte[] ttl_unders = redirect_itm.Ttl().Full_db_href();
+			byte[] ttl_spaces = Xoa_ttl.Replace_unders(redirect_itm.Ttl().Full_db());
 			redirect_bfr.Add(Gfh_bldr_.Bry__a_lhs_w_href)	// '<a href="'
 				.Add(Xoh_href_.Bry__wiki)					// '/wiki/'
 				.Add(ttl_unders)							// 'PageA'

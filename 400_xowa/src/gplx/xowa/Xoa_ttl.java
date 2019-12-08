@@ -106,6 +106,36 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 			return url_encoder.Encode(this.Talk_txt());
 		}
 	}
+	public byte[] Talk_href() {
+		synchronized (href_encoder) {	// LOCK:static-obj
+			return href_encoder.Encode(this.Talk_txt());
+		}
+	}
+	public byte[] Leaf_href() {
+		synchronized (href_encoder) {	// LOCK:static-obj
+			return href_encoder.Encode(this.Leaf_txt());
+		}
+	}
+	public byte[] Full_href() {
+		synchronized (href_encoder) {	// LOCK:static-obj
+			return href_encoder.Encode(full_txt);
+		}
+	}
+	public byte[] Page_href() {
+		synchronized (href_encoder) {	// LOCK:static-obj
+			return href_encoder.Encode(this.Page_txt());
+		}
+	}
+	public byte[] Full_url_url() {
+		synchronized (url_encoder) {	// LOCK:static-obj
+			return url_encoder.Encode(full_txt);
+		}
+	}
+	public byte[] Full_db_href() {
+		synchronized (href_encoder) {	// LOCK:static-obj
+			return href_encoder.Encode(this.Full_db());
+		}
+	}
 	public byte[] Subj_url() {
 		synchronized (url_encoder) {	// LOCK:static-obj
 			return url_encoder.Encode(this.Subj_txt());
@@ -286,6 +316,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		byte[] b_ary = null;
 		int cur = bgn;
 		int match_pos = -1;
+                int equal_pos = -1;
 		while (cur != end) {
 			byte b = src[cur];
 			switch (b) {
@@ -361,8 +392,14 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				case Byte_ascii.Underline: if (ltr_bgn != -1) add_ws = true; ++cur;
 					continue;	// only mark add_ws if ltr_seen; this ignores ws at bgn; also, note "continue"
 				case Byte_ascii.Question:
-					if (txt_bb_len + 1 < end)	// guard against trailing ? (which shouldn't happen)
-						qarg_bgn = txt_bb_len + 1;
+                                    if (qarg_bgn >= 0) {
+                                            if (equal_pos < qarg_bgn) 
+                                                qarg_bgn = txt_bb_len + 1;
+                                    }
+                                    else
+                                        qarg_bgn = txt_bb_len + 1;
+					//if (txt_bb_len + 1 < end)	// guard against trailing ? (which shouldn't happen)
+					//	qarg_bgn = txt_bb_len + 1;
 					break;
 				case Byte_ascii.Amp:
 					int cur2 = cur + 1;
@@ -483,13 +520,24 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				add_ws = false;
 			}
 			if (ltr_bgn == -1) ltr_bgn = txt_bb_len; // if 1st letter not seen, mark 1st letter					
-			if		(b_ary == null) {bfr.Add_byte(b); ++txt_bb_len;} // add to bfr
-			else					{bfr.Add(b_ary); txt_bb_len += b_ary.length; b_ary = null; cur = match_pos;}	// NOTE: b_ary != null only for amp_trie
+			if (b_ary == null) {
+                            bfr.Add_byte(b);
+                            if (b == Byte_ascii.Eq)
+				equal_pos = txt_bb_len;
+                            ++txt_bb_len;
+                        } // add to bfr
+                        else {
+                            bfr.Add(b_ary);
+                            txt_bb_len += b_ary.length;
+                            b_ary = null;
+                            cur = match_pos;}	// NOTE: b_ary != null only for amp_trie
 			if (ltr_bgn_reset)  {// colon found; set ws to bgn mode; note that # and / do not reset 
 				ltr_bgn_reset = false;
 				ltr_bgn = -1;
 			}
 		}
+                if (qarg_bgn >= 0 && equal_pos < qarg_bgn)
+                    qarg_bgn = -1; // reset (if not a valid qarg string(must have '=')
 		txt_bb_len = stripwhitespace(bfr, txt_bb_len);
 		if (txt_bb_len == 0) return false;
 		if (wik_bgn == -1 && page_bgn == txt_bb_len) return false;	// if no wiki, but page_bgn is at end, then ttl is ns only; EX: "Help:"; NOTE: "fr:", "fr:Help" is allowed 

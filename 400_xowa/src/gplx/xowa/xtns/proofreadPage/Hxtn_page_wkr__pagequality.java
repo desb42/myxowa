@@ -25,7 +25,7 @@ public class Hxtn_page_wkr__pagequality implements Hxtn_page_wkr {
 		this.page_text_tbl = page_text_tbl;
 	}
 	public void Load_by_page(Xoh_page hpg, Xoa_ttl ttl, int page_id) {
-		byte[] serial = page_text_tbl.Select_text(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_wiki_itm.Tid__self, page_id);
-                hpg.Quality_tots().Deserialise(serial);
+		byte[] serial = page_text_tbl.Select_text(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Itm__pp_pagequality, page_id);
+		hpg.Quality_tots_serial_(serial);
 	}
 }

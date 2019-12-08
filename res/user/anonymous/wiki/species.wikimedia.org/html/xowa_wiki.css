@@ -1,0 +1,277 @@
+/*XOWA:MediaWiki:Common.css*/
+/* Style for horizontal lists (separator following item).
+   @source mediawiki.org/wiki/Snippets/Horizontal_lists
+   @revision 7 (2015-11-12)
+   @author [[User:Edokter]]
+ */
+.hlist dl,
+.hlist ol,
+.hlist ul {
+    margin: 0;
+    padding: 0;
+}
+/* Display list items inline */
+.hlist dd,
+.hlist dt,
+.hlist li {
+    margin: 0;
+    display: inline;
+}
+/* Display nested lists inline */
+.hlist.inline,
+.hlist.inline dl,
+.hlist.inline ol,
+.hlist.inline ul,
+.hlist dl dl, .hlist dl ol, .hlist dl ul,
+.hlist ol dl, .hlist ol ol, .hlist ol ul,
+.hlist ul dl, .hlist ul ol, .hlist ul ul {
+    display: inline;
+}
+/* Hide empty list itmes */
+.hlist .mw-empty-li {
+    display: none;
+}
+/* Generate interpuncts */
+.hlist dt:after {
+    content: ": ";
+}
+.hlist dd:after,
+.hlist li:after {
+    content: " · ";
+    font-weight: bold;
+}
+.hlist dd:last-child:after,
+.hlist dt:last-child:after,
+.hlist li:last-child:after {
+    content: none;
+}
+/* Add parentheses around nested lists */
+.hlist dd dd:first-child:before, .hlist dd dt:first-child:before, .hlist dd li:first-child:before,
+.hlist dt dd:first-child:before, .hlist dt dt:first-child:before, .hlist dt li:first-child:before,
+.hlist li dd:first-child:before, .hlist li dt:first-child:before, .hlist li li:first-child:before {
+    content: " (";
+    font-weight: normal;
+}
+.hlist dd dd:last-child:after, .hlist dd dt:last-child:after, .hlist dd li:last-child:after,
+.hlist dt dd:last-child:after, .hlist dt dt:last-child:after, .hlist dt li:last-child:after,
+.hlist li dd:last-child:after, .hlist li dt:last-child:after, .hlist li li:last-child:after {
+    content: ") ";
+    font-weight: normal;
+}
+/* Put ordinals in front of ordered list items */
+.hlist ol {
+    counter-reset: listitem;
+}
+.hlist ol > li {
+    counter-increment: listitem;
+}
+.hlist ol > li:before {
+    content: " " counter(listitem) " ";
+    white-space: nowrap;
+}
+.hlist dd ol > li:first-child:before,
+.hlist dt ol > li:first-child:before,
+.hlist li ol > li:first-child:before {
+    content: " (" counter(listitem) " ";
+}
+
+/* Make the list of references in [[Template:Reflist]] smaller */
+.references-small { 
+    font-size: 90%;
+}
+ 
+/* VALIDATOR NOTICE: the following is correct, but the W3C validator doesn't accept it */
+/* -moz-* is a vendor-specific extension (CSS 2.1 4.1.2.1) */
+/* column-count is from the CSS3 module "CSS Multi-column Layout" */
+/* Please ignore any validator errors caused by these two lines */
+.references-2column {
+    font-size: 90%;
+    -moz-column-count: 2;
+    column-count: 2;
+}
+ 
+/* Highlight clicked reference in blue to help navigation */
+ol.references > li:target,
+sup.reference:target,
+span.citation:target, cite:target { 
+    background-color: #DEF;
+}
+ 
+/* Ensure refs in table headers and the like aren't bold or italic */
+sup.reference {
+    font-weight: normal;
+    font-style: normal;
+} 
+ 
+/* Styling for citations */
+span.citation, cite {
+    font-style: normal;
+    word-wrap: break-word;
+}
+ 
+/* For linked citation numbers and document IDs, where
+   the number need not be shown on a screen or a handheld,
+   but should be included in the printed version
+*/
+@media screen, handheld, projection {
+    span.citation *.printonly, cite *.printonly {
+        display: none;
+    }
+}
+
+/*Hide main page title*/
+body.page-Main_Page #deleteconfirm,
+body.page-Main_Page #t-cite,
+body.page-Main_Page #lastmod, 
+body.page-Main_Page #siteSub,
+body.page-Main_Page #contentSub,
+body.page-Main_Page h1.firstHeading,
+body.page-Main_Page #catlinks {
+    display: none !important;
+}
+/* Cell sizes for ambox/tmbox/imbox/cmbox/ombox/fmbox/dmbox message boxes */
+th.mbox-text, td.mbox-text {   /* The message body cell(s) */
+    border: none;
+    /* @noflip */
+    padding: 0.25em 0.9em;     /* 0.9em left/right */
+    width: 100%;               /* Make all mboxes the same width regardless of text length */
+}
+td.mbox-image {                /* The left image cell */
+    border: none;
+    /* @noflip */
+    padding: 2px 0 2px 0.9em;  /* 0.9em left, 0px right */
+    text-align: center;
+}
+td.mbox-imageright {           /* The right image cell */
+    border: none;
+    /* @noflip */
+    padding: 2px 0.9em 2px 0;  /* 0px left, 0.9em right */
+    text-align: center;
+}
+td.mbox-empty-cell {           /* An empty narrow cell */
+    border: none;
+    padding: 0;
+    width: 1px;
+}
+
+/* Talk page message box styles */
+table.tmbox {
+    margin: 4px 10%;
+    border-collapse: collapse;
+    border: 1px solid #c0c090;    /* Default "notice" gray-brown */
+    background: #f8eaba;
+}
+.mediawiki .mbox-inside .tmbox { /* For tmboxes inside other templates. The "mediawiki" class ensures that */
+    margin: 2px 0;               /* this declaration overrides other styles (including mbox-small above)   */
+    width: 100%;                 /* For Safari and Opera */
+}
+.mbox-inside .tmbox.mbox-small { /* "small" tmboxes should not be small when  */
+    line-height: 1.5em;          /* also "nested", so reset styles that are   */
+    font-size: 100%;             /* set in "mbox-small" above.                */
+}
+
+table.tmbox-speedy {
+    border: 2px solid #b32424;    /* Red */
+    background: #fee7e6;             /* Pink */
+}
+table.tmbox-delete {
+    border: 2px solid #b32424;    /* Red */
+}
+table.tmbox-content {
+    border: 2px solid #f28500;    /* Orange */
+}
+table.tmbox-style {
+    border: 2px solid #fc3;    /* Yellow */
+}
+table.tmbox-move {
+    border: 2px solid #9932cc;    /* Purple */
+}
+table.tmbox-protection,
+table.tmbox-notice {
+    border: 1px solid #c0c090;    /* Gray-brown */
+}
+
+/* Other pages message box styles */
+table.ombox {
+    margin: 4px 10%;
+    border-collapse: collapse;
+    border: 1px solid #a2a9b1;       /* Default "notice" gray */
+    background: #f8f9fa;
+}
+
+table.ombox-notice {
+    border: 1px solid #a2a9b1;       /* Gray */
+}
+table.ombox-speedy {
+    border: 2px solid #b32424;    /* Red */
+    background: #fee7e6;             /* Pink */
+}
+table.ombox-delete {
+    border: 2px solid #b32424;    /* Red */
+}
+table.ombox-content {
+    border: 1px solid #f28500;    /* Orange */
+}
+table.ombox-style {
+    border: 1px solid #fc3;    /* Yellow */
+}
+table.ombox-move {
+    border: 1px solid #9932cc;    /* Purple */
+}
+table.ombox-protection {
+    border: 2px solid #a2a9b1;       /* Gray-gold */
+}
+.nowrap,
+.nowraplinks a,
+.nowraplinks .selflink {
+	white-space: nowrap;
+}
+.nowrap pre {
+	white-space: pre;
+}
+
+/* These mbox-small classes must be placed after all other
+   ambox/tmbox/ombox etc classes. "html body.mediawiki" is so
+   they override "table.ambox + table.ambox" above. */
+html body.mediawiki .mbox-small {   /* For the "small=yes" option. */
+    /* @noflip */
+    clear: right;
+    /* @noflip */
+    float: right;
+    /* @noflip */
+    margin: 4px 0 4px 1em;
+    box-sizing: border-box;
+    width: 238px;
+    font-size: 88%;
+    line-height: 1.25em;
+}
+html body.mediawiki .mbox-small-left {   /* For the "small=left" option. */
+    /* @noflip */
+    margin: 4px 1em 4px 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 238px;
+    border-collapse: collapse;
+    font-size: 88%;
+    line-height: 1.25em;
+}
+
+/*XOWA:MediaWiki:Vector.css*/
+/* edit this file to customize the monobook skin for the entire site */
+div#logo, div#logo a, div#logo a:hover {
+    height: 180px;
+}
+
+div#panel {
+    padding-top: 20px;
+}
+
+/* bypassing bug 2020 - from Yiddish Wikipedia */
+ul {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+}
+ol {
+    margin-left: 2.4em;
+    margin-right: 2.4em;
+}

@@ -36,7 +36,8 @@ public class Xopg_html_data {
 	public boolean				Mode_wtxt_shown() {synchronized (this) {return mode_wtxt_shown;}} public void Mode_wtxt_shown_y_() {synchronized (this) {this.mode_wtxt_shown = true;}} private boolean mode_wtxt_shown; 
 	public byte[]				Display_ttl_vnt() {return display_ttl_vnt;} public void Display_ttl_vnt_(byte[] v) {display_ttl_vnt = v;} private byte[] display_ttl_vnt;
 	public byte[]				Content_sub() {return content_sub;} public void Content_sub_(byte[] v) {content_sub = v;} private byte[] content_sub;
-	public byte[]				Pgbnr_bread() {return pgbnr_bread;} public void Pgbnr_bread_(byte[] v) {pgbnr_bread = v;} private byte[] pgbnr_bread;
+	public byte[]				Pgbnr_isin() {return pgbnr_isin;} public void Pgbnr_isin_(byte[] v) {pgbnr_isin = v;} private byte[] pgbnr_isin = null;
+	public byte[]				Pgbnr_bry() {return pgbnr_bry;} public void Pgbnr_bry_(byte[] v) {pgbnr_bry = v;} private byte[] pgbnr_bry = null;
 	public Xopg_page_heading	Page_heading() {return page_heading;} private final    Xopg_page_heading page_heading = new Xopg_page_heading();
 	public String				Bmk_pos() {return html_bmk_pos;} public void Bmk_pos_(String v) {html_bmk_pos = v;} private String html_bmk_pos;
 	public Bry_bfr				Portal_div_xtn() {return portal_div_xtn;} private Bry_bfr portal_div_xtn = Bry_bfr_.Reset(255);
@@ -90,6 +91,8 @@ public class Xopg_html_data {
 		custom_html = custom_tab_name = null;
 		indicators.Clear();
 		this.mode_wtxt_shown = false;
+		pgbnr_isin = null;
+		pgbnr_bry = null;
 	}
 	public void Init_by_page(Xoa_ttl ttl) {
 		redlink_list.Disabled_(ttl.Ns().Id_is_module());

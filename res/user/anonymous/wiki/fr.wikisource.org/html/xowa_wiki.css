@@ -1,0 +1,1073 @@
+/*XOWA:MediaWiki:Common.css*/
+/* CSS placed here will be applied to all skins */
+
+/* Éviter les soulignés et la modification de curseur pour <abbr title="...">...</abbr> */
+abbr[title] {
+    border-bottom:inherit;
+    text-decoration:inherit;
+    cursor:inherit;
+}
+
+/* Interligne */
+ 
+/* Éviter d'obtenir un interlignage de taille variable. */
+.reference, .exposant { 
+ vertical-align:text-top;
+ position:relative;
+ font-size:.8em;
+ top:-5px;
+}
+
+/* mediawiki définit sup.reference en inline-block, cela force une identation de 2em hérité de .pagetext > p  */
+sup.reference {
+   display:inline !important;
+}
+
+
+/* --- GÉNÉRAL --- */
+
+#content {
+  text-align: justify;
+}
+
+.catlinks {
+    text-align: left;
+}
+ 
+/* éléments du modèle DébutTexte */
+#text-wrap {
+ margin-left:3em; 
+ position:relative;
+}
+#text-container {
+ width:100%;
+}
+#text {
+ text-align:justify;
+ width:36em;
+ margin:0px auto;
+}
+#text p {
+  text-indent: 2em;
+}
+#text pre {
+  background-color: #ffffff;
+  font-family: sans-serif;
+  line-height: 150%;
+  border: 0px;
+  padding-left: 2em;
+  margin: 0;
+  white-space: pre;
+}
+
+/**
+ * Allow limiting of which header levels are shown in a TOC;
+ * <div class="toclimit-3">, for instance, will limit to
+ * showing ==headings== and ===headings=== but no further.
+ * Used in [[Template:TOCright]]
+ */
+.toclimit-2 .toclevel-1 ul,
+.toclimit-3 .toclevel-2 ul,
+.toclimit-4 .toclevel-3 ul,
+.toclimit-5 .toclevel-4 ul,
+.toclimit-6 .toclevel-5 ul,
+.toclimit-7 .toclevel-6 ul {
+  display: none;
+}
+
+/* classe utilisée pour utiliser une image comme un lien, par exemple pour l'icône livre dans le modèle L2S */
+span.imagelink > a > img:hover{ border-bottom: 1px solid #0645AD;}
+
+
+.romanlist ol {
+ list-style-type:lower-roman;
+}
+
+
+/* Extension:Babel, personnalisation */
+.mw-babel-wrapper {
+}
+.mw-babel-header {
+ text-align: center;
+}
+.mw-babel-footer {
+ text-align: center;
+}
+
+/*
+ * classes utilisées par MediaWiki:Proofreadpage_header_template
+ */
+
+#headertemplate {
+ text-align: center;
+}
+.headerlabel {
+ display:none;
+}
+.headertemplate {
+ width: 98%; 
+ padding:0.5em; 
+ border-top: 1px solid #A0A0A0; 
+ background-color: #f4f0e5; 
+}
+.headertemplate-journal {
+  border-bottom: 1px solid #CCCCCC; 
+  background-color: #f4f4f4; 
+  padding: 0.5em; 
+  width: 98%;
+}
+.headertemplate-author { padding-top:0.5em; padding-bottom:0.4em; font-size:100%; font-weight:bold; }
+.headertemplate-title { padding-top:0.4em; padding-bottom:0.4em; font-size:120%; font-weight:bold; }
+.headertemplate-reference { padding-top:0.4em; padding-bottom:0.5em; font-size:90%; }
+
+.footertemplate {
+ width: 98%; 
+ padding-left: 0.5em;
+ padding-right: 0.5em;
+ padding-top: 0.2em;
+ padding-bottom: 0.2em;
+ border-top: 1px solid #A0A0A0;
+ border-bottom: 1px solid #A0A0A0;
+ background-color: #f8f8f0;
+ text-align: center;
+ font-size:90%;
+}
+
+
+.references { 
+ color:darkslategray; 
+ font-size:85%; 
+ border-style:solid; 
+ border-width:1px; 
+ border-color:whitesmoke; 
+ background-color:snow; 
+ padding:auto; 
+ margin-top:20px;
+ border-top: solid 0.2em silver !important; 
+ padding-top: 1em !important; 
+}
+
+/* supprimer l'indentation du premier paragraphe des références, ne matche que le code ref follow= */
+.references p:first-child {
+   text-indent:0em;
+}
+
+/* voir la cible d'une ancre */
+span.HighlightedAnchor:target {
+    background-color: #DEF;
+}
+
+/* Mise en surbrillance de la note ou de l'ouvrage de référence cliqué
+   pour faciliter la navigation (de en.wikipedia). */
+ol.references > li:target { background:#DDEEFF; }
+ 
+/* suppression des numéros dans le sommaire */
+span.tocnumber { display:none;}
+
+/* suppression du lien créer un livre */
+#coll-create_a_book { display:none; speak:none;}
+#coll-download-as-rdf2latex { display:none; speak:none; }
+
+/* suppression du sous-titre pour version imprimable */
+h3#siteSub { display:none; }
+.printfooter { display:none; }
+
+/* utilisé par le modèle:1er par exemple */
+.abbr {
+  border-bottom : none;
+  cursor : default;
+}
+
+/* classe verse : utiliser avec <poem> pour les textes en vers */
+
+.verse {
+  text-align: left;
+  margin:0px auto;
+  padding-left: 2em;
+}
+.verse p { text-indent: 0em
+}
+.verse pre {
+  background-color: #ffffff;
+  font-family: sans-serif;
+  line-height: 150%;
+  border: 0px;
+  padding-left: 2em;
+  margin: 0;
+  white-space: pre;
+}
+
+
+/* --- NAMESPACE PAGE --- */
+
+/* classe par défaut */
+.pagetext {
+  position: relative;
+  max-width: 36em;
+  text-align: justify;
+}
+.pagetext p {
+  text-indent: 2em
+}
+.pagetext blockquote {
+  margin: 0.5em 0em;
+}
+/* la numérotation des pages doit avoir la même largeur que .pagetext */
+#pageheader {
+  width: 36em !important;
+  margin: .2em 0 !important;
+}
+/* même largeur que .pagetext, pour voir plus facilement si une image est correctement centré */
+.prp-page-qualityheader {
+  max-width: 36em;
+}
+
+/* largeur des pages */
+body.ns-104 .largeur54 {  width: 54em; }
+body.ns-104 .largeur20 {  width: 20em; }
+
+body.ns-104 .sidenote-left { position:absolute; left:0; width:6em; padding-right:1em; text-indent:0em; text-align:left;}
+body.ns-104 .sidenote-right { position:absolute; right:0; width:6em; padding-left:1em; text-indent:0em; text-align:left;}
+
+body.ns-104 h2, #text-wrap h2{
+  text-align:center;
+  border-bottom:none;
+  font-weight:normal;
+  font-size:110%;
+  margin-top:1em;
+  margin-bottom:1em;
+}
+
+body.ns-104 h2 .editsection, #text-wrap h2 .editsection{
+  display:none
+}
+
+/*
+ * twocolumn et deuxcolonnes 
+ *  - twocolumn ne fait rien, est sans-doute utilisé en conjonction avec un modèle (à documenter)
+ *  - préférer deuxcolonnes : cette classe créé des vraies colonnes.
+ */
+
+.twocolumn {
+  width: 54em;
+  text-align: justify;
+}
+.twocolumn p {
+  text-indent: 2em
+}
+.twocolumn blockquote {
+  margin: 0.5em 0em;
+}
+
+body.ns-104 .deuxcolonnes {
+ -moz-column-count:2; -moz-column-gap:3em;
+ -webkit-column-count:2; -webkit-column-gap:3em;
+ -o-column-count:2; -o-column-gap:3em;
+ column-count:2; column-gap:3em;
+}
+
+/* --- MISE EN FORME --- */
+
+/* Texte en petites majuscules */
+.romain {
+  text-transform:lowercase;
+  font-variant:small-caps;
+}
+
+/* Texte avec une majuscule à la première lettre de chaque mot */
+.personnage
+{
+  font-weight:bold;
+  font-variant:small-caps;
+}
+
+.lignecapitale:first-line
+{
+font-variant:small-caps;
+font-size:120%;
+text-align: justify;
+}
+
+/* Classe vocabulaire : Modèle V (liens vers Wiktionnaire) */
+.vocabulaire { color : #000000; } /* noir, comme le texte général, par défaut */
+.vocabulaire a:link {color:black;} /* pour IE */
+
+/* Classe encyclopedie : Modèle W (liens vers Wikipédia) */
+.encyclopedie { color : #000000; } /* noir, comme le texte général, par défaut */
+.encyclopedie a:link {color:black;} /* pour IE */
+
+/* Classe lang : Texte en langue étrangère */
+.lang {color:#800000}
+
+
+/* 
+* ancienne classe utilisée pour les références ; périmée ? 
+*/
+.references-small { font-size: 90%;}
+
+
+/* 
+ * classe prose : PERIMÉE, utiliser text 
+*/
+
+.prose {
+  width: 36em;
+  text-align: justify;
+  margin:0px auto;
+}
+.prose p {
+  text-indent: 2em
+}
+
+
+/* --- CLASSES ACTIVES --- */
+
+/* classe text : colonne centrée de texte avec indentation */
+
+.text {
+  max-width: 36em;
+  text-align: justify;
+  margin:0px auto;
+}
+.text p {
+  text-indent: 2em;
+}
+.text pre {
+  background-color: #ffffff;
+  font-family: sans-serif;
+  line-height: 150%;
+  border: 0px;
+  padding-left: 2em;
+  margin: 0;
+  white-space: pre;
+}
+
+
+/* classe centertext : PÉRIMÉE, UTILISER TEXT */
+.centertext {
+  width: 36em;
+  text-align: justify;
+  margin:0px auto;
+}
+.centertext p {
+  text-indent: 0em;
+}
+
+/* classe lefttext : PÉRIMÉE, utiliser text */
+
+.lefttext {
+  max-width: 36em;
+  text-align: justify;
+  margin:0px auto;
+}
+.lefttext p {
+  text-indent: 2em
+}
+
+
+/* affichage de div comme des tableaux avec rétrocompatibilité ie 6 et 7 */
+html.client-msie-6 .table-cell-left{
+  float:left;
+}
+html.client-msie-6 .table-cell-right{
+  float:right;
+}
+html.client-msie-7 .table-cell-left{
+  float:left;
+}
+html.client-msie-7 .table-cell-right{
+  float:right;
+}
+
+.table-cell-left {
+  display:table-cell;
+}
+.table-cell-right {
+  display:table-cell;
+}
+
+/* indentation, voir le modèle:Alinéa */
+.alinea p {
+  text-indent: inherit;
+}
+
+/* indentation négative, voir le modèle:AlinéaNégatif */
+.alineanegatif {
+  text-indent: -2em;
+  padding-left:2em;
+}
+.alineanegatif p {
+  text-indent: -2em ! important;
+}
+
+/* classe indentation : création d'une indentation dans une div quelconque */
+
+.indentation {
+  text-indent: 2em;
+}
+
+/* Quelques classes aidant à la création de table des matières pour deux types
+ * de tables, à deux ou trois colonnes.
+ */
+.tdm_2 tr > td:first-child {
+   vertical-align:top;
+}
+
+.tdm_2 tr > td:first-child + td,
+.tdm_3 tr > td:first-child + td + td {
+   vertical-align:bottom;
+   text-align:right;
+}
+
+.tdm_3 tr > td:first-child {
+   vertical-align:top;
+   text-align:right;
+}
+
+.tdm_3 tr > td:first-child + td {
+   vertical-align:bottom;
+}
+
+.tan_1 tr > td:first-child,
+.tan_2 tr > td:first-child + td  {
+   text-indent:-1.5em;
+   padding-left:1.5em;
+   text-align:justify;
+}
+
+/* classe titre */
+
+.titre {
+  padding: 2em;
+  background: #F0F0E0;
+  border: 1px solid #808080;
+}
+
+
+
+
+
+/* Alignement de la barre de titre */
+
+   h1 {
+      text-align: left;
+      }
+
+
+/* === Prettytable === */
+
+   table.prettytable {
+      margin: 1em 1em 1em 0;
+      background: #f9f9f9;
+      border: 1px #AAA solid;
+      border-collapse: collapse;
+      }
+
+   table.prettytable th, table.prettytable td {
+      border: 1px #AAA solid;
+      padding: 0.2em;
+      }
+
+   table.prettytable th {
+      background: #f2f2f2;
+      text-align: center;
+      }
+
+   table.prettytable caption {
+      margin-left: inherit;
+      margin-right: inherit;
+      }
+
+/* Alignement du tableau : flottant à droite ou à gauche. On peut aligner à droite ou à gauche sans flottement en ajoutant le modèle:clr en bas du tableau, ou en précisant style="float: none" dans l'en-tête du tableau. */
+
+   table.gauche {
+      float:left;
+      margin: 0em 1em 1em 0em;
+      }
+   table.droite {
+      float:right;
+      margin: 0em 0em 1em 1em;
+      }
+
+/* === Taille et famille des polices pour les écritures non-latines ; voir aussi le modèle:lang. === */
+ 
+   .lang-grc, .lang-el {
+      font-family: "DejaVu Sans", Athena, Gentium, "Palatino Linotype", "Arial Unicode MS", "Lucida Sans Unicode", "Lucida Grande", Code2000, sans-serif;
+   }
+
+   .lang-he {
+      font-family: "SBL Hebrew", "Ezra SIL SR", "Ezra SIL", Cardo, "Chrysanthi Unicode", "TITUS Cyberbit Basic", "Arial Unicode MS", Narkisim, "Times New Roman";
+      font-size: 120%;
+   }
+
+
+/* #### modèle:Proofreadpage header template */
+        table.headertemplate {
+                width:100%;
+                margin-bottom:5px;
+                border:1px solid #ADA;
+                background:#E4F2E4;
+                text-align:center;
+                font-size:0.9em;
+                }
+
+        .headertemplate .header_backlink, .headertemplate .header_forelink {
+                width:20%; font-size:0.9em;
+                } 
+
+        .header_notes {
+                width:100%;
+                border-bottom:1px solid #A88;
+                background:#FAFAFF;
+                font-size:0.9em;
+                }
+
+        .headertemplate .header_title { width: 60%; }
+        .headertemplate .header_backlink { text-align:left; }
+        .headertemplate .header_forelink { text-align:right; }
+
+.alarm {
+    font-style:normal;
+    font-weight:bold;
+    color:#F00;
+    }
+
+/*************************************************/
+/*                   Infobox V2                  */
+/*************************************************/
+ 
+.infobox_v2 {
+ background: #f9f9f9;
+ color: #000;
+ font-size:90%;
+ line-height:1.1em; 
+ float:right;
+ clear:right;
+ margin:0 0 .5em 1em;
+ width:300px;
+ border: 1px solid #aaa;
+ padding: 0.1em;
+}
+ 
+.infobox_v2 th {
+ vertical-align:top;
+ text-align:left;
+}
+ 
+.infobox_v2 th a {
+ color:black;  /* désactive la couleur des liens à gauche */
+}
+ 
+.infobox_v2 .entete {
+ height:45px;
+ vertical-align:middle;
+ text-align:center;
+ font-size:150%; 
+ font-weight:bolder;
+ line-height:1.2em;
+ color:#000
+}
+ 
+/* graphiques transparents d'entêtes des infobox V2 */
+.entete.defaut       {}
+.entete.auteur  {background: url("upload.wikimedia.org/wikipedia/commons/1/1e/Picto_infobox_auteur.png") no-repeat top right;}
+ 
+/*************** Fin de Infobox V2 ***************/
+
+
+/*classe poem*/
+.poem { 
+	margin-bottom: 0em; 
+	margin-top: 0em; 
+	line-height: 1.6em;
+	margin-left: 2.5em;
+	text-indent: 0em;
+}
+.poem p { 
+	margin-top: 0em ! important; 
+	margin-bottom: 0em ! important; 
+	text-indent: 0em !important;
+}
+
+/*double point : 1em, pas d'espace vertical*/
+.poem dd{
+  margin-top:0px;
+  margin-bottom:0px;
+  padding-top:0px;
+  padding-bottom:0px;
+  margin-left:1em;
+}
+.poem dl{
+  margin-top:0px;
+  margin-bottom:0px;
+  padding-top:0px;
+  padding-bottom:0px;
+}
+
+.poem .center {
+  margin-left: -2.5em;
+  text-align: center;
+}
+
+
+
+/*réduction de la taille des titres dans l'espace page*/
+body.ns-104 h1.firstHeading { font-size:150%; }
+
+/*copyright warning*/
+body div#copyrightwarning_page { display:none; }
+body.ns-104 div#copyrightwarning_page { display:inline; }
+body.ns-104 div#copyrightwarning_default { display:none; }
+
+
+
+/*espace auteur*/
+body.ns-102.action-view h1.firstHeading, body.ns-102.action-submit h1.firstHeading { display:none; }
+
+body.ns-102 h2 {
+  border-bottom: none;
+  font-size: 120%;
+  margin-top: 1.2em;
+}
+
+body.ns-102 h2 .mw-headline{
+  font-weight:bold
+}
+
+body.ns-102 h2 + h3 {
+  padding-top:0;
+  margin-top:0;
+}
+
+body.ns-102 h3{
+  font-size: 100%;
+}
+
+body.ns-102 h3 .mw-headline{
+  font-weight:bold
+}
+
+body.ns-102 h4{
+  font-size: 100%;
+}
+
+body.ns-102 h4 .mw-headline{
+  font-style:italic;
+  font-weight:normal
+}
+
+/* indicateurs de qualité de proofreadpage */ 
+.quality4 { background:#90ff90; }
+.quality3 { background:#ffe867; }
+.quality2 { background:#b0b0ff; }
+.quality1 { background:#ffa0a0; }
+.quality0 { background:#dddddd; }
+/* pas sur sommaire */ 
+div#sommaire a.quality4 { background:#ffffff; }
+div#sommaire a.quality3 { background:#ffffff; }
+div#sommaire a.quality2 { background:#ffffff; }
+div#sommaire a.quality1 { background:#ffffff; }
+div#sommaire a.quality0 { background:#ffffff; }
+
+
+body.ns-104 .coquille { color:#1e761e; }
+.ns-104 .editsection { visibility:hidden; }
+
+
+.lettrine p:first-child:first-letter {
+    float:left; display:block;
+    /* background-color: #eeeeee; */
+    line-height:30px;
+    /* padding: 5px; */
+    /*color: #237ab2;*/
+    font-weight:bold; 
+    font-size:40px;
+}
+
+p.lettrine {
+    background-color: #eeeeee; 
+}
+
+/* 
+ * classe pour textes avec ligatures 
+ * voir : http://hacks.mozilla.org/2009/06/beautiful-fonts-with-font-face/
+ */
+
+.ligatures {
+     font-family: "Linux Libertine";
+     font-size:1.4em;
+     line-height:1.2;
+}
+
+
+
+
+
+/* BOÎTES DÉROULANTES */
+
+/* Styles des boîtes déroulantes, voir [[Modèle:Boîte déroulante/documentation]]. */
+div.NavFrame {
+margin:0;
+padding:2px;
+border:1px #AAA;
+text-align:center;
+border-collapse:collapse;
+font-size:95%;
+}
+/* monobookocentré début */
+div.NavFrame + div.NavFrame {
+border-top-style:hidden;
+}
+
+div.NavPic {
+background:#FFF;
+margin:0;
+padding:2px;
+float:left;
+}
+
+div.NavFrame div.NavHead {
+height:1.6em;
+font-weight:bold;
+font-size:100%;
+background:#EFEFEF;
+}
+
+div.NavFrame p,
+div.NavFrame div.NavContent,
+div.NavFrame div.NavContent p { font-size:100% }
+
+div.NavEnd {
+margin:0;
+padding:0;
+line-height:1px;
+clear:both;
+}
+
+.NavToggle {
+font-size:x-small;
+float:right;
+} 
+/* monobookocentré fin */
+
+/* fin boîtes déroulantes */
+
+/* Menu de navigation pour Modèle:Menu de navigation */
+
+.navigation { 
+      margin: 0; 
+      padding: 0; 
+      list-style: none; 
+      width: 17em; 
+      font: 1.1em; 
+      } 
+   .navigation a, .navigation span { 
+      display: block; 
+      padding-left: 10px;
+      } 
+   .navigation .toggleSubMenu a, .navigation .toggleSubMenu span { 
+      background-image: url("upload.wikimedia.org/wikipedia/commons/f/f7/Arrow-down-navmenu.png"); 
+      background-position : right;
+      background-repeat: no-repeat;
+      } 
+   .navigation .open a, .navigation .open span { 
+      background-image: url("upload.wikimedia.org/wikipedia/commons/0/01/Arrow-up-navmenu.png"); 
+      background-position : right;
+      background-repeat: no-repeat;
+      } 
+   .navigation a:hover, .navigation a:focus, .navigation a:active { 
+      text-decoration: underline; 
+      } 
+   .navigation .subMenu { 
+      list-style: none;
+      font-size: 1em; 
+      background-color: #ccc;
+      margin: 0; 
+      padding-left: 1em;  
+      } 
+   .navigation .subMenuA { 
+      border-top: 1px solid #C0C0C0;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      } 
+   .navigation ul.subMenu a { 
+      background: none; 
+      padding-left: 10px; 
+      }
+   .navigation ul.subMenu li { 
+      position:relative;
+      }
+   .navigation .selflink { 
+      padding-left: 10px;
+      }
+
+/* fin menu de navigation */
+
+
+/* LOGO WIKISOURCE TRANSPARENT */
+.logo_transparent {
+  background:url("upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Wikisource-logo-200px-transparent.png/190px-Wikisource-logo-200px-transparent.png")
+}
+ 
+/* DEGRADÉ POUR BOUTONS ET AUTRES USAGES */
+.degrade { 
+  background-image:url("upload.wikimedia.org/wikipedia/commons/f/fb/Gradient_43px.png"); background-position:top; background-repeat:repeat-x;}
+ 
+/* BOÎTES D'AVANCEMENT */
+/* Pour les boites d'avancement, voir [[Modèle:Avancement]]. */
+.avance_boite {
+ position:relative;
+ margin:0;
+ padding:0;
+ width:100px;
+ height:16px;
+ background:#D3D3D3;
+ border:solid 1px gray;
+}
+ 
+.avance_barre {
+ position:relative;
+ margin:0;
+ padding:0;
+ height:100%;
+ background:#A0A0FF;
+ border:0;
+ vertical-align:middle;
+}
+ 
+.avance_texte {
+ position:absolute;
+ top:50%;
+ left:0;
+ width:100px;
+ height:100%;
+ padding:0;
+ border:0;
+ margin:0;
+ margin-top:-0.5em;
+ text-align:center;
+ font-size:14px;
+ line-height:1em;
+}
+
+/* BANDEAUX DE PORTAIL */
+/* style par défaut des bandeaux de portail
+*/
+
+#bandeau-portail {
+  border: solid #AAAAAA 1px;
+  padding: 4px;
+  background-color: #F9F9F9;
+  text-align: center;
+  margin-top: 0.5em;
+  margin-left: 0;
+  clear: both;
+}
+ 
+#liste-portail {
+  padding: 4px;
+  margin-left: 0;
+  clear: both;
+}
+ 
+#liste-portail li {display: inline}
+#bandeau-portail li {display: inline}
+.bandeau-portail-element {white-space: nowrap; margin: auto 1em}
+.bandeau-portail-icone {margin-right: 0.5em}
+.bandeau-portail-texte {font-weight: bold}
+
+/* Table Sorting */
+table.jquery-tablesorter th.headerSort {
+background-position:left;
+padding-left: 1em;
+}
+
+/* @source en.wikipedia.org/wiki/MediaWiki:Common.css
+   @maintainer: [[User:Edokter]]
+   @revision: 3.1
+*/
+.skin-monobook .hlist dl,
+.skin-modern .hlist dl,
+.skin-vector .hlist dl {
+    line-height: 1.5em;
+}
+.hlist dl,
+.hlist ol,
+.hlist ul {
+    margin: 0;
+    padding: 0;
+}
+/* Display list items inline and make them nowrap */
+.hlist dd,
+.hlist dt,
+.hlist li {
+    margin: 0;
+    display: inline;
+    white-space: nowrap;
+}
+/* Allow wrapping for list items (in tight spaces) */
+.hlist.hwrap dd,
+.hlist.hwrap dt,
+.hlist.hwrap li {
+    white-space: normal;
+}
+/* Display nested lists inline and allow them to wrap */
+.hlist dl dl, .hlist dl ol, .hlist dl ul,
+.hlist ol dl, .hlist ol ol, .hlist ol ul,
+.hlist ul dl, .hlist ul ol, .hlist ul ul {
+    display: inline;
+    white-space: normal;
+}
+/* Generate interpuncts */
+.hlist dt:after {
+    content: ":";
+}
+.hlist dd:after,
+.hlist li:after {
+    content: " ·";
+    font-weight: bold;
+}
+.hlist dd:last-child:after,
+.hlist dt:last-child:after,
+.hlist li:last-child:after {
+    content: none;
+}
+/* For IE8 */
+.hlist dd.hlist-last-child:after,
+.hlist dt.hlist-last-child:after,
+.hlist li.hlist-last-child:after {
+    content: none;
+}
+/* Add parentheses around nested lists */
+.hlist dd dd:first-child:before, .hlist dd dt:first-child:before, .hlist dd li:first-child:before,
+.hlist dt dd:first-child:before, .hlist dt dt:first-child:before, .hlist dt li:first-child:before,
+.hlist li dd:first-child:before, .hlist li dt:first-child:before, .hlist li li:first-child:before {
+    content: "(";
+    font-weight: normal;
+}
+.hlist dd dd:last-child:after, .hlist dd dt:last-child:after, .hlist dd li:last-child:after,
+.hlist dt dd:last-child:after, .hlist dt dt:last-child:after, .hlist dt li:last-child:after,
+.hlist li dd:last-child:after, .hlist li dt:last-child:after, .hlist li li:last-child:after {
+    content: ")";
+    font-weight: normal;
+}
+/* For IE8 */
+.hlist dd dd.hlist-last-child:after, .hlist dd dt.hlist-last-child:after, .hlist dd li.hlist-last-child:after,
+.hlist dt dd.hlist-last-child:after, .hlist dt dt.hlist-last-child:after, .hlist dt li.hlist-last-child:after,
+.hlist li dd.hlist-last-child:after, .hlist li dt.hlist-last-child:after, .hlist li li.hlist-last-child:after {
+    content: ")";
+    font-weight: normal;
+}
+/* Put numbers in front of ordered list items */
+.hlist.hnum ol {
+    counter-reset: list-item;
+}
+.hlist.hnum ol > li {
+    counter-increment: list-item;
+}
+.hlist.hnum ol > li:before {
+    content: counter(list-item) " ";
+}
+.hlist.hnum dd ol > li:first-child:before,
+.hlist.hnum dt ol > li:first-child:before,
+.hlist.hnum li ol > li:first-child:before {
+    content: "(" counter(list-item) " ";
+}
+
+
+
+ 
+/******************************
+ * Style pour la page d'accueil
+ ******************************/
+
+/* Retire le nom de la page d'accueil */
+.action-view.page-Wikisource_Accueil #firstHeading {
+	display: none;
+}
+
+.wikisource-accueil-logo {
+	position: relative;
+}
+.wikisource-accueil-titre {
+	position: absolute; left: 115px; top: 28px; padding: 0;
+}
+.wikisource-accueil-soustitre {
+	position: absolute; left: 180px; top: 95px; padding: 0;
+}
+.wikisource-accueil-colonne60 {
+	float: left;
+	width: 60%;
+}
+.wikisource-accueil-colonne40 {
+	float: left;
+	width: 40%;
+}
+.wikisource-accueil-colonne-gauche {
+	padding-right: 5px;
+}
+.wikisource-accueil-colonne-droite {
+	padding-left: 5px;
+}
+/**
+ * Adaptation pour mobile et petite résolution
+ */
+ 
+@media all and (max-width: 799px) {
+	.wikisource-accueil-logo {
+	position: static;
+	}
+	.wikisource-accueil-titre {
+	position: static; left: auto; top: auto; padding: 0;
+	}
+	.wikisource-accueil-soustitre {
+	position: static; left: auto; top: auto; padding: 0;
+	}
+	.wikisource-accueil-colonne60 {
+		float: inherit;
+		width: inherit;
+	}
+	.wikisource-accueil-colonne40 {
+		float: inherit;
+		width: inherit;
+	}
+	.wikisource-accueil-colonne-gauche {
+		padding-right: 0;
+	}
+	.wikisource-accueil-colonne-droite {
+		padding-left: 0;
+	}
+	.wikisource-accueil-m-superflu {
+		display: none;
+	}
+}
+
+#mf-extrait {
+	max-height: 80em;
+	overflow: auto;
+}
+
+/* Search box alignment */
+.searchbox p {
+	text-indent: 0 !important;
+}
+
+/* Texte en petites capitales {{sc}} et {{sct}} 
+ * pour alléger le code HTML des pages à avec de très nombreuses utilisations
+ */
+.sc, .sct{
+	font-variant:small-caps;
+}
+.sct{
+	letter-spacing:.1em;
+	word-spacing:.1em;
+}
+
+/* Petite image placée à gauche du modèle {{CorrDiscussion}} 
+ * pour alléger le code HTML des longues listes de corrections.
+ * Exemple sur Discussion Livre:Dictionnaire_de_Trévoux,_1771,_I.djvu
+ */
+.label-correction{
+	background:url("upload.wikimedia.org/wikipedia/commons/thumb/9/91/Book_important2.svg/15px-Book_important2.svg.png") no-repeat left center;
+	padding-left:20px;
+}

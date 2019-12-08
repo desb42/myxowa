@@ -72,9 +72,13 @@ public class Gfo_url_parser {
 		boolean encoded = false;
 		int src_zth = src_end - 1;
 		int anch_bgn = -1, qarg_bgn = -1, seg_bgn = pos;
+                int equal_pos = -1;
 		for (int i = pos; i < src_end; ++i) {
 			byte b = src[i];
 			switch (b) {
+				case Byte_ascii.Eq:
+					equal_pos = i;
+                                        break;
 				case Byte_ascii.Slash:
 					if (qarg_bgn == -1) {		// ignore slash in qargs
 						segs_list.Add(Make_bry(encoded, src, seg_bgn, i));
@@ -88,14 +92,21 @@ public class Gfo_url_parser {
 					i = src_end;
 					break;
 				case Byte_ascii.Question:		// set qarg to last "?"; EX: A?B?C -> C
-					if (i == src_zth) continue;	// ignore ? at EOS; EX: "A?"
-					qarg_bgn = i;
+                                        if (qarg_bgn >= 0) {
+                                            if (equal_pos < qarg_bgn) 
+                                                qarg_bgn = i;
+                                        }
+                                        else
+//					if (i == src_zth) continue;	// ignore ? at EOS; EX: "A?"
+                                            qarg_bgn = i;
 					break;
 				case Byte_ascii.Percent:
 					encoded = true;
 					break;
 			}
 		}
+                if (qarg_bgn >= 0 && equal_pos < qarg_bgn)
+                    qarg_bgn = -1; // reset (if not a valid qarg string(must have '=')
 		
 		int seg_end = src_end;	// set seg_end to src_end; EX: "https://site/A" -> "A"; seg_end may be overriden if "#" or "?" exists
 

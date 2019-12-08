@@ -22,6 +22,7 @@ import gplx.xowa.wikis.nss.*;
 import gplx.xowa.xtns.lst.*; import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.amps.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*; import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.parsers.lnkis.files.*;
+import gplx.xowa.mediawiki.*;
 public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	private boolean xtn_literal = false;
 	private Xop_root_tkn xtn_root;
@@ -100,6 +101,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			full_bfr.Mkr_rls();
 		}
 		page.Html_data().Indicators().Enabled_(Bool_.Y);
+                page.Pp_indexpage_(index_ttl.Full_db());
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		if (xtn_literal)
@@ -144,7 +146,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		}
 		byte[] rv = Bry_.Empty;
 		Pp_pagelist_nde pl_nde = null;
-		if (bgn_page_bry != null || end_page_bry != null || include != null) {	// from, to, or include specified				
+		if (bgn_page_bry != null || end_page_bry != null || include != null) {	// from, to, or include specified
 			//Xoa_ttl[] ttls = null;
 			List_adp list = null;
 			if (	index_page_xndes_len > 0		// pagelist exists; don't get from args
@@ -173,8 +175,9 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		else {
 			header = Toc_bry;
 		}
-		if (header != null)
+		if (header != null && XophpBool.is_true(header)) {// check if header is true; ignore values like header=0; ISSUE#:622; DATE:2019-11-28
 			rv = Bld_wikitext_for_header(full_bfr, index_page, pl_nde, rv);
+		}
 		// wrap the output in a div, to prevent the parser from inserting paragraphs
 		Bry_bfr page_bfr = wiki.Utl__bfr_mkr().Get_m001();
 		try {
@@ -205,7 +208,8 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	private byte[] Get_caption(Bry_bfr full_bfr, byte[] index_page_src, Xop_lnki_tkn lnki) {
 		byte[] rv = Bry_.Empty;
 		try {
-			wiki.Html_mgr().Html_wtr().Write_tkn_to_html(full_bfr, ctx, Xoh_wtr_ctx.Basic, index_page_src, null, -1, lnki.Caption_tkn());
+		// NOTE: call "Lnki_wtr().Write_caption", not "Write_tkn_to_html" else XML in caption will be escaped; ISSUE#:624 DATE:2019-11-30
+			wiki.Html_mgr().Html_wtr().Lnki_wtr().Write_caption(full_bfr, Xoh_wtr_ctx.Basic, index_page_src, lnki, lnki.Ttl());
 			rv = full_bfr.To_bry_and_clear();
 		}
 		catch (Exception e) {
@@ -247,9 +251,9 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			full_bfr.Add(Bry_toc_prv).Add(toc_prv);						// |prev=Page/1"
 		if (toc_nxt != null)
 			full_bfr.Add(Bry_toc_nxt).Add(toc_nxt);						// |next=Page/3"
-		if (bgn_page_int != -1)
+		if (bgn_page_int != -1 && pl_nde != null)
 			full_bfr.Add(Bry_page_bgn).Add(pl_nde.FormattedPageNumber(bgn_page_int));	// |from=1"
-		if (end_page_int != -1)
+		if (end_page_int != -1 && pl_nde != null)
 			full_bfr.Add(Bry_page_end).Add(pl_nde.FormattedPageNumber(end_page_int));	// |to=3"
 		List_adp invk_args  = index_page.Invk_args();
 		int invk_args_len = invk_args.Count();
@@ -424,7 +428,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				int quality = wiki.Quality().getQualityFromCatlink(ttl, wiki);
 				tots.Increment(quality);
 				if (quality != Pp_quality.Quality_without_text) {
-					page_bfr.Add(Bry_tmpl_page).Add(ttl_page_db);
+					page_bfr.Add(Bry_tmpl_page).Add(ttl.Full_db());
 					if (pl_nde != null) {
 						page_bfr.Add(Bry_page_num).Add(pl_nde.FormattedPageNumber(page_no));
 						page_bfr.Add(Bry_page_format).Add(pl_nde.FormattedPageNumber(page_no));

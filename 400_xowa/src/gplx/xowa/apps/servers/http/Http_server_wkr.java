@@ -131,6 +131,7 @@ public class Http_server_wkr implements Gfo_invk {
 					page_html = String_.Replace(page_html, "<textarea", "<textarea name=\"wpTextbox1\"");
 				}
 			}
+                        Xosrv_http_wkr_.Set_content_type(page.Content_type());
 		}
 		writeFile(page_html, "d:/des/xowa_x/html.htm");
 		Xosrv_http_wkr_.Write_response_as_html(client_wtr, Bool_.N, page_html);
@@ -194,7 +195,8 @@ public class Http_server_wkr implements Gfo_invk {
 	private static String Convert_page(String page_html, String root_dir_http, String wiki_domain) {
 		//page_html = String_.Replace(page_html, root_dir_http		, "/fsys/");
 		page_html = String_.Replace(page_html, "xowa-cmd:"			, "/exec/");
-		page_html = String_.Replace(page_html, " href=\"/wiki/"	, " href=\"/xowa/" + wiki_domain + "/wiki/");
+		//page_html = String_.Replace(page_html, " href=\"/wiki/"	, " href=\"/xowa/" + wiki_domain + "/wiki/");
+		page_html = String_.Replace(page_html, "\"/wiki/"	, "\"/xowa/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, " href='/wiki/"	, " href='/xowa/" + wiki_domain + "/wiki/");
 		//page_html = String_.Replace(page_html, "<area href=\"/wiki/"	, "<area href=\"/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, "action=\"/wiki/"	, "action=\"/xowa/" + wiki_domain + "/wiki/");
@@ -638,6 +640,7 @@ public class Http_server_wkr implements Gfo_invk {
 	private static final    int Url__fsys_len = Url__fsys.length;
 }
 class Xosrv_http_wkr_ {
+    public static void Set_content_type(byte[] content_type) {Rsp__content_type_html = content_type;}
 	public static void Write_response_as_html(Http_client_wtr client_wtr, boolean cross_domain, String html) {Write_response_as_html(client_wtr, cross_domain, Bry_.new_u8(html));}
 	public static void Write_response_as_html(Http_client_wtr client_wtr, boolean cross_domain, byte[] html) {
 		try{
@@ -673,9 +676,9 @@ class Xosrv_http_wkr_ {
 			client_wtr.Rls();
 		}
 	}
+	public static byte[] Rsp__content_type_html;
 	public static final    byte[]
 	  Rsp__http_ok				= Bry_.new_a7("HTTP/1.1 200 OK:\n")
-	, Rsp__content_type_html	= Bry_.new_a7("Content-Type: text/html; charset=utf-8\n")
 	, Rsp__http_redirect        = Bry_.new_a7("HTTP/1.1 302 Found:\n")
 	, Rsp__location             = Bry_.new_a7("Location: /") // "/" to start from root
 	;

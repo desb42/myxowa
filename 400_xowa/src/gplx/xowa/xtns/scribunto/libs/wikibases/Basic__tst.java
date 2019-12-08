@@ -25,9 +25,6 @@ public class Basic__tst {
 		wdata_fxt.Init(fxt.Parser_fxt(), false);
 		wdata_fxt.Init_lang_fallbacks("zh-hant", "zh-hk");
 	}
-	// @Test  public void GetGlobalSiteId() {
-	//	fxt.Test_scrib_proc_str(lib, Scrib_lib_wikibase.Invk_getGlobalSiteId, Object_.Ary_empty, "enwiki");
-	// }
 	@Test  public void IsValidEntityId() {
 		IsValidEntityIdCheck(Bool_.Y, "P1");
 		IsValidEntityIdCheck(Bool_.Y, "P123");
@@ -193,7 +190,16 @@ public class Basic__tst {
 		fxt.Test_scrib_proc_str(lib, Scrib_lib_wikibase.Invk_getEntityUrl, Object_.Ary("Q2"							), "https://www.wikidata.org/wiki/Special:EntityPage/Q2");
 	}
 	@Test  public void GetSetting() {
-		fxt.Test_scrib_proc_obj(lib, Scrib_lib_wikibase.Invk_getSetting, Object_.Ary("allowArbitraryDataAccess"	), true); // PAGE:en.w:Beccles DATE:2018-06-27
+		fxt.Test_scrib_proc_obj(lib, Scrib_lib_wikibase.Invk_getSetting, Object_.Ary("allowArbitraryDataAccess"), true); // PAGE:en.w:Beccles DATE:2018-06-27
+	}
+	@Test  public void GetSetting__siteGlobalID() {
+		fxt.Test_scrib_proc_obj(lib, Scrib_lib_wikibase.Invk_getSetting, Object_.Ary("siteGlobalID"), "enwiki");
+	}
+	@Test  public void IncrementStatsKey() {
+		fxt.Test_scrib_proc_obj(lib, Scrib_lib_wikibase.Invk_incrementStatsKey, Object_.Ary("wikibase.client.scribunto.wikibase.getEntityIdForCurrentPage.call"), null);
+	}
+	@Test  public void GetEntityModuleName() {
+		fxt.Test_scrib_proc_obj(lib, Scrib_lib_wikibase.Invk_getEntityModuleName, Object_.Ary("Q123"), "mw.wikibase.entity");
 	}
 }
 class Wbase_snak_utl_ {

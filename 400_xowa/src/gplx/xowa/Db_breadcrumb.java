@@ -67,12 +67,21 @@ public class Db_breadcrumb {
 			byte[] parent = (byte[])breadcrumb_list.Get_at(i);
 			if (i > 0)
 				tmp_bfr.Add_str_a7( " > " );
-			byte[] lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, parent, Xop_tkn_.Lnki_end);		// make "[[ttl]]"
+                        int colon = Bry_find_.Find_fwd(parent, Byte_ascii.Colon);
+			byte[] lnk;
+                        if (colon > 0)
+                            lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, Byte_ascii.Colon_bry, parent, Byte_ascii.Pipe_bry, Bry_.Mid(parent, colon+1), Xop_tkn_.Lnki_end);		// make "[[xx:ttl ttl]]"
+                        else
+                            lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, parent, Xop_tkn_.Lnki_end);		// make "[[ttl]]"
 			tmp_bfr.Add( lnk );
 		}
 		if (len > 0)
 			tmp_bfr.Add_str_a7( " > " );
-		tmp_bfr.Add(ttl);
+                int colon = Bry_find_.Find_fwd(ttl, Byte_ascii.Colon);
+                if (colon > 0)
+                    tmp_bfr.Add_mid(ttl, colon+1, ttl.length);
+                else
+                    tmp_bfr.Add(ttl);
 		tmp_bfr.Add_str_a7("</div>");
 		return tmp_bfr.To_bry_and_clear();
 	}

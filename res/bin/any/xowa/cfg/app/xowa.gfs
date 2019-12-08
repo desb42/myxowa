@@ -272,7 +272,7 @@ app.wikis.get('~{wiki_key}').html.article {
   <div id="xowa_err_div" class="xowa_err" style="display:none; color:red; white-space:pre; display:block; unicode-bidi:embed;"></div>
 ~{page_heading}~{page_pgbnr_bread}~{page_pgbnr}
   <div id="bodyContent" class="mw-body-content">
-    <div id="siteSub">From XOWA: the free, open-source, offline wiki application</div>
+    <div id="siteSub" class="noprint">~{tagline}</div>
     <div id="contentSub" class="visible">~{page_content_sub}</div>~{page_jumpto}
     <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-content-~{page_lang_ltr}">~{page_data}
     </div>
@@ -336,8 +336,8 @@ for (var i = 0; i < redlinks.length; i++) {
 <html dir="~{page_lang_ltr}" class="client-js" lang="~{page_lang}">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>~{page_name} - XOWA ~{wiki}</title>
-  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/app_icon.png" />
+  <title>~{page_name} - XOWA ~{wiki_key}</title>
+  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/~{app_icon}" />
   <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
   <link rel="stylesheet" href="~{html_css_wiki_path}" type="text/css">
   ~{html_css_night_tag}<!--XOWA.SCRIPT.HEAD.TOP-->~{xowa_head}<!--XOWA.SCRIPT.HEAD.BOT-->
@@ -371,7 +371,7 @@ for (var i = 0; i < redlinks.length; i++) {
 <div id="content" class="mw-body">~{page_indicators}
   <div id="xowa_err_div" class="xowa_err"></div>~{page_heading}  
   <div id="bodyContent" class="mw-body-content">
-    <div id="siteSub">From XOWA: the free, open-source, offline wiki application</div>
+    <div id="siteSub" class="noprint">~{tagline}</div>
     <div id="contentSub" class="visible">~{page_content_sub}</div>
     <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-content-~{page_lang_ltr}">
       <div id="xowa_page_edit_preview_id">~{edit_div_preview}</div>
@@ -420,11 +420,11 @@ for (var i = 0; i < redlinks.length; i++) {
   page_html =
 <:["
 <!DOCTYPE html>
-<html dir="~{page_lang_ltr}" lang="~{page_lang}">
+<html dir="~{page_lang_ltr}" class="client-js" lang="~{page_lang}">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>~{page_name} - XOWA ~{wiki}</title>
-  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/app_icon.png" />
+  <title>~{page_name} - XOWA ~{wiki_key}</title>
+  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/~{app_icon}" />
   <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
   <link rel="stylesheet" href="~{html_css_wiki_path}" type="text/css">
   ~{html_css_night_tag}<!--XOWA.SCRIPT.HEAD.TOP-->~{xowa_head}<!--XOWA.SCRIPT.HEAD.BOT-->

@@ -84,6 +84,7 @@ public class Xoae_page implements Xoa_page {
 	public Xopg_tmpl_prepend_mgr	Tmpl_prepend_mgr() {return tmpl_prepend_mgr;} private Xopg_tmpl_prepend_mgr tmpl_prepend_mgr = new Xopg_tmpl_prepend_mgr();
 	public Db_quality_tots	Quality_tots() {return qualitytots;} private Db_quality_tots qualitytots = new Db_quality_tots();
 	public void	Quality_tots(Db_quality_tots tots) {qualitytots = tots;}
+	public byte[] Pp_indexpage() {return pp_indexpage; } public void Pp_indexpage_(byte[] v) {pp_indexpage = v;} private byte[] pp_indexpage;
 	public void Clear_all() {Clear(true);}
 	public void Clear(boolean clear_scrib) { // NOTE: this is called post-fetch but pre-wtxt; do not clear items set by post-fetch, such as id, ttl, redirected_ttls, data_raw
 		db.Clear();
@@ -107,6 +108,7 @@ public class Xoae_page implements Xoa_page {
 		tmpl_prepend_mgr.Clear();
 		commons_mgr.Clear();
 		qualitytots.Clear();
+		pp_indexpage = null;
 	}
 	public static final    Xoae_page Empty = new Xoae_page();
 	public static Xoae_page New(Xowe_wiki wiki, Xoa_ttl ttl)		{return new Xoae_page(wiki, ttl);}

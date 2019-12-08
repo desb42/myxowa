@@ -34,47 +34,7 @@ public class Categorytree_nde implements Xox_xnde {
 			Mwh_atr_itm atr = atrs_ary[i];
 			byte[] key = atr.Key_bry();
 			byte[] val = atr.Val_as_bry();
-			if (Bry_.Eq(key, Categorytree_itm_.Attr_showcount)) {
-				if (val.length > 0) {
-					if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || (val[0] == 'o' && val.length > 1 && val[1] == 'n')) // constants!! (true or yes or on/false no off)
-						params.Showcount_(true);
-				}
-			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_mode)) {
-				if (val.length > 0) {
-					// categories, pages, all, parents
-					// only supporting categories and pages
-					if (val[0] == 'c')
-						params.Mode_(Categorytree_itm_.Mode__CATEGORIES);
-					else if (val[0] == 'p')
-						params.Mode_(Categorytree_itm_.Mode__PAGES);
-					else if (val[0] == 'a')
-						params.Mode_(Categorytree_itm_.Mode__ALL);
-				}
-			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_hideprefix)) {
-				if (val.length > 1) {
-					// always, never, auto, categories
-					if (val[0] == 'a' && val[1] == 'l')
-						params.Hideprefix_(Categorytree_itm_.Hide__ALWAYS);
-					else if (val[0] == 'n')
-						params.Hideprefix_(Categorytree_itm_.Hide__NEVER);
-					else if (val[0] == 'a' && val[1] == 'u')
-						params.Hideprefix_(Categorytree_itm_.Hide__AUTO);
-					else if (val[0] == 'c')
-						params.Hideprefix_(Categorytree_itm_.Hide__CATEGORIES);
-				}
-			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_hideroot)) {
-				if (val.length > 0) {
-					if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || (val[0] == 'o' && val.length > 1 && val[1] == 'n')) // constants!! (true or yes or on)
-						params.Hideroot_(true);
-				}
-			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_depth)) {
-				int d = val[0] - '0'; // TODO: should check values
-				params.Depth_(d);
-			} else if (Bry_.Eq(key, Categorytree_itm_.Attr_namespaces)) {
-				// TODO: space separated list of namespaces
-				// params.Namespaces_(true);
-				// params.Namespacelist_ somehow
-			}
+                        cat_mgr.Update_params(key, val, params);
 		}
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
@@ -83,5 +43,4 @@ public class Categorytree_nde implements Xox_xnde {
 		cat_mgr.Renderchild(bfr, src, bgn, end, params);
 		page.Html_data().Head_mgr().Itm__categorytree().Enabled_y_();
 	}
-
 }

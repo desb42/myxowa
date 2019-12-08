@@ -47,12 +47,16 @@ public class Hxtn_blob_tbl implements Rls_able {
 		Db_stmt_.Insert_by_rdr(flds, rdr, stmt_insert);
 	}
 	public void Insert_exec(int blob_tid, int wiki_id, int blob_id, byte[] blob_data) {
-		blob_data = zip_mgr.Zip(zip_tid_default, blob_data);
+		byte zip_tid = zip_tid_default;
+		if (blob_data.length < 30) // say
+			zip_tid = gplx.core.ios.streams.Io_stream_tid_.Tid__raw;
+		else
+			blob_data = zip_mgr.Zip(zip_tid_default, blob_data);
 		stmt_insert.Clear()
 			.Val_int(fld_blob_tid   , blob_tid)
 			.Val_int(fld_wiki_id    , wiki_id)
 			.Val_int(fld_blob_id    , blob_id)
-			.Val_byte(fld_zip_tid   , zip_tid_default)
+			.Val_byte(fld_zip_tid   , zip_tid)
 			.Val_bry(fld_blob_data  , blob_data)
 		.Exec_insert();
 	}
@@ -78,7 +82,8 @@ public class Hxtn_blob_tbl implements Rls_able {
 			if (rdr.Move_next()) {
 				byte[] rv = rdr.Read_bry(fld_blob_data);
 				byte zip_type = rdr.Read_byte(fld_zip_tid);
-				rv = zip_mgr.Unzip(zip_type, rv);
+				if (zip_type > gplx.core.ios.streams.Io_stream_tid_.Tid__raw)
+					rv = zip_mgr.Unzip(zip_type, rv);
 				return rv;
 			}
 			else {

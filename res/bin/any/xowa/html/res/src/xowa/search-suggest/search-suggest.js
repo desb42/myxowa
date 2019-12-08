@@ -48,10 +48,7 @@ function fetchSuggestions () {
         }
         , function(xreq)
           {
-            var suggestions = xreq.responseText;
-            // bit of manipulation
-            suggestions = suggestions.replace(/<strong>/g, '","').replace(/<\/strong>/g, '","')
-            eval(suggestions);
+            eval(xreq.responseText);
           }
         );
   }
@@ -72,11 +69,11 @@ function sendByAjaxWithCallback(cmd, data, cbk) {
     xreq.send(form_data);
 }
 
-function renderSuggestion (page_db, page_before, page_display, page_after) {
+function renderSuggestion (page_db, page_display) {
 	var	textNode = document.createElement('span'),
 		linkNode = document.createElement('a'),
 		liNode = document.createElement('li');
-	textNode.innerHTML = page_before + "<strong>" + page_display + "</strong>" + page_after;
+	textNode.innerHTML = page_display;
 	textNode.setAttribute('xowa_page_db', page_db);
   var href = '/wiki/' + page_db.replace(/ /g, '_');
   if (xowa_global_values.mode_is_http) {
@@ -95,14 +92,12 @@ function showSuggestions (suggestions) {
 		return;
 	}
 	suggestionList.style.display = '';
- 	suggestionList.style.height = 'auto'; // .vector tabs ul {height:100%} causes all search-suggest rows to collapse into one; DATE:2019-08-04
+  suggestionList.style.height = 'auto'; // .vector tabs ul {height:100%} causes all search-suggest rows to collapse into one; DATE:2019-08-04
 	var i, li;
-	for (i = 0; i < suggestions.length; i += 4) {
+	for (i = 0; i < suggestions.length; i += 2) {
 		var page_db = suggestions[i];
-		var page_before = suggestions[i + 1];
-		var page_display = suggestions[i + 2];
-		var page_after = suggestions[i + 3];
-		li = renderSuggestion(page_db, page_before, page_display, page_after),
+		var page_display = suggestions[i + 1];
+		li = renderSuggestion(page_db, page_display),
 		renderedSuggestions.push([li, page_db]);
 		suggestionList.appendChild(li);
 	}

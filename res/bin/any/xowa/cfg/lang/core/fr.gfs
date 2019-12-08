@@ -4388,8 +4388,8 @@ sitecsspreview|<strong>Rappelez-vous que vous ne faites que prévisualiser cette
 sitejspreview|<strong>Rappelez-vous que vous ne faites que prévisualiser ce code JavaScript. \nIl n’a pas encore été enregistré !</strong>
 sitenotice|-
 sitesubtitle|
-sitesupport-url|https://donate.wikimedia.org/?utm_source=donate&utm_medium=sidebar&utm_campaign=spontaneous&uselang=en
-sitesupport|Donate
+sitesupport-url|https://donate.wikimedia.org/?utm_source=donate&utm_medium=sidebar&utm_campaign=spontaneous&uselang=fr
+sitesupport|Faire un don
 sitetitle|{{SITENAME}}
 siteusers|{{PLURAL:~{1}\u007C{{GENDER:~{0}\u007Cl’utilisateur\u007Cl’utilisatrice}}\u007C{{Gender:~{0}\u007Cles utilisateurs\u007Cles utilisatrices}}}} ~{0} de {{SITENAME}}
 siteuser|{{GENDER:~{1}\u007Cl'utilisateur\u007Cl'utilisatrice\u007Cl'utilisateur}} ~{0} de {{SITENAME}}
@@ -4895,7 +4895,7 @@ tooltip-n-mainpage|Visiter la page d'accueil du site
 tooltip-n-portal|À propos du projet, ce que vous pouvez faire, où trouver les informations
 tooltip-n-randompage|Afficher une page au hasard
 tooltip-n-recentchanges|Liste des modifications récentes sur le wiki
-tooltip-n-sitesupport|Support us
+tooltip-n-sitesupport|Soutenez-nous
 tooltip-namespace_association|Cochez cette case pour inclure également l’espace de noms de discussion ou du sujet, associé à l’espace de noms sélectionné
 tooltip-p-logo|Visiter la page d’accueil
 tooltip-preferences-save|Sauvegarder les préférences

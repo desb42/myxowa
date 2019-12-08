@@ -243,29 +243,24 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	private static final	Bry_fmt
 	  Fmt__cat = Bry_fmt.Auto_nl_skip_last
 	( ""
-	, "			  ~{startli}<div class=\"CategoryTreeSection\">"
-	, "				<div class=\"CategoryTreeItem\">"
-	, "				  <span class=\"~{attr_class}\">"
-	, "					~{bullet}"
-	, "				  </span>"
-	, "				  <a href=\"~{itm_href}\" class=\"CategoryTreeLabel CategoryTreeLabelNs~{ns} ~{label}\">~{itm_text}"
-	, "				  </a>"
-	, "				  ~{count_string}"
-	, "				</div>"
-	, "				<div class=\"CategoryTreeChildren\" style=\"display:~{cstyle}\">~{child_text}</div>"
-	, "			  </div>~{endli}"
+	, "~{startli}<div class=\"CategoryTreeSection\">"
+	, "	<div class=\"CategoryTreeItem\">"
+	, "	  <span class=\"~{attr_class}\">~{bullet}</span>"
+	, "	  <a href=\"~{itm_href}\" class=\"CategoryTreeLabel CategoryTreeLabelNs~{ns} ~{label}\">~{itm_text}</a>"
+	, "	  ~{count_string}"
+	, "	</div>"
+	, "	<div class=\"CategoryTreeChildren\" style=\"display:~{cstyle}\">~{child_text}</div>"
+	, "</div>~{endli}"
 	);
 	private static final	Bry_fmt
 	  Fmt__count_string = Bry_fmt.Auto_nl_skip_last
 	( ""
-	, "<span title=\"~{itm_contains_title}\" dir=\"~{dir}\">~{itm_contains_text}"
-	, "</span>"
+	, "<span title=\"~{itm_contains_title}\" dir=\"~{dir}\">~{itm_contains_text}</span>"
 	);
 	private static final	Bry_fmt
 	  Fmt__bullet = Bry_fmt.Auto_nl_skip_last
 	( ""
-	, "					<span class=\"CategoryTreeToggle\" data-ct-title=\"~{itm_data_title}\" title=\"~{itm_title}\" ~{data-ct}>"
-	, "					~{txt}</span> "
+	, "<span class=\"CategoryTreeToggle\" data-ct-title=\"~{itm_data_title}\" title=\"~{itm_title}\" ~{data-ct}>~{txt}</span> "
 	);
 	private static byte[]
 	  datact_expanded = Bry_.new_a7("data-ct-loaded=\"1\" data-ct-state=\"expanded\"")
@@ -297,12 +292,13 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 		Xoctg_catpage_ctg ctg = Get_by_db_or_null(ttl.Page_db(), catpage_url, ttl, grp_max);
 		if (ctg == null) return;
 
+                if (params.Isjson() == false)
 		Fmt__data_ct.Bld_many(local_tmp_bfr, params.Mode(), params.Hideprefix(), params.Showcount(), params.Namespaces());
 		byte[] data_ct_mode = local_tmp_bfr.To_bry_and_clear();
 
 		// write html
-                if (params.Depth() != 0)
-                    Build_cattree(local_tmp_bfr, wiki, ctg, params, data_ct_mode);
+		if (params.Depth() != 0)
+			Build_cattree(local_tmp_bfr, wiki, ctg, params, data_ct_mode);
 		if (params.Hideroot() == false || params.Depth() == 0) {
 			byte[] inner = local_tmp_bfr.To_bry_and_clear();
 			Bld_cat_itm(local_tmp_bfr, wiki, ctg.Subcs().Count_all(), ctg.Pages().Count_all(), ctg.Files().Count_all(), ttl, params, false, inner, data_ct_mode);
@@ -354,4 +350,48 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	( ""
 	, "<div class=\"CategoryTreeTag\" data-ct-mode=\"~{mode}\" data-ct-options=\"{&quot;mode&quot;:~{mode},&quot;hideprefix&quot;:~{hide},&quot;showcount&quot;:~{showcount},&quot;namespaces&quot;:~{namespaces}}\">"
 	);
+
+	public void Update_params(byte[] key, byte[] val, Categorytree_params_ params) {
+		if (Bry_.Eq(key, Categorytree_itm_.Attr_showcount)) {
+			if (val.length > 0) {
+				if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || (val[0] == 'o' && val.length > 1 && val[1] == 'n')) // constants!! (true or yes or on/false no off)
+					params.Showcount_(true);
+			}
+		} else if (Bry_.Eq(key, Categorytree_itm_.Attr_mode)) {
+			if (val.length > 0) {
+				// categories, pages, all, parents
+				// only supporting categories and pages
+				if (val[0] == 'c')
+					params.Mode_(Categorytree_itm_.Mode__CATEGORIES);
+				else if (val[0] == 'p')
+					params.Mode_(Categorytree_itm_.Mode__PAGES);
+				else if (val[0] == 'a')
+					params.Mode_(Categorytree_itm_.Mode__ALL);
+			}
+		} else if (Bry_.Eq(key, Categorytree_itm_.Attr_hideprefix)) {
+			if (val.length > 1) {
+				// always, never, auto, categories
+				if (val[0] == 'a' && val[1] == 'l')
+					params.Hideprefix_(Categorytree_itm_.Hide__ALWAYS);
+				else if (val[0] == 'n')
+					params.Hideprefix_(Categorytree_itm_.Hide__NEVER);
+				else if (val[0] == 'a' && val[1] == 'u')
+					params.Hideprefix_(Categorytree_itm_.Hide__AUTO);
+				else if (val[0] == 'c')
+					params.Hideprefix_(Categorytree_itm_.Hide__CATEGORIES);
+			}
+		} else if (Bry_.Eq(key, Categorytree_itm_.Attr_hideroot)) {
+			if (val.length > 0) {
+				if (val[0] == '1' || val[0] == 't' || val[0] == 'y' || (val[0] == 'o' && val.length > 1 && val[1] == 'n')) // constants!! (true or yes or on)
+					params.Hideroot_(true);
+			}
+		} else if (Bry_.Eq(key, Categorytree_itm_.Attr_depth)) {
+			int d = val[0] - '0'; // TODO: should check values
+			params.Depth_(d);
+		} else if (Bry_.Eq(key, Categorytree_itm_.Attr_namespaces)) {
+			// TODO: space separated list of namespaces
+			// params.Namespaces_(true);
+			// params.Namespacelist_ somehow
+		}
+	}
 }
