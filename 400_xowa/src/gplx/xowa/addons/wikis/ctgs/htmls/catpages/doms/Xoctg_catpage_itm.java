@@ -73,6 +73,7 @@ public class Xoctg_catpage_itm {
 			}
 			else {
 				byte[] sortkey_normalized = Bry_.Replace(sortkey_prefix, Sortkey_prefix_replace__src, Sortkey_prefix_replace__trg);
+				sortkey_normalized = DB_case_cvt.Upper_1st(sortkey_normalized, 0, sortkey_normalized.length);
 				tmp_bfr.Add(sortkey_normalized);
 				tmp_bfr.Add_byte_nl().Add(page_ttl.Page_txt());	// "$prefix\n$unprefixed";
 				sortkey_handle = tmp_bfr.To_bry_and_clear();

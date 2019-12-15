@@ -121,9 +121,9 @@ function wikibase.setupInterface()
 	function wikibase.getEntityIdForCurrentPage()
 		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.getEntityIdForCurrentPage.call' )
 
-		if pageEntityId == false then
+		--if pageEntityId == false then
 			pageEntityId = php.getEntityId( tostring( mw.title.getCurrentTitle().prefixedText ) )
-		end
+		--end
 
 		return pageEntityId
 	end

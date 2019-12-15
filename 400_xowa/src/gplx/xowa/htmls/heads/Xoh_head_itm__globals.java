@@ -26,7 +26,10 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	@Override public void Write_js_include(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Xoh_head_wtr wtr) {
 		if (Url_core_js == null) {
 			Io_url core_dir = app.Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "html", "res", "src", "xowa", "core");
-			Url_core_js				= core_dir.GenSubFil("core.js").To_http_file_bry();
+			if (app.Mode().Tid_is_http())
+				Url_core_js				= core_dir.GenSubFil("core.js").To_http_file_bry();
+			else
+				Url_core_js				= core_dir.GenSubFil("core_gui.js").To_http_file_bry();
 			Url_exec_js				= core_dir.GenSubFil("exec.js").To_http_file_bry();
 			Url_DOMContentLoaded_js = core_dir.GenSubFil("DOMContentLoaded.js").To_http_file_bry();
 			Io_url j_dir = app.Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "html", "res", "lib", "jquery");

@@ -1307,12 +1307,12 @@ category-subcat-count|{{PLURAL:~{1}\u007CQuesta categoria contiene un'unica sott
 category_header|Pagine nella categoria "~{0}"
 categorypage|Visualizza la categoria
 categorytree-category|Categoria:
-categorytree-collapse-bullet|[<b>−</b>]
+categorytree-collapse-bullet|▼
 categorytree-collapse|comprimi
 categorytree-desc|Visualizza in modo dinamico la [[Special:CategoryTree\u007Cstruttura delle categorie]]
-categorytree-empty-bullet|[<b>×</b>]
+categorytree-empty-bullet|► 
 categorytree-error|Problema nel caricamento dei dati.
-categorytree-expand-bullet|[<b>+</b>]
+categorytree-expand-bullet|►
 categorytree-expand|espandi
 categorytree-go|Mostra albero
 categorytree-header|Inserisci il nome di una categoria per vederne i contenuti in una struttura ad albero. (richiede JavaScript)

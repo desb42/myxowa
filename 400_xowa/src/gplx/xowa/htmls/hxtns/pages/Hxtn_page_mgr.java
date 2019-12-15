@@ -93,7 +93,8 @@ public class Hxtn_page_mgr {
 		int len = list.Len();
 		for (int i = 0; i < len; i++) {
 			Hxtn_page_itm itm = (Hxtn_page_itm)list.Get_at(i);
-			Hxtn_page_wkr wkr = (Hxtn_page_wkr)wkrs.Get_by_or_fail(itm.Wkr_id());
+			Hxtn_page_wkr wkr = (Hxtn_page_wkr)wkrs.Get_by_or_null(itm.Wkr_id());
+			if (wkr == null) continue;
 			wkr.Load_by_page(hpg, ttl, itm.Data_id());
 		}
 	}
@@ -104,13 +105,13 @@ public class Hxtn_page_mgr {
 	, Id__indicators = 2
 	, Id__geocrumb = 3
 	, Id__pgbnr = 4
-                , Id__pp_indexpage = 5
+	, Id__pp_indexpage = 5
 	;
 	public static final int
 	  Itm__pp_pagequality = 0
 	, Itm__indicators = 1
 	, Itm__geocrumb =2
 	, Itm__pgbnr = 3
-                , Itm__pp_indexpage = 4;
+	, Itm__pp_indexpage = 4;
 	;
 }

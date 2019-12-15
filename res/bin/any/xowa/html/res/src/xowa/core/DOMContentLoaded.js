@@ -51,6 +51,7 @@ function init () {
     jQuery.escapeRE = function (s) {
         return s.replace(/([\\{}()|.?*+\-\^$\[\]])/g, '\\$1');
     };
+    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.ba-throttle-debounce.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.cookie.js');
     var needCollapsible = document.querySelectorAll('table.collapsible, .mw-collapsible').length,
         needSortable    = document.querySelectorAll('table.sortable').length,
@@ -168,7 +169,7 @@ function init () {
     if (document.querySelectorAll('.wpb-topbanner').length) {
 //      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.css')
 //      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.js');
-      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.ba-throttle-debounce.js');
+//      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.ba-throttle-debounce.js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/WikidataPageBanner/resources/ext.WikidataPageBanner.positionBanner/ext.WikidataPageBanner.positionBanner.js');
       importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/PageBanner/ext.WikidataPageBanner.toc.styles.css')
     }

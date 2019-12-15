@@ -29,3 +29,4 @@ ns_mgr.get_by_id_or_new(829).subpages_enabled_('y');
 // wiki.ctgs.collations.bgn
 catpage_mgr.collation_('uca-vi');
 // wiki.ctgs.collations.end
+tz_mgr.set_('Asia/Ho_Chi_Minh');

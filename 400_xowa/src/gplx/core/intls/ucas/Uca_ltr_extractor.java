@@ -21,7 +21,8 @@ public class Uca_ltr_extractor {
 	public Uca_ltr_extractor(boolean numeric) {
 		this.numeric = numeric;
 		if (numeric) {
-			numeric_heading = Bry_.new_a7("0-9");
+			//numeric_heading = Bry_.new_a7("0-9");
+			numeric_heading = Bry_.new_u8("0–9");
 
 			// create hash of "0", "1", "2", ...
 			numeric_hash = Hash_adp_bry.cs();

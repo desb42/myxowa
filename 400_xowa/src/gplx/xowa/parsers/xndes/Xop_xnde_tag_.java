@@ -147,8 +147,15 @@ public class Xop_xnde_tag_ {
 , Tid__link = 122
 , Tid__template_styles = 123
 , Tid__chem = 124
+, Tid__audio = 125
+, Tid__video = 126
+, Tid__track = 127
+, Tid__rtc = 128
+, Tid__figure = 129
+, Tid__figure_inline = 130
+, Tid__figcaption = 130
 	;
-	public static final int Tid__len = 125;
+	public static final int Tid__len = 131;
 	public static final    Xop_xnde_tag[] Ary = new Xop_xnde_tag[Tid__len];
 	private static Xop_xnde_tag New(int id, String name) {
 		Xop_xnde_tag rv = new Xop_xnde_tag(id, name);
@@ -283,5 +290,13 @@ public class Xop_xnde_tag_ {
 , Tag__meta = New(Tid__meta, "meta")
 , Tag__link = New(Tid__link, "link")
 , Tag__template_styles = New(Tid__template_styles, "templatestyles").Xtn_().Html_mkr_(Tag_html_mkr_.Basic(false))
+
+, Tag__audio = New(Tid__audio, "audio")
+, Tag__video = New(Tid__video, "video")
+, Tag__track = New(Tid__track, "track")
+, Tag__rtc = New(Tid__rtc, "rtc")
+, Tag__figure = New(Tid__figure, "figure")
+, Tag__figure_inline = New(Tid__figure_inline, "figure-inline")
+, Tag__figcaption = New(Tid__figcaption, "figcaption")
 	;
 }

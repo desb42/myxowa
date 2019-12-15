@@ -22,6 +22,7 @@ import gplx.xowa.addons.wikis.ctgs.htmls.*;
 public class Xoctg_double_box implements Bfr_arg {
 	public Xoctg_double_grp Grp_normal() {return grp_normal;} private final    Xoctg_double_grp grp_normal = new Xoctg_double_grp();
 	public Xoctg_double_grp Grp_hidden() {return grp_hidden;} private final    Xoctg_double_grp grp_hidden = new Xoctg_double_grp();
+        private byte[] nocats;
 	public void Init_by_wiki(Xow_wiki wiki) {
 		Xou_history_mgr history_mgr = wiki.App().User().History_mgr();
 		grp_normal.Init_by_wiki(wiki, history_mgr, Bool_.Y);
@@ -30,8 +31,11 @@ public class Xoctg_double_box implements Bfr_arg {
 	public void Write_pagebox(Bry_bfr bfr, Xoctg_pagebox_itm[] ary) {
 		grp_normal.Itms().Itms__clear();
 		grp_hidden.Itms().Itms__clear();
+                nocats = null;
 
 		int len = ary.length;
+                if (len == 0)
+                    nocats = Bry_.new_a7(" catlinks-allhidden");
 		for (int i = 0; i < len; ++i) {
 			Xoctg_pagebox_itm itm = ary[i];
 			Xoctg_double_grp list = itm.Hidden() ? grp_hidden : grp_normal; 
@@ -40,11 +44,11 @@ public class Xoctg_double_box implements Bfr_arg {
 		this.Bfr_arg__add(bfr);
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
-		Fmt__all.Bld_many(bfr, grp_normal, grp_hidden);
+		Fmt__all.Bld_many(bfr, nocats, grp_normal, grp_hidden);
 	}
 	private static final    Bry_fmt 
 	  Fmt__all = Bry_fmt.Auto_nl_skip_last
-	( "<div id=\"catlinks\" class=\"catlinks\">~{grp_normal}~{grp_hidden}"
+	( "<div id=\"catlinks\" class=\"catlinks~{nocats}\" data-mw=\"interface\">~{grp_normal}~{grp_hidden}"
 	, "</div>"
 	);
 }

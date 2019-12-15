@@ -33,3 +33,4 @@ ns_mgr.get_by_id_or_new(101).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(828).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(829).subpages_enabled_('y');
 // wiki.ns_mgr.subpages.end
+tz_mgr.set_('Europe/Berlin');

@@ -591,7 +591,7 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__nowiki:
 				Xnde_subs_escape(bfr, ctx, hctx, src, xnde, false, false);
 				break;
-                        case Xop_xnde_tag_.Tid__hr:
+			case Xop_xnde_tag_.Tid__hr:
 			case Xop_xnde_tag_.Tid__b: case Xop_xnde_tag_.Tid__strong:
 			case Xop_xnde_tag_.Tid__i: case Xop_xnde_tag_.Tid__em: case Xop_xnde_tag_.Tid__cite: case Xop_xnde_tag_.Tid__dfn: case Xop_xnde_tag_.Tid__var:
 			case Xop_xnde_tag_.Tid__u: case Xop_xnde_tag_.Tid__ins: case Xop_xnde_tag_.Tid__abbr:

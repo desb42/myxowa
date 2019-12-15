@@ -67,7 +67,8 @@ public class Bry_ {
 			new_u8__write(str, str_len, rv, 0);
 			return rv;
 		}
-		catch (Exception e) {throw Err_.new_exc(e, "core", "invalid UTF-8 sequence", "s", str);}
+		catch (Exception e) {
+			throw Err_.new_exc(e, "core", "invalid UTF-8 sequence", "s", str);}
 	}
 	public static int new_u8__by_len(String s, int s_len) {
 		int rv = 0;

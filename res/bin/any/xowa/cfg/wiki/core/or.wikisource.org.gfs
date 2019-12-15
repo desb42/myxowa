@@ -1,3 +1,4 @@
 // wiki.xtns.pages.bgn
 parser.xtns.get('pages').ns_names_('ପୃଷ୍ଠା', 'ପୃଷ୍ଠା ଆଲୋଚନା', 'ସୂଚୀ', 'ସୂଚୀ ଆଲୋଚନା');
 // wiki.xtns.pages.end
+tz_mgr.set_('Asia/Kolkata');

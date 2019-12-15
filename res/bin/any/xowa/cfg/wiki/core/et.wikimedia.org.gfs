@@ -1,3 +1,4 @@
 // wiki.ctgs.collations.bgn
 catpage_mgr.collation_('xx-uca-et');
 // wiki.ctgs.collations.end
+tz_mgr.set_('Europe/Tallinn');

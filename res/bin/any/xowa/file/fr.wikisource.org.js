@@ -425,26 +425,26 @@ function init_page_layout() {
 
     add_page_container();
 
-//    if(document.getElementById("text-wrap")) {
-//		mw.loader.using( 'mediawiki.util', function() {
-//       var optlist = get_optlist();
-//       mw.util.addPortletLink ('p-displayOptions', 'javascript:toggle_layout();', ws_msg('layout'), 'option-textLayout', '' );
-//
-//        layout_num = 0;
-//        /* FIXME: the cookie also must store the selected layout by name, but it must be backward compatible with the storing by integer */
-//        layout = mw.cookie.get("layout") ;
-//        if (layout)
-//            layout_num = parseInt( layout );
-//        if(!layout_num || layout_num == NaN) layout_num = 0;
-//        set_layout(layout_num);
-//        
-//        //We make sure to stay to the hash (fixes a bug in Chrome and Firefox)
-//        var hash = window.location.hash;
-//        if(hash.indexOf("#") != -1) {
-//            window.location.href = hash;
-//        }
+    if(document.getElementById("text-wrap")) {
+//			mw.loader.using( 'mediawiki.util', function() {
+       var optlist = get_optlist();
+       mw.util.addPortletLink ('p-displayOptions', 'javascript:toggle_layout();', ws_msg('layout'), 'option-textLayout', '' );
+
+        layout_num = 0;
+        /* FIXME: the cookie also must store the selected layout by name, but it must be backward compatible with the storing by integer */
+        layout = mw.cookie.get("layout") ;
+        if (layout)
+            layout_num = parseInt( layout );
+        if(!layout_num || layout_num == NaN) layout_num = 0;
+        set_layout(layout_num);
+        
+        //We make sure to stay to the hash (fixes a bug in Chrome and Firefox)
+        var hash = window.location.hash;
+        if(hash.indexOf("#") != -1) {
+            window.location.href = hash;
+        }
 //	});
-//    }
+    }
         set_layout(0);
 }
 
@@ -1287,3 +1287,45 @@ jQuery( document ).ready( function ( $ ) {
         });
     }());
 //});
+
+/*XOWA: https://wikisource.org/w/index.php?title=MediaWiki:DisplayFooter.js&action=raw&ctype=text/javascript */
+/* see commented out stuff above */
+/**********************
+*** Automatically generate page footer from values in <nowiki>{{header}}</nowiki>
+*** by [[user:GrafZahl]] and [[user:Tpt]]
+**********************/
+// <source lang="javascript">
+ 
+$( document ).ready( function() {
+	if( mediaWiki.config.get( 'wgNamespaceNumber' ) !== 0) { // || mediaWiki.util.getParamValue( 'match' ) !== null ) {
+		return;
+	}
+	var $nofooterElt = $( '#nofooter' );
+	var $hp = $( '#headerprevious' );
+	var $hn = $( '#headernext' );
+ 	var $contentElt = $( '#mw-content-text' );
+	if( $contentElt.length === 0 || ($hp.length === 0 && $hn.length === 0) || $nofooterElt.length !== 0 ) {
+		return; 
+	}
+ 
+	var footer = '<div class="footertemplate ws-noexport noprint" id="footertemplate" style="margin-top:1em; clear:both;">';
+	footer += '<div style="width:100%; padding-left:0px; padding-right:0px; background-color:transparent;">';
+	if( $hp.length !== 0 ) {
+		footer += '<div style="text-align:left; float:left; max-width:40%;"><span id="footerprevious">' + $hp.html() + '</span></div>';
+	}
+	if( $hn.length !== 0 ) {
+		footer += '<div style="text-align:right; float:right; max-width:40%;"><span id="footernext">' + $hn.html() + '</span></div>';
+	}
+	footer += '<div style="text-align:center; margin-left:25%; margin-right:25%;"><a href="#top">' + ws_msg( '▲' ) + '</a></div>';
+	footer += '</div><div style="clear:both;"></div></div>';
+ 
+//		var $printlinksElt = $( 'div.printfooter' );
+//		if( $printlinksElt.length !== 0 ) { 	// place footer before category box
+//			$printlinksElt.after( footer );
+//		} else {
+//			$contentElt.after( footer );
+//		}
+	$contentElt.append( footer );
+	}
+);
+ 

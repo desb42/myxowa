@@ -17,7 +17,7 @@ package gplx.xowa.xtns.proofreadPage; import gplx.*; import gplx.xowa.*; import 
 import gplx.core.primitives.*; import gplx.core.brys.fmtrs.*;
 import gplx.xowa.apps.cfgs.*;
 import gplx.langs.htmls.entitys.*;import gplx.xowa.htmls.Xoh_page_wtr_wkr_;
- import gplx.xowa.htmls.core.htmls.*;
+import gplx.xowa.htmls.core.htmls.*;
 import gplx.xowa.wikis.nss.*;
 import gplx.xowa.xtns.lst.*; import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.amps.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*; import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.tmpls.*;
@@ -38,8 +38,12 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	private byte[] src; private Xop_xnde_tkn xnde_tkn;
 	private Xoa_ttl cur_page_ttl;
 	private boolean badindex = false;
+	private List_adp xtra_args = List_adp_.New();
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {
-		if (xatr_id_obj == null) return;
+		if (xatr_id_obj == null) {
+			xtra_args.Add(new Pp_index_arg(xatr.Key_bry(), xatr.Val_as_bry()));
+			return;
+		}
 		Byte_obj_val xatr_id = (Byte_obj_val)xatr_id_obj;
 		switch (xatr_id.Val()) {
 			case Xatr_index_ttl:
@@ -101,7 +105,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			full_bfr.Mkr_rls();
 		}
 		page.Html_data().Indicators().Enabled_(Bool_.Y);
-                page.Pp_indexpage_(index_ttl.Full_db());
+		page.Pp_indexpage_(index_ttl.Full_db());
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		if (xtn_literal)
@@ -255,7 +259,13 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			full_bfr.Add(Bry_page_bgn).Add(pl_nde.FormattedPageNumber(bgn_page_int));	// |from=1"
 		if (end_page_int != -1 && pl_nde != null)
 			full_bfr.Add(Bry_page_end).Add(pl_nde.FormattedPageNumber(end_page_int));	// |to=3"
-		List_adp invk_args  = index_page.Invk_args();
+		Add_xtras(full_bfr, xtra_args);
+		Add_xtras(full_bfr, index_page.Invk_args());
+		full_bfr.Add(gplx.xowa.parsers.tmpls.Xop_curly_end_lxr.Hook);
+		full_bfr.Add(rv);
+		return full_bfr.To_bry_and_clear();
+	}
+	private void Add_xtras(Bry_bfr full_bfr, List_adp invk_args) {
 		int invk_args_len = invk_args.Count();
 		for (int i = 0; i < invk_args_len; i++) {
 			Pp_index_arg arg = (Pp_index_arg)invk_args.Get_at(i);
@@ -266,9 +276,6 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				.Add(arg.Val())
 				;
 		}
-		full_bfr.Add(gplx.xowa.parsers.tmpls.Xop_curly_end_lxr.Hook);
-		full_bfr.Add(rv);
-		return full_bfr.To_bry_and_clear();
 	}
 	//private Xoa_ttl[] Get_ttls_from_xnde_args(Gfo_number_parser num_parser) {
 	private List_adp Get_ttls_from_xnde_args(Gfo_number_parser num_parser) {

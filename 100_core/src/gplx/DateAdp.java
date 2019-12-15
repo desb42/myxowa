@@ -85,6 +85,18 @@ public class DateAdp implements CompareAble, Gfo_invk {
 				: Timezone_offset_test
 				;
 	}
+	public DateAdp XtoZone(java.util.TimeZone tz) {
+            // dt/time offset by timezone+dst for now
+		java.util.Date date = under.getTime();
+		java.util.Date now = new java.util.Date();
+		long msFromEpochGmt = date.getTime();
+		long msFromEpochGmt_now = now.getTime();
+		//int offsetFromUTC = tz.getOffset(msFromEpochGmt);
+		int offsetFromUTC = tz.getOffset(msFromEpochGmt_now);
+		Calendar gmtCal = Calendar.getInstance();
+		gmtCal.setTimeInMillis(msFromEpochGmt + offsetFromUTC);
+		return new DateAdp(gmtCal);
+	}
 	public DateAdp XtoUtc() {
 		java.util.Date date = under.getTime();
 		java.util.TimeZone tz = under.getTimeZone();

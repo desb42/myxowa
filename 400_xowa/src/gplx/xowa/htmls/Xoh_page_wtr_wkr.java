@@ -91,6 +91,7 @@ public class Xoh_page_wtr_wkr {
 		DateAdp modified_on = page.Db().Page().Modified_on();
 		byte[] modified_on_msg = Bry_.Empty;
 		if (modified_on != DateAdp_.MinValue && wiki.Installed()) {
+			modified_on = modified_on.XtoZone(wiki.Tz_mgr().Get_timezone());
 			modified_on_msg = wiki.Msg_mgr().Val_by_key_args(Key_lastmodifiedat, 
 						wiki.Lang().Time_format_mgr().Get_date_defaultfmt(wiki, modified_on),
 						wiki.Lang().Time_format_mgr().Get_time_defaultfmt(wiki, modified_on));
@@ -385,7 +386,7 @@ public class Xoh_page_wtr_wkr {
 			) {
 			//if (app.Mode().Tid_is_gui()) app.Usr_dlg().Prog_many("", "", "loading categories: count=~{0}", ctgs_len);
 			Xoctg_pagebox_itm[] pagebox_itms = wiki.Ctg__pagebox_wtr().Get_catlinks_by_page(wiki, page);
-			if (pagebox_itms.length > 0)
+//			if (pagebox_itms.length > 0)
 				wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, wiki, page, pagebox_itms);
 		}
 		return tmp_bfr.To_bry_and_clear();

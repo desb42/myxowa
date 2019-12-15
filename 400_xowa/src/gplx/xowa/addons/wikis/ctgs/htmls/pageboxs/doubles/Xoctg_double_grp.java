@@ -31,6 +31,7 @@ public class Xoctg_double_grp implements Bfr_arg {
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		int count =  itms.Itms__count();
+		if (count == 0) return;
 		if (type_is_normal) {
 			byte[] lbl_ctg_text = wiki.Msg_mgr().Val_by_key_args(Key_pagecategories, count);
 			Fmt__normal.Bld_many(bfr, lbl_ctg_help, lbl_ctg_text, itms);

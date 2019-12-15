@@ -53,7 +53,8 @@ window.ws_msg = function (name) {
 /**
  * Messages are configurable here
  */
-self.ws_messages = {
+//self.ws_messages = {
+self.ws_messages = addObj(self.ws_messages, {
 	'do':'Display Options',
 	'displayOptions':'Display Options',
 	'optlist':'Display Options',
@@ -69,7 +70,8 @@ self.ws_messages = {
 	'layout_3':'Layout 3',
 	'layout_4':'Layout 4',
 	'proposed_layout':'Proposed Layout',
-};
+//};
+});
 
 // Dynamic layouts
 if ( !self.ws_layouts ) {
@@ -621,6 +623,13 @@ $( document ).ready( function() {
 		}
 	}
 );
+
+function addObj(obj1, obj2){
+    for (var j in obj2) {
+      obj1[j] = obj2[j];
+    }
+    return obj1;
+};
  
 /**
  * Messages are configurable here
@@ -632,7 +641,8 @@ window.ws_msg = function (name) {
 	if(m) return m; else return name;
 };
  
-self.ws_messages = {
+//self.ws_messages = {
+self.ws_messages = addObj(self.ws_messages, {
 	'author':'Author',
 	'translator':'Translator',
 	'editor':'Editor',
@@ -653,7 +663,7 @@ self.ws_messages = {
 	'progress_OCR':'Source file needs an OCR text layer',
 	'progress_L':'Source file is incorrect (missing pages, unordered pages, etc)',
 	'progress_X':'Pagelist needed (to verify file is complete and correct before commencing proofreading)',
-	'▲':'Return to the top of the page.',
+//	'▲':'Return to the top of the page.',
  
 	'corr_list':'List of typos identified on this page',
 	'corr_link':'Typos Marked',
@@ -670,7 +680,8 @@ self.ws_messages = {
  
 	'compare_with':  'Comparison with:',
 	'compare_texts': 'Compare texts'
-};
+//};
+});
  
 /* stop faux red links on fresh links */
 $( 'div.mw-body a' ).removeClass( 'stub' );

@@ -83,9 +83,10 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		/*if (Bry_.Eq(domain_bry, Xow_domain_itm_.Bry__home))*/ xwiki_mgr.Add_by_atrs(domain_bry, domain_bry);	// add full name to xwiki_mgr; needed for lookup in home ns; EX: [[home:Help/Contents]]
 		this.lnki_bldr = new Xoh_lnki_bldr(app, href_wtr);
 		this.ctg_catpage_mgr = new Xoctg_catpage_mgr(this);
-                this.quality = new Pp_quality(domain_itm.Domain_type_id() == Xow_domain_tid_.Tid__wikisource);
-                this.bread = new Db_breadcrumb(this);
-                this.maxpage = new Db_maxpage(this);
+		this.quality = new Pp_quality(domain_itm.Domain_type_id() == Xow_domain_tid_.Tid__wikisource);
+		this.bread = new Db_breadcrumb(this);
+		this.maxpage = new Db_maxpage(this);
+		this.tz_mgr = new Db_tz_mgr(this);
 	}
 	public Gfo_evt_mgr				Evt_mgr() {return ev_mgr;} private final    Gfo_evt_mgr ev_mgr;
 	public Xow_ns_mgr				Ns_mgr() {return ns_mgr;} private final    Xow_ns_mgr ns_mgr;
@@ -156,15 +157,15 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public byte[]					Wdata_wiki_abrv() {return wdata_wiki_abrv;} private byte[] wdata_wiki_abrv;
 	public Pp_quality				Quality() {return quality;} private Pp_quality quality;
 	public Db_breadcrumb				Bread() {return bread;} private Db_breadcrumb bread;
-        public Db_maxpage                               Maxpage() {return maxpage;} private Db_maxpage maxpage;
-        private byte[] tagline = null;
-        public byte[] Tagline() {
-            //if (tagline == null)
-                   tagline = msg_mgr.Val_by_key_obj("tagline");
-                   if (tagline.length > 0)
-                       tagline = Bry_.Add(tagline, Bry_.new_a7(" (XOWA)"));
-            return tagline;
-        }
+	public Db_maxpage				Maxpage() {return maxpage;} private Db_maxpage maxpage;
+	public Db_tz_mgr				Tz_mgr() {return tz_mgr;} private Db_tz_mgr tz_mgr;
+	private byte[] tagline = null;
+	public byte[] Tagline() {
+		tagline = msg_mgr.Val_by_key_obj("tagline");
+		if (tagline.length > 0)
+			tagline = Bry_.Add(tagline, Bry_.new_a7(" (XOWA)"));
+		return tagline;
+	}
 	private void Wdata_wiki_abrv_() {
 		Bry_bfr bfr = utl__bry_bfr_mkr.Get_b128();
 		Xow_abrv_wm_.To_abrv(bfr, wdata_wiki_lang, Int_obj_ref.New(wdata_wiki_tid));
@@ -284,6 +285,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		page_mgr.Init_by_wiki(this);
 
 		app.Cfg().Bind_many_wiki(this, this, Cfg__variant__current);
+		tz_mgr.Init_by_wiki(this);
 	}
 	public void Rls() {
 		if (rls_list != null) {
@@ -323,6 +325,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		else if	(ctx.Match(k, Invk_xtns))				return xtn_mgr;
 		else if	(ctx.Match(k, Invk_catpage_mgr))		return ctg_catpage_mgr;
 		else if	(ctx.Match(k, Invk_hdump_enabled_))		this.html_mgr__hdump_enabled = m.ReadYn("v");
+		else if	(ctx.Match(k, Invk_tz_mgr))		return tz_mgr;
 
 		else if (ctx.Match(k, Cfg__variant__current))	lang.Vnt_mgr().Cur_itm_(m.ReadBry("v"));
 		else	return Gfo_invk_.Rv_unhandled;
@@ -338,6 +341,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	, Invk_db_mgr_to_sql_ = "db_mgr_to_sql_"
 	, Invk_domain = "domain", Invk_maint = "maint", Invk_hdump_enabled_ = "hdump_enabled_"
 	, Invk_catpage_mgr = "catpage_mgr"
+	, Invk_tz_mgr = "tz_mgr"
 	;
 	public static final String Cfg__variant__current = "xowa.wiki.lang.variant.current";
 	public static final String	Invk_db_mgr = "db_mgr";	// SERIALIZED:000.sqlite3|xowa_cfg

@@ -35,7 +35,7 @@ public class Gallery_mgr_packed_base extends Gallery_mgr_base {
 	@Override public int Get_thumb_div_width(int thm_w) {
 		if (thm_w < Scale_factor_x_60)
 			thm_w = Scale_factor_x_60;	// Require at least 60px wide, so caption is wide enough to work.
-		return (int)(thm_w / Scale_factor) + this.Get_thumb_padding();
+		return (int)Math.round(thm_w / Scale_factor) + this.Get_thumb_padding();
 	}
 	@Override public int Get_gb_width(int thm_w, int thm_h) {
 		int val = thm_w == -1 ? (int)(itm_default_w * Scale_factor) : thm_w;
@@ -45,8 +45,8 @@ public class Gallery_mgr_packed_base extends Gallery_mgr_base {
 		Get_thumb_size_static(lnki, ext, itm_default_w, itm_default_h);
 	}
 	@Override public void Adjust_image_parameters(Xof_file_itm xfer_itm) {
-		int w = (int)(xfer_itm.Html_w() / Scale_factor);
-		int h = (int)(xfer_itm.Html_h() / Scale_factor);
+		int w = (int)Math.ceil(xfer_itm.Html_w() / Scale_factor);
+		int h = (int)Math.ceil(xfer_itm.Html_h() / Scale_factor);
 		xfer_itm.Html_size_(w, h);
 	}
 	public static final double Scale_factor = 1.5d;	// We artificially have 1.5 the resolution neccessary so that we can scale it up by that much on the client side, without worrying about requesting a new image.
@@ -57,8 +57,8 @@ public class Gallery_mgr_packed_base extends Gallery_mgr_base {
 			w = itm_default_w;
 		else
 			w = (itm_default_h) * 10 + 100;	// We want the width not to be the constraining factor, so use random big number.
-		lnki.W_((int)(Scale_factor * w));
-		lnki.H_((int)(Scale_factor * itm_default_h));
+		lnki.W_((int)Math.round(Scale_factor * w));
+		lnki.H_((int)Math.round(Scale_factor * itm_default_h));
 	}
 }
 class Gallery_mgr_packed_overlay extends Gallery_mgr_packed_base {
