@@ -26,6 +26,9 @@ public abstract class Xoctg_fmt_itm_base implements gplx.core.brys.Bfr_arg {
 	private byte[] ltr_cur; private int loop_bgn; private int col_end;
 
 	public int		Loop_end_idx() {return loop_end_idx;} private int loop_end_idx;
+	public void		Col_end_(int col_bgn, int col_idx) {
+		this.col_end = col_bgn + Calc_col_len(grp.Itms__len(), col_idx, Cols_max);
+	}
 	public void Init_from_ltr(Xow_wiki wiki, Xoctg_catpage_grp grp, Uca_ltr_extractor ltr_extractor) {
 		this.wiki = wiki;
 		this.grp = grp;
@@ -61,7 +64,7 @@ public abstract class Xoctg_fmt_itm_base implements gplx.core.brys.Bfr_arg {
 		loop_end_idx = grp_end;
 	}
 	@gplx.Virtual public void Bld_html(Bry_bfr bfr, Xow_wiki wiki, Xou_history_mgr history_mgr, Xoh_href_parser href_parser, Xoctg_catpage_itm itm, Xoa_ttl ttl) {
-		byte[] itm_full_ttl = Gfh_utl.Escape_html_as_bry(tmp_bfr, ttl.Full_txt_w_ttl_case());// NOTE: ttl.Full_txt() to get full ns; EX: Template:A instead of just "A"
+		byte[] itm_full_ttl = Gfh_utl.Escape_html_as_bry(tmp_bfr, ttl.Full_txt());// NOTE: ttl.Full_txt() to get full ns; EX: Template:A instead of just "A"
 		byte[] itm_href = wiki.Html__href_wtr().Build_to_bry(wiki, ttl);
 		byte[] itm_atr_cls = Xoh_lnki_wtr.Lnki_cls_visited(history_mgr, wiki.Domain_bry(), ttl.Page_txt());	// NOTE: must be ttl.Page_txt() in order to match Xou_history_mgr.Add
 		Fmt__exists.Bld_many(bfr, itm_href, itm_atr_cls, itm_full_ttl, itm_full_ttl, gplx.core.encoders.Hex_utl_.Encode_bry(itm.Sortkey_binary()));
@@ -76,4 +79,12 @@ public abstract class Xoctg_fmt_itm_base implements gplx.core.brys.Bfr_arg {
 	, "            <li><a href=\"~{itm_href}\"~{itm_atr_cls} title=\"~{itm_title}\">~{itm_text}</a></li>"	// <!--~{itm_sortkey}-->
 	)
 	;
+	public static final int Cols_max = 3;
+	public static int Calc_col_len(int grp_len, int col_idx, int max_cols) {	// TEST
+		if (grp_len == 0) return 0;								// 0 items in group; return 0;
+		int max_itms_in_col = ((grp_len - 1) / max_cols) + 1;	// EX: grp with 4, 5, 6 items should have max of 2 items in 1 col, so (a) subtract 1; (b) divide by 3; (c) add 1
+		return col_idx <= ((grp_len - 1) % max_cols)			// complicated formula but works; rely on example and note that only 2 or 1 can be returned; EX: 4=2,1,1; 5=2,2,1; 6=2,2,2
+			? max_itms_in_col 
+			: max_itms_in_col - 1; 
+	}
 }

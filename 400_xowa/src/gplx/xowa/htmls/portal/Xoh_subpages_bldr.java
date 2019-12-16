@@ -61,7 +61,7 @@ public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
 			Xoa_ttl subpage_ttl = wiki.Ttl_parse(subpage_ttl_bry);
 
 			// re-define subpage_ttl_bry to properly-case title elements; EX: "help:a/b" -> "Help:A/b"
-			subpage_ttl_bry = subpage_ttl.Full_txt_w_ttl_case();
+			subpage_ttl_bry = subpage_ttl.Full_txt();
 
 			// add subpage_caption_bfr; needed for cases like "Help:A/B/C/D/E" where "B/C/D" does not exist which should show as "Help:A" | "B/C/D"  not "D" DATE:2019-12-07
 			if (subpage_caption_bfr.Len_gt_0()) subpage_caption_bfr.Add_byte_slash();
@@ -73,7 +73,7 @@ public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
 			// get subpage_caption
 			byte[] subpage_caption
 				= i == 0
-				? subpage_ttl.Full_txt_w_ttl_case()        // 1st seg is Full_txt; EX: "Help:A"
+				? subpage_ttl.Full_txt()        // 1st seg is Full_txt; EX: "Help:A"
 				: subpage_caption_bfr.To_bry(); // nth seg is caption_bfr ("b", not "Help:A/b")
 			subpage_caption_bfr.Clear(); // always clear subpage_caption_bfr; note that 1st seg will add to bfr, but never use it
 
@@ -81,7 +81,7 @@ public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
 			// NOTE: convert underscore to space; ISSUE#:308 PAGE:en.v:Computer-aided_design/Software DATE:2018-12-23
 			fmtr_itm.Bld_bfr(bfr, delimiter
 				, Bry_.Add(Xoh_href_.Bry__wiki, subpage_ttl.Full_url()) // EX: /wiki/Help:A
-				, Xoa_ttl.Replace_unders(Bry_.Escape_html(subpage_ttl_bry))
+				, Xoa_ttl.Replace_unders(subpage_ttl_bry)
 				, Xoa_ttl.Replace_unders(subpage_caption));
 		}
 		path_bfr.Clear();
