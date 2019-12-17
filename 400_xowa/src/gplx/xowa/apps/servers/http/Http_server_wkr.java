@@ -208,7 +208,7 @@ public class Http_server_wkr implements Gfo_invk {
 		//page_html = String_.Replace(page_html, "https://commons.wikimedia.org"	, "/commons.wikimedia.org");
 		//page_html = String_.Replace(page_html, "https://en.wikipedia.org"	, "/en.wikipedia.org"); // eg en.wikiquote.org/wiki/Leo_Varadkar
 		//page_html = String_.Replace(page_html, "https://" + wiki_domain	, "/" + wiki_domain);
-		page_html = page_html.replaceAll("(https?:)?//upload.wikimedia.org" , "/xowa/fsys/file/upload.wikimedia.org");
+		page_html = page_html.replaceAll("(https?:)?//upload.wikimedia.org" , "/xowa/fsys/bin/any/xowa/upload.wikimedia.org");
 
 		//page_html = String_.Replace(page_html, "/fsys/file/commons.wikimedia.org/thumb/2/1/1/9/Speaker_Icon.svg/20px.png", "/fsys/file/commons.wikimedia.org/orig/2/1/1/9/Speaker_Icon.svg");
 		//page_html = page_html.replaceAll("\n +", "\n");

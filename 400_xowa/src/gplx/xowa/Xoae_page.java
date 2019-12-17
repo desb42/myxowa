@@ -23,9 +23,10 @@ import gplx.xowa.parsers.logs.stats.*;
 import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.addons.htmls.tocs.*; import gplx.xowa.htmls.modules.popups.*;
 import gplx.xowa.wikis.pages.wtxts.*; import gplx.xowa.wikis.pages.dbs.*; import gplx.xowa.wikis.pages.redirects.*; import gplx.xowa.wikis.pages.hdumps.*; import gplx.xowa.wikis.pages.htmls.*;
 import gplx.xowa.parsers.lists.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.doubles.*;
 public class Xoae_page implements Xoa_page {
-    public Xop_list_tkn_new Prev_list_tkn() { return prev_list_tkn; }
-    public void Prev_list_tkn_(Xop_list_tkn_new prev_list_tkn) { this.prev_list_tkn = prev_list_tkn; } private Xop_list_tkn_new prev_list_tkn;
+	public Xop_list_tkn_new Prev_list_tkn() { return prev_list_tkn; }
+	public void Prev_list_tkn_(Xop_list_tkn_new prev_list_tkn) { this.prev_list_tkn = prev_list_tkn; } private Xop_list_tkn_new prev_list_tkn;
 	Xoae_page(Xowe_wiki wiki, Xoa_ttl ttl) {
 		this.wiki = wiki; this.ttl = ttl;
 		this.lang = wiki.Lang();	// default to wiki.lang; can be override later by wikitext
@@ -85,6 +86,9 @@ public class Xoae_page implements Xoa_page {
 	public Db_quality_tots	Quality_tots() {return qualitytots;} private Db_quality_tots qualitytots = new Db_quality_tots();
 	public void	Quality_tots(Db_quality_tots tots) {qualitytots = tots;}
 	public byte[] Pp_indexpage() {return pp_indexpage; } public void Pp_indexpage_(byte[] v) {pp_indexpage = v;} private byte[] pp_indexpage;
+	public Xoctg_double_grp Grp_normal() {return grp_normal;}
+        public void Grp_normal_(Xoctg_double_grp v) {grp_normal = v;}
+        private Xoctg_double_grp grp_normal;
 	public void Clear_all() {Clear(true);}
 	public void Clear(boolean clear_scrib) { // NOTE: this is called post-fetch but pre-wtxt; do not clear items set by post-fetch, such as id, ttl, redirected_ttls, data_raw
 		db.Clear();
@@ -109,6 +113,7 @@ public class Xoae_page implements Xoa_page {
 		commons_mgr.Clear();
 		qualitytots.Clear();
 		pp_indexpage = null;
+		grp_normal = null;
 	}
 	public static final    Xoae_page Empty = new Xoae_page();
 	public static Xoae_page New(Xowe_wiki wiki, Xoa_ttl ttl)		{return new Xoae_page(wiki, ttl);}

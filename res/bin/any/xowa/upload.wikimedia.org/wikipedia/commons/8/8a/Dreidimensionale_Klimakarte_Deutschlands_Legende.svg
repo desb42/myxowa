@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 30 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<style type="text/css">
+text {font-family:'DejaVu Sans';stroke-width:5;stroke:#000;text-anchor:middle;}
+.e2 {opacity:.5}
+.e3 {opacity:.333}
+@keyframes show2 {0%{opacity:0}33%{opacity:0}34%{opacity:1}100%{opacity:1}}
+@keyframes show3 {0%{opacity:0}66%{opacity:0}67%{opacity:1}100%{opacity:1}}
+.g2 {-webkit-animation:show2 3s infinite backwards;-moz-animation:show2 3s infinite backwards;animation:show2 3s infinite backwards}
+.g3 {-webkit-animation:show3 3s infinite backwards;-moz-animation:show3 3s infinite backwards;animation:show3 3s infinite backwards}
+@keyframes shows {0%{opacity:1}24.9999%{opacity:1}25%{opacity:0}100%{opacity:0}}
+@keyframes showt {0%{opacity:0}25%{opacity:0}25.0001%{opacity:1}49.9999%{opacity:1}50%{opacity:0}100%{opacity:0}}
+@keyframes showr {0%{opacity:0}50%{opacity:0}50.0001%{opacity:1}74.9999%{opacity:1}75%{opacity:0}100%{opacity:0}}
+@keyframes showa {0%{opacity:0}75%{opacity:0}75.0001%{opacity:1}100%{opacity:1}}
+#sonne {-webkit-animation:shows 12s infinite backwards;-moz-animation:shows 12s infinite backwards;animation:shows 12s infinite backwards}
+#regen {-webkit-animation:showr 12s infinite backwards;-moz-animation:showr 12s infinite backwards;animation:showr 12s infinite backwards}
+#temperatur {-webkit-animation:showt 12s infinite backwards;-moz-animation:showt 12s infinite backwards;animation:showt 12s infinite backwards}
+#alles {-webkit-animation:showa 12s infinite backwards;-moz-animation:showa 12s infinite backwards;animation:showa 12s infinite backwards}
+	</style>
+	<defs>
+		<linearGradient id="d">
+			<stop style="stop-color:#00f" offset="0"/>
+			<stop offset="1"/>
+		</linearGradient>
+		<rect id="a" x="-2" y="-2" width="12" height="12"/>
+		<linearGradient id="b" x2="8" y1="4" y2="4" gradientUnits="userSpaceOnUse">
+			<stop offset="0"/>
+			<stop style="stop-color:#f00" offset="1"/>
+		</linearGradient>
+		<linearGradient id="e" x1="0" x2="0" y1="0" y2="8" gradientUnits="userSpaceOnUse" xlink:href="#d"/>
+		<linearGradient id="f" x1="2300" x2="1900" y1="1600" y2="2e3" gradientUnits="userSpaceOnUse">
+			<stop offset="0"/>
+			<stop style="stop-color:#ff0" offset="1"/>
+		</linearGradient>
+		<path id="p" d="m6 5 6-6h-12l-6 6z"/>
+		<linearGradient id="h" x1="2400" x2="2400" y1="1300" y2="500" gradientUnits="userSpaceOnUse">
+			<stop offset="0"/>
+			<stop style="stop-color:#00f" offset="1"/>
+		</linearGradient>
+		<linearGradient id="g" x2="0" y2="4" gradientUnits="userSpaceOnUse">
+			<stop offset="0"/>
+			<stop style="stop-color:#ff0" offset="1"/>
+		</linearGradient>
+		<linearGradient id="c" x1="1" x2="5" y2="4" gradientUnits="userSpaceOnUse">
+			<stop offset="0"/>
+			<stop style="stop-color:#f00" offset="1"/>
+		</linearGradient>
+		<linearGradient id="linearGradient857">
+			<stop offset="0"/>
+			<stop style="stop-color:#00f" offset="1"/>
+		</linearGradient>
+		<linearGradient id="linearGradient845">
+			<stop offset="0"/>
+			<stop style="stop-color:#ff0" offset="1"/>
+		</linearGradient>
+		<linearGradient id="j" x1="600" x2="1400" y1="2200" y2="2200" gradientUnits="userSpaceOnUse">
+			<stop offset="0"/>
+			<stop style="stop-color:#f00" offset="1"/>
+		</linearGradient>
+		<path id="i" d="m-5 5 6-6v12l-6 6z"/>
+		<linearGradient id="linearGradient847" x2="-4" y1="5" y2="5" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient845"/>
+		<linearGradient id="linearGradient851" x2="-4" y1="9.6779661" y2="6" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient857"/>
+		<pattern id="sonne3d" x="0" y="0" width="30" height="24" patternUnits="userSpaceOnUse">
+			<g id="sonne1e" transform="translate(2,1)">
+				<use transform="translate(9,5)" fill="url(#b)" xlink:href="#a"/>
+				<use class="e2" transform="translate(9,5)" fill="url(#e)" xlink:href="#a"/>
+				<use class="e3" transform="translate(9,5)" xlink:href="#a"/>
+			</g>
+			<g id="sonne2e" transform="translate(0,3)">
+				<use transform="translate(9,5)" fill="url(#b)" xlink:href="#a"/>
+				<use class="e2" transform="translate(9,5)" fill="url(#e)" xlink:href="#a"/>
+				<use class="e3" transform="translate(9,5)" fill="#808000" xlink:href="#a"/>
+			</g>
+			<g id="sonne3e" transform="translate(-2,5)">
+				<use transform="translate(9,5)" fill="url(#b)" xlink:href="#a"/>
+				<use class="e2" transform="translate(9,5)" fill="url(#e)" xlink:href="#a"/>
+				<use class="e3" transform="translate(9,5)" fill="#ff0" xlink:href="#a"/>
+			</g>
+		</pattern>
+		<pattern id="temperatur3d" x="0" y="0" width="30" height="24" patternUnits="userSpaceOnUse">
+			<g id="temperatur1e">
+				<use fill="url(#linearGradient847)" transform="translate(11,4)" xlink:href="#i"/>
+				<use class="e2" fill="url(#linearGradient851)" transform="translate(11,4)" xlink:href="#i"/>
+				<use class="e3" fill="#000" transform="translate(11,4)" xlink:href="#i"/>
+			</g>
+			<g id="temperatur2e" transform="translate(4)">
+				<use fill="url(#linearGradient847)" transform="translate(11,4)" xlink:href="#i"/>
+				<use class="e2" fill="url(#linearGradient851)" transform="translate(11,4)" xlink:href="#i"/>
+				<use class="e3" fill="#800000" transform="translate(11,4)" xlink:href="#i"/>
+			</g>
+			<g id="temperatur3e" transform="translate(8)">
+				<use fill="url(#linearGradient847)" transform="translate(11,4)" xlink:href="#i"/>
+				<use class="e2" fill="url(#linearGradient851)" transform="translate(11,4)" xlink:href="#i"/>
+				<use class="e3" fill="#f00" transform="translate(11,4)" xlink:href="#i"/>
+			</g>
+		</pattern>
+		<pattern id="regen3d" x="0" y="0" width="30" height="24" patternUnits="userSpaceOnUse">
+			<g id="regen1e">
+				<use fill="url(#g)" transform="translate(10,14)" xlink:href="#p"/>
+				<use class="e2" transform="translate(10,14)" fill="url(#c)" xlink:href="#p"/>
+				<use class="e3" transform="translate(10,14)" fill="#000" xlink:href="#p"/>
+			</g>
+			<g id="regen2e" transform="translate(0,-4)">
+				<use fill="url(#g)" transform="translate(10,14)" xlink:href="#p"/>
+				<use class="e2" transform="translate(10,14)" fill="url(#c)" xlink:href="#p"/>
+				<use class="e3" transform="translate(10,14)" fill="#000080" xlink:href="#p"/>
+			</g>
+			<g id="regen3e" transform="translate(0,-8)">
+				<use fill="url(#g)" transform="translate(10,14)" xlink:href="#p"/>
+				<use class="e2" transform="translate(10,14)" fill="url(#c)" xlink:href="#p"/>
+				<use class="e3" transform="translate(10,14)" fill="#00f" xlink:href="#p"/>
+			</g>
+		</pattern>
+	</defs>
+	<text x="1500" y="200" font-size="200px" transform="scale(.01)">Legende</text>
+	<g id="sonne">
+		<use xlink:href="#sonne1e"/>
+		<use class="g2" xlink:href="#sonne2e"/>
+		<use class="g3" xlink:href="#sonne3e"/>
+		<g id="sonnetext" transform="scale(.01)" fill="url(#f)">
+			<text x="2300" y="1700" font-size="200px">14</text>
+			<text x="2100" y="1900" font-size="200px">16</text>
+			<text x="1900" y="2100" font-size="200px">18</text>
+			<text transform="rotate(-45)" x="200" y="3000" font-size="100px">100 Sonnenstunden</text>
+		</g>
+	</g>
+	<g id="temperatur">
+		<use xlink:href="#temperatur1e"/>
+		<use class="g2" xlink:href="#temperatur2e"/>
+		<use class="g3" xlink:href="#temperatur3e"/>
+		<g id="temperaturtext" transform="scale(.01)" fill="url(#j)">
+			<text x="600" y="2300" font-size="200px">6</text>
+			<text x="1000" y="2300" font-size="200px">8,5</text>
+			<text x="1400" y="2300" font-size="200px">11</text>
+			<text x="1000" y="2400" fill="#f00" font-size="100px">Grad Celsius</text>
+		</g>
+	</g>
+	<g id="regen">
+		<use xlink:href="#regen1e"/>
+		<use class="g2" xlink:href="#regen2e"/>
+		<use class="g3" xlink:href="#regen3e"/>
+		<g id="regentext" transform="scale(.01)" fill="url(#h)">
+			<text x="2400" y="1400" font-size="200px">5</text>
+			<text x="2400" y="1000" font-size="200px">8,5</text>
+			<text x="2400" y="600" font-size="200px">12</text>
+			<text transform="rotate(-90)" x="-900" y="2700" fill="#00f" font-size="100px">100 mm Niederschlag</text>
+		</g>
+	</g>
+	<g id="alles">
+		<use xlink:href="#sonnetext"/><use xlink:href="#regentext"/><use xlink:href="#temperaturtext"/>
+		<path d="m5 20v-12h2v-2h2v-2h12v12h-2v2h-2v2z" fill="url(#sonne3d)"/>
+		<path d="m12 3-1 1h1v-1zm-1 1-2 2h2v-2zm-2 2-2 2h2v-2zm-2 2-1 1v2l1-1v-2zm-1 3v4l1-1v-3h-1zm0 4v4l1-1v-3h-1zm0 4v2l1-1v-1h-1zm10-16-1 1h1v-1zm-1 1-2 2h2v-2zm-2 2-2 2h2v-2zm-2 2-1 1v2l1-1v-2zm-1 3v4l1-1v-3h-1zm0 4v4l1-1v-3h-1zm0 4v2l1-1v-1h-1zm10-16-1 1h1v-1zm-1 1-2 2h2v-2zm-2 2-2 2h2v-2zm-2 2-1 1v2l1-1v-2zm-1 3v4l1-1v-3h-1zm0 4v4l1-1v-3h-1zm0 4v2l1-1v-1h-1z" fill="url(#temperatur3d)"/>
+		<path d="m21 5v1l1-1h-1zm0 1h-2v2l2-2zm-2 2h-2v2l2-2zm-2 2h-2l-1 1h2l1-1zm-3 1v-1h-3l-1 1h4zm-4 0v-1h-3l-1 1h4zm-4 0v-1h-1l-1 1h2zm15-2v1l1-1h-1zm0 1h-2v2l2-2zm-2 2h-2v2l2-2zm-2 2h-2l-1 1h2l1-1zm-3 1v-1h-3l-1 1h4zm-4 0v-1h-3l-1 1h4zm-4 0v-1h-1l-1 1h2zm15-2v1l1-1h-1zm0 1h-2v2l2-2zm-2 2h-2v2l2-2zm-2 2h-2l-1 1h2l1-1zm-3 1v-1h-3l-1 1h4zm-4 0v-1h-3l-1 1h4zm-4 0v-1h-1l-1 1h2z" fill="url(#regen3d)"/>
+	</g>
+</svg>

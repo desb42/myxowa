@@ -30,8 +30,10 @@ public class Xoctg_pagebox_wtr implements Gfo_invk {
 	}
 	public void Write_pagebox(Bry_bfr bfr, Xow_wiki wiki, Xoa_page page, Xoctg_pagebox_itm[] pagebox_itms) {
 		try {
-			if (grouping_enabled)
+			if (grouping_enabled) {
 				double_box.Write_pagebox(bfr, pagebox_itms);
+				page.Grp_normal_(double_box.Grp_normal());
+			}
 			else
 				single_box.Write_pagebox(bfr, pagebox_itms);
 		} catch (Exception e) {

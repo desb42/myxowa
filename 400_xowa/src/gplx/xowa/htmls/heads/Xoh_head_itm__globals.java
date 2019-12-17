@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.htmls.heads; import gplx.*; import gplx.xowa.*; import gplx.xowa.htmls.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.langs.numbers.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.doubles.*;
 public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	private final    Xoh_head_wtr tmp_wtr = new Xoh_head_wtr();
 	@Override public byte[] Key() {return Xoh_head_itm_.Key__globals;}
@@ -26,11 +27,8 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	@Override public void Write_js_include(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Xoh_head_wtr wtr) {
 		if (Url_core_js == null) {
 			Io_url core_dir = app.Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "html", "res", "src", "xowa", "core");
-			if (app.Mode().Tid_is_http())
-				Url_core_js				= core_dir.GenSubFil("core.js").To_http_file_bry();
-			else
-				Url_core_js				= core_dir.GenSubFil("core_gui.js").To_http_file_bry();
-			Url_exec_js				= core_dir.GenSubFil("exec.js").To_http_file_bry();
+			Url_core_js				= core_dir.GenSubFil("core.js").To_http_file_bry();
+//			Url_exec_js				= core_dir.GenSubFil("exec.js").To_http_file_bry();
 			Url_DOMContentLoaded_js = core_dir.GenSubFil("DOMContentLoaded.js").To_http_file_bry();
 			Io_url j_dir = app.Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "html", "res", "lib", "jquery");
                         Url_jquery = j_dir.GenSubFil("jquery-3.3.1.js").To_http_file_bry();
@@ -100,6 +98,13 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		wtr.Bfr().Add(Bry_.new_a7("\n \"wgArticlePath\" : \"/xowa/"));
 		wtr.Bfr().Add(page.Wiki().Domain_bry());
 		wtr.Bfr().Add(Bry_.new_a7("/wiki/$1\","));
+
+		// list of categories (not hidden)
+		wtr.Bfr().Add(Bry_.new_a7("\n \"wgCategories\":["));
+                Xoctg_double_grp grp = page.Grp_normal();
+                if (grp != null)
+                    grp.Itms().List_categories(wtr.Bfr());
+		wtr.Bfr().Add(Bry_.new_a7("],"));
 	}
 	public static final    byte[]	// NOTE: most of these are for the table-sorter
 	  Key_mode_is_gui					= Bry_.new_a7("mode_is_gui")

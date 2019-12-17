@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa; import gplx.*; import gplx.xowa.*;
 import gplx.xowa.langs.*;
 import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.pages.lnkis.*; import gplx.xowa.wikis.pages.dbs.*; import gplx.xowa.wikis.pages.redirects.*; import gplx.xowa.wikis.pages.hdumps.*; import gplx.xowa.wikis.pages.htmls.*; import gplx.xowa.wikis.pages.wtxts.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.doubles.*;
 public interface Xoa_page {
 	Xow_wiki				Wiki();
 	Guid_adp                Page_guid();
@@ -32,4 +33,5 @@ public interface Xoa_page {
 	boolean					Xtn__timeline_exists();
 	boolean					Xtn__gallery_exists();
         //Db_quality_tots Quality_tots();
+	void Grp_normal_(Xoctg_double_grp v);
 }

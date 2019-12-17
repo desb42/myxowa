@@ -84,6 +84,13 @@ public class Bry_bfr {
 		bfr_len += val_len;
 		return this;
 	}
+	public Bry_bfr Add_dq_escape(byte[] val) {
+		int val_len = val.length;
+		if (bfr_len + val_len > bfr_max) Resize((bfr_max + val_len) * 2);
+		Bry_.Copy_to_dq_escape(val, 0, val_len, bfr, bfr_len);
+		bfr_len += val_len;
+		return this;
+	}
 	public Bry_bfr Add_mid(byte[] val, int bgn, int end) {
 		int len = end - bgn;
 		if (len < 0) throw Err_.new_wo_type("negative len", "bgn", bgn, "end", end, "excerpt", String_.new_u8__by_len(val, bgn, bgn + 16));	// NOTE: check for invalid end < bgn, else difficult to debug errors later; DATE:2014-05-11

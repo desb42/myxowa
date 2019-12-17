@@ -303,6 +303,17 @@ public class Bry_ {
 		for (int i = src_bgn; i < src_end; i++)
 			trg[i + trg_adj] = src[i];
 	}
+	public static void Copy_to_dq_escape(byte[] src, int src_bgn, int src_end, byte[] trg, int trg_bgn) {
+		int trg_adj = trg_bgn - src_bgn;
+		for (int i = src_bgn; i < src_end; i++) {
+			byte b = src[i];
+			if (b == Byte_ascii.Quote) {
+				trg[i + trg_adj] = Byte_ascii.Backslash;
+				trg_adj++;
+			}
+			trg[i + trg_adj] = b;
+                }
+	}
 	public static void Copy_to_reversed(byte[] src, int src_bgn, int src_end, byte[] trg, int trg_bgn) {
 		// copies src to trg, but in reverse order; EX: trg="1" src="432." -> "1.234"
 		int len = src_end - src_bgn;

@@ -57,4 +57,15 @@ public class Xoctg_double_itm implements gplx.core.brys.Bfr_arg {
 //	,     "</li>"
 	( "<li><a~{lnki_cls} href=\"~{lnki_href}\" title=\"~{lnki_ttl}\">~{lnki_text}</a></li>"
 	);
+	public void List_categories(Bry_bfr bfr) {
+		int len = itms.Count();
+		for (int i = 0; i < len; ++i) {
+			Xoctg_pagebox_itm itm = (Xoctg_pagebox_itm)itms.Get_at(i);
+			Xoa_ttl ttl = itm.Ttl();
+			byte[] lnki_text = ttl.Page_txt();
+			if (i > 0)
+				bfr.Add_byte(Byte_ascii.Comma);
+			bfr.Add_byte(Byte_ascii.Quote).Add_dq_escape(lnki_text).Add_byte(Byte_ascii.Quote);
+		}
+	}
 }

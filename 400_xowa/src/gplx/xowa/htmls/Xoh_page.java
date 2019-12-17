@@ -19,6 +19,7 @@ import gplx.xowa.files.*;
 import gplx.xowa.langs.*;
 import gplx.xowa.htmls.heads.*; import gplx.xowa.htmls.sections.*; import gplx.xowa.addons.htmls.tocs.*;
 import gplx.xowa.wikis.pages.dbs.*; import gplx.xowa.wikis.pages.hdumps.*; import gplx.xowa.wikis.pages.htmls.*; import gplx.xowa.wikis.pages.wtxts.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.doubles.*;
 public class Xoh_page implements Xoa_page {
 	// core
 	public Xow_wiki					Wiki()				{return wiki;}				private Xow_wiki wiki;
@@ -40,6 +41,7 @@ public class Xoh_page implements Xoa_page {
 
 	public boolean					Xtn__timeline_exists() {return xtn__timeline_exists;} private boolean xtn__timeline_exists; public void Xtn__timeline_exists_y_() {xtn__timeline_exists = true;}
 	public boolean					Xtn__gallery_exists() {return xtn__gallery_exists;} private boolean xtn__gallery_exists; public void Xtn__gallery_exists_y_() {xtn__gallery_exists = true;}
+        public void Grp_normal_(Xoctg_double_grp v) {};
 
 	// props
 	public int						Page_id()			{return page_id;} private int page_id;
