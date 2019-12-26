@@ -59,7 +59,7 @@ public class Db_quality_tots {
 	}
 	public void Deserialise(byte[] serial) {
 		this.qualitytot = 0;
-                if (serial == null) return;
+		if (serial == null) return;
 		int len = serial.length;
 		int pos = 0, startpos;
 		for (int i = 0; i < 5; i++) {

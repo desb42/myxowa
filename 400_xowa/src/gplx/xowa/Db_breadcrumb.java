@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa; import gplx.*;
 import gplx.dbs.*;
+import gplx.xowa.parsers.Xop_ctx;
 import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.wikis.data.Xow_db_mgr;
 import gplx.xowa.wikis.data.tbls.Xowd_page_tbl;
@@ -35,7 +36,7 @@ public class Db_breadcrumb {
 		// need to check that the table 'parent' exists and contains at least one row
 		initialised = true;
 	}
-	public byte[] Get_breadcrumbs(byte[] ttl, byte[] isin) {
+	public byte[] Get_breadcrumbs(Xowe_wiki wiki, Xop_ctx ctx, byte[] ttl, byte[] isin, byte[] redirect_msg) {
 		if (!initialised) Init();
 		List_adp breadcrumb_list = List_adp_.New();
 		if (hasdata) {
@@ -61,27 +62,34 @@ public class Db_breadcrumb {
 		}
 
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		tmp_bfr.Add_str_a7("<div class=\"ext-wpb-pagebanner-subtitle\">");
 		int len = breadcrumb_list.Count();
 		for (int i = 0; i < len; i++) {
 			byte[] parent = (byte[])breadcrumb_list.Get_at(i);
 			if (i > 0)
 				tmp_bfr.Add_str_a7( " > " );
-                        int colon = Bry_find_.Find_fwd(parent, Byte_ascii.Colon);
+			int colon = Bry_find_.Find_fwd(parent, Byte_ascii.Colon);
 			byte[] lnk;
-                        if (colon > 0)
-                            lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, Byte_ascii.Colon_bry, parent, Byte_ascii.Pipe_bry, Bry_.Mid(parent, colon+1), Xop_tkn_.Lnki_end);		// make "[[xx:ttl ttl]]"
-                        else
-                            lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, parent, Xop_tkn_.Lnki_end);		// make "[[ttl]]"
+			if (colon > 0)
+				lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, Byte_ascii.Colon_bry, parent, Byte_ascii.Pipe_bry, Bry_.Mid(parent, colon+1), Xop_tkn_.Lnki_end);		// make "[[xx:ttl ttl]]"
+			else
+				lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, parent, Xop_tkn_.Lnki_end);		// make "[[ttl]]"
 			tmp_bfr.Add( lnk );
 		}
 		if (len > 0)
 			tmp_bfr.Add_str_a7( " > " );
-                int colon = Bry_find_.Find_fwd(ttl, Byte_ascii.Colon);
-                if (colon > 0)
-                    tmp_bfr.Add_mid(ttl, colon+1, ttl.length);
-                else
-                    tmp_bfr.Add(ttl);
+		int colon = Bry_find_.Find_fwd(ttl, Byte_ascii.Colon);
+		if (colon > 0)
+			tmp_bfr.Add_mid(ttl, colon+1, ttl.length);
+		else
+			tmp_bfr.Add(ttl);
+		byte[] bread = tmp_bfr.To_bry_and_clear();
+		wiki.Parser_mgr().Main().Parse_text_to_html(tmp_bfr, ctx, ctx.Page(), false, bread);
+		bread = tmp_bfr.To_bry_and_clear();
+		tmp_bfr.Add_str_a7("<div class=\"ext-wpb-pagebanner-subtitle\">");
+		if (redirect_msg.length != 0) {
+			tmp_bfr.Add(redirect_msg).Add_str_a7("<br/>\n");
+		}
+		tmp_bfr.Add(bread);
 		tmp_bfr.Add_str_a7("</div>");
 		return tmp_bfr.To_bry_and_clear();
 	}

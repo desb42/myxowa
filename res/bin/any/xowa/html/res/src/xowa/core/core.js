@@ -141,6 +141,50 @@ if (!window.xowa) {
 */
   };
     
+	/**
+	 * Private helper function used by util.escapeId*()
+	 * @ignore
+	 *
+	 * @param {string} str String to be encoded
+	 * @param {string} mode Encoding mode, see documentation for $wgFragmentMode
+	 *     in DefaultSettings.php
+	 * @return {string} Encoded string
+	 */
+	function escapeIdInternal( str, mode ) {
+		str = String( str );
+
+		switch ( mode ) {
+			case 'html5':
+				return str.replace( / /g, '_' );
+			case 'html5-legacy':
+				str = str.replace( /[ \t\n\r\f_'"&#%]+/g, '_' )
+					.replace( /^_+|_+$/, '' );
+				if ( str === '' ) {
+					str = '_';
+				}
+				return str;
+			case 'legacy':
+				return rawurlencode( str.replace( / /g, '_' ) )
+					.replace( /%3A/g, ':' )
+					.replace( /%/g, '.' );
+			default:
+				throw new Error( 'Unrecognized ID escaping mode ' + mode );
+		}
+	}
+	/**
+	 * Encode the string like PHP's rawurlencode
+	 * @ignore
+	 *
+	 * @param {string} str String to be encoded.
+	 * @return {string} Encoded string
+	 */
+	function rawurlencode( str ) {
+		str = String( str );
+		return encodeURIComponent( str )
+			.replace( /!/g, '%21' ).replace( /'/g, '%27' ).replace( /\(/g, '%28' )
+			.replace( /\)/g, '%29' ).replace( /\*/g, '%2A' ).replace( /~/g, '%7E' );
+	}
+
   xowa.js.mediaWiki.init = function(){
     if (xowa.js.mediaWiki.init_done) return;
   	window.mw = 
@@ -401,7 +445,83 @@ if (!window.xowa) {
 			//$link.updateTooltipAccessKeys();
 
 			return $item[ 0 ];
-		}
+		},
+		/**
+		 * Encode page titles for use in a URL
+		 *
+		 * We want / and : to be included as literal characters in our title URLs
+		 * as they otherwise fatally break the title.
+		 *
+		 * The others are decoded because we can, it's prettier and matches behaviour
+		 * of `wfUrlencode` in PHP.
+		 *
+		 * @param {string} str String to be encoded.
+		 * @return {string} Encoded string
+		 */
+		wikiUrlencode: function ( str ) {
+			//return util.rawurlencode( str )
+			return rawurlencode( str )
+				.replace( /%20/g, '_' )
+				// wfUrlencode replacements
+				.replace( /%3B/g, ';' )
+				.replace( /%40/g, '@' )
+				.replace( /%24/g, '$' )
+				.replace( /%21/g, '!' )
+				.replace( /%2A/g, '*' )
+				.replace( /%28/g, '(' )
+				.replace( /%29/g, ')' )
+				.replace( /%2C/g, ',' )
+				.replace( /%2F/g, '/' )
+				.replace( /%7E/g, '~' )
+				.replace( /%3A/g, ':' );
+		},
+
+		/**
+		 * Get the link to a page name (relative to `wgServer`),
+		 *
+		 * @param {string|null} [pageName=wgPageName] Page name
+		 * @param {Object} [params] A mapping of query parameter names to values,
+		 *  e.g. `{ action: 'edit' }`
+		 * @return {string} Url of the page with name of `pageName`
+		 */
+		getUrl: function ( pageName, params ) {
+			var titleFragmentStart, url, query,
+				fragment = '',
+				title = typeof pageName === 'string' ? pageName : mw.config.get( 'wgPageName' );
+
+			// Find any fragment
+			titleFragmentStart = title.indexOf( '#' );
+			if ( titleFragmentStart !== -1 ) {
+				fragment = title.slice( titleFragmentStart + 1 );
+				// Exclude the fragment from the page name
+				title = title.slice( 0, titleFragmentStart );
+			}
+
+			// Produce query string
+			if ( params ) {
+				query = $.param( params );
+			}
+			if ( query ) {
+				url = title ?
+					util.wikiScript() + '?title=' + mw.util.wikiUrlencode( title ) + '&' + query :
+					util.wikiScript() + '?' + query;
+			} else {
+				url = mw.config.get( 'wgArticlePath' )
+					.replace( '$1', mw.util.wikiUrlencode( title ).replace( /\$/g, '$$$$' ) );
+			}
+
+			// Append the encoded fragment
+			if ( fragment.length ) {
+				url += '#' + mw.util.escapeIdForLink( fragment );
+			}
+
+			return url;
+		},
+		escapeIdForLink: function ( str ) {
+			var mode = 'html5';
+
+			return escapeIdInternal( str, mode );
+		},
 
         },
         //simulate mediaWiki.hook: Execute functions queued for 'wikipage.content' directly, and ignore anything else

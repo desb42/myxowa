@@ -86,19 +86,26 @@ public class Xop_redirect_mgr {
 				.Add(Xoh_href_.Bry__wiki)					// '/wiki/'
 				.Add(ttl_unders)							// 'PageA'
 				.Add(Bry_redirect_arg)						// ?redirect=no
-				.Add(Gfh_bldr_.Bry__title__nth)				// '" title="'
+				.Add(Bry_class_title)				// '" class="mw-redirect" title="'
 				.Add(ttl_spaces)							// 'PageA'
 				.Add(Gfh_bldr_.Bry__lhs_end_head_w_quote)	// '">'
 				.Add(ttl_spaces)							// 'PageA'
 				.Add(Gfh_bldr_.Bry__a_rhs);					// </a>
 		}
 		if (!dirty) return Bry_.Empty; // ignore Special:Redirects else Special:Random will always show "redirected from"; DATE:2016-07-05
-		Xol_msg_itm msg_itm = wiki.Lang().Msg_mgr().Itm_by_id_or_null(Xol_msg_itm_.Id_redirectedfrom);
+		//Xol_msg_itm msg_itm = wiki.Lang().Msg_mgr().Itm_by_id_or_null(Xol_msg_itm_.Id_redirectedfrom);
 		Bry_bfr fmt_bfr = wiki.Utl__bfr_mkr().Get_b512();
-		app.Tmp_fmtr().Fmt_(msg_itm.Val()).Bld_bfr_one(fmt_bfr, redirect_bfr);
+		fmt_bfr.Add_str_a7("<span class=\"mw-redirectedfrom\">");
+		fmt_bfr.Add(wiki.Msg_mgr().Val_by_key_args(Key_redirectedfrom, redirect_bfr.To_bry()));
+		//app.Tmp_fmtr().Fmt_(msg_itm.Val()).Bld_bfr_one(fmt_bfr, redirect_bfr);
+		fmt_bfr.Add_str_a7("</span>");
 		redirect_bfr.Clear().Mkr_rls(); fmt_bfr.Mkr_rls();
 		return fmt_bfr.To_bry_and_clear();
 	}	private static byte[] Bry_redirect_dlm = Bry_.new_a7(" <--- "), Bry_redirect_arg = Bry_.new_a7("?redirect=no");		
+		private static final byte[]
+                        Key_redirectedfrom = Bry_.new_a7("redirectedfrom")
+                        , Bry_class_title = Bry_.new_a7("\" class=\"mw-redirect\" title=\"")
+                        ;
 }
 class Xop_redirect_mgr_ {
 	public static int Get_kwd_end_or_end(byte[] src, int bgn, int end) {	// get end of kwd

@@ -178,6 +178,19 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/ProofreadPage/ext.proofreadpage.article.js');
     }
 
+    if (document.querySelectorAll('.jcarousel-wrapper').length) {
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/carousel/ext.gadget.Carousel.js');
+    }
+
+    if (document.querySelectorAll('.read-more-container').length) {
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki/mediawiki.api.python.js');
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/oojs/oojs.jquery.js');
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/readmore/ext.relatedArticles.whole.js');
+    }
+
+    if (x_p.wiki == 'en.wikivoyage.org' || x_p.wiki == 'en.wikipedia.org') {
+      $(document).ready( xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/ext.popups.images.js') );
+    }
 /*
 ????? wikibooks
 // Move icons and navigation to top of content area, which should place them right below the page title

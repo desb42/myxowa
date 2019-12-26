@@ -85,11 +85,13 @@ public class Xow_portal_mgr implements Gfo_invk {
 
 		div_home_bry = Init_fmtr(tmp_bfr, eval_mgr, div_home_fmtr);
 		div_wikis_fmtr.Eval_mgr_(eval_mgr);
+		div_after_fmtr.Eval_mgr_(eval_mgr);
 		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
 		div_jump_to = Div_jump_to_fmtr.Bld_bry_many(tmp_bfr, msg_mgr.Val_by_key_obj("jumpto"), msg_mgr.Val_by_key_obj("jumptonavigation"), msg_mgr.Val_by_key_obj("jumptosearch"));
 		tmp_bfr.Mkr_rls();
 		sidebar_mgr.Init_by_wiki();
-	}	private boolean init_needed = true;
+	}
+	private boolean init_needed = true;
 	private byte[] Init_fmtr(Bry_bfr tmp_bfr, Bry_fmtr_eval_mgr eval_mgr, Bry_fmtr fmtr, Object... fmt_args) {
 		fmtr.Eval_mgr_(eval_mgr);
 		fmtr.Bld_bfr_many(tmp_bfr, fmt_args);
@@ -105,8 +107,8 @@ public class Xow_portal_mgr implements Gfo_invk {
 		return div_footer_bry;
 	}
 
-        // assuming Div_personal_bry is followed by Div_ns_bry is followed by Div_view_bry
-        private byte[] subj_href = null;
+	// assuming Div_personal_bry is followed by Div_ns_bry is followed by Div_view_bry
+	private byte[] subj_href = null;
 	public byte[] Div_personal_bry(boolean from_hdump, Xoa_ttl ttl, byte html_gen_tid, boolean isnoredirect) {
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
 		byte[] wiki_user_name = wiki.User().Name();
@@ -260,6 +262,15 @@ public class Xow_portal_mgr implements Gfo_invk {
 		div_wikis_fmtr.Bld_bfr_many(tmp_bfr, toggle_itm.Html_toggle_btn(), toggle_itm.Html_toggle_hdr());
 		return tmp_bfr.To_bry_and_rls();
 	}
+	public byte[] Div_after_bry(Xoae_page page) {
+		List_adp lst = page.Related().List();
+		int len = lst.Count();
+		if (len == 0) return Bry_.Empty;
+		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
+		div_after_fmtr.Bld_bfr_many(tmp_bfr, Bry_.new_a7("<div class=\"read-more-container\"></div>"));
+		return tmp_bfr.To_bry_and_rls();
+	}
+
 	private final    Bry_fmtr 
 	  div_personal_fmtr = Bry_fmtr.new_("~{portal_personal_subj_href};~{portal_personal_subj_text};~{portal_personal_talk_cls};~{portal_personal_talk_href};~{portal_personal_talk_cls};~{portal_indicators_pagesource}", "portal_personal_subj_href", "portal_personal_subj_text", "portal_personal_subj_cls", "portal_personal_talk_href", "portal_personal_talk_cls", "portal_indicators_pagesource")
 	, div_ns_fmtr = Bry_fmtr.new_("~{portal_ns_subj_href};~{portal_ns_subj_cls};~{portal_ns_talk_href};~{portal_ns_talk_cls};~{portal_div_vnts};~{portal_main};~{portal_ca};~{portal_extra}", "portal_ns_subj_href", "portal_ns_subj_cls", "portal_ns_talk_href", "portal_ns_talk_cls", "portal_div_vnts", "portal_main", "portal_ca", "portal_extra")
@@ -267,6 +278,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 	, div_logo_fmtr = Bry_fmtr.new_("", "portal_nav_main_href", "portal_logo_url")
 	, div_sync_fmtr = Bry_fmtr.new_("", "page_url")
 	, div_wikis_fmtr = Bry_fmtr.new_("", "toggle_btn", "toggle_hdr")
+	, div_after_fmtr = Bry_fmtr.new_("", "content")
 	;
 	public Bry_fmtr Div_logo_fmtr() {return div_logo_fmtr;} // TEST:
 	private byte[] Reverse_li(byte[] bry) {
@@ -353,7 +365,8 @@ public class Xow_portal_mgr implements Gfo_invk {
 		else if	(ctx.Match(k, Invk_div_logo_))						div_logo_fmtr.Fmt_(m.ReadBry("v"));
 		else if	(ctx.Match(k, Invk_div_home_))						div_home_fmtr.Fmt_(m.ReadBry("v"));
 		else if	(ctx.Match(k, Invk_div_sync_))						div_sync_fmtr.Fmt_(m.ReadBry("v"));
-		else if	(ctx.Match(k, Invk_div_wikis_))						div_wikis_fmtr.Fmt_(m.ReadBry("v"));
+		else if	(ctx.Match(k, Invk_div_wikis_))                                         div_wikis_fmtr.Fmt_(m.ReadBry("v"));
+		else if	(ctx.Match(k, Invk_div_after_))                                         div_after_fmtr.Fmt_(m.ReadBry("v"));
 
 		else if (ctx.Match(k, Cfg__missing_class))					missing_ns_cls = m.ReadBry("v");
 		else if (ctx.Match(k, Cfg__sidebar_enabled__desktop))		Sidebar_enabled_(Bool_.Y, m.ReadYn("v"));
@@ -366,7 +379,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 		return this;
 	}
 	private static final String Invk_div_personal_ = "div_personal_", Invk_div_view_ = "div_view_", Invk_div_ns_ = "div_ns_", Invk_div_home_ = "div_home_"
-	, Invk_div_sync_ = "div_sync_", Invk_div_wikis_ = "div_wikis_";
+	, Invk_div_sync_ = "div_sync_", Invk_div_wikis_ = "div_wikis_", Invk_div_after_ = "div_after_";
 	public static final String Invk_div_logo_ = "div_logo_";
 	private static final    byte[] Missing_ns_cls_hide = Bry_.new_a7("xowa_display_none");
 

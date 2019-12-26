@@ -16,7 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.htmls; import gplx.*; import gplx.xowa.*;
 import gplx.langs.htmls.*; import gplx.xowa.xtns.relatedSites.*;
 import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.pages.tags.*;
-import gplx.xowa.parsers.utils.*;	
+import gplx.xowa.parsers.utils.*;
 public class Xoh_page_wtr_wkr_ {
 	/*private static int[] qualitycount;
 	private static int qualitytot;

@@ -67,17 +67,17 @@ public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 		int result = 0;
 		for (int i = 3; i >= 0; i--) {
 			result <<= 8;
-                        int c = bin[ofs + i];
-                        // 2s compliment
-                        if (c < 0)
-                            c += 256;
+			int c = bin[ofs + i];
+			// 2s compliment
+			if (c < 0)
+				c += 256;
 			result += c;
 		}
 		return result;
 	}
 	public void Deserialise(byte[] serial) {
 		Clear();
-                if (serial == null) return;
+		if (serial == null) return;
 		int len = serial.length;
 		int i = 0;
 		while (i < len) {

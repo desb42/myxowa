@@ -48,7 +48,7 @@ public class Xowd_page_tbl implements Db_tbl {
 		if (fld_cat_db_id_name != Dbmeta_fld_itm.Key_null)
 			fld_cat_db_id		= flds.Add_int_dflt(fld_cat_db_id_name, -1);// MW:XOWA
 		flds_select_all	= String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id);
-		flds_select_idx	= String_.Ary_wo_null(fld_ns, fld_title, fld_id, fld_len, fld_score);
+		flds_select_idx	= String_.Ary_wo_null(fld_ns, fld_title, fld_id, fld_len, fld_score, fld_is_redirect);
 		conn.Rls_reg(this);
 	}
 	public Db_conn Conn()						{return conn;} private final    Db_conn conn; 
@@ -354,6 +354,7 @@ public class Xowd_page_tbl implements Db_tbl {
 		, rdr.Read_int(fld_ns)
 		, rdr.Read_bry_by_str(fld_title)
 		, rdr.Read_int(fld_len)
+		, rdr.Read_bool_by_byte(fld_is_redirect)
 		);
 	}
 	public void Read_page__all(Xowd_page_itm page, Db_rdr rdr) {

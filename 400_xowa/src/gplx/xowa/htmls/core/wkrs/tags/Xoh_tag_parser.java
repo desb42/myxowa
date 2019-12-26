@@ -21,6 +21,7 @@ import gplx.xowa.htmls.core.wkrs.imgs.*; import gplx.xowa.htmls.core.wkrs.thms.*
 import gplx.xowa.htmls.core.wkrs.addons.forms.*;
 import gplx.xowa.htmls.core.hzips.*; import gplx.xowa.htmls.core.wkrs.tocs.*;
 import gplx.xowa.wikis.ttls.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*;
 public class Xoh_tag_parser implements Gfh_doc_wkr {
 	private final    Xoh_hdoc_wkr hdoc_wkr;
 	private final    Gfh_tag_rdr tag_rdr = Gfh_tag_rdr.New__html();
@@ -104,6 +105,9 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 						rv = Parse_by_data(hdoc_wkr, hctx, tag_rdr, src, cur, null, Xoh_hzip_dict_.Tid__img);
 					else if (cur.Atrs__cls_has(Xoh_toc_wtr.Atr__class__toc))
 						rv = Parse_by_data(hdoc_wkr, hctx, tag_rdr, src, cur, null, Xoh_hzip_dict_.Tid__toc);
+					else if (cur.Atrs__cls_has(Xoctg_catpage_mgr.Atr__class__categorytreetag))
+						((Xoh_page)hctx.Page()).Xtn__categorytree_exists_y_();
+
 					break;
 				case Gfh_tag_.Id__ul:
 					if		(cur.Atrs__cls_has(Xoh_gly_grp_data.Atr__cls__gallery)) {

@@ -154,7 +154,8 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 		if ( prefixhide ) {
 			ttl_page = ttl.Page_txt();
 		} else {
-			ttl_page = ttl.Page_db(); // Not sure this is correct
+			//ttl_page = ttl.Page_db(); // Not sure this is correct
+			ttl_page = ttl.Page_txt();
 		}
 
 		byte[] labelClass;
@@ -292,12 +293,12 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 		Xoctg_catpage_ctg ctg = Get_by_db_or_null(ttl.Page_db(), catpage_url, ttl, grp_max);
 		if (ctg == null) return;
 
-                if (params.Isjson() == false)
-		Fmt__data_ct.Bld_many(local_tmp_bfr, params.Mode(), params.Hideprefix(), params.Showcount(), params.Namespaces());
+		if (params.Isjson() == false)
+			Fmt__data_ct.Bld_many(local_tmp_bfr, params.Mode(), params.Hideprefix(), params.Showcount(), params.Namespaces());
 		byte[] data_ct_mode = local_tmp_bfr.To_bry_and_clear();
 
 		// write html
-		if (params.Depth() != 0)
+		if (params.Depth() != 0 || (params.Isjson() && params.Mode() == Categorytree_itm_.Mode__PAGES))
 			Build_cattree(local_tmp_bfr, wiki, ctg, params, data_ct_mode);
 		if (params.Hideroot() == false || params.Depth() == 0) {
 			byte[] inner = local_tmp_bfr.To_bry_and_clear();
@@ -350,6 +351,7 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	( ""
 	, "<div class=\"CategoryTreeTag\" data-ct-mode=\"~{mode}\" data-ct-options=\"{&quot;mode&quot;:~{mode},&quot;hideprefix&quot;:~{hide},&quot;showcount&quot;:~{showcount},&quot;namespaces&quot;:~{namespaces}}\">"
 	);
+	public static byte[] Atr__class__categorytreetag = Bry_.new_a7("CategoryTreeTag");
 
 	public void Update_params(byte[] key, byte[] val, Categorytree_params_ params) {
 		if (Bry_.Eq(key, Categorytree_itm_.Attr_showcount)) {
@@ -363,9 +365,9 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 				// only supporting categories and pages
 				if (val[0] == 'c')
 					params.Mode_(Categorytree_itm_.Mode__CATEGORIES);
-				else if (val[0] == 'p')
+				else if (val[0] == 'p' || (val.length == 2 && val[0] == '1' && val[1] == '0'))
 					params.Mode_(Categorytree_itm_.Mode__PAGES);
-				else if (val[0] == 'a')
+				else if (val[0] == 'a' || (val.length == 2 && val[0] == '2' && val[1] == '0'))
 					params.Mode_(Categorytree_itm_.Mode__ALL);
 			}
 		} else if (Bry_.Eq(key, Categorytree_itm_.Attr_hideprefix)) {

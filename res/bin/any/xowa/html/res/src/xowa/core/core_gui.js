@@ -1,4 +1,4 @@
-// Add Event Manager for simple pub/sub pattern; DATE:2018-11-11
+// Add Event Manager for simple pub sub pattern; DATE:2018-11-11
 var XoEvtMgr = (function(){
   var funcs = [];
   function XoEvtMgr() {
@@ -19,6 +19,8 @@ var XoEvtMgr = (function(){
   
   return XoEvtMgr;
 }());
+
+window.mwNow = Date.now();
 
 if (!window.xowa) {
   window.xowa = {
@@ -117,15 +119,17 @@ if (!window.xowa) {
   };
   xowa.js.jquery.init = function(document) {
     jQuery.cookie = xowa.cookie;
+    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.webfonts.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.preferences.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.webfonts.repository.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.webfonts.js');
   	// loaded elsewhere
   	return;
-    if (xowa.js.jquery.init_done) return;
+/*    if (xowa.js.jquery.init_done) return;
     //xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery-1.11.3.min.js', xowa.js.jquery.init_callback);
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery-3.2.1.js', xowa.js.jquery.init_callback);
     xowa.js.jquery.init_done = true;
+*/
   };
     
   xowa.js.mediaWiki.init = function(){
@@ -137,9 +141,259 @@ if (!window.xowa) {
         config: {
             get: xowa.cfg.get
         },
+        html: {
+        	escape: function(val) { return val; }
+        },
+        experiments: {
+		getBucket: function ( experiment, token ) {
+			return 'control';
+		}
+        },
+        user: {
+    getPageviewToken: function () {
+    	return "boohoo";
+    },
+		/**
+		 * Get the current user's name
+		 *
+		 * @return {string|null} User name string or null if user is anonymous
+		 */
+		getName: function () {
+			return mw.config.get( 'wgUserName' );
+		},
+		/**
+		 * Generate a random user session ID.
+		 *
+		 * This information would potentially be stored in a cookie to identify a user during a
+		 * session or series of sessions. Its uniqueness should not be depended on unless the
+		 * browser supports the crypto API.
+		 *
+		 * Known problems with Math.random():
+		 * Using the Math.random function we have seen sets
+		 * with 1% of non uniques among 200,000 values with Safari providing most of these.
+		 * Given the prevalence of Safari in mobile the percentage of duplicates in
+		 * mobile usages of this code is probably higher.
+		 *
+		 * Rationale:
+		 * We need about 64 bits to make sure that probability of collision
+		 * on 500 million (5*10^8) is <= 1%
+		 * See https://en.wikipedia.org/wiki/Birthday_problem#Probability_table
+		 *
+		 * @return {string} 64 bit integer in hex format, padded
+		 */
+		generateRandomSessionId: function () {
+			var rnds, i,
+				hexRnds = new Array( 2 ),
+				// Support: IE 11
+				crypto = window.crypto || window.msCrypto;
+
+			if ( crypto && crypto.getRandomValues && typeof Uint32Array === 'function' ) {
+				// Fill an array with 2 random values, each of which is 32 bits.
+				// Note that Uint32Array is array-like but does not implement Array.
+				rnds = new Uint32Array( 2 );
+				crypto.getRandomValues( rnds );
+			} else {
+				rnds = [
+					Math.floor( Math.random() * 0x100000000 ),
+					Math.floor( Math.random() * 0x100000000 )
+				];
+			}
+			// Convert number to a string with 16 hex characters
+			for ( i = 0; i < 2; i++ ) {
+				// Add 0x100000000 before converting to hex and strip the extra character
+				// after converting to keep the leading zeros.
+				hexRnds[ i ] = ( rnds[ i ] + 0x100000000 ).toString( 16 ).slice( 1 );
+			}
+
+			// Concatenation of two random integers with entropy n and m
+			// returns a string with entropy n+m if those strings are independent
+			return hexRnds.join( '' );
+		},
+		/**
+		 * Whether the current user is anonymous
+		 *
+		 * @return {boolean}
+		 */
+		isAnon: function () {
+			return mw.user.getName() === null;
+		},
+
+		/**
+		 * Get an automatically generated random ID (persisted in sessionStorage)
+		 *
+		 * This ID is ephemeral for everyone, staying in their browser only until they
+		 * close their browsing session.
+		 *
+		 * @return {string} Random session ID
+		 */
+		sessionId: function () {
+			return sessionId = mw.user.generateRandomSessionId();
+			var sessionId = mw.storage.session.get( 'mwuser-sessionId' );
+			if ( !sessionId ) {
+				sessionId = mw.user.generateRandomSessionId();
+				mw.storage.session.set( 'mwuser-sessionId', sessionId );
+			}
+			return sessionId;
+		},
+
+		/**
+		 * Get the current user's name or the session ID
+		 *
+		 * Not to be confused with #getId.
+		 *
+		 * @return {string} User name or random session ID
+		 */
+		id: function () {
+			return mw.user.getName() || mw.user.sessionId();
+		},
+
+      	},
         util: {
-        	//$content: window.jQuery ? jQuery('#mw-content-text') : null
-        	$content: window.jQuery ? jQuery('#content') : null
+        escapeRegExp: function (str) {
+        	return str.replace('$', '\\$');
+        },
+        	$content: window.jQuery ? jQuery('#mw-content-text') : null,
+        	//$content: window.jQuery ? jQuery('#content') : null,
+		/**
+		 * Add a link to a portlet menu on the page, such as:
+		 *
+		 * p-cactions (Content actions), p-personal (Personal tools),
+		 * p-navigation (Navigation), p-tb (Toolbox)
+		 *
+		 * The first three parameters are required, the others are optional and
+		 * may be null. Though providing an id and tooltip is recommended.
+		 *
+		 * By default the new link will be added to the end of the list. To
+		 * add the link before a given existing item, pass the DOM node
+		 * (e.g. `document.getElementById( 'foobar' )`) or a jQuery-selector
+		 * (e.g. `'#foobar'`) for that item.
+		 *
+		 *     util.addPortletLink(
+		 *         'p-tb', 'https://www.mediawiki.org/',
+		 *         'mediawiki.org', 't-mworg', 'Go to mediawiki.org', 'm', '#t-print'
+		 *     );
+		 *
+		 *     var node = util.addPortletLink(
+		 *         'p-tb',
+		 *         new mw.Title( 'Special:Example' ).getUrl(),
+		 *         'Example'
+		 *     );
+		 *     $( node ).on( 'click', function ( e ) {
+		 *         console.log( 'Example' );
+		 *         e.preventDefault();
+		 *     } );
+		 *
+		 * @param {string} portlet ID of the target portlet ( 'p-cactions' or 'p-personal' etc.)
+		 * @param {string} href Link URL
+		 * @param {string} text Link text
+		 * @param {string} [id] ID of the new item, should be unique and preferably have
+		 *  the appropriate prefix ( 'ca-', 'pt-', 'n-' or 't-' )
+		 * @param {string} [tooltip] Text to show when hovering over the link, without accesskey suffix
+		 * @param {string} [accesskey] Access key to activate this link (one character, try
+		 *  to avoid conflicts. Use `$( '[accesskey=x]' ).get()` in the console to
+		 *  see if 'x' is already used.
+		 * @param {HTMLElement|jQuery|string} [nextnode] Element or jQuery-selector string to the item that
+		 *  the new item should be added before, should be another item in the same
+		 *  list, it will be ignored otherwise
+		 *
+		 * @return {HTMLElement|null} The added element (a ListItem or Anchor element,
+		 * depending on the skin) or null if no element was added to the document.
+		 */
+		addPortletLink: function ( portlet, href, text, id, tooltip, accesskey, nextnode ) {
+			var $item, $link, $portlet, $ul;
+
+			// Check if there's at least 3 arguments to prevent a TypeError
+			if ( arguments.length < 3 ) {
+				return null;
+			}
+			// Setup the anchor tag
+			$link = $( '<a>' ).attr( 'href', href ).text( text );
+			if ( tooltip ) {
+				$link.attr( 'title', tooltip );
+			}
+
+			// Select the specified portlet
+			$portlet = $( '#' + portlet );
+			if ( $portlet.length === 0 ) {
+				return null;
+			}
+			// Select the first (most likely only) unordered list inside the portlet
+			$ul = $portlet.find( 'ul' ).eq( 0 );
+
+			// If it didn't have an unordered list yet, create it
+			if ( $ul.length === 0 ) {
+
+				$ul = $( '<ul>' );
+
+				// If there's no <div> inside, append it to the portlet directly
+				if ( $portlet.find( 'div:first' ).length === 0 ) {
+					$portlet.append( $ul );
+				} else {
+					// otherwise if there's a div (such as div.body or div.pBody)
+					// append the <ul> to last (most likely only) div
+					$portlet.find( 'div' ).eq( -1 ).append( $ul );
+				}
+			}
+			// Just in case..
+			if ( $ul.length === 0 ) {
+				return null;
+			}
+
+			// Unhide portlet if it was hidden before
+			$portlet.removeClass( 'emptyPortlet' );
+
+			// Wrap the anchor tag in a list item (and a span if $portlet is a Vector tab)
+			// and back up the selector to the list item
+			if ( $portlet.hasClass( 'vectorTabs' ) ) {
+				$item = $link.wrap( '<li><span></span></li>' ).parent().parent();
+			} else {
+				$item = $link.wrap( '<li></li>' ).parent();
+			}
+
+			// Implement the properties passed to the function
+			if ( id ) {
+				$item.attr( 'id', id );
+			}
+
+			if ( accesskey ) {
+				$link.attr( 'accesskey', accesskey );
+			}
+
+			if ( tooltip ) {
+				$link.attr( 'title', tooltip );
+			}
+
+			if ( nextnode ) {
+				// Case: nextnode is a DOM element (was the only option before MW 1.17, in wikibits.js)
+				// Case: nextnode is a CSS selector for jQuery
+				if ( nextnode.nodeType || typeof nextnode === 'string' ) {
+					nextnode = $ul.find( nextnode );
+				} else if ( !nextnode.jquery ) {
+					// Error: Invalid nextnode
+					nextnode = undefined;
+				}
+				if ( nextnode && ( nextnode.length !== 1 || nextnode[ 0 ].parentNode !== $ul[ 0 ] ) ) {
+					// Error: nextnode must resolve to a single node
+					// Error: nextnode must have the associated <ul> as its parent
+					nextnode = undefined;
+				}
+			}
+
+			// Case: nextnode is a jQuery-wrapped DOM element
+			if ( nextnode ) {
+				nextnode.before( $item );
+			} else {
+				// Fallback (this is the default behavior)
+				$ul.append( $item );
+			}
+
+			// Update tooltip for the access key after inserting into DOM
+			// to get a localized access key label (T69946).
+			//$link.updateTooltipAccessKeys();
+
+			return $item[ 0 ];
+		}
+
         },
         //simulate mediaWiki.hook: Execute functions queued for 'wikipage.content' directly, and ignore anything else
         hook: function (name) {
@@ -508,13 +762,11 @@ if (!window.xowa) {
     elem.insertAdjacentHTML('beforebegin', html);
     
     xowa.js.doc.process_new_elem(elem.parentNode);  // NOTE: elem is placeholder item; html is inserted after it; need to call process_new_elem on parentNode; DATE:2015-08-03
+    return true;
   };
-/*
-  xowa.js.doc.ElemAdd.publish()
-*/
   // PURPOSE: process new element such as adding bindings; DATE:2015-07-09
   xowa.js.doc.process_new_elem = function(elem) {
-     xowa.js.doc.EvtElemAdd.pub(elem);
+     xowa.js.doc.evtElemAdd.pub(elem);
   }
   
   // PURPOSE: async search; gallery; imap
@@ -613,8 +865,83 @@ if (!window.xowa) {
   window.navigate_to = function(href) { // XOWA: expose publicly for alertify
     window.location = href;
   };
+
+	function addCss(style) {
+		if (style)
+			xowa.css.add(style.css[0]);
+	}
+	function addMessages(messages) {
+		if (messages) {
+			for (key in messages) {
+	    	xowa.cfg.set(key, messages[key]);
+	    }
+	  }
+  }
+	function addScript(script) {
+		if (script)
+			script( $, $ );
+			//script( $, $, mw.loader.require, registry[ module ].module );
+	}
+
+	function xowa_implement( module, script, style, messages, templates ) {
+		addMessages(messages || null);
+		addScript(script || null);
+		addCss(style || null);
+//					registry[ name ].templates = templates || null;
+	}
+
+
+window.xowa_global_values['wgNamespaceIds'] = {
+				media: -2,
+				special: -1,
+				'': 0,
+				talk: 1,
+				user: 2,
+				user_talk: 3,
+				wikipedia: 4,
+				wikipedia_talk: 5,
+				file: 6,
+				file_talk: 7,
+				mediawiki: 8,
+				mediawiki_talk: 9,
+				template: 10,
+				template_talk: 11,
+				help: 12,
+				help_talk: 13,
+				category: 14,
+				category_talk: 15,
+				image: 6,
+				image_talk: 7,
+				project: 4,
+				project_talk: 5,
+			};
+window.xowa_global_values['wgFormattedNamespaces'] = {
+				'-2': 'Media',
+				'-1': 'Special',
+				0: '',
+				1: 'Talk',
+				2: 'User',
+				3: 'User talk',
+				4: 'Wikipedia',
+				5: 'Wikipedia talk',
+				6: 'File',
+				7: 'File talk',
+				8: 'MediaWiki',
+				9: 'MediaWiki talk',
+				10: 'Template',
+				11: 'Template talk',
+				12: 'Help',
+				13: 'Help talk',
+				14: 'Category',
+				15: 'Category talk',
+			};
+window.xowa_global_values['skin'] = "vector";
+
 }
-/* + exec.js */
+
+
+
+/* ------------------------------------ */
 function obj__merge(lhs, rhs) {
   var rv = lhs;
   for (prop in rhs) {
@@ -796,3 +1123,17 @@ function Xonotify() {
   }
 }
 window.xowa.cmds.add('xowa.notify', new Xonotify());
+
+      xowa.js.jquery.init();
+      xowa.js.mediaWiki.init();
+
+
+jQuery( document ).ready( function ( $ ) {
+	  var locjs = '/';
+    if (window.location.pathname.substring(0,5) == '/xowa')
+      locjs = '/xowa/';
+    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '.js');
+    var pageurl = locjs + x_p.wiki + '/wiki/' + xowa_global_values.wgPageName;
+    //if (pageurl != location.pathname)
+    //  window.history.pushState('page2', xowa_global_values.wgTitle, pageurl);
+} );

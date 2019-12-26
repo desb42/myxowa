@@ -106,12 +106,14 @@ public class Hxtn_page_mgr {
 	, Id__geocrumb = 3
 	, Id__pgbnr = 4
 	, Id__pp_indexpage = 5
+	, Id__related = 6
 	;
 	public static final int
 	  Itm__pp_pagequality = 0
 	, Itm__indicators = 1
 	, Itm__geocrumb =2
 	, Itm__pgbnr = 3
-	, Itm__pp_indexpage = 4;
+	, Itm__pp_indexpage = 4
+	, Itm__related = 5
 	;
 }

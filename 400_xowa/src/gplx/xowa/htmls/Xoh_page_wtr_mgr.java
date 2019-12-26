@@ -99,6 +99,7 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	, "page_body_cls", "html_content_editable"
 	, "page_data", "page_langs"
 	, "portal_div_footer"
+	, "portal_div_after"
 	
 	, "portal_div_personal"
 	, "portal_div_ns"

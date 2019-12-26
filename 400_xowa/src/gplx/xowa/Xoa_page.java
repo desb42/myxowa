@@ -32,6 +32,7 @@ public interface Xoa_page {
 	Xoa_page__commons_mgr	Commons_mgr();
 	boolean					Xtn__timeline_exists();
 	boolean					Xtn__gallery_exists();
+	boolean					Xtn__categorytree_exists();
         //Db_quality_tots Quality_tots();
 	void Grp_normal_(Xoctg_double_grp v);
 }

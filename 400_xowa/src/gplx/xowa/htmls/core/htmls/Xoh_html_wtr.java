@@ -436,7 +436,9 @@ public class Xoh_html_wtr {
 				++commonPrefixLength;
 			}
 			if ( prefixLength == 0 && lastPrefix_end - lastPrefix_bgn > 0 ) {
-				output.Add_byte(Byte_ascii.Nl);
+				//output.Add_byte(Byte_ascii.Nl);
+                                // (re)set para start
+                                //ctx.Para().Process_block__xnde(null, Xop_xnde_tag.Block_bgn);
 			}
 		}
 		// do some trimming
@@ -613,8 +615,9 @@ public class Xoh_html_wtr {
 				break;
 			case Xop_xnde_tag_.Tid__dl:
 			case Xop_xnde_tag_.Tid__div:
+                                //ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_end);
 				Write_xnde(bfr, ctx, hctx, xnde, tag, tag_id, src);
-                                // (re)set para start
+                                // (re)set para start - maybe??
                                 ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_bgn);
 				break;
 			case Xop_xnde_tag_.Tid__pre: {

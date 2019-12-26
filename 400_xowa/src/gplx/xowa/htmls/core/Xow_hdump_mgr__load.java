@@ -41,21 +41,6 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 	public void Load_by_xowe(Xoae_page wpg) {
 		tmp_hpg.Ctor_by_hview(wpg.Wiki(), wpg.Url(), wpg.Ttl(), wpg.Db().Page().Id());
 		Load_by_xowh(tmp_hpg, wpg.Ttl(), Bool_.Y);
-		// copy to 'real' page
-		wpg.Quality_tots().Deserialise(tmp_hpg.Quality_tots_serial());
-		wpg.Db().Html().Html_bry_(tmp_hpg.Db().Html().Html_bry());
-		byte[] pgbnr = null;
-		if (tmp_hpg.Pgbnr_bry() != null)
-			pgbnr = Parse(tmp_hpg, 1, Xoh_hzip_dict_.Hdb__htxt, tmp_hpg.Pgbnr_bry());
-		wpg.Html_data().Pgbnr_bry_(pgbnr);
-		wpg.Html_data().Pgbnr_isin_(tmp_hpg.Pgbnr_isin());
-		wpg.Html_data().Indicators().Deserialise(tmp_hpg.Indicators_serial());
-		if (tmp_hpg.Pgbnr_bry() != null) {
-			Pgbnr_itm itm = new Pgbnr_itm();
-			itm.Pgbnr_bry_( tmp_hpg.Pgbnr_bry() );
-			wpg.Html_data().Xtn_pgbnr_(itm);
-		}
-                wpg.Pp_indexpage_(tmp_hpg.Pp_indexpage());
 		wpg.Root_(new gplx.xowa.parsers.Xop_root_tkn());	// HACK: set root, else load page will fail
 		Fill_page(wpg, tmp_hpg);
 	}
@@ -117,6 +102,22 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 	}
 	public void Fill_page(Xoae_page wpg, Xoh_page hpg) {
 		Xopg_html_data html_data = wpg.Html_data();
+
+		// copy to 'real' page
+		wpg.Quality_tots().Deserialise(tmp_hpg.Quality_tots_serial());
+		wpg.Db().Html().Html_bry_(tmp_hpg.Db().Html().Html_bry());
+		byte[] pgbnr = null;
+		if (tmp_hpg.Pgbnr_bry() != null) {
+			pgbnr = Parse(tmp_hpg, 1, Xoh_hzip_dict_.Hdb__htxt, tmp_hpg.Pgbnr_bry());
+			Pgbnr_itm itm = new Pgbnr_itm();
+			itm.Pgbnr_bry_( pgbnr );
+			html_data.Xtn_pgbnr_(itm);
+		}
+		html_data.Pgbnr_isin_(tmp_hpg.Pgbnr_isin());
+		html_data.Indicators().Deserialise(tmp_hpg.Indicators_serial());
+		wpg.Pp_indexpage_(tmp_hpg.Pp_indexpage());
+		wpg.Related().Deserialise(tmp_hpg.Related_serial());
+
 		html_data.Display_ttl_(tmp_hpg.Display_ttl());
 		html_data.Content_sub_(tmp_hpg.Content_sub());			
 		html_data.Xtn_skin_mgr().Add(new Xopg_xtn_skin_itm_stub(tmp_hpg.Sidebar_div()));
@@ -130,12 +131,13 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		wpg_head.Itm__hiero().Enabled_			(hpg_head.Hiero_exists());
 		wpg_head.Itm__timeline().Enabled_		(hpg.Xtn__timeline_exists());
 		wpg_head.Itm__gallery_styles().Enabled_	(hpg.Xtn__gallery_exists());
+		wpg_head.Itm__categorytree().Enabled_	(hpg.Xtn__categorytree_exists());
 		wpg_head.Itm__toc().Enabled_(hpg.Html_data().Toc_mgr().Exists());
 		wpg_head.Itm__pgbnr().Enabled_(hpg.Html_data().Head_mgr().Itm__pgbnr().Enabled());
 
 		// transfer Xtn_gallery_packed_exists; needed for hdump; PAGE:en.w:Mexico; DATE:2016-08-14
 		if (hpg.Html_data().Xtn_gallery_packed_exists())
-			wpg.Html_data().Xtn_gallery_packed_exists_y_();
+			html_data.Xtn_gallery_packed_exists_y_();
 
 		// transfer images from Xoh_page to Xoae_page 
 		Xoh_img_mgr src_imgs = hpg.Img_mgr();
@@ -156,7 +158,7 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 			trg_list.Add_direct(src_list.Get_at(i));
 		}
 	}
- 		public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
+	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Cfg__read_preferred))	 		read_preferred = m.ReadYn("v");
 		else if	(ctx.Match(k, Cfg__html_mode))				html_mode = Xow_hdump_mode.Parse(m.ReadStr("v"));
 		return this;

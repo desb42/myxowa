@@ -125,7 +125,7 @@ public class Xoh_lnki_wtr {
 				if (lnki_html_id > Lnki_id_ignore)					// html_id=0 for skipped lnkis; EX:anchors and interwiki
 					bfr.Add(Bry__id_xolnki)					// ' id=\"xolnki_'
 						.Add_int_variable(lnki_html_id)
-                                                .Add_byte_quote();			// '1234"'
+						.Add_byte_quote();			// '1234"'
 			}
 			bfr.Add(Bry__href); // '" href="'
 			wiki.Html__href_wtr().Build_to_bfr(bfr, app, hctx, wiki.Domain_bry(), lnki_ttl);	// '/wiki/A'

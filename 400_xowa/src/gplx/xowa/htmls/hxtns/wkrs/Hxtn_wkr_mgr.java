@@ -28,6 +28,7 @@ public class Hxtn_wkr_mgr {
 			Reg_wkr(new gplx.xowa.xtns.indicators.Hxtn_page_wkr__indicators(null));
 			Reg_wkr(new gplx.xowa.xtns.pagebanners.Hxtn_page_wkr__pgbnr(null));
 			Reg_wkr(new gplx.xowa.xtns.proofreadPage.Hxtn_page_wkr__indexpage(null));
+			Reg_wkr(new gplx.xowa.xtns.related.Hxtn_page_wkr__related(null));
 		}
 	}
 	private void Reg_wkr(Hxtn_page_wkr wkr) {

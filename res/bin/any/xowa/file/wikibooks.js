@@ -54,8 +54,8 @@ $(document).ready(remove_no_license);
 // Maintainer: [[User:Darklama]]
 
 // images to use for hide/show states
-var collapse_action_hide = '//upload.wikimedia.org/wikipedia/commons/1/10/MediaWiki_Vector_skin_action_arrow.png';
-var collapse_action_show = '//upload.wikimedia.org/wikipedia/commons/4/41/MediaWiki_Vector_skin_right_arrow.png';
+var collapse_action_hide = xowa_root_dir + "bin/any/xowa/upload.wikimedia.org/wikipedia/commons/1/10/MediaWiki_Vector_skin_action_arrow.png";
+var collapse_action_show = xowa_root_dir + "bin/any/xowa/upload.wikimedia.org/wikipedia/commons/4/41/MediaWiki_Vector_skin_right_arrow.png";
  
 // toggle state of collapsible boxes
 function collapsible_boxes()

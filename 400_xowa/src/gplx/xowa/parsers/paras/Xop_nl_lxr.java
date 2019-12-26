@@ -64,12 +64,15 @@ public class Xop_nl_lxr implements Xop_lxr {
 				para_wkr.Process_block__bgn_n__end_y(Xop_xnde_tag_.Tag__li);
 				break;
 			case Xop_tkn_itm_.Tid_list_new:		// close new list
-                                                Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-                                                if (prev != null && prev.Src_bgn() > src.length)
-                                                    System.out.println("nl");
-				Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-				ctx.Subs_add_and_stack(root, itm);
-				ctx.Page().Prev_list_tkn_(null);
+				Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+				if (prev != null) {
+					if (prev.Src_bgn() > src.length)
+						System.out.println("nl");
+					Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+					ctx.Subs_add_and_stack(root, itm);
+					ctx.Page().Prev_list_tkn_(null);
+					para_wkr.Process_block__bgn_n__end_y(Xop_xnde_tag_.Tag__li);
+				}
 				break;
 			case Xop_tkn_itm_.Tid_lnke:		// close lnke
 				if (ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_tmpl_invk) == -1) // only close if no tmpl; MWR: [[SHA-2]]; * {{cite journal|title=Proposed 

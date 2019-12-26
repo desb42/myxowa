@@ -44,13 +44,15 @@ public class Xowd_page_itm {
 		id_val = null;
 		return this;
 	}
-	public void Init_by_load__idx(int id, int ns_id, byte[] ttl_page_db, int text_len) {
+	public void Init_by_load__idx(int id, int ns_id, byte[] ttl_page_db, int text_len, boolean redirected) {
+//            System.out.println(String_.new_u8(ttl_page_db) + " " + redirected);
 		this.exists			= true;	// COMMENT: DATE:2016-08-28
 		this.id				= id;
 		this.id_val			= null;
 		this.ns_id			= ns_id;
 		this.ttl_page_db	= ttl_page_db;
 		this.text_len		= text_len;
+		this.redirected		= redirected;
 	}
 	public void	Init_by_load__all(int id, int ns_id, byte[] ttl_page_db, DateAdp modified_on, boolean redirected, int text_len, int random_int, int text_db_id, int html_db_id, int redirect_id, int score, int cat_db_id) {
 		// same as Init_by_load__idx; COMMENT: DATE:2016-08-28
@@ -60,9 +62,9 @@ public class Xowd_page_itm {
 		this.ns_id			= ns_id;
 		this.ttl_page_db	= ttl_page_db;
 		this.text_len		= text_len;
+		this.redirected		= redirected;
 
 		// other props
-		this.redirected		= redirected;
 		this.text_db_id		= text_db_id;
 		this.modified_on	= modified_on;
 		this.random_int		= random_int;

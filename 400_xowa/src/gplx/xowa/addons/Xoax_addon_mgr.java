@@ -68,6 +68,7 @@ public class Xoax_addon_mgr {
 		, new gplx.xowa.xtns.indicators                 .Indicators_addon()
 		, new gplx.xowa.xtns.pagebanners                .Pagebanners_addon()
 		, new gplx.xowa.xtns.proofreadPage              .ProofreadPage_addon2()
+		, new gplx.xowa.xtns.related                    .Related_addon()
 
 		// specials
 		, new gplx.xowa.addons.wikis.registrys			.Wiki_registry_addon()

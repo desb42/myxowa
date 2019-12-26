@@ -59,39 +59,47 @@ public class Xopg_redlink_mgr implements Gfo_invk {
 			Xowd_page_itm page_row = (Xowd_page_itm)lnki_hash.Get_by(full_db);
 			String html_uid = Xopg_lnki_list.Lnki_id_prefix + Int_.To_str(lnki.Html_uid());
 			if (page_row.Exists()) { // may need to colour
-                            Xopg_colour colour = new Xopg_colour(page_row, html_uid);
-                            lnki_ids.Add(colour);
-                        } else {
-
-			// for vnt languages, convert missing ttl to vnt and check again; EX: [[zh_cn]] will check for page_ttl for [[zh_tw]]
-			if (vnt_enabled) {
-				Xowd_page_itm vnt_page = vnt_mgr.Convert_mgr().Convert_ttl(wiki, lnki.Ttl());	// check db
-				if (vnt_page != null) {	// vnt found; update href to point to vnt
-					Xoa_ttl vnt_ttl = wiki.Ttl_parse(lnki.Ttl().Ns().Id(), vnt_page.Ttl_page_db());
-					js_wkr.Html_atr_set(html_uid, "href", "/wiki/" + String_.new_u8(vnt_ttl.Full_url()));
-					if (!String_.Eq(vnt_mgr.Html__lnki_style(), "")) js_wkr.Html_atr_set(html_uid, "style", vnt_mgr.Html__lnki_style());	// colorize for debugging
-					continue;
+				Xopg_colour colour = new Xopg_colour(page_row, html_uid);
+				lnki_ids.Add(colour);
+				if (page_row.Redirected()) {
+					if (bfr != null) {
+						Build_class(bfr, html_uid, "mw-redirect");
+					}
 				}
-			}
+			} else {
 
-			// lnki is missing; redlink it
-			if (usr_dlg.Canceled()) return;
-                        if (bfr != null) {
-                            bfr.Add_byte_comma().Add_byte(Byte_ascii.Brack_bgn);
-                            bfr.Add_byte_quote().Add_str_u8(html_uid).Add_byte_quote();
-                            bfr.Add_byte_comma();
-                            bfr.Add_byte_quote().Add_str_u8("new").Add_byte_quote();
-                            bfr.Add_byte(Byte_ascii.Brack_end);
-                        }
-                        else
-                            Js_img_mgr.Update_link_missing(js_wkr, html_uid);
-                        //System.out.println("redlink " + html_uid);
-			++redlink_count;
-                        }
+				// for vnt languages, convert missing ttl to vnt and check again; EX: [[zh_cn]] will check for page_ttl for [[zh_tw]]
+				if (vnt_enabled) {
+					Xowd_page_itm vnt_page = vnt_mgr.Convert_mgr().Convert_ttl(wiki, lnki.Ttl());	// check db
+					if (vnt_page != null) {	// vnt found; update href to point to vnt
+						Xoa_ttl vnt_ttl = wiki.Ttl_parse(lnki.Ttl().Ns().Id(), vnt_page.Ttl_page_db());
+						js_wkr.Html_atr_set(html_uid, "href", "/wiki/" + String_.new_u8(vnt_ttl.Full_url()));
+						if (!String_.Eq(vnt_mgr.Html__lnki_style(), "")) js_wkr.Html_atr_set(html_uid, "style", vnt_mgr.Html__lnki_style());	// colorize for debugging
+						continue;
+					}
+				}
+
+				// lnki is missing; redlink it
+				if (usr_dlg.Canceled()) return;
+				if (bfr != null) {
+					Build_class(bfr, html_uid, "new");
+				}
+				else
+					Js_img_mgr.Update_link_missing(js_wkr, html_uid);
+				//System.out.println("redlink " + html_uid);
+				++redlink_count;
+			}
 		}
-                Pp_pagelist_colour.Colour(lnki_ids, bfr, wiki); // check for page colour (only wikisource)
+		Pp_pagelist_colour.Colour(lnki_ids, bfr, wiki); // check for page colour (only wikisource)
 		usr_dlg.Log_many("", "", "redlink.redlink_end: redlinks_run=~{0}", redlink_count);
 	}
+        private void Build_class(Bry_bfr bfr, String html_uid, String klass) {
+                bfr.Add_byte_comma().Add_byte(Byte_ascii.Brack_bgn);
+                bfr.Add_byte_quote().Add_str_u8(html_uid).Add_byte_quote();
+                bfr.Add_byte_comma();
+                bfr.Add_byte_quote().Add_str_u8(klass).Add_byte_quote();
+                bfr.Add_byte(Byte_ascii.Brack_end);
+        }
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_run)) {synchronized (this) {Redlink(null);}}	// NOTE: attempt to eliminate random IndexBounds errors; DATE:2014-09-02
 		else	return Gfo_invk_.Rv_unhandled;

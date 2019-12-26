@@ -42,6 +42,7 @@ public class Xoh_page implements Xoa_page {
 	public boolean					Xtn__timeline_exists() {return xtn__timeline_exists;} private boolean xtn__timeline_exists; public void Xtn__timeline_exists_y_() {xtn__timeline_exists = true;}
 	public boolean					Xtn__gallery_exists() {return xtn__gallery_exists;} private boolean xtn__gallery_exists; public void Xtn__gallery_exists_y_() {xtn__gallery_exists = true;}
         public void Grp_normal_(Xoctg_double_grp v) {};
+	public boolean					Xtn__categorytree_exists() {return xtn__categorytree_exists;} private boolean xtn__categorytree_exists; public void Xtn__categorytree_exists_y_() {xtn__categorytree_exists = true;}
 
 	// props
 	public int						Page_id()			{return page_id;} private int page_id;
@@ -69,6 +70,7 @@ public class Xoh_page implements Xoa_page {
 		this.Pgbnr_isin_(null);
 		this.Indicators_serial_(null);
 		this.Pp_indexpage_(null);
+		this.Related_serial_(null);
 	}
 	public Xoh_page Ctor_by_hdiff(Bry_bfr tmp_bfr, Xoae_page page, byte[] toc_label) {
 		this.wiki = page.Wiki(); this.page_url = page.Url(); this.page_ttl = page.Ttl(); this.page_id = page.Db().Page().Id();			
@@ -115,4 +117,5 @@ public class Xoh_page implements Xoa_page {
 	public byte[] Pgbnr_bry() {return pgbnr_bry;} public void Pgbnr_bry_(byte[] v) {pgbnr_bry = v;} private byte[] pgbnr_bry = null;
 	public byte[] Indicators_serial() {return indicators;} public void Indicators_serial_(byte[] v) {indicators = v;} private byte[] indicators = null;
 	public byte[] Pp_indexpage() {return pp_indexpage; } public void Pp_indexpage_(byte[] v) {pp_indexpage = v;} private byte[] pp_indexpage = null;
+	public byte[] Related_serial() {return related;} public void Related_serial_(byte[] v) {related = v;} private byte[] related = null;
 }

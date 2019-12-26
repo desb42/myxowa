@@ -239,6 +239,13 @@ app.wikis.get('~{wiki_key}').html.portal {
   </div>
 "]:>
 ;
+  div_after =
+<:["
+  <div id="mw-data-after-content">
+    ~{content}
+  </div>
+"]:>
+;
 }
 
 app.wikis.get('~{wiki_key}').html.article {
@@ -282,6 +289,7 @@ app.wikis.get('~{wiki_key}').html.article {
     </div>
   </div>
 </div>
+~{portal_div_after}
 
 <div id="mw-navigation">
 <h2>Navigation menu</h2>

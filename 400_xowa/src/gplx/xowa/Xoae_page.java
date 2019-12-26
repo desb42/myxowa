@@ -53,6 +53,7 @@ public class Xoae_page implements Xoa_page {
 	public void						Xtn_gallery_packed_exists_y_() {html.Xtn_gallery_packed_exists_y_();}
 	public boolean						Xtn__timeline_exists() {return false;}	// drd always sets timeline
 	public boolean					Xtn__gallery_exists() {return false;}	// drd does not need to set gallery.style.css
+	public boolean					Xtn__categorytree_exists() {return false;}	// drd does not need to set categorytreetag
 	public int						Xtn__math_uid__next() {return xtn__math_uid++;}	private int xtn__math_uid;
 	public Xoa_kv_hash              Kv_data() {return kv_data;} private Xoa_kv_hash kv_data = new Xoa_kv_hash();
 	public void Kv_data_(Xoa_kv_hash v) {kv_data = v;}
@@ -86,9 +87,10 @@ public class Xoae_page implements Xoa_page {
 	public Db_quality_tots	Quality_tots() {return qualitytots;} private Db_quality_tots qualitytots = new Db_quality_tots();
 	public void	Quality_tots(Db_quality_tots tots) {qualitytots = tots;}
 	public byte[] Pp_indexpage() {return pp_indexpage; } public void Pp_indexpage_(byte[] v) {pp_indexpage = v;} private byte[] pp_indexpage;
+	public Db_related Related() {return related;} private Db_related related = new Db_related();;
 	public Xoctg_double_grp Grp_normal() {return grp_normal;}
-        public void Grp_normal_(Xoctg_double_grp v) {grp_normal = v;}
-        private Xoctg_double_grp grp_normal;
+	public void Grp_normal_(Xoctg_double_grp v) {grp_normal = v;}
+	private Xoctg_double_grp grp_normal;
 	public void Clear_all() {Clear(true);}
 	public void Clear(boolean clear_scrib) { // NOTE: this is called post-fetch but pre-wtxt; do not clear items set by post-fetch, such as id, ttl, redirected_ttls, data_raw
 		db.Clear();
@@ -114,6 +116,7 @@ public class Xoae_page implements Xoa_page {
 		qualitytots.Clear();
 		pp_indexpage = null;
 		grp_normal = null;
+		related.Clear();
 	}
 	public static final    Xoae_page Empty = new Xoae_page();
 	public static Xoae_page New(Xowe_wiki wiki, Xoa_ttl ttl)		{return new Xoae_page(wiki, ttl);}
