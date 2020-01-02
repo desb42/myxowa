@@ -123,6 +123,9 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/karto/modules/linkbox/Link.js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/karto/modules/maplink/maplink.js');
     }
+    if (document.querySelectorAll('.mw-kartographer-container').length || document.querySelectorAll('.mw-kartographer-maplink').length) {
+      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/karto/ext.kartographer.style.css')
+    }
       
     // proofread (wikisource) pages
     if (document.querySelectorAll('table.pr_quality').length) {

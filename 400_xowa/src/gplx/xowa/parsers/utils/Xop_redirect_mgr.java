@@ -101,11 +101,12 @@ public class Xop_redirect_mgr {
 		fmt_bfr.Add_str_a7("</span>");
 		redirect_bfr.Clear().Mkr_rls(); fmt_bfr.Mkr_rls();
 		return fmt_bfr.To_bry_and_clear();
-	}	private static byte[] Bry_redirect_dlm = Bry_.new_a7(" <--- "), Bry_redirect_arg = Bry_.new_a7("?redirect=no");		
-		private static final byte[]
-                        Key_redirectedfrom = Bry_.new_a7("redirectedfrom")
-                        , Bry_class_title = Bry_.new_a7("\" class=\"mw-redirect\" title=\"")
-                        ;
+	}
+	private static byte[] Bry_redirect_dlm = Bry_.new_a7(" <--- "), Bry_redirect_arg = Bry_.new_a7("?redirect=no");		
+	private static final byte[]
+	  Key_redirectedfrom = Bry_.new_a7("redirectedfrom")
+	, Bry_class_title = Bry_.new_a7("\" class=\"mw-redirect\" title=\"")
+	;
 }
 class Xop_redirect_mgr_ {
 	public static int Get_kwd_end_or_end(byte[] src, int bgn, int end) {	// get end of kwd

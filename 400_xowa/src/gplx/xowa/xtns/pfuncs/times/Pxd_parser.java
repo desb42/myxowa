@@ -42,9 +42,13 @@ class Pxd_parser {
 		Bry_fmtr fmtr = itm.Fmtr();
 		fmtr.Bld_bfr(error_bfr, args);
 	}	private Bry_bfr error_bfr = Bry_bfr_.New_w_size(32);
-	public DateAdp Parse(byte[] src, Bry_bfr error_bfr) {
-		Tokenize(src);	// NOTE: should check if Tokenize failed, but want to be liberal as date parser is not fully implemented; this will always default to 1st day of year; DATE:2014-03-27
-		return Evaluate(src, error_bfr);
+	public DateAdp Parse(byte[] src, Bry_bfr error_bfr, Xoa_ttl ttl) {
+		//Tokenize(src);	// NOTE: should check if Tokenize failed, but want to be liberal as date parser is not fully implemented; this will always default to 1st day of year; DATE:2014-03-27
+		if (Tokenize(src))
+			return Evaluate(src, error_bfr);
+		Gfo_usr_dlg_.Instance.Warn_many("", "", "date parse err: ttl=~{0} txt=~{1}", ttl.Full_db(), src);
+		Err_set(Pft_func_time_log.Invalid_day, Bfr_arg_.New_bry(src));
+		return null;
 	}
 	private boolean Tokenize(byte[] src) { 
 		this.src = src; src_len = src.length;
@@ -213,7 +217,7 @@ class Pxd_parser_ {
 		Init_unit(DateAdp_.SegIdx_minute	, "min", "mins", "minute", "minutes");
 		Init_unit(DateAdp_.SegIdx_hour  	, "hour", "hours");
 		Init_unit(DateAdp_.SegIdx_day   	, "day", "days");
-		Init_unit(DateAdp_.SegIdx_day, 14	, "fortnight", "forthnight");
+		Init_unit(DateAdp_.SegIdx_day, 14	, "fortnight", "fortnights", "forthnight", "forthnights");
 		Init_unit(DateAdp_.SegIdx_month 	, "month", "months");
 		Init_unit(DateAdp_.SegIdx_year  	, "year", "years");
 		Init_unit(DateAdp_.SegIdx_day,  7	, "week", "weeks");

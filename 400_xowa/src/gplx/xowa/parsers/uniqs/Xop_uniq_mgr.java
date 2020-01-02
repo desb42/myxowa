@@ -36,7 +36,8 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 			.Add(type).Add_byte(Byte_ascii.Dash) // "ref-"
 			.Add_int_variable(idx)			   // "1"
 			.Add(Bry__uniq__add__end)			// "-QINU`\"'\u007f"
-			.To_bry_and_clear(); 
+			.To_bry_and_clear();
+                //System.out.println(String_.new_u8(key)+":"+String_.new_u8(val));
 		Xop_uniq_itm itm = new Xop_uniq_itm(expand_after_template_parsing, type, idx, key, val);
 		general_trie.Add_obj(key, itm);
 		return key;

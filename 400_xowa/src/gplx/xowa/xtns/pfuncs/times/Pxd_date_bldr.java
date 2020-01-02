@@ -25,6 +25,10 @@ public class Pxd_date_bldr {
 		seg_ary[idx] = val;
 	}
 
+	public int Seg_get(int idx) {
+		return seg_ary[idx];
+	}
+
 	// relative workers will convert segs to date, add a relative unit, and then convert back to date
 	// note that the date conversion is necessary b/c Date class has logic to do things like "2017-12-31 +1 day" and rollover to next month / next year
 	public DateAdp To_date() {

@@ -15,7 +15,9 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx;
 import gplx.core.brys.fmtrs.*;
+import java.util.concurrent.locks.*;
 public class Gfo_usr_dlg_base implements Gfo_usr_dlg {
+	public static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	private final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
 	private final    Bry_fmtr tmp_fmtr = Bry_fmtr.New__tmp().Fail_when_invalid_escapes_(false);	// do not fail b/c msgs may contain excerpt of random text; EX:[[User:A|~A~]] DATE:2014-11-28
 	public Gfo_usr_dlg_base(Gfo_usr_dlg__log log_wkr, Gfo_usr_dlg__gui gui_wkr) {this.log_wkr = log_wkr; this.gui_wkr = gui_wkr;}
@@ -43,7 +45,9 @@ public class Gfo_usr_dlg_base implements Gfo_usr_dlg {
 		return rv;
 	}
 	private String Bld_msg_many(String grp_key, String msg_key, String fmt, Object[] args) {
-		synchronized (tmp_fmtr) {
+		try {
+			rwl.writeLock().lock(); // one at a time
+//		synchronized (tmp_fmtr) {
 			try {
 				tmp_fmtr.Fmt_(fmt).Bld_bfr_many(tmp_bfr, args);
 				return tmp_bfr.To_str_and_clear();
@@ -53,7 +57,10 @@ public class Gfo_usr_dlg_base implements Gfo_usr_dlg {
 				return fmt;
 			}
 		}
-	}
+		finally {
+			rwl.writeLock().unlock();
+		}
+}
 	private String Bld_msg_one(String grp_key, String msg_key, String fmt, Object val) {
 		synchronized (tmp_fmtr) {
 			tmp_fmtr.Fmt_(fmt).Bld_bfr_one(tmp_bfr, val);

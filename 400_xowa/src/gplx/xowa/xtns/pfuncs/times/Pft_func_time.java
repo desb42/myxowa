@@ -27,7 +27,7 @@ public class Pft_func_time extends Pf_func_base {
 		byte[] arg_date = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, self_args_len, 0);
 		byte[] arg_lang = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, self_args_len, 1);
 		Bry_bfr error_bfr = Bry_bfr_.New();
-		DateAdp date = ParseDate(arg_date, utc, error_bfr);
+		DateAdp date = ParseDate(arg_date, utc, error_bfr, ctx.Page().Ttl());
 		Xowe_wiki wiki = ctx.Wiki();
 		if (date == null || error_bfr.Len() > 0)
 			bfr.Add_str_a7("<strong class=\"error\">").Add_bfr_and_clear(error_bfr).Add_str_a7("</strong>");
@@ -43,10 +43,10 @@ public class Pft_func_time extends Pf_func_base {
 			wiki.Parser_mgr().Date_fmt_bldr().Format(bfr, wiki, lang, date, fmt_ary);
 		}
 	}
-	public static DateAdp ParseDate(byte[] date, boolean utc, Bry_bfr error_bfr) {
+	public static DateAdp ParseDate(byte[] date, boolean utc, Bry_bfr error_bfr, Xoa_ttl ttl) {
 		if (date == Bry_.Empty) return utc ? Datetime_now.Get().XtoUtc() : Datetime_now.Get();
 		try {
-			DateAdp rv = new Pxd_parser().Parse(date, error_bfr);
+			DateAdp rv = new Pxd_parser().Parse(date, error_bfr, ttl);
 			return rv;
 		}
 		catch (Exception exc) {

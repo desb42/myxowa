@@ -85,3 +85,11 @@ div#simpleSearch #mw-searchButton {
 /*#content a:visited {color: #0645ad;}
 #content a.xowa-visited {color: #0b0080;}
 #content a.new {color: #ba0000;}*/
+
+.mw-redirect {
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  padding: 1px 0px 1px 0px;
+}

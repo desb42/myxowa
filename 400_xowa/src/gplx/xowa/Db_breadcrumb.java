@@ -40,16 +40,9 @@ public class Db_breadcrumb {
 		if (!initialised) Init();
 		List_adp breadcrumb_list = List_adp_.New();
 		if (hasdata) {
-			String sql_fmt = String_.Concat_lines_nl_skip_last
-			( "WITH RECURSIVE bread(count, parent) AS ("
-			, "  SELECT 1, parent FROM parent WHERE ttl='{0}'"
-			, "  UNION ALL"
-			, "  SELECT bread.count+1, parent.parent FROM parent, bread WHERE bread.parent=parent.ttl)"
-			, "SELECT parent FROM bread ORDER BY count DESC;"
-			);
-
-			String sql = String_.Format(sql_fmt, ttl);
-			Db_rdr rdr = conn.Stmt_sql(sql).Exec_select__rls_auto();
+			Db_stmt stmt = conn.Stmt_sql(sql);
+			stmt.Crt_bry_as_str("ttl", ttl);
+			Db_rdr rdr = stmt.Exec_select__rls_auto();
 			try {
 				while (rdr.Move_next()) {
 					byte[] parent = rdr.Read_str("parent").getBytes();
@@ -63,25 +56,27 @@ public class Db_breadcrumb {
 
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		int len = breadcrumb_list.Count();
-		for (int i = 0; i < len; i++) {
-			byte[] parent = (byte[])breadcrumb_list.Get_at(i);
-			if (i > 0)
+		if (len > 0) {
+			for (int i = 0; i < len; i++) {
+				byte[] parent = (byte[])breadcrumb_list.Get_at(i);
+				if (i > 0)
+					tmp_bfr.Add_str_a7( " > " );
+				int colon = Bry_find_.Find_fwd(parent, Byte_ascii.Colon);
+				byte[] lnk;
+				if (colon > 0)
+					lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, Byte_ascii.Colon_bry, parent, Byte_ascii.Pipe_bry, Bry_.Mid(parent, colon+1), Xop_tkn_.Lnki_end);		// make "[[xx:ttl ttl]]"
+				else
+					lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, parent, Xop_tkn_.Lnki_end);		// make "[[ttl]]"
+				tmp_bfr.Add( lnk );
+			}
+			if (len > 0)
 				tmp_bfr.Add_str_a7( " > " );
-			int colon = Bry_find_.Find_fwd(parent, Byte_ascii.Colon);
-			byte[] lnk;
+			int colon = Bry_find_.Find_fwd(ttl, Byte_ascii.Colon);
 			if (colon > 0)
-				lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, Byte_ascii.Colon_bry, parent, Byte_ascii.Pipe_bry, Bry_.Mid(parent, colon+1), Xop_tkn_.Lnki_end);		// make "[[xx:ttl ttl]]"
+				tmp_bfr.Add_mid(ttl, colon+1, ttl.length);
 			else
-				lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, parent, Xop_tkn_.Lnki_end);		// make "[[ttl]]"
-			tmp_bfr.Add( lnk );
+				tmp_bfr.Add(ttl);
 		}
-		if (len > 0)
-			tmp_bfr.Add_str_a7( " > " );
-		int colon = Bry_find_.Find_fwd(ttl, Byte_ascii.Colon);
-		if (colon > 0)
-			tmp_bfr.Add_mid(ttl, colon+1, ttl.length);
-		else
-			tmp_bfr.Add(ttl);
 		byte[] bread = tmp_bfr.To_bry_and_clear();
 		wiki.Parser_mgr().Main().Parse_text_to_html(tmp_bfr, ctx, ctx.Page(), false, bread);
 		bread = tmp_bfr.To_bry_and_clear();
@@ -96,4 +91,11 @@ public class Db_breadcrumb {
 	public void Insert(byte[] ttl, byte[] isin) {
 		// insert into parent values(ttl, isin)
 	}
+	private static String sql = String_.Concat_lines_nl_skip_last
+	( "WITH RECURSIVE bread(count, parent) AS ("
+	, "  SELECT 1, parent FROM parent WHERE ttl=?"
+	, "  UNION ALL"
+	, "  SELECT bread.count+1, parent.parent FROM parent, bread WHERE bread.parent=parent.ttl)"
+	, "SELECT parent FROM bread ORDER BY count DESC;"
+	);
 }

@@ -370,7 +370,7 @@ public class Http_server_wkr implements Gfo_invk {
 	  Bry__file_lhs = Bry_.new_a7("file:///")
 	, Bry__file_mid = Bry_.new_a7("/file/")
 	, Bry__file_fsys = Bry_.new_a7("/xowa/fsys")
-                , Bry__xowa_bit = Bry_.new_a7("/xowa/")
+	, Bry__xowa_bit = Bry_.new_a7("/xowa/")
 	;
 
 	public static byte[] Replace_fsys_hack1(byte[] html_bry) {

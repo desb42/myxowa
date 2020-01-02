@@ -26,6 +26,7 @@ public class Json_itm_str extends Json_itm_base {
 		bfr.Add_byte(Byte_ascii.Quote);
 	}
 	@Override public Object Data() {return this.Data_as_str();}
+	public void Overwrite_bry(byte[] v) {data_bry = v;} //needed by MapLink/MapFrame
 	public String Data_as_str() {
 		if (data_str == null) {
 			if (data_bry == null)

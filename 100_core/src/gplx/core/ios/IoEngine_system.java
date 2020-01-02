@@ -24,7 +24,9 @@ import java.nio.channels.*;
 import gplx.core.criterias.*; import gplx.core.bits.*; import gplx.core.envs.*;
 import gplx.core.ios.streams.*; import gplx.core.ios.atrs.*;
 import gplx.core.progs.*;
+import java.util.concurrent.locks.*;
 public class IoEngine_system extends IoEngine_base {
+	public static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	@Override public String Key() {return IoEngine_.SysKey;}
 	@Override public void DeleteDirDeep(IoEngine_xrg_deleteDir args) {utl.DeleteDirDeep(this, args.Url(), args);}
 	@Override public void XferDir(IoEngine_xrg_xferDir args) {Io_url trg = args.Trg(); utl.XferDir(this, args.Src(), IoEnginePool.Instance.Get_by(trg.Info().EngineKey()), trg, args);}
@@ -42,7 +44,7 @@ public class IoEngine_system extends IoEngine_base {
 	@Override public Io_itm_atr_req Query_itm_atrs(Io_url url, Io_itm_atr_req req) {
 		return Io_itm_atr_wkr.New(url).Process(req);
 	}
-		@Override public boolean ExistsFil_api(Io_url url) {
+	@Override public boolean ExistsFil_api(Io_url url) {
 		File f = new File(url.Xto_api());
 		return f.exists();
 	}
@@ -56,6 +58,7 @@ public class IoEngine_system extends IoEngine_base {
 		FileChannel fc = null; FileOutputStream fos = null;
 		if (!ExistsDir(url.OwnerDir())) CreateDir(url.OwnerDir());
 		try {
+			rwl.writeLock().lock(); // one at a time
 			// open file
 			try 	{fos = new FileOutputStream(url.Xto_api(), mpo.Append());}
 			catch 	(FileNotFoundException e) {throw Err_Fil_NotFound(e, url);}
@@ -73,10 +76,11 @@ public class IoEngine_system extends IoEngine_base {
 				IoEngine_system_xtn.SetExecutable(fil, true);
 			}
 		}
-		finally {		
+		finally {
 			// cleanup
 			Closeable_close(fc, url, false);
 			Closeable_close(fos, url, false);
+			rwl.writeLock().unlock();
 		}
 	}
 	@Override public String LoadFilStr(IoEngine_xrg_loadFilStr args) {

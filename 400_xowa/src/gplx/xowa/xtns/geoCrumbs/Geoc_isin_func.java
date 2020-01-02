@@ -28,9 +28,15 @@ public class Geoc_isin_func extends Pf_func_base {
 			ttl_bry = Bry_.Add(page_ttl.Ns().Name_db_w_colon(), ttl_bry);
 		Xoa_ttl ttl = Xoa_ttl.Parse(wiki, ttl_bry); if (ttl == null) return;
 		if (wiki.App().Mode().Tid_is_cmd()) {
+			ttl_bry = DB_case_cvt.Upper_1st(ttl_bry, 0, ttl_bry.length);
+			// how to remove any trailing r-t-l or l-t-r marks?
+			int tlen = ttl_bry.length;
+			if (tlen > 3 && ttl_bry[tlen - 3] == 0xe2 && ttl_bry[tlen - 2] == 0x82 && (ttl_bry[tlen - 1] == 0x8f || ttl_bry[tlen - 1] == 0x8e)) {
+				ttl_bry = Bry_.Mid(ttl_bry, 0, tlen - 3);
+			}
 			// insert into parent table
 			wiki.Bread().Insert(ctx.Page().Ttl().Full_txt_raw(), ttl_bry);
-			Gfo_usr_dlg_.Instance.Warn_many("", "", "#isin: ttl=~{0} parent=~{1}", page_ttl.Full_db(), ttl_bry);
+			Gfo_usr_dlg_.Instance.Log_many("", "", "#isin: ttl=~{0} parent=~{1}", page_ttl.Full_db(), ttl_bry);
 		}
 		ctx.Page().Html_data().Pgbnr_isin_(ttl_bry);
 	}

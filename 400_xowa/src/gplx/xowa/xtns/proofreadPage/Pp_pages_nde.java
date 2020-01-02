@@ -550,27 +550,27 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		int end = src.length;
 		int pos = 0;
 		Bry_bfr bfr = null;
-		// scan for &
+		// scan for '.' (dot)
 		while (pos < end) {
 			byte b = src[pos];
 			if (b == Byte_ascii.Dot) {	// . found check for two hex chars
-							if (!dirty) {	// 1st amp found; add preceding String to bfr
-									if (bfr == null) {
-											bfr = Bry_bfr_.Get();
-											dirty = true;
-									}
-									bfr.Add_mid(src, 0, pos);
-							}
-							pos += Decode(bfr, src, end, pos, b, false) + 1;
-							continue;
-						}
+				if (!dirty) {	// 1st dot found; add preceding String to bfr
+					if (bfr == null) {
+						bfr = Bry_bfr_.Get();
+						dirty = true;
+					}
+					bfr.Add_mid(src, 0, pos);
+				}
+				pos += Decode(bfr, src, end, pos, b, false) + 1;
+				continue;
+			}
 			if (dirty)
 				bfr.Add_byte(b);
 			++pos;
 		}
 		return dirty ? bfr.To_bry_and_clear_and_rls() : src;
-		}
-		// copied from Gfo_url_encoder_itm.java
+	}
+	// copied from Gfo_url_encoder_itm.java
 	private static int Decode(Bry_bfr bfr, byte[] src, int end, int idx, byte b, boolean fail_when_invalid) {
 		if (idx + 2 >= end) {
 			if (fail_when_invalid) throw Err_.new_wo_type("decode needs 3 bytes", "idx", idx, "len", end, "snip", String_.new_u8(Bry_.Mid_by_len_safe(src, idx, 3)));
@@ -588,13 +588,13 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		if (v_0 != -1) {
 			int v_1 = By_upper_hex_byte(src[idx + 2]);
 			if (v_1 != -1) {
-							if (v_0 + v_1 > 32) { // greater than space (hex 20-32)
-				bfr.Add_byte((byte)(v_0 + v_1));
-				return 2;
-							} else {
-								bfr.Add_byte(b);
-								return 0;
-							}
+				if (v_0 + v_1 > 32) { // greater than space (hex 20-32)
+					bfr.Add_byte((byte)(v_0 + v_1));
+					return 2;
+				} else {
+					bfr.Add_byte(b);
+					return 0;
+				}
 			}
 		}
 		if (fail_when_invalid)
@@ -604,7 +604,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			return 0;
 		}
 	}
-		// copied from Int_.java and hacked
+	// copied from Int_.java and hacked
 	private static int By_upper_hex_byte(byte b) {
 		switch (b) {
 			case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
@@ -617,7 +617,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		}
 	}
 
-}	
+}
 /*
 NOTE:page_regy
 . original implmentation was following

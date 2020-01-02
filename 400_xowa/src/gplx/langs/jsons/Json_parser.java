@@ -21,11 +21,12 @@ public class Json_parser {
 	public Json_doc Parse_by_apos_ary(String... ary) {return Parse_by_apos(String_.Concat_lines_nl(ary));}
 	public Json_doc Parse_by_apos(String s) {return Parse(Bry_.Replace(Bry_.new_u8(s), Byte_ascii.Apos, Byte_ascii.Quote));}
 	public Json_doc Parse(String src) {return Parse(Bry_.new_u8(src));}
-	public Json_doc Parse(byte[] src) {
+	public Json_doc Parse(byte[] src) {return Parse(src, 0, src.length);}
+	public Json_doc Parse(byte[] src, int pos, int src_len) {
 		synchronized (factory) {
 			this.src = src;				if (src == null) return null;
-			this.src_len = src.length;	if (src_len == 0) return null;
-			this.pos = 0;
+			this.src_len = src_len;	if (src_len == 0) return null;
+			this.pos = pos;
 			Skip_ws();
 			boolean root_is_nde = true;
 			switch (src[pos]) {

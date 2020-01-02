@@ -85,20 +85,28 @@ public class Gfo_usr_dlg__log_base implements Gfo_usr_dlg__log {
 		} 
 		catch (Exception e) {Err_.Noop(e);}			// java.lang.StringBuilder can throw exceptions in some situations when called on a different thread; ignore errors
 	}	private String_bldr sb = String_bldr_.new_thread();	// NOTE: use java.lang.StringBuffer to try to avoid random exceptions when called on a different thread
-	private String Bld_msg(String s) {return sb.Add(Datetime_now.Get_force().XtoUtc().XtoStr_fmt_yyyyMMdd_HHmmss_fff()).Add(" ").Add(s).Add_char_nl().To_str_and_clear();}
-	private void Log_msg(Io_url url, String txt) {
-		if (queue_enabled) {
-			String url_raw = url == null ? "mem" : url.Raw();
-			Usr_log_fil fil = (Usr_log_fil)queued_list.Get_by(url_raw);
-			if (fil == null) {
-				fil = new Usr_log_fil(url);
-				queued_list.Add(url_raw, fil);
-			}
-			fil.Add(txt);
+	private String Bld_msg(String s) {
+		String ns;
+		synchronized (this) {
+			ns = sb.Add(Datetime_now.Get_force().XtoUtc().XtoStr_fmt_yyyyMMdd_HHmmss_fff()).Add(" ").Add(s).Add_char_nl().To_str_and_clear();
 		}
-		else {
-			if (enabled)
-				Io_mgr.Instance.AppendFilStr(url, txt);
+		return ns;
+	}
+	private void Log_msg(Io_url url, String txt) {
+		synchronized (this) {
+			if (queue_enabled) {
+				String url_raw = url == null ? "mem" : url.Raw();
+				Usr_log_fil fil = (Usr_log_fil)queued_list.Get_by(url_raw);
+				if (fil == null) {
+					fil = new Usr_log_fil(url);
+					queued_list.Add(url_raw, fil);
+				}
+				fil.Add(txt);
+			}
+			else {
+				if (enabled)
+					Io_mgr.Instance.AppendFilStr(url, txt);
+			}
 		}
 	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

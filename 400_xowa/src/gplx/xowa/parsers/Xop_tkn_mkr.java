@@ -88,7 +88,7 @@ public class Xop_tkn_mkr {
 	public gplx.xowa.xtns.xowa_cmds.wiki_setups.Xop_wiki_setup_xnde Xnde__xowa_wiki_setup()	{return new gplx.xowa.xtns.xowa_cmds.wiki_setups.Xop_wiki_setup_xnde();}
 	public gplx.xowa.xtns.listings.Listing_xnde Xnde__listing(int tag_id)					{return new gplx.xowa.xtns.listings.Listing_xnde(tag_id);}
 	public gplx.xowa.xtns.scores.Score_xnde Xnde__score()									{return new gplx.xowa.xtns.scores.Score_xnde();}
-	public gplx.xowa.xtns.inputbox.Xtn_inputbox_nde Xnde__inputbox()						{return new gplx.xowa.xtns.inputbox.Xtn_inputbox_nde();}
+	public gplx.xowa.xtns.inputBox.Xtn_inputbox_nde Xnde__inputbox()						{return new gplx.xowa.xtns.inputBox.Xtn_inputbox_nde();}
 	public gplx.xowa.xtns.translates.Xop_translate_xnde Xnde__translate()					{return new gplx.xowa.xtns.translates.Xop_translate_xnde();}
 	public gplx.xowa.xtns.translates.Xop_languages_xnde Xnde__languages()					{return new gplx.xowa.xtns.translates.Xop_languages_xnde();}
 	public gplx.xowa.xtns.wikias.Random_selection_xnde Xnde__random_selection()				{return new gplx.xowa.xtns.wikias.Random_selection_xnde();}
