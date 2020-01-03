@@ -85,6 +85,7 @@ public class DateAdp implements CompareAble, Gfo_invk {
 				: Timezone_offset_test
 				;
 	}
+	public String Timezone_identifier() { return "UTC"; } // fixed??
 	public DateAdp XtoZone(java.util.TimeZone tz) {
             // dt/time offset by timezone+dst for now
 		java.util.Date date = under.getTime();

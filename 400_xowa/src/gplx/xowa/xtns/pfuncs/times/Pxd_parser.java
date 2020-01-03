@@ -69,15 +69,41 @@ class Pxd_parser {
 				case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
 				case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
 					if (tkn_type != Pxd_itm_.Tid_int)	MakePrvTkn(cur_pos, Pxd_itm_.Tid_int); break;
-				case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
+				case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_p:
+					// check for 'meridian' [AaPp] .? [Mm] .? [\0\t ]
+					int pos = cur_pos;
+					if (pos+1 < src_len && src[pos+1] == '.') {
+						pos++;
+					}
+					if (pos+1 < src_len && (src[pos+1] == 'm') || src[pos+1] == 'M') {
+						pos++;
+						if (pos+1 < src_len && src[pos+1] == '.') {
+							pos++;
+						}
+						if (pos+1 == src_len || src[pos+1] == '\t') {
+							// this is a meridian token
+							MakePrvTkn(cur_pos, Pxd_itm_.Tid_null);			// first, make prv tkn
+							if (b == Byte_ascii.Ltr_P || b == Byte_ascii.Ltr_p)
+								tkns[tkns_len] = new Pxd_itm_meridian(tkns_len, true);
+							else
+								tkns[tkns_len] = new Pxd_itm_meridian(tkns_len, false);
+							++tkns_len;
+							cur_pos = pos;
+							if (pos+1 != src_len)
+								cur_pos--;
+							break;
+						}
+					}
+					// else fall through
+				                       case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
 				case Byte_ascii.Ltr_F: case Byte_ascii.Ltr_G: case Byte_ascii.Ltr_H: case Byte_ascii.Ltr_I: case Byte_ascii.Ltr_J:
 				case Byte_ascii.Ltr_K: case Byte_ascii.Ltr_L: case Byte_ascii.Ltr_M: case Byte_ascii.Ltr_N: case Byte_ascii.Ltr_O:
-				case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
+				                       case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
 				case Byte_ascii.Ltr_U: case Byte_ascii.Ltr_V: case Byte_ascii.Ltr_W: case Byte_ascii.Ltr_X: case Byte_ascii.Ltr_Y: case Byte_ascii.Ltr_Z:
-				case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
+				                       case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
 				case Byte_ascii.Ltr_f: case Byte_ascii.Ltr_g: case Byte_ascii.Ltr_h: case Byte_ascii.Ltr_i: case Byte_ascii.Ltr_j:
 				case Byte_ascii.Ltr_k: case Byte_ascii.Ltr_l: case Byte_ascii.Ltr_m: case Byte_ascii.Ltr_n: case Byte_ascii.Ltr_o:
-				case Byte_ascii.Ltr_p: case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
+				                       case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
 				case Byte_ascii.Ltr_u: case Byte_ascii.Ltr_v: case Byte_ascii.Ltr_w: case Byte_ascii.Ltr_x: case Byte_ascii.Ltr_y: case Byte_ascii.Ltr_z:
 				case Byte_ascii.At:
 					MakePrvTkn(cur_pos, Pxd_itm_.Tid_null);			// first, make prv tkn

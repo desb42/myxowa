@@ -81,14 +81,23 @@ class Pft_fmt_itm_dayOfYear implements Pft_fmt_itm {
 class Pft_fmt_itm_am_pm implements Pft_fmt_itm {
 	public int TypeId() {return Pft_fmt_itm_.Tid_AmPm;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
-		boolean am = date.Hour() < 13;
+		// "am" during the morning (00:00:00 -> 11:59:59), "pm" otherwise (12:00:00 -> 23:59:59)
+		boolean am = date.Hour() < 12;
 		byte[] val = null;
-		if		( am &&  lower) val = Ary_am_lower;
-		else if ( am && !lower) val = Ary_am_upper;
-		else if (!am &&  lower) val = Ary_pm_lower;
-		else if (!am && !lower) val = Ary_pm_upper;
+		if ( am ) {
+			if (lower)
+				val = Ary_am_lower;
+			else
+				val = Ary_am_upper;
+		} else {
+			if (lower)
+				val = Ary_pm_lower;
+			else
+				val = Ary_pm_upper;
+		}
 		bfr.Add(val);
-	}	private static final    byte[] Ary_am_upper = Bry_.new_a7("AM"), Ary_pm_upper = Bry_.new_a7("PM"), Ary_am_lower = Bry_.new_a7("am"), Ary_pm_lower = Bry_.new_a7("pm");
+	}
+	private static final    byte[] Ary_am_upper = Bry_.new_a7("AM"), Ary_pm_upper = Bry_.new_a7("PM"), Ary_am_lower = Bry_.new_a7("am"), Ary_pm_lower = Bry_.new_a7("pm");
 	public Pft_fmt_itm_am_pm(boolean lower) {this.lower = lower;} private boolean lower;
 }
 class Pft_fmt_itm_dow_base0 implements Pft_fmt_itm {
@@ -125,5 +134,56 @@ class Pft_fmt_itm_timezone_offset implements Pft_fmt_itm {
 	public int TypeId() {return Pft_fmt_itm_.Tid_timezone_offset;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
 		bfr.Add_int_variable(date.Timezone_offset());
+	}
+}
+class Pft_fmt_itm_timezone_offset_4 implements Pft_fmt_itm {
+	public Pft_fmt_itm_timezone_offset_4() {}
+	public int TypeId() {return Pft_fmt_itm_.Tid_timezone_offset_4;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		int tz_off = date.Timezone_offset();
+		if (tz_off < 0) {
+			bfr.Add_byte(Byte_ascii.Dash);
+			tz_off = -1*tz_off;
+		}
+		else
+			bfr.Add_byte(Byte_ascii.Plus);
+		int tz_mins = tz_off / 60;
+		int tz_hours = tz_mins / 60;
+		tz_mins = tz_mins % 60;
+		bfr.Add_int_fixed(tz_hours, 2);
+		bfr.Add_int_fixed(tz_mins, 2);
+	}
+}
+class Pft_fmt_itm_timezone_offset_4_colon implements Pft_fmt_itm {
+	public Pft_fmt_itm_timezone_offset_4_colon() {}
+	public int TypeId() {return Pft_fmt_itm_.Tid_timezone_offset_4_colon;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		int tz_off = date.Timezone_offset();
+		if (tz_off < 0) {
+			bfr.Add_byte(Byte_ascii.Dash);
+			tz_off = -1*tz_off;
+		}
+		else
+			bfr.Add_byte(Byte_ascii.Plus);
+		int tz_mins = tz_off / 60;
+		int tz_hours = tz_mins / 60;
+		tz_mins = tz_mins % 60;
+		bfr.Add_int_fixed(tz_hours, 2);
+		bfr.Add_byte(Byte_ascii.Colon);
+		bfr.Add_int_fixed(tz_mins, 2);
+	}
+}
+class Pft_fmt_itm_timezone_identifier implements Pft_fmt_itm {
+	public Pft_fmt_itm_timezone_identifier() {}
+	public int TypeId() {return Pft_fmt_itm_.Tid_timezone_identifier;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		bfr.Add_str_a7(date.Timezone_identifier());
+	}
+}
+class Pft_fmt_itm_timezone_abbreviation implements Pft_fmt_itm {
+	public Pft_fmt_itm_timezone_abbreviation() {}
+	public int TypeId() {return Pft_fmt_itm_.Tid_timezone_abbreviation;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		bfr.Add_str_a7(date.Timezone_identifier());
 	}
 }

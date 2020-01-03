@@ -134,3 +134,54 @@ class Pxd_itm_sorter implements gplx.core.lists.ComparerAble {
 		return rv;
 	}
 }
+class Pxd_itm_meridian extends Pxd_itm_base {
+	@Override public byte Tkn_tid() {return Pxd_itm_.Tid_meridian;} 
+	@Override public int Eval_idx() {return 19;}
+	@Override public boolean Time_ini(Pxd_date_bldr bldr) {return true;}
+	@Override public boolean Eval(Pxd_parser state) {
+		Pxd_itm[] tkns = state.Tkns();
+		boolean colon_found = false;
+		Pxd_itm_int itm_int = null;
+		Pxd_itm itm = null;
+		int i;
+		// ignore whitespace
+		for (i = this.Ary_idx() - 1; i > -1; --i) {
+			itm = tkns[i];
+			if (itm.Tkn_tid() != Pxd_itm_.Tid_ws)
+				break;
+		}
+		if (itm.Tkn_tid() != Pxd_itm_.Tid_int) i = -1;
+		if (i > 0 && tkns[i-1].Tkn_tid() == Pxd_itm_.Tid_colon) {
+			i--;
+			colon_found = true;
+			if (i > 0 && tkns[i-1].Tkn_tid() == Pxd_itm_.Tid_int) {
+				itm = tkns[i-1];
+				i--;
+				if (i > 0 && tkns[i-1].Tkn_tid() == Pxd_itm_.Tid_colon) {
+					i--;
+					if (i > 0 && tkns[i-1].Tkn_tid() == Pxd_itm_.Tid_int) {
+						itm = tkns[i-1];
+					}
+				}
+			}
+		}
+		if (i < 0 || itm == null) {state.Err_set(Pft_func_time_log.Invalid_hour, Bfr_arg_.New_bry("null")); return false;}
+		itm_int = (Pxd_itm_int)itm;
+                int hour = itm_int.Val();
+                // funny rules for 12AM and 12PM
+		if (pm) {
+                    if (hour != 12) {
+                    itm_int.Val_(itm_int.Val() + 12);
+                    itm_int.Digits_(2);
+                    }
+                } else if (hour == 12) { // 12AM -> 00:00 (!)
+                    itm_int.Val_(0);
+                    itm_int.Digits_(1); // how many digits is zero?
+                }
+		if (!colon_found)
+			return Pxd_eval_seg.Eval_as_h(state, itm_int);
+		return true;
+	}
+	public boolean is_PM() {return pm;} private boolean pm;
+	public Pxd_itm_meridian(int ary_idx, boolean pm) {this.Ctor(ary_idx);this.pm = pm;}
+}

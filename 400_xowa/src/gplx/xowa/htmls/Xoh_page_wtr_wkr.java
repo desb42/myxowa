@@ -518,7 +518,7 @@ public class Xoh_page_wtr_wkr {
 		// check if we have a redirect
 		byte[] redirect_msg = Xop_redirect_mgr.Bld_redirect_msg(app, wiki, page.Redirect_trail());
 		page.Redirect_trail().Clear(); // so it does not show up later
-		return wiki.Bread().Get_breadcrumbs(wiki, ctx, page.Ttl().Full_txt_raw(), isin, redirect_msg);
+		return wiki.Bread().Get_breadcrumbs(wiki, ctx, page.Ttl(), isin, redirect_msg);
 	}
 	private byte[] Pagebanner(Xop_ctx ctx, Xoh_wtr_ctx hctx) {
 		if (page.Html_data().Xtn_pgbnr() == null) return Bry_.Empty;

@@ -40,6 +40,7 @@ class Pxd_itm_ {
 	, Tid_unit_relative		= 11	// next, previous
 	, Tid_unixtime			= 12	// @123
 	, Tid_iso8601_t			= 13	// T
+	, Tid_meridian			= 14	// PM
 	, Tid_dash 				= Byte_ascii.Dash
 	, Tid_dot 				= Byte_ascii.Dot
 	, Tid_slash 			= Byte_ascii.Slash
