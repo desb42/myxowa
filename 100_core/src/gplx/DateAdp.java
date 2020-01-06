@@ -79,13 +79,26 @@ public class DateAdp implements CompareAble, Gfo_invk {
 	public int DayOfWeek() {return under.get(Calendar.DAY_OF_WEEK) - 1;}	// -1 : Base0; NOTE: dotnet/php is also Sunday=0
 	public int DayOfYear() {return under.get(Calendar.DAY_OF_YEAR);}
 	public int Timezone_offset() {
-		return Timezone_offset_test == Int_.Min_value							// Timezone_offset_test not over-ridden
+            return under.getTimeZone().getRawOffset()/1000;
+/*		return Timezone_offset_test == Int_.Min_value							// Timezone_offset_test not over-ridden
 				? 0
 		//		? under.getTimeZone().getOffset(this.Timestamp_unix()) / 1000	// divide by 1000 to convert from ms to seconds
 				: Timezone_offset_test
-				;
+				;*/
 	}
-	public String Timezone_identifier() { return "UTC"; } // fixed??
+	public String Timezone_identifier() {
+		java.util.TimeZone tz = under.getTimeZone();
+		if (tz.getRawOffset() == 0)
+			return "UTC"; // else Europe/London
+		else
+			return tz.getID(); 
+		//return under.getTimeZone().getDisplayName(); 
+	}
+	public boolean Timezone_dst() {
+		java.util.TimeZone tz = under.getTimeZone();
+		java.util.Date date = under.getTime();
+		return tz.inDaylightTime(date);
+	}
 	public DateAdp XtoZone(java.util.TimeZone tz) {
             // dt/time offset by timezone+dst for now
 		java.util.Date date = under.getTime();
@@ -157,8 +170,18 @@ public class DateAdp implements CompareAble, Gfo_invk {
 	}
 	protected DateAdp(Calendar under) {this.under = under;}
 	protected DateAdp(int year, int month, int day, int hour, int minute, int second, int frac) {
+		MakeDate(year, month, day, hour, minute, second, frac, java.util.TimeZone.getTimeZone("UTC"));
+	}
+	protected DateAdp(int year, int month, int day, int hour, int minute, int second, int frac, java.util.TimeZone tz) {
+		MakeDate(year, month, day, hour, minute, second, frac, tz);
+        }
+        private void MakeDate(int year, int month, int day, int hour, int minute, int second, int frac, java.util.TimeZone tz) {
 		this.under = new GregorianCalendar(year, month - Month_base0adj, day, hour, minute, second);
 		under.set(Calendar.MILLISECOND, frac);
+		under.setTimeZone(tz);
+	}
+	public void setTimeZone(java.util.TimeZone tz) {
+		under.setTimeZone(tz);
 	}
 	public static final int Month_base0adj = 1;
-	}
+}

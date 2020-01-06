@@ -187,3 +187,10 @@ class Pft_fmt_itm_timezone_abbreviation implements Pft_fmt_itm {
 		bfr.Add_str_a7(date.Timezone_identifier());
 	}
 }
+class Pft_fmt_itm_timezone_dst implements Pft_fmt_itm {
+	public Pft_fmt_itm_timezone_dst() {}
+	public int TypeId() {return Pft_fmt_itm_.Tid_timezone_dst;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		bfr.Add_int_bool(date.Timezone_dst());
+	}
+}

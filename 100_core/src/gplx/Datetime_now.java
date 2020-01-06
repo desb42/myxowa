@@ -46,6 +46,11 @@ public class Datetime_now {
 		if (autoincrement) manual = rv.Add_minute(1);		// simulate passage of manual by increasing manual by 1 minute with each call
 		return rv;
 	}
+	public static DateAdp Get(java.util.TimeZone tz) {
+		DateAdp rv = new DateAdp(new GregorianCalendar());
+		rv.setTimeZone(tz);
+		return rv;
+	}
 	public static DateAdp Get_force() {	// ignore manual and force get of real time
 		return new DateAdp(new GregorianCalendar());
 	}

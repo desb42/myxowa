@@ -57,6 +57,7 @@ public class Pft_fmt_itm_ {
 	, Tid_timezone_abbreviation = 36
 	, Tid_timezone_offset_4 = 37
 	, Tid_timezone_offset_4_colon = 38
+	, Tid_timezone_dst = 39
 	;
 
 	public static final    Pft_fmt_itm 
@@ -119,6 +120,7 @@ public class Pft_fmt_itm_ {
 	, Timezone_abbreviation			= new Pft_fmt_itm_timezone_abbreviation()
 	, Timezone_offset_4			= new Pft_fmt_itm_timezone_offset_4()
 	, Timezone_offset_4_colon			= new Pft_fmt_itm_timezone_offset_4_colon()
+	, Timezone_dst			= new Pft_fmt_itm_timezone_dst()
 	;
 	public static final    Btrie_fast_mgr Regy = Btrie_fast_mgr.cs()
 	.Add(Byte_ascii.Ltr_Y		, Pft_fmt_itm_.Year_len4)				// 2012
@@ -155,6 +157,7 @@ public class Pft_fmt_itm_ {
 	.Add(Byte_ascii.Ltr_T		, Pft_fmt_itm_.Timezone_abbreviation)			// UTC
 	.Add(Byte_ascii.Ltr_O		, Pft_fmt_itm_.Timezone_offset_4)			// timezone offset in seconds +0000
 	.Add(Byte_ascii.Ltr_P		, Pft_fmt_itm_.Timezone_offset_4_colon)		// timezone offset in seconds with colon +00:00
+	.Add(Byte_ascii.Ltr_I		, Pft_fmt_itm_.Timezone_dst)			// dte in daylight saving time
 	.Add("xr"					, Pft_fmt_itm_.Roman)					// MCXI
 	.Add("xkY"					, Pft_fmt_itm_.Thai_year)					// Year +=  543
 	.Add("xoY"					, Pft_fmt_itm_.Minguo_year)					// Year -= 1911

@@ -44,14 +44,25 @@ class Pxd_parser {
 	}	private Bry_bfr error_bfr = Bry_bfr_.New_w_size(32);
 	public DateAdp Parse(byte[] src, Bry_bfr error_bfr, Xoa_ttl ttl) {
 		//Tokenize(src);	// NOTE: should check if Tokenize failed, but want to be liberal as date parser is not fully implemented; this will always default to 1st day of year; DATE:2014-03-27
+		DateAdp dt = DateAdp_.MinValue;
 		if (Tokenize(src))
-			return Evaluate(src, error_bfr);
+			dt = Evaluate(src, error_bfr);
+		if (dt != DateAdp_.MinValue)
+			return dt;
 		Gfo_usr_dlg_.Instance.Warn_many("", "", "date parse err: ttl=~{0} txt=~{1}", ttl.Full_db(), src);
 		Err_set(Pft_func_time_log.Invalid_day, Bfr_arg_.New_bry(src));
 		return null;
 	}
 	private boolean Tokenize(byte[] src) { 
 		this.src = src; src_len = src.length;
+		// trim the end of any ' ', '\t' or ')'
+		while (src_len > 0) {
+			byte b = src[src_len-1];
+			if (b == ' ' || b == '\t' || b == ')')
+				src_len--;
+			else
+				break;
+		}
 		tkns = new Pxd_itm[src_len]; tkns_len = 0;		
 		tkn_type = Pxd_itm_.Tid_null; tkn_bgn_pos = -1;
 		cur_pos = 0;
@@ -61,8 +72,9 @@ class Pxd_parser {
 			seg_idxs[i] = Pxd_itm_base.Seg_idx_null;
 		while (cur_pos < src_len) {
 			byte b = src[cur_pos];
-			switch (b) {	
-				case Byte_ascii.Space: case Byte_ascii.Tab: case Byte_ascii.Nl:
+			switch (b) {
+				// ignore '(' and ')'
+				case Byte_ascii.Space: case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Paren_bgn: case Byte_ascii.Paren_end:
 					if (tkn_type != Pxd_itm_.Tid_ws) MakePrvTkn(cur_pos, Pxd_itm_.Tid_ws); break; // SEE:NOTE_1 for logic
 				case Byte_ascii.Dash: case Byte_ascii.Dot: case Byte_ascii.Colon: case Byte_ascii.Slash:
 					if (tkn_type != b) MakePrvTkn(cur_pos, b); break;
@@ -109,12 +121,13 @@ class Pxd_parser {
 					MakePrvTkn(cur_pos, Pxd_itm_.Tid_null);			// first, make prv tkn
 					Object o = trie.Match_at_w_b0(trv, b, src, cur_pos, src_len);	// now match String against tkn
 					if (o == null) return false;	// unknown letter / word; exit now;
+					if (o instanceof Pxd_itm_tz_abbr && trv.Pos() != src_len) return false;
 					tkns[tkns_len] = ((Pxd_itm_prototype)o).MakeNew(tkns_len); 
 					++tkns_len;
 					cur_pos = trv.Pos() - 1; // -1 b/c trie matches to next char, and ++ below
 					break;
 				case Byte_ascii.Comma: case Byte_ascii.Plus:
-					MakePrvTkn(cur_pos, Pxd_itm_.Tid_null);					
+					MakePrvTkn(cur_pos, Pxd_itm_.Tid_null);
 					tkns[tkns_len] = new Pxd_itm_sym(tkns_len, b);
 					++tkns_len;
 					break;
@@ -170,7 +183,7 @@ class Pxd_parser {
 			}
 			if (error_bfr.Len() != 0) {
 				error.Add_bfr_and_clear(error_bfr);
-				return DateAdp_.MinValue;			
+				return DateAdp_.MinValue;
 			}
 		}
 
@@ -215,6 +228,7 @@ class Pxd_parser_ {
 	private static final       String[] Names_day_suffix		= {"st", "nd", "rd", "th"};
 	private static final       String[] Names_day_full			= {"sunday", "monday", "tuesday", "wednesday" , "thursday", "friday", "saturday"};
 	private static final       String[] Names_day_abrv			= {"sun", "mon", "tue", "wed" , "thu", "fri", "sat"};
+	private static final       String[] Names_timezones			= {"utc", "gmt", "a", "acdt", "acst", "addt", "adt", "aedt", "aest", "ahdt", "ahst", "akdt", "akst", "amt", "apt", "ast", "awdt", "awst", "awt", "b", "bdst", "bdt", "bmt", "bst", "c", "cast", "cat", "cddt", "cdt", "cemt", "cest", "cet", "chst", "cmt", "cmt", "cpt", "cst", "cwt", "d", "dmt", "e", "eat", "eddt", "edt", "eest", "eet", "emt", "ept", "est", "ewt", "f", "ffmt", "fmt", "g", "gdt", "gst", "h", "hdt", "hkst", "hkt", "hmt", "hpt", "hst", "hwt", "i", "iddt", "idt", "imt", "ist", "jdt", "jmt", "jst", "k", "kdt", "kmt", "kst", "l", "lst", "m", "mddt", "mdst", "mdt", "mest", "met", "mmt", "mpt", "msd", "msk", "mst", "mwt", "n", "nddt", "ndt", "npt", "nst", "nwt", "nzdt", "nzmt", "nzst", "o", "p", "pddt", "pdt", "pkst", "pkt", "plmt", "pmt", "ppmt", "ppt", "pst", "pwt", "q", "qmt", "r", "rmt", "s", "sast", "sdmt", "sjmt", "smt", "sst", "t", "tbmt", "tmt", "u", "uct", "v", "w", "wast", "wat", "wemt", "west", "wet", "wib", "wit", "wita", "wmt", "x", "y", "yddt", "ydt", "ypt", "yst", "ywt", "z"};
 	//TODO_OLD:
 	//private static final       String[] Names_day_text		= {"weekday", "weekdays"};
 	//private static final       String[] Names_ordinal_num		= {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"};
@@ -247,6 +261,7 @@ class Pxd_parser_ {
 		Init_unit(DateAdp_.SegIdx_month 	, "month", "months");
 		Init_unit(DateAdp_.SegIdx_year  	, "year", "years");
 		Init_unit(DateAdp_.SegIdx_day,  7	, "week", "weeks");
+		Init_reg_tz_abbr(Names_timezones);
 		trie.Add_obj(Pxd_itm_ago.Name_ago, new Pxd_itm_ago(-1, -1));
 		Init_suffix(Names_day_suffix);
 		Init_relative();
@@ -266,6 +281,13 @@ class Pxd_parser_ {
 		for (int i = 0; i < len; i++) {
 			byte[] itm_bry = Bry_.new_u8(ary[i]);
 			trie.Add_obj(itm_bry, new Pxd_itm_dow_name(-1, itm_bry, i));	// NOTE: days are base0; 0-6
+		}
+	}
+	private static void Init_reg_tz_abbr(String[] ary) {
+		int len = ary.length;
+		for (int i = 0; i < len; i++) {
+			byte[] itm_bry = Bry_.new_u8(ary[i]);
+			trie.Add_obj(itm_bry, new Pxd_itm_tz_abbr(-1, itm_bry, i));
 		}
 	}
 	private static void Init_suffix(String[] suffix_ary) {

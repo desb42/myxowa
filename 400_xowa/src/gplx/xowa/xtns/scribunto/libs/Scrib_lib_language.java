@@ -239,7 +239,7 @@ public class Scrib_lib_language implements Scrib_lib {
 				}
 				date_bry = Bry_.Mid(date_bry, dash_pos - 4, date_bry.length); // take only 4 digits for years; lops off "+0000000" as well as "+"; FOOTNOTE:WIKIDATA_DATES
 			}
-			date = Pft_func_time.ParseDate(date_bry, utc, tmp_bfr, core.Ctx().Page().Ttl());	// NOTE: not using java's datetime parse b/c it is more strict; not reconstructing PHP's datetime parse b/c it is very complicated (state machine); re-using MW's parser b/c it is inbetween; DATE:2015-07-29
+			date = Pft_func_time.ParseDate(date_bry, utc, tmp_bfr, core.Ctx());	// NOTE: not using java's datetime parse b/c it is more strict; not reconstructing PHP's datetime parse b/c it is very complicated (state machine); re-using MW's parser b/c it is inbetween; DATE:2015-07-29
 		}
 		if (date == null || tmp_bfr.Len() > 0) {
 			tmp_bfr.Mkr_rls();

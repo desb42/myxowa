@@ -28,6 +28,11 @@ public class Db_parser {
 		m_newsrc.Clear();
 		m_pos = 0;
 		byte[] nsrc = removecomments();
+		m_src = nsrc;
+		m_src_end = nsrc.length;
+		m_newsrc.Clear();
+		m_pos = 0;
+		nsrc = removetranslate();
 		return nsrc;
 	}
 	private byte[] removecomments() {
@@ -39,6 +44,29 @@ public class Db_parser {
 				if (match_opencomment()) {
 					addtext(start_text, curpos);
 					// skip the comment
+					start_text = m_pos;
+				}
+				else
+					m_pos++;
+			}
+			else
+				m_pos++;
+		}
+		if (start_text > 0) {
+			addtext(start_text, m_src_end);
+			return m_newsrc.To_bry_and_clear();
+		}
+		return m_src;
+	}
+	private byte[] removetranslate() {
+		int start_text = m_pos;
+		while (m_pos < m_src_end) {
+			byte b = m_src[m_pos];
+			if (b == '<') {
+				int curpos = m_pos;
+				if (match_translate()) {
+					addtext(start_text, curpos);
+					// skip the tag
 					start_text = m_pos;
 				}
 				else
@@ -68,7 +96,34 @@ public class Db_parser {
 		nsrc = pass2();
 		return nsrc;
 	}
-	
+	// <translate> or </translate>
+	private boolean match_translate() {
+		int savedpos = m_pos;
+		m_pos++;
+		boolean close = false;
+		if (m_src[m_pos] == '/') {
+			close = true;
+			m_pos++;
+		}
+		if (m_pos + 10 >= m_src_end) return false;
+		// probably should be case insensitive
+		if (m_src[m_pos] == 't' && m_src[m_pos+1] == 'r' && m_src[m_pos+2] == 'a' && m_src[m_pos+3] == 'n' && m_src[m_pos+4] == 's' && m_src[m_pos+5] == 'l' && m_src[m_pos+6] == 'a' && m_src[m_pos+7] == 't' && m_src[m_pos+8] == 'e' && m_src[m_pos+9] == '>') {
+			m_pos += 10;
+			if (!close) {
+				while (m_pos < m_src_end) {
+					byte b = m_src[m_pos];
+					if (b == ' ' || b == '\t' || b == '\n')
+						m_pos++;
+					else
+						break;
+				}
+			}
+			return true;
+		}
+		m_pos = savedpos; // restore
+		return false;
+	}
+
 	private boolean match_opencomment() {
 		boolean startnl = false;
 		int savedpos = m_pos;
@@ -104,6 +159,32 @@ public class Db_parser {
 					}
 				}
 				m_pos++;
+			}
+		}
+		m_pos = savedpos;
+		return false;
+	}
+	// remove <noinclude>...</noinclude>
+	private boolean remove_noinclude() {
+		int savedpos = m_pos;
+		if (m_pos + 11 >= m_src_end) return false;
+		m_pos++;
+		// probably should be case insensitive
+		if (m_src[m_pos] == 'n' && m_src[m_pos+1] == 'o' && m_src[m_pos+2] == 'i' && m_src[m_pos+3] == 'n' && m_src[m_pos+4] == 'c' && m_src[m_pos+5] == 'l' && m_src[m_pos+6] == 'u' && m_src[m_pos+7] == 'd' && m_src[m_pos+8] == 'e' && m_src[m_pos+9] == '>') {
+			m_pos += 10;
+			while (m_pos < m_src_end) {
+				byte b = m_src[m_pos];
+				if (b == '<') {
+					m_pos++;
+					if (m_pos + 11 <= m_src_end) {
+						if (m_src[m_pos] == '/' && m_src[m_pos+1] == 'n' && m_src[m_pos+2] == 'o' && m_src[m_pos+3] == 'i' && m_src[m_pos+4] == 'n' && m_src[m_pos+5] == 'c' && m_src[m_pos+6] == 'l' && m_src[m_pos+7] == 'u' && m_src[m_pos+8] == 'd' && m_src[m_pos+9] == 'e' && m_src[m_pos+10] == '>') {
+							m_pos += 11;
+							return true;
+						}
+					}
+				}
+				else
+					m_pos++;
 			}
 		}
 		m_pos = savedpos;

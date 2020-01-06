@@ -24,7 +24,7 @@ import gplx.xowa.parsers.lnkis.files.*;
 import gplx.xowa.wikis.pages.lnkis.Xopg_colour;
 public class Pp_pagelist_colour {
 	public static void Colour(List_adp list, Bry_bfr bfr, Xow_wiki wiki) {
-            if (wiki.Quality().Not_colouring()) return;
+		if (wiki.Quality().Not_colouring()) return;
 		// only check on Page: pages
 		int len = list.Count();
 		for (int i = 0; i < len; i++) {
