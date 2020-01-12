@@ -53,7 +53,7 @@ public class Xomw_quote_wkr {// THREAD.UNSAFE: caching for repeated calls
 		return found ? tmp.To_bry_and_clear() : src;
 	}
 	private boolean Do_quotes(Bry_bfr bfr, boolean all_quotes_mode, byte[] src, int line_bgn, int line_end) {
-		byte[][] arr = XophpPreg.split(apos_pos_ary, src, line_bgn, line_end, Wtxt__apos, Bool_.Y);	// PORTED.REGX: arr = preg_split("/(''+)/", text, -1, PREG_SPLIT_DELIM_CAPTURE);
+		byte[][] arr = XophpPreg_.split(apos_pos_ary, src, line_bgn, line_end, Wtxt__apos, Bool_.Y);	// PORTED.REGX: arr = preg_split("/(''+)/", text, -1, PREG_SPLIT_DELIM_CAPTURE);
 		if (arr == null) {
 			if (all_quotes_mode) {
 				bfr.Add_mid(src, line_bgn, line_end).Add_byte_nl();
@@ -110,8 +110,8 @@ public class Xomw_quote_wkr {// THREAD.UNSAFE: caching for repeated calls
 			for (int i = 1; i < arr_len; i += 2) {
 				if (arr[i].length == 3) {
 					byte[] prv = arr[i - 1];
-					byte prv__last_char = XophpString.substr_byte(prv, -1);
-					byte prv__last_minus_1_char = XophpString.substr_byte(prv, -2, 1);
+					byte prv__last_char = XophpString_.substr_byte(prv, -1);
+					byte prv__last_minus_1_char = XophpString_.substr_byte(prv, -2, 1);
 					if (prv__last_char == Byte_ascii.Space) {              // NOTE: prv ends in space; EX: "''prv '''"
 						if (prv_ends_w_space == -1) {
 							prv_ends_w_space = i;

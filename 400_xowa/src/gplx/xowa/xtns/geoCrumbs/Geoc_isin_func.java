@@ -35,8 +35,7 @@ public class Geoc_isin_func extends Pf_func_base {
 				ttl_bry = Bry_.Mid(ttl_bry, 0, tlen - 3);
 			}
 			// insert into parent table
-			wiki.Bread().Insert(ctx.Page().Ttl().Full_txt_raw(), ttl_bry);
-			Gfo_usr_dlg_.Instance.Log_many("", "", "#isin: ttl=~{0} parent=~{1}", page_ttl.Full_db(), ttl_bry);
+			wiki.Bread().Insert(page_ttl, ttl_bry);
 		}
 		ctx.Page().Html_data().Pgbnr_isin_(ttl_bry);
 	}

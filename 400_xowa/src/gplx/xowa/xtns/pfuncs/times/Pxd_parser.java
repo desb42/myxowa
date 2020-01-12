@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.pfuncs.times; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.pfuncs.*;
 import gplx.core.brys.*; import gplx.core.brys.fmtrs.*; import gplx.core.btries.*; import gplx.core.log_msgs.*;
+import gplx.xowa.parsers.*;
 class Pxd_parser {
 	private final    Btrie_rv trv = new Btrie_rv();
 	private byte[] src; int cur_pos, tkn_bgn_pos, src_len, tkn_type;
@@ -25,6 +26,9 @@ class Pxd_parser {
 	public int Colon_count;
 	public int[] Seg_idxs() {return seg_idxs;} private int[] seg_idxs = new int[DateAdp_.SegIdx__max];	// temp ary for storing current state
 	public byte[] Src() {return src;}
+	public Pxd_parser(Xop_ctx ctx) {
+		this.trie = Pxd_parser_.Trie(ctx);
+	}
 	public boolean Seg_idxs_chk(int... ary) {
 		int len = ary.length;
 		for (int i = 0; i < len; i++)
@@ -212,23 +216,23 @@ class Pxd_parser {
 			}
 		}
 	}
-	private static Btrie_slim_mgr trie = Pxd_parser_.Trie();
+	private static Btrie_slim_mgr trie;
 }
 class Pxd_parser_ {
-	public static Btrie_slim_mgr Trie() {
+	public static Btrie_slim_mgr Trie(Xop_ctx ctx) {
 		if (trie == null) {
 			trie = Btrie_slim_mgr.ci_a7();	// NOTE:ci.ascii:MW_const.en
-			Init();
+			Init(ctx);
 		}
 		return trie;
-	}	private static Btrie_slim_mgr trie;
+	}
+	private static Btrie_slim_mgr trie;
 	private static final       String[] Names_month_full		= {"january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
 	private static final       String[] Names_month_abrv		= {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
 	private static final       String[] Names_month_roman		= {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"};
 	private static final       String[] Names_day_suffix		= {"st", "nd", "rd", "th"};
 	private static final       String[] Names_day_full			= {"sunday", "monday", "tuesday", "wednesday" , "thursday", "friday", "saturday"};
 	private static final       String[] Names_day_abrv			= {"sun", "mon", "tue", "wed" , "thu", "fri", "sat"};
-	private static final       String[] Names_timezones			= {"utc", "gmt", "a", "acdt", "acst", "addt", "adt", "aedt", "aest", "ahdt", "ahst", "akdt", "akst", "amt", "apt", "ast", "awdt", "awst", "awt", "b", "bdst", "bdt", "bmt", "bst", "c", "cast", "cat", "cddt", "cdt", "cemt", "cest", "cet", "chst", "cmt", "cmt", "cpt", "cst", "cwt", "d", "dmt", "e", "eat", "eddt", "edt", "eest", "eet", "emt", "ept", "est", "ewt", "f", "ffmt", "fmt", "g", "gdt", "gst", "h", "hdt", "hkst", "hkt", "hmt", "hpt", "hst", "hwt", "i", "iddt", "idt", "imt", "ist", "jdt", "jmt", "jst", "k", "kdt", "kmt", "kst", "l", "lst", "m", "mddt", "mdst", "mdt", "mest", "met", "mmt", "mpt", "msd", "msk", "mst", "mwt", "n", "nddt", "ndt", "npt", "nst", "nwt", "nzdt", "nzmt", "nzst", "o", "p", "pddt", "pdt", "pkst", "pkt", "plmt", "pmt", "ppmt", "ppt", "pst", "pwt", "q", "qmt", "r", "rmt", "s", "sast", "sdmt", "sjmt", "smt", "sst", "t", "tbmt", "tmt", "u", "uct", "v", "w", "wast", "wat", "wemt", "west", "wet", "wib", "wit", "wita", "wmt", "x", "y", "yddt", "ydt", "ypt", "yst", "ywt", "z"};
 	//TODO_OLD:
 	//private static final       String[] Names_day_text		= {"weekday", "weekdays"};
 	//private static final       String[] Names_ordinal_num		= {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"};
@@ -246,7 +250,7 @@ class Pxd_parser_ {
 	, Unit_name_day			= Bry_.new_a7("day")
 	, Unit_name_hour		= Bry_.new_a7("hour")
 	;
-	private static void Init() {
+	private static void Init(Xop_ctx ctx) {
 		Init_reg_months(Names_month_full);
 		Init_reg_months(Names_month_abrv);
 		Init_reg_months(Names_month_roman);
@@ -261,7 +265,7 @@ class Pxd_parser_ {
 		Init_unit(DateAdp_.SegIdx_month 	, "month", "months");
 		Init_unit(DateAdp_.SegIdx_year  	, "year", "years");
 		Init_unit(DateAdp_.SegIdx_day,  7	, "week", "weeks");
-		Init_reg_tz_abbr(Names_timezones);
+		Init_reg_tz_abbr(ctx);
 		trie.Add_obj(Pxd_itm_ago.Name_ago, new Pxd_itm_ago(-1, -1));
 		Init_suffix(Names_day_suffix);
 		Init_relative();
@@ -283,12 +287,9 @@ class Pxd_parser_ {
 			trie.Add_obj(itm_bry, new Pxd_itm_dow_name(-1, itm_bry, i));	// NOTE: days are base0; 0-6
 		}
 	}
-	private static void Init_reg_tz_abbr(String[] ary) {
-		int len = ary.length;
-		for (int i = 0; i < len; i++) {
-			byte[] itm_bry = Bry_.new_u8(ary[i]);
-			trie.Add_obj(itm_bry, new Pxd_itm_tz_abbr(-1, itm_bry, i));
-		}
+	private static void Init_reg_tz_abbr(Xop_ctx ctx) {
+		if (ctx == null) return; // for testing
+		Db_timezone.Setup_timezones(trie);
 	}
 	private static void Init_suffix(String[] suffix_ary) {
 		int len = suffix_ary.length;

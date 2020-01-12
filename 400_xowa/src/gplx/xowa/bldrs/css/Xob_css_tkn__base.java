@@ -24,7 +24,7 @@ abstract class Xob_css_tkn__base {
 	public int Pos_end() {return pos_end;} protected int pos_end;
 	@gplx.Virtual public void Process(Xob_mirror_mgr mgr) {}
 	public abstract int Write(Bry_bfr bfr, byte[] src);
-	public static final int Tid_warn = 1, Tid_base64 = 2, Tid_url = 3, Tid_import = 4;
+	public static final int Tid_warn = 1, Tid_base64 = 2, Tid_url = 3, Tid_import = 4, Tid_comment = 5;
 }
 class Xob_css_tkn__warn extends Xob_css_tkn__base {
 	public String Fail_msg() {return fail_msg;} private String fail_msg;
@@ -111,6 +111,18 @@ class Xob_css_tkn__import extends Xob_css_tkn__base {
 		Xob_css_tkn__import rv = new Xob_css_tkn__import();
 		rv.Init(Tid_import, pos_bgn, pos_end);
 		rv.src_url = src_url; rv.trg_url = trg_url; rv.quote_byte = quote_byte;
+		return rv;
+	}
+}
+class Xob_css_tkn__comment extends Xob_css_tkn__base {
+	@Override public void Process(Xob_mirror_mgr mgr) {
+	}
+	@Override public int Write(Bry_bfr bfr, byte[] src) {
+		return pos_end;
+	}
+	public static Xob_css_tkn__comment new_(int pos_bgn, int pos_end) {
+		Xob_css_tkn__comment rv = new Xob_css_tkn__comment();
+		rv.Init(Tid_comment, pos_bgn, pos_end);
 		return rv;
 	}
 }

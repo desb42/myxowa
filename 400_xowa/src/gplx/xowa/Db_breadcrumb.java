@@ -14,7 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa; import gplx.*;
-import gplx.dbs.*;
+import gplx.dbs.*; import gplx.dbs.engines.sqlite.*;
 import gplx.xowa.parsers.Xop_ctx;
 import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.wikis.data.Xow_db_mgr;
@@ -33,7 +33,17 @@ public class Db_breadcrumb {
 			Xowd_page_tbl page_tbl = db_mgr.Db__core().Tbl__page();
 			this.conn = page_tbl.Conn();
 		}
-		// need to check that the table 'parent' exists and contains at least one row
+		boolean found = false;
+		// need to check that the table 'parent' exists
+		try {
+			Db_stmt stmt = conn.Stmt_sql("select * from parent limit 1;");
+			found = true;
+		}
+		catch (Exception e) { }
+		if (!found) {
+			Sqlite_engine_.Tbl_create(conn, "parent", "create table parent (ttl varchar(255), parent varchar(255), ttl_namespace int, parent_namespace int);");
+			Sqlite_engine_.Tbl_create(conn, "parent", "create unique index if not exists parentindex on parent(ttl, ttl_namespace);");
+		}
 		initialised = true;
 	}
 	public byte[] Get_breadcrumbs(Xowe_wiki wiki, Xop_ctx ctx, Xoa_ttl ttl, byte[] isin, byte[] redirect_msg) {
@@ -87,8 +97,18 @@ public class Db_breadcrumb {
 		tmp_bfr.Add_str_a7("</div>");
 		return tmp_bfr.To_bry_and_clear();
 	}
-	public void Insert(byte[] ttl, byte[] isin) {
-		// insert into parent values(ttl, isin)
+	public void Insert(Xoa_ttl ttl, byte[] isin) {
+		// insert into parent (ttl, parent, ttl_namespace, parent_namespace) values(?,?,?,?)
+		Xoa_ttl parent = Xoa_ttl.Parse(wiki, isin);
+		Db_stmt stmt = conn.Stmt_sql("insert into parent (ttl, parent, ttl_namespace, parent_namespace) values(?,?,?,?);");
+		stmt.Crt_bry_as_str("ttl", ttl.Page_txt());
+		stmt.Crt_int("ttl_namespace", ttl.Ns().Id());
+		stmt.Crt_bry_as_str("parent", parent.Page_txt());
+		stmt.Crt_int("parent_namespace", parent.Ns().Id());
+		Db_rdr rdr = stmt.Exec_select__rls_auto(); // ugh!
+		rdr.Rls();
+		Gfo_usr_dlg_.Instance.Log_many("", "", "#isin: ttl=~{0} parent=~{1}", ttl.Full_db(), isin);
+		// assume somewhere else is committing?!?!
 	}
 	private static String sql = String_.Concat_lines_nl_skip_last
 	( "WITH RECURSIVE bread(count, parent, parent_namespace) AS ("

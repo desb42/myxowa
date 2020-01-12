@@ -28,8 +28,9 @@ public class DateAdp implements CompareAble, Gfo_invk {
 			if (ctx.Deny()) return this;
 			return this.Add_day(days);
 		}
-		else										return Gfo_invk_.Rv_unhandled;			
-	}	public static final    String Invk_XtoStr_fmt = "XtoStr_fmt", Invk_AddDays = "Add_day";
+		else										return Gfo_invk_.Rv_unhandled;
+	}
+	public static final String Invk_XtoStr_fmt = "XtoStr_fmt", Invk_AddDays = "Add_day";
 	public int Segment(int segmentIdx) {
 		switch (segmentIdx) {
 			case DateAdp_.SegIdx_year:			return this.Year();
@@ -69,7 +70,7 @@ public class DateAdp implements CompareAble, Gfo_invk {
 	public String XtoStr_fmt_iso_8561()				{return XtoStr_fmt("yyyy-MM-dd HH:mm:ss");}
 	public String XtoStr_fmt_iso_8561_w_tz()		{return XtoStr_fmt("yyyy-MM-dd'T'HH:mm:ss'Z'");}
 	public static int Timezone_offset_test = Int_.Min_value;
-		public Calendar UnderDateTime() 		{return under;} Calendar under;
+	public Calendar UnderDateTime() 		{return under;} Calendar under;
 	public int Year() {return under.get(Calendar.YEAR);}
 	public int Month() {return under.get(Calendar.MONTH) + Month_base0adj;}
 	public int Day() {return under.get(Calendar.DAY_OF_MONTH);}
@@ -79,7 +80,7 @@ public class DateAdp implements CompareAble, Gfo_invk {
 	public int DayOfWeek() {return under.get(Calendar.DAY_OF_WEEK) - 1;}	// -1 : Base0; NOTE: dotnet/php is also Sunday=0
 	public int DayOfYear() {return under.get(Calendar.DAY_OF_YEAR);}
 	public int Timezone_offset() {
-            return under.getTimeZone().getRawOffset()/1000;
+		return under.getTimeZone().getRawOffset()/1000;
 /*		return Timezone_offset_test == Int_.Min_value							// Timezone_offset_test not over-ridden
 				? 0
 		//		? under.getTimeZone().getOffset(this.Timestamp_unix()) / 1000	// divide by 1000 to convert from ms to seconds
@@ -130,10 +131,13 @@ public class DateAdp implements CompareAble, Gfo_invk {
 		return new DateAdp(gmtCal);
 	}
 	public long Timestamp_unix() {
-		long offsetFromUTC = (under.getTimeZone().getOffset(0));
-		boolean dst = TimeZone.getDefault().inDaylightTime(under.getTime());
-		long dst_adj = dst ? 3600000 : 0;
-		return (under.getTimeInMillis() + offsetFromUTC + dst_adj) / 1000;
+		java.util.Date date = under.getTime();
+		long msFromEpochGmt = date.getTime();
+		return msFromEpochGmt / 1000; // should not be zone dependent
+		//long offsetFromUTC = (under.getTimeZone().getOffset(0));
+		//boolean dst = TimeZone.getDefault().inDaylightTime(under.getTime());
+		//long dst_adj = dst ? 3600000 : 0;
+		//return (under.getTimeInMillis() + offsetFromUTC + dst_adj) / 1000;
 	}
 	public int WeekOfYear() {return under.get(Calendar.WEEK_OF_YEAR);}
 	public int Frac() {return under.get(Calendar.MILLISECOND);}
@@ -151,11 +155,11 @@ public class DateAdp implements CompareAble, Gfo_invk {
 	}
 	public String XtoStr_fmt(String fmt)	{
 		fmt = fmt.replace("f", "S");
-        SimpleDateFormat sdf = new SimpleDateFormat(fmt);
+		SimpleDateFormat sdf = new SimpleDateFormat(fmt);
 		return sdf.format(under.getTime());
 	}
 	public String XtoStr_tz()	{
-        SimpleDateFormat sdf = new SimpleDateFormat("Z");
+		SimpleDateFormat sdf = new SimpleDateFormat("Z");
 		String time_zone = sdf.format(under.getTime());
 		return String_.Mid(time_zone, 0, 3) + ":" + String_.Mid(time_zone, 3, String_.Len(time_zone));
 	}
@@ -170,18 +174,36 @@ public class DateAdp implements CompareAble, Gfo_invk {
 	}
 	protected DateAdp(Calendar under) {this.under = under;}
 	protected DateAdp(int year, int month, int day, int hour, int minute, int second, int frac) {
-		MakeDate(year, month, day, hour, minute, second, frac, java.util.TimeZone.getTimeZone("UTC"));
+		MakeDate(year, month, day, hour, minute, second, frac, utc_tz);
 	}
 	protected DateAdp(int year, int month, int day, int hour, int minute, int second, int frac, java.util.TimeZone tz) {
 		MakeDate(year, month, day, hour, minute, second, frac, tz);
-        }
-        private void MakeDate(int year, int month, int day, int hour, int minute, int second, int frac, java.util.TimeZone tz) {
-		this.under = new GregorianCalendar(year, month - Month_base0adj, day, hour, minute, second);
-		under.set(Calendar.MILLISECOND, frac);
-		under.setTimeZone(tz);
 	}
-	public void setTimeZone(java.util.TimeZone tz) {
-		under.setTimeZone(tz);
+	private void MakeDate(int year, int month, int day, int hour, int minute, int second, int frac, java.util.TimeZone tz) {
+		java.util.TimeZone.setDefault(tz);
+		this.under = new GregorianCalendar(year, month - Month_base0adj, day, hour, minute, second);
+		java.util.TimeZone.setDefault(utc_tz);
+		under.set(Calendar.MILLISECOND, frac);
+		//System.out.println("make " + under.getTime() + " " + under.getTimeZone());
+		//under.setTimeZone(tz);
+		//System.out.println(under.getTimeZone());
+	}
+	private static java.util.TimeZone utc_tz = java.util.TimeZone.getTimeZone("UTC");
+	public void SetTimeZone(java.util.TimeZone tz) {
+		java.util.Date date = under.getTime();
+		long msFromEpochGmt = date.getTime();
+		int offsetFromUTC = tz.getOffset(msFromEpochGmt);
+		java.util.TimeZone.setDefault(tz);
+		//Calendar gmtCal = Calendar.getInstance();
+		//gmtCal.setTimeInMillis(msFromEpochGmt + offsetFromUTC);
+		//gmtCal.setTimeInMillis(msFromEpochGmt + offsetFromUTC);
+		//under = gmtCal;
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(msFromEpochGmt);
+		under = cal;
+		java.util.TimeZone.setDefault(utc_tz);
+		//under.setTimeZone(tz);
+		//System.out.println("set " + under.getTime() + " " + under.getTimeZone());
 	}
 	public static final int Month_base0adj = 1;
 }

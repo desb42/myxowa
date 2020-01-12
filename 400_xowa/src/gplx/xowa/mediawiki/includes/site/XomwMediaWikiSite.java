@@ -44,7 +44,7 @@ public class XomwMediaWikiSite extends XomwSite {	private static final String PA
 	* @return String
 	*/
 	public byte[] toDBKey(byte[] title) {
-		return XophpString.str_replace(Byte_ascii.Space_bry, Byte_ascii.Underline_bry, title);
+		return XophpString_.str_replace(Byte_ascii.Space_bry, Byte_ascii.Underline_bry, title);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class XomwMediaWikiSite extends XomwSite {	private static final String PA
 	* @return String
 	*/
 	public String getRelativePagePath() {
-		return XophpUrl.parse_url(this.getPath(XomwMediaWikiSite.PATH_PAGE), XophpUrl.PHP_URL_PATH);
+		return XophpUrl_.parse_url(this.getPath(XomwMediaWikiSite.PATH_PAGE), XophpUrl_.PHP_URL_PATH);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class XomwMediaWikiSite extends XomwSite {	private static final String PA
 	* @return String
 	*/
 	public String getRelativeFilePath() {
-		return XophpUrl.parse_url(this.getPath(XomwMediaWikiSite.PATH_FILE), XophpUrl.PHP_URL_PATH);
+		return XophpUrl_.parse_url(this.getPath(XomwMediaWikiSite.PATH_FILE), XophpUrl_.PHP_URL_PATH);
 	}
 
 	/**

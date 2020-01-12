@@ -38,9 +38,26 @@ public class Xoa_css_img_downloader {
 			int prv_pos = 0;
 			Bry_bfr bfr = Bry_bfr_.New_w_size(src_len);
 			Hash_adp img_hash = Hash_adp_bry.cs();
+			// need to take comments into account
 			while (true) {
+				boolean incomment = false;
 				int url_pos = Bry_find_.Find_fwd(src, Bry_url, prv_pos);
 				if (url_pos == Bry_find_.Not_found) {bfr.Add_mid(src, prv_pos, src_len); break;}	// no more "url("; exit;
+				int comment_pos = Bry_find_.Find_fwd(src, Bry_comment_start, prv_pos);
+				while (comment_pos != Bry_find_.Not_found && comment_pos < url_pos) {
+					int comment_end = Bry_find_.Find_fwd(src, Bry_comment_end, prv_pos);
+					if (comment_end == Bry_find_.Not_found)
+						comment_end = src_len;
+					prv_pos = comment_end + 2;
+					if (comment_end < url_pos) {
+						comment_pos = Bry_find_.Find_fwd(src, Bry_comment_start, prv_pos);
+						continue;
+					}
+					incomment = true;
+					break;
+				}
+				if (incomment)
+					continue;
 				int bgn_pos = url_pos + Bry_url_len;	// set bgn_pos after "url("
 				byte bgn_byte = src[bgn_pos];
 				byte end_byte = Byte_ascii.Null;
@@ -186,6 +203,7 @@ public class Xoa_css_img_downloader {
 	  Bry_url = Bry_.new_a7("url("), Bry_data_image = Bry_.new_a7("data:image/")
 	, Bry_http = Bry_.new_a7("http://"), Bry_fwd_slashes = Bry_.new_a7("//"), Bry_import = Bry_.new_a7("@import ")
 	, Bry_http_protocol = Bry_.new_a7("http")
+	, Bry_comment_start = Bry_.new_a7("/*")
 	;
 	public static final    byte[] 
 		  Bry_comment_bgn = Bry_.new_a7("/*XOWA:"), Bry_comment_end = Bry_.new_a7("*/");

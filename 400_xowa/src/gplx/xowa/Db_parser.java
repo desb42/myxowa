@@ -21,6 +21,7 @@ public class Db_parser {
 	private int m_src_end, m_pos, m_start, m_tail;
 	private Bry_bfr m_newsrc = Bry_bfr_.New();
 	private Xop_ctx ctx;
+	private Tag_match translate_tag = new Tag_match("translate");
 
 	public byte[] stripcomments(byte[] src) {
 		m_src = src;
@@ -63,17 +64,16 @@ public class Db_parser {
 		while (m_pos < m_src_end) {
 			byte b = m_src[m_pos];
 			if (b == '<') {
-				int curpos = m_pos;
-				if (match_translate()) {
-					addtext(start_text, curpos);
+                                int newpos = translate_tag.Match(m_src, m_pos, m_src_end);
+				//if (match_translate()) {
+				if (newpos > 0) {
+					addtext(start_text, m_pos);
 					// skip the tag
-					start_text = m_pos;
+					start_text = newpos;
+                                        m_pos = newpos - 1;
 				}
-				else
-					m_pos++;
 			}
-			else
-				m_pos++;
+			m_pos++;
 		}
 		if (start_text > 0) {
 			addtext(start_text, m_src_end);
@@ -475,5 +475,48 @@ public class Db_parser {
 			}*/
 		}
 		return m_src;
+	}
+}
+class Tag_match {
+	private byte[] tag;
+	private int tag_len;
+	Tag_match(String tag) {
+		this.tag = Bry_.new_a7(tag);
+		this.tag_len = this.tag.length;
+	}
+	public int Match(byte[]src, int bgn, int src_end) {
+		bgn++; //??? 
+		boolean close = false;
+		if (src[bgn] == '/') {
+			close = true;
+			bgn++;
+		}
+		if (bgn + tag_len >= src_end) return 0;
+		// probably should be case insensitive
+		for (int i = 0; i < tag_len; i++) {
+			byte s = src[bgn++];
+			byte c = tag[i];
+			if (c != s && (c | 32) != (s | 32)) // case insensitive
+				return 0;
+		}
+		// any whitespace beween tag and '>'
+		while (bgn < src_end) {
+			byte b = src[bgn];
+			if (b == ' ' || b == '\t' || b == '\n')
+				bgn++;
+			else
+				break;
+		}
+		if (bgn < src_end && src[bgn++] != '>') return 0;
+		if (!close) {
+			while (bgn < src_end) {
+				byte b = src[bgn];
+				if (b == ' ' || b == '\t' || b == '\n')
+					bgn++;
+				else
+					break;
+			}
+		}
+		return bgn;
 	}
 }

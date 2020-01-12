@@ -128,6 +128,8 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		index_ttl_bry = Decode_as_dot_bry(index_ttl_bry);
 		bgn_page_bry = amp_mgr.Decode_as_bry(bgn_page_bry);
 		end_page_bry = amp_mgr.Decode_as_bry(end_page_bry);
+		if (bgn_sect_bry != null && Bry_.Len_eq_0(bgn_sect_bry)) bgn_sect_bry = null; //reset
+		if (end_sect_bry != null && Bry_.Len_eq_0(end_sect_bry)) end_sect_bry = null; //reset
 		Xowc_xtn_pages cfg_pages = wiki.Cfg_parser().Xtns().Itm_pages();
 		if (cfg_pages.Init_needed()) cfg_pages.Init(wiki.Ns_mgr());
 		ns_index_id = cfg_pages.Ns_index_id(); if (ns_index_id == Int_.Min_value) return Fail_msg("wiki does not have an Index ns");
@@ -179,7 +181,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		else {
 			header = Toc_bry;
 		}
-		if (header != null && XophpBool.is_true(header)) {// check if header is true; ignore values like header=0; ISSUE#:622; DATE:2019-11-28
+		if (header != null && XophpBool_.is_true(header)) {// check if header is true; ignore values like header=0; ISSUE#:622; DATE:2019-11-28
 			rv = Bld_wikitext_for_header(full_bfr, index_page, pl_nde, rv);
 		}
 		// wrap the output in a div, to prevent the parser from inserting paragraphs
@@ -322,13 +324,13 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				end_page_int = num_parser.Rv_as_int();
 		}
 		if (bgn_page_int > end_page_int) {
-					if (end_page_int == 0)
-					// assume no more than say 20 pages?
-						end_page_int = bgn_page_int + 20;
-					else {
-			Fail_args("from must be less than to: from={0} to={1}", bgn_page_int, end_page_int);
-			return null;
-					}
+			if (end_page_int == 0)
+				// assume no more than say 20 pages?
+				end_page_int = bgn_page_int + 20;
+			else {
+				Fail_args("from must be less than to: from={0} to={1}", bgn_page_int, end_page_int);
+				return null;
+			}
 		}
 		for (int i = bgn_page_int; i <= end_page_int; i++)
 			list.Add(new Int_obj_val(i));

@@ -278,7 +278,7 @@ public class XomwFile {
 	* @return String
 	*/
 	public byte[] getName() {
-		if (!XophpUtility.isset(this.name)) {
+		if (!XophpObject_.isset(this.name)) {
 			// this.assertRepoDefined();
 			this.name = this.repo.getNameFromTitle(this.title);
 		}
@@ -292,10 +292,10 @@ public class XomwFile {
 	* @return String
 	*/
 	private byte[] getExtension() {
-		if (!XophpUtility.isset(this.extension)) {
-			int n = XophpString.strpos(this.getName(), Byte_ascii.Dot);
+		if (!XophpObject_.isset(this.extension)) {
+			int n = XophpString_.strpos(this.getName(), Byte_ascii.Dot);
 			this.extension = normalizeExtension(
-				n != Bry_find_.Not_found ? XophpString.substr(this.getName(), n + 1) : Bry_.Empty);
+				n != Bry_find_.Not_found ? XophpString_.substr(this.getName(), n + 1) : Bry_.Empty);
 		}
 
 		return this.extension;
@@ -329,7 +329,7 @@ public class XomwFile {
 	* @return String
 	*/
 	public byte[] getUrl() {
-		if (!XophpUtility.isset(this.url)) {
+		if (!XophpObject_.isset(this.url)) {
 			// this.assertRepoDefined();
 			byte[] ext = this.getExtension();
 			this.url = Bry_.Add(this.repo.getZoneUrl(XomwFileRepo.Zone__public, ext), Byte_ascii.Slash_bry, this.getUrlRel());
@@ -1496,7 +1496,7 @@ public class XomwFile {
 	* @return String
 	*/
 	private byte[] getHashPath() {
-		if (!XophpUtility.isset(this.hashPath)) {
+		if (!XophpObject_.isset(this.hashPath)) {
 			// this.assertRepoDefined();
 			this.hashPath = this.repo.getHashPath(this.getName());
 		}
@@ -1558,7 +1558,7 @@ public class XomwFile {
 	* @return String
 	*/
 	private byte[] getUrlRel() {
-		return Bry_.Add(this.getHashPath(), XophpEncode.rawurlencode(this.getName()));
+		return Bry_.Add(this.getHashPath(), XophpEncode_.rawurlencode(this.getName()));
 	}
 
 //		/**

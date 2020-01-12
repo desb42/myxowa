@@ -14,14 +14,17 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.mediawiki; import gplx.*; import gplx.xowa.*;
-public class XophpMath {
-	public static double round(double v, int places) {
-		if (places < 0) {	// -1 means round to 10; -2 means round to 100; etc..
-			int factor = (int)Math_.Pow(10, places * -1);
-			return ((int)(Math_.Round(v, 0) / factor)) * factor;	// EX: ((int)Round(123, 0) / 10) * 10: 123 -> 12.3 -> 12 -> 120
-		}
-		else {
-			return Math_.Round(v, places);
-		}
-	}					
+import org.junit.*; import gplx.core.tests.*;
+public class XophpMath__tst {
+	private final    XophpMath__fxt fxt = new XophpMath__fxt();
+	@Test  public void fmod() {
+		fxt.Test__fmod(8, 2, 0);
+		fxt.Test__fmod(7, 2, 1);
+		fxt.Test__fmod(5.7d, 1.3d, .5d);
+	}
+}
+class XophpMath__fxt {
+	public void Test__fmod(double lhs, double rhs, double expd) {
+		Gftest.Eq__double(expd, XophpMath_.fmod(lhs, rhs));
+	}
 }

@@ -44,18 +44,24 @@ public class Pft_func_time extends Pf_func_base {
 		}
 	}
 	public static DateAdp ParseDate(byte[] date, boolean utc, Bry_bfr error_bfr, Xop_ctx ctx) {
+		DateAdp rv = null;
 		//if (date == Bry_.Empty) return utc ? Datetime_now.Get().XtoUtc() : Datetime_now.Get().XtoZone(ctx.Wiki().Tz_mgr().Get_timezone());
 		//if (date == Bry_.Empty) return utc ? Datetime_now.Get().XtoUtc() : Datetime_now.Get(ctx.Wiki().Tz_mgr().Get_timezone()).XtoLocal();
-		if (date == Bry_.Empty) return utc ? Datetime_now.Get().XtoUtc() : Datetime_now.Get(ctx.Wiki().Tz_mgr().Get_timezone());
-		try {
-			DateAdp rv = new Pxd_parser().Parse(date, error_bfr, ctx.Page().Ttl());
-			return rv;
+		//if (date == Bry_.Empty) return utc ? Datetime_now.Get().XtoUtc() : Datetime_now.Get(ctx.Wiki().Tz_mgr().Get_timezone());
+		if (date == Bry_.Empty)
+			rv = Datetime_now.Get().XtoUtc();
+		else {
+			try {
+				rv = new Pxd_parser(ctx).Parse(date, error_bfr, ctx.Page().Ttl());
+			}
+			catch (Exception exc) {
+				Err_.Noop(exc);
+				error_bfr.Add_str_a7("Invalid time");
+			}
 		}
-		catch (Exception exc) {
-			Err_.Noop(exc);
-			error_bfr.Add_str_a7("Invalid time");
-			return null;
-		}
+		if (rv != null && !utc)
+			rv.SetTimeZone(ctx.Wiki().Tz_mgr().Get_timezone());
+		return rv;
 	}
 	public static final    Pft_func_time _Lcl = new Pft_func_time(false), _Utc = new Pft_func_time(true);
 }

@@ -48,7 +48,7 @@ public class Datetime_now {
 	}
 	public static DateAdp Get(java.util.TimeZone tz) {
 		DateAdp rv = new DateAdp(new GregorianCalendar());
-		rv.setTimeZone(tz);
+		rv.SetTimeZone(tz);
 		return rv;
 	}
 	public static DateAdp Get_force() {	// ignore manual and force get of real time

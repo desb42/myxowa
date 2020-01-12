@@ -17,7 +17,7 @@ package gplx.xowa.xtns.pfuncs.times; import gplx.*; import gplx.xowa.*; import g
 import org.junit.*;
 public class Pxd_parser_tst {
 	private final    Bry_bfr bfr = Bry_bfr_.New_w_size(16);
-	private final    Pxd_parser parser = new Pxd_parser();
+	private final    Pxd_parser parser = new Pxd_parser(null);
 	private final    DateAdp test_date = DateAdp_.parse_fmt("2012-02-27", "yyyy-MM-dd");
 	@Before public void init() {
 		Datetime_now.Manual_y_();

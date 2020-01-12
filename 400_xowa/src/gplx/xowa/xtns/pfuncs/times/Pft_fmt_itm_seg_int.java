@@ -184,7 +184,8 @@ class Pft_fmt_itm_timezone_abbreviation implements Pft_fmt_itm {
 	public Pft_fmt_itm_timezone_abbreviation() {}
 	public int TypeId() {return Pft_fmt_itm_.Tid_timezone_abbreviation;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
-		bfr.Add_str_a7(date.Timezone_identifier());
+		byte[] code = Db_timezone.Get_code(date.Timezone_identifier(), date.Timezone_offset());
+		bfr.Add(code);
 	}
 }
 class Pft_fmt_itm_timezone_dst implements Pft_fmt_itm {
