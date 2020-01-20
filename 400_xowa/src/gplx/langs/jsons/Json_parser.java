@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.jsons; import gplx.*; import gplx.langs.*;
+package gplx.langs.jsons; import gplx.*; import gplx.xowa.*; import gplx.langs.*;
 import gplx.core.primitives.*;
 public class Json_parser {
 	private byte[] src; private int src_len, pos; private final    Gfo_number_parser num_parser = new Gfo_number_parser();
@@ -32,6 +32,9 @@ public class Json_parser {
 			switch (src[pos]) {
 				case Byte_ascii.Curly_bgn:	root_is_nde = Bool_.Y; break;
 				case Byte_ascii.Brack_bgn:	root_is_nde = Bool_.N; break;
+				case 16:
+					Db_JDecode dc = new Db_JDecode(src);
+					return dc.Decode();
 				default:					return null;
 			}
 			Skip_ws();

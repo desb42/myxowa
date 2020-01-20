@@ -53,6 +53,14 @@ class Pxd_parser {
 			dt = Evaluate(src, error_bfr);
 		if (dt != DateAdp_.MinValue)
 			return dt;
+                // dont log some date errors
+                boolean report = true;
+                int src_len = src.length;
+                if (src_len > 2 && src[0] == '1' && src[1] == ' ')
+                    report = false;
+                else if (src_len == 6 && Bry_.Eq(src, Bry_.new_a7("einval")))
+                    report = false;
+                if (report)
 		Gfo_usr_dlg_.Instance.Warn_many("", "", "date parse err: ttl=~{0} txt=~{1}", ttl.Full_db(), src);
 		Err_set(Pft_func_time_log.Invalid_day, Bfr_arg_.New_bry(src));
 		return null;

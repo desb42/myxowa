@@ -67,6 +67,7 @@ public class Xol_time_format_mgr implements Gfo_invk {
 		return tmp_bfr.To_bry_and_clear();
 	}
 	public Pft_fmt_itm[] Get_date_format(byte[] fmt_name) {
+            if (fmt_name != null) {
 		int len = fmt_name.length;
 		byte[][] names = fmt_grp.Names();
 		int names_len= names.length;
@@ -75,6 +76,7 @@ public class Xol_time_format_mgr implements Gfo_invk {
 				return fmt_grp.Times()[i].Time_format(Db_time_formats.Tid__date);
 			}
 		}
+        }
 		// not found (including "default") return default
 		return fmt_grp.Times()[0].Time_format(Db_time_formats.Tid__date);
 	}

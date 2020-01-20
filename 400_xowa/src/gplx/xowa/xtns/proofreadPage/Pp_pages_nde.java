@@ -44,23 +44,26 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			xtra_args.Add(new Pp_index_arg(xatr.Key_bry(), xatr.Val_as_bry()));
 			return;
 		}
+		if (xatr.Val_bgn() == -1)
+			return; // skip selfrefs
 		Byte_obj_val xatr_id = (Byte_obj_val)xatr_id_obj;
+		byte[] val_bry = xatr.Val_as_bry();
 		switch (xatr_id.Val()) {
 			case Xatr_index_ttl:
-				index_ttl_bry = checkquotes(xatr.Val_as_bry());
+				index_ttl_bry = checkquotes(val_bry);
 				break;
-			case Xatr_bgn_page:		bgn_page_bry	= xatr.Val_as_bry(); break;
-			case Xatr_end_page:		end_page_bry	= xatr.Val_as_bry(); break;
-			case Xatr_bgn_sect:		bgn_sect_bry	= xatr.Val_as_bry(); break;
-			case Xatr_end_sect:		end_sect_bry	= xatr.Val_as_bry(); break;
-			case Xatr_include:		include			= xatr.Val_as_bry(); break;
-			case Xatr_exclude:		exclude			= xatr.Val_as_bry(); break;
-			case Xatr_step:			step_bry		= xatr.Val_as_bry(); break;
-			case Xatr_onlysection:	onlysection		= xatr.Val_as_bry(); break;
-			case Xatr_header:		header			= xatr.Val_as_bry(); break;
-			case Xatr_toc_cur:		toc_cur			= xatr.Val_as_bry(); break;
-			case Xatr_toc_prv:		toc_prv			= xatr.Val_as_bry(); break;
-			case Xatr_toc_nxt:		toc_nxt			= xatr.Val_as_bry(); break;
+			case Xatr_bgn_page:		if (Bry_.Len_gt_0(val_bry)) bgn_page_bry = val_bry; break;
+			case Xatr_end_page:		if (Bry_.Len_gt_0(val_bry)) end_page_bry = val_bry; break;
+			case Xatr_bgn_sect:		if (Bry_.Len_gt_0(val_bry)) bgn_sect_bry = val_bry; break; // ignore empty-String; EX:fromsection=""; ISSUE#:650 DATE:2020-01-11
+			case Xatr_end_sect:		if (Bry_.Len_gt_0(val_bry)) end_sect_bry = val_bry; break; // ignore empty-String; EX:tosection=""; ISSUE#:650 DATE:2020-01-11
+			case Xatr_include:		include			= val_bry; break;
+			case Xatr_exclude:		exclude			= val_bry; break;
+			case Xatr_step:			step_bry		= val_bry; break;
+			case Xatr_onlysection:	onlysection		= val_bry; break;
+			case Xatr_header:		header			= val_bry; break;
+			case Xatr_toc_cur:		toc_cur			= val_bry; break;
+			case Xatr_toc_prv:		toc_prv			= val_bry; break;
+			case Xatr_toc_nxt:		toc_nxt			= val_bry; break;
 		}
 	}
 	private byte[] checkquotes(byte[] title) {
@@ -128,8 +131,6 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		index_ttl_bry = Decode_as_dot_bry(index_ttl_bry);
 		bgn_page_bry = amp_mgr.Decode_as_bry(bgn_page_bry);
 		end_page_bry = amp_mgr.Decode_as_bry(end_page_bry);
-		if (bgn_sect_bry != null && Bry_.Len_eq_0(bgn_sect_bry)) bgn_sect_bry = null; //reset
-		if (end_sect_bry != null && Bry_.Len_eq_0(end_sect_bry)) end_sect_bry = null; //reset
 		Xowc_xtn_pages cfg_pages = wiki.Cfg_parser().Xtns().Itm_pages();
 		if (cfg_pages.Init_needed()) cfg_pages.Init(wiki.Ns_mgr());
 		ns_index_id = cfg_pages.Ns_index_id(); if (ns_index_id == Int_.Min_value) return Fail_msg("wiki does not have an Index ns");

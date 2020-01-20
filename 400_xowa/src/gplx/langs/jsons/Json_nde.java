@@ -18,6 +18,13 @@ public class Json_nde extends Json_itm_base implements Json_grp {
 	private Json_itm[] subs = Json_itm_.Ary_empty; private int subs_len = 0, subs_max = 0;
 	private Hash_adp_bry subs_hash;
 	public Json_nde(Json_doc jdoc, int src_bgn) {this.jdoc = jdoc; this.Ctor(src_bgn, -1);}
+	public Json_nde(Json_doc jdoc, int src_bgn, int size) {
+		this.jdoc = jdoc;
+		this.Ctor(src_bgn, -1);
+		subs = new Json_itm[size];
+                subs_max = size;
+		subs_hash = null;
+	}
 	@Override public byte Tid() {return Json_itm_.Tid__nde;}
 	public Json_doc Doc() {return jdoc;} private final    Json_doc jdoc;
 	public void Src_end_(int v) {this.src_end = v;}

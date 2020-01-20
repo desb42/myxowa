@@ -18,6 +18,12 @@ public class Json_itm_int extends Json_itm_base {
 	private final Json_doc doc;
 	private byte[] data_bry; private int data; private boolean data_is_null = true;
 	public Json_itm_int(Json_doc doc, int src_bgn, int src_end) {this.Ctor(src_bgn, src_end); this.doc = doc;}
+	public Json_itm_int(Json_doc doc, int val) {
+            this.Ctor(-1, -1); 
+            this.doc = doc;
+            this.data = val;
+            this.data_is_null = false;
+        }
 	@Override public byte Tid() {return Json_itm_.Tid__int;}
 	public int Data_as_int() {
 		if (data_is_null) {

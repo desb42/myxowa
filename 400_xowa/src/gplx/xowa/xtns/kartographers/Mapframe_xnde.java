@@ -51,9 +51,9 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		if (this.lang == null) {
 			this.lang = wiki.Lang().Key_bry();
 		}
-                if (this.mapstyle == null) {
-                    this.mapstyle = Bry_.new_a7("osm-intl"); // osm-intl or osm
-                }
+		if (this.mapstyle == null) {
+			this.mapstyle = Bry_.new_a7("osm-intl"); // osm-intl or osm
+		}
 		json_bgn = xnde.Tag_open_end();
 		json_end = xnde.Tag_close_bgn();
 		//System.out.println("mapframe " + String_.new_u8(src, xnde.Tag_open_bgn(), xnde.Tag_close_end()));
@@ -157,7 +157,7 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 				}
 				break;
 */
-                byte[] style = Bry_.Empty;
+		byte[] style = Bry_.Empty;
 /*
 		$containerClass = 'mw-kartographer-container';
 		if ( $fullWidth ) {

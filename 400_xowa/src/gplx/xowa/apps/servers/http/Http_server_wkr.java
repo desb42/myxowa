@@ -227,6 +227,7 @@ public class Http_server_wkr implements Gfo_invk {
 		//String css = mini.readFileAsString("d:/des/xowa_x/csstest.txt");
 		//System.out.println(mini.cssmin(css, 0));
 		//perform();
+                //page_html += test_jdecode();
 		return page_html;
 	}
         private static String collapser(String html)
@@ -344,6 +345,34 @@ public class Http_server_wkr implements Gfo_invk {
         long mstime = (System.nanoTime() - tickTime) / 1000000;
         System.out.println(action + ": " + mstime + "ms");
     }
+	public static byte[] Load_from_file_as_bry(String url_str) {
+		// get reader for file
+		InputStream stream = null;		
+		try 	{stream = new FileInputStream(url_str);}
+		catch 	(FileNotFoundException e) {
+			throw Err_.new_exc(e, "io", "file not found", "file", url_str).Trace_ignore_add_1_();
+		}
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		byte[] data = new byte[4096];
+		int read = 0;
+		try {
+			while ((read = stream.read(data, 0, data.length)) != -1) {
+			  buffer.write(data, 0, read);
+			}
+			buffer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return buffer.toByteArray();
+	}
+	private static String test_jdecode() {
+            byte[] jstream = Load_from_file_as_bry("d:/des/xowa_x/json_test.dat");
+            Db_JDecode dc = new Db_JDecode(jstream);
+            gplx.langs.jsons.Json_doc jdoc = dc.Decode();
+            Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
+            jdoc.Root_nde().Print_as_json(tmp_bfr, 0);
+            return tmp_bfr.To_str();
+	}
         private static void perform() {
                 Xoh_css_minify mini = new Xoh_css_minify();
                 String css = mini.readFileAsString("d:/des/xowa_x/csstest.txt");

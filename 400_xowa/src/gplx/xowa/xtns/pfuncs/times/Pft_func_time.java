@@ -34,6 +34,9 @@ public class Pft_func_time extends Pf_func_base {
 		else {
 			Xol_lang_itm lang = ctx.Lang();
 			if (Bry_.Len_gt_0(arg_lang)) {
+				int lang_len = arg_lang.length;
+				if (lang_len == 5 && Bry_.Eq(arg_lang, Bry_.new_a7("local")))
+					arg_lang = Bry_.new_a7("en");
 				Xol_lang_stub specified_lang_itm = Xol_lang_stub_.Get_by_key_or_null(arg_lang);
 				if (specified_lang_itm != null) {	// NOTE: if lang_code is bad, then ignore (EX:bad_code)
 					Xol_lang_itm specified_lang = wiki.Appe().Lang_mgr().Get_by_or_load(arg_lang);

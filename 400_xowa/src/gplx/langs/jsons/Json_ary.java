@@ -16,6 +16,11 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.langs.jsons; import gplx.*; import gplx.langs.*;
 public class Json_ary extends Json_itm_base implements Json_grp {
 	public Json_ary(int src_bgn, int src_end) {this.Ctor(src_bgn, src_end);}
+	public Json_ary(int src_bgn, int src_end, int size) {
+		this.Ctor(src_bgn, src_end);
+		subs = new Json_itm[size];
+                subs_max = size;
+	}
 	@Override public byte Tid() {return Json_itm_.Tid__ary;}
 	public void Src_end_(int v) {this.src_end = v;}
 	@Override public Object Data() {return null;}
