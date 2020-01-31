@@ -71,7 +71,8 @@ public class DateAdp_ implements Gfo_invk {
 		int rv = DaysInMonth_ary[month - Int_.Base1];
 		if (rv == 28 && IsLeapYear(year)) rv = 29;
 		return rv;
-	}	static int [] DaysInMonth_ary = {31,28,31,30,31,30,31,31,30,31,30,31};
+	}
+	private static int [] DaysInMonth_ary = {31,28,31,30,31,30,31,31,30,31,30,31};
 	public static boolean IsLeapYear(int year) {
 		if		(year % 4   != 0)	return false;
 		else if (year % 400 == 0)	return true;
@@ -115,10 +116,19 @@ public class DateAdp_ implements Gfo_invk {
 		c.setTimeInMillis(v);
 		return new DateAdp(c);
 	}
-		public static final int SegIdx_year = 0, SegIdx_month = 1, SegIdx_day = 2, SegIdx_hour = 3, SegIdx_minute = 4, SegIdx_second = 5, SegIdx_frac = 6, SegIdx_dayOfWeek = 7, SegIdx_weekOfYear = 8, SegIdx_dayOfYear = 9
+	public static final int SegIdx_year = 0, SegIdx_month = 1, SegIdx_day = 2, SegIdx_hour = 3, SegIdx_minute = 4, SegIdx_second = 5, SegIdx_frac = 6, SegIdx_dayOfWeek = 7, SegIdx_weekOfYear = 8, SegIdx_dayOfYear = 9
                         , SegIdx_tz = 10, SegIdx__max = 11;
 	public static String Xto_str_fmt_or(DateAdp v, String fmt, String or) {
 		return v == null ? or : v.XtoStr_fmt(fmt);
+	}
+	public static DateAdp FirstDayofYear(int year) {
+		return new DateAdp(year, 1, 1, 0, 0, 0, 0);
+	}
+	public static DateAdp DateByDayofYear(int year, int day) {
+		return new DateAdp(year, 1, day, 0, 0, 0, 0);
+	}
+	public static DateAdp DateByBits(int y, int m, int d, int h, int i, int s, int ms) {
+		return new DateAdp(y, m, d, h, i, s, ms);
 	}
 	public static final String 
 	  Fmt_iso8561_date_time = "yyyy-MM-dd HH:mm:ss"

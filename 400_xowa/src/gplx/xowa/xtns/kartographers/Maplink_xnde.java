@@ -46,8 +46,18 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		//System.out.println(String_.new_u8(src, xnde.Tag_open_bgn(), xnde.Tag_close_end()));
                 
 		if (jdoc != null) {
-			Db_karto_counters counters = ctx.Page().Karto_counters();;
-			doCountersRecursive(jdoc.Root_grp(), counters);
+			Db_karto_counters counters = ctx.Page().Karto_counters();
+                        Json_grp grp = jdoc.Root_grp();
+                        if (grp instanceof Json_nde)
+                            doCountersRecursive(grp, counters);
+                        else if (grp.Len() == 1) {
+                            grp = (Json_grp)grp.Get_at(0);
+                            doCountersRecursive(grp, counters);
+                        }
+                        else {
+                            // not sure what to do
+                            int a = 1;
+                        }
 		}
 //		if (jdoc == null) {
 //			Gfo_usr_dlg_.Instance.Warn_many("", "", "invalid jdoc for ttl: orig=~{0} cur=~{1}", ttl_bry, cur_ttl_bry);

@@ -19,11 +19,18 @@ interface Pxd_itm_int_interface extends Pxd_itm {
 	int Xto_int_or(int or);
 }
 class Pxd_itm_int extends Pxd_itm_base implements Pxd_itm_int_interface {
+	private boolean couldbetime;
 	public Pxd_itm_int(int ary_idx, int digits, int val) {
 		this.Ctor(ary_idx); this.digits = digits; this.val = val;
+		if (val/100 < 25 && val % 100 < 60)
+			couldbetime = true;
+		else
+			couldbetime = false;
 		switch (digits) {
 			case 4:					// assume year
 				eval_idx = 50;
+                                if (couldbetime)
+                                    eval_idx = 80;
 				break;
 			case 2:
 			case 1:
@@ -41,6 +48,11 @@ class Pxd_itm_int extends Pxd_itm_base implements Pxd_itm_int_interface {
 	public boolean Val_is_adj() {return val_is_adj;} public void Val_is_adj_(boolean v) {val_is_adj = v;} private boolean val_is_adj;
 	public int Xto_int_or(int or) {return val;}
 	public int Digits() {return digits;} public void Digits_(int v) {digits = v;} private int digits;
+        public void Makeyear() {
+            // make sure this is treated as a year(ish)
+            couldbetime = false;
+            if (digits == 4) eval_idx = 50;
+        }
 	@Override public boolean Time_ini(Pxd_date_bldr bldr) {
 		int seg_idx = this.Seg_idx();
 		if (seg_idx == Pxd_itm_base.Seg_idx_skip) return true;
@@ -66,13 +78,21 @@ class Pxd_itm_int extends Pxd_itm_base implements Pxd_itm_int_interface {
 			}
 			else {
 				if (seg_idx == -1) return false; // PAGE:New_York_City EX: March 14, 2,013; DATE:2016-07-06
-				bldr.Seg_set(seg_idx, val);
 				if (seg_idx == DateAdp_.SegIdx_month) {
+					// NOTE: if day > month, set it to month's max; ISSUE#:644; DATE:2020-01-12
 					int day = bldr.Seg_get(DateAdp_.SegIdx_day);
 					int daysinmonth = DateAdp_.DaysInMonth(val, bldr.Seg_get(DateAdp_.SegIdx_year));
 					if (day > daysinmonth)
 						bldr.Seg_set(DateAdp_.SegIdx_day, daysinmonth);
 				}
+                                if (couldbetime) {
+				bldr.Seg_set(DateAdp_.SegIdx_hour, val/100);
+				bldr.Seg_set(DateAdp_.SegIdx_minute, val%100);
+				bldr.Seg_set(DateAdp_.SegIdx_second, 0);
+				bldr.Seg_set(DateAdp_.SegIdx_frac, 0);
+                                }
+                                else
+				bldr.Seg_set(seg_idx, val);
 			}
 		}
 		return true;
@@ -82,8 +102,8 @@ class Pxd_itm_int extends Pxd_itm_base implements Pxd_itm_int_interface {
 		if (this.Seg_idx() != Pxd_itm_base.Seg_idx_null) return true;			// has seg_idx; already eval'd by something else
 		switch (digits) {
 			case 5:																		// 5 digits
-				switch (data_idx) {
-					case 0: Pxd_eval_year.Eval_at_pos_0(tctx, this); break;				// year at pos 0; EX: 01234-02-03
+				switch (data_idx - tctx.Data_idx_adj()) {
+					case 0: Pxd_eval_year.Eval_at_pos_0(tctx, this, couldbetime); break;				// year at pos 0; EX: 01234-02-03
 					case 1: tctx.Err_set(Pft_func_time_log.Invalid_date, Bfr_arg_.New_bry(tctx.Src())); return false;		// year at pos 1; invalid; EX: 01-01234-02
 					case 2: tctx.Err_set(Pft_func_time_log.Invalid_date, Bfr_arg_.New_bry(tctx.Src())); break;				// year at pos 2; invalid; EX: 01-02-01234
 				}
@@ -92,16 +112,16 @@ class Pxd_itm_int extends Pxd_itm_base implements Pxd_itm_int_interface {
 				break;
 			case 4:
 				// 4 digits; assume year
-				switch (data_idx) {
+				switch (data_idx - tctx.Data_idx_adj()) {
 					// year at pos 0; EX: 2001-02-03
-					case 0:		Pxd_eval_year.Eval_at_pos_0(tctx, this); break;
+					case 0:		Pxd_eval_year.Eval_at_pos_0(tctx, this, couldbetime); break;
 					// year at pos 1; invalid; EX: 02-2003-03
 					case 1:		tctx.Err_set(Pft_func_time_log.Invalid_year_mid); return false;
 					// year at pos 2; EX: 02-03-2001
 					case 2:		Pxd_eval_year.Eval_at_pos_2(tctx, this); break;
 					// year at pos 3 or more
 					default:
-						// if year already exists, ignore; needed else multiple access-date errors in references; PAGE:en.w:Template:Date; en.w:Antipas,_Cotabato; EX:"12 November 2016 2008" DATE:2017-04-01
+						// if year already exists, treat as hour/min; needed else multiple access-date errors in references; PAGE:en.w:Template:Date; en.w:Antipas,_Cotabato; EX:"12 November 2016 2008" DATE:2017-04-01
 						if (tctx.Seg_idxs()[DateAdp_.SegIdx_year] != Pxd_itm_base.Seg_idx_null
 						) {
 							this.Seg_idx_(Seg_idx_skip);
@@ -127,7 +147,7 @@ class Pxd_itm_int extends Pxd_itm_base implements Pxd_itm_int_interface {
 					)
 					if (!Pxd_eval_seg.Eval_as_d(tctx, cur_itm)) return true;			// cur int should be day; EX:January 1, 2010; PAGE:en.w:Wikipedia:WikiProject_Maine/members; DATE:2014-06-25
 				if (val > Month_max) {									// value is not a month; assume day; DATE:2013-03-15
-					switch (data_idx) {
+					switch (data_idx - tctx.Data_idx_adj()) {
 						case 0:															// > 12 in slot 0
 							if (Match_sym(tctx, Bool_.Y, Pxd_itm_.Tid_dot))			// next sym is dot; assume m.d.y; EX: 22.5.70
 								Eval_day_at_pos_0(tctx); 
@@ -147,7 +167,7 @@ class Pxd_itm_int extends Pxd_itm_base implements Pxd_itm_int_interface {
 					}
 				}
 				else {																	// value is either day or month;
-					switch (data_idx) {
+					switch (data_idx - tctx.Data_idx_adj()) {
 						case 0: Eval_unknown_at_pos_0(tctx); break;
 						case 3: Eval_unknown_at_pos_3(tctx); break;
 						case 4: Eval_unknown_at_pos_4(tctx); break;

@@ -17,6 +17,7 @@ package gplx.xowa.xtns.pfuncs.times; import gplx.*; import gplx.xowa.*; import g
 import gplx.core.brys.*;
 class Pxd_itm_unit_relative extends Pxd_itm_base implements Pxd_itm_prototype { // handle "next", "prev", "this"; EX: "next year"
 	private final    int adj;
+	public int Adj() { return adj; }
 	public Pxd_itm_unit_relative(int adj, int ary_idx) {
 		this.adj = adj;
 		Ctor(ary_idx);

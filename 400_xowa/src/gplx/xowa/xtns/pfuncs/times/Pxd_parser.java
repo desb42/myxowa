@@ -24,10 +24,25 @@ class Pxd_parser {
 	public Pxd_itm[] Data_ary() {return data_ary;} Pxd_itm[] data_ary;
 	public int Data_ary_len() {return data_ary_len;} private int data_ary_len;
 	public int Colon_count;
+	public boolean Has_date() { return hasdate; } private boolean hasdate;
+	public void Has_date_() {
+		if (hasdate)
+			throw Err_.new_unhandled(0);
+		hasdate = true;
+	}
+	public boolean Has_time() { return hastime; } private boolean hastime;
+	public void Has_time_() {
+		if (hastime)
+			throw Err_.new_unhandled(0);
+		hastime = true;
+	}
+	public int Data_idx_adj() { return dataidxadj;} public void Inc_data_idx_adj() { dataidxadj++; }
+	private int dataidxadj;
 	public int[] Seg_idxs() {return seg_idxs;} private int[] seg_idxs = new int[DateAdp_.SegIdx__max];	// temp ary for storing current state
 	public byte[] Src() {return src;}
 	public Pxd_parser(Xop_ctx ctx) {
 		this.trie = Pxd_parser_.Trie(ctx);
+                Dbx_scan_support.Init(trie);
 	}
 	public boolean Seg_idxs_chk(int... ary) {
 		int len = ary.length;
@@ -47,23 +62,81 @@ class Pxd_parser {
 		fmtr.Bld_bfr(error_bfr, args);
 	}	private Bry_bfr error_bfr = Bry_bfr_.New_w_size(32);
 	public DateAdp Parse(byte[] src, Bry_bfr error_bfr, Xoa_ttl ttl) {
+            return Dbx_scan_support.Parse(src);
+/*		hasdate = false;
+		hastime = false;
+		dataidxadj = 0;
+		System.out.println(String_.new_a7(src));
 		//Tokenize(src);	// NOTE: should check if Tokenize failed, but want to be liberal as date parser is not fully implemented; this will always default to 1st day of year; DATE:2014-03-27
+		// fake it!! [abcd, YYYY] => [YYYY abcd]
+		int slen = src.length;
+		int ofs = 0;
+		if (slen > 21) {
+			if (src[slen - 20] == ',')
+				ofs = -20;
+			if (src[slen - 11] == ',')
+				ofs = -11;
+			if (src[slen - 6] == ',')
+				ofs = -6;
+			if (src[slen - 5] == ',')
+				ofs = -5;
+		}
+		else if (slen > 12) {
+			if (src[slen - 11] == ',')
+				ofs = -11;
+			if (src[slen - 6] == ',')
+				ofs = -6;
+			if (src[slen - 5] == ',')
+				ofs = -5;
+		}
+		else if (slen > 7) {
+			if (src[slen - 6] == ',')
+				ofs = -6;
+			if (src[slen - 5] == ',')
+				ofs = -5;
+		}
+		else if (slen > 6) {
+			if (src[slen - 5] == ',')
+				ofs = -5;
+		}
+*/
+		/*if (ofs < 0) {
+			if (src[slen - 4] >= '0' && src[slen - 4] <= '9') {
+				src = Bry_.Add(Bry_.Mid(src, slen + ofs + 1, slen), Byte_ascii.Space_bry, Bry_.Mid(src, 0, slen + ofs));
+			}
+		}*/
+
+/*		if (slen > 3) {
+			if (src[0] == 'c' && src[1] == '.')
+				src = Bry_.new_a7("now");
+		}
+
+		//System.out.println("* "+String_.new_a7(src));
 		DateAdp dt = DateAdp_.MinValue;
-		if (Tokenize(src))
+		if (Tokenize(src)) {
+                    Month_check();
 			dt = Evaluate(src, error_bfr);
+                }
 		if (dt != DateAdp_.MinValue)
 			return dt;
-                // dont log some date errors
-                boolean report = true;
-                int src_len = src.length;
-                if (src_len > 2 && src[0] == '1' && src[1] == ' ')
-                    report = false;
-                else if (src_len == 6 && Bry_.Eq(src, Bry_.new_a7("einval")))
-                    report = false;
-                if (report)
-		Gfo_usr_dlg_.Instance.Warn_many("", "", "date parse err: ttl=~{0} txt=~{1}", ttl.Full_db(), src);
+		// dont log some date errors
+		boolean report = true;
+		int src_len = src.length;
+		if (src_len > 2) {
+			if ((src[0] == '1' || src[0] == '2') && src[1] == ' ')
+				report = false;
+			if (src[0] == '{' && src[2] == '{')
+				report = false;
+			else if (src_len == 6 && Bry_.Eq(src, Bry_.new_a7("einval")))
+				report = false;
+		}
+		else if (src_len == 1 && (src[0] == '1' || src[0] == '2'))
+			report = false;
+		if (report)
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "date parse err: ttl=~{0} txt=~{1}", ttl.Full_db(), src);
 		Err_set(Pft_func_time_log.Invalid_day, Bfr_arg_.New_bry(src));
 		return null;
+*/
 	}
 	private boolean Tokenize(byte[] src) { 
 		this.src = src; src_len = src.length;
@@ -75,9 +148,17 @@ class Pxd_parser {
 			else
 				break;
 		}
+		cur_pos = 0;
+                // trim start
+		while (cur_pos < src_len) {
+			byte b = src[cur_pos];
+			if (b == ' ' || b == '\t' || b == ')')
+				cur_pos++;
+			else
+				break;
+		}
 		tkns = new Pxd_itm[src_len]; tkns_len = 0;		
 		tkn_type = Pxd_itm_.Tid_null; tkn_bgn_pos = -1;
-		cur_pos = 0;
 		Colon_count = 0;
 		error_bfr.Clear();
 		for (int i = 0; i < DateAdp_.SegIdx__max; i++)
@@ -87,62 +168,47 @@ class Pxd_parser {
 			switch (b) {
 				// ignore '(' and ')'
 				case Byte_ascii.Space: case Byte_ascii.Tab: case Byte_ascii.Nl: case Byte_ascii.Paren_bgn: case Byte_ascii.Paren_end:
+				case Byte_ascii.Comma:
 					if (tkn_type != Pxd_itm_.Tid_ws) MakePrvTkn(cur_pos, Pxd_itm_.Tid_ws); break; // SEE:NOTE_1 for logic
 				case Byte_ascii.Dash: case Byte_ascii.Dot: case Byte_ascii.Colon: case Byte_ascii.Slash:
 					if (tkn_type != b) MakePrvTkn(cur_pos, b); break;
 				case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
 				case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
 					if (tkn_type != Pxd_itm_.Tid_int)	MakePrvTkn(cur_pos, Pxd_itm_.Tid_int); break;
-				case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_p:
-					// check for 'meridian' [AaPp] .? [Mm] .? [\0\t ]
-					int pos = cur_pos;
-					if (pos+1 < src_len && src[pos+1] == '.') {
-						pos++;
-					}
-					if (pos+1 < src_len && (src[pos+1] == 'm') || src[pos+1] == 'M') {
-						pos++;
-						if (pos+1 < src_len && src[pos+1] == '.') {
-							pos++;
-						}
-						if (pos+1 == src_len || src[pos+1] == '\t') {
-							// this is a meridian token
-							MakePrvTkn(cur_pos, Pxd_itm_.Tid_null);			// first, make prv tkn
-							if (b == Byte_ascii.Ltr_P || b == Byte_ascii.Ltr_p)
-								tkns[tkns_len] = new Pxd_itm_meridian(tkns_len, true);
-							else
-								tkns[tkns_len] = new Pxd_itm_meridian(tkns_len, false);
-							++tkns_len;
-							cur_pos = pos;
-							if (pos+1 != src_len)
-								cur_pos--;
-							break;
-						}
-					}
-					// else fall through
-				                       case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
+				case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
 				case Byte_ascii.Ltr_F: case Byte_ascii.Ltr_G: case Byte_ascii.Ltr_H: case Byte_ascii.Ltr_I: case Byte_ascii.Ltr_J:
 				case Byte_ascii.Ltr_K: case Byte_ascii.Ltr_L: case Byte_ascii.Ltr_M: case Byte_ascii.Ltr_N: case Byte_ascii.Ltr_O:
-				                       case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
+				case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
 				case Byte_ascii.Ltr_U: case Byte_ascii.Ltr_V: case Byte_ascii.Ltr_W: case Byte_ascii.Ltr_X: case Byte_ascii.Ltr_Y: case Byte_ascii.Ltr_Z:
-				                       case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
+				case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
 				case Byte_ascii.Ltr_f: case Byte_ascii.Ltr_g: case Byte_ascii.Ltr_h: case Byte_ascii.Ltr_i: case Byte_ascii.Ltr_j:
 				case Byte_ascii.Ltr_k: case Byte_ascii.Ltr_l: case Byte_ascii.Ltr_m: case Byte_ascii.Ltr_n: case Byte_ascii.Ltr_o:
-				                       case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
+				case Byte_ascii.Ltr_p: case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
 				case Byte_ascii.Ltr_u: case Byte_ascii.Ltr_v: case Byte_ascii.Ltr_w: case Byte_ascii.Ltr_x: case Byte_ascii.Ltr_y: case Byte_ascii.Ltr_z:
 				case Byte_ascii.At:
 					MakePrvTkn(cur_pos, Pxd_itm_.Tid_null);			// first, make prv tkn
 					Object o = trie.Match_at_w_b0(trv, b, src, cur_pos, src_len);	// now match String against tkn
 					if (o == null) return false;	// unknown letter / word; exit now;
+					// a valid timezone name can only be at the end
 					if (o instanceof Pxd_itm_tz_abbr && trv.Pos() != src_len) return false;
 					tkns[tkns_len] = ((Pxd_itm_prototype)o).MakeNew(tkns_len); 
 					++tkns_len;
 					cur_pos = trv.Pos() - 1; // -1 b/c trie matches to next char, and ++ below
 					break;
-				case Byte_ascii.Comma: case Byte_ascii.Plus:
+				case Byte_ascii.Plus:
+					if (tkns_len == 0) { // plus as first char
+						tkns[tkns_len] = ((Pxd_itm_prototype)Pxd_itm_time_relative.Now).MakeNew(tkns_len); 
+						++tkns_len;
+					}
+				/*	// FALL THROUGH
+				case Byte_ascii.Comma:*/
 					MakePrvTkn(cur_pos, Pxd_itm_.Tid_null);
 					tkns[tkns_len] = new Pxd_itm_sym(tkns_len, b);
 					++tkns_len;
 					break;
+				default:
+					// invalid character
+					throw Err_.new_unhandled(0);
 			}
 			++cur_pos;
 		}
@@ -163,6 +229,10 @@ class Pxd_parser {
 						itm = new Pxd_itm_int_dmy_14(tkns_len, Bry_.Mid(src, tkn_bgn_pos, cur_pos), digits); break;
 					case 6:
 						itm = new Pxd_itm_int_mhs_6(tkns_len, Bry_.Mid(src, tkn_bgn_pos, cur_pos)); break;
+					case 4:
+						// 4 digits essentially mean 'gnunocolon' (either a year or hour/min)
+						itm = new Pxd_itm_int(tkns_len, digits, int_val);
+						break;
 					default:
 						itm = new Pxd_itm_int(tkns_len, digits, int_val); break;
 				}
@@ -180,6 +250,52 @@ class Pxd_parser {
 		}
 		tkn_type = nxt_type;
 		tkn_bgn_pos = cur_pos;
+	}
+	private int Skip_ws(int npos) {
+		while (npos < tkns_len) {
+			Pxd_itm itm = tkns[npos];
+			int tid = itm.Tkn_tid();
+			if (tid == Pxd_itm_.Tid_ws || tid == Pxd_itm_.Tid_sym || tid == Pxd_itm_.Tid_day_suffix)
+				npos++;
+			else
+				return npos;
+		}
+		return -1;
+	}
+	private void Month_check() {
+		int pos = 0;
+                int npos;
+		Pxd_itm itm;
+		Pxd_itm itm_a = null;
+		Pxd_itm itm_b = null;
+		while (pos < tkns_len) {
+			itm = tkns[pos++];
+			if (itm.Tkn_tid() == Pxd_itm_.Tid_int) {
+				itm_a = itm;
+				npos = Skip_ws(pos);
+				if (npos < 0) return;
+				itm = tkns[npos++];
+				if (itm.Tkn_tid() == Pxd_itm_.Tid_month_name) {
+					npos = Skip_ws(npos);
+					if (npos < 0) return;
+					itm = tkns[npos++];
+					if (itm.Tkn_tid() == Pxd_itm_.Tid_int)
+						itm_b = itm;
+                                }
+				if (itm_b != null) ((Pxd_itm_int)itm_b).Makeyear();
+				if (itm_a != null) ((Pxd_itm_int)itm_a).Makeyear();
+				return;
+			}
+			else if (itm.Tkn_tid() == Pxd_itm_.Tid_month_name) {
+				npos = Skip_ws(pos);
+				if (npos < 0) return;
+				itm = tkns[npos++];
+				if (itm.Tkn_tid() == Pxd_itm_.Tid_int)
+					itm_b = itm;
+				if (itm_b != null) ((Pxd_itm_int)itm_b).Makeyear();
+				return;
+			}
+		}
 	}
 	DateAdp Evaluate(byte[] src, Bry_bfr error) {
 		if (tkns_len == 0) {
@@ -220,102 +336,11 @@ class Pxd_parser {
 				case Pxd_itm_.Tid_int:
 					itm.Data_idx_(data_ary_len);
 					data_ary[data_ary_len++] = itm;
-					break;			
+					break;
 			}
 		}
 	}
 	private static Btrie_slim_mgr trie;
-}
-class Pxd_parser_ {
-	public static Btrie_slim_mgr Trie(Xop_ctx ctx) {
-		if (trie == null) {
-			trie = Btrie_slim_mgr.ci_a7();	// NOTE:ci.ascii:MW_const.en
-			Init(ctx);
-		}
-		return trie;
-	}
-	private static Btrie_slim_mgr trie;
-	private static final       String[] Names_month_full		= {"january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
-	private static final       String[] Names_month_abrv		= {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
-	private static final       String[] Names_month_roman		= {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"};
-	private static final       String[] Names_day_suffix		= {"st", "nd", "rd", "th"};
-	private static final       String[] Names_day_full			= {"sunday", "monday", "tuesday", "wednesday" , "thursday", "friday", "saturday"};
-	private static final       String[] Names_day_abrv			= {"sun", "mon", "tue", "wed" , "thu", "fri", "sat"};
-	//TODO_OLD:
-	//private static final       String[] Names_day_text		= {"weekday", "weekdays"};
-	//private static final       String[] Names_ordinal_num		= {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"};
-	
-	private static void Init_unit(int seg_idx, String... name_ary) {Init_unit(seg_idx, 1, name_ary);}
-	private static void Init_unit(int seg_idx, int seg_val, String... name_ary) {
-		int name_ary_len = name_ary.length;
-		for (int i = 0; i < name_ary_len; i++) {
-			byte[] name_bry = Bry_.new_u8(name_ary[i]);
-			trie.Add_obj(name_bry, new Pxd_itm_unit(-1, name_bry, seg_idx, seg_val));
-		}
-	}
-	public static final    byte[] 
-	  Unit_name_month		= Bry_.new_a7("month")
-	, Unit_name_day			= Bry_.new_a7("day")
-	, Unit_name_hour		= Bry_.new_a7("hour")
-	;
-	private static void Init(Xop_ctx ctx) {
-		Init_reg_months(Names_month_full);
-		Init_reg_months(Names_month_abrv);
-		Init_reg_months(Names_month_roman);
-		Init_reg_month("sept", 9);
-		Init_reg_days_of_week(Names_day_full);
-		Init_reg_days_of_week(Names_day_abrv);
-		Init_unit(DateAdp_.SegIdx_second	, "sec", "secs", "second", "seconds");
-		Init_unit(DateAdp_.SegIdx_minute	, "min", "mins", "minute", "minutes");
-		Init_unit(DateAdp_.SegIdx_hour  	, "hour", "hours");
-		Init_unit(DateAdp_.SegIdx_day   	, "day", "days");
-		Init_unit(DateAdp_.SegIdx_day, 14	, "fortnight", "fortnights", "forthnight", "forthnights");
-		Init_unit(DateAdp_.SegIdx_month 	, "month", "months");
-		Init_unit(DateAdp_.SegIdx_year  	, "year", "years");
-		Init_unit(DateAdp_.SegIdx_day,  7	, "week", "weeks");
-		Init_reg_tz_abbr(ctx);
-		trie.Add_obj(Pxd_itm_ago.Name_ago, new Pxd_itm_ago(-1, -1));
-		Init_suffix(Names_day_suffix);
-		Init_relative();
-		trie.Add_obj(Pxd_itm_unixtime.Name_const, new Pxd_itm_unixtime(-1, -1));
-		trie.Add_obj(Pxd_itm_iso8601_t.Name_const, new Pxd_itm_iso8601_t(-1, -1));
-	}
-	private static void Init_reg_months(String[] names) {
-		for (int i = 0; i < names.length; i++)
-			Init_reg_month(names[i], i + Int_.Base1);	// NOTE: Months are Base1: 1-12
-	}
-	private static void Init_reg_month(String name_str, int seg_val) {
-		byte[] name_ary = Bry_.new_u8(name_str);
-		trie.Add_obj(name_ary, new Pxd_itm_month_name(-1, name_ary, DateAdp_.SegIdx_month, seg_val));
-	}
-	private static void Init_reg_days_of_week(String[] ary) {
-		int len = ary.length;
-		for (int i = 0; i < len; i++) {
-			byte[] itm_bry = Bry_.new_u8(ary[i]);
-			trie.Add_obj(itm_bry, new Pxd_itm_dow_name(-1, itm_bry, i));	// NOTE: days are base0; 0-6
-		}
-	}
-	private static void Init_reg_tz_abbr(Xop_ctx ctx) {
-		if (ctx == null) return; // for testing
-		Db_timezone.Setup_timezones(trie);
-	}
-	private static void Init_suffix(String[] suffix_ary) {
-		int len = suffix_ary.length;
-		for (int i = 0; i < len; i++) {
-			String suffix = suffix_ary[i];
-			trie.Add_obj(suffix, Pxd_itm_day_suffix.Instance);
-		}
-	}
-	private static void Init_relative() {
-		trie.Add_obj("today", Pxd_itm_day_relative.Today);
-		trie.Add_obj("tomorrow", Pxd_itm_day_relative.Tomorrow);
-		trie.Add_obj("yesterday", Pxd_itm_day_relative.Yesterday);
-		trie.Add_obj("now", Pxd_itm_time_relative.Now);
-		trie.Add_obj("next", Pxd_itm_unit_relative.Next);
-		trie.Add_obj("last", Pxd_itm_unit_relative.Prev);
-		trie.Add_obj("previous", Pxd_itm_unit_relative.Prev);
-		trie.Add_obj("this", Pxd_itm_unit_relative.This);
-	}
 }
 /*
 NOTE_1:parsing works by completing previous items and then setting current;

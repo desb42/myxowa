@@ -16,25 +16,61 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.pfuncs.times; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.pfuncs.*;
 import gplx.core.brys.*;
 class Pxd_eval_year {
-	public static void Eval_at_pos_0(Pxd_parser tctx, Pxd_itm_int cur) {
+	public static void Eval_at_pos_0(Pxd_parser tctx, Pxd_itm_int cur, boolean couldbetime) {
 		Pxd_itm[] data_ary = tctx.Data_ary();
-		if (tctx.Data_ary_len() < 2) return;
-		Pxd_itm_int itm_1 = Pxd_itm_int_.CastOrNull(data_ary[1]);
+                int ary_len = tctx.Data_ary_len();
+                int ofs = 1;
+                Pxd_itm_int itm_1 = null;
+                Pxd_itm_int itm_2 = null;
+                Pxd_itm_int itm_3 = null;
+                while (ofs < ary_len) {
+                    itm_1 = Pxd_itm_int_.CastOrNull(data_ary[ofs]);
+                    if (itm_1 == null) return;
+                    if (itm_1.Seg_idx() != Pxd_itm_base.Seg_idx_null || itm_1 == cur) {
+                        ofs++;
+                        itm_1 = null;
+                    }
+                    else
+                        break;
+                }
 		if (itm_1 != null) {
+                    if (couldbetime) {
+                        tctx.Seg_idxs_(itm_1, DateAdp_.SegIdx_hour, itm_1.Val()/100);
+                        tctx.Seg_idxs_(itm_1, DateAdp_.SegIdx_minute, itm_1.Val()%100);
+                        return;
+                    }
+                    else 
 			if (!Pxd_eval_seg.Eval_as_m(tctx, itm_1)) return;
 		}
-		if (tctx.Data_ary_len() < 3) return;
-		Pxd_itm_int itm_2 = Pxd_itm_int_.CastOrNull(data_ary[2]);
+                ofs++;
+                while (ofs < ary_len) {
+                    itm_2 = Pxd_itm_int_.CastOrNull(data_ary[ofs]);
+                    if (itm_2 == null) return;
+                    if (itm_2.Seg_idx() != Pxd_itm_base.Seg_idx_null) {
+                        ofs++;
+                        itm_2 = null;
+                    }
+                    else
+                        break;
+                }
 		if (itm_2 != null) {
 			if (!Pxd_eval_seg.Eval_as_d(tctx, itm_2)) return;
 		}
-		if (tctx.Data_ary_len() == 4) {	// handle strange constructions like 2014-03-24-25;
-			Pxd_itm_int itm_3 = Pxd_itm_int_.CastOrNull(data_ary[3]);
-			if (itm_3 != null) {			// treat 4th number as hour adjustment; EX: 2014-03-24-72 -> 2014-03-26; DATE:2014-03-24
+                ofs++;
+                while (ofs < ary_len) {
+                    itm_3 = Pxd_itm_int_.CastOrNull(data_ary[ofs]);
+                    if (itm_3 == null) return;
+                    if (itm_3.Seg_idx() != Pxd_itm_base.Seg_idx_null) {
+                        ofs++;
+                        itm_3 = null;
+                    }
+                    else
+                        break;
+                }
+                if (itm_3 != null) {	// handle strange constructions like 2014-03-24-25;
 				int itm_3_val = itm_3.Val();
 				if (itm_3_val > 99) itm_3_val = 0;	// only adjust if number is between 0 and 99;
 				Pxd_itm_int_.Convert_to_rel(tctx, itm_3, Pxd_parser_.Unit_name_hour, DateAdp_.SegIdx_hour, itm_3_val);
-			}
 		}
 	}
 	public static void Eval_at_pos_2(Pxd_parser tctx, Pxd_itm_int cur) {

@@ -18,6 +18,7 @@ import gplx.core.brys.*;
 class Pxd_itm_month_name extends Pxd_itm_base implements Pxd_itm_prototype {
 	private byte[] name;
 	private int seg_val;
+        public int Seg_val() { return seg_val; }
 	public Pxd_itm_month_name(int ary_idx, byte[] name, int seg_idx, int seg_val) {
 		Ctor(ary_idx);
 		this.name = name; 
@@ -51,7 +52,8 @@ class Pxd_itm_month_name extends Pxd_itm_base implements Pxd_itm_prototype {
 				}
 				Eval_month_2(state);				
 				break;
-		} 
+		}
+		state.Inc_data_idx_adj(); // adjust for month_name itm
 		return true;
 	}
 	public void Eval_month_0(Pxd_parser state) {
@@ -75,9 +77,12 @@ class Pxd_itm_month_name extends Pxd_itm_base implements Pxd_itm_prototype {
 				if (itm_1 == null || itm_2 == null) {return;} // trie: fail
 				if (itm_1.Digits() == 4) {	// ASSUME: year since there are 4 digits; EX: May 2012
 					if (Pxd_eval_seg.Eval_as_y(state, itm_1)) return;	// no error; return; otherwise continue below;
+                                    if (!Pxd_eval_seg.Eval_as_d(state, itm_2)) return;
 				}
+                                else {
 				if (!Pxd_eval_seg.Eval_as_d(state, itm_1)) return;
 				if (!Pxd_eval_seg.Eval_as_y(state, itm_2)) return;
+                                }
 				break;
 			}
 		}
@@ -85,37 +90,50 @@ class Pxd_itm_month_name extends Pxd_itm_base implements Pxd_itm_prototype {
 	public void Eval_month_1(Pxd_parser state) {
 		Pxd_itm[] data_ary = state.Data_ary();
 		int data_ary_len = state.Data_ary_len();
+		Pxd_itm[] tkn_ary = state.Tkns();
+		int pos = this.Ary_idx();
+		Pxd_itm tkn_0 = tkn_ary[pos-1];
 		switch (data_ary_len) {
 			case 2: {
 				Pxd_itm_int itm_0 = Pxd_itm_int_.CastOrNull(data_ary[0]);
 				if (itm_0 == null) {return;} // trie: fail
 				switch (itm_0.Digits()) {
-					case 4: 	Pxd_eval_seg.Eval_as_y(state, itm_0); break;
-					default: 	Pxd_eval_seg.Eval_as_d(state, itm_0); break;				
+					case 4:
+						if (tkn_0 instanceof Pxd_itm_ws)
+							throw Err_.new_unhandled(0);
+					 	Pxd_eval_seg.Eval_as_y(state, itm_0);
+						break;
+					default: 	Pxd_eval_seg.Eval_as_d(state, itm_0); break;
 				}
+				state.Inc_data_idx_adj(); // used up one data entry
 				break;
 			}
 			default:
 			case 3: {
+				Pxd_itm tkn_2 = tkn_ary[pos+1];
 				Pxd_itm_int itm_0 = Pxd_itm_int_.GetNearest(data_ary, this.Data_idx(), false);
 				Pxd_itm_int itm_2 = Pxd_itm_int_.GetNearest(data_ary, this.Data_idx(), true);
 				if (itm_0 == null || itm_2 == null) {return;} // trie: fail
 				switch (itm_0.Digits()) {
 					case 4:
-						if (!Pxd_eval_seg.Eval_as_y(state, itm_0)) return;						
+						if (tkn_0 instanceof Pxd_itm_ws && !(tkn_2 instanceof Pxd_itm_sym))
+							throw Err_.new_unhandled(0);
+						if (!Pxd_eval_seg.Eval_as_y(state, itm_0)) return;
 						if (!Pxd_eval_seg.Eval_as_d(state, itm_2)) return;
 						break;
 					default:
 						if (itm_2.Digits() == 4) {
-							if (!Pxd_eval_seg.Eval_as_d(state, itm_0)) return;							
-							if (!Pxd_eval_seg.Eval_as_y(state, itm_2)) return;						
+							if (!Pxd_eval_seg.Eval_as_d(state, itm_0)) return;
+							if (!Pxd_eval_seg.Eval_as_y(state, itm_2)) return;
 						}
 						else { // 2 digits on either side of month; assume dd mm yy; EX: 03 Feb 01 -> 2001-02-03
-							if (!Pxd_eval_seg.Eval_as_d(state, itm_0)) return;						
-							if (!Pxd_eval_seg.Eval_as_y(state, itm_2)) return;							
+							if (!Pxd_eval_seg.Eval_as_d(state, itm_0)) return;
+							if (!Pxd_eval_seg.Eval_as_y(state, itm_2)) return;
 						}
 						break;
 				}
+				state.Inc_data_idx_adj();
+				state.Inc_data_idx_adj(); // used up two data enties
 				break;
 			}
 		}			
@@ -130,20 +148,22 @@ class Pxd_itm_month_name extends Pxd_itm_base implements Pxd_itm_prototype {
 				if (itm_0 == null || itm_1 == null) {return;} // trie: fail
 				switch (itm_0.Digits()) {
 					case 4:
-						if (!Pxd_eval_seg.Eval_as_y(state, itm_0)) return;						
+						if (!Pxd_eval_seg.Eval_as_y(state, itm_0)) return;
 						if (!Pxd_eval_seg.Eval_as_d(state, itm_1)) return;
 						break;
 					default:
 						if (itm_1.Digits() == 4) {
-							if (!Pxd_eval_seg.Eval_as_d(state, itm_0)) return;							
+							if (!Pxd_eval_seg.Eval_as_d(state, itm_0)) return;
 							if (!Pxd_eval_seg.Eval_as_y(state, itm_1)) return;
 						}
 						else { // 2 digits on either side of month; assume dd mm yy; EX: 03 Feb 01 -> 2001-02-03
-							if (!Pxd_eval_seg.Eval_as_d(state, itm_0)) return;						
-							if (!Pxd_eval_seg.Eval_as_y(state, itm_1)) return;							
+							if (!Pxd_eval_seg.Eval_as_d(state, itm_0)) return;
+							if (!Pxd_eval_seg.Eval_as_y(state, itm_1)) return;
 						}
 						break;
 				}
+				state.Inc_data_idx_adj();
+				state.Inc_data_idx_adj(); // used up two data enties
 				break;
 			}
 		}	
@@ -156,6 +176,7 @@ class Pxd_itm_month_name extends Pxd_itm_base implements Pxd_itm_prototype {
 class Pxd_itm_unit extends Pxd_itm_base implements Pxd_itm_prototype {
 	private int seg_val = 1;
 	private int seg_multiple;
+	public int Seg_multiple() { return seg_multiple; }
 	private boolean eval_done_by_relative_word;
 	public Pxd_itm_unit(int ary_idx, byte[] name, int seg_idx, int seg_multiple) {
 		Ctor(ary_idx);
@@ -167,7 +188,7 @@ class Pxd_itm_unit extends Pxd_itm_base implements Pxd_itm_prototype {
 	@Override public int Eval_idx() {return 10;}
 	public byte[] Name() {return name;} private final    byte[] name;
 	public Pxd_itm MakeNew(int ary_idx) {
-		return new Pxd_itm_unit(ary_idx, name, this.Seg_idx(), seg_val);
+		return new Pxd_itm_unit(ary_idx, name, this.Seg_idx(), seg_multiple);
 	}
 	public void Unit_seg_val_(int v) {	// handled by relative_word; EX: next year
 		this.seg_val = v;
@@ -299,6 +320,7 @@ class Pxd_itm_time_relative extends Pxd_itm_base implements Pxd_itm_prototype {
 	public Pxd_itm MakeNew(int ary_idx) {return new Pxd_itm_time_relative(ary_idx);}
 	@Override public boolean Eval(Pxd_parser state) {return true;}
 	@Override public boolean Time_ini(Pxd_date_bldr bldr) {
+            if (this.Seg_idx() == Pxd_itm_base.Seg_idx_skip) return true;
 		DateAdp date = Datetime_now.Get();
 		bldr.Seg_set(DateAdp_.SegIdx_year		, date.Year());
 		bldr.Seg_set(DateAdp_.SegIdx_month		, date.Month());

@@ -41,7 +41,10 @@ class Pxd_itm_ {
 	, Tid_unixtime			= 12	// @123
 	, Tid_iso8601_t			= 13	// T
 	, Tid_meridian			= 14	// PM
-                , Tid_tz_abbr = 15 // timezone abbreviation
+	, Tid_tz_abbr = 15 // timezone abbreviation
+	, Tid_weekofyear = 16
+	, Tid_ord_name = 17
+	, Tid_weekdays = 18
 	, Tid_dash 				= Byte_ascii.Dash
 	, Tid_dot 				= Byte_ascii.Dot
 	, Tid_slash 			= Byte_ascii.Slash
@@ -103,5 +106,6 @@ class Pft_func_time_log {
 		, Invalid_second				= Gfo_msg_itm_.new_warn_(owner, "Invalid second: ~{0}")
 		, Invalid_date					= Gfo_msg_itm_.new_warn_(owner, "Invalid date: ~{0}")
 		, Invalid_timezone				= Gfo_msg_itm_.new_warn_(owner, "Invalid timezone: ~{0}")
+		, Invalid_time                  = Gfo_msg_itm_.new_warn_(owner, "Invalid time. ~{0}")
 		;
 }

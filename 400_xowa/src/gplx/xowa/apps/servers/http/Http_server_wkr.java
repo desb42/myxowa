@@ -25,6 +25,7 @@ import java.io.OutputStream; import java.io.FileOutputStream; import java.io.Fil
 import java.io.BufferedReader; import java.io.*;
 import java.util.Stack;
 import gplx.xowa.htmls.*;
+import gplx.xowa.xtns.pfuncs.times.*;
 public class Http_server_wkr implements Gfo_invk {
 	private final    int uid;
 	private final    Http_server_mgr server_mgr;
@@ -228,6 +229,7 @@ public class Http_server_wkr implements Gfo_invk {
 		//System.out.println(mini.cssmin(css, 0));
 		//perform();
                 //page_html += test_jdecode();
+                //test_scanner();
 		return page_html;
 	}
         private static String collapser(String html)
@@ -365,6 +367,21 @@ public class Http_server_wkr implements Gfo_invk {
 		}
 		return buffer.toByteArray();
 	}
+	private static void test_scanner() {
+            DateAdp ret = Dbx_scan_support.Parse(Bry_.new_a7("10 jun 2010"));
+            ret = Dbx_scan_support.Parse(Bry_.new_a7("jun 12"));
+            ret = Dbx_scan_support.Parse(Bry_.new_a7("10a.m."));
+            ret = Dbx_scan_support.Parse(Bry_.new_a7("12 jun"));
+            ret = Dbx_scan_support.Parse(Bry_.new_a7("8451-W48-1"));
+            ret = Dbx_scan_support.Parse(Bry_.new_a7("+1year"));
+            // hour12 ":" minutelz ":" secondlz [:.] [0-9]+ meridian
+            ret = Dbx_scan_support.Parse(Bry_.new_a7("9:32:45.345 am"));
+            //ret = Dbx_scan_support.Checkdatstr(Bry_.new_a7("first day of june"));
+            ret = Dbx_scan_support.Parse(Bry_.new_a7("second day of june"));
+            ret = Dbx_scan_support.Parse(Bry_.new_a7("09:32:45.345 am"));
+            ret = Dbx_scan_support.Parse(Bry_.new_a7("june +2 weeks 1day"));
+            int a = 1;
+        }
 	private static String test_jdecode() {
             byte[] jstream = Load_from_file_as_bry("d:/des/xowa_x/json_test.dat");
             Db_JDecode dc = new Db_JDecode(jstream);

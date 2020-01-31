@@ -53,8 +53,8 @@ public class Pft_fmt_itm_ {
 	, Tid_hijiri_day_idx				= 32
 	, Tid_hijiri_month_name				= 33
 	, Tid_nengo_year				= 34
-	, Tid_timezone_identifier		= 35
-	, Tid_timezone_abbreviation = 36
+	, Tid_timezone_id_full              = 35
+	, Tid_timezone_id_abrv              = 36
 	, Tid_timezone_offset_4 = 37
 	, Tid_timezone_offset_4_colon = 38
 	, Tid_timezone_dst = 39
@@ -116,10 +116,10 @@ public class Pft_fmt_itm_ {
 	, Thai_year				= new Pft_fmt_itm_thai_year()
 	, Minguo_year			= new Pft_fmt_itm_minguo_year()
 	, Nengo_year			= new Pft_fmt_itm_nengo_year()
-	, Timezone_identifier			= new Pft_fmt_itm_timezone_identifier()
-	, Timezone_abbreviation			= new Pft_fmt_itm_timezone_abbreviation()
-	, Timezone_offset_4			= new Pft_fmt_itm_timezone_offset_4()
-	, Timezone_offset_4_colon			= new Pft_fmt_itm_timezone_offset_4_colon()
+	, Timezone_id_full			= new Pft_fmt_itm_timezone_id(Bool_.N)
+	, Timezone_id_abrv			= new Pft_fmt_itm_timezone_id(Bool_.Y)
+	, Timezone_offset_4			= new Pft_fmt_itm_timezone_offset_4(Bool_.N)
+	, Timezone_offset_4_colon			= new Pft_fmt_itm_timezone_offset_4(Bool_.Y)
 	, Timezone_dst			= new Pft_fmt_itm_timezone_dst()
 	;
 	public static final    Btrie_fast_mgr Regy = Btrie_fast_mgr.cs()
@@ -150,11 +150,11 @@ public class Pft_fmt_itm_ {
 	.Add(Byte_ascii.Ltr_s		, Pft_fmt_itm_.Second_int_len2)			// 05
 	.Add(Byte_ascii.Ltr_t		, Pft_fmt_itm_.DaysInMonth_int)			// 31
 	.Add(Byte_ascii.Ltr_U		, Pft_fmt_itm_.Timestamp_unix)			// 1343865600
-	.Add(Byte_ascii.Ltr_Z		, Pft_fmt_itm_.Timezone_offset)			// timezone offset in seconds 0
+	.Add(Byte_ascii.Ltr_Z		, Pft_fmt_itm_.Timezone_offset)			// timezone offset in seconds
 	.Add(Byte_ascii.Ltr_c		, Pft_fmt_itm_.Iso_fmt)					// 2012-01-02T03:04:05+00:00
 	.Add(Byte_ascii.Ltr_r		, Pft_fmt_itm_.Rfc_5322)				// Mon 02 Jan 2012 08:04:05 +0000
-	.Add(Byte_ascii.Ltr_e		, Pft_fmt_itm_.Timezone_identifier)			// UTC
-	.Add(Byte_ascii.Ltr_T		, Pft_fmt_itm_.Timezone_abbreviation)			// UTC
+	.Add(Byte_ascii.Ltr_e		, Pft_fmt_itm_.Timezone_id_full)			// UTC
+	.Add(Byte_ascii.Ltr_T		, Pft_fmt_itm_.Timezone_id_abrv)			// UTC
 	.Add(Byte_ascii.Ltr_O		, Pft_fmt_itm_.Timezone_offset_4)			// timezone offset in seconds +0000
 	.Add(Byte_ascii.Ltr_P		, Pft_fmt_itm_.Timezone_offset_4_colon)		// timezone offset in seconds with colon +00:00
 	.Add(Byte_ascii.Ltr_I		, Pft_fmt_itm_.Timezone_dst)			// dte in daylight saving time

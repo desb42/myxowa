@@ -38,22 +38,24 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	private byte[] src; private Xop_xnde_tkn xnde_tkn;
 	private Xoa_ttl cur_page_ttl;
 	private boolean badindex = false;
-	private List_adp xtra_args = List_adp_.New();
+	private List_adp unknown_xatrs = List_adp_.New();
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {
+		// cache unknown xatrs for header usage; ISSUE#:635; DATE:2020-01-19
 		if (xatr_id_obj == null) {
-			xtra_args.Add(new Pp_index_arg(xatr.Key_bry(), xatr.Val_as_bry()));
+			unknown_xatrs.Add(new Pp_index_arg(xatr.Key_bry(), xatr.Val_as_bry()));
 			return;
 		}
+		// skip valid xatrs with invalid values; EX: <pages index=\"A\" from=1 to 2 />; ISSUE#:656 DATE:2020-01-19
 		if (xatr.Val_bgn() == -1)
-			return; // skip selfrefs
+			return;
 		Byte_obj_val xatr_id = (Byte_obj_val)xatr_id_obj;
 		byte[] val_bry = xatr.Val_as_bry();
 		switch (xatr_id.Val()) {
 			case Xatr_index_ttl:
 				index_ttl_bry = checkquotes(val_bry);
 				break;
-			case Xatr_bgn_page:		if (Bry_.Len_gt_0(val_bry)) bgn_page_bry = val_bry; break;
-			case Xatr_end_page:		if (Bry_.Len_gt_0(val_bry)) end_page_bry = val_bry; break;
+			case Xatr_bgn_page:		bgn_page_bry = val_bry; break;
+			case Xatr_end_page:		end_page_bry = val_bry; break;
 			case Xatr_bgn_sect:		if (Bry_.Len_gt_0(val_bry)) bgn_sect_bry = val_bry; break; // ignore empty-String; EX:fromsection=""; ISSUE#:650 DATE:2020-01-11
 			case Xatr_end_sect:		if (Bry_.Len_gt_0(val_bry)) end_sect_bry = val_bry; break; // ignore empty-String; EX:tosection=""; ISSUE#:650 DATE:2020-01-11
 			case Xatr_include:		include			= val_bry; break;
@@ -89,13 +91,15 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			return title;
 	}
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
-//		if (!wiki.Xtn_mgr().Xtn_proofread().Enabled()) return;
+		// TOMBSTONE: do not disable Enabled check; needs smarter way of checking for xtn enable / disable
+		// if (!wiki.Xtn_mgr().Xtn_proofread().Enabled()) return;
 		if (!Init_vars(wiki, ctx, src, xnde)) return;
+
+		if (wiki.Parser_mgr().Lst__recursing()) return;	// moved from Pp_index_parser; DATE:2014-05-21s
 
 		// set recursing flag
 		Xoae_page page = ctx.Page();
 		Bry_bfr full_bfr = wiki.Utl__bfr_mkr().Get_m001();
-		if (wiki.Parser_mgr().Lst__recursing()) return;	// moved from Pp_index_parser; DATE:2014-05-21s
 		try {
 			wiki.Parser_mgr().Lst__recursing_(true);
 			Hash_adp_bry lst_page_regy = ctx.Lst_page_regy(); if (lst_page_regy == null) lst_page_regy = Hash_adp_bry.cs();	// SEE:NOTE:page_regy; DATE:2014-01-01
@@ -262,13 +266,13 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			full_bfr.Add(Bry_page_bgn).Add(pl_nde.FormattedPageNumber(bgn_page_int));	// |from=1"
 		if (end_page_int != -1 && pl_nde != null)
 			full_bfr.Add(Bry_page_end).Add(pl_nde.FormattedPageNumber(end_page_int));	// |to=3"
-		Add_xtras(full_bfr, xtra_args);
-		Add_xtras(full_bfr, index_page.Invk_args());
+		Add_args(full_bfr, index_page.Invk_args());
+		Add_args(full_bfr, unknown_xatrs);
 		full_bfr.Add(gplx.xowa.parsers.tmpls.Xop_curly_end_lxr.Hook);
 		full_bfr.Add(rv);
 		return full_bfr.To_bry_and_clear();
 	}
-	private void Add_xtras(Bry_bfr full_bfr, List_adp invk_args) {
+	private void Add_args(Bry_bfr full_bfr, List_adp invk_args) {
 		int invk_args_len = invk_args.Count();
 		for (int i = 0; i < invk_args_len; i++) {
 			Pp_index_arg arg = (Pp_index_arg)invk_args.Get_at(i);
@@ -301,7 +305,13 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		return list;
 	}
 	private List_adp Get_ttls_from_xnde_args__rng(Gfo_number_parser num_parser, List_adp list) {
-		if (Bry_.Len_eq_0(bgn_page_bry) && Bry_.Len_eq_0(end_page_bry)) return list;	// from and to are blank; exit early
+		// exit if "from" and "to" are blank but include is specified; ISSUE#:657 DATE:2020-01-19
+		if (   Bry_.Len_eq_0(bgn_page_bry)
+			&& Bry_.Len_eq_0(end_page_bry)
+			&& Bry_.Len_gt_0(include)
+			)
+			return list;
+
 		bgn_page_int = 0;	// NOTE: default to 0 (1st page)
 		if (Bry_.Len_gt_0(bgn_page_bry)) {
 			num_parser.Parse(bgn_page_bry);
