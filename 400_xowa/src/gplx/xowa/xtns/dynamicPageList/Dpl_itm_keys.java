@@ -42,7 +42,7 @@ class Dpl_itm_keys {
 	, Key_offset = 5
 	, Key_imagewidth = 6
 	, Key_imageheight = 7
-	, Key_imagesperow = 8
+	, Key_imagesperrow = 8
 	, Key_mode = 9
 	, Key_gallery = 10
 	, Key_none = 11
@@ -76,6 +76,7 @@ class Dpl_itm_keys {
 	, Key_ascending = 39
 	, Key_false = 40
 	, Key_true = 41
+	, Key_ignoresubpages = 42
 	;
 	private static final Hash_adp_bry keys = Hash_adp_bry.ci_a7()
 	.Add_str_byte("category", Dpl_itm_keys.Key_category)
@@ -85,7 +86,7 @@ class Dpl_itm_keys {
 	.Add_str_byte("offset", Dpl_itm_keys.Key_offset)
 	.Add_str_byte("imagewidth", Dpl_itm_keys.Key_imagewidth)
 	.Add_str_byte("imageheight", Dpl_itm_keys.Key_imageheight)
-	.Add_str_byte("imagesperow", Dpl_itm_keys.Key_imagesperow)
+	.Add_str_byte("imagesperrow", Dpl_itm_keys.Key_imagesperrow)
 	.Add_str_byte("mode", Dpl_itm_keys.Key_mode)
 	.Add_str_byte("gallery", Dpl_itm_keys.Key_gallery)
 	.Add_str_byte("none", Dpl_itm_keys.Key_none)
@@ -119,5 +120,6 @@ class Dpl_itm_keys {
 	.Add_str_byte("ascending", Dpl_itm_keys.Key_ascending)
 	.Add_str_byte("false", Dpl_itm_keys.Key_false)
 	.Add_str_byte("true", Dpl_itm_keys.Key_true)
+	.Add_str_byte("ignoresubpages", Dpl_itm_keys.Key_ignoresubpages)
 	;
 }

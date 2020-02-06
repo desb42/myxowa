@@ -34,6 +34,7 @@ public class Xop_redirect_mgr {
 		if (src == null) return Redirect_null_ttl;
 		return Extract_redirect(src, src.length);
 	}
+	private int ttl_bgn, ttl_end; // used by Adjust_redirect
 	public Xoa_ttl Extract_redirect(byte[] src, int src_len) {	// NOTE: this proc is called by every page. be careful of changes; DATE:2014-07-05
 		if (src_len == 0) return Redirect_null_ttl;
 		int bgn = Bry_find_.Find_fwd_while_not_ws(src, 0, src_len);
@@ -43,10 +44,10 @@ public class Xop_redirect_mgr {
 		if (redirect_hash == null) redirect_hash = Xol_kwd_mgr.hash_(wiki.Lang().Kwd_mgr(), Xol_kwd_grp_.Id_redirect);
 		Object redirect_itm = redirect_hash.Get_by_mid(src, bgn, kwd_end);
 		if (redirect_itm == null)		return Redirect_null_ttl; // not a redirect kwd
-		int ttl_bgn = Xop_redirect_mgr_.Get_ttl_bgn_or_neg1(src, kwd_end, src_len);
+		ttl_bgn = Xop_redirect_mgr_.Get_ttl_bgn_or_neg1(src, kwd_end, src_len);
 		if (ttl_bgn == Bry_find_.Not_found)	return Redirect_null_ttl;
 		ttl_bgn += Xop_tkn_.Lnki_bgn.length;
-		int ttl_end = Bry_find_.Find_fwd(src, Xop_tkn_.Lnki_end, ttl_bgn); if (ttl_end == Bry_find_.Not_found)	return Redirect_null_ttl;
+		ttl_end = Bry_find_.Find_fwd(src, Xop_tkn_.Lnki_end, ttl_bgn); if (ttl_end == Bry_find_.Not_found)	return Redirect_null_ttl;
 		int pipe_pos = Bry_find_.Find_fwd(src, Byte_ascii.Pipe, ttl_bgn); 
 		if (	pipe_pos != Bry_find_.Not_found	// if pipe exists; PAGE:da.w:Middelaldercentret; DATE:2015-11-06
 			&&	pipe_pos < ttl_end)				// and pipe is before ]]; do not take pipe from next lnki; PAGE:en.w:Template:pp-semi; DATE:2015-11-14
@@ -54,6 +55,21 @@ public class Xop_redirect_mgr {
 		byte[] redirect_bry = Bry_.Mid(src, ttl_bgn, ttl_end);
 		redirect_bry = url_decoder.Decode(redirect_bry);	// NOTE: url-decode links; PAGE: en.w:Watcher_(Buffy_the_Vampire_Slayer); DATE:2014-08-18
 		return Xoa_ttl.Parse(wiki, redirect_bry);
+	}
+	public void Adjust_redirect(Xowe_wiki wiki, Xoae_page page, byte[] src) { // extract #REDIRECT link and add back to code
+		Xoa_ttl ttl = Extract_redirect(src);
+		if (ttl == Redirect_null_ttl) return;
+
+		byte[] html = Bry_.Add(Xop_tkn_.Lnki_bgn			// "[["
+				, Bry_.Mid(src, ttl_bgn, ttl_end)				// "Page"
+				, Xop_tkn_.Lnki_end			// "]]"
+				);
+
+		byte[] redir = Bld_redirect_msg_to(wiki, html);
+
+		src = Bry_.Add( redir, Bry_.Mid(src, ttl_end + 2, src.length)); // should check the +2
+		page.Db().Text().Text_bry_(src);
+		// need to add $out->addModuleStyles( 'mediawiki.action.view.redirectPage' );
 	}
 	public static final    Xoa_ttl Extract_redirect_is_null = null;
 	public static final int Redirect_max_allowed = 4;
@@ -68,7 +84,7 @@ public class Xop_redirect_mgr {
 			,	Xop_tkn_.Lnki_end			// "]]"
 			);
 	}
-	public static byte[] Bld_redirect_msg(Xoae_app app, Xowe_wiki wiki, Xopg_redirect_mgr redirect_mgr) {
+	public static byte[] Bld_redirect_msg_from(Xoae_app app, Xowe_wiki wiki, Xopg_redirect_mgr redirect_mgr) {
 		// NOTE: this assumes that redirect_mgr only has redirect_src, not redirect_trg; note that #REDIRECT [[A]] only adds redirect_src, whereas special redirects add redirect_trg; DATE:2016-07-31
 		int len = redirect_mgr.Itms__len(); if (len == 0) return Bry_.Empty;
 		Bry_bfr redirect_bfr = wiki.Utl__bfr_mkr().Get_b512();
@@ -104,6 +120,19 @@ public class Xop_redirect_mgr {
 		redirect_bfr.Clear().Mkr_rls();
 		fmt_bfr.Mkr_rls();
 		return fmt_bfr.To_bry_and_clear();
+	}
+	public static byte[] Bld_redirect_msg_sub(Xoae_app app, Xowe_wiki wiki, Xopg_redirect_mgr redirect_mgr) {
+		return Bry_.Add(Bry_.new_a7("<span id=\"redirectsub\">")
+			, wiki.Msg_mgr().Val_by_key_args(Bry_.new_a7("redirectpagesub"))
+			, Bry_.new_a7("</span>"));
+	}
+	public static byte[] Bld_redirect_msg_to(Xowe_wiki wiki, byte[] html) {
+		return Bry_.Add(Bry_.new_a7("<div class=\"redirectMsg\"><p>")
+			, wiki.Msg_mgr().Val_by_key_args(Bry_.new_a7("redirectto"))
+			, Bry_.new_a7("</p><ul class=\"redirectText\"><li>")
+			//, <a href="/wiki/Casa_automobilistica" title="Casa automobilistica">Casa automobilistica</a>
+			, html
+			, Bry_.new_a7("</li></ul></div>"));
 	}
 	private static byte[]
 	  Bry_redirect_dlm = Bry_.new_a7(" <--- ")

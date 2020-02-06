@@ -163,7 +163,7 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 	}
 	public void				Pool__rls	() {pool_mgr.Rls_fast(pool_idx);} private Gfo_poolable_mgr pool_mgr; private int pool_idx;
 	public Gfo_poolable_itm	Pool__make	(Gfo_poolable_mgr mgr, int idx, Object[] args) {Xoh_img_wtr rv = new Xoh_img_wtr(); rv.pool_mgr = mgr; rv.pool_idx = idx; return rv;}
-	private static final    byte[] Vid__bry__bgn = Bry_.new_a7("<div class=\"xowa_media_div\">\n<div>");
+	private static final    byte[] Vid__bry__bgn = Bry_.new_a7("<div class=\"mediaContainer xowa_media_div\">\n<div>");
 	private static final    Bry_fmtr 
 	  img_fmtr = Bry_fmtr.new_
 	( "<a~{anch_href}~{anch_rel}~{anch_cls}~{anch_title}~{anch_xowa_title}><img~{img_id}~{img_xowa_title}~{img_xowa_image}~{img_src}~{img_w}~{img_h}~{img_cls}~{img_alt}~{img_pgbnr_atrs}></a>"

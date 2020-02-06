@@ -102,7 +102,7 @@ public class Xoh_page_wtr_wkr {
 		// byte[] html_content_editable = wiki.Gui_mgr().Cfg_browser().Content_editable() ? Content_editable_bry : Bry_.Empty;
 		byte[] html_content_editable = Bry_.Empty;
 		byte[] breadcrumb = Breadcrumb(page, ctx); // must be before Bld_page_content_sub
-		byte[] page_content_sub = Xoh_page_wtr_wkr_.Bld_page_content_sub(app, wiki, page, tmp_bfr);
+		byte[] page_content_sub = Xoh_page_wtr_wkr_.Bld_page_content_sub(app, wiki, page, tmp_bfr, isnoredirect);
 		byte[] js_edit_toolbar_bry = html_gen_tid == Xopg_view_mode_.Tid__edit ? wiki.Fragment_mgr().Html_js_edit_toolbar() : Bry_.Empty;
 		Xol_vnt_mgr vnt_mgr = wiki.Lang().Vnt_mgr();
 		if (vnt_mgr.Enabled()) {
@@ -516,7 +516,7 @@ public class Xoh_page_wtr_wkr {
 		byte[] isin = page.Html_data().Pgbnr_isin();
 		if (isin == null) return Bry_.Empty;
 		// check if we have a redirect
-		byte[] redirect_msg = Xop_redirect_mgr.Bld_redirect_msg(app, wiki, page.Redirect_trail());
+		byte[] redirect_msg = Xop_redirect_mgr.Bld_redirect_msg_from(app, wiki, page.Redirect_trail());
 		page.Redirect_trail().Clear(); // so it does not show up later
 		return wiki.Bread().Get_breadcrumbs(wiki, ctx, page.Ttl(), isin, redirect_msg);
 	}

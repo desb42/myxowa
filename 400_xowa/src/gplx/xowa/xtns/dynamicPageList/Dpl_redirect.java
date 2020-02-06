@@ -14,7 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.dynamicPageList; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
-class Dpl_redirect {
+public class Dpl_redirect {
 	public static final byte Tid_exclude = 0, Tid_include = 1, Tid_only = 2, Tid_unknown = Byte_.Max_value_127;
 	public static byte Parse(byte[] bry) {
 		byte key = Dpl_itm_keys.Parse(bry, Dpl_redirect.Tid_exclude);	// NOTE: exclude is default value.

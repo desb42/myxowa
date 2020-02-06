@@ -127,8 +127,11 @@ public class DateAdp_ implements Gfo_invk {
 	public static DateAdp DateByDayofYear(int year, int day) {
 		return new DateAdp(year, 1, day, 0, 0, 0, 0);
 	}
-	public static DateAdp DateByBits(int y, int m, int d, int h, int i, int s, int ms) {
-		return new DateAdp(y, m, d, h, i, s, ms);
+	public static DateAdp DateByBits(int y, int m, int d, int h, int i, int s, int us, int tz_ofs, byte[] tz_abbr) {
+		DateAdp dte = new DateAdp(y, m, d, h, i, s, us/1000);
+                if (tz_ofs != 0)
+                    dte.SetTzOffset(tz_ofs);
+                return dte;
 	}
 	public static final String 
 	  Fmt_iso8561_date_time = "yyyy-MM-dd HH:mm:ss"

@@ -88,7 +88,10 @@ public class Xow_page_mgr implements Gfo_invk {
 			wiki.Db_mgr().Load_mgr().Load_page(page_row, ns);
 			byte[] wtxt = page_row.Text();
 			rv.Db().Text().Text_bry_(wtxt);
-			if (redirect_force) return ttl;			// redirect_force passed; return page now, even if page is a redirect elsewhere; NOTE: only applies to WTXT, not HTML
+			if (redirect_force) {
+				wiki.Redirect_mgr().Adjust_redirect(wiki, rv, wtxt);
+				return ttl;
+			}			// redirect_force passed; return page now, even if page is a redirect elsewhere; NOTE: only applies to WTXT, not HTML
 
 			// handle redirects for html_dbs
 			if (	page_row.Redirect_id() > 0		// redirect exists

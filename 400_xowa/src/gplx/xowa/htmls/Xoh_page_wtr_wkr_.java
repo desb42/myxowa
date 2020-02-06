@@ -27,11 +27,15 @@ public class Xoh_page_wtr_wkr_ {
 		qualitycount = counts;
 		qualitytot = tot;
 	}*/
-	public static byte[] Bld_page_content_sub(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Bry_bfr tmp_bfr) {
+	public static byte[] Bld_page_content_sub(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Bry_bfr tmp_bfr, boolean isnoredirect) {
 		byte[] subpages = app.Html_mgr().Page_mgr().Subpages_bldr().Bld(wiki, page.Ttl());
 		byte[] page_content_sub = page.Html_data().Content_sub();		// contentSub exists;
 		byte[] quality_table = Db_quality_tots.Generate_quality(wiki, page);
-		byte[] redirect_msg = Xop_redirect_mgr.Bld_redirect_msg(app, wiki, page.Redirect_trail());
+		byte[] redirect_msg;
+		if (isnoredirect)
+			redirect_msg = Xop_redirect_mgr.Bld_redirect_msg_sub(app, wiki, page.Redirect_trail());
+		else
+			redirect_msg = Xop_redirect_mgr.Bld_redirect_msg_from(app, wiki, page.Redirect_trail());
 		return Bry_.Add(subpages, page_content_sub, quality_table, redirect_msg);
 	}
 	public static byte[] Bld_page_name(Bry_bfr tmp_bfr, Xoa_ttl ttl, byte[] display_ttl) {

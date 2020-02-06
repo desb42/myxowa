@@ -19,6 +19,7 @@ public class Pxd_itm_tz_abbr extends Pxd_itm_base implements Pxd_itm_prototype {
 	private final    byte[] tz_abbr;
 	private final    int tz_offset;
 	public int Tz_offset() { return tz_offset; }
+	public byte[] Tz_abbr() { return tz_abbr; }
 	public Pxd_itm_tz_abbr(int ary_idx, byte[] tz_abbr, int tz_idx, int offset) {
 		this.tz_abbr = tz_abbr; 
 		this.tz_idx = tz_idx;

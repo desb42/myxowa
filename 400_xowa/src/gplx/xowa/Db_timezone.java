@@ -19,13 +19,16 @@ import gplx.xowa.xtns.pfuncs.times.*;
 import gplx.xowa.wikis.data.Xow_db_mgr;
 import gplx.xowa.wikis.data.tbls.Xowd_page_tbl;
 import gplx.core.btries.*;
+import gplx.xowa.parsers.Xop_ctx;
 import java.io.*;
 public class Db_timezone {
 	private static Db_conn conn;
 	private static Xowe_wiki wiki = null;
+        private static Xoae_app app;
 	private static boolean initialised = false;
-	public static void Set_wiki(Xowe_wiki w) {
+	public static void Set_wiki(Xowe_wiki w, Xoae_app xapp) {
 		wiki = w;
+                app = xapp;
 	}
 	private static final String create_sql = String_.Concat_lines_nl
 	( "CREATE TABLE if not exists timezone ("
@@ -61,7 +64,8 @@ public class Db_timezone {
 		if (!found) {
 			Sqlite_engine_.Tbl_create(conn, "timezone", create_sql);
 			try {
-				File file = new File("d:/des/xowa_x/timezones.sql");    //creates a new file instance
+				String fname = app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "file", "timezones.sql").toString();//.To_http_file_str();
+				File file = new File(fname);    //creates a new file instance
 				FileReader fr = new FileReader(file);   //reads the file
 				BufferedReader br = new BufferedReader(fr);  //creates a buffering character input stream
 				String line;

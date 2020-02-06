@@ -98,15 +98,16 @@ public class Db_breadcrumb {
 		return tmp_bfr.To_bry_and_clear();
 	}
 	public void Insert(Xoa_ttl ttl, byte[] isin) {
+		if (!initialised) Init();
+                // somehow need to batch this up (say in groups of 100 / 1000?)
 		// insert into parent (ttl, parent, ttl_namespace, parent_namespace) values(?,?,?,?)
 		Xoa_ttl parent = Xoa_ttl.Parse(wiki, isin);
-		Db_stmt stmt = conn.Stmt_sql("insert into parent (ttl, parent, ttl_namespace, parent_namespace) values(?,?,?,?);");
+		/*Db_stmt stmt = conn.Stmt_sql("insert into parent (ttl, parent, ttl_namespace, parent_namespace) values(?,?,?,?);");
 		stmt.Crt_bry_as_str("ttl", ttl.Page_txt());
 		stmt.Crt_int("ttl_namespace", ttl.Ns().Id());
 		stmt.Crt_bry_as_str("parent", parent.Page_txt());
 		stmt.Crt_int("parent_namespace", parent.Ns().Id());
-		Db_rdr rdr = stmt.Exec_select__rls_auto(); // ugh!
-		rdr.Rls();
+		stmt.Exec_insert(); // ugh!*/
 		Gfo_usr_dlg_.Instance.Log_many("", "", "#isin: ttl=~{0} parent=~{1}", ttl.Full_db(), isin);
 		// assume somewhere else is committing?!?!
 	}

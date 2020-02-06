@@ -26,7 +26,12 @@ import java.io.BufferedReader; import java.io.*;
 import java.util.Stack;
 import gplx.xowa.htmls.*;
 import gplx.xowa.xtns.pfuncs.times.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 public class Http_server_wkr implements Gfo_invk {
+        private static String rootdir;
 	private final    int uid;
 	private final    Http_server_mgr server_mgr;
 	private final    Http_server_wtr server_wtr;
@@ -47,6 +52,7 @@ public class Http_server_wkr implements Gfo_invk {
 		this.root_dir_http = app.Fsys_mgr().Root_dir().To_http_file_str();
 		this.root_dir_fsys = Bry_.new_u8(app.Fsys_mgr().Root_dir().Raw());
 		this.request_parser = server_mgr.Request_parser();
+                rootdir = app.Fsys_mgr().Root_dir().toString();
 	}
 	public void Init_by_thread(Socket_adp socket) {
 		this.socket = socket;
@@ -134,7 +140,7 @@ public class Http_server_wkr implements Gfo_invk {
 			}
                         Xosrv_http_wkr_.Set_content_type(page.Content_type());
 		}
-		writeFile(page_html, "d:/des/xowa_x/html.htm");
+		writeFile(page_html, rootdir + "html.htm");
 		Xosrv_http_wkr_.Write_response_as_html(client_wtr, Bool_.N, page_html);
 	}
 	private void Process_post(Http_request_itm request, byte[] url_bry) {
@@ -200,7 +206,7 @@ public class Http_server_wkr implements Gfo_invk {
 		page_html = String_.Replace(page_html, "\"/wiki/"	, "\"/xowa/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, " href='/wiki/"	, " href='/xowa/" + wiki_domain + "/wiki/");
 		//page_html = String_.Replace(page_html, "<area href=\"/wiki/"	, "<area href=\"/" + wiki_domain + "/wiki/");
-		page_html = String_.Replace(page_html, "action=\"/wiki/"	, "action=\"/xowa/" + wiki_domain + "/wiki/");
+		//page_html = String_.Replace(page_html, "action=\"/wiki/"	, "action=\"/xowa/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, "/site"				, "/xowa");
 		// should check to see if these have been downloaded somehow
 		//page_html = page_html.replaceAll("https?://(commons\\.wikimedia|de\\.wikipedia|en\\.wikibooks|en\\.wikinews|en\\.wikipedia|en\\.wikiquote|en\\.wikisource|en\\.wikiversity|en\\.wikivoyage|en\\.wiktionary|fr\\.wikipedia|fr\\.wikisource|he\\.wikipedia|it\\.wikipedia|it\\.wikisource|ja\\.wikipedia|simple\\.wikipedia|species\\.wikimedia|www\\.wikidata)\\.org" , "/xowa/$1.org");
@@ -209,7 +215,7 @@ public class Http_server_wkr implements Gfo_invk {
 		//page_html = String_.Replace(page_html, "https://commons.wikimedia.org"	, "/commons.wikimedia.org");
 		//page_html = String_.Replace(page_html, "https://en.wikipedia.org"	, "/en.wikipedia.org"); // eg en.wikiquote.org/wiki/Leo_Varadkar
 		//page_html = String_.Replace(page_html, "https://" + wiki_domain	, "/" + wiki_domain);
-		page_html = page_html.replaceAll("(https?:)?//upload.wikimedia.org" , "/xowa/fsys/bin/any/xowa/upload.wikimedia.org");
+		//page_html = page_html.replaceAll("(https?:)?//upload.wikimedia.org" , "/xowa/fsys/bin/any/xowa/upload.wikimedia.org"); // handled in Template_style_nde.java
 
 		//page_html = String_.Replace(page_html, "/fsys/file/commons.wikimedia.org/thumb/2/1/1/9/Speaker_Icon.svg/20px.png", "/fsys/file/commons.wikimedia.org/orig/2/1/1/9/Speaker_Icon.svg");
 		//page_html = page_html.replaceAll("\n +", "\n");
@@ -225,11 +231,18 @@ public class Http_server_wkr implements Gfo_invk {
 		//page_html = blockquote(page_html);
 		//page_html = String_.Replace(page_html, "\"mw-parser-output\">", karto);
 		//Xoh_css_minify mini = new Xoh_css_minify();
-		//String css = mini.readFileAsString("d:/des/xowa_x/csstest.txt");
+		//String css = mini.readFileAsString(rootdir + "csstest.txt");
 		//System.out.println(mini.cssmin(css, 0));
 		//perform();
                 //page_html += test_jdecode();
                 //test_scanner();
+                /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK);
+		Date d = null;
+		try 	{d = sdf.parse("2016-02-01 18:34:08");}
+		catch 	(ParseException e) { }
+
+                DateAdp dte = DateAdp_.parse_fmt("2016-02-01 18:34:08", "yyyy-MM-dd HH:mm:ss");
+                long timestamp = dte.Timestamp_unix();*/
 		return page_html;
 	}
         private static String collapser(String html)
@@ -383,7 +396,7 @@ public class Http_server_wkr implements Gfo_invk {
             int a = 1;
         }
 	private static String test_jdecode() {
-            byte[] jstream = Load_from_file_as_bry("d:/des/xowa_x/json_test.dat");
+            byte[] jstream = Load_from_file_as_bry(rootdir + "json_test.dat");
             Db_JDecode dc = new Db_JDecode(jstream);
             gplx.langs.jsons.Json_doc jdoc = dc.Decode();
             Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
@@ -392,7 +405,7 @@ public class Http_server_wkr implements Gfo_invk {
 	}
         private static void perform() {
                 Xoh_css_minify mini = new Xoh_css_minify();
-                String css = mini.readFileAsString("d:/des/xowa_x/csstest.txt");
+                String css = mini.readFileAsString(rootdir + "csstest.txt");
                 //String css = mini.readFileAsString("D:\\des\\mediawiki\\extensions\\Kartographer\\lib\\mapbox\\style.css");
                 
                 String c1 = "", c2 = "";
@@ -424,7 +437,7 @@ public class Http_server_wkr implements Gfo_invk {
 		Bry_bfr bfr = Bry_bfr_.New();
 		int len = html_bry.length;
 		int pos = 0;
-		//writeFile(String_.new_u8(html_bry), "d:/des/xowa_x/xxhtml.htm");
+		//writeFile(String_.new_u8(html_bry), rootdir + "xxhtml.htm");
 
 		// loop while finding "file:///.*/file/"
 		// or root_dir_fsys
@@ -490,7 +503,7 @@ public class Http_server_wkr implements Gfo_invk {
 		int len = html_bry.length;
 		int pos = 0;
 	  int bgn = 0;
-          byte b;
+		byte b;
 		while (pos < len) {
 			b = html_bry[pos++];
 			if (b == 'f') { // check for file:/// et al
@@ -662,6 +675,16 @@ public class Http_server_wkr implements Gfo_invk {
 						}
 					}
 				}
+//			} else if (b == '"' || b == '\'') { // ="/wiki/ or ='/wiki/
+//				//page_html = String_.Replace(page_html, "\"/wiki/"	, "\"/xowa/" + wiki_domain + "/wiki/");
+//				//page_html = String_.Replace(page_html, " href='/wiki/"	, " href='/xowa/" + wiki_domain + "/wiki/");
+//				if (pos > 1) {
+//					if (src[pos - 2] == '=') {
+//						if (src[pos] == '/' && src[pos+1] == 'w' && src[pos+2] == 'i' && src[pos+3] == 'k' && src[pos+4] == 'i' && src[pos+5] == '/') {
+//							?? where to get wiki_domain from?
+//						}
+//					}
+//				} 
 			}
 		}
 		if (bgn > 0) {

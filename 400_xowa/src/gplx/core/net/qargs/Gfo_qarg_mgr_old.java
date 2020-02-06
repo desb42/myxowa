@@ -19,7 +19,7 @@ public class Gfo_qarg_mgr_old {
 	private final    List_adp list = List_adp_.New();
 	private final    Hash_adp hash = Hash_adp_bry.cs();
 	public int Len() {return list.Count();}
-        public boolean IsNoRedirect() { return noredirect; } private boolean noredirect = false;
+	public boolean IsNoRedirect() { return noredirect; } private boolean noredirect = false;
 	public boolean Match(byte[] key, byte[] val) {
 		Gfo_qarg_itm arg = (Gfo_qarg_itm)hash.Get_by(key);
 		return arg == null ? false : Bry_.Eq(val, arg.Val_bry());
@@ -57,8 +57,8 @@ public class Gfo_qarg_mgr_old {
 			list.Add(itm);
 			hash.Add_if_dupe_use_nth(itm.Key_bry(), itm);
 		}
-                if (Match(Xoa_url_.Qarg__redirect, Xoa_url_.Qarg__redirect__no))
-                    noredirect = true;
+		if (Match(Xoa_url_.Qarg__redirect, Xoa_url_.Qarg__redirect__no))
+			noredirect = true;
 		return this;
 	}
 	public Gfo_qarg_itm[] To_ary() {return (Gfo_qarg_itm[])list.To_ary(Gfo_qarg_itm.class);}

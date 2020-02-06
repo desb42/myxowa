@@ -83,9 +83,9 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	public byte[] Bld_thumb_file_image(byte[] thumb_image, byte[] caption, byte[] alt) {return fmtr_thumb_file_image.Bld_many_to_bry(tmp_bfr, thumb_image, caption, alt);}
 	private final    Bry_fmt fmtr_thumb_file_image = Bry_fmt.Auto("    ~{thumb_image}~{caption}~{alt}");
 
-	@gplx.Virtual public byte[] Bld_thumb_file_audio(byte[] caption, byte[] alt, byte[] play_btn, byte[] info_btn) {return fmtr_thumb_file_audio.Bld_many_to_bry(tmp_bfr, play_btn, info_btn, caption, alt);}
+	@gplx.Virtual public byte[] Bld_thumb_file_audio(int width, byte[] caption, byte[] alt, byte[] play_btn, byte[] info_btn) {return fmtr_thumb_file_audio.Bld_many_to_bry(tmp_bfr, width, play_btn, info_btn, caption, alt);}
 	private Bry_fmt fmtr_thumb_file_audio = Bry_fmt.Auto(String_.Concat_lines_nl_skip_last
-	( "    <div class=\"xowa_media_div\">~{play_btn}~{info_btn}"
+	( "    <div class=\"mediaContainer xowa_media_div\" style=\"width:~{width}px\">~{play_btn}~{info_btn}"
 	, "    </div>~{caption}~{alt}"
 	));
 

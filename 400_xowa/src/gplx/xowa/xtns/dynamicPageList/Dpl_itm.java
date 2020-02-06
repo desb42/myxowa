@@ -18,10 +18,12 @@ import gplx.core.primitives.*;
 import gplx.langs.htmls.*; import gplx.xowa.htmls.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*;
 import gplx.xowa.wikis.nss.*;
-class Dpl_itm {
+public class Dpl_itm {
 	public byte[] Page_ttl() {return page_ttl;} private byte[] page_ttl;
 	public List_adp Ctg_includes() {return ctg_includes;} private List_adp ctg_includes;
+	public int[] Ctg_include_ids() {return ctg_include_ids;} public void Ctg_include_ids_(int[] vals) {ctg_include_ids = vals;} private int[] ctg_include_ids;
 	public List_adp Ctg_excludes() {return ctg_excludes;} private List_adp ctg_excludes;
+	public int[] Ctg_exclude_ids() {return ctg_exclude_ids;} public void Ctg_exclude_ids_(int[] vals) {ctg_exclude_ids = vals;} private int[] ctg_exclude_ids;
 	public int Count() {return count;} private int count = Int_.Min_value;
 	public int Offset() {return offset;} private int offset = Int_.Min_value;
 	public boolean No_follow() {return no_follow;} private boolean no_follow;
@@ -41,6 +43,7 @@ class Dpl_itm {
 	public byte Mode_tid() {return mode_tid;} private byte mode_tid = Dpl_itm_keys.Key_unordered;
 	public byte Quality_pages() {return quality_pages;} private byte quality_pages;
 	public byte Stable_pages() {return stable_pages;} private byte stable_pages;
+	public boolean IgnoreSubpages() {return ignoresubpages;} private boolean ignoresubpages;
 	private Xop_ctx sub_ctx; private Xop_tkn_mkr sub_tkn_mkr; private Xop_root_tkn sub_root;
 	private void Parse_src(Xowe_wiki wiki, Xop_ctx ctx, byte[] page_ttl, byte[] src, Xop_xnde_tkn xnde) {	// parse kvps in xnde; EX:<dpl>category=abc\nredirects=y\n</dpl>
 		this.page_ttl = page_ttl;
@@ -118,7 +121,7 @@ class Dpl_itm {
 			case Dpl_itm_keys.Key_addfirstcategorydate:	Parse_ctg_date(val); break;
 			case Dpl_itm_keys.Key_count:				count = Bry_.To_int_or(val, Int_.Min_value); break;
 			case Dpl_itm_keys.Key_offset:				offset = Bry_.To_int_or(val, Int_.Min_value); break;
-			case Dpl_itm_keys.Key_imagesperow:			gallery_imgs_per_row = Bry_.To_int_or(val, Int_.Min_value); break;
+			case Dpl_itm_keys.Key_imagesperrow:			gallery_imgs_per_row = Bry_.To_int_or(val, Int_.Min_value); break;
 			case Dpl_itm_keys.Key_imagewidth:			gallery_img_w = Bry_.To_int_or(val, Int_.Min_value); break;
 			case Dpl_itm_keys.Key_imageheight:			gallery_img_h = Bry_.To_int_or(val, Int_.Min_value); break;
 			case Dpl_itm_keys.Key_gallerycaption:		gallery_caption = val; break;	// FUTURE: parse for {{int:}}?
@@ -126,6 +129,7 @@ class Dpl_itm {
 			case Dpl_itm_keys.Key_galleryshowfilename:	gallery_filename = Dpl_itm_keys.Parse_as_bool(val, true); break;
 			case Dpl_itm_keys.Key_ordermethod:			sort_tid = Dpl_sort.Parse_ordermethod(val); break;
 			case Dpl_itm_keys.Key_mode:			mode_tid = Parse_mode(val, usr_dlg, page_ttl); break;
+			case Dpl_itm_keys.Key_ignoresubpages:		ignoresubpages = Dpl_itm_keys.Parse_as_bool(val, false); break;
 			default:
 				String err_msg = String_.Format("dynamic_page_list:unknown_keyword: page={0} keyword={1}", String_.new_u8(page_ttl), key_id);
 				usr_dlg.Log_many("", "", err_msg);
@@ -140,14 +144,14 @@ class Dpl_itm {
 		usr_dlg.Log_many("", "", err_msg);
 		return Dpl_itm_keys.Key_unordered;
 	}
-        private byte Keys_get_or(byte[] bry) {
+	private byte Keys_get_or(byte[] bry) {
 		byte key = Dpl_itm_keys.Parse(bry, Dpl_itm_keys.Key_false);	// NOTE: exclude is default value.
 		switch (key) {
 			case Dpl_itm_keys.Key_true: 			return Dpl_itm_keys.Key_true;
 			case Dpl_itm_keys.Key_false: 			return Dpl_itm_keys.Key_false;
 			default:								return Dpl_itm_keys.Key_null;
 		}
-        }
+	}
 	private void Parse_ctg_date(byte[] val) {
 			byte val_key = Keys_get_or(val);
 			if (val_key == Dpl_itm_keys.Key_true)

@@ -51,7 +51,7 @@ public class Xoh_media_wtr {
 	private final    Bfr_arg__bry_fmt fmt__noicon = new Bfr_arg__bry_fmt(Bry_fmt.Auto_nl_apos("\n<div><a href=\"/wiki/File:~{lnki_ttl}\" class=\"xowa_media_info\" title=\"About this file\"></a></div>"));
 	private final    Bry_fmt 
 	  fmt__audio = Bry_fmt.Auto_nl_apos
-	( "<div class=\"xowa_media_div\">"
+	( "<div class=\"mediaContainer xowa_media_div\" style=\"width:~{a_max_width}px\">"
 	, "<div><a href=\"\" xowa_title=\"~{lnki_ttl}\" class=\"xowa_media_play\" style=\"width:~{a_width}px;max-width:~{a_max_width}px;\" alt=\"Play sound\"></a></div>~{noicon}"
 	, "</div>"
 	)

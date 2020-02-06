@@ -21,7 +21,7 @@ import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.p
 import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.urls.*;
 import gplx.xowa.xtns.pfuncs.times.Pft_func_formatdate;
 public class Dpl_xnde implements Xox_xnde {
-	private Dpl_itm itm; private Ordered_hash pages;
+	private Dpl_itm itm; private List_adp pages;
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {} // NOTE: <dynamicPageList> has no attributes
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
 		itm = Dpl_itm.Parse(wiki, ctx, ctx.Page().Ttl().Full_txt(), src, xnde);

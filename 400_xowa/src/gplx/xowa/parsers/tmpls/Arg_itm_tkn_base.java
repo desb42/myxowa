@@ -45,6 +45,7 @@ public class Arg_itm_tkn_base extends Xop_tkn_itm_base implements Arg_itm_tkn {
 				this.Subs_get(i).Tmpl_evaluate(ctx, src, caller, bfr);
 		}
 		else bfr.Add(dat_ary);
+                //System.out.println(String_.new_a7(bfr.Bfr(), 0, bfr.Len()));
 		return true;
 	}
 	public Arg_itm_tkn Subs_add_ary(Xop_tkn_itm... ary) {for (Xop_tkn_itm sub : ary) Subs_add(sub); return this;}

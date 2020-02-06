@@ -232,9 +232,10 @@ public class Xow_portal_mgr implements Gfo_invk {
 		// build url_fragment with action query argument; EX: "/wiki/Page_name?action="
 		//byte[] url_frag_w_action_qarg = Bry_.Add(Xoh_href_.Bry__wiki, ttl.Full_db(), Byte_ascii.Question_bry, Xoa_url_.Qarg__action, Byte_ascii.Eq_bry);
 		byte[] url_frag_w_action_qarg = Bry_.Add(subj_href, Byte_ascii.Question_bry, Xoa_url_.Qarg__action, Byte_ascii.Eq_bry);
-                byte[] noredirect = isnoredirect 
-                                        ? Bry_.Add(Byte_ascii.Amp_bry, Xoa_url_.Qarg__redirect, Byte_ascii.Eq_bry, Xoa_url_.Qarg__redirect__no)
-                                        : Bry_.Empty;
+		byte[] noredirect = isnoredirect 
+			? Bry_.Add(Byte_ascii.Amp_bry, Xoa_url_.Qarg__redirect, Byte_ascii.Eq_bry, Xoa_url_.Qarg__redirect__no)
+			: Bry_.Empty;
+
 		div_view_fmtr.Bld_bfr_many(tmp_bfr, read_cls, edit_cls, html_cls, search_text
 			, subj_href //Bry_.Add(Xoh_href_.Bry__wiki, ttl.Full_db())
 			, Bry_.Add(url_frag_w_action_qarg, Xoa_url_.Qarg__action__edit, noredirect)

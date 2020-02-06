@@ -555,6 +555,7 @@ public class Dbx_scan_support {
 				s.ptr = trv.Pos();
 				t.zone_type = TIMELIB_ZONETYPE_ABBR;
 				retval = ((Pxd_itm_tz_abbr)o).Tz_offset();
+				t.tz_abbr = ((Pxd_itm_tz_abbr)o).Tz_abbr();
 				s.tz_not_found = 0;
 			}
 //			offset = timelib_lookup_abbr(ptr, dst, &tz_abbr, &found);
@@ -646,7 +647,7 @@ public class Dbx_scan_support {
 		return nowtime;
 	}
 	private static int timelib_day_of_week(int y, int m, int d) {
-		DateAdp dte = DateAdp_.DateByBits(y, m, d, 0, 0, 0, 0);
+		DateAdp dte = DateAdp_.DateByBits(y, m, d, 0, 0, 0, 0, 0, null);
 		return dte.DayOfWeek();
 	}
 
@@ -865,7 +866,7 @@ public class Dbx_scan_support {
 		timelib_fill_holes(parsed, now, 0);
 		timelib_update_ts(parsed);
 
-		DateAdp dte = DateAdp_.DateByBits(parsed.y, parsed.m, parsed.d, parsed.h, parsed.i, parsed.s, parsed.us/1000);
+		DateAdp dte = DateAdp_.DateByBits(parsed.y, parsed.m, parsed.d, parsed.h, parsed.i, parsed.s, parsed.us, parsed.z, parsed.tz_abbr);
 		return dte;
 	}
 }

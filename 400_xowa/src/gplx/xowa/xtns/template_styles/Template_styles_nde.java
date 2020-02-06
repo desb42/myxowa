@@ -53,6 +53,7 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		Xow_page_cache_itm page_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(css_ttl);
 		if (page_itm != null) {
 			css_src = page_itm.Wtxt__direct();
+			css_src = cvt_url(css_src);
 			css_page_id = page_itm.Page_id();
 
 			// update css_page_ids
@@ -104,6 +105,33 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		// $parser->addTrackingCategory( 'templatestyles-page-error-category' );
 		// + call_user_func_array( 'wfMessage', $msg )->inContentLanguage()->parse()
 		return html_error.Bld_many_to_str_auto_bfr(msg);
+	}
+	private byte[] cvt_url(byte[] src) {
+		Bry_bfr tmp_bfr = null;
+                int src_len = src.length;
+		int pos = 0;
+		int start = 0;
+		while (pos < src_len) {
+			byte b = src[pos++];
+			if (b == 'h') {
+				if (pos + 20 < src_len &&
+					src[pos] == 't' && src[pos+1] == 't' && src[pos+2] == 'p' && src[pos+3] == 's' && src[pos+4] == ':' && src[pos+5] == '/' && src[pos+6] == '/' && 
+					src[pos+7] == 'u' && src[pos+8] == 'p' && src[pos+9] == 'l' && src[pos+10] == 'o' && src[pos+11] == 'a' && src[pos+12] == 'd' && src[pos+13] == '.') {
+					if (tmp_bfr == null) {
+						tmp_bfr = Bry_bfr_.New();
+					}
+					tmp_bfr.Add_mid(src, start, pos);
+					tmp_bfr.Add_str_a7("ttp://localhost/xowa/fsys/bin/any/xowa");
+					start = pos + 6; // skip ttps:/
+				}
+			}
+		}
+		if (tmp_bfr == null)
+			return src;
+		else {
+			tmp_bfr.Add_mid(src, start, pos);
+			return tmp_bfr.To_bry_and_clear();
+		}
 	}
 
 	public static final byte Xatr__src = 0;

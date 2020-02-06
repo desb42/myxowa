@@ -24,18 +24,21 @@ public class Json_parser {
 	public Json_doc Parse(byte[] src) {return Parse(src, 0, src.length);}
 	public Json_doc Parse(byte[] src, int pos, int src_len) {
 		synchronized (factory) {
-			this.src = src;				if (src == null) return null;
-			this.src_len = src_len;	if (src_len == 0) return null;
+			this.src = src;
+			if (src == null) return null;
+			this.src_len = src_len;
+			if (src_len == 0) return null;
 			this.pos = pos;
 			Skip_ws();
 			boolean root_is_nde = true;
-			switch (src[pos]) {
+			switch (src[this.pos]) {
 				case Byte_ascii.Curly_bgn:	root_is_nde = Bool_.Y; break;
 				case Byte_ascii.Brack_bgn:	root_is_nde = Bool_.N; break;
 				case 16:
 					Db_JDecode dc = new Db_JDecode(src);
 					return dc.Decode();
-				default:					return null;
+				default:
+					return null;
 			}
 			Skip_ws();
 			Json_doc doc = new Json_doc();

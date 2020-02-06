@@ -168,7 +168,7 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 		gplx.core.net.emails.Gfo_email_mgr_.Instance = gplx.core.net.emails.Gfo_email_mgr_.New_jre();
 		special_mgr.Init_by_app(this);
 		sys_cfg.Init_by_app(this);
-		Db_timezone.Set_wiki(wiki_mgr.Get_at_or_null(0));
+		Db_timezone.Set_wiki(wiki_mgr.Get_at_or_null(0), this);
 	}
 	public void Launch() {
 		// guard against circular calls; probably no longer needed

@@ -22,18 +22,19 @@ import gplx.xowa.langs.msgs.*;
 public class Xtn_templateData_nde implements Xox_xnde {
 	private Json_doc jdoc = null;
 	private Xow_msg_mgr msg_mgr;
-        Xop_ctx ctx;
+	Xop_ctx ctx;
 	public Xop_xnde_tkn Xnde() {return xnde;} private Xop_xnde_tkn xnde;
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {}
 	// some logic from mediawiki\extensions\TemplateData\includes\TemplateDataBlob.php
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
 		this.xnde = xnde;
-                this.ctx = ctx;
+		this.ctx = ctx;
 		msg_mgr = wiki.Msg_mgr();
 		int itm_bgn = xnde.Tag_open_end(), itm_end = xnde.Tag_close_bgn();
 		if (itm_bgn == src.length)	return;  // NOTE: handle inline where there is no content to parse; EX: <templatedata/>
 		if (itm_bgn >= itm_end)		return;  // NOTE: handle inline where there is no content to parse; EX: a<templatedata/>b
-		jdoc = wiki.App().Utl__json_parser().Parse(Bry_.Mid(src, xnde.Tag_open_end(), xnde.Tag_close_bgn()));
+		//jdoc = wiki.App().Utl__json_parser().Parse(Bry_.Mid(src, xnde.Tag_open_end(), xnde.Tag_close_bgn()));
+		jdoc = wiki.App().Utl__json_parser().Parse(src, xnde.Tag_open_end(), xnde.Tag_close_bgn());
 	}
 
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
@@ -206,20 +207,20 @@ public class Xtn_templateData_nde implements Xox_xnde {
 
 		bfr.Add_str_a7("<tr><th>");
 		if (fld_label == Bry_.Empty) {
-                    if (param_key != Bry_.Empty) {
-			byte b = param_key[0];
-			if (b >= 'a' && b <= 'z') {
-				param_key[0] = (byte)(b - 32); // uppercase 1st letter
+			if (param_key != Bry_.Empty) {
+				byte b = param_key[0];
+				if (b >= 'a' && b <= 'z') {
+					param_key[0] = (byte)(b - 32); // uppercase 1st letter
+				}
+				bfr.Add(param_key);
+				param_key[0] = b; // restore
 			}
-			bfr.Add(param_key);
-			param_key[0] = b; // restore
-                    }
 		}
 		else
 			bfr.Add(fld_label);
 		bfr.Add_str_a7("</th><td class=\"mw-templatedata-doc-param-name\"><code>");
 		bfr.Add(param_key);
-                bfr.Add_str_a7("</code>");
+		bfr.Add_str_a7("</code>");
 		if (fld_aliases != null) {
 			Bry_bfr tmp_bfr = Bry_bfr_.New();
 			int ary_len = fld_aliases.Len();
@@ -273,13 +274,13 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		if (fld_type == Bry_.Empty) {
 			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-type-unknown"));
 		} else {
-                    String stype;
-                    // check for comptibility - starting 'string/'
-                    if (Bry_.Match(fld_type, 0, 7, string_start)) {
-                        stype = String_.new_a7(Bry_.Mid(fld_type, 7));
-                    }
-                    else
-                        stype = String_.new_a7(fld_type);
+			String stype;
+			// check for comptibility - starting 'string/'
+			if (Bry_.Match(fld_type, 0, 7, string_start)) {
+				stype = String_.new_a7(Bry_.Mid(fld_type, 7));
+			}
+			else
+				stype = String_.new_a7(fld_type);
 			bfr.Add(msg_mgr.Val_by_key_obj("templatedata-doc-param-type-" + stype));
 		}
 		bfr.Add_str_a7("</td><td");
@@ -293,33 +294,33 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		bfr.Add_str_a7("</td></tr>");
 	}
 
-        private byte[] get_text_value(Json_itm itm) {
-            if (itm == null) return Bry_.Empty;
-            // ((Json_itm_str)val).Data_bry();
-            if (itm instanceof Json_itm_str)
-                return ((Json_itm_str)itm).Data_bry();
-            Json_nde langs = Json_nde.cast(itm);
-            int langs_len = langs.Len();
-            for (int j = 0; j < langs_len; j++) {
-                    Json_kv kv = Json_kv.cast(langs.Get_at(j));
-                    byte[] key = kv.Key_as_bry();
-                    Json_itm val = kv.Val();
-                    if (key[0] == 'e' && key[1] == 'n')
-                        return ((Json_itm_str)val).Data_bry();
-            }
-            return Bry_.Empty;
-        }
-        private boolean get_boolean_value(Json_itm itm) { // should be with a language tag
-            if (itm == null) return false;
-            if (itm instanceof Json_itm_bool)
-                return ((Json_itm_bool)itm).Data_as_bool();
-            byte[] word = ((Json_itm_str)itm).Data_bry();
-            if (word.length > 0) {
-                if (word[0] == 'Y' || word[0] == 'y') return true;
-                if (word[0] == '1') return true;
-            }
-            return false;
-        }
+	private byte[] get_text_value(Json_itm itm) {
+		if (itm == null) return Bry_.Empty;
+		// ((Json_itm_str)val).Data_bry();
+		if (itm instanceof Json_itm_str)
+			return ((Json_itm_str)itm).Data_bry();
+		Json_nde langs = Json_nde.cast(itm);
+		int langs_len = langs.Len();
+		for (int j = 0; j < langs_len; j++) {
+			Json_kv kv = Json_kv.cast(langs.Get_at(j));
+			byte[] key = kv.Key_as_bry();
+			Json_itm val = kv.Val();
+			if (key[0] == 'e' && key[1] == 'n')
+				return ((Json_itm_str)val).Data_bry();
+		}
+		return Bry_.Empty;
+	}
+	private boolean get_boolean_value(Json_itm itm) { // should be with a language tag
+		if (itm == null) return false;
+		if (itm instanceof Json_itm_bool)
+			return ((Json_itm_bool)itm).Data_as_bool();
+		byte[] word = ((Json_itm_str)itm).Data_bry();
+		if (word.length > 0) {
+			if (word[0] == 'Y' || word[0] == 'y') return true;
+			if (word[0] == '1') return true;
+		}
+		return false;
+	}
 	private static final byte[]
 	  tdps_deprecated = Bry_.new_a7("templatedata-doc-param-status-deprecated")
 	, tdps_required = Bry_.new_a7("templatedata-doc-param-status-required")
@@ -330,6 +331,6 @@ public class Xtn_templateData_nde implements Xox_xnde {
 	, m_settings = Bry_.new_a7("settings")
 	, f_block = Bry_.new_a7("template-format-block")
 	, f_inline = Bry_.new_a7("template-format-inline")
-                , string_start = Bry_.new_a7("string/")
+	, string_start = Bry_.new_a7("string/")
 	;
 }

@@ -131,7 +131,7 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 
 		// bld audio_div
 		byte[] audio_div = html_fmtr.Bld_thumb_file_audio
-			( Bld_caption_div(ctx, hctx, src, lnki, uid, img_orig_src, lnki_href)
+			( play_btn_width, Bld_caption_div(ctx, hctx, src, lnki, uid, img_orig_src, lnki_href)
 			, Bld_alt(Bool_.Y, ctx, hctx, src, lnki)
 			, Bld_play_btn(hctx, uid, img_orig_src, lnki_ttl, play_btn_width, play_btn_width)	// NOTE: changed max_width from 1024: DATE:2016-08-05
 			, info_btn);
@@ -258,6 +258,8 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 	private byte[] Bld_caption_div(Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_lnki_tkn lnki, int uid, byte[] img_orig_src, byte[] lnki_href) {
 		byte[] caption = Bld_caption(ctx, hctx, src, lnki);
 		byte[] magnify_btn = lnki.Media_icon() ? html_fmtr.Bld_thumb_part_magnify(lnki_href, msg_file_enlarge) : Bry_.Empty;
+                if (caption == Bry_.Empty && magnify_btn == Bry_.Empty)
+                    return Bry_.Empty;
 		return html_fmtr.Bld_thumb_part_caption(magnify_btn, caption);
 	}
 	private byte[] Bld_caption(Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_lnki_tkn lnki) {

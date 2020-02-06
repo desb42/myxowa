@@ -82,7 +82,7 @@ class Xop_redirect_mgr_fxt {
 		Xoa_ttl ttl = fxt.Wiki().Ttl_parse(Bry_.new_u8(page_str));
 		Xoa_url url = Xoa_url.New(fxt.Wiki(), ttl);
 		redirect_mgr.Itms__add__article(url, ttl, Bry_.Empty);
-		byte[] actl_bry = Xop_redirect_mgr.Bld_redirect_msg(fxt.App(), fxt.Wiki(), redirect_mgr);
+		byte[] actl_bry = Xop_redirect_mgr.Bld_redirect_msg_from(fxt.App(), fxt.Wiki(), redirect_mgr);
 		Tfds.Eq_str(expd_str, String_.new_u8(actl_bry));
 	}
 }

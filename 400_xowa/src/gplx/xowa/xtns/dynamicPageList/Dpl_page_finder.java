@@ -18,7 +18,11 @@ import gplx.core.primitives.*; import gplx.core.lists.*;
 import gplx.xowa.wikis.dbs.*;
 import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.addons.wikis.ctgs.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.urls.*;
+import gplx.xowa.wikis.data.Xow_db_mgr;
+import gplx.dbs.*; import gplx.xowa.wikis.data.*; import gplx.xowa.addons.wikis.ctgs.dbs.*;
+import gplx.core.times.*;
 class Dpl_page_finder {
+	private final    DateAdp_parser dateParser = DateAdp_parser.new_();
 	private final    Dpl_itm itm;
 	private final    Xowe_wiki wiki;
 
@@ -26,112 +30,39 @@ class Dpl_page_finder {
 		this.itm = itm;
 		this.wiki = wiki;
 	}
-	public Ordered_hash Find() {
+	public List_adp Find() {
 		// get include_ttls
 		List_adp include_ttls = itm.Ctg_includes();
-		if (include_ttls == null) return Ordered_hash_.New(); // exit early if none exists
+		List_adp exclude_ttls = itm.Ctg_excludes();
+		if (include_ttls == null) return null; // exit early if none exists
 
-		// get exclude_pages
-		Ordered_hash exclude_pages = Get_exclude_pages(itm.Ctg_excludes());
-
-		// init vars for loop below
-		int itm_ns_filter = itm.Ns_filter();
-		List_adp remove_list = List_adp_.New();
-		Int_obj_ref tmp_id = Int_obj_ref.New_zero();
-
-		// get include_pags; note that this is a UNION of all member pages; EX: include_ttls=Ctg_A,Ctg_B,Ctg_C will only return pages in Ctg_A AND Ctg_B AND Ctg_C
-		Ordered_hash rv = Ordered_hash_.New();
+		Xow_db_mgr db_mgr = wiki.Data__core_mgr();
+		Xowd_page_tbl page_tbl = db_mgr.Db__core().Tbl__page();
 		int len = include_ttls.Len();
+		int[] cat_ids = new int[len];
 		for (int i = 0; i < len; i++) {
-			// get ttl
-			Xoa_ttl ttl = Get_ctg_ttl_or_null(include_ttls, i);
-			if (ttl == null) continue;
-
-			// get pages
-			Ordered_hash cur_pages = Ordered_hash_.New();
-			Find_pages_in_ctg(cur_pages, itm.Page_ttl(), ttl);
-
-			// identify pages (a) not in previous list; (b) excluded; (c) ns_filter
-			remove_list.Clear();
-			int cur_len = cur_pages.Len();
-			for (int j = 0; j < cur_len; j++) {
-				// get item and init tmp
-				Xowd_page_itm page_itm = (Xowd_page_itm)cur_pages.Get_at(j);
-				tmp_id.Val_(page_itm.Id());
-
-				// check if should be removed
-				if (   (i != 0 && !rv.Has(tmp_id)) // item doesn't exist in previous set; note this doesn't apply to the 0th set
-					|| exclude_pages.Has(tmp_id) // item is marked as excluded
-					|| itm_ns_filter != Dpl_itm.Ns_filter_null && itm_ns_filter != page_itm.Ns().Id()  // item does not match specified filter
-					) {
-					remove_list.Add(page_itm);
-				}
-			}
-
-			// remove pages
-			int remove_len = remove_list.Len();
-			for (int j = 0; j < remove_len; j++) {
-				Xowd_page_itm page_itm = (Xowd_page_itm)remove_list.Get_at(j);
-				cur_pages.Del(tmp_id.Val_(page_itm.Id()));
-			}
-
-			// set cur_pages as main list
-			rv = cur_pages;
+			// get cat page ids
+			cat_ids[i] = Get_ctg_ttl_page_id(include_ttls, i, page_tbl);
 		}
-
-		// sorting
-		rv.Sort_by
-			( itm.Sort_ascending() == Bool_.__byte
-			? (ComparerAble)Xowd_page_itm_sorter.IdAsc // sort not specified; use default;
-			: (ComparerAble)new Dpl_page_sorter(itm)); // sort specified
-		return rv;
-	}
-	private Ordered_hash Get_exclude_pages(List_adp ttls) {
-		Ordered_hash rv = Ordered_hash_.New();
-
-		// return empty hash if no ttls
-		if (ttls == null)
-			return rv;
-
-		// loop exclude ttls
-		int len = ttls.Count();
+		itm.Ctg_include_ids_(cat_ids);
+		if (exclude_ttls == null)
+			len = 0;
+		else
+			len = exclude_ttls.Len();
+		cat_ids = new int[len];
 		for (int i = 0; i < len; i++) {
-			Xoa_ttl ttl = Get_ctg_ttl_or_null(ttls, i);
-			if (ttl == null) continue;
-			Find_pages_in_ctg(rv, itm.Page_ttl(), ttl);
+			cat_ids[i] = Get_ctg_ttl_page_id(exclude_ttls, i, page_tbl);
 		}
-		return rv;
-	}
-	private void Find_pages_in_ctg(Ordered_hash rv, byte[] page_ttl, Xoa_ttl cat_ttl) {
-		// get ctg
-//		Xoctg_catpage_ctg ctg = wiki.Ctg__catpage_mgr().Get_by_cache_or_null(page_ttl, Xoctg_catpage_url.New__blank(), cat_ttl, Int_.Max_value);
-		Xoctg_catpage_ctg ctg = wiki.Ctg__catpage_mgr().Get_by_cache_or_null(page_ttl, Xoctg_catpage_url.New__blank(), cat_ttl, 10000);
-		if (ctg == null) return;
+		itm.Ctg_exclude_ids_(cat_ids);
 
-		// loop grps to get each page
-		Int_obj_ref tmp_id = Int_obj_ref.New_zero();
-		for (byte tid = 0; tid < Xoa_ctg_mgr.Tid___max; tid++) {
-			// get grp; EX: subc; page; file
-			Xoctg_catpage_grp grp = ctg.Grp_by_tid(tid);
+		//Xoctg_catpage_ctg ctg = wiki.Ctg__catpage_mgr().Get_by_cache_or_null(page_ttl, Xoctg_catpage_url.New__blank(), cat_ttl, 10000, itm);
 
-			// loop itms in grp and add to hash
-			int len = grp.Itms__len();
-			for (int i = 0; i < len; i++) {
-				Xoctg_catpage_itm itm = grp.Itms__get_at(i);
-				int itm_page_id = itm.Page_id();
+		Xowd_cat_core_tbl cat_core_tbl = Xodb_cat_db_.Get_cat_core_or_fail(db_mgr);
 
-				if (rv.Has(tmp_id.Val_(itm_page_id))) continue; // check to make sure not already added
-
-				Xowd_page_itm page = new Xowd_page_itm();
-				if (itm.Page_ttl() == null) continue; // cat_link can exist without entry in page_db.page
-				page.Id_(itm_page_id);
-				page.Ttl_(itm.Page_ttl());
-				rv.Add(Int_obj_ref.New(itm_page_id), page);
-			}
-		}
+		return Dpl_loader(wiki, page_tbl, db_mgr, cat_core_tbl.Conn());
 	}
 
-	private Xoa_ttl Get_ctg_ttl_or_null(List_adp list, int i) {// helper method to extract ttl from list
+	private int Get_ctg_ttl_page_id(List_adp list, int i, Xowd_page_tbl page_tbl) {// helper method to extract ttl from list
 		// get ttl
 		byte[] ttl_bry = (byte[])list.Get_at(i);
 		Xoa_ttl ttl = wiki.Ttl_parse(gplx.xowa.wikis.nss.Xow_ns_.Tid__category, ttl_bry);
@@ -140,6 +71,193 @@ class Dpl_page_finder {
 		if (ttl == null) {
 			Gfo_usr_dlg_.Instance.Log_many("", "", "category title is invalid; wiki=~{0} page=~{1} ttl=~{2}", wiki.Domain_str(), itm.Page_ttl(), ttl_bry);
 		}
-		return ttl;
+		if (ttl == null) return -1;
+
+		Xowd_page_itm page_itm = page_tbl.Select_by_ttl_as_itm_or_null(ttl);
+		if (page_itm == null) {
+			Gfo_usr_dlg_.Instance.Log_many("", "", "dpl category does not exist in page table; wiki=~{0} page=~{1} ttl=~{2}", wiki.Domain_str(), "?", ttl.Full_db());	// Log instead of Warn b/c happens many times in en.d, en.b, en.u; DATE:2016-10-22
+			return -1;
+		}
+		return page_itm.Id();
+	}
+
+	private String Generate_sql_dpl(Dpl_itm itm, int limit, int link_db_id, Db_attach_mgr attach_mgr) {
+		StringBuilder where = new StringBuilder();
+		java.util.Formatter where_fmt = new java.util.Formatter(where);
+		where.append(" where 1");
+		StringBuilder table = new StringBuilder();
+		java.util.Formatter table_fmt = new java.util.Formatter(table);
+
+		String fields = String_.Concat_lines_nl
+		( "SELECT  c1.cl_to_id"
+		, ",       c1.cl_from"
+		, ",       c1.cl_type_id"
+		, ",       datetime(c1.cl_timestamp_unix, 'unixepoch') as cl_timestamp"
+		, ",       c1.cl_sortkey"
+		, ",       c1.cl_sortkey_prefix"
+		, ",       p.page_namespace"
+		, ",       p.page_title"
+		, ",       p.page_touched"
+		);
+		
+		switch ( itm.Redirects_mode() ) {
+			case Dpl_redirect.Tid_only:
+				where.append(" and page_is_redirect=1");
+				break;
+			case Dpl_redirect.Tid_exclude:
+				where.append(" and page_is_redirect=0");
+				break;
+		}
+
+		if ( itm.IgnoreSubpages() ) {
+			where.append(" and page_title NOT like %/%");
+		}
+
+		int currentTableNumber = 1;
+		
+		table.append("\nfrom <page_db>page p\n");
+
+		int i;
+		int catCount = itm.Ctg_include_ids().length;
+		for ( i = 0; i < catCount; i++ ) {
+			table_fmt.format("INNER JOIN <link_db_%d>cat_link c%d on p.page_id = c%d.cl_from AND c%d.cl_to_id=%d\n",
+				link_db_id, currentTableNumber, currentTableNumber, currentTableNumber, itm.Ctg_include_ids()[i]);
+
+			currentTableNumber++;
+		}
+
+		int excludeCatCount = itm.Ctg_exclude_ids().length;
+		for ( i = 0; i < excludeCatCount; i++ ) {
+			table_fmt.format("LEFT OUTER JOIN <link_db_%d>cat_link c%d on p.page_id = c%d.cl_from AND c%d.cl_to_id=%d\n",
+				link_db_id, currentTableNumber, currentTableNumber, currentTableNumber, itm.Ctg_exclude_ids()[i]);
+			where_fmt.format(" and c%d.cl_to_id is null", currentTableNumber);
+			currentTableNumber++;
+		}
+
+		String sqlOrder;
+		if ( itm.Sort_ascending() == Bool_.Y_byte ) {
+			sqlOrder = "ASC";
+		} else {
+			sqlOrder = "DESC";
+		}
+
+		String sqlSort;
+		switch ( itm.Sort_tid() ) {
+			case Dpl_sort.Tid_lastedit:
+				sqlSort = "page_touched";
+				break;
+			case Dpl_sort.Tid_length:
+				sqlSort = "page_len";
+				break;
+			case Dpl_sort.Tid_created:
+				sqlSort = "page_id"; // Since they're never reused and increasing
+				break;
+			case Dpl_sort.Tid_categorysortkey:
+				sqlSort = "c1.cl_type " + sqlOrder + ", c1.cl_sortkey";
+				break;
+			case Dpl_sort.Tid_popularity:
+				sqlSort = "page_counter";
+				break;
+			default:
+			case Dpl_sort.Tid_categoryadd:
+				sqlSort = "c1.cl_timestamp_unix";
+				break;
+		}
+		String order_by = "\norder by " + sqlSort + " " + sqlOrder;
+		String options;
+		if (itm.Offset() > 0)
+			options = "\nlimit " + Integer.toString(itm.Offset()) + "," + Integer.toString(limit);
+		else
+			options = "\nlimit " + Integer.toString(limit);
+		String sql = fields + table.toString() + where.toString() + order_by + options; 
+		return attach_mgr.Resolve_sql(sql);
+	}
+/* copied from 400_xowa\src\gplx\xowa\addons\wikis\ctgs\htmls\catpages\dbs\Xoctg_catlink_loader.java */
+	private void Load_catlinks(List_adp catlink_list, String sql, Db_attach_mgr attach_mgr) {
+		Db_rdr rdr = Db_rdr_.Empty;
+		int count = 0;
+		try {
+			attach_mgr.Attach();
+			rdr = attach_mgr.Conn_main().Stmt_sql(sql).Exec_select__rls_auto();
+			while (rdr.Move_next()) {
+				Xoctg_dynamic_itm itm = Xoctg_dynamic_itm.New_by_rdr(wiki, rdr);
+				catlink_list.Add(itm);
+				if (count >= 1000 && (count % 1000) == 0) Gfo_usr_dlg_.Instance.Prog_many("", "", "loading cat_links: count=~{0}", count);
+				count++;
+			}
+		}
+		catch (Exception e) {
+			throw Err_.new_exc(e, "db", "db.xxxxxx failed", "sql", sql);}
+		finally {
+			rdr.Rls();
+			attach_mgr.Detach();
+		}
+	}
+	public List_adp Dpl_loader(Xow_wiki wiki, Xowd_page_tbl page_tbl, Xow_db_mgr db_mgr, Db_conn cat_core_conn) {
+		// init db vars
+		List_adp db_list = List_adp_.New();
+		Db_conn db_1st = null;
+		int db_idx = 0;
+
+		// fill db_list by looping over each db unless (a) cat_link_db or (b) core_db (if all or few)
+		int len = db_mgr.Dbs__len();
+		for (int i = 0; i < len; ++i) {
+			Xow_db_file cl_db = db_mgr.Dbs__get_at(i);
+			String key = "";
+			switch (cl_db.Tid()) {
+				case Xow_db_file_.Tid__cat_link:	// always use cat_link db
+					key = "link_db_" + ++db_idx;
+					break;
+				case Xow_db_file_.Tid__cat_core:
+					key = "cat_core";
+					break;
+				case Xow_db_file_.Tid__core:		// only use core if all or few
+					if (db_mgr.Props().Layout_text().Tid_is_lot()) 
+						continue;
+					else
+						break;
+				default:							// skip all other files
+					continue;
+			}
+
+			// add to db_list
+			if (db_1st == null) db_1st = cl_db.Conn();
+			db_list.Add(new Db_attach_itm(key, cl_db.Conn()));
+		}
+
+		// make attach_mgr
+		byte version = 4;
+		int link_dbs_len = db_list.Len() - 1; // dont count 'core'
+		if (cat_core_conn.Meta_tbl_exists("cat_sort")) {
+			version = 3;
+			db_1st = cat_core_conn;
+		}
+
+		// add page_db
+		db_list.Add(new Db_attach_itm("page_db", page_tbl.Conn()));
+
+		Db_attach_mgr attach_mgr = new Db_attach_mgr(db_1st, (Db_attach_itm[])db_list.To_ary_and_clear(Db_attach_itm.class));
+
+		List_adp catlink_list = List_adp_.New();
+		for (int i = 0; i < link_dbs_len; i++) {
+			String sql = Generate_sql_dpl(itm, 200, i + 1, attach_mgr);
+			Load_catlinks(catlink_list, sql, attach_mgr);
+		}
+
+		List_adp result_pages = List_adp_.New();
+			len = catlink_list.Count();
+			for (int i = 0; i < len; i++) {
+				Xoctg_dynamic_itm cp_itm = (Xoctg_dynamic_itm)catlink_list.Get_at(i);
+				int itm_page_id = cp_itm.Page_id();
+
+				Xowd_page_itm page = new Xowd_page_itm();
+				if (cp_itm.Page_ttl() == null) continue; // cat_link can exist without entry in page_db.page
+				page.Id_(itm_page_id);
+				page.Ttl_(cp_itm.Page_ttl());
+                                if (itm.Show_date())
+                                    page.Modified_on_(DateAdp_.seg_(dateParser.Parse_iso8651_like(cp_itm.Cat_date())));
+				result_pages.Add(page);
+			}
+		return result_pages;
 	}
 }
