@@ -386,8 +386,12 @@ public function formatValues( $snaksSerialization ) {
 		Wdata_doc wdoc = Get_wdoc_or_null(args, core, "GetSiteLinkPageName", true);  // NOTE: prop should be of form "P123"; do not add "P"; PAGE:no.w:Anne_Enger; DATE:2015-10-27
 		if (wdoc == null) return rslt.Init_ary_empty();
 
-		Xow_domain_itm domain_itm = core.Wiki().Domain_itm();
-		Wdata_sitelink_itm itm = wdoc.Get_slink_itm_or_null(domain_itm.Abrv_wm());
+		byte[] wiki_bry = args.Cast_bry_or_null(1);
+		if (wiki_bry == null) {
+			Xow_domain_itm domain_itm = core.Wiki().Domain_itm();
+			wiki_bry = domain_itm.Abrv_wm();
+		}
+		Wdata_sitelink_itm itm = wdoc.Get_slink_itm_or_null(wiki_bry);
 		return itm == null ? rslt.Init_ary_empty() : rslt.Init_many_objs(itm.Name(), itm.Lang());
 	}
 	public boolean GetDescription(Scrib_proc_args args, Scrib_proc_rslt rslt) {

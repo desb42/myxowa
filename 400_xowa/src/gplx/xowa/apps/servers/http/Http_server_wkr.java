@@ -224,6 +224,8 @@ public class Http_server_wkr implements Gfo_invk {
 		page_html = tablecaption(page_html);
 		page_html = page_html.replaceAll("</p>\\s*<p>", "</p><p>");
 		page_html = page_html.replaceAll("</div>\\s*<div", "</div><div");
+
+                page_html = page_html.replaceAll("<nowiki>(.*?)</nowiki>", "$1"); // HACK until <nowiki> sorted
 		//[replaced]page_html = page_html.replaceAll("\"file\\:.*?/file/", "\"/fsys/file/");
 
 		//page_html = page_html.replaceAll("\"/fsys/file/([^\"]*?\\.svg)/([0-9]*)px.*?\"", "\"/SVG/$1\"");
