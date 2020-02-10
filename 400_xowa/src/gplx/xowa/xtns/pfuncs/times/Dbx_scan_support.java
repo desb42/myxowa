@@ -137,12 +137,12 @@ public class Dbx_scan_support {
 	}
 	public static void add_error(Dbx_scanner s, int errcode, String str) {
 		throw Err_.new_unhandled(0); // break early
-		//s.errors.warning_count++;
+		//s.errors.error_count++;
 		//System.out.println("err: " + str);
 	}
 	public static void add_warning(Dbx_scanner s, int errcode, String str) {
-		throw Err_.new_unhandled(0); // break early
-		//s.errors.error_count++;
+		//throw Err_.new_unhandled(0); // break early
+		s.errors.warning_count++;
 		//System.out.println("warn: " + str);
 	}
 
@@ -189,7 +189,7 @@ public class Dbx_scan_support {
 	public static void TIMELIB_HAVE_RELATIVE(Dbx_scanner s) { s.time.have_relative = true; }
 	public static void TIMELIB_HAVE_WEEKDAY_RELATIVE(Dbx_scanner s) { s.time.have_relative = true; s.time.relative.have_weekday_relative = true; }
 	public static void TIMELIB_HAVE_SPECIAL_RELATIVE(Dbx_scanner s) { s.time.have_relative = true; s.time.relative.have_special_relative = true; }
-	public static void TIMELIB_HAVE_TZ(Dbx_scanner s) {
+	public static boolean TIMELIB_HAVE_TZ(Dbx_scanner s) {
 		s.cur = s.cursor;
 		if (s.time.have_zone > 0) {
 			if (s.time.have_zone > 1)
@@ -198,10 +198,12 @@ public class Dbx_scan_support {
 				add_warning(s, TIMELIB_WARN_DOUBLE_TZ, "Double timezone specification");
 			//timelib_string_free(str);
 			s.time.have_zone++;
+			return true;
 			//throw return TIMELIB_ERROR;
 		} else {
 			s.time.have_zone++;
 		}
+		return false;
 	}
 	public static void TIMELIB_PROCESS_YEAR(Dbx_scanner s) {
 		if ((s.time.y == TIMELIB_UNSET) || (s.length >= 4)) {
