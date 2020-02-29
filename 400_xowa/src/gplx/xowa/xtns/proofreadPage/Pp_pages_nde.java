@@ -450,7 +450,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				if (quality != Pp_quality.Quality_without_text) {
 					page_bfr.Add(Bry_tmpl_page).Add(ttl.Full_db());
 					if (pl_nde != null) {
-						page_bfr.Add(Bry_page_num).Add(pl_nde.FormattedPageNumber(page_no));
+						page_bfr.Add(Bry_page_num).Add(pl_nde.RawPageNumber(page_no));
 						page_bfr.Add(Bry_page_format).Add(pl_nde.FormattedPageNumber(page_no));
 					}
 					else

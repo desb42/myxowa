@@ -25,7 +25,7 @@ import gplx.xowa.mediawiki.extensions.Wikibase.client.includes.dataAccess.scribu
 import gplx.core.brys.fmtrs.*;
 public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	private final    Xoae_app app;
-	private final    Wdata_prop_val_visitor prop_val_visitor;
+//	private final    Wdata_prop_val_visitor prop_val_visitor;
 	private final    Wdata_doc_parser wdoc_parser_v1 = new Wdata_doc_parser_v1(), wdoc_parser_v2 = new Wdata_doc_parser_v2();
 	private final    Object thread_lock = new Object();
 	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
@@ -37,7 +37,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		this.Pid_mgr = new Wbase_pid_mgr(this);	
 		this.Doc_mgr = new Wbase_doc_mgr(this, this.Qid_mgr);
 		this.prop_mgr = new Wbase_prop_mgr(Wbase_prop_mgr_loader_.New_db(this));
-		this.prop_val_visitor = new Wdata_prop_val_visitor(app, this);
+//		this.prop_val_visitor = new Wdata_prop_val_visitor(app, this);
 		this.Enabled_(true);
 	}
 	public Gfo_evt_mgr Evt_mgr() {return evt_mgr;} private final    Gfo_evt_mgr evt_mgr;
@@ -96,8 +96,10 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	public void Resolve_claim(Bry_bfr rv, Xow_domain_itm domain, Wbase_claim_base claim_itm) {
 		synchronized (thread_lock) {	// LOCK:must synchronized b/c prop_val_visitor has member bfr which can get overwritten; DATE:2016-07-06
 			if (hwtr_mgr == null) Hwtr_mgr_assert();
-			prop_val_visitor.Init(rv, hwtr_mgr.Msgs(), domain.Lang_orig_key(), Bool_.N);
-			claim_itm.Welcome(prop_val_visitor);
+
+                        Wdata_prop_val_visitor local_prop_val_visitor = new Wdata_prop_val_visitor(app, this, rv, hwtr_mgr.Msgs(), domain.Lang_orig_key(), Bool_.N);
+			//prop_val_visitor.Init(rv, hwtr_mgr.Msgs(), domain.Lang_orig_key(), Bool_.N);
+			claim_itm.Welcome(local_prop_val_visitor);
 		}
 	}
 	public void Resolve_to_bfr(Bry_bfr bfr, Xowe_wiki wiki, Wbase_claim_grp prop_grp, byte[] lang_key, boolean mode_is_statements) {
@@ -121,8 +123,9 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 					bfr.Add(wiki.Msg_mgr().Val_by_id(Xol_msg_itm_.Id_xowa_wikidata_somevalue));
 					break;
 				default: {
-					prop_val_visitor.Init(bfr, hwtr_mgr.Msgs(), lang_key, mode_is_statements);
-					selected.Welcome(prop_val_visitor);
+					Wdata_prop_val_visitor local_prop_val_visitor = new Wdata_prop_val_visitor(app, this, bfr, hwtr_mgr.Msgs(), lang_key, mode_is_statements);
+					//prop_val_visitor.Init(bfr, hwtr_mgr.Msgs(), lang_key, mode_is_statements);
+					selected.Welcome(local_prop_val_visitor);
 					break;
 				}
 			}

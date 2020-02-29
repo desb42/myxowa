@@ -27,6 +27,7 @@ public class Wdata_prop_val_visitor_ {
 		try {
 			for (int i = 0; i < len; ++i) {
 				Keyval[] itm = (Keyval[])snaks[i].Val();
+				itm = (Keyval[])itm[0].Val();
 				Render_snak(bfr, wdata_mgr, wiki, wiki.Lang(), page_url, itm, i, len);
 			}
 			wiki.Lang().Comma_wkr().Comma__end(bfr);
@@ -44,7 +45,6 @@ public class Wdata_prop_val_visitor_ {
 		return rv;
 	}
 	private static void Render_snak(Bry_bfr bfr, Wdata_wiki_mgr wdata_mgr, Xowe_wiki wiki, Xol_lang_itm lang, byte[] page_url, Keyval[] props, int sub_idx, int sub_len) {
-		props = (Keyval[])props[0].Val(); // extra level of indirection (in  list of one)
 		// loop props to get (a) snaktype; (b) property; (c) datavalue
 		byte snak_tid = Byte_.Max_value_127;
 		int pid = -1;

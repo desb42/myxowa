@@ -38,7 +38,7 @@ public class Xoctg_fmt_grp {	// subc|page|file
 		// get msgs
 		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
 		byte[] msg_label_bry = msg_mgr.Val_by_id_args(msg_label_id, dom_ctg.Name());
-		byte[] msg_stats_bry = msg_mgr.Val_by_id_args(msg_stats_id, dom_grp.Itms__len(), lang.Num_mgr().Format_num(dom_grp.Count_all()));
+		byte[] msg_stats_bry = msg_mgr.Val_by_id_args(msg_stats_id, dom_grp.Itms__len(), lang.Num_mgr().Format_num(count));
 
 		// get nav html; next / previous 200
 		Xoa_ttl ctg_ttl = wiki.Ttl_parse(Xow_ns_.Tid__category, dom_ctg.Name());

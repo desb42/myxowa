@@ -93,9 +93,17 @@ public class Xoctg_catpage_itm {
 		if (version == Version__4) {
 			sortkey_binary = rdr.Read_bry("cl_sortkey");
 			sortkey_prefix = rdr.Read_bry_by_str("cl_sortkey_prefix");
-			count_subcs = rdr.Read_int("cat_subcats");
-			count_pages = rdr.Read_int("cat_pages");
-			count_files = rdr.Read_int("cat_files");
+			Object cs = rdr.Read_obj("cat_subcats");
+			if (cs == null) {
+				count_subcs = 0;
+				count_pages = 0;
+				count_files = 0;
+			}
+			else {
+				count_subcs = Int_.Cast(cs); //rdr.Read_int("cat_subcats");
+				count_pages = rdr.Read_int("cat_pages");
+				count_files = rdr.Read_int("cat_files");
+			}
 		}
 		else {
 			sortkey_binary = Bry_.Empty;

@@ -112,7 +112,7 @@ class Xoctg_catlink_loader {
 		), sortkey_join, link_db_id);
 
 		if (grp_tid == 0) {
-			bfr.Add_str_u8("JOIN <cat_core>cat_core cca ON cl.cl_from = cca.cat_id\n");
+			bfr.Add_str_u8("LEFT JOIN <cat_core>cat_core cca ON cl.cl_from = cca.cat_id\n");
 		}
 		bfr.Add_str_u8_fmt("LEFT JOIN <page_db>page p ON p.page_id = cl{0}.cl_from\n", sortkey_join);
 

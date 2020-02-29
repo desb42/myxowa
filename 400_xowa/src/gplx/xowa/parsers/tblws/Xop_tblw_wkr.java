@@ -81,6 +81,16 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 							return -1;
 						else {	// DATE:2014-02-19; NOTE: do not add nl if ||; DATE:2014-04-14							
 							if (wlxr_type == Tblw_type_td) {	// "\n|"
+/*					// any outstanding list?
+					if (ctx.Page().Prev_list_tkn() != null && called_from != Called_from_list) {
+						// inject a list close
+						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+						if (prev != null && prev.Src_bgn() > src.length)
+							System.out.println("tbl_td");
+						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+						ctx.Subs_add_and_stack(root, itm);
+						ctx.Page().Prev_list_tkn_(null);
+					}*/
 								ctx.Subs_add(root, ctx.Tkn_mkr().NewLine(bgn_pos, bgn_pos + 1, Xop_nl_tkn.Tid_char, 1));
 								ctx.Subs_add(root, ctx.Tkn_mkr().Pipe(bgn_pos + 1, cur_pos));
 							}
@@ -218,7 +228,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 							&&	!tbl_is_xml					// cur is "\n|"
 							) {								// insert <tr>; EX: "<tr><td>\n|" -> "<tr><td><tr><td>" PAGE:fi.w:Salibandyn_maailmanmestaruuskilpailut_2012 DATE:2015-09-07
 							int prv_tr_tkn_idx = ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_tblw_tr);
-                                if (prv_tr_tkn_idx != Xop_ctx.Stack_not_found) { 	// <tr> exists
+							if (prv_tr_tkn_idx != Xop_ctx.Stack_not_found) { 	// <tr> exists
 								int prv_tb_tkn_idx = ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_tblw_tb);
 								if (prv_tb_tkn_idx < prv_tr_tkn_idx) 			// don't close <tr> above current tbl
 									ctx.Stack_pop_til(root, src, prv_tr_tkn_idx, true, bgn_pos, bgn_pos, Xop_tkn_itm_.Tid_tblw_td);	// close <tr>
@@ -228,8 +238,19 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 							ctx.Subs_add_and_stack_tblw(root, prv_tkn, new_tkn);
 						}
 						else {
-							if (!tbl_is_xml)					// only for "\n|" not <td>
+							if (!tbl_is_xml) { // only for "\n|" not <td>
 								ctx.Para().Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);	// simulate "\n"; DATE:2014-02-20; ru.w:;home/wiki/Dashboard/Image_databases; DATE:2014-02-20
+					// any outstanding list?
+					if (ctx.Page().Prev_list_tkn() != null) {
+						// inject a list close
+						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+						if (prev != null && prev.Src_bgn() > src.length)
+							System.out.println("tbl");
+						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+						ctx.Subs_add_and_stack(root, itm);
+						ctx.Page().Prev_list_tkn_(null);
+					}
+							}
                                 // trim trailing whitespace
                                 root.Subs_ignore_whitespace();
 							ctx.Para().Process_block__bgn_y__end_n(Xop_xnde_tag_.Tag__td);		// <td>
@@ -354,7 +375,8 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			ctx.Para().Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);	// simulate "\n"; process para (which will create paras for cells) 2012-12-08
 
 		Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-		if (prev != null && typeId == Xop_tkn_itm_.Tid_tblw_te) {
+		//if (prev != null && typeId == Xop_tkn_itm_.Tid_tblw_te) {
+		if (prev != null) {
 			Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
 			ctx.Subs_add_and_stack(root, itm);
 			ctx.Page().Prev_list_tkn_(null);

@@ -21,30 +21,31 @@ import java.io.BufferedReader; import java.io.*;
 import java.util.Stack;
 
 public class Xoh_css_minify_v3 {
-	private static Pattern url = Pattern.compile("url\\(\\s*([\"']?)data\\:");
-	private static Pattern quoted = Pattern.compile("(\"([^\\\\\"]|\\\\.|\\\\)*\")|('([^\\\\']|\\\\.|\\\\)*')");
-	private static Pattern pseudo = Pattern.compile("(^|\\})(([^\\{:])+:)+([^\\{]*\\{)");
-	private static Pattern background = Pattern.compile("(background-position|transform-origin|webkit-transform-origin|moz-transform-origin|o-transform-origin|ms-transform-origin):0(;|\\})", Pattern.CASE_INSENSITIVE);
-	private static Pattern pat_rgb = Pattern.compile("rgb\\s*\\(\\s*([0-9,\\s]+)\\s*\\)", Pattern.CASE_INSENSITIVE);
-	private static Pattern pat_border = Pattern.compile("(border|border-top|border-right|border-bottom|border-right|outline|background):none(;|\\})", Pattern.CASE_INSENSITIVE);
-	private static Pattern pat_space = Pattern.compile("\\s+");
-	private static Pattern pat_leadingspace = Pattern.compile("\\s+([!{};:>+\\(\\)\\],])");
-	private static Pattern pat_first = Pattern.compile(":first-(line|letter)(\\{|,)");
-	private static Pattern pat_charset1 = Pattern.compile("^(.*)(@charset \"[^\"]*\";)", Pattern.CASE_INSENSITIVE);
-	private static Pattern pat_charset2 = Pattern.compile("^(\\s*@charset [^;]+;\\s*)+", Pattern.CASE_INSENSITIVE);
-	private static Pattern pat_and = Pattern.compile("(?i)\\band\\(");
-	private static Pattern pat_trailingspace = Pattern.compile("([!{}:;>+\\(\\[,])\\s+");
-	private static Pattern pat_semico = Pattern.compile(";+\\}");
-	private static Pattern pat_px = Pattern.compile("([\\s:])(0)(px|em|%|in|cm|mm|pc|pt|ex)", Pattern.CASE_INSENSITIVE);
-	private static Pattern pat_zero1 = Pattern.compile(":0 0 0 0(;|\\})");
-	private static Pattern pat_zero2 = Pattern.compile(":0 0 0(;|\\})");
-	private static Pattern pat_zero3 = Pattern.compile(":0 0(;|\\})");
-	private static Pattern pat_removezero = Pattern.compile("(:|\\s)0+\\.(\\d+)");
-	private static Pattern pat_opacity = Pattern.compile("progid:DXImageTransform\\.Microsoft\\.Alpha\\(Opacity=", Pattern.CASE_INSENSITIVE);
-	private static Pattern pat_empty = Pattern.compile("[^\\};\\{\\/]+\\{\\}");
-	private static Pattern pat_lead_trail_space = Pattern.compile("^\\s+|\\s+$");
-	private static Pattern pat_mwparser1 = Pattern.compile("\\}([^@}].{2})");
-	private static Pattern pat_mwparser2 = Pattern.compile("(@media[^\\{]*\\{)");
+	private static final Pattern url = Pattern.compile("url\\(\\s*([\"']?)data\\:");
+	private static final Pattern quoted = Pattern.compile("(\"([^\\\\\"]|\\\\.|\\\\)*\")|('([^\\\\']|\\\\.|\\\\)*')");
+	private static final Pattern pseudo = Pattern.compile("(^|\\})(([^\\{:])+:)+([^\\{]*\\{)");
+	private static final Pattern background = Pattern.compile("(background-position|transform-origin|webkit-transform-origin|moz-transform-origin|o-transform-origin|ms-transform-origin):0(;|\\})", Pattern.CASE_INSENSITIVE);
+	private static final Pattern pat_rgb = Pattern.compile("rgb\\s*\\(\\s*([0-9,\\s]+)\\s*\\)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern pat_border = Pattern.compile("(border|border-top|border-right|border-bottom|border-right|outline|background):none(;|\\})", Pattern.CASE_INSENSITIVE);
+	private static final Pattern pat_space = Pattern.compile("\\s+");
+	private static final Pattern pat_leadingspace = Pattern.compile("\\s+([!{};:>+\\(\\)\\],])");
+	private static final Pattern pat_first = Pattern.compile(":first-(line|letter)(\\{|,)");
+	private static final Pattern pat_charset1 = Pattern.compile("^(.*)(@charset \"[^\"]*\";)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern pat_charset2 = Pattern.compile("^(\\s*@charset [^;]+;\\s*)+", Pattern.CASE_INSENSITIVE);
+	private static final Pattern pat_and = Pattern.compile("(?i)\\band\\(");
+	private static final Pattern pat_trailingspace = Pattern.compile("([!{}:;>+\\(\\[,])\\s+");
+	private static final Pattern pat_semico = Pattern.compile(";+\\}");
+	private static final Pattern pat_px = Pattern.compile("([\\s:])(0)(px|em|%|in|cm|mm|pc|pt|ex)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern pat_zero1 = Pattern.compile(":0 0 0 0(;|\\})");
+	private static final Pattern pat_zero2 = Pattern.compile(":0 0 0(;|\\})");
+	private static final Pattern pat_zero3 = Pattern.compile(":0 0(;|\\})");
+	private static final Pattern pat_removezero = Pattern.compile("(:|\\s)0+\\.(\\d+)");
+	private static final Pattern pat_opacity = Pattern.compile("progid:DXImageTransform\\.Microsoft\\.Alpha\\(Opacity=", Pattern.CASE_INSENSITIVE);
+	private static final Pattern pat_empty = Pattern.compile("[^\\};\\{\\/]+\\{\\}");
+	private static final Pattern pat_lead_trail_space = Pattern.compile("^\\s+|\\s+$");
+	private static final Pattern pat_mwparser1 = Pattern.compile("\\}([^@}].{2})");
+	private static final Pattern pat_mwparser2 = Pattern.compile("(@media[^\\{]*\\{)");
+	private static final Pattern pat_pcc = Pattern.compile("/\\*___YUICSSMIN_PRESERVE_CANDIDATE_COMMENT_(\\d*)___\\*/");
 
 	private Stack<String> preservedTokens;
 	private Stack<String> preservedComments;
@@ -57,7 +58,7 @@ public class Xoh_css_minify_v3 {
 		Matcher m = p.matcher(base);
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;
-		
+
 		while (m.find()) {
 			found = true;
 			m.appendReplacement(sb, replacement);
@@ -74,7 +75,7 @@ public class Xoh_css_minify_v3 {
 		Matcher m = p.matcher(base);
 		StringBuffer sb = new StringBuffer();
 		boolean found = false;
-		
+
 		while (m.find()) {
 			found = true;
 			m.appendReplacement(sb, replacement);
@@ -88,15 +89,14 @@ public class Xoh_css_minify_v3 {
 	}
 	private String wrestle_comments(String css) {
 		StringBuilder sb = new StringBuilder();
-		Pattern p = Pattern.compile("/\\*___YUICSSMIN_PRESERVE_CANDIDATE_COMMENT_(\\d*)___\\*/");
-		Matcher m = p.matcher(css);
+		Matcher m = pat_pcc.matcher(css);
 		boolean found = false;
 		int appendIndex = 0;
-                String token;
-		
+		String token;
+
 		while (m.find()) {
 			found = true;
-			
+
 			int comment_code = Integer.parseInt(m.group(1));
 			token = preservedComments.get(comment_code);
 
@@ -111,7 +111,7 @@ public class Xoh_css_minify_v3 {
 				//css = css.replace(placeholder,  "___YUICSSMIN_PRESERVED_TOKEN_" + (preservedTokens.size() - 1) + "___");
 				continue;
 			}
-	
+
 			// keep empty comments after child selectors (IE7 hack)
 			// e.g. html >/**/ body
 			if (token.length() == 0) {
@@ -124,11 +124,11 @@ public class Xoh_css_minify_v3 {
 					}
 				}
 			}
-	
+
 			// in all other cases kill the comment
 			//css = css.replace("/*" + placeholder + "*/", "");
 		}
-	
+
 		if (found) {
 			sb.append(css.substring(appendIndex));
 			return sb.toString();
@@ -138,7 +138,7 @@ public class Xoh_css_minify_v3 {
 	}
 
 	private String extractDataUrls(String css) {
-	
+
 		// Leave data urls alone to increase parse performance.
 		int maxIndex = css.length() - 1,
 			appendIndex = 0,
@@ -151,28 +151,28 @@ public class Xoh_css_minify_v3 {
 		StringBuffer sb = new StringBuffer();
 		Matcher m = url.matcher(css);
 		boolean found = false;
-	
+
 		// Since we need to account for non-base64 data urls, we need to handle
 		// ' and ) being part of the data string. Hence switching to indexOf,
 		// to determine whether or not we have matching string terminators and
 		// handling sb appends directly, instead of using matcher.append* methods.
-	
+
 		while (m.find()) {
 			found = true;
 			startIndex = m.start() + 4;  // "url(".length()
 			terminator = m.group(1);	 // ', " or empty (not quoted)
-	
+
 			if (terminator.length() == 0) {
 				terminator = ")";
 			}
-	
+
 			foundTerminator = false;
-	
+
 			endIndex = m.end() - 1;
-	
+
 			while(foundTerminator == false && endIndex+1 <= maxIndex) {
 				endIndex = css.indexOf(terminator, endIndex + 1);
-	
+
 				// endIndex == 0 doesn't really apply here
 				if ((endIndex > 0) && (css.charAt(endIndex - 1) != '\\')) {
 					foundTerminator = true;
@@ -181,18 +181,18 @@ public class Xoh_css_minify_v3 {
 					}
 				}
 			}
-	
+
 			// Enough searching, start moving stuff over to the buffer
 			sb.append(css.substring(appendIndex, m.start()));
-	
+
 			if (foundTerminator) {
 				token = css.substring(startIndex, endIndex);
 				token = my_replaceAll(token, pat_space, "");
 				preservedTokens.push(token);
-	
+
 				preserver = "url(___YUICSSMIN_PRESERVED_TOKEN_" + (preservedTokens.size() - 1) + "___)";
 				sb.append(preserver);
-	
+
 				appendIndex = endIndex + 1;
 			} else {
 				// No end terminator found, re-add the whole match. Should we throw/warn here?
@@ -200,7 +200,7 @@ public class Xoh_css_minify_v3 {
 				appendIndex = m.end();
 			}
 		}
-	
+
 		if (found) {
 			sb.append(css.substring(appendIndex));
 			return sb.toString();
@@ -213,13 +213,13 @@ public class Xoh_css_minify_v3 {
 		StringBuffer sb = new StringBuffer();
 		Matcher m = quoted.matcher(css);
 		boolean found = false;
-		
+
 		while (m.find()) {
 			found = true;
-			
+
 			String match = m.group();
 			String quote = match.substring(0,1);
-	
+
 			// maybe the string contains a comment-like substring?
 			// one, maybe more? put'em back then
 			if (match.indexOf("___YUICSSMIN_PRESERVE_CANDIDATE_COMMENT_") >= 0) {
@@ -227,10 +227,10 @@ public class Xoh_css_minify_v3 {
 					match = match.replace("___YUICSSMIN_PRESERVE_CANDIDATE_COMMENT_" + i + "___", preservedComments.get(i));
 				}
 			}
-	
+
 			// minify alpha opacity in filter strings
 			match = my_replaceAll(match, pat_opacity, "alpha(opacity=");
-	
+
 			preservedTokens.push(match);
 			String str = "___YUICSSMIN_PRESERVED_TOKEN_" + (preservedTokens.size() - 1) + "___";
 			m.appendReplacement(sb, str);
@@ -246,7 +246,7 @@ public class Xoh_css_minify_v3 {
 		StringBuffer sb = new StringBuffer();
 		Matcher m = pseudo.matcher(css);
 		boolean found = false;
-		
+
 		while (m.find()) {
 			found = true;
 			String str = m.group();
@@ -264,7 +264,7 @@ public class Xoh_css_minify_v3 {
 		StringBuffer sb = new StringBuffer();
 		Matcher m = background.matcher(css);
 		boolean found = false;
-		
+
 		while (m.find()) {
 			found = true;
 			String prop = m.group(1), tail = m.group(2);
@@ -281,7 +281,7 @@ public class Xoh_css_minify_v3 {
 		StringBuffer sb = new StringBuffer();
 		Matcher m = pat_rgb.matcher(css);
 		boolean found = false;
-		
+
 		while (m.find()) {
 			found = true;
 			String[] rgbcolors = m.group(1).split(",");
@@ -306,7 +306,7 @@ public class Xoh_css_minify_v3 {
 		StringBuffer sb = new StringBuffer();
 		Matcher m = pat_border.matcher(css);
 		boolean found = false;
-		
+
 		while (m.find()) {
 			found = true;
 			String prop = m.group(1), tail = m.group(2);
@@ -320,7 +320,7 @@ public class Xoh_css_minify_v3 {
 			return css;
 	}
 	public String cssmin(String css, int linebreakpos) {
-	
+
 		int startIndex = 0,
 			endIndex = 0,
 			i = 0, max = 0,
@@ -328,11 +328,11 @@ public class Xoh_css_minify_v3 {
 			//preservedTokens = [],
 			//comments = [],
 		String token = "";
-	
+
 		preservedTokens = new Stack<>();
 		preservedComments = new Stack<>();
 		css = extractDataUrls(css);
-	
+
 		// collect all comment blocks...
 		StringBuilder sb = new StringBuilder();
 		int starting = 0;
@@ -353,65 +353,63 @@ public class Xoh_css_minify_v3 {
 			sb.append(css.substring(starting));
 			css = sb.toString();
 		}
-		
+
 		css = preservestring(css);
-		
+
 		// strings are safe, now wrestle the comments
 		css = wrestle_comments(css);
-	
+
 		// Normalize all whitespace strings to single spaces. Easier to work with that way.
 		css = my_replaceAll(css, pat_space, " ");
-	
+
 		// Remove the spaces before the things that should not have spaces before them.
 		// But, be careful not to turn "p :link {...}" into "p:link{...}"
 		// Swap out any pseudo-class colons with the token, and then swap back.
 		css = preservepseudo(css);
-	
+
 		css = my_replaceAll(css, pat_leadingspace, "$1");
 		css = css.replace("___YUICSSMIN_PSEUDOCLASSCOLON___", ":");
-	
+
 		// retain space for special IE6 cases
 		css = my_replaceAll(css, pat_first, ":first-$1 $2");
-	
+
 		// no space after the end of a preserved comment
 		css = css.replace("*/ ", "*/");
-	
-	
+
 		// If there is a @charset, then only allow one, and push to the top of the file.
 		css = my_replaceAll(css, pat_charset1, "$2$1");
 		css = my_replaceAll(css, pat_charset2, "$1");
-	
+
 		// Put the space back in some cases, to support stuff like
 		// @media screen and (-webkit-min-device-pixel-ratio:0){
 		css = my_replaceAll(css, pat_and, "and (");
-	
-	
+
 		// Remove the spaces after the things that should not have spaces after them.
 		css = my_replaceAll(css, pat_trailingspace, "$1");
-	
+
 		// remove unnecessary semicolons
 		css = my_replaceAll(css, pat_semico, "}");
-	
+
 		// Replace 0(px,em,%) with 0.
 		css = my_replaceAll(css, pat_px, "$1$2");
-	
+
 		// Replace 0 0 0 0; with 0.
 		css = my_replaceAll(css, pat_zero1, ":0$1");
 		css = my_replaceAll(css, pat_zero2, ":0$1");
 		css = my_replaceAll(css, pat_zero3, ":0$1");
-	
+
 		// Replace background-position:0; with background-position:0 0;
 		// same for transform-origin
 		css = backgroundpos(css);
-	
+
 		// Replace 0.6 to .6, but only when preceded by : or a white-space
 		css = my_replaceAll(css, pat_removezero, "$1.$2");
-	
+
 		// Shorten colors from rgb(51,102,153) to #336699
 		// This makes it more likely that it'll get further compressed in the next step.
 		css = rgbcvt(css);
-	
-	
+
+
 		// Shorten colors from #AABBCC to #ABC. Note that we want to make sure
 		// the color is not preceded by either ", " or =. Indeed, the property
 		//	 filter: chroma(color="#FFFFFF");
@@ -433,16 +431,16 @@ public class Xoh_css_minify_v3 {
 		});
 		*/
 		//css = _compressHexColors(css);
-	
+
 		// border: none -> border:0
 		css = borders(css);
-	
+
 		// shorter opacity IE filter
 		css = my_replaceAll(css, pat_opacity, "alpha(opacity=");
-	
+
 		// Remove empty rules.
 		css = my_replaceAll(css, pat_empty, "");
-	
+
 		if (linebreakpos >= 0) {
 			// Some source control tools don't like it when files containing lines longer
 			// than, say 8000 characters, are checked in. The linebreak option is used in
@@ -457,57 +455,57 @@ public class Xoh_css_minify_v3 {
 	//			}
 	//		}
 		}
-	
+
 		// Replace multiple semi-colons in a row by a single one
 		// See SF bug #1980989
 		css = my_replaceAll(css, ";;+", ";");
-	
+
 		// restore preserved comments and strings
 		for (i = 0, max = preservedTokens.size(); i < max; i = i + 1) {
 			css = css.replace("___YUICSSMIN_PRESERVED_TOKEN_" + i + "___", preservedTokens.get(i));
 		}
-	
+
 		// Trim the final string (for any leading or trailing white spaces)
 		css = my_replaceAll(css, pat_lead_trail_space, "");
-	
+
 		// add the '.mw-parser-output ' selector
 		css = my_replaceAll(css, pat_mwparser1, "}.mw-parser-output $1");
 		css = my_replaceAll(css, pat_mwparser2, "$1.mw-parser-output ");
 		if (css.charAt(0) != '@')
 			css = ".mw-parser-output " + css;
-	
+
 		return css;
 	}
 	public String readFileAsString(String filePath) {
 		FileReader fr;
 		try {
 			fr = new FileReader(filePath);
-					} catch (IOException e) {
-						e.printStackTrace();
-						return "";
-					}
-			StringBuffer fileData = new StringBuffer();
-			BufferedReader reader = new BufferedReader(fr);
-			char[] buf = new char[1024];
-			int numRead=0;
-			while(true) {
-				try {
-					numRead = reader.read(buf);
-					} catch (IOException e) {
-						e.printStackTrace();
-						return "";
-					}
-				if (numRead == -1)
-					break;
-				String readData = String.valueOf(buf, 0, numRead);
-				fileData.append(readData);
-			}
-			try {
-			reader.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-						return "";
-					}
-			return fileData.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
 		}
+		StringBuffer fileData = new StringBuffer();
+		BufferedReader reader = new BufferedReader(fr);
+		char[] buf = new char[1024];
+		int numRead=0;
+		while(true) {
+			try {
+				numRead = reader.read(buf);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return "";
+			}
+			if (numRead == -1)
+				break;
+			String readData = String.valueOf(buf, 0, numRead);
+			fileData.append(readData);
+		}
+		try {
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
+		return fileData.toString();
+	}
 }

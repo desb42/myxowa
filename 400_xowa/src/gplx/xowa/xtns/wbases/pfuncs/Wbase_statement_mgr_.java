@@ -20,7 +20,9 @@ import gplx.xowa.parsers.logs.*; import gplx.xowa.xtns.pfuncs.*; import gplx.xow
 import gplx.xowa.langs.kwds.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
 public class Wbase_statement_mgr_ {
+    private static Object gwd = new Object();
 	public static void Get_wbase_data(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src, Pf_func_base pfunc, boolean mode_is_statements) {
+//            synchronized (gwd) { 
 		// init
 		byte[] pid_ttl = pfunc.Eval_argx(ctx, src, caller, self);
 		Xop_log_property_wkr property_wkr = ctx.Xtn__wikidata__property_wkr();
@@ -47,13 +49,32 @@ public class Wbase_statement_mgr_ {
 		// get doc from args; EX:{{#property:p123}} -> "current_page"; EX:{{#property:p123|of=Earth}} -> "Q2"; {{#property:p123|q=q2}} -> "Q2"; {{#property:p123|from=p321}} -> "Property:P321"
 		Wdata_pf_property_data doc_data = Wdata_pf_property_data.Parse(ctx, src, caller, self);
 		Wdata_doc doc = Wbase_statement_mgr_.Get_doc(wdata_mgr, wiki, ttl, doc_data);
-		if (doc == null) return; // NOTE: some pages will not have a qid; EX: "Some_unknown_page" will not have a qid in wikidata; if no qid, then all {{#property:p###}} will have no prop_val
+		if (doc == null) {
+                if (pid_int == 625) {
+                Thread currentThread = Thread.currentThread();
+                System.out.println(currentThread.getName()+"-no doc-"+ttl.Full_db_as_str());
+                }
+			 return; // NOTE: some pages will not have a qid; EX: "Some_unknown_page" will not have a qid in wikidata; if no qid, then all {{#property:p###}} will have no prop_val
+		}
 
 		// get val based on pid and doc; EX: {{#property:p123|of=Earth}} -> doc=Q2; pid=123 -> "value of p123 in Q2"
 		Wbase_claim_grp claim_grp = doc.Get_claim_grp_or_null(pid_int);
-		if (claim_grp == null) return;// NOTE: some props may not exist; EX: "Some_known_page" has a qid of 123 but does not have pid 345 required by {{#property:P345|q=123}}
+		if (claim_grp == null) {
+                if (pid_int == 625) {
+                Thread currentThread = Thread.currentThread();
+                System.out.println(currentThread.getName()+"-no claim-"+ttl.Full_db_as_str());
+                }
+			return;// NOTE: some props may not exist; EX: "Some_known_page" has a qid of 123 but does not have pid 345 required by {{#property:P345|q=123}}
+		}
 		wdata_mgr.Resolve_to_bfr(bfr, ctx.Wiki(), claim_grp, wiki.Wdata_wiki_lang(), mode_is_statements); // NOTE: was ctx.Page().Lang().Key_bry(), but fails in simplewiki; DATE:2013-12-02
 		if (property_wkr != null) property_wkr.Eval_end(ctx.Page(), pid_ttl, log_time_bgn);
+                if (pid_int == 625) {
+                    if (bfr.Len_eq_0())
+                        pid_int = 626;
+                Thread currentThread = Thread.currentThread();
+                System.out.println(currentThread.getName()+"-"+String_.new_u8(bfr.Bfr(), 0 , bfr.Len()));
+                }
+//            }
 	}
 	public static int Parse_pid(Gfo_number_parser num_parser, byte[] bry) {
 		int bry_len = bry.length;

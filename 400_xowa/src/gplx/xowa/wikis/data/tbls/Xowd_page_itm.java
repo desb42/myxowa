@@ -38,6 +38,9 @@ public class Xowd_page_itm {
 	public Object		Xtn() {return xtn;} public Xowd_page_itm Xtn_(Object v) {this.xtn = v; return this;} private Object xtn;
 	public int			Tdb_row_idx() {return tdb_row_idx;} public void Tdb_row_idx_(int v) {tdb_row_idx = v;} private int tdb_row_idx;
 	public int			Rank() {return text_len;}
+	public void Model_(int v) { model_format |= v << 4; } // used during page build
+	public void Format_(int v) { model_format |= v; }
+	public int Model_format() { return model_format; } private int model_format;
 	public Xowd_page_itm	Init(int id, byte[] ttl_page_db, boolean redirected, int text_len, int text_db_id, int tdb_row_idx) {
 		this.id = id; this.ttl_page_db = ttl_page_db; this.redirected = redirected;
 		this.text_len = text_len; this.text_db_id = text_db_id; this.tdb_row_idx = tdb_row_idx; 
@@ -128,6 +131,7 @@ public class Xowd_page_itm {
 		id_val = null;
 		html_db_id = cat_db_id = -1;
 		redirect_id = -1;
+                model_format = 0;
 		return this;
 	}
 	public void Copy(Xowd_page_itm orig) {

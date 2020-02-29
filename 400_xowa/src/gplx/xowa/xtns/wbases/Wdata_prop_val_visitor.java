@@ -23,10 +23,10 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 	private final    Bry_bfr tmp_time_bfr = Bry_bfr_.Reset(255); private final    Bry_fmtr tmp_time_fmtr = Bry_fmtr.new_();
 	private Wdata_hwtr_msgs msgs;
 	private boolean mode_is_statements;
-	public Wdata_prop_val_visitor(Xoae_app app, Wdata_wiki_mgr wdata_mgr) {
+	public Wdata_prop_val_visitor(Xoae_app app, Wdata_wiki_mgr wdata_mgr, Bry_bfr bfr, Wdata_hwtr_msgs msgs, byte[] lang_key, boolean mode_is_statements) {
 		this.app = app; this.wdata_mgr = wdata_mgr;
-	}
-	public void Init(Bry_bfr bfr, Wdata_hwtr_msgs msgs, byte[] lang_key, boolean mode_is_statements) {
+//	}
+//	public void xInit(Bry_bfr bfr, Wdata_hwtr_msgs msgs, byte[] lang_key, boolean mode_is_statements) {
 		// init some member variables; 
 		this.bfr = bfr; this.msgs = msgs;
 		this.lang = app.Lang_mgr().Get_by_or_null(lang_key);
@@ -175,6 +175,7 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 				bfr.Add_byte(Byte_ascii.Paren_end);
 			}
 		}
+		//System.out.println(String_.new_u8(Bry_.Mid(bfr.Bfr(), 0, bfr.Len())));
 	}
 
 	private static final    byte[] Wikidata_url = Bry_.new_a7("http://www.wikidata.org/entity/");

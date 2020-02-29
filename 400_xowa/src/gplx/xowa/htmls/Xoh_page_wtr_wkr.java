@@ -482,7 +482,10 @@ public class Xoh_page_wtr_wkr {
 			bfr.Add_str_a7("\" data-type=\"");
 			bfr.Add(dh[i].type);
 			bfr.Add_str_a7("\">");
-			bfr.Add(dh[i].title);
+			if (dh[i].title == null)
+				bfr.Add(dh[i].name);
+			else
+				bfr.Add(dh[i].title);
 			bfr.Add_str_a7("</th>");
 		}
 		bfr.Add_str_a7("</tr>\n");
@@ -493,10 +496,23 @@ public class Xoh_page_wtr_wkr {
 				Json_itm itm = itms.Get_at(i);
 				bfr.Add_str_a7("<td data-type=\"");
 				bfr.Add(dh[i].type);
+				if (itm instanceof Json_itm_null)
+					bfr.Add_str_a7("\" class=\"mw-tabular-value-null");
 				bfr.Add_str_a7("\">");
-								byte[] val = itm.Data_bry();
-								if (val.length != 0)
-									bfr.Add(itm.Data_bry());
+				if (itm instanceof Json_itm_str)
+					bfr.Add(itm.Data_bry());
+				else if (itm instanceof Json_nde) {
+					bfr.Add(Get_text((Json_nde)itm));
+					bfr.Add_str_a7("<span class=\"mw-tabular-value-info\">(");
+					bfr.Add_int_variable(((Json_nde) itm).Len());
+					bfr.Add_str_a7(")</span>");
+				}
+				else if (itm instanceof Json_itm_bool) {
+					if (((Json_itm_bool)itm).Data_as_bool())
+						bfr.Add_str_u8("☑");
+					else
+						bfr.Add_str_u8("☐");
+				}
 				bfr.Add_str_a7("</td>");
 			}
 			bfr.Add_str_a7("</tr>\n");

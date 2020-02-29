@@ -54,7 +54,7 @@ public class Xof_bin_wkr__http_wmf implements Xof_bin_wkr {
 		return rv;
 	}
 	private boolean Get_to_fsys(byte[] orig_repo, byte[] orig_ttl, byte[] orig_md5, Xof_ext orig_ext, boolean lnki_is_thumb, int file_w, double lnki_time, int lnki_page, Io_url file_url) {
-		Init_download(orig_repo, orig_ttl, orig_md5, orig_ext, lnki_is_thumb, file_w, lnki_time, lnki_page, file_url);
+ 		Init_download(orig_repo, orig_ttl, orig_md5, orig_ext, lnki_is_thumb, file_w, lnki_time, lnki_page, file_url);
 		boolean rv = download_wkr.Exec();
 		if (!rv) Handle_error();
 		return rv;
@@ -67,6 +67,10 @@ public class Xof_bin_wkr__http_wmf implements Xof_bin_wkr {
 		byte mode = lnki_is_thumb ? Xof_img_mode_.Tid__thumb : Xof_img_mode_.Tid__orig;
 		Xof_repo_pair repo_itm = repo_mgr.Repos_get_by_wiki(orig_repo);
 		String src = url_bldr.Init_for_src_file(repo_itm.Src(), mode, orig_ttl, orig_md5, orig_ext, file_w, lnki_time, lnki_page).Xto_str();
+            //if (orig_ext.Id_is_djvu()) { // skip DJVU !!!!! db 20200220
+            //    src = "http://localhost/DJVU/" + src.substring(7);
+            //}
+            src = "http://localhost/xowa/IMAGE/" + src.substring(8); // ALL go thru my cache server
 		download_wkr.Init(src, file_url);
 	}
 	private String Make_src(byte[] orig_repo, byte[] orig_ttl, byte[] orig_md5, Xof_ext orig_ext, boolean lnki_is_thumb, int file_w, double lnki_time, int lnki_page, Io_url file_url) {

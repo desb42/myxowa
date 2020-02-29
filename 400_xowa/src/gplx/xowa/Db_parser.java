@@ -486,6 +486,7 @@ class Tag_match {
 	}
 	public int Match(byte[]src, int bgn, int src_end) {
 		bgn++; //??? 
+		if (bgn >= src_end) return 0;
 		boolean close = false;
 		if (src[bgn] == '/') {
 			close = true;

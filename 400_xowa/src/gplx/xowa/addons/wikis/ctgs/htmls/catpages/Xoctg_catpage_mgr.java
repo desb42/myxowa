@@ -93,13 +93,27 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 
 			// load categories from cat dbs; exit if not found
 			Xoctg_catpage_ctg ctg = Get_by_db_or_null(page.Ttl().Page_db(), catpage_url, page.Ttl(), grp_max);
-			if (ctg == null) return;
 
 			// write html
 			Xol_lang_itm lang = page.Lang();
-			fmt_subcs.Write_catpage_grp(bfr, wiki, lang, ltr_extractor, ctg, grp_max);
-			fmt_pages.Write_catpage_grp(bfr, wiki, lang, ltr_extractor, ctg, grp_max);
-			fmt_files.Write_catpage_grp(bfr, wiki, lang, ltr_extractor, ctg, grp_max);
+			// wrap in a div
+			bfr.Add(Bry_.new_a7("<div class=\"mw-category-generated\" lang=\""))
+			   .Add(lang.Key_bry())
+			   .Add(Bry_.new_a7("\" dir=\""))
+			   .Add(lang.Dir_ltr_bry())
+			   .Add(Bry_.new_a7("\">"));
+			if (ctg == null) {
+				Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
+				bfr.Add(Bry_.new_a7("<p>"));
+				bfr.Add( Db_expand.Extracheck(msg_mgr.Val_by_id_args(Xol_msg_itm_.Id_ctg_empty), "") );
+				bfr.Add(Bry_.new_a7("</p>"));
+			}
+			else {
+				fmt_subcs.Write_catpage_grp(bfr, wiki, lang, ltr_extractor, ctg, grp_max);
+				fmt_pages.Write_catpage_grp(bfr, wiki, lang, ltr_extractor, ctg, grp_max);
+				fmt_files.Write_catpage_grp(bfr, wiki, lang, ltr_extractor, ctg, grp_max);
+			}
+			bfr.Add(Bry_.new_a7("</div>"));
 
 			page.Html_data().Head_mgr().Itm__categorytree().Enabled_y_();
 		}

@@ -729,6 +729,17 @@ public class Xoh_html_wtr {
 	}
 	private void Write_xnde(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xop_xnde_tkn xnde, Xop_xnde_tag tag, int tag_id, byte[] src) {
 		byte[] name = tag.Name_bry();
+		bfr.Add_byte(Byte_ascii.Angle_bgn).Add(name);
+		if (xnde.Atrs_bgn() > Xop_tblw_wkr.Atrs_ignore_check) Xnde_atrs(tag_id, hctx, src, xnde.Atrs_bgn(), xnde.Atrs_end(), xnde.Atrs_ary(), bfr);
+		bfr.Add_byte(Byte_ascii.Angle_end);
+		int subs_len = xnde.Subs_len();
+		for (int i = 0; i < subs_len; i++) {
+			Xop_tkn_itm sub = xnde.Subs_get(i);
+			if (sub.Ignore()) continue;
+			Write_tkn(bfr, ctx, hctx, src, xnde, i, sub);
+		}
+		Gfh_tag_.Bld_rhs(bfr, name);										// NOTE: inline is never written as <b/>; will be written as <b></b>; SEE: NOTE_1
+/* IGNORE THIS (for now 20200216)
 		boolean at_bgn = true;
 		Bry_bfr ws_bfr = wiki.Utl__bfr_mkr().Get_b512();						// create separate ws_bfr to handle "a<b> c </b>d" -> "a <b>c</b> d"
 		int subs_len = xnde.Subs_len();
@@ -770,6 +781,7 @@ public class Xoh_html_wtr {
 		Gfh_tag_.Bld_rhs(bfr, name);										// NOTE: inline is never written as <b/>; will be written as <b></b>; SEE: NOTE_1
 		if (ws_bfr.Len() > 0) bfr.Add_bfr_and_clear(ws_bfr);				// dump any leftover ws to bfr; handles "<b>c </b>" -> "<b>c</b> "
 		ws_bfr.Mkr_rls();
+*/
 	}
 	private void Xnde_atrs(int tag_id, Xoh_wtr_ctx hctx, byte[] src, int bgn, int end, Mwh_atr_itm[] ary, Bry_bfr bfr) {
 		if (ary == null) return;	// NOTE: some nodes will have null xatrs b/c of whitelist; EX: <pre style="overflow:auto">a</pre>; style is not on whitelist so not xatr generated, but xatr_bgn will != -1

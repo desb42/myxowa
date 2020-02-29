@@ -138,7 +138,7 @@ public class Http_server_wkr implements Gfo_invk {
 					page_html = String_.Replace(page_html, "<textarea", "<textarea name=\"wpTextbox1\"");
 				}
 			}
-                        Xosrv_http_wkr_.Set_content_type(page.Content_type());
+			Xosrv_http_wkr_.Set_content_type(page.Content_type());
 		}
 		writeFile(page_html, rootdir + "html.htm");
 		Xosrv_http_wkr_.Write_response_as_html(client_wtr, Bool_.N, page_html);
@@ -228,7 +228,8 @@ public class Http_server_wkr implements Gfo_invk {
                 page_html = page_html.replaceAll("<nowiki>(.*?)</nowiki>", "$1"); // HACK until <nowiki> sorted
 		//[replaced]page_html = page_html.replaceAll("\"file\\:.*?/file/", "\"/fsys/file/");
 
-		//page_html = page_html.replaceAll("\"/fsys/file/([^\"]*?\\.svg)/([0-9]*)px.*?\"", "\"/SVG/$1\"");
+		//page_html = page_html.replaceAll("\"/xowa/fsys/file/([^\"]*?\\.svg)/([0-9]*)px.*?\"", "\"/SVG/$1\"");
+		//page_html = page_html.replaceAll("\"/xowa/fsys/file/([^\"]*?\\.djvu)/440px-([0-9]*).jpg\"", "\"/DJVU/$1-$2\""); // djvu/440px-16.jpg
 
 		//page_html = blockquote(page_html);
 		//page_html = String_.Replace(page_html, "\"mw-parser-output\">", karto);
@@ -502,6 +503,7 @@ public class Http_server_wkr implements Gfo_invk {
 	public static byte[] Replace_fsys_hack(byte[] html_bry) {
 		// init
 		Bry_bfr bfr = Bry_bfr_.New();
+                if (html_bry == null) return null;
 		int len = html_bry.length;
 		int pos = 0;
 	  int bgn = 0;
@@ -565,9 +567,18 @@ public class Http_server_wkr implements Gfo_invk {
 				found = ofs + 16;
 			break;
 		case 'd':
-			if (html_bry[ofs] == 'e' && html_bry[ofs+1] == '.' && html_bry[ofs+2] == 'w' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'k' && html_bry[ofs+5] == 'i' && html_bry[ofs+6] == 'p' && html_bry[ofs+7] == 'e' && html_bry[ofs+8] == 'd' && html_bry[ofs+9] == 'i' && html_bry[ofs+10] == 'a')
-				found = ofs + 11;
-			break;
+			if (html_bry[ofs] == 'e' && html_bry[ofs+1] == '.' && html_bry[ofs+2] == 'w' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'k' && html_bry[ofs+5] == 'i') {
+				switch (html_bry[ofs+6]) {
+					case 'p':
+						if (html_bry[ofs+7] == 'e' && html_bry[ofs+8] == 'd' && html_bry[ofs+9] == 'i' && html_bry[ofs+10] == 'a')
+							found = ofs + 11;
+						break;
+					case 's':
+						if (html_bry[ofs+7] == 'o' && html_bry[ofs+8] == 'u' && html_bry[ofs+9] == 'r' && html_bry[ofs+10] == 'c' && html_bry[ofs+11] == 'e')
+							found = ofs + 12;
+						break;
+				}
+			}
 		case 'e':
 			if (html_bry[ofs] == 'n' && html_bry[ofs+1] == '.' && html_bry[ofs+2] == 'w' && html_bry[ofs+3] == 'i' && html_bry[ofs+4] == 'k') {
 				switch (html_bry[ofs+5]) {

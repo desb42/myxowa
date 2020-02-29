@@ -23,6 +23,8 @@ public class Xob_xml_parser_ {
 		trie_add(rv, Bry_title_bgn, Id_title_bgn); trie_add(rv, Bry_title_bgn_frag, Id_title_bgn_frag); trie_add(rv, Bry_title_end, Id_title_end);
 		trie_add(rv, Bry_timestamp_bgn, Id_timestamp_bgn); trie_add(rv, Bry_timestamp_bgn_frag, Id_timestamp_bgn_frag); trie_add(rv, Bry_timestamp_end, Id_timestamp_end);
 		trie_add(rv, Bry_text_bgn, Id_text_bgn); trie_add(rv, Bry_text_bgn_frag, Id_text_bgn_frag); trie_add(rv, Bry_text_end, Id_text_end);
+		trie_add(rv, Bry_model_bgn, Id_model_bgn); trie_add(rv, Bry_model_bgn_frag, Id_model_bgn_frag); trie_add(rv, Bry_model_end, Id_model_end);
+		trie_add(rv, Bry_format_bgn, Id_format_bgn); trie_add(rv, Bry_format_bgn_frag, Id_format_bgn_frag); trie_add(rv, Bry_format_end, Id_format_end);
 		trie_add(rv, Bry_amp, Id_amp, Byte_ascii.Amp); trie_add(rv, Bry_quot, Id_quot, Byte_ascii.Quote); trie_add(rv, Bry_gt, Id_gt, Byte_ascii.Gt); trie_add(rv, Bry_lt, Id_lt, Byte_ascii.Lt);
 		trie_add(rv, Bry_tab, Id_tab, Bry_tab_ent); trie_add(rv, Bry_cr_nl, Id_cr_nl, Byte_ascii.Nl); trie_add(rv, Bry_cr, Id_cr, Byte_ascii.Nl);
 		return rv;
@@ -41,6 +43,8 @@ public class Xob_xml_parser_ {
 		, Bry_text_bgn = Bry_.new_a7("<text>"), Bry_text_bgn_frag = Bry_.new_a7("<text"), Bry_text_end = Bry_.new_a7("</text>")
 		, Bry_amp = Bry_.new_a7("&amp;"), Bry_quot = Bry_.new_a7("&quot;"), Bry_gt = Bry_.new_a7("&gt;"), Bry_lt = Bry_.new_a7("&lt;")
 		, Bry_tab_ent = Bry_.new_a7("&#09;"), Bry_tab = Bry_.new_a7("\t"), Bry_cr_nl = Bry_.new_a7("\r\n"), Bry_cr = Bry_.new_a7("\r")			
+		, Bry_model_bgn = Bry_.new_a7("<model>"), Bry_model_bgn_frag = Bry_.new_a7("<model"), Bry_model_end = Bry_.new_a7("</model>")
+		, Bry_format_bgn = Bry_.new_a7("<format>"), Bry_format_bgn_frag = Bry_.new_a7("<format"), Bry_format_end = Bry_.new_a7("</format>")
 		;
 	public static final byte
 		  Id_page_bgn = 0, Id_page_bgn_frag = 1, Id_page_end = 2
@@ -56,6 +60,8 @@ public class Xob_xml_parser_ {
 		, Id_text_bgn = 30, Id_text_bgn_frag = 31, Id_text_end = 32
 		, Id_amp = 33, Id_quot = 34, Id_gt = 35, Id_lt = 36
 		, Id_tab = 37, Id_cr_nl = 38, Id_cr = 39
+		, Id_model_bgn = 40, Id_model_bgn_frag = 41, Id_model_end = 42
+		, Id_format_bgn = 43, Id_format_bgn_frag = 44, Id_format_end = 45
 		;
 	private static void trie_add(Btrie_fast_mgr rv, byte[] hook, byte id)						{rv.Add(hook, new Xob_xml_parser_itm(hook, id, Byte_.Zero	, Bry_.Empty));}
 	private static void trie_add(Btrie_fast_mgr rv, byte[] hook, byte id, byte subst_byte)	{rv.Add(hook, new Xob_xml_parser_itm(hook, id, subst_byte	, Bry_.Empty));}

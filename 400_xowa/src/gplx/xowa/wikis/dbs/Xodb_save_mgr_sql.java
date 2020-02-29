@@ -49,7 +49,7 @@ public class Xodb_save_mgr_sql implements Xodb_save_mgr {
 		page_core_tbl.Insert_bgn();
 		page_text_tbl.Insert_bgn();
 		try {
-			db_mgr.Core_data_mgr().Create_page(page_core_tbl, page_text_tbl, page_id, ns_id, ttl.Page_db(), redirect, Datetime_now.Get(), text_zip, text_raw.length, ns_count, page_text_db.Id(), -1);
+			db_mgr.Core_data_mgr().Create_page(page_core_tbl, page_text_tbl, page_id, ns_id, ttl.Page_db(), redirect, Datetime_now.Get(), text_zip, text_raw.length, ns_count, page_text_db.Id(), -1, 0);
 			db_file.Tbl__ns().Update_ns_count(ns_id, ns_count);
 			db_file.Tbl__cfg().Update_int(Xowd_cfg_key_.Grp__db, Xowd_cfg_key_.Key__wiki__page__id_next, page_id + 1);
 		} finally {

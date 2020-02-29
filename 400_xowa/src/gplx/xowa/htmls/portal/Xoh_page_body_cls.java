@@ -41,6 +41,8 @@ public class Xoh_page_body_cls {	// REF.MW:Skin.php|getPageClasses
 					tmp_bfr.Add_byte_space().Add(Bry_wb_lexemepage);
 					tmp_bfr.Add_byte_space().Add(Bry_wb_lexemepage).Add_byte(Byte_ascii.Dash).Add(ttl.Page_db());
 					break;
+				case 486: // commons.wikimedia.org Data:
+					break;
 				default:
 					Gfo_usr_dlg_.Instance.Warn_many("", "", "unexpected ns for page_body_cls; ttl=~{0}", String_.new_u8(ttl.Raw()));
 					break;

@@ -52,7 +52,7 @@ public class Pfunc_expr_shunter {
 					else
 						break;
 				}
-				return Err_set(ctx, Xol_msg_itm_.Id_pfunc_expr_unrecognised_word, Bry_.Mid(src, bgn_pos, cur_pos));
+				return Err_set(ctx, Xol_msg_itm_.Id_pfunc_expr_unrecognised_word, src/*Bry_.Mid(src, bgn_pos, cur_pos)*/);
 			}
 			else {
 				Expr_tkn t = (Expr_tkn)o;

@@ -60,10 +60,14 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 		html_wtr.Write_tkn_to_html(bfr, ctx, hctx, xtn_root.Root_src(), xnde, Xoh_html_wtr.Sub_idx_null, xtn_root);
 	}
 
-	// expose getFormattedPageNumber
+	// expose getFormattedPageNumber and getRawPageNumber
 	public byte[] FormattedPageNumber(int i) {
 		Page_number pagnum = lst.getNumber(i);
 		return pagnum.getFormattedPageNumber();
+	}
+	public byte[] RawPageNumber(int i) {
+		Page_number pagnum = lst.getNumber(i);
+		return pagnum.getRawPageNumber();
 	}
 	private byte[] Bld_wikitext(Bry_bfr bfr, Xoa_ttl ttl) {
 		int countsize;
@@ -358,6 +362,39 @@ class Page_number {
 		}
 		return tmp_bfr.To_bry_and_clear_and_rls();
 	}
+	public byte[] getRawPageNumber() { // should be language sensitive
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		switch ( mode ) {
+			case Page_list_row.Display_highroman:
+				Pfxtp_roman.ToRoman(displayednumber, tmp_bfr, false);
+				break;
+			case Page_list_row.Display_roman:
+				Pfxtp_roman.ToRoman(displayednumber, tmp_bfr, true);
+				break;
+			case Page_list_row.Display_normal:
+				if (displayedtext != null)
+					tmp_bfr.Add(displayedtext);
+				else
+					tmp_bfr.Add_long_variable(displayednumber);
+				break;
+			case Page_list_row.Display_folio:
+				tmp_bfr.Add_long_variable(displayednumber);
+				formatRectoVerso(tmp_bfr);
+				break;
+			case Page_list_row.Display_foliohighroman:
+				Pfxtp_roman.ToRoman(displayednumber, tmp_bfr, false);
+				rawRectoVerso(tmp_bfr);
+				break;
+			case Page_list_row.Display_folioroman:
+				Pfxtp_roman.ToRoman(displayednumber, tmp_bfr, true);
+				rawRectoVerso(tmp_bfr);
+				break;
+			default:
+				tmp_bfr.Add(displayedtext);
+				break;
+		}
+		return tmp_bfr.To_bry_and_clear_and_rls();
+	}
 	private void formatRectoVerso(Bry_bfr tmp_bfr) {
 		if (isRecto)
 			tmp_bfr.Add_str_a7("<sup>r</sup>");
@@ -372,14 +409,14 @@ class Page_number {
 	}
 }
 class Page_list {
-	static List_adp pagelistrows;
-	static Dictionary<Integer, Page_number> pagenumbers;
+	private List_adp pagelistrows;
+	private Dictionary<Integer, Page_number> pagenumbers;
 
 	Page_list(List_adp pagelist) {
 		this.pagelistrows = pagelist;
 		pagenumbers = new Hashtable<Integer, Page_number> ();
 	}
-	public static Page_number getNumber(int num) {
+	public  Page_number getNumber(int num) {
 		Page_number pn = pagenumbers.get(num);
 		if (pn != null)
 			return pn;
@@ -387,7 +424,7 @@ class Page_list {
 		pagenumbers.put(num, pn);
 		return pn;
 	}
-	private static Page_number buildNumber(int num) {
+	private Page_number buildNumber(int num) {
 		int mode = Page_list_row.Display_normal; // default mode
 		int offset = 0;
 		byte [] displayedpagetext = null;
@@ -427,7 +464,7 @@ class Page_list {
 		return new Page_number( displayednumber, displayedpagetext, mode, isEmpty, isRecto );
 	}
 
-	private static boolean numberInRange( Page_list_row pnum, int num ) {
+	private boolean numberInRange( Page_list_row pnum, int num ) {
 		// in range?
 		if (num < pnum.From()) return false;
 		if (pnum.To() < num) return false;

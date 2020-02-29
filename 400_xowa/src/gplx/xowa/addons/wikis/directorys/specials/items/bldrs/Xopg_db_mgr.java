@@ -50,7 +50,7 @@ public class Xopg_db_mgr {
 		text_tbl.Insert_bgn();
 		int ns_count = ns_tbl.Select_ns_count(ns_id) + 1;
 		try {
-			page_tbl.Insert_cmd_by_batch(page_id, ns_id, ttl_page_db, redirect, Datetime_now.Get(), text_raw.length, ns_count, text_db_id, -1, cat_db_id);
+			page_tbl.Insert_cmd_by_batch(page_id, ns_id, ttl_page_db, redirect, Datetime_now.Get(), text_raw.length, ns_count, text_db_id, -1, cat_db_id, 0);
 			text_tbl.Insert_cmd_by_batch(page_id, text_zip);
 			ns_tbl.Update_ns_count(ns_id, ns_count);
 		} finally {

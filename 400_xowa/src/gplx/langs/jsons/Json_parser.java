@@ -57,7 +57,11 @@ public class Json_parser {
 		while (pos < src_len) {
 			Skip_ws();
 			if (src[pos] == Byte_ascii.Curly_end) 	{++pos; return nde;}
-			else									nde.Add(Make_kv(doc));
+                        else if (src[pos] == Byte_ascii.Comma) { // skip empty elements
+                            pos++;
+                            continue;
+                        }
+			else					nde.Add(Make_kv(doc));
 			Skip_ws();
 			switch (src[pos++]) {
 				case Byte_ascii.Comma:			break;

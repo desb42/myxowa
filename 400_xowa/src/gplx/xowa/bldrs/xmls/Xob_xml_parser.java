@@ -18,6 +18,7 @@ import gplx.core.btries.*; import gplx.core.ios.*; import gplx.core.times.*;
 import gplx.xowa.wikis.data.tbls.*; import gplx.xowa.wikis.nss.*;
 public class Xob_xml_parser {
 	Btrie_fast_mgr trie = Xob_xml_parser_.trie_(); Bry_bfr data_bfr = Bry_bfr_.New(); DateAdp_parser date_parser = DateAdp_parser.new_();
+	Xob_xml_parse_model_format model_format = new Xob_xml_parse_model_format();
 	public Xob_xml_parser Tag_len_max_(int v) {tag_len_max = v; return this;} private int tag_len_max = 255; // max size of any (a) xml tag, (b) int or (c) date; everything else goes into a data_bfr
 	public Xob_xml_parser Data_bfr_len_(int v) {data_bfr.Resize(v); return this;} // PERF: resize data_bfr once to large size, rather than grow incremently to it
 	public Xob_xml_parser Trie_tab_del_() {trie.Del(Xob_xml_parser_.Bry_tab); return this;}
@@ -67,6 +68,14 @@ public class Xob_xml_parser {
 					case Xob_xml_parser_.Id_timestamp_end:
 						date_parser.Parse_iso8651_like(modified_on_ary, src, data_bgn, hook_bgn);
 						rv.Modified_on_(DateAdp_.seg_(modified_on_ary));
+						break;
+					case Xob_xml_parser_.Id_model_bgn:  data_bgn = pos; break;
+					case Xob_xml_parser_.Id_model_end:
+						rv.Model_( model_format.Parse_model(src, data_bgn, hook_bgn) );
+						break;
+					case Xob_xml_parser_.Id_format_bgn:  data_bgn = pos; break;
+					case Xob_xml_parser_.Id_format_end:
+						rv.Format_( model_format.Parse_format(src, data_bgn, hook_bgn) );
 						break;
 					case Xob_xml_parser_.Id_title_bgn:		if (title_needed) data_bfr_add = true; break;
 					case Xob_xml_parser_.Id_text_bgn:		data_bfr_add = true; break;
@@ -124,4 +133,35 @@ public class Xob_xml_parser {
 		return -1;
 	}	boolean gt_was_inline = false;
 	static final String GRP_KEY = "xowa.bldrs.xmls.xml_parser";
+}
+class Xob_xml_parse_model_format {
+
+//1      <model>wikitext</model>
+//2      <model>Scribunto</model>
+//3      <model>css</model>
+//4      <model>javascript</model>
+//5      <model>sanitized-css</model>
+//
+//1      <format>text/x-wiki</format>
+//2      <format>text/plain</format>
+//3      <format>text/css</format>
+//4      <format>text/javascript</format>
+
+	public int Parse_model(byte[] src, int bgn, int end) {
+		byte b = src[bgn];
+		if (b == 'w') return 1;
+		if (b == 'S') return 2;
+		if (b == 'c') return 3;
+		if (b == 'j') return 4;
+		if (b == 's') return 5;
+                return 6;
+	}
+	public int Parse_format(byte[] src, int bgn, int end) {
+		byte b = src[bgn + 5];
+		if (b == 'x') return 1;
+		if (b == 'p') return 2;
+		if (b == 'c') return 3;
+		if (b == 'j') return 4;
+                return 5;
+	}
 }

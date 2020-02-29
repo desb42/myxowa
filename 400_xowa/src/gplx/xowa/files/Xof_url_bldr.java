@@ -185,7 +185,7 @@ public class Xof_url_bldr {
 			case Xof_ext_.Id_tif:															// add .jpg					EX: "A.tif" -> "A.tif.jpg"		NOTE: MediaWiki always adds as lowercase
 			case Xof_ext_.Id_tiff:
 			case Xof_ext_.Id_ogg:
-			case Xof_ext_.Id_ogv:						
+			case Xof_ext_.Id_ogv:
 			case Xof_ext_.Id_djvu:
 			case Xof_ext_.Id_webm:
 				tmp_bfr.Add_byte(Byte_ascii.Dot).Add(Xof_ext_.Bry_jpg);

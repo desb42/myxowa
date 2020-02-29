@@ -43,7 +43,12 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		Json_nde params = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("params")));
 		Json_ary paramorder = (Json_ary)jdoc.Get_grp(Bry_.new_a7("paramOrder"));
 				// also 'sets' and 'maps'?
-		byte[] desc = jdoc.Get_val_as_bry_or(Bry_.new_a7("description"), null);
+		Json_itm descgrp = jdoc.Find_nde(Bry_.new_a7("description"));
+		byte[] desc;
+		if (descgrp == null)
+			desc = null;
+		else
+			desc = get_text_value(descgrp); //(jdoc.Get_val_as_bry_or(Bry_.new_a7("description"), null);
 		byte[] format = jdoc.Get_val_as_bry_or(Bry_.new_a7("format"), null);
 		byte[] icon = m_settings;
 		byte[] formatMsg;
@@ -146,7 +151,7 @@ public class Xtn_templateData_nde implements Xox_xnde {
 			fld_deprecated = false;
 			fld_description = Bry_.Empty;
 			fld_example = Bry_.Empty;
-			fld_label = Bry_.Empty;
+			fld_label = null;
 			fld_required = false;
 			fld_suggested = false;
 			fld_type = Bry_.Empty;
@@ -206,7 +211,7 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		}
 
 		bfr.Add_str_a7("<tr><th>");
-		if (fld_label == Bry_.Empty) {
+		if (fld_label == null) {
 			if (param_key != Bry_.Empty) {
 				byte b = param_key[0];
 				if (b >= 'a' && b <= 'z') {

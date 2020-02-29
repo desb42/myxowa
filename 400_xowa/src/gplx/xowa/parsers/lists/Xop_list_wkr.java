@@ -32,6 +32,8 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		// close apos
 		ctx.Apos().End_frame(ctx, root, src, bgn_pos, false);
 
+		ctx.Para().Process_nl(ctx, root, src, bgn_pos, cur_pos);
+
 		// Multiple prefixes may abut each other for nested lists.
 		while (cur_pos < src_len) {
 			byte b = src[cur_pos];
