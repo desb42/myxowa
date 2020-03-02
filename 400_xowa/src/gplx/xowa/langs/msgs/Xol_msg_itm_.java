@@ -509,7 +509,8 @@ case Xol_msg_itm_.Id_xowa_wikidata_years1e8: return new_(Xol_msg_itm_.Id_xowa_wi
 case Xol_msg_itm_.Id_xowa_wikidata_years1e9: return new_(Xol_msg_itm_.Id_xowa_wikidata_years1e9, "xowa-wikidata-years1e9", "~{0} billion years");
 case Xol_msg_itm_.Id_xowa_wikidata_bc: return new_(Xol_msg_itm_.Id_xowa_wikidata_bc, "xowa-wikidata-bc", "~{0} BC");
 case Xol_msg_itm_.Id_xowa_wikidata_inTime: return new_(Xol_msg_itm_.Id_xowa_wikidata_inTime, "xowa-wikidata-inTime", "in ~{0}");
-case Xol_msg_itm_.Id_ctg_tbl_hidden: return new_(Xol_msg_itm_.Id_ctg_tbl_hidden, "hidden-category-category", "Hidden categories");
+//case Xol_msg_itm_.Id_ctg_tbl_hidden: return new_(Xol_msg_itm_.Id_ctg_tbl_hidden, "hidden-category-category", "Hidden categories");
+case Xol_msg_itm_.Id_ctg_tbl_hidden: return new_(Xol_msg_itm_.Id_ctg_tbl_hidden, "hidden-categories", "Hidden categories"); // should be PLURAL (comes from MediaWiki:)
 case Xol_msg_itm_.Id_ctg_help_page: return new_(Xol_msg_itm_.Id_ctg_help_page, "pagecategorieslink", "Special:Categories");
 case Xol_msg_itm_.Id_statistics_title: return new_(Xol_msg_itm_.Id_statistics_title, "statistics", "Statistics");
 case Xol_msg_itm_.Id_statistics_header_pages: return new_(Xol_msg_itm_.Id_statistics_header_pages, "statistics-header-pages", "Page statistics");

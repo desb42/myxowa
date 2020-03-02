@@ -105,7 +105,8 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 			if (ctg == null) {
 				Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
 				bfr.Add(Bry_.new_a7("<p>"));
-				bfr.Add( Db_expand.Extracheck(msg_mgr.Val_by_id_args(Xol_msg_itm_.Id_ctg_empty), "") );
+				//bfr.Add( Db_expand.Extracheck(msg_mgr.Val_by_id_args(Xol_msg_itm_.Id_ctg_empty), "") );
+				bfr.Add( Db_expand.Extracheck(msg_mgr.Val_by_key_obj("category-empty"), "") );
 				bfr.Add(Bry_.new_a7("</p>"));
 			}
 			else {

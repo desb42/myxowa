@@ -14,10 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa; import gplx.*;
-import gplx.dbs.*;
-import gplx.xowa.parsers.tmpls.*;
-import gplx.xowa.wikis.data.Xow_db_mgr;
-import gplx.xowa.wikis.data.tbls.Xowd_page_tbl;
+import gplx.langs.htmls.*;
 public class Db_expand {
 
 	private static Object lock = "a";
@@ -46,6 +43,8 @@ public class Db_expand {
 			// scan for <nowik> first
 			// reuse the bfr
 			byte b;
+			boolean inbold = false;
+			boolean initalic = false;
 			int nowiki_bgn, nowiki_end, lnki_bgn, lnki_end, bar_pos;
 			byte[] src = bfr.Bfr();
 			int len = bfr.Len();
@@ -141,6 +140,40 @@ public class Db_expand {
 					}
 					else
 						tmp_bfr.Add_byte(b);
+				}
+				else if (b == '\'') { // possible emphasis(''') or italic ('')
+					int apos_count = 1;
+					while (pos < len) {
+						if (src[pos] == '\'') {
+							pos++;
+							apos_count++;
+						}
+						else
+							break;
+					}
+					if (apos_count > 1) {
+						if (apos_count == 2) {
+							if (initalic) {
+								tmp_bfr.Add(Gfh_tag_.I_rhs);
+								initalic = false;
+							}
+							else {
+								tmp_bfr.Add(Gfh_tag_.I_lhs);
+								initalic = true;
+							}
+						}
+						else if (apos_count == 3) {
+							if (inbold) {
+								tmp_bfr.Add(Gfh_tag_.B_rhs);
+								inbold = false;
+							}
+							else {
+								tmp_bfr.Add(Gfh_tag_.B_lhs);
+								inbold = true;
+							}
+						}
+						// could be 5!!
+					}
 				}
 				else if (b == 0) {
 					substitute(tmp_bfr, src[pos++]);
