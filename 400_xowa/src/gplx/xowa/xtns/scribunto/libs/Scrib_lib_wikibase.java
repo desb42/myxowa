@@ -259,7 +259,7 @@ public class Scrib_lib_wikibase implements Scrib_lib {
 		return rslt.Init_obj(rv);
 	}
 	public boolean RenderSnaks(Scrib_proc_args args, Scrib_proc_rslt rslt) {
-		String rv = Wdata_prop_val_visitor_.Render_snaks(core.Wiki(), core.Page().Url_bry_safe(), args.Pull_kv_ary_safe(0));
+		String rv = Wdata_prop_val_visitor_.Render_snaks(core.Wiki(), core.Page().Url_bry_safe(), Deserialize_snaks(args, 0));
 		return rslt.Init_obj(rv);
 	}
 	public boolean FormatValue(Scrib_proc_args args, Scrib_proc_rslt rslt) {
@@ -282,7 +282,7 @@ public function formatValues( $snaksSerialization ) {
 	}
 	public boolean FormatValues(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// WORKAROUND: return same as RenderSnaks until ISSUE:#593 is completed
-		String rv = Wdata_prop_val_visitor_.Render_snaks(core.Wiki(), core.Page().Url_bry_safe(), args.Pull_kv_ary_safe(0));
+		String rv = Wdata_prop_val_visitor_.Render_snaks(core.Wiki(), core.Page().Url_bry_safe(), Deserialize_snaks(args, 0));
 		return rslt.Init_obj(rv);
 	}
 	public boolean ResolvePropertyId(Scrib_proc_args args, Scrib_proc_rslt rslt) {			
@@ -382,15 +382,19 @@ public function formatValues( $snaksSerialization ) {
 		byte[] label = core.Wiki().Xtn_mgr().Xtn_wikibase().Lua_bindings().getLabelByLanguage_or_null(prefixedEntityId, languageCode);
 		return label == null ? rslt.Init_str_empty() : rslt.Init_obj(label);
 	}
-	public boolean GetSiteLinkPageName(Scrib_proc_args args, Scrib_proc_rslt rslt) {			
+	public boolean GetSiteLinkPageName(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		// get wdoc from args; EX: "q2"
 		Wdata_doc wdoc = Get_wdoc_or_null(args, core, "GetSiteLinkPageName", true);  // NOTE: prop should be of form "P123"; do not add "P"; PAGE:no.w:Anne_Enger; DATE:2015-10-27
 		if (wdoc == null) return rslt.Init_ary_empty();
 
+		// get wiki from args (EX: "enwiki"), or default to current wiki; ISSUE#:665; PAGE:commons.wikimedia.org/wiki/Category:Paddy_Ashdown; DATE:2020-02-19
 		byte[] wiki_bry = args.Cast_bry_or_null(1);
 		if (wiki_bry == null) {
 			Xow_domain_itm domain_itm = core.Wiki().Domain_itm();
 			wiki_bry = domain_itm.Abrv_wm();
 		}
+
+		// get sitelink for wiki from wdoc
 		Wdata_sitelink_itm itm = wdoc.Get_slink_itm_or_null(wiki_bry);
 		return itm == null ? rslt.Init_ary_empty() : rslt.Init_many_objs(itm.Name(), itm.Lang());
 	}
@@ -451,6 +455,30 @@ public function formatValues( $snaksSerialization ) {
 		Wdata_doc wdoc = entity_mgr.Get_by_xid_or_null(xid_bry); // NOTE: by_xid b/c Module passes just "p1" not "Property:P1"
 		if (wdoc == null && logMissing) Wdata_wiki_mgr.Log_missing_qid(core.Ctx(), type, xid_bry);
 		return wdoc;
+	}
+	private static Keyval[] Deserialize_snaks(Scrib_proc_args args, int idx) {
+		// NOTE: SnakListDeserializer has an if-case to check for either "Snak[]" or "[key:"key",value:Snaks[]]" ISSUE#:666; PAGE:ja.w:Sed_(コンピュータ) DATE:2020-03-01
+		// REF.MW: https://github.com/wikimedia/mediawiki-vendor/blob/4361929262cc87a08345c69a71258f59319be2c7/wikibase/data-model-serialization/src/Deserializers/SnakListDeserializer.php#L53-L68
+		// get kvs
+		Keyval[] kvs = args.Pull_kv_ary_safe(idx);
+		int kvs_len = kvs.length;
+
+		if (kvs_len == 0) return kvs; // empty kvs; just return it;
+
+		// get 1st
+		Keyval kv = kvs[0];
+
+		// key is String; EX: {"P10":[{"property":"P20"}]}
+		if (Type_.Eq_by_obj(kv.Key_as_obj(), String.class)) {
+			if (Type_.Eq_by_obj(kv.Key_as_obj(), Keyval[].class)) {
+				throw Err_.new_wo_type("The snaks per property " + kv.Key() + " should be an array" );
+			}
+			return (Keyval[])kv.Val();
+		}
+		// key is int; EX: ["1":{"property":"P20"}]
+		else {
+			return kvs;
+		}
 	}
 
 	/**

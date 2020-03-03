@@ -27,7 +27,6 @@ public class Wdata_prop_val_visitor_ {
 		try {
 			for (int i = 0; i < len; ++i) {
 				Keyval[] itm = (Keyval[])snaks[i].Val();
-				itm = (Keyval[])itm[0].Val();
 				Render_snak(bfr, wdata_mgr, wiki, wiki.Lang(), page_url, itm, i, len);
 			}
 			wiki.Lang().Comma_wkr().Comma__end(bfr);
