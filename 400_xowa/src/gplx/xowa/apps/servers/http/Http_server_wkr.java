@@ -130,7 +130,12 @@ public class Http_server_wkr implements Gfo_invk {
 			if (page_html == null) {
 				page_html = "Strange! no data";
 			} else {
+                        byte[] wikitext = page.Page().Db().Text().Text_bry();
+            Db_wikistrip ws = new Db_wikistrip();
+            byte[] stripped = ws.Search_text(wikitext); //.Strip_wiki(wikitext);
 				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()));
+                                page_html += "----\n" + String_.new_u8(stripped);
+                                page_html += "----\n" + String_.new_u8(ws.First_para(wikitext));
 				if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // change some more things
 					//page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
 					page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\">");
@@ -246,6 +251,7 @@ public class Http_server_wkr implements Gfo_invk {
 
                 DateAdp dte = DateAdp_.parse_fmt("2016-02-01 18:34:08", "yyyy-MM-dd HH:mm:ss");
                 long timestamp = dte.Timestamp_unix();*/
+                //page_html += test_wikistrip();
 		return page_html;
 	}
         private static String collapser(String html)
@@ -405,6 +411,12 @@ public class Http_server_wkr implements Gfo_invk {
             Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
             jdoc.Root_nde().Print_as_json(tmp_bfr, 0);
             return tmp_bfr.To_str();
+	}
+	private static String test_wikistrip() {
+            byte[] wiki = Load_from_file_as_bry(rootdir + "wiki_test.txt");
+            Db_wikistrip ws = new Db_wikistrip();
+            byte[] stripped = ws.Strip_wiki(wiki);
+            return String_.new_u8(stripped);
 	}
         private static void perform() {
                 Xoh_css_minify mini = new Xoh_css_minify();

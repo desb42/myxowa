@@ -20,13 +20,13 @@ import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*; import gplx.xowa.addon
 public class Xoctg_fmt_grp {	// subc|page|file
 	private final    byte tid;
 	private final    byte[] div_id, url_arg_bgn, url_arg_end;
-	private final    int msg_label_id, msg_stats_id;
+	private final    byte[] msg_label_key, msg_stats_key;
 	private final    Xoctg_fmt_ltr itms_fmt;
-	Xoctg_fmt_grp(byte tid, Xoctg_fmt_itm_base itm_fmt, int msg_label_id, int msg_stats_id, byte[] url_arg_bgn, byte[] url_arg_end, byte[] div_id) {
+	Xoctg_fmt_grp(byte tid, Xoctg_fmt_itm_base itm_fmt, byte[] msg_label_key, byte[] msg_stats_key, byte[] url_arg_bgn, byte[] url_arg_end, byte[] div_id) {
 		this.tid = tid;
 		this.itm_fmt = itm_fmt;
 		this.itms_fmt = new Xoctg_fmt_ltr(itm_fmt);
-		this.msg_label_id = msg_label_id; this.msg_stats_id = msg_stats_id;
+		this.msg_label_key = msg_label_key; this.msg_stats_key = msg_stats_key;
 		this.url_arg_bgn = url_arg_bgn; this.url_arg_end = url_arg_end; this.div_id = div_id;
 	}
 	public Xoctg_fmt_itm_base Itm_fmt() {return itm_fmt;} private final    Xoctg_fmt_itm_base itm_fmt;
@@ -37,8 +37,8 @@ public class Xoctg_fmt_grp {	// subc|page|file
 
 		// get msgs
 		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
-		byte[] msg_label_bry = msg_mgr.Val_by_id_args(msg_label_id, dom_ctg.Name());
-		byte[] msg_stats_bry = msg_mgr.Val_by_id_args(msg_stats_id, dom_grp.Itms__len(), lang.Num_mgr().Format_num(count));
+		byte[] msg_label_bry = msg_mgr.Val_by_key_args(msg_label_key, dom_ctg.Name());
+		byte[] msg_stats_bry = msg_mgr.Val_by_key_args(msg_stats_key, dom_grp.Itms__len(), lang.Num_mgr().Format_num(count));
 
 		// get nav html; next / previous 200
 		Xoa_ttl ctg_ttl = wiki.Ttl_parse(Xow_ns_.Tid__category, dom_ctg.Name());
@@ -110,9 +110,20 @@ public class Xoctg_fmt_grp {	// subc|page|file
 	, "  </div>~{nav_html}"
 	, "</div>"
 	);
-	public static Xoctg_fmt_grp New__subc() {return new Xoctg_fmt_grp(Xoa_ctg_mgr.Tid__subc, new Xoctg_fmt_itm_subc(), Xol_msg_itm_.Id_ctg_subc_header, Xol_msg_itm_.Id_ctg_subc_count, Xoctg_catpage_url_parser.Bry__arg_subc_bgn, Xoctg_catpage_url_parser.Bry__arg_subc_end, Bry_.new_a7("mw-subcategories"));}
-	public static Xoctg_fmt_grp New__page() {return new Xoctg_fmt_grp(Xoa_ctg_mgr.Tid__page, new Xoctg_fmt_itm_page(), Xol_msg_itm_.Id_ctg_page_header, Xol_msg_itm_.Id_ctg_page_count, Xoctg_catpage_url_parser.Bry__arg_page_bgn, Xoctg_catpage_url_parser.Bry__arg_page_end, Bry_.new_a7("mw-pages"));}
-	public static Xoctg_fmt_grp New__file() {return new Xoctg_fmt_grp(Xoa_ctg_mgr.Tid__file, new Xoctg_fmt_itm_file(), Xol_msg_itm_.Id_ctg_file_header, Xol_msg_itm_.Id_ctg_file_count, Xoctg_catpage_url_parser.Bry__arg_file_bgn, Xoctg_catpage_url_parser.Bry__arg_file_end, Bry_.new_a7("mw-category-media"));}
+	public static Xoctg_fmt_grp New__subc() {return new Xoctg_fmt_grp(Xoa_ctg_mgr.Tid__subc, new Xoctg_fmt_itm_subc(), Ctg_subc_header, Ctg_subc_count, Xoctg_catpage_url_parser.Bry__arg_subc_bgn, Xoctg_catpage_url_parser.Bry__arg_subc_end, Mw_subcategories);}
+	public static Xoctg_fmt_grp New__page() {return new Xoctg_fmt_grp(Xoa_ctg_mgr.Tid__page, new Xoctg_fmt_itm_page(), Ctg_page_header, Ctg_page_count, Xoctg_catpage_url_parser.Bry__arg_page_bgn, Xoctg_catpage_url_parser.Bry__arg_page_end, Mw_pages);}
+	public static Xoctg_fmt_grp New__file() {return new Xoctg_fmt_grp(Xoa_ctg_mgr.Tid__file, new Xoctg_fmt_itm_file(), Ctg_file_header, Ctg_file_count, Xoctg_catpage_url_parser.Bry__arg_file_bgn, Xoctg_catpage_url_parser.Bry__arg_file_end, Mw_category_media);}
+	private static byte[]
+	  Ctg_subc_header = Bry_.new_a7("subcategories")
+	, Ctg_subc_count = Bry_.new_a7("category-subcat-count")
+	, Mw_subcategories = Bry_.new_a7("mw-subcategories")
+	, Ctg_page_header = Bry_.new_a7("category_header")
+	, Ctg_page_count = Bry_.new_a7("category-article-count")
+	, Mw_pages = Bry_.new_a7("mw-pages")
+	, Ctg_file_header = Bry_.new_a7("category-media-header")
+	, Ctg_file_count = Bry_.new_a7("category-file-count")
+	, Mw_category_media = Bry_.new_a7("mw-category-media")
+	;
 }
 /*
 == LT_NOT_LTE ==
