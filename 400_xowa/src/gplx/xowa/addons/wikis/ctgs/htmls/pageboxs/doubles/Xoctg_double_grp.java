@@ -37,7 +37,7 @@ public class Xoctg_double_grp implements Bfr_arg {
 			Fmt__normal.Bld_many(bfr, lbl_ctg_help, lbl_ctg_text, itms);
 		}
 		else {
-			byte[] lbl_hidden = wiki.Msg_mgr().Val_by_id_args(Xol_msg_itm_.Id_ctg_tbl_hidden, count);
+			byte[] lbl_hidden = wiki.Msg_mgr().Val_by_id_args(Xol_msg_itm_.Id_hidden_categories, count);
 			byte[] vis;
 			if (wiki.Lang().Lang_id() == Xol_lang_stub_.Id_fr)
 				vis = Bry_.new_a7("hidden");
