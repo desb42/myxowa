@@ -298,11 +298,11 @@ cite_error_references_no_text|Marcator <code>&lt;ref&gt;</code> mìa valido; no 
 cite_error_included_ref|<code>&lt;/ref&gt;</code> de chiusura mancante par el marcador <code>&lt;ref&gt;</code>
 cite_error_refs_without_references|Ghe xe un tag <code>&lt;ref&gt;</code>, ma no xe stà catà nissun tag <code>&lt;references/&gt;</code>
 cite_error_group_refs_without_references|Ghe xe un tag <code>&lt;ref&gt;</code> par un grupo che se ciama "~{0}", ma no xe stà catà nissun tag <code>&lt;references group="~{0}"/&gt;</code> che corisponda.
-cite_error_references_group_mismatch|El tag <code>&lt;ref&gt;</code> in <code>&lt;references&gt;</code> el gà l\\'atributo de grupo "~{0}" in conflito.
+cite_error_references_group_mismatch|El tag <code>&lt;ref&gt;</code> in <code>&lt;references&gt;</code> el gà l'atributo de grupo "~{0}" in conflito.
 cite_error_references_missing_group|El tag <code>&lt;ref&gt;</code> definìo in <code>&lt;references&gt;</code> el gà un atributo de grupo "~{0}" che no conpare mia nel testo precedente.
-cite_error_references_missing_key|El tag <code>&lt;ref&gt;</code> con nome "~{0}" definìo in <code>&lt;references&gt;</code> no\\'l xe doparà nel testo precedente.
+cite_error_references_missing_key|El tag <code>&lt;ref&gt;</code> con nome "~{0}" definìo in <code>&lt;references&gt;</code> no'l xe doparà nel testo precedente.
 cite_error_references_no_key|El tag <code>&lt;ref&gt;</code> definìo in <code>&lt;references&gt;</code> no'l gà un atributo nome.
-cite_error_empty_references_define|El tag <code>&lt;ref&gt;</code> definìo in <code>&lt;references&gt;</code> con nome "~{0}" no\\'l gà nissun contenuto.
+cite_error_empty_references_define|El tag <code>&lt;ref&gt;</code> definìo in <code>&lt;references&gt;</code> con nome "~{0}" no'l gà nissun contenuto.
 imagemap_desc|Parméte de realizar ''image map'' clicàbili lato client col tag <code>&lt;imagemap&gt;</code>
 imagemap_no_image|Error: se gà da specificar na imagine ne la prima riga
 imagemap_invalid_image|Error: l'imagine no la xe valida o no la esiste
@@ -686,13 +686,13 @@ wikibase-restrictionedit-tooltip-message|Sta pagina la xe proteta. No se pol mia
 wikibase-blockeduser-tooltip-message|No te ghè el parmesso de modifica, parché el to nome utente o l'indiriso IP el xe stà blocà.
 wikibase-move-error|No te pol mia spostar pagine che xe nel namespace dei dati, e no te pol mia spostar pagine su de elo.
 wikibase-warning-constraint-violation-length|Xe stà ativà un vincolo de longhesa par el còdese de lengua "~{0}".
-wikibase-error-constraint-violation-label|Se ga verificà na violasion de {{PLURAL:~{0}\u007Cun vincolo\u007Cvincoli}} {{PLURAL:~{0}\u007Cin te l\\'eticheta\u007Cin te le etichete}} "~{2}" par {{PLURAL:~{0}\u007Cel còdese de lengua\u007Ci còdesi de lengua}} "~{1}".
+wikibase-error-constraint-violation-label|Se ga verificà na violasion de {{PLURAL:~{0}\u007Cun vincolo\u007Cvincoli}} {{PLURAL:~{0}\u007Cin te l'eticheta\u007Cin te le etichete}} "~{2}" par {{PLURAL:~{0}\u007Cel còdese de lengua\u007Ci còdesi de lengua}} "~{1}".
 wikibase-error-constraint-violation-description|Se ga verificà na violasion de {{PLURAL:~{0}\u007Cun vincolo\u007Cvincoli}} {{PLURAL:~{0}\u007Cin te la descrision\u007Cin te le descrision}} "~{2}" par {{PLURAL:~{0}\u007Cel còdese de lengua\u007Ci còdesi de lengua}} "~{1}".
-wikibase-error-constraint-violation-aliases|Se ga verificà na violasion de {{PLURAL:~{0}\u007Cun vincolo\u007Cvincoli}} {{PLURAL:~{0}\u007Cin te l\\'alias\u007Cin te i alias}} "~{2}" par {{PLURAL:~{0}\u007Cel còdese de lengua\u007Ci còdesi de lengua}} "~{1}".
+wikibase-error-constraint-violation-aliases|Se ga verificà na violasion de {{PLURAL:~{0}\u007Cun vincolo\u007Cvincoli}} {{PLURAL:~{0}\u007Cin te l'alias\u007Cin te i alias}} "~{2}" par {{PLURAL:~{0}\u007Cel còdese de lengua\u007Ci còdesi de lengua}} "~{1}".
 wikibase-error-sitelink-already-used|Colegamento al sito [~{0} ~{1}] zà doparà da l'elemento [[~{2}]].
-wikibase-error-label-not-unique-wikibase-property|N\\'altra proprietà (~{2}) la ga zà l\\'eticheta "~{0}" asocià col còdese lengua ~{1}
-wikibase-error-label-not-unique-wikibase-query|N\\'altra riserca (~{2}) la ga zà l\\'eticheta "~{0}" asocià col còdese lengua ~{1}
-wikibase-error-label-not-unique-item|N\\'altro elemento (~{2}) el ga zà l\\'eticheta "~{0}" e la descrision "~{3}" asocià col còdese lengua ~{1}
+wikibase-error-label-not-unique-wikibase-property|N'altra proprietà (~{2}) la ga zà l'eticheta "~{0}" asocià col còdese lengua ~{1}
+wikibase-error-label-not-unique-wikibase-query|N'altra riserca (~{2}) la ga zà l'eticheta "~{0}" asocià col còdese lengua ~{1}
+wikibase-error-label-not-unique-item|N'altro elemento (~{2}) el ga zà l'eticheta "~{0}" e la descrision "~{3}" asocià col còdese lengua ~{1}
 special-itembytitle|Elementi par titolo
 wikibase-itembytitle-lookup-fieldset|Serca elementi par sito e titolo
 wikibase-itembytitle-lookup-site|Sito:
@@ -747,8 +747,8 @@ wikibase-setaliases-submit|Imposta i alias
 wikibase-setaliases-warning-remove|Vuto dal bon cavar tuti i alias de [[~{0}]]?
 wikibase-modifyentity-id|ID:
 wikibase-modifyterm-language|Còdese lengoa:
-wikibase-modifyentity-invalid-id|L\\'ID "~{0}" el xe sconossùo al sistema. Dòpara un ID de entità valido.
-wikibase-modifyterm-invalid-langcode|L\\'identificador de lingua "~{0}" el xe sconosùo. Dòpara un identificador de lengua conosùo al sistema, par esenpio "vec".
+wikibase-modifyentity-invalid-id|L'ID "~{0}" el xe sconossùo al sistema. Dòpara un ID de entità valido.
+wikibase-modifyterm-invalid-langcode|L'identificador de lingua "~{0}" el xe sconosùo. Dòpara un identificador de lengua conosùo al sistema, par esenpio "vec".
 special-dispatchstats|Statistiche propagasion modifiche
 wikibase-dispatchstats-intro|Sta pagina la fornise le statistiche su la propagasion de le modifiche ai client.\nNa wiki client la xe notificà de un canbiamento su {{SITENAME}} apena chel canbiamento el xe stà propagà su chela wiki, e la coa de laoro su chela wiki la gà procesà la notifica.\n* {{int:wikibase-dispatchstats-changes}} mostra el nùmaro e la data par i pi veci e pi novi elementi atualmente in coa.\n* {{int:wikibase-dispatchstats-stats}} fornise informasion su le wiki pi in ritardo e manco in ritardo, e quela de mezo tra lore. Par ogni wiki, vien fornìe ste informasion:\n** "{{int:wikibase-dispatchstats-site-id}}" xe l'ID interno de la wiki client.\n** "{{int:wikibase-dispatchstats-pos}}" xe l'ID de l'ultimo canbiamento propagà a chela wiki.\n** "{{int:wikibase-dispatchstats-lag-num}}" xe el nùmaro de canbiamenti gnancora propagà a chela wiki.\n** "{{int:wikibase-dispatchstats-lag-time}}" xe el tenpo tra l'ultimo canbiamento propagà a la wiki, e l'ultima modifica fata su {{SITENAME}}.\n** "{{int:wikibase-dispatchstats-touched}}" xe l'ora in cui l'ultimo bloco de canbiamenti el xe stà propagà a la wiki.
 wikibase-dispatchstats-no-stats|Atualmente no ghe xe statistiche disponibili.
@@ -1267,8 +1267,8 @@ group-coder-member|{{GENDER:~{0}\u007Cprogramador\u007Cprogramatrise\u007Cprogra
 group-inactive|Utenti inativi
 group-inactive-member|{{GENDER:~{0}\u007Cutente inativo\u007Cutente inativa\u007Cutente inativo/a}}
 grouppage-inactive|{{ns:project}}:Utenti inativi
-wikimedia-copyright|El testo el xè disponibiłe secondo ła <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.it">licensa Creative Commons Atribusion-Condividi al steso modo</a>; e poe aplicarse ulteriori condision. Varda łe <a class=\\'internal\\' href="/wiki/Wikipedia:Copyright#Condixion_d.27uxo">condision d\\'uxo</a> par i detaji. Wikipedia® xè on marchio rejistrà de ła <a href="https://www.wikimediafoundation.org">Wikimedia Foundation, Inc.</a>
-wikidata-copyright|Tuti i dati struturai dal namespace prinsipałe i xe disponibiłi secondo ła licensa <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Definition of the Creative Commons CC0 License">Creative Commons CC0</a>;\ni testi in altri namespace i xe disponibiłi secondo ła licensa <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Definition of the Creative Commons Attribution/Share-Alike License">Creative Commons Atribusion/Condividi al steso modo</a>;\npol vegner aplicae altre condision.\nVarda i <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Wikimedia Foundation Terms of Use">Termini d\\'uxo</a> par detaji.
+wikimedia-copyright|El testo el xè disponibiłe secondo ła <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.it">licensa Creative Commons Atribusion-Condividi al steso modo</a>; e poe aplicarse ulteriori condision. Varda łe <a class='internal' href="/wiki/Wikipedia:Copyright#Condixion_d.27uxo">condision d'uxo</a> par i detaji. Wikipedia® xè on marchio rejistrà de ła <a href="https://www.wikimediafoundation.org">Wikimedia Foundation, Inc.</a>
+wikidata-copyright|Tuti i dati struturai dal namespace prinsipałe i xe disponibiłi secondo ła licensa <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Definition of the Creative Commons CC0 License">Creative Commons CC0</a>;\ni testi in altri namespace i xe disponibiłi secondo ła licensa <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Definition of the Creative Commons Attribution/Share-Alike License">Creative Commons Atribusion/Condividi al steso modo</a>;\npol vegner aplicae altre condision.\nVarda i <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Wikimedia Foundation Terms of Use">Termini d'uxo</a> par detaji.
 wikidata-shortcopyrightwarning|Strucando "Salva", te aceti le [https://wikimediafoundation.org/wiki/Terms_of_Use/it condision de uso] e te consenti irevocabilmente a rilasiar el to contributo in base a la licensa [https://creativecommons.org/publicdomain/zero/1.0/deed.it CC0].
 wikimedia-copyrightwarning|Strucando so'l boton "{{int:savearticle}}", te aceti łe [https://wikimediafoundation.org/wiki/Condizioni_d'uso condision d'uxo], e te aceti irevocabilmente de rełasar el to contributo soto łe license [https://creativecommons.org/licenses/by-sa/3.0/deed.it Creative Commons Atribusion-Condividi al steso modo 3.0] e [https://www.gnu.org/copyleft/fdl.html GFDL]. Te aceti inoltre che un ligamento ipertestuałe o URL el sia sufisente par l'atribusion in baxe a ła licensa Creative Commons.
 cant-delete-main-page|Nó te poi scansełar o sposta ła pàjina prinsipałe.

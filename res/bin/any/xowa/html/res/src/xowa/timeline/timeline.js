@@ -801,7 +801,7 @@ this.drawLink = function(ctx, target, x, y, w, h) {
 	if (!(/^https?:\/\//).test(target)) {
 		target = '/wiki/' + target;
 		if (xowa.app.mode == 'http_server')
-			target = '/' + x_p.wiki + target;
+			target = '/xowa/' + x_p.wiki + target;
 	}
 	a.href = target;
 	ctx.canvas.parentNode.appendChild(a);

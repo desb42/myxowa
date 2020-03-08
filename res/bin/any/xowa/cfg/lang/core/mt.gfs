@@ -117,7 +117,7 @@ Unusedcategories|KategorijiMhuxUżati
 Unusedimages|StampiMhuxUżati~FajlsMhuxUżati
 Unusedtemplates|MudelliMhuxUżati
 Unwatchedpages|PaġniMhuxOsservati
-Upload|Tella\\'
+Upload|Tella'
 Userlogin|UtentDħul
 Userlogout|UtentĦruġ
 Userrights|DrittijietUtent
@@ -161,18 +161,18 @@ localdayname|1|ISEMTAL-ĠURNATALOKALI~LOCALDAYNAME~
 localyear|1|SENALOKALI~LOCALYEAR~
 localtime|1|ĦINLOKALI~LOCALTIME~
 localhour|1|SIEGĦALOKALI~LOCALHOUR~
-numberofpages|1|NUMRUTA\\'PAĠNI~NUMBEROFPAGES~
-numberofarticles|1|NUMRUTA\\'ARTIKLI~NUMBEROFARTICLES~
-numberoffiles|1|NUMRUTA\\'FAJLS~NUMBEROFFILES~
-numberofusers|1|NUMRUTA\\'UTENTI~NUMBEROFUSERS~
-numberofactiveusers|1|NUMRUTA\\'UTENTIATTIVI~NUMBEROFACTIVEUSERS~
-numberofedits|1|NUMBRUTA\\'MODIFIKI~NUMBEROFEDITS~
+numberofpages|1|NUMRUTA'PAĠNI~NUMBEROFPAGES~
+numberofarticles|1|NUMRUTA'ARTIKLI~NUMBEROFARTICLES~
+numberoffiles|1|NUMRUTA'FAJLS~NUMBEROFFILES~
+numberofusers|1|NUMRUTA'UTENTI~NUMBEROFUSERS~
+numberofactiveusers|1|NUMRUTA'UTENTIATTIVI~NUMBEROFACTIVEUSERS~
+numberofedits|1|NUMBRUTA'MODIFIKI~NUMBEROFEDITS~
 pagename|1|ISEMTAL-PAĠNA~PAGENAME~
 pagenamee|1|ISEMTAL-PAĠNAE~PAGENAMEE~
 namespace|1|SPAZJUTAL-ISEM~NAMESPACE~
 namespacee|1|SPAZJUTAL-ISEME~NAMESPACEE~
-talkspace|1|SPAZJUTA\\'DISKUSSJONI~TALKSPACE~
-talkspacee|1|SPAZJUTA\\'DISKUSSJONIE~TALKSPACEE~
+talkspace|1|SPAZJUTA'DISKUSSJONI~TALKSPACE~
+talkspacee|1|SPAZJUTA'DISKUSSJONIE~TALKSPACEE~
 subjectspace|1|SPAZJUTAS-SUĠĠETT~SPAZJUTAL-ARTIKLU~SUBJECTSPACE~ARTICLESPACE~
 fullpagename|1|ISEMSĦIĦTAL-PAĠNA~FULLPAGENAME~
 fullpagenamee|1|ISEMTAL-PAĠNASĦIĦAE~FULLPAGENAMEE~
@@ -180,7 +180,7 @@ subpagename|1|ISEMTAS-SOTTOPAĠNA~SUBPAGENAME~
 subpagenamee|1|ISEMTAS-SUBPAĠNAE~SUBPAGENAMEE~
 basepagename|1|ISEMBAŻIKUTAL-PAĠNA~BASEPAGENAME~
 basepagenamee|1|ISEMTAL-PAĠNATAL-BAŻIE~BASEPAGENAMEE~
-talkpagename|1|ISEMPAĠNATA\\'DISKUSSJONI~TALKPAGENAME~
+talkpagename|1|ISEMPAĠNATA'DISKUSSJONI~TALKPAGENAME~
 talkpagenamee|1|ISEMTAL-PAĠNATAD-DISKUSSJONIE~TALKPAGENAMEE~
 subjectpagename|1|ISEMTAS-SUĠĠETTTAL-PAĠNA~ISEMTAL-ARTIKLUTAL-PAĠNA~SUBJECTPAGENAME~ARTICLEPAGENAME~
 subjectpagenamee|1|ISEMTAS-SUĠĠETTTAL-PAĠNAE~ISEMTAL-ARTIKLUTAL-PAĠNAE~SUBJECTPAGENAMEE~ARTICLEPAGENAMEE~
@@ -189,7 +189,7 @@ subst|0|BIDDEL:~SUBST:~
 msgnw|0|MSĠEW~MSGNW~
 img_thumbnail|1|daqsminuri~minuri~thumbnail~thumb~
 img_manualthumb|1|daqsminuri=$1~minuri=$1~thumbnail=$1~thumb=$1~
-img_framed|1|tilat~b\\'tilar~tilar~framed~enframed~frame~
+img_framed|1|tilat~b'tilar~tilar~framed~enframed~frame~
 img_frameless|1|bla_tilar~frameless~
 img_upright|1|wieqaf~wieqaf=$1~wieqaf $1~upright~upright=$1~upright $1~
 img_border|1|bordura~burdura~border~
@@ -211,7 +211,7 @@ ns|0|IS~NS~
 localurl|0|URLLOKALI~LOCALURL~
 localurle|0|URLLOKALIE~LOCALURLE~
 servername|0|ISEMTAS-SERVER~SERVERNAME~
-scriptpath|0|DESTINAZZJONITA\\'SKRITT~SCRIPTPATH~
+scriptpath|0|DESTINAZZJONITA'SKRITT~SCRIPTPATH~
 grammar|0|GRAMMATIKA~GRAMMAR~
 gender|0|SESS~GENDER~
 notitleconvert|0|__EBDAKONVERTURTITLU__~__EBDAKT__~__NOTITLECONVERT__~__NOTC__~
@@ -244,7 +244,7 @@ directionmark|1|MARKATAD-DIREZZJONI~MARKADIRE~DIRECTIONMARK~DIRMARK~
 language|0|#LINGWA~#LANGUAGE~
 contentlanguage|1|LINGWATAL-KONTENUT~LINGKONTENUT~CONTENTLANGUAGE~CONTENTLANG~
 pagesinnamespace|1|PAĠNIFL-ISPAZJUTAL-ISEM~PAĠNISI~PAGESINNAMESPACE~PAGESINNS~
-numberofadmins|1|NUMRUTA\\'AMMIN~NUMBEROFADMINS~
+numberofadmins|1|NUMRUTA'AMMIN~NUMBEROFADMINS~
 padleft|0|PADXELLUG~PADLEFT~
 padright|0|PADLEMIN~PADRIGHT~
 special|0|#speċjali~#special~
@@ -258,7 +258,7 @@ index|1|__INDIĊI__~__INDEX__~
 noindex|1|__EBDAINDIĊI__~__NOINDEX__~
 numberingroup|1|NUMRUFIL-GRUPP~NUMFIL-GRUPP~NUMBERINGROUP~NUMINGROUP~
 staticredirect|1|__RIINDIRIZZSTATIKU__~__STATICREDIRECT__~
-protectionlevel|1|LIVELLITA\\'PROTEZZJONI~PROTECTIONLEVEL~
+protectionlevel|1|LIVELLITA'PROTEZZJONI~PROTECTIONLEVEL~
 formatdate|0|#formatdata~#dataformat~#formatdate~#dateformat~
 expr|0|#expr~
 if|0|#if~
@@ -420,11 +420,11 @@ cite_error_references_no_text|Tikketta <code>&lt;ref&gt;</code> invalida;\nl-ebd
 cite_error_included_ref|<code>&lt;/ref&gt;</code> tal-għeluq hija nieqsa għat-tikketta <code>&lt;ref&gt;</code>
 cite_error_refs_without_references|It-tikketti <code>&lt;ref&gt;</code> jeżistu, imma l-ebda tikketta <code>&lt;references/&gt;</code> ma nstabet
 cite_error_group_refs_without_references|It-tikketti <code>&lt;ref&gt;</code> jeżistu għal grupp bl-isem "~{0}" imma l-ebda tikketta <code>&lt;references group="~{0}"/&gt;</code> rispettiva ma nstabet
-cite_error_references_group_mismatch|It-tikketta <code>&lt;ref&gt;</code> f\\'<code>&lt;references&gt;</code> għandha l-attribut tal-grupp "~{0}" f\\'kunflitt.
-cite_error_references_missing_group|It-tikketta <code>&lt;ref&gt;</code> definita f\\'<code>&lt;references&gt;</code> għandha l-attribut tal-grupp "~{0}" li ma jidhirx fit-test preċedenti.
-cite_error_references_missing_key|It-tikketta <code>&lt;ref&gt;</code> bl-isem "~{0}" definita f\\'<code>&lt;references&gt;</code> mhix użata fit-test preċedenti.
+cite_error_references_group_mismatch|It-tikketta <code>&lt;ref&gt;</code> f'<code>&lt;references&gt;</code> għandha l-attribut tal-grupp "~{0}" f'kunflitt.
+cite_error_references_missing_group|It-tikketta <code>&lt;ref&gt;</code> definita f'<code>&lt;references&gt;</code> għandha l-attribut tal-grupp "~{0}" li ma jidhirx fit-test preċedenti.
+cite_error_references_missing_key|It-tikketta <code>&lt;ref&gt;</code> bl-isem "~{0}" definita f'<code>&lt;references&gt;</code> mhix użata fit-test preċedenti.
 cite_error_references_no_key|It-tikketta <code>&lt;ref&gt;</code> definita f'<code>&lt;references&gt;</code> m'għandiex l-attribut tal-isem.
-cite_error_empty_references_define|It-tikketta <code>&lt;ref&gt;</code> definita f\\'<code>&lt;references&gt;</code> bl-isem "~{0}" m\\'għandha l-ebda kontenut.
+cite_error_empty_references_define|It-tikketta <code>&lt;ref&gt;</code> definita f'<code>&lt;references&gt;</code> bl-isem "~{0}" m'għandha l-ebda kontenut.
 imagemap_no_image|Żball: trid tispeċifika stampa fl-ewwel linja
 imagemap_invalid_image|Żball: l-istampa hija invalida jew ħażina
 imagemap_bad_image|Żball: l-istampa tinsab fil-''blacklist'' fuq din il-paġna
@@ -999,8 +999,8 @@ group-coder-member|{{GENDER:~{0}\u007Cprogrammatur}}
 group-inactive|utenti inattivi
 group-inactive-member|{{GENDER:~{0}\u007Cutent inattiv\u007Cutenta inattiva}}
 grouppage-inactive|{{ns:project}}:Utenti inattivi
-wikimedia-copyright|It-test huwa disponibbli taħt il-<a href="https://creativecommons.org/licenses/by-sa/3.0/">Liċenzja Creative Commons Attribution/Share-Alike</a>;\ntermini addizjonali jistgħu japplikaw.\nAra t-<a href="https://wikimediafoundation.org/wiki/Terms_of_Use">termini ta\\' użu</a> għal aktar dettalji.
-wikimedia-copyrightwarning|Billi tiklikkja fuq il-buttuna "{{int:savearticle}}", int taqbel mat-[https://wikimediafoundation.org/wiki/Terms_of_Use termini ta\\' użu], u rrevokabilment taqbel li tħalli l-kontribuzzjoni tiegħek taħt il-liċenzja [https://creativecommons.org/licenses/by-sa/3.0/ Creative Commons Attribution/Share-Alike License 3.0] u l-[https://www.gnu.org/copyleft/fdl.html GFDL].\nInti taqbel li bħala minimu tiġi kreditat minn utenti oħra permezz ta\\' ħolqa jew URL lejn il-paġna li inti qed tikkontribwixxi abbażi tal-liċenzja Creative Commons.
+wikimedia-copyright|It-test huwa disponibbli taħt il-<a href="https://creativecommons.org/licenses/by-sa/3.0/">Liċenzja Creative Commons Attribution/Share-Alike</a>;\ntermini addizjonali jistgħu japplikaw.\nAra t-<a href="https://wikimediafoundation.org/wiki/Terms_of_Use">termini ta' użu</a> għal aktar dettalji.
+wikimedia-copyrightwarning|Billi tiklikkja fuq il-buttuna "{{int:savearticle}}", int taqbel mat-[https://wikimediafoundation.org/wiki/Terms_of_Use termini ta' użu], u rrevokabilment taqbel li tħalli l-kontribuzzjoni tiegħek taħt il-liċenzja [https://creativecommons.org/licenses/by-sa/3.0/ Creative Commons Attribution/Share-Alike License 3.0] u l-[https://www.gnu.org/copyleft/fdl.html GFDL].\nInti taqbel li bħala minimu tiġi kreditat minn utenti oħra permezz ta' ħolqa jew URL lejn il-paġna li inti qed tikkontribwixxi abbażi tal-liċenzja Creative Commons.
 cant-delete-main-page|Ma tistax tħassar jew tmexxi l-paġna prinċipali.
 wikimedia-translationnotifications-signup-legal|Inti taqbel li billi tipprovid din l-informazzjoni lill-Fondazzjoni Wikimedia aħna nistgħu nikkuntatjawk rigward traduzzjonijiet jew suġġetti oħra relatati mal-moviment tal-Wikimedia li naħsbu li jistgħu jinteressawk. Inti taqbel li d-dejta tiegħek tista' tiġi miżmuma fl-Istati Uniti tal-Amerika u hi suġġetta għall-[https://wikimediafoundation.org/wiki/Privacy_policy politika tal-privatezza] tagħna.
 createacct-helpusername|[[{{MediaWiki:createacct-helpusername-url}}\u007C(għini nagħżel)]]

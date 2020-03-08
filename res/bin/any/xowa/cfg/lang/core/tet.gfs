@@ -5,8 +5,8 @@ this
 -2|Media
 -1|Espesiál
 1|Diskusaun
-2|Uza-na\\'in
-3|Diskusaun Uza-na\\'in
+2|Uza-na'in
+3|Diskusaun Uza-na'in
 5|Diskusaun $1
 6|Imajen
 7|Diskusaun Imajen
@@ -40,16 +40,16 @@ CreateAccount|Rejista
 Emailuser|Haruka_korreiu_eletróniku
 Export|Esporta
 Import|Importa
-BlockList|Lista_ema_sira-ne\\'ebé_blokeiu_tiha
+BlockList|Lista_ema_sira-ne'ebé_blokeiu_tiha
 Listadmins|Lista_administradór
 Listfiles|Lista_imajen
-Listusers|Lista_uza-na\\'in
+Listusers|Lista_uza-na'in
 Longpages|Pájina_naruk
 Movepage|Book_pájina~Book
-Mypage|Ha\\'u-nia_pájina
+Mypage|Ha'u-nia_pájina
 Newimages|Imajen_foun
 Preferences|Preferénsia
-Protectedpages|Pájina_sira-ne\\'ebé_proteje_tiha
+Protectedpages|Pájina_sira-ne'ebé_proteje_tiha
 Randompage|Pájina_ruma
 Recentchanges|Mudansa_foufoun_sira
 Search|Buka
@@ -61,7 +61,7 @@ Upload|Tau_iha_arkivu_laran
 Userrights|Priviléjiu
 Version|Versaun
 Watchlist|Lista_hateke
-Whatlinkshere|Pájina_sira_ne\\'ebé_bá_iha_ne\\'e
+Whatlinkshere|Pájina_sira_ne'ebé_bá_iha_ne'e
 Withoutinterwiki|Laiha_interwiki
 ']:>
 ).lang

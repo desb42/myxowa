@@ -253,7 +253,7 @@ proofreadpage-indexoai-eprint-content-url|{{notranslate}}
 proofreadpage-indexoai-eprint-content-text|Short description of the OAI-PMH API.
 proofreadpage-indexoai-error-schemanotfound|Title of the error when a requested XML Schema does not exist.
 proofreadpage-indexoai-error-schemanotfound-text|Text of the error when a requested XML schema does not exist. Parameters:\n* ~{0} is name of the schema.
-proofreadpage-disambiguationspage|This message is the name of the template used for marking disambiguation pages. It is used to find all pages which link to disambiguation pages.\n\n{{doc-important\u007CDon\\'t translate the "Template:" part!}}\n{{Identical\u007CTemplate:disambig}}
+proofreadpage-disambiguationspage|This message is the name of the template used for marking disambiguation pages. It is used to find all pages which link to disambiguation pages.\n\n{{doc-important\u007CDon't translate the "Template:" part!}}\n{{Identical\u007CTemplate:disambig}}
 relatedarticles-title|Title shown on the sidebar
 relatedarticles-desc|{{desc\u007Cname=Related Articles\u007Curl=http://www.mediawiki.org/wiki/Extension:RelatedArticles}}
 scribunto-desc|{{desc\u007Cname=Scribunto\u007Curl=http://www.mediawiki.org/wiki/Extension:Scribunto}}
@@ -292,7 +292,7 @@ scribunto-lua-notarrayreturn|Error message.
 scribunto-luastandalone-proc-error|Exception message.
 scribunto-luastandalone-proc-error-msg|Exception message. Parameters:\n* ~{0} - (Unused)\n* ~{1} - Warning/error text from PHP
 scribunto-luastandalone-proc-error-proc-open|Exception message displayed when PHP's proc_open function is not available, which is needed by the LuaStandalone engine.
-scribunto-luastandalone-proc-error-safe-mode|Exception message displayed when PHP\\'s "safe_mode" configuration directive is enabled.
+scribunto-luastandalone-proc-error-safe-mode|Exception message displayed when PHP's "safe_mode" configuration directive is enabled.
 scribunto-luastandalone-decode-error|Exception message.
 scribunto-luastandalone-write-error|Exception message.
 scribunto-luastandalone-read-error|Exception message.
@@ -408,12 +408,12 @@ wikieditor-toolbar-tool-replace|{{Identical\u007CSearch and replace}}
 wikieditor-toolbar-tool-replace-title|{{Identical\u007CSearch and replace}}
 wikieditor-toolbar-tool-replace-search|{{Identical\u007CSearch}}
 wikieditor-toolbar-tool-replace-case|This could as well be translated as "case sensitive search" -\n"case" refers to character case, that is upper case, or lower case.
-wikieditor-toolbar-tool-replace-regex|A "regular expression" is a syntax to find strings based on patterns, for more see [[wikipedia:Regular expression\u007Cthe Wikipedia article]].\n\nMore notes:\n* "Regular expression" is mostly a programmer tool, which is sometimes exposed to normal users too. It\\'s almost as an programming language, but it is used to describe different kinds of strings (sometimes also called patterns and pattern matching), and is often used to change (parts of) the strings,  too.
+wikieditor-toolbar-tool-replace-regex|A "regular expression" is a syntax to find strings based on patterns, for more see [[wikipedia:Regular expression\u007Cthe Wikipedia article]].\n\nMore notes:\n* "Regular expression" is mostly a programmer tool, which is sometimes exposed to normal users too. It's almost as an programming language, but it is used to describe different kinds of strings (sometimes also called patterns and pattern matching), and is often used to change (parts of) the strings,  too.
 wikieditor-toolbar-tool-replace-button-findnext|{{Identical\u007CFind next}}
 wikieditor-toolbar-tool-replace-button-replace|{{Identical\u007CReplace}}
 wikieditor-toolbar-tool-replace-close|{{Identical\u007CClose}}
 wikieditor-toolbar-tool-replace-success|Parameter:\n* ~{0} - the number of replacements
-wikieditor-toolbar-tool-replace-invalidregex|Parameters:\n* ~{0} - a browser-supplied error message, probably in English, possibly in the browser language.\n\nA "regular expression" is a syntax to find strings based on patterns, for more see [[wikipedia:Regular expression\u007Cthe Wikipedia article]].\n\nRegular expressions are mostly a programmer tool, which is sometimes exposed to normal users too.\n\nIt\\'s almost as an programming language, but it is used to describe different kinds of strings (sometimes also called patterns and pattern matching), and is often used to change (parts of) the strings too.
+wikieditor-toolbar-tool-replace-invalidregex|Parameters:\n* ~{0} - a browser-supplied error message, probably in English, possibly in the browser language.\n\nA "regular expression" is a syntax to find strings based on patterns, for more see [[wikipedia:Regular expression\u007Cthe Wikipedia article]].\n\nRegular expressions are mostly a programmer tool, which is sometimes exposed to normal users too.\n\nIt's almost as an programming language, but it is used to describe different kinds of strings (sometimes also called patterns and pattern matching), and is often used to change (parts of) the strings too.
 wikieditor-toolbar-section-characters|This will be a toolbar for special characters, like emoticons.\nFor more information, see http://www.mediawiki.org/wiki/Extension:WikiEditor/Toolbar_customization\n{{Identical\u007CSpecial character}}
 wikieditor-toolbar-characters-page-latin|This is the name of a script, or alphabet, not a language
 wikieditor-toolbar-characters-page-latinextended|The name of the Latin Extended character set section of the toolbar.\nFor more information, see http://www.mediawiki.org/wiki/Extension:WikiEditor/Toolbar_customization
@@ -468,10 +468,10 @@ wikieditor-toolbar-help-content-file-description|{{Identical\u007CEmbedded file}
 wikieditor-toolbar-help-content-file-syntax|{{doc-important\u007C''thumb'' is a magic word. Leave it untranslated!}}\nParameters:\n* \\~{0} - "File" namespace name
 wikieditor-toolbar-help-content-file-result|{{doc-important\u007CDo not translate anything except "Caption text" (twice) and "Enlarge" (to "{{int:thumbnail-more}}").}}\nParameters:\n* ~{0} - style path. e.g. "/w/skins"\n* ~{1} - extension assets path. e.g. "/w/extensions"
 wikieditor-toolbar-help-content-reference-description|{{Identical\u007CReference}}
-wikieditor-toolbar-help-content-reference-syntax|I suggest leaving the <code>name="test"</code> string in English\n\nwww.example.org is not a real website, but it has been reserved to use in software documentation. If you translate the word example and try to go to that web address then you might get a message that it doesn\\'t exist. But somebody may have created a commercial web page for that address, such as www.Beispiel.org, using the German word for example. It is therefore recommended that you do not translate http://www.example.org at all. If you do wish to translate it you should first check where the translated link takes you.
+wikieditor-toolbar-help-content-reference-syntax|I suggest leaving the <code>name="test"</code> string in English\n\nwww.example.org is not a real website, but it has been reserved to use in software documentation. If you translate the word example and try to go to that web address then you might get a message that it doesn't exist. But somebody may have created a commercial web page for that address, such as www.Beispiel.org, using the German word for example. It is therefore recommended that you do not translate http://www.example.org at all. If you do wish to translate it you should first check where the translated link takes you.
 wikieditor-toolbar-help-content-rereference-syntax|{{Optional}}
 wikieditor-toolbar-help-content-showreferences-syntax|{{Optional}}
-wikieditor-toolbar-help-content-showreferences-result|For the <code><nowiki><li></nowiki></code> tag\\'s <code>id</code> attribute, non-ASCII characters are URL-encoded as follows: a period (<code>.</code>) followed by a capital hexadecimal code. For example, <code><nowiki><ref name="thử"></nowiki></code> produces <code><nowiki><li id="cite_note-th.E1.BB.AD-0"></nowiki></code>.\n\nwww.example.org is not a real website, but it has been reserved to use in software documentation. If you translate the word example and try to go to that web address then you might get a message that it doesn\\'t exist. But somebody may have created a commercial web page for that address, such as www.Beispiel.org, using the German word for example. It is therefore recommended that you do not translate http://www.example.org at all. If you do wish to translate it you should first check where the translated link takes you.
+wikieditor-toolbar-help-content-showreferences-result|For the <code><nowiki><li></nowiki></code> tag's <code>id</code> attribute, non-ASCII characters are URL-encoded as follows: a period (<code>.</code>) followed by a capital hexadecimal code. For example, <code><nowiki><ref name="thử"></nowiki></code> produces <code><nowiki><li id="cite_note-th.E1.BB.AD-0"></nowiki></code>.\n\nwww.example.org is not a real website, but it has been reserved to use in software documentation. If you translate the word example and try to go to that web address then you might get a message that it doesn't exist. But somebody may have created a commercial web page for that address, such as www.Beispiel.org, using the German word for example. It is therefore recommended that you do not translate http://www.example.org at all. If you do wish to translate it you should first check where the translated link takes you.
 wikieditor-toolbar-help-content-signaturetimestamp-description|{{Identical\u007CSignature with timestamp}}
 wikieditor-toolbar-help-content-signaturetimestamp-syntax|{{notranslate}}
 wikieditor-toolbar-help-content-signature-description|{{Identical\u007CSignature}}
@@ -842,7 +842,7 @@ action-label-update|{{doc-action\u007Clabel-update}}
 action-description-remove|{{doc-action\u007Cdescription-remove}}
 action-description-update|{{doc-action\u007Cdescription-update}}
 wm-license-cc-wiki-link|{{optional}}\nAn interwiki link that will work within Wikimedia projects and lead to a wiki page (most probably in a Wikipedia) in your language providing more information about Creative Commons licenses.\n\nUsed in:\n* {{msg-mw\u007CWm-license-cc-by-3.0-2.5-2.0-1.0-text}}\n* {{msg-mw\u007CWm-license-cc-by-sa-2.5-2.0-1.0-text}}\n* {{msg-mw\u007CWm-license-cc-by-sa-3.0-2.5-2.0-1.0-text}}
-wm-license-cc-attribution|The "attribution" message in a Creative Commons template. See [[:Commons:Template:Cc-by-sa-3.0]] for an example how it\\'s used.\n{{Identical\u007CAttribution}}
+wm-license-cc-attribution|The "attribution" message in a Creative Commons template. See [[:Commons:Template:Cc-by-sa-3.0]] for an example how it's used.\n{{Identical\u007CAttribution}}
 wm-license-cc-by-1.0-text|{{CreativeCommonsLicense\u007Cby\u007C1.0}}
 wm-license-cc-by-1.0-fi-text|{{CreativeCommonsLicense\u007Cby\u007C1.0\u007Cfi}}
 wm-license-cc-by-1.0-il-text|{{CreativeCommonsLicense\u007Cby\u007C1.0\u007Cil}}
@@ -1063,7 +1063,7 @@ wm-license-artwork-credit-line|Label "Credit line" at [[Commons:Template:Artwork
 wm-license-artwork-references|Label "References" at [[Commons:Template:Artwork]]. Field holds books and websites with information about the artwork.\n{{Identical\u007CReference}}
 wm-license-artwork-inscriptions|Label "Inscriptions" at [[Commons:Template:Artwork]]. Field holds \tdescription of: inscriptions (text carved, painted, etc. on the artwork), watermarks, captions, coats of arm, etc.
 wm-license-artwork-notes|Label "Notes" at [[Commons:Template:Artwork]]. Field holds general notes, not covered by other specific fields, about the artwork.\n{{Identical\u007CNote}}
-wm-license-artwork-id|Identification number: label "Accession number" at [[Commons:Template:Artwork]]. Field holds museum\\'s accession number or some other inventory or identification number used by the parent institution. Often link to the institution database record is also provided.
+wm-license-artwork-id|Identification number: label "Accession number" at [[Commons:Template:Artwork]]. Field holds museum's accession number or some other inventory or identification number used by the parent institution. Often link to the institution database record is also provided.
 wm-license-artwork-source|Label "Source/Photographer" at [[Commons:Template:Artwork]]. Field holds information about source of the file or the photographer. For example it might be website or book name where the image come from, or the name of the photographer that took the picture.
 wm-license-book-edition|Label "Edition" at [[Commons:Template:Book]].\n{{Identical\u007CEdition}}
 wm-license-book-editor|Label "Editor" at [[Commons:Template:Book]].\n{{Identical\u007CEditor}}
@@ -1074,7 +1074,7 @@ wm-license-book-place-of-publication|Label "Place of publication" at [[Commons:T
 wm-license-book-printer|Label "Printer" at [[Commons:Template:Book]].\n{{Identical\u007CPrinter}}
 wm-license-book-publisher|Label "Publisher" at [[Commons:Template:Book]].\n{{Identical\u007CPublisher}}
 wm-license-book-series-title|Label "Series title" at [[Commons:Template:Book]].\n{{Identical\u007CSeries title}}
-wm-license-book-start-this-book|Label "Start this Book" at [[Commons:Template:Book]]. It\\'s the label of the link to the first page of the book the user is seeing one image of. [[commons:File:Meyers_b1_s0024.jpg\u007CExample]]\n\nAlternative wording: "The beginning of the book"
+wm-license-book-start-this-book|Label "Start this Book" at [[Commons:Template:Book]]. It's the label of the link to the first page of the book the user is seeing one image of. [[commons:File:Meyers_b1_s0024.jpg\u007CExample]]\n\nAlternative wording: "The beginning of the book"
 wm-license-book-subtitle|Label "Subtitle" at [[Commons:Template:Book]].\n{{Identical\u007CSubtitle}}
 wm-license-book-title|Label "Title" at [[Commons:Template:Book]].\n{{Identical\u007CTitle}}
 wm-license-book-translator|Label "Translator" at [[Commons:Template:Book]].\n{{Identical\u007CTranslator}}

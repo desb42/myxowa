@@ -239,7 +239,7 @@ wm-license-information-other-versions|Ôtès modêyes
 wm-license-own-work|Prôpe ovraedje
 wm-license-self-one-license-with-author|~{0}, li ci k' a les abondroets so ciste ouve, l' eplaide dizo l' licinse shuvante:
 wm-license-self-multiple-licenses-select|Voz ploz tchoezi l' licince ki vos vloz eployî.
-wikimediamessages-desc|Messaedjes rén k\\' pol waibe "Wikimedia"
+wikimediamessages-desc|Messaedjes rén k' pol waibe "Wikimedia"
 sitesupport|Ecwårlaedje
 tooltip-n-sitesupport|Sotnez nos
 group-Ex_Administrator|Vîs manaedjeus
@@ -316,7 +316,7 @@ group-coder-member|{{GENDER:~{0}\u007Cfijheu\u007Cfijheuse}} di côdes
 group-inactive|Uzeus ki n' boutèt nén
 group-inactive-member|{{GENDER:~{0}\u007Cuzeu\u007Cuzeuse}} ki n' boute nén
 grouppage-inactive|{{ns:project}}:Uzeus ki n' boutnut nén
-wikimedia-copyright|Les tecses sont disponibes dizo l\\' <a href="https://creativecommons.org/licenses/by-sa/3.0/">licince "\\'\\'Creative Commons\\'\\'" atribucion pårtaedje a l’ idintike</a>.\nLoukîz les <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">condicions d’ eployaedje</a> po saveur les ca et les ma.
+wikimedia-copyright|Les tecses sont disponibes dizo l' <a href="https://creativecommons.org/licenses/by-sa/3.0/">licince "''Creative Commons''" atribucion pårtaedje a l’ idintike</a>.\nLoukîz les <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">condicions d’ eployaedje</a> po saveur les ca et les ma.
 wikimedia-copyrightwarning|Si vos clitchîz so «{{int:savearticle}}», vos acceptez, sins poleur rivni e-n erî, di mete vosse sicrijhaedje dizo l' [https://creativecommons.org/licenses/by-sa/3.0/ licince "''Creative Commons"'' atribucion pårtaedje a l’ idintike 3.0] eyet [https://www.gnu.org/copyleft/fdl.html GFDL].\nEt esse sifwaitmint d' acoird d’ esse ricnoxhou (-owe) come sicrijheu(se) di ces racsegnes la, pol moens pa ene hårdêye ou èn URL aviè l’ årtike ki vos avoz scrît ou ki vos î avoz bodjî.\nLoukîz les [https://wikimediafoundation.org/wiki/Terms_of_Use condicions d’ eployaedje] po saveur les ca et les ma.
 cant-delete-main-page|Vos n' poloz nén disfacer ou displaecî l' mwaisse pådje.
 tog-underline|Sorlignî les loyéns:

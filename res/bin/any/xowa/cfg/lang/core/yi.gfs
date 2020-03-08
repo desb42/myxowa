@@ -74,7 +74,7 @@ Listredirects|ווייטערפירונגען
 Listusers|ליסטע_פון_באניצערס
 Lockdb|פארשליסן_דאטנבאזע
 Log|לאגביכער
-Lonelypages|פאר\\'יתומ\\'טע_בלעטער
+Lonelypages|פאר'יתומ'טע_בלעטער
 Longpages|לאנגע_בלעטער
 MergeHistory|צונויפמישן_היסטאריע
 MIMEsearch|זוכן_MIME
@@ -343,7 +343,7 @@ cite_error_references_invalid_parameters_group|אומגילטיקער <code>&lt;
 cite_error_references_no_text|אומגילטיגער <code>&lt;ref&gt;</code> טאַג;\nקיין טעקסט נישט געשריבן פֿאַר רעפֿערענצן מיטן נאָמען <code>~{0}</code>
 cite_error_included_ref|פֿעלט א שליסנדיגער <code>&lt;/ref&gt;</code> פֿאַר <code>&lt;ref&gt;</code> טאַג
 cite_error_refs_without_references|ס'זענען דא <code>&lt;ref&gt;</code> טאַגן, אבער מ'האט נישט געטראפֿן קיין <code>&#123;&#123;רעפליסטע&#125;&#125;</code> מוסטער און נישט קיין <code>&lt;references/&gt;</code> טאַג.
-cite_error_group_refs_without_references|ס\\'זענען דא <code>&lt;ref&gt;</code> טאַגן פֿאַר א גרופע וואס הייסט "~{0}", אבער מ\\'האט נישט געטראפֿן קיין אַנטקעגענעם  <code>&lt;references group="~{0}"/&gt;</code> טאַג, אדער א שליסנדיקער <code>&lt;/ref&gt;</code> פֿעלט.
+cite_error_group_refs_without_references|ס'זענען דא <code>&lt;ref&gt;</code> טאַגן פֿאַר א גרופע וואס הייסט "~{0}", אבער מ'האט נישט געטראפֿן קיין אַנטקעגענעם  <code>&lt;references group="~{0}"/&gt;</code> טאַג, אדער א שליסנדיקער <code>&lt;/ref&gt;</code> פֿעלט.
 cite_error_references_group_mismatch|דער <code>&lt;ref&gt;</code> טאג אין <code>&lt;references&gt;</code> האט א גרופע אייגנקייט וואס איז סותר "~{0}".
 cite_error_references_missing_group|דער <code>&lt;ref&gt;</code> טאג דעפינעירט אין <code>&lt;references&gt;</code> האט גרופע אייגנקייט "~{0}" וואס באווייזט זיך נישט אין פריערדיקן טעקסט.
 cite_error_references_missing_key|<code>&lt;ref&gt;</code> טאַג מיטן נאָמען "~{0}" דעפֿינירט אין<code>&lt;references&gt;</code> נישט געניצט אין פֿריערדיקן טעקסט.

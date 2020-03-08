@@ -7,18 +7,18 @@ this
 -1|Manokana
 1|Dinika
 2|Mpikambana
-3|Dinika amin\\'ny mpikambana
-5|Dinika amin\\'ny $1
+3|Dinika amin'ny mpikambana
+5|Dinika amin'ny $1
 6|Sary
-7|Dinika amin\\'ny sary
+7|Dinika amin'ny sary
 8|MediaWiki
-9|Dinika amin\\'ny MediaWiki
+9|Dinika amin'ny MediaWiki
 10|Endrika
-11|Dinika amin\\'ny endrika
+11|Dinika amin'ny endrika
 12|Fanoroana
-13|Dinika amin\\'ny fanoroana
+13|Dinika amin'ny fanoroana
 14|Sokajy
-15|Dinika amin\\'ny sokajy
+15|Dinika amin'ny sokajy
 ']:>
 ).lang
 .ns_aliases
@@ -36,7 +36,7 @@ this
 12|Aide
 13|Discussion Aide
 12|Fanampiana
-13|Dinika amin\\'ny fanampiana
+13|Dinika amin'ny fanampiana
 14|Catégorie
 15|Discussion Catégorie
 ']:>
@@ -60,10 +60,10 @@ ChangeEmail|HanovaNyMailaka~Hanova_ny_mailaka
 ChangePassword|Hiova_tenimiafina~HiovaTenimiafina~Fiovantenimiafina
 ComparePages|Fampitaham-pejy~Fampitahampejy~HampitahaPejy~Hampitaha_pejy
 Confirmemail|FanamarinanaAdiresyMailaka~Fanamarinana_adiresy_mailaka
-Contributions|Fandraisan\\'anjara~Fandraisananjara
+Contributions|Fandraisan'anjara~Fandraisananjara
 CreateAccount|Hamorona_kaonty~HamoronaKaonty
 Deadendpages|Pejy_tsy_misy_rohy~Pejy_tsy_mandrohy
-DeletedContributions|Fandraisan\\'anjara_voafafa~FandraisananjaraVoafafa
+DeletedContributions|Fandraisan'anjara_voafafa~FandraisananjaraVoafafa
 Diff|Fahasmhf.
 DoubleRedirects|Fihodinana_miroa
 EditWatchlist|Hanova_ny_pejy_arahana~HanovaPejyArahana
@@ -83,7 +83,7 @@ Listbots|Lisitry_ny_rôbô~LisitraRôbô~LisitraRobo
 Listfiles|Lisitry_ny_rakitra~LisitraRakitra
 Listgrouprights|Lisitry_ny_satam-pikambana
 Listredirects|Lisitry_ny_fihodinana
-Listusers|Lisitran\\'ny_mpikambana
+Listusers|Lisitran'ny_mpikambana
 Lockdb|Hanidy_ny_database
 Log|Laogy
 Lonelypages|Pejy_manirery
@@ -97,7 +97,7 @@ Mostlinkedcategories|Sokajy_voarohy_indrindra
 Mostlinkedtemplates|Endrika_voarohy_indrindra
 Mostrevisions|Pejy_be_mpanova_indrindra
 Movepage|Hanova_anaram-pejy
-Mycontributions|Fandraisan\\'anjarako
+Mycontributions|Fandraisan'anjarako
 Mypage|Pejiko
 Mytalk|Pejin-dresako
 Myuploads|Fanondranako
@@ -133,7 +133,7 @@ Uncategorizedimages|Sary_tsy_misy_sokajy~Rakitra_tsy_misy_sokajy
 Uncategorizedpages|Pejy_tsy_misy_sokajy
 Uncategorizedtemplates|Endrika_tsy_misy_sokajy
 Undelete|Hamerina
-Unlockdb|Hanala_ny_hidin\\'ny_database
+Unlockdb|Hanala_ny_hidin'ny_database
 Unusedcategories|Sokajy_tsy_miasa
 Unusedimages|Rakitra_tsy_miasa~Sary_tsy_miasa
 Unusedtemplates|Endrika_tsy_misy_mpampiasa
@@ -346,7 +346,7 @@ categorytree-go|hijery ny hazon-tsokajy
 categorytree-parents|renisokajy
 categorytree-mode-categories|sokajy ihany
 categorytree-mode-pages|pejy tsy misy sary
-cite-desc|Mamnpy ny balizy <tt><nowiki><ref[ name="id"]></nowiki></tt> et <tt><nowiki><references/></nowiki></tt> ho an\\'ny tsiahy.
+cite-desc|Mamnpy ny balizy <tt><nowiki><ref[ name="id"]></nowiki></tt> et <tt><nowiki><references/></nowiki></tt> ho an'ny tsiahy.
 cite_article_link|Hitanisa ity pejy ity
 wikieditor-toolbar-tool-table-example-cell-text|Lahatsoratra anaty sela
 wikieditor-toolbar-tool-table-title|Hampiditra tabilao
@@ -498,7 +498,7 @@ group-coder-member|mpanakaody
 group-inactive|mpikambana tsy miasa
 group-inactive-member|mpikambana tsy miasa
 grouppage-inactive|{{ns:project}}:Mpikambana tsy manova
-wikimedia-copyright|Azo ampiasaina araka ny fepetra apetraky ny lisansa <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr">Creative Commons Attribution/Share-Alike </a> ; Mety misy ny fepetra fanampiny mihatra. Jereo <a href="https://wikimediafoundation.org/wiki/Fepetram-pampiasana">fepetram-pampiasana</a> ho an\\'ny antsipirihany.
+wikimedia-copyright|Azo ampiasaina araka ny fepetra apetraky ny lisansa <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr">Creative Commons Attribution/Share-Alike </a> ; Mety misy ny fepetra fanampiny mihatra. Jereo <a href="https://wikimediafoundation.org/wiki/Fepetram-pampiasana">fepetram-pampiasana</a> ho an'ny antsipirihany.
 tog-underline|Hanipika ny rohy:
 tog-hideminor|Hanitsika ny fiovana madinika ao amin'ny fiovana farany
 tog-hidepatrolled|Hanitrika ny fiovana voaara-maso ao amin'ny fiovana farany

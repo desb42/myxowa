@@ -181,18 +181,18 @@ cite_error_ref_no_key|Tag <code>&lt;ref&gt;</code> invalide;\nle referimende sen
 cite_error_ref_too_many_keys|Tag <code>&lt;ref&gt;</code> invalide;\nnome invalide, pe esembie troppe luènghe
 cite_error_ref_no_input|Tag <code>&lt;ref&gt;</code> invalide;\nreferimende senza nome onne tenè 'nu condenute
 cite_error_references_invalid_parameters|Tag <code>&lt;references&gt;</code> invalide;\nnon ge se pò mettere nisciune parametre.\nAuse <code>&lt;references /&gt;</code>
-cite_error_references_invalid_parameters_group|Tag <code>&lt;references&gt;</code> invalide;\nsulamende \\'u parametre "group" pò essere ausate.\nAuse <code>&lt;references /&gt;</code> o <code>&lt;references group="..." /&gt;</code>
+cite_error_references_invalid_parameters_group|Tag <code>&lt;references&gt;</code> invalide;\nsulamende 'u parametre "group" pò essere ausate.\nAuse <code>&lt;references /&gt;</code> o <code>&lt;references group="..." /&gt;</code>
 cite_error_references_no_backlink_label|Le etichette personalizzate pe le collegaminde de rrete onne spicciate.\nDefiniscene otre jndr'à 'u messàgge <nowiki>[[MediaWiki:Cite references link many format backlink labels]]</nowiki>.
-cite_error_no_link_label_group|Le etichette personalizzate de le collegaminde pu gruppe "~{0}" onne spicciate.\nDefiniscene otre jndr\\'à \\'u messàgge <nowiki>[[MediaWiki:~{1}]]</nowiki>.
+cite_error_no_link_label_group|Le etichette personalizzate de le collegaminde pu gruppe "~{0}" onne spicciate.\nDefiniscene otre jndr'à 'u messàgge <nowiki>[[MediaWiki:~{1}]]</nowiki>.
 cite_error_references_no_text|Tag <code>&lt;ref&gt;</code> invalide;\nnisciune teste ere previste pe le referimende nnomenate <code>~{0}</code>
 cite_error_included_ref|Stè 'u tag <code>&lt;/ref&gt;</code> ma manghe <code>&lt;ref&gt;</code>
 cite_error_refs_without_references|'u tag <code>&lt;ref&gt;</code> esiste, ma non g'esiste 'u tag <code>&lt;references/&gt;</code>
-cite_error_group_refs_without_references|\\'U tag <code>&lt;ref&gt;</code> esiste pu gruppe nomenate "~{0}", ma non ge corresponne a \\'u tag acchiate <code>&lt;references group="~{0}"/&gt;</code>, o \\'nu tag de chiusure <code>&lt;/ref&gt;</code> manghe
+cite_error_group_refs_without_references|'U tag <code>&lt;ref&gt;</code> esiste pu gruppe nomenate "~{0}", ma non ge corresponne a 'u tag acchiate <code>&lt;references group="~{0}"/&gt;</code>, o 'nu tag de chiusure <code>&lt;/ref&gt;</code> manghe
 cite_error_references_group_mismatch|'U tag <code>&lt;ref&gt;</code> tag jndr'à <code>&lt;references&gt;</code> tène conflitte cu l'attribbute d'u gruppe "\\~{0}".
 cite_error_references_missing_group|'U tag <code>&lt;ref&gt;</code> definite jndr'à <code>&lt;references&gt;</code> ave attribbute de gruppe "\\~{0}" 'u quale non ge jesse jndr'à 'u teste prengepàle.
 cite_error_references_missing_key|'U tag <code>&lt;ref&gt;</code> cu 'u nome "\\~{0}" definite jndr'à <code>&lt;references&gt;</code> non g'avene ausate jndr'à 'u teste prengepàle.
 cite_error_references_no_key|'U tag <code>&lt;ref&gt;</code> definite jndr'à <code>&lt;references&gt;</code> non ge tène 'nu nome d'attrebbute.
-cite_error_empty_references_define|\\'U tag <code>&lt;ref&gt;</code> definite jndr\\'à <code>&lt;references&gt;</code> cu \\'u nome "~{0}" non ge tène condenute.
+cite_error_empty_references_define|'U tag <code>&lt;ref&gt;</code> definite jndr'à <code>&lt;references&gt;</code> cu 'u nome "~{0}" non ge tène condenute.
 cite_references_link_accessibility_label|Zumbe sus
 cite_references_link_many_accessibility_label|Zumbe sus a:
 imagemap_desc|Permette le mappe de immaggine cazzabbele late cliende ausanne 'u tag <code>&lt;imagemap&gt;</code>
@@ -296,7 +296,7 @@ scribunto-parser-dialog-title|Errore d'u script
 scribunto-error-short|Errore d'u script: ~{0}
 scribunto-error-long|Errore d'u script:\n\n~{0}
 scribunto-console-clear|Pulizze
-scribunto-lua-in-function|jndr\\'à funzione "~{0}"
+scribunto-lua-in-function|jndr'à funzione "~{0}"
 scribunto-lua-error-location|Errore Lua: ~{0}: ~{1}.
 scribunto-lua-error|Errore Lua: ~{1}.
 cite_article_desc|Aggiunge 'na pàgena speciele de [[Special:Cite\u007Ccitaziune]] e collegamende a scatele de le struminde
@@ -519,7 +519,7 @@ wikieditor-toolbar-help-content-file-description|File 'ngorporate
 wikieditor-toolbar-help-content-file-syntax|[[~{0}:Example.png\u007Cthumb\u007CTeste d'u titele]]
 wikieditor-toolbar-help-content-file-result|<div style='width:104px;' class='thumbinner'><a title='Teste d'u titele' class='image' href='#'><img height='50' width='100' border='0' class='thumbimage' src='~{1}/WikiEditor/modules/images/toolbar/example-image.png' alt=''/></a><div class='thumbcaption'><div class='magnify'><a title='Allarie' class='internal' href='#'><img height='11' width='15' alt='' src='~{0}/common/images/magnify-clip.png'/></a></div>Teste d'u titele</div></div>
 wikieditor-toolbar-help-content-reference-description|Riferimende
-wikieditor-toolbar-help-content-reference-syntax|Teste d\\'a pàgene.&lt;ref name="test"&gt;[http://www.example.org Teste d\\'u collegamende], teste addizionale.&lt;/ref&gt;
+wikieditor-toolbar-help-content-reference-syntax|Teste d'a pàgene.&lt;ref name="test"&gt;[http://www.example.org Teste d'u collegamende], teste addizionale.&lt;/ref&gt;
 wikieditor-toolbar-help-content-reference-result|Teste d'a pàgene.<sup><a href='#'>[1]</a></sup>
 wikieditor-toolbar-help-content-rereference-description|Ause addizionale d'u stesse riferimende
 wikieditor-toolbar-help-content-rereference-result|Teste d'a pàgene.<sup><a href='#'>[1]</a></sup>
@@ -979,8 +979,8 @@ group-inactive|Utinde inattive
 group-inactive-member|{{GENDER:~{0}\u007Cutende inattive}}
 grouppage-inactive|{{ns:project}}:Utinde inattive
 wikimedia-copyright|'U teste ète disponibbile sotte 'a <a href="https://creativecommons.org/licenses/by-sa/3.0/">licenze ''Creative Commons Attribution/Condivide a 'u stesse mode</a>;\ntermine addizionale pò essere applicate.\nVide <a href="https://wikimediafoundation.org/wiki/Terms_of_use">Termine de Utilizze</a> pe cchiù 'mbormaziune.
-wikidata-copyright|Tutte le date strutturate da \\'u namespace prengepàle e probbietà sue jè disponibbile sotte a <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Definition of the Creative Commons CC0 License">Licenze Creative Commons CC0</a>;\nteste jndr\\'à otre namespace jè disponibbile sotte a <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Definition of the Creative Commons Attribution/Share-Alike License">Licenze de Creative Commons Attribution/Share-Alike</a>;\ntermine addizionale ponne essere applicate.\n\\'Ndruche <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Wikimedia Foundation Terms of Use">le Termine d\\'ause</a> pe dettaglie.
-wikidata-shortcopyrightwarning|Cazzanne  "{{int:wikibase-save}}", tu accette le [https://wikimediafoundation.org/wiki/Terms_of_Use termine d\\'ause], e tu irrevocabbilmende accette de relascià \\'u condrebbute tune sotte a [https://creativecommons.org/publicdomain/zero/1.0/ licenze CC0].
+wikidata-copyright|Tutte le date strutturate da 'u namespace prengepàle e probbietà sue jè disponibbile sotte a <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Definition of the Creative Commons CC0 License">Licenze Creative Commons CC0</a>;\nteste jndr'à otre namespace jè disponibbile sotte a <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Definition of the Creative Commons Attribution/Share-Alike License">Licenze de Creative Commons Attribution/Share-Alike</a>;\ntermine addizionale ponne essere applicate.\n'Ndruche <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Wikimedia Foundation Terms of Use">le Termine d'ause</a> pe dettaglie.
+wikidata-shortcopyrightwarning|Cazzanne  "{{int:wikibase-save}}", tu accette le [https://wikimediafoundation.org/wiki/Terms_of_Use termine d'ause], e tu irrevocabbilmende accette de relascià 'u condrebbute tune sotte a [https://creativecommons.org/publicdomain/zero/1.0/ licenze CC0].
 wikimedia-copyrightwarning|Cazzanne 'u bottone "{{int:savearticle}}", tu ste accette le [https://wikimediafoundation.org/wiki/Terms_of_Use condizziune d'ause] e irrevocabbilmende accette de relassà 'u condrebbute tune sotte le licenze [https://creativecommons.org/licenses/by-sa/3.0/ CC-BY-SA 3.0 Licenze] e [https://www.gnu.org/copyleft/fdl.html GFDL].\nTu accette ca 'nu ipercollegamende o URL jè sufficiende pe l'attribbuzione sotte 'a Licenze Creative Commons.
 wikibase-sitelinks-wikivoyage|Pàggene de Uicchivoyage collegate a sta vôsce
 wikibase-sitelinks-commons|Le pàggene Uicchimedia Commons ca sò collegate a sta vôsce

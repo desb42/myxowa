@@ -213,16 +213,16 @@ cite_error_ref_no_key|Etiqueta <code>&lt;ref&gt;</code> non válida; les referen
 cite_error_ref_too_many_keys|Etiqueta <code>&lt;ref&gt;</code> non válida; nomes non válidos (p.ex. demasiaos)
 cite_error_ref_no_input|Etiqueta <code>&lt;ref&gt;</code> non válida; les referencies ensin nome han tener conteníu
 cite_error_references_invalid_parameters|Etiqueta <code>&lt;references&gt;</code> non válida; nun se permiten parámetros, usa <code>&lt;references /&gt;</code>
-cite_error_references_invalid_parameters_group|Etiqueta <code>&lt;references&gt;</code> non válida;\nnamái se permite\\'l parámetru "group".\nUsa <code>&lt;references /&gt;</code>, o bien <code>&lt;references group="..." /&gt;</code>
+cite_error_references_invalid_parameters_group|Etiqueta <code>&lt;references&gt;</code> non válida;\nnamái se permite'l parámetru "group".\nUsa <code>&lt;references /&gt;</code>, o bien <code>&lt;references group="..." /&gt;</code>
 cite_error_references_no_backlink_label|Etiquetes personalizaes agotaes.\nDefini más nel mensaxe <nowiki>[[MediaWiki:Cite references link many format backlink labels]]</nowiki>
-cite_error_no_link_label_group|Nun queden más etiquetes d\\'enllaz personalizáu pal grupu "~{0}".\nDefine más nel mensaxe <nowiki>[[MediaWiki:~{1}]]</nowiki>.
+cite_error_no_link_label_group|Nun queden más etiquetes d'enllaz personalizáu pal grupu "~{0}".\nDefine más nel mensaxe <nowiki>[[MediaWiki:~{1}]]</nowiki>.
 cite_error_references_no_text|Etiqueta <code>&lt;ref&gt;</code> non válida; nun se conseñó testu pa les referencies nomaes <code>~{0}</code>
 cite_error_included_ref|Falta <code>&lt;/ref&gt;</code> pa la etiqueta <code>&lt;ref&gt;</code>
 cite_error_refs_without_references|Les etiquetes <code>&lt;ref&gt;</code> esisten, pero nun s'alcontró denguna etiqueta <code>&lt;references/&gt;</code>
-cite_error_group_refs_without_references|Les etiquetes <code>&lt;ref&gt;</code> esisten pa un grupu llamáu "~{0}", pero nun s\\'alcontró la etiqueta <code>&lt;references group="~{0}"/&gt;</code> correspondiente, o falta un cierre <code>&lt;/ref&gt;</code>
+cite_error_group_refs_without_references|Les etiquetes <code>&lt;ref&gt;</code> esisten pa un grupu llamáu "~{0}", pero nun s'alcontró la etiqueta <code>&lt;references group="~{0}"/&gt;</code> correspondiente, o falta un cierre <code>&lt;/ref&gt;</code>
 cite_error_references_group_mismatch|La etiqueta <code>&lt;ref&gt;</code> en <code>&lt;references&gt;</code> tien un conflictu col atributu de grupu "~{0}".
-cite_error_references_missing_group|La etiqueta <code>&lt;ref&gt;</code> definida en <code>&lt;references&gt;</code> tien l\\'atributu de grupu "~{0}" que nun apaez nel testu anterior.
-cite_error_references_missing_key|La etiqueta <code>&lt;ref&gt;</code> col nome "~{0}" definida en <code>&lt;references&gt;</code> nun s\\'utiliza nel testu anterior.
+cite_error_references_missing_group|La etiqueta <code>&lt;ref&gt;</code> definida en <code>&lt;references&gt;</code> tien l'atributu de grupu "~{0}" que nun apaez nel testu anterior.
+cite_error_references_missing_key|La etiqueta <code>&lt;ref&gt;</code> col nome "~{0}" definida en <code>&lt;references&gt;</code> nun s'utiliza nel testu anterior.
 cite_error_references_no_key|La etiqueta <code>&lt;ref&gt;</code> definida en <code>&lt;references&gt;</code> nun tien dengún atributu de nome.
 cite_error_empty_references_define|La etiqueta <code>&lt;ref&gt;</code> definida en <code>&lt;references&gt;</code> col nome "~{0}" nun tien conteníu.
 cite_references_link_accessibility_label|Saltar arriba
@@ -354,13 +354,13 @@ scribunto-lua-noreturn|Error de script: El módulu nun devolvió nengún valor. 
 scribunto-lua-notarrayreturn|Error de script: El módulu devolvió una cosa distinta d'una tabla. Esperase que devuelva una tabla d'esportación.
 scribunto-luastandalone-proc-error|Error de Lua: Nun pue crease'l procesu.
 scribunto-luastandalone-proc-error-msg|Error de Lua: Nun pue crease'l procesu: ~{1}
-scribunto-luastandalone-proc-error-proc-open|Error de Lua: Nun pue crease\\'l procesu: proc_open nun ta disponible. Compruebe la direutiva de configuración "disable_functions" de PHP.
-scribunto-luastandalone-proc-error-safe-mode|Error de Lua: Nun pue crese\\'l procesu. Tenga en cuenta que la direutiva de configuración anticuada "safe_mode" de PHP ta activada.
+scribunto-luastandalone-proc-error-proc-open|Error de Lua: Nun pue crease'l procesu: proc_open nun ta disponible. Compruebe la direutiva de configuración "disable_functions" de PHP.
+scribunto-luastandalone-proc-error-safe-mode|Error de Lua: Nun pue crese'l procesu. Tenga en cuenta que la direutiva de configuración anticuada "safe_mode" de PHP ta activada.
 scribunto-luastandalone-decode-error|Error de Lua: Error internu: Nun pudo descodificase'l mensaxe.
 scribunto-luastandalone-write-error|Error de Lua: Error internu: Error al escribir nun conductu (pipe).
 scribunto-luastandalone-read-error|Error de Lua: Error internu: Error al lleer d'un conductu (pipe).
 scribunto-luastandalone-gone|Error de Lua: Error internu: L'intérprete yá acabó.
-scribunto-luastandalone-signal|Error de Lua: Error internu: L\\'intérprete acabó cola señal "~{1}".
+scribunto-luastandalone-signal|Error de Lua: Error internu: L'intérprete acabó cola señal "~{1}".
 scribunto-luastandalone-exited|Error de Lua: Error internu: L'intérprete acabó col estáu ~{1}.
 cite_article_desc|Añade una páxina especial de [[Special:Cite\u007Ccites]] y un enllaz a la caxa de ferramientes
 cite_article_link|Citar esta páxina
@@ -683,7 +683,7 @@ wikibase-itembytitle-lookup-page|Páxina:
 wikibase-itembytitle-submit|Guetar
 wikibase-itembytitle-nothing-found|Nun s'alcontró nengún elementu na gueta anterior. Por favor, refine la consulta con una identificación meyor de la páxina esterna.
 wikibase-itembytitle-invalid-site|La consulta anterior nun pudo usase pa una gueta. Por favor, proporcione un identificador de sitiu válidu.
-wikibase-itembytitle-description|Sitiu ye un códigu d\\'identificación, como "enwiki".
+wikibase-itembytitle-description|Sitiu ye un códigu d'identificación, como "enwiki".
 wikibase-itembytitle-create|Tamién pue [~{0} crear un elementu].
 special-itemdisambiguation|Dixebra d'elementos
 wikibase-itemdisambiguation-lookup-fieldset|Buscar elementos por llingua y etiqueta
@@ -739,11 +739,11 @@ wikibase-setsitelink-warning-remove|¿Realmente quier desaniciar l'enllaz de sit
 wikibase-setsitelink-invalid-site|La id del sitiu "~{0}" ye desconocida. Por favor, use una id de sitiu esistente, como "astwiki".
 wikibase-setsitelink-add-failed|L'enllaz del sitiu nun pudo guardase.
 wikibase-setsitelink-remove-failed|L'enllaz del sitiu nun pudo desaniciase.
-wikibase-setsitelink-not-itemid|"~{0}" nun ye una id d\\'elementu válida. Los enllaces a sitios web namái puen configurase pa elementos.
+wikibase-setsitelink-not-itemid|"~{0}" nun ye una id d'elementu válida. Los enllaces a sitios web namái puen configurase pa elementos.
 wikibase-modifyentity-id|ID:
 wikibase-modifyterm-language|Códigu de llingua:
-wikibase-modifyentity-invalid-id|La ID "~{0}" ye desconocida pal sistema. Por favor, use una ID d\\'entidá válida.
-wikibase-modifyterm-invalid-langcode|L\\'identificador de llingua "~{0}" ye desconocíu. Por favor, use un identificador de llingua conocíu pol sistema, como "ast".
+wikibase-modifyentity-invalid-id|La ID "~{0}" ye desconocida pal sistema. Por favor, use una ID d'entidá válida.
+wikibase-modifyterm-invalid-langcode|L'identificador de llingua "~{0}" ye desconocíu. Por favor, use un identificador de llingua conocíu pol sistema, como "ast".
 special-dispatchstats|Camudar les estadístiques de distribución
 wikibase-dispatchstats-intro|Esta páxina ufre estadístiques tocante a la distribución de cambios a los clientes.\nUna wiki cliente recibe l'avisu d'un cambiu en {{SITENAME}} en cuanto que'l cambiu tea distribuíu nesa wiki, y la cola de trabayos d'esa wiki tenga procesada esa notificación.\n* {{int:wikibase-dispatchstats-changes}} amuesa'l númberu y la data del elementu más antiguu y del más nuevu que tean na cola.\n* {{int:wikibase-dispatchstats-stats}} ufre información tocante a la wiki cliente con más y menos retardu, y una mediana ente elles. Pa cada wiki, úfrese la siguiente información:\n** "{{int:wikibase-dispatchstats-site-id}}" ye la ID interna de la wiki cliente.\n** "{{int:wikibase-dispatchstats-pos}}" ye la ID del últimu cambiu distribuíu a esa wiki.\n** "{{int:wikibase-dispatchstats-lag-num}}" ye'l númberu de cambios ensin distribuir entá a esa wiki.\n** "{{int:wikibase-dispatchstats-lag-time}}" ye'l tiempu ente l'últimu cambiu distribuíu a la wiki, y l'últimu cambiu fechu en {{SITENAME}}.\n** "{{int:wikibase-dispatchstats-touched}}" ye'l tiempu cuando l'últimu llote de cambios distribuyose a la wiki.
 wikibase-dispatchstats-no-stats|Actualmente nun hai estadístiques disponibles.
@@ -1154,10 +1154,10 @@ group-coder-member|{{GENDER:~{0}\u007Cprogramador\u007Cprogramadora}}
 group-inactive|Usuarios inactivos
 group-inactive-member|{{GENDER:~{0}\u007Cusuariu inactivu\u007Cusuaria inactiva}}
 grouppage-inactive|{{ns:project}}:Usuarios inactivos
-wikimedia-copyright|El testu ta disponible baxo la <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.es">Llicencia Creative Commons Reconocimientu/Compartir-Igual 3.0</a>; puen aplicase otres cláusules más.\nLlea <a href="https://wikimediafoundation.org/wiki/Terms_of_Use/ast">les condiciones d\\'usu</a> pa más detalles.
-wikidata-copyright|Tolos datos estruturaos de los espacios de nomes principal y de propiedaá tan disponibles baxo la <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Definition of the Creative Commons CC0 License">llicencia Creative Commons CC0</a>;\nel testu de los demás espacios de nomes ta disponible baxo la <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Definition of the Creative Commons Attribution/Share-Alike License">llicencia Creative Commons reconocimientu/compartir igual</a>;\npuen aplicase otres condiciones más.\nConsulte les <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Wikimedia Foundation Terms of Use">condiciones d\\'usu</a> pa más detalles.
+wikimedia-copyright|El testu ta disponible baxo la <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.es">Llicencia Creative Commons Reconocimientu/Compartir-Igual 3.0</a>; puen aplicase otres cláusules más.\nLlea <a href="https://wikimediafoundation.org/wiki/Terms_of_Use/ast">les condiciones d'usu</a> pa más detalles.
+wikidata-copyright|Tolos datos estruturaos de los espacios de nomes principal y de propiedaá tan disponibles baxo la <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Definition of the Creative Commons CC0 License">llicencia Creative Commons CC0</a>;\nel testu de los demás espacios de nomes ta disponible baxo la <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Definition of the Creative Commons Attribution/Share-Alike License">llicencia Creative Commons reconocimientu/compartir igual</a>;\npuen aplicase otres condiciones más.\nConsulte les <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Wikimedia Foundation Terms of Use">condiciones d'usu</a> pa más detalles.
 wikidata-shortcopyrightwarning|Calcando en «{{int:wikibase-save}}», aceuta les [https://wikimediafoundation.org/wiki/Terms_of_Use/ast condiciones d'usu] y aceuta lliberar irrevocablemente la so collaboración baxo la [https://creativecommons.org/publicdomain/zero/1.0/deed.ast llicencia CC0].
-wikimedia-copyrightwarning|Al calcar nel botón "{{int:savearticle}}" aceutes los [https://wikimediafoundation.org/wiki/Terms_of_Use términos d\\'usu] y aceutes de mou irrevocable lliberar la contribución baxo la [https://creativecommons.org/licenses/by-sa/3.0/ llicencia CC-BY-SA 3.0] y la [https://www.gnu.org/copyleft/fdl.html GFDL].\nAceutes qu\\'un hiperenllaz o URL ye reconocimientu abondo baxo la llicencia Creative Commons.
+wikimedia-copyrightwarning|Al calcar nel botón "{{int:savearticle}}" aceutes los [https://wikimediafoundation.org/wiki/Terms_of_Use términos d'usu] y aceutes de mou irrevocable lliberar la contribución baxo la [https://creativecommons.org/licenses/by-sa/3.0/ llicencia CC-BY-SA 3.0] y la [https://www.gnu.org/copyleft/fdl.html GFDL].\nAceutes qu'un hiperenllaz o URL ye reconocimientu abondo baxo la llicencia Creative Commons.
 wikibase-sitelinks-wikivoyage|Páxines de Wikivoyage enllazaes con esti elementu
 wikibase-sitelinks-commons|Páxina de Wikimedia Commons enllazada con esti elementu
 wikibase-sitelinks-sitename-commonswiki|Commons

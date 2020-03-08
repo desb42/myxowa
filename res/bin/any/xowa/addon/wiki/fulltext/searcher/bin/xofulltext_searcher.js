@@ -109,7 +109,8 @@
         
         // build url
         var path_prefix = xowa.app.mode == 'http_server'
-          ? '/'
+//          ? '/'
+          ? '/xowa/'
           : '/site/';
         var url = path_prefix + xo.elem.get_val_or_null('cur_wiki') + '/wiki/Special:XowaSearch?search=' + search_text;
         var len = this.qarg_keys.length;

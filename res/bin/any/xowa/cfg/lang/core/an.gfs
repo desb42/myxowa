@@ -48,12 +48,12 @@ Emailuser|Ninvía_mensache~Nimbía_mensache
 Export|Exportar
 Fewestrevisions|Pachinas_con_menos_edicions~Pachinas_con_menos_edizions~Pachinas_menos_editatas~Pachinas_con_menos_bersions
 Import|Importar
-BlockList|Lista_d\\'IPs_bloqueyatas~Lista_d\\'IPs_bloquiatas~Lista_d\\'adrezas_IP_bloqueyatas~Lista_d\\'adrezas_IP_bloquiatas
-Listadmins|Lista_d\\'almenistradors
+BlockList|Lista_d'IPs_bloqueyatas~Lista_d'IPs_bloquiatas~Lista_d'adrezas_IP_bloqueyatas~Lista_d'adrezas_IP_bloquiatas
+Listadmins|Lista_d'almenistradors
 Listbots|Lista_de_botz~Lista_de_bots
-Listfiles|Lista_de_fichers~Lista_d\\'imáchens~Lista_d\\'imachens
+Listfiles|Lista_de_fichers~Lista_d'imáchens~Lista_d'imachens
 Listgrouprights|ListaDreitosGrupos
-Listusers|Lista_d\\'usuarios
+Listusers|Lista_d'usuarios
 Log|Rechistro~Rechistros
 Lonelypages|Pachinas_popiellas
 Longpages|Pachinas_mas_largas
@@ -65,7 +65,7 @@ Mostlinkedtemplates|Plantillas_mas_emplegatas~Plantillas_mas_enlazatas~Plantilla
 Mostrevisions|Pachinas_con_más_edicions~Pachinas_con_más_edizions~Pachinas_más_editatas~Pachinas_con_más_bersions
 Movepage|TresladarPachina~Renombrar_pachina~Mober_pachina~Tresladar_pachina
 Mycontributions|As_mías_contrebucions~As_mías_contrebuzions
-Mypage|A_mía_pachina~A_mía_pachina_d\\'usuario
+Mypage|A_mía_pachina~A_mía_pachina_d'usuario
 Mytalk|A_mía_descusión~A_mía_pachina_de_descusión
 Newimages|Nuevos_fichers~Nuevas_imáchens~Nuevas_imachens~Nuebas_imachens
 Newpages|Pachinas_nuevas~Pachinas_recients~Pachinas_nuebas~Pachinas_más_nuebas~Pachinas_más_rezients~Pachinas_rezients
@@ -74,7 +74,7 @@ Preferences|Preferencias
 Prefixindex|Pachinas_por_prefixo~Mirar_por_prefixo
 Protectedpages|Pachinas_protechitas~Pachinas_protechidas
 Protectedtitles|Títols_protechitos~Títols_protexitos~Títols_protechius
-Randompage|Pachina_a_l\\'azar~Pachina_aleatoria~Pachina_aliatoria
+Randompage|Pachina_a_l'azar~Pachina_aleatoria~Pachina_aliatoria
 Recentchanges|Zaguers_cambeos~Cambeos_recients
 Search|Mirar
 Shortpages|Pachinas_más_curtas
@@ -271,14 +271,14 @@ cite_error_ref_no_input|Etiqueta <code>&lt;ref&gt;</code> incorreuta; as referen
 cite_error_references_invalid_parameters|Etiqueta <code>&lt;references&gt;</code> incorreuta; no se premiten parametros, faiga servir <code>&lt;references /&gt;</code>
 cite_error_references_invalid_parameters_group|Etiqueta <code>&lt;references&gt;</code> no conforme;\nnomás se premite o parametro "group".\nFaiga servir <code>&lt;references /&gt;</code>, u <code>&lt;references group="..." /&gt;</code>
 cite_error_references_no_backlink_label|Ya no quedan etiquetas backlink presonalizatas, defina más en o mensache <nowiki>[[MediaWiki:Cite references link many format backlink labels]]</nowiki>
-cite_error_no_link_label_group|S\\'han acorau as etiquetas de vinclos personalizaus ta o grupo "~{0}".\nDefina-ne mas en o mensache <nowiki>[[MediaWiki:~{1}]]</nowiki>.
+cite_error_no_link_label_group|S'han acorau as etiquetas de vinclos personalizaus ta o grupo "~{0}".\nDefina-ne mas en o mensache <nowiki>[[MediaWiki:~{1}]]</nowiki>.
 cite_error_references_no_text|Etiqueta <code>&lt;ref&gt;</code> incorreuta; no ha escrito garra testo t'as referencias nombratas <code>~{0}</code>
 cite_error_included_ref|Zarrando <code>&lt;/ref&gt;</code> falta una etiqueta <code>&lt;ref&gt;</code>
 cite_error_refs_without_references|Existen etiquetas <code>&lt;ref&gt;</code>, pero no se trobó garra etiqueta <code>&lt;references /&gt;</code>
 cite_error_group_refs_without_references|Existen etiquetas <code>&lt;ref&gt;</code> ta un grupo clamau "~{0}", pero no se trobó garra etiqueta <code>&lt;references group="~{0}"/&gt;</code>
-cite_error_references_group_mismatch|O tag <code>&lt;ref&gt;</code> en <code>&lt;references&gt;</code> presienta l\\'atributo de grupo en conflicto "~{0}".
-cite_error_references_missing_group|O tag <code>&lt;ref&gt;</code> definiu en <code>&lt;references&gt;</code> incluye l\\'atributo "~{0}" no declarau en o texto precedente.
-cite_error_references_missing_key|O tag <code>&lt;ref&gt;</code> con nombre "~{0}" definiu en <code>&lt;references&gt;</code> no s\\'emplega en o texto precedente.
+cite_error_references_group_mismatch|O tag <code>&lt;ref&gt;</code> en <code>&lt;references&gt;</code> presienta l'atributo de grupo en conflicto "~{0}".
+cite_error_references_missing_group|O tag <code>&lt;ref&gt;</code> definiu en <code>&lt;references&gt;</code> incluye l'atributo "~{0}" no declarau en o texto precedente.
+cite_error_references_missing_key|O tag <code>&lt;ref&gt;</code> con nombre "~{0}" definiu en <code>&lt;references&gt;</code> no s'emplega en o texto precedente.
 cite_error_references_no_key|O tag <code>&lt;ref&gt;</code> definiu en <code>&lt;references&gt;</code> no tiene garra atributo de nombre.
 cite_error_empty_references_define|O tag <code>&lt;ref&gt;</code> definiu en <code>&lt;references&gt;</code> con nombre "~{0}" no tiene garra conteniu.
 imagemap_desc|Premite mapas d'imachens punchables en o client fendo servir a etiqueta <code>&lt;imagemap&gt;</code>
@@ -550,7 +550,7 @@ wikieditor-toolbar-help-content-file-description|Fichero incorporato
 wikieditor-toolbar-help-content-file-syntax|[[~{0}:Eixemplo.png\u007Cthumb\u007CTexto descriptivo d'a imachen]]
 wikieditor-toolbar-help-content-file-result|<div style='width:104px;' class='thumbinner'><a title='Texto de piet de foto' class='image' href='#'><img height='50' width='100' border='0' class='thumbimage' src='~{1}/WikiEditor/modules/images/toolbar/example-image.png' alt=''/></a><div class='thumbcaption'><div class='magnify'><a title='Fer más gran' class='internal' href='#'><img height='11' width='15' alt='' src='~{0}/common/images/magnify-clip.png'/></a></div>Texto de piet de foto</div></div>
 wikieditor-toolbar-help-content-reference-description|Referencia
-wikieditor-toolbar-help-content-reference-syntax|Texto d\\'a pachina.&lt;ref name="test"&gt;[http://www.example.org Texto d\\'o vinclo], texto adicional.&lt;/ref&gt;
+wikieditor-toolbar-help-content-reference-syntax|Texto d'a pachina.&lt;ref name="test"&gt;[http://www.example.org Texto d'o vinclo], texto adicional.&lt;/ref&gt;
 wikieditor-toolbar-help-content-reference-result|Texto d'a pachina.<sup><a href='#'>[1]</a></sup>
 wikieditor-toolbar-help-content-rereference-description|Uso adicional d'a mesma referencia
 wikieditor-toolbar-help-content-rereference-result|Texto d'a pachina.<sup><a href='#'>[1]</a></sup>
@@ -955,7 +955,7 @@ group-coder-member|{{GENDER:~{0}\u007Ccodificador\u007Ccodificadora}}
 group-inactive|Usuarios inactivos
 group-inactive-member|{{GENDER:~{0}\u007Cusuario inactivo\u007Cusuaria inactiva}}
 grouppage-inactive|{{ns:project}}:Usuarios inactivos
-wikimedia-copyright|O texto ye disponible baixo a <a href="https://creativecommons.org/licenses/by-sa/3.0/">Licencia Creative Commons Atribución/Compartir-Igual</a>;\ntalment sigan d\\'aplicación clausulas adicionals.\nMire-se <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">os termins d\\'uso</a> ta conoixer más detalles.
+wikimedia-copyright|O texto ye disponible baixo a <a href="https://creativecommons.org/licenses/by-sa/3.0/">Licencia Creative Commons Atribución/Compartir-Igual</a>;\ntalment sigan d'aplicación clausulas adicionals.\nMire-se <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">os termins d'uso</a> ta conoixer más detalles.
 wikimedia-copyrightwarning|En pretando o botón "{{int:savearticle}}", ye acceptando os [https://wikimediafoundation.org/wiki/Terms_of_Use Termins d'utilización], y a cesión irrefusable d'a suya contribución baixo a [https://creativecommons.org/licenses/by-sa/3.0/ Licencia Creative Commons CC-BY-SA 3.0] y a [https://www.gnu.org/copyleft/fdl.html Licencia GFDL].\nTamién ye acceptando que una cita por meyo d'un hipervinclo u URL ye una atribución suficient baixo a licencia Creative Commons.
 cant-delete-main-page|No puede borrar ni mover a pachina prencipal.
 tog-underline|Subrayar os vinclos:

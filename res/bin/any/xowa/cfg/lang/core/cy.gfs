@@ -61,7 +61,7 @@ img_super|1|uwch~super~sup~
 img_top|1|brig~top~
 img_bottom|1|gwaelod~godre~bottom~
 server|0|GWEINYDD~SERVER~
-servername|0|ENW\\'RGWEINYDD~SERVERNAME~
+servername|0|ENW'RGWEINYDD~SERVERNAME~
 grammar|0|GRAMMAR~GRAMADEG~GRAMMAR~
 currentweek|1|WYTHNOSGYFREDOL~CURRENTWEEK~
 revisionid|1|IDYGOLYGIAD~REVISIONID~
@@ -251,10 +251,10 @@ cite_error_included_ref|<code>&lt;/ref&gt;</code> clo yn eisiau ar gyfer y tag <
 cite_error_refs_without_references|Mae tagiau <code>&lt;ref&gt;</code> yn bresennol, ond dim tag <code>&lt;references/&gt;</code>
 cite_error_group_refs_without_references|Mae tagiau <code>&lt;ref&gt;</code> yn bresennol ar gyfer y grwp "~{0}", ond ni chafwyd tag <code>&lt;references/&gt;</code>, ynteu roedd <code>&lt;/ref&gt;</code> terfynol yn eisiau.
 cite_error_references_group_mismatch|Mae gan y tag <code>&lt;ref&gt;</code> oddi mewn i <code>&lt;references&gt;</code> briodoledd grŵp anghyson "~{0}".
-cite_error_references_missing_group|Mae gan y tag <code>&lt;ref&gt;</code> a ddiffinir yn <code>&lt;references&gt;</code> briodoledd grŵp "~{0}" nag ydyw\\'n cael ei ddefnyddio yn y testun cynt.
-cite_error_references_missing_key|Ni ddefnyddir y tag <code>&lt;ref&gt;</code> o\\'r enw "~{0}", a ddiffinir yn <code>&lt;references&gt;</code>, yn y testun blaenorol.
+cite_error_references_missing_group|Mae gan y tag <code>&lt;ref&gt;</code> a ddiffinir yn <code>&lt;references&gt;</code> briodoledd grŵp "~{0}" nag ydyw'n cael ei ddefnyddio yn y testun cynt.
+cite_error_references_missing_key|Ni ddefnyddir y tag <code>&lt;ref&gt;</code> o'r enw "~{0}", a ddiffinir yn <code>&lt;references&gt;</code>, yn y testun blaenorol.
 cite_error_references_no_key|Nid oes dim priodoledd o enw gan y tag <code>&lt;ref&gt;</code> a ddiffinir yn <code>&lt;references&gt;</code>
-cite_error_empty_references_define|Does dim byd yn y tag <code>&lt;ref&gt;</code> a\\'r enw "~{0}" arno, sydd wedi ei ddiffinio oddi mewn i dagiau <code>&lt;references&gt;</code>.
+cite_error_empty_references_define|Does dim byd yn y tag <code>&lt;ref&gt;</code> a'r enw "~{0}" arno, sydd wedi ei ddiffinio oddi mewn i dagiau <code>&lt;references&gt;</code>.
 cite_references_link_accessibility_label|Neidio am lan
 cite_references_link_many_accessibility_label|Neidio lan i:
 imagemap_no_image|Gwall: Rhaid nodi delwedd yn y llinell gyntaf.
@@ -1092,9 +1092,9 @@ group-coder-member|{{GENDER:~{0}\u007Ccodydd}}
 group-inactive|Defnyddwyr segur
 group-inactive-member|{{GENDER:~{0}\u007Cdefnyddiwr segur}}
 grouppage-inactive|{{ns:project}}:Defnyddwyr segur
-wikimedia-copyright|Rhoddir testun y dudalen ar gael ar delerau\\'r drwydded <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike</a>;\ngall fod telerau ychwanegol yn perthyn i\\'r testun.\nGweler <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">Telerau Defnyddio\\'r Drwydded</a> am fanylion pellach.
-wikidata-copyright|Mae\\'r holl data strwythuredig yn y prif barth a\\'r parth nodwedd ar gael yn ôl termau\\'r drwydded <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Deffiniad y Drwydded Creative Commons CC0">Creative Commons CC0</a>;\nmae testun yn y parthau eraill ar gael yn ôl termau\\'r drwydded <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Diffiniad y Drwydded Creative Commons Attribution/Share-Alike">Creative Commons Attribution/Share-Alike</a>;\ngall termau ychwanegol fod yn weithredol.\nGweler y <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Termau Defnyddio Sefydliad Wikimedia">Termau Defnyddio</a> am fanylion.
-wikidata-shortcopyrightwarning|Wrth bwyso ar "{{int:wikibase-save}}", rydych yn derbyn y [https://wikimediafoundation.org/wiki/Terms_of_Use telerau defnyddio], ac yn cytuno\\'n ddi-droi-nôl i ryddhau eich cyfraniad gyda  [https://creativecommons.org/publicdomain/zero/1.0/ thrwydded CC0] arno.
+wikimedia-copyright|Rhoddir testun y dudalen ar gael ar delerau'r drwydded <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike</a>;\ngall fod telerau ychwanegol yn perthyn i'r testun.\nGweler <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">Telerau Defnyddio'r Drwydded</a> am fanylion pellach.
+wikidata-copyright|Mae'r holl data strwythuredig yn y prif barth a'r parth nodwedd ar gael yn ôl termau'r drwydded <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Deffiniad y Drwydded Creative Commons CC0">Creative Commons CC0</a>;\nmae testun yn y parthau eraill ar gael yn ôl termau'r drwydded <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Diffiniad y Drwydded Creative Commons Attribution/Share-Alike">Creative Commons Attribution/Share-Alike</a>;\ngall termau ychwanegol fod yn weithredol.\nGweler y <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Termau Defnyddio Sefydliad Wikimedia">Termau Defnyddio</a> am fanylion.
+wikidata-shortcopyrightwarning|Wrth bwyso ar "{{int:wikibase-save}}", rydych yn derbyn y [https://wikimediafoundation.org/wiki/Terms_of_Use telerau defnyddio], ac yn cytuno'n ddi-droi-nôl i ryddhau eich cyfraniad gyda  [https://creativecommons.org/publicdomain/zero/1.0/ thrwydded CC0] arno.
 wikimedia-copyrightwarning|Wrth roi'r dudalen ar gadw, rydych yn cytuno, a hynny'n ddi-alw'n-ôl, i ryddhau eich cyfraniad ar drwyddedau'r [https://creativecommons.org/licenses/by-sa/3.0/ Creative Commons Attribution/Share-Alike License 3.0] a'r [https://www.gnu.org/copyleft/fdl.html GFDL].\nYr ydych yn cytuno i gael eich cydnabod pan gaiff y cyfraniad ei ail-ddefnyddio, o leiaf trwy osod hypergyswllt neu URL at y dudalen yr ydych yn cyfrannu ato.\nGweler [https://wikimediafoundation.org/wiki/Terms_of_Use Telerau Defnyddio'r Drwydded] am fanylion pellach.
 wikibase-sitelinks-wikivoyage|Tudalennau Wicidaith sy'n cysylltu a'r eitem hon
 wikibase-sitelinks-commons|Tudalen ar Gomin Wikimedia sydd wedi ei chysylltu â'r eitem hon

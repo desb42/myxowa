@@ -62,11 +62,11 @@ Fewestrevisions|Pàgines_menys_editades
 FileDuplicateSearch|Cerca_fitxers_duplicats
 Import|Importa
 BlockList|Usuaris_blocats
-LinkSearch|Enllaços_web~Busca_enllaços~Recerca_d\\'enllaços_web
+LinkSearch|Enllaços_web~Busca_enllaços~Recerca_d'enllaços_web
 Listadmins|Administradors
 Listbots|Bots
 Listfiles|Imatges~Fitxers
-Listgrouprights|Drets_dels_grups_d\\'usuaris
+Listgrouprights|Drets_dels_grups_d'usuaris
 Listredirects|Redireccions
 Listusers|Usuaris
 Lockdb|Bloca_bd
@@ -129,10 +129,10 @@ Withoutinterwiki|Sense_interwiki
 .keywords
   .load_text(
 <:['
-numberofarticles|1|NOMBRED\\'ARTICLES~NUMBEROFARTICLES~
-numberoffiles|1|NOMBRED\\'ARXIUS~NUMBEROFFILES~
-numberofusers|1|NOMBRED\\'USUARIS~NUMBEROFUSERS~
-numberofedits|1|NOMBRED\\'EDICIONS~NUMBEROFEDITS~
+numberofarticles|1|NOMBRED'ARTICLES~NUMBEROFARTICLES~
+numberoffiles|1|NOMBRED'ARXIUS~NUMBEROFFILES~
+numberofusers|1|NOMBRED'USUARIS~NUMBEROFUSERS~
+numberofedits|1|NOMBRED'EDICIONS~NUMBEROFEDITS~
 pagename|1|NOMDELAPLANA~PAGENAME~
 img_border|1|vora~border~
 img_right|1|dreta~right~
@@ -297,7 +297,7 @@ cite-desc|Afegeix les etiquetes <nowiki><ref[ name=id]></nowiki> i <nowiki><refe
 cite_error|Error de citació: ~{0}
 cite_error_ref_numeric_key|Etiqueta <code>&lt;ref&gt;</code> no vàlida;\nel nom no pot ser un nombre. Empreu una paraula o un títol descriptiu
 cite_error_ref_no_key|Etiqueta <code>&lt;ref&gt;</code> no vàlida;\nles refs sense contingut han de tenir nom
-cite_error_ref_too_many_keys|Etiqueta <code>&lt;ref&gt;</code> no vàlida;\nempreu l\\'estructura <code>&lt;ref name="Nom"&gt;</code>
+cite_error_ref_too_many_keys|Etiqueta <code>&lt;ref&gt;</code> no vàlida;\nempreu l'estructura <code>&lt;ref name="Nom"&gt;</code>
 cite_error_ref_no_input|Etiqueta <code>&lt;ref&gt;</code> no vàlida; \nles referències sense nom han de tenir contingut
 cite_error_references_invalid_parameters|Etiqueta <code>&lt;references&gt;</code> no vàlida; \nno es permeten paràmetres. \nUseu <code>&lt;references /&gt;</code>
 cite_error_references_invalid_parameters_group|Etiqueta <code>&lt;references&gt;</code> no vàlida;\núnicament es permet el paràmetre "group".\nUseu <code>&lt;references /&gt;</code>, o <code>&lt;references group="..." /&gt;</code>
@@ -306,12 +306,12 @@ cite_error_no_link_label_group|No hi ha etiquetes vincle personalitzat per al gr
 cite_error_references_no_text|Etiqueta <code>&lt;ref&gt;</code> no vàlida;\nno s'ha proporcionat text per les refs amb l'etiqueta <code>~{0}</code>
 cite_error_included_ref|Es tanca el <code>&lt;/ref&gt;</code> que manca per una etiqueta <code>&lt;ref&gt;</code>
 cite_error_refs_without_references|Hi ha etiquetes <code>&lt;ref&gt;</code> però no cap etiqueta <code>&lt;references/&gt;</code>
-cite_error_group_refs_without_references|Existeixen etiquetes <code>&lt;ref&gt;</code> pel grup «~{0}» però no l\\'etiqueta <code>&lt;references group="~{0}"/&gt;</code> corresponent
-cite_error_references_group_mismatch|L\\'etiqueta <code>&lt;ref&gt;</code> a <code>&lt;references&gt;</code> té un conflicte amb l\\'atribut de grup "~{0}".
-cite_error_references_missing_group|L\\'etiqueta <code>&lt;ref&gt;</code> definida a <code>&lt;references&gt;</code> té l\\'atribut de grup "~{0}" que no apareix en el text anterior.
-cite_error_references_missing_key|L\\'etiqueta <code>&lt;ref&gt;</code> amb el nom "~{0}" definida a <code>&lt;references&gt;</code> no s\\'utilitza en el text anterior.
+cite_error_group_refs_without_references|Existeixen etiquetes <code>&lt;ref&gt;</code> pel grup «~{0}» però no l'etiqueta <code>&lt;references group="~{0}"/&gt;</code> corresponent
+cite_error_references_group_mismatch|L'etiqueta <code>&lt;ref&gt;</code> a <code>&lt;references&gt;</code> té un conflicte amb l'atribut de grup "~{0}".
+cite_error_references_missing_group|L'etiqueta <code>&lt;ref&gt;</code> definida a <code>&lt;references&gt;</code> té l'atribut de grup "~{0}" que no apareix en el text anterior.
+cite_error_references_missing_key|L'etiqueta <code>&lt;ref&gt;</code> amb el nom "~{0}" definida a <code>&lt;references&gt;</code> no s'utilitza en el text anterior.
 cite_error_references_no_key|L'etiqueta <code>&lt;ref&gt;</code> definida a <code>&lt;references&gt;</code> no té cap atribut de nom.
-cite_error_empty_references_define|L\\'etiqueta <code>&lt;ref&gt;</code> definida a <code>&lt;references&gt;</code> amb el nom "~{0}" no té contingut.
+cite_error_empty_references_define|L'etiqueta <code>&lt;ref&gt;</code> definida a <code>&lt;references&gt;</code> amb el nom "~{0}" no té contingut.
 imagemap_desc|Permet mapes d'imatges clicables des del costat del client fent servir l'etiqueta <code>&lt;imagemap&gt;</code>
 imagemap_no_image|Error: cal especificar una imatge en la primera línia
 imagemap_invalid_image|Error: la imatge no es vàlida o no existeix
@@ -645,7 +645,7 @@ wikieditor-toolbar-help-content-file-description|Fitxer incrustat
 wikieditor-toolbar-help-content-file-syntax|[[~{0}:Example.png\u007Cthumb\u007CText descriptiu de la imatge]]
 wikieditor-toolbar-help-content-file-result|<div style='width:104px;' class='thumbinner'><a title='Caption text' class='image' href='#'><img height='50' width='100' border='0' class='thumbimage' src='~{1}/WikiEditor/modules/images/toolbar/example-image.png' alt=''/></a><div class='thumbcaption'><div class='magnify'><a title='Enlarge' class='internal' href='#'><img height='11' width='15' alt='' src='~{0}/common/images/magnify-clip.png'/></a></div>Llegenda</div></div>
 wikieditor-toolbar-help-content-reference-description|Referències
-wikieditor-toolbar-help-content-reference-syntax|Text de la pàgina.&lt;ref name="test"&gt;[http://www.exemple.cat Nom de l\\'enllaç], text addicional.&lt;/ref&gt;
+wikieditor-toolbar-help-content-reference-syntax|Text de la pàgina.&lt;ref name="test"&gt;[http://www.exemple.cat Nom de l'enllaç], text addicional.&lt;/ref&gt;
 wikieditor-toolbar-help-content-reference-result|Text de la pàgina.<sup><a href='#'>[1]</a></sup>
 wikieditor-toolbar-help-content-rereference-description|Ús addicional de la mateixa referència
 wikieditor-toolbar-help-content-rereference-result|Text de la pàgina.<sup><a href='#'>[1]</a></sup>
@@ -724,9 +724,9 @@ wikibase-restrictionedit-tooltip-message|Aquesta pàgina està protegida. No s'a
 wikibase-blockeduser-tooltip-message|No teniu permís per editar perquè el vostre nom d'usuari o la vostra adreça IP han estat blocats.
 wikibase-move-error|No podeu desplaçar pàgines de l'espai de noms de dades, i tampoc no podeu desplaçar-hi pàgines.
 wikibase-error-sitelink-already-used|L'enllaç de lloc [~{0} ~{1}] ja és inclós en un altre element, [[~{2}]].
-wikibase-error-label-not-unique-wikibase-property|Una altra propietat (~{2}) ja té l\\'etiqueta "~{0}" associada amb el codi d\\'idioma ~{1}.
-wikibase-error-label-not-unique-wikibase-query|Una altra consulta (~{2}) ja té l\\'etiqueta "~{0}" associada amb el codi d\\'idioma ~{1}.
-wikibase-error-label-not-unique-item|Una altre element (~{2}) ja té l\\'etiqueta "~{0}" i la descripció "~{3}" associada amb el codi d\\'idioma ~{1}.
+wikibase-error-label-not-unique-wikibase-property|Una altra propietat (~{2}) ja té l'etiqueta "~{0}" associada amb el codi d'idioma ~{1}.
+wikibase-error-label-not-unique-wikibase-query|Una altra consulta (~{2}) ja té l'etiqueta "~{0}" associada amb el codi d'idioma ~{1}.
+wikibase-error-label-not-unique-item|Una altre element (~{2}) ja té l'etiqueta "~{0}" i la descripció "~{3}" associada amb el codi d'idioma ~{1}.
 special-itembytitle|Element per títol
 wikibase-itembytitle-lookup-fieldset|Cerca elements per lloc i títol
 wikibase-itembytitle-lookup-site|Lloc:
@@ -1199,9 +1199,9 @@ group-coder-member|{{GENDER:~{0}\u007Cprogramador\u007Cprogramadora}}
 group-inactive|Usuaris inactius
 group-inactive-member|{{GENDER:~{0}\u007Cusuari inactiu\u007Cusuària inactiva}}
 grouppage-inactive|{{ns:project}}:Usuaris inactius
-wikimedia-copyright|El text està disponible sota la <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.ca">Llicència de Creative Commons Reconeixement/Compartir-Igual</a>; es poden aplicar termes addicionals.\nVegeu les <a href="https://wikimediafoundation.org/wiki/Condicions_d%27%C3%BAs">condicions d\\'ús</a> per a més informació.
-wikidata-shortcopyrightwarning|En clicar "desa", esteu acceptant les [https://wikimediafoundation.org/wiki/Terms_of_Use/ca condicions d\\'ús] i accepteu alliberar irrevocablement la vostra contribució sota la [https://creativecommons.org/publicdomain/zero/1.0/deed.ca llicència CC0].
-wikimedia-copyrightwarning|Fent clic al botó de "{{int:savearticle}}" esteu acceptant les [https://wikimediafoundation.org/wiki/Terms_of_Use condicions d\\'ús] i esteu acceptant alliberar irrevocablement la vostra contribució sota la [https://creativecommons.org/licenses/by-sa/3.0/ llicència CC-BY-SA 3.0] i la [https://www.gnu.org/copyleft/fdl.html GFDL].\nAccepteu que un hiperenllaç o URL és suficient atribució sota la llicència Creative Commons.
+wikimedia-copyright|El text està disponible sota la <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.ca">Llicència de Creative Commons Reconeixement/Compartir-Igual</a>; es poden aplicar termes addicionals.\nVegeu les <a href="https://wikimediafoundation.org/wiki/Condicions_d%27%C3%BAs">condicions d'ús</a> per a més informació.
+wikidata-shortcopyrightwarning|En clicar "desa", esteu acceptant les [https://wikimediafoundation.org/wiki/Terms_of_Use/ca condicions d'ús] i accepteu alliberar irrevocablement la vostra contribució sota la [https://creativecommons.org/publicdomain/zero/1.0/deed.ca llicència CC0].
+wikimedia-copyrightwarning|Fent clic al botó de "{{int:savearticle}}" esteu acceptant les [https://wikimediafoundation.org/wiki/Terms_of_Use condicions d'ús] i esteu acceptant alliberar irrevocablement la vostra contribució sota la [https://creativecommons.org/licenses/by-sa/3.0/ llicència CC-BY-SA 3.0] i la [https://www.gnu.org/copyleft/fdl.html GFDL].\nAccepteu que un hiperenllaç o URL és suficient atribució sota la llicència Creative Commons.
 wikibase-sitelinks-wikivoyage|Pàgines de Viquiviatges vinculades a aquest element
 wikibase-sitelinks-commons|Pàgines de Wikimedia Commons vinculades a aquest element
 cant-delete-main-page|No podeu esborrar ni traslladar la portada.

@@ -122,6 +122,16 @@ if (!window.xowa) {
     document.getElementsByTagName('head')[0].appendChild(script);
   };
 
+  xowa.js.importStylesheetURI = function( url, media ) {
+    var l = document.createElement( 'link' );
+    l.rel = 'stylesheet';
+    l.href = url;
+    if ( media ) {
+      l.media = media;
+    }
+    document.head.appendChild( l );
+    return l;
+  }
   xowa.js.jquery.init_callback = function() {
     jQuery.cookie = xowa.cookie;
     jQuery.ready(); //fire the ready event
@@ -132,8 +142,8 @@ if (!window.xowa) {
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.preferences.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.webfonts.repository.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.webfonts.js');
-  	// loaded elsewhere
-  	return;
+    // loaded elsewhere
+    return;
 /*    if (xowa.js.jquery.init_done) return;
     //xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery-1.11.3.min.js', xowa.js.jquery.init_callback);
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery-3.2.1.js', xowa.js.jquery.init_callback);
@@ -1263,7 +1273,9 @@ jQuery( document ).ready( function ( $ ) {
 	  var locjs = '/';
     if (window.location.pathname.substring(0,5) == '/xowa')
       locjs = '/xowa/';
-    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '.js');
+    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '/extra.js');
+    xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '/extra.css')
+//    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '.js');
     var pageurl = locjs + x_p.wiki + '/wiki/' + xowa_global_values.wgPageName;
     //if (pageurl != location.pathname)
     //  window.history.pushState('page2', xowa_global_values.wgTitle, pageurl);

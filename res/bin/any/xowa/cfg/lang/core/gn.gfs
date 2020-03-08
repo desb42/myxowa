@@ -3,13 +3,13 @@ this
 .ns_names
   .load_text(
 <:['
--1|Mba\\'echĩchĩ
+-1|Mba'echĩchĩ
 1|Myangekõi
 2|Puruhára
 3|Puruhára myangekõi
 5|$1 myangekõi
-6|Ta\\'ãnga
-7|Ta\\'ãnga myangekõi
+6|Ta'ãnga
+7|Ta'ãnga myangekõi
 8|MediaWiki
 9|MediaWiki myangekõi
 10|Tembiecharã

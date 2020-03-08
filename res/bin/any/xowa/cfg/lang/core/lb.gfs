@@ -333,7 +333,7 @@ cite_error_references_invalid_parameters_group|Ongëltege  <code>&lt;references&
 cite_error_references_no_text|Ongëlteg <code>&lt;ref&gt;</code> Markéierung;\net gouf keen Text ugi fir d'Referenze mam Numm <code>~{0}</code>
 cite_error_included_ref|Den Tag <code>&lt;/ref&gt;</code> feelt fir den Tag <code>&lt;ref&gt;</code> zouzemaachen
 cite_error_refs_without_references|D'Markéierung <code>&lt;ref&gt;</code> gëtt et, awer d'Markéierung <code>&lt;references/&gt;</code> gouf net fonnt
-cite_error_group_refs_without_references|D\\'Markéierung <code>&lt;ref&gt;</code> gëtt et fir d\\'Grupp "~{0}", awer d\\'entspriechend Markéierung <code>&lt;references group="~{0}"/&gt;</code> gouf net fonnt oder een <code>&lt;/ref&gt;</code> feelt
+cite_error_group_refs_without_references|D'Markéierung <code>&lt;ref&gt;</code> gëtt et fir d'Grupp "~{0}", awer d'entspriechend Markéierung <code>&lt;references group="~{0}"/&gt;</code> gouf net fonnt oder een <code>&lt;/ref&gt;</code> feelt
 cite_error_references_group_mismatch|Den <code>&lt;ref&gt;</code>-Tag an <code>&lt;references&gt;</code> huet den Attribut "~{0}" deen am Konflikt mat deem am <code>&lt;references&gt;</code> steet.
 cite_error_references_missing_group|Deen am <code>&lt;references&gt;</code> definéierten <code>&lt;ref&gt;</code>-Tag huet en Attribut "~{0}" deen am Text virdrun net dran ass.
 cite_error_references_missing_key|Deen am <code>&lt;references&gt;</code> definéierten <code>&lt;ref&gt;</code>-Tag mam Numm "~{0}" gëtt am Text virdrun net benotzt.
@@ -736,9 +736,9 @@ wikibase-blockeduser-tooltip-message|Dir hutt net d'Recht fir Ännerungen ze maa
 wikibase-move-error|Dir kënnt keng Säiten déi an engem Data-Nummraum si réckelen an Dir kënnt och keng Säiten dohi réckelen.
 wikibase-warning-constraint-violation-length|Eng Limitatioun vun der Längt vum Sproochcode "~{0}" gëtt markéiert.
 wikibase-error-sitelink-already-used|Link op de Site [~{0} ~{1}] ass schonn an engem aneren Element dran, [[~{2}]].
-wikibase-error-label-not-unique-wikibase-property|Eng aner Eegeschaft (~{2}) huet schonn d\\'Etikett "~{0}" associéiert mam Sproochcode ~{1}.
-wikibase-error-label-not-unique-wikibase-query|Eng aner Ufro (~{2}) huet schonn d\\'Etikett "~{0}" associéiert mam Sproochcode ~{1}.
-wikibase-error-label-not-unique-item|En anert Element (~{2}) huet schonn d\\'Etikett "~{0}" an d\\'Beschreiwung "~{3}" associéiert mam Sproochecode ~{1}.
+wikibase-error-label-not-unique-wikibase-property|Eng aner Eegeschaft (~{2}) huet schonn d'Etikett "~{0}" associéiert mam Sproochcode ~{1}.
+wikibase-error-label-not-unique-wikibase-query|Eng aner Ufro (~{2}) huet schonn d'Etikett "~{0}" associéiert mam Sproochcode ~{1}.
+wikibase-error-label-not-unique-item|En anert Element (~{2}) huet schonn d'Etikett "~{0}" an d'Beschreiwung "~{3}" associéiert mam Sproochecode ~{1}.
 special-itembytitle|Element no Titel
 wikibase-itembytitle-lookup-fieldset|Sicht no Elementer mam Site a mam Titel
 wikibase-itembytitle-lookup-site|Site:
@@ -794,7 +794,7 @@ wikibase-setsitelink-add-failed|De Link op de Site konnt net gespäichert ginn.
 wikibase-setsitelink-remove-failed|De Link op de Site konnt net ewechgeholl ginn.
 wikibase-modifyentity-id|ID:
 wikibase-modifyterm-language|Sproochcode:
-wikibase-modifyentity-invalid-id|D\\'ID "~{0}" ass am System net bekannt. Benotzt w.e.g. en valabel ID vun der Entitéit.
+wikibase-modifyentity-invalid-id|D'ID "~{0}" ass am System net bekannt. Benotzt w.e.g. en valabel ID vun der Entitéit.
 wikibase-modifyterm-invalid-langcode|De Sproochcode "~{0}" ass onbekannt. Benotzt w.e.g. e Sproochcode deen dem System bekannt ass, wéi z. Bsp. "en".
 wikibase-dispatchstats-no-stats|Et sinn elo keng Statistiken disponibel.
 wikibase-dispatchstats-stats|Statistike vun der Verbreedung
@@ -1312,7 +1312,7 @@ group-inactive|Benotzer déi net aktiv sinn
 group-inactive-member|{{GENDER:~{0}\u007Cnet aktive Benotzer}}
 grouppage-inactive|{{ns:project}}:Net aktiv Benotzer
 wikimedia-copyright|Den Text ass disponibel ënner der <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike Lizenz</a>; zousätzlech Bedingunge kënnen applicabel sinn.\nKuckt <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">Benotzungsbedingunge</a> fir méi Detailer.
-wikidata-shortcopyrightwarning|Wann Dir op "{{int:wikibase-save}}" klickt, da sidd Dir mat den  [https://wikimediafoundation.org/wiki/Terms_of_Use terms of use] d\\'accord an Dir sidd domat d\\'accord datt Äre Beitrag ënner der  [https://creativecommons.org/publicdomain/zero/1.0/ CC0 Lizenz]. publizéiert gëtt.
+wikidata-shortcopyrightwarning|Wann Dir op "{{int:wikibase-save}}" klickt, da sidd Dir mat den  [https://wikimediafoundation.org/wiki/Terms_of_Use terms of use] d'accord an Dir sidd domat d'accord datt Äre Beitrag ënner der  [https://creativecommons.org/publicdomain/zero/1.0/ CC0 Lizenz]. publizéiert gëtt.
 wikimedia-copyrightwarning|Wann Dir op de(n) "{{int:savearticle}}" Knäppche klickt, sidd Dir mat de [https://wikimediafoundation.org/wiki/Terms_of_Use Benotzungsbedingungen] averstanen an Dir sidd och onwidderrufflech averstane fir Äre Beitrag ënner der [https://creativecommons.org/licenses/by-sa/3.0/ Creative Commons Attribution/Share-Alike Lizenz 3.0] an der [https://www.gnu.org/copyleft/fdl.html GFDL] fräizeginn.\nDir sidd averstanen datt en Hyperlink oder eng URL duer geet fir Äert Matschaffen ënner der Creative Commons Lizenz ze honoréieren.
 wikibase-sitelinks-wikivoyage|Wikivoyage-Säiten déi mat dësem Element verlinkt sinn
 wikibase-sitelinks-commons|Wikimedia Commons Säit déi mat dësem Element verlinkt ass

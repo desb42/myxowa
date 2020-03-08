@@ -24,8 +24,8 @@ this
   .load_text(
 <:['
 -2|Nká
-2|Ọ\\'bànifé
-3|Okwu ọ\\'bànifé
+2|Ọ'bànifé
+3|Okwu ọ'bànifé
 6|Ákwúkwó orünotu
 7|Okwu ákwúkwó orünotu
 8|NkáWiki
@@ -51,8 +51,8 @@ Preferences|Ọtúm_dọsẹrẹ_ihem
 Specialpages|IhüKá
 Undelete|Ábàkàshịkwàlà
 Upload|TinyéIheNélú
-Userlogin|Ọ\\'bàniféÍBànyé
-Userlogout|Ọ\\'bàniféÍFụtá
+Userlogin|Ọ'bàniféÍBànyé
+Userlogout|Ọ'bàniféÍFụtá
 ']:>
 ).lang
 .keywords

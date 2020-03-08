@@ -418,12 +418,12 @@ cite_error_ref_no_key|<code>&lt;ref&gt;</code> unanchachaqa manam allinchu;\nch'
 cite_error_ref_too_many_keys|<code>&lt;ref&gt;</code> unanchachaqa manam allinchu;\nsutinkunaqa manam allinchu, nisyu sutinchá
 cite_error_ref_no_input|<code>&lt;ref&gt;</code> unanchachaqa manam allinchu;\nsutinnaq pukyu willana unanchachaqa ama ch'usaqchu kachun
 cite_error_references_invalid_parameters|<code>&lt;ref&gt;</code> unanchachaqa manam allinchu;\nama kuskanachina tupuchu kachun. <code>&lt;references /&gt;</code> unanchachata llamk'achiy
-cite_error_references_invalid_parameters_group|<code>&lt;ref&gt;</code> unanchachaqa manam allinchu;\n"group" nisqa kuskanachina tupulla kachun. <code>&lt;references /&gt;</code> icha <code>&lt;references group="..." /&gt;</code> unanchachata llamk\\'achiy
+cite_error_references_invalid_parameters_group|<code>&lt;ref&gt;</code> unanchachaqa manam allinchu;\n"group" nisqa kuskanachina tupulla kachun. <code>&lt;references /&gt;</code> icha <code>&lt;references group="..." /&gt;</code> unanchachata llamk'achiy
 cite_error_references_no_backlink_label|Manañam kanchu allichana kutimuy t'inki unanchakuna.\nAstawan sut'ichay <nowiki>[[MediaWiki:Cite references link many format backlink labels\u007CPukyumanta willaykuna achka allichana kutimuy t'inki unanchakunata t'inkin]]</nowiki> nisqa willaypi
 cite_error_references_no_text|<code>&lt;ref&gt;</code> unanchachaqa manam allinchu;\n<code>~{0}</code> nisqapaq pukyu qillqa manam kanchu
 cite_error_included_ref|Kichaq <code>&lt;ref&gt;</code> unanchachapaq wichq'aq <code>&lt;/ref&gt;</code> unanchachaqa manam kanchu
 cite_error_refs_without_references|<code>&lt;ref&gt;</code> unanchacham kachkan, ichataq manam <code>&lt;references/&gt;</code> unanchachachu
-cite_error_group_refs_without_references|"~{0}" sutiyuq huñupaq <code>&lt;ref&gt;</code> unanchacham kachkan, ichataq manam chay huñupaq qillqasqa <code>&lt;references group="~{0}"/&gt;</code> unanchacha manam tarisqachu, icha wichq\\'aq <code>&lt;/ref&gt;</code> unanchacha manam kanchu
+cite_error_group_refs_without_references|"~{0}" sutiyuq huñupaq <code>&lt;ref&gt;</code> unanchacham kachkan, ichataq manam chay huñupaq qillqasqa <code>&lt;references group="~{0}"/&gt;</code> unanchacha manam tarisqachu, icha wichq'aq <code>&lt;/ref&gt;</code> unanchacha manam kanchu
 cite_references_link_accessibility_label|Hawaman t'iskuy
 cite_references_link_many_accessibility_label|Hawaman t'iskuspa kayman riy:
 imagemap_description|Kay rikchamanta
@@ -654,7 +654,7 @@ wikieditor-toolbar-help-content-file-description|Ch'aqtasqa rikcha
 wikieditor-toolbar-help-content-file-syntax|[[~{0}:Qhawarichiy.png\u007Cthumb\u007CCh'uyanchay qillqa]]
 wikieditor-toolbar-help-content-file-result|<div style='width:104px;' class='thumbinner'><a title='Ch'uyanchay qillqa' class='image' href='#'><img height='50' width='100' border='0' class='thumbimage' src='~{1}/WikiEditor/modules/images/toolbar/example-image.png' alt=''/></a><div class='thumbcaption'><div class='magnify'><a title='Hatunchay' class='internal' href='#'><img height='11' width='15' alt='' src='~{0}/common/images/magnify-clip.png'/></a></div>Ch'uyanchay qillqa</div></div>
 wikieditor-toolbar-help-content-reference-description|Pukyumanta willay
-wikieditor-toolbar-help-content-reference-syntax|P\\'anqa qillqa.&lt;ref name="test"&gt;[http://www.example.org T\\'inki qillqa], yapasqa qillqa.&lt;/ref&gt;
+wikieditor-toolbar-help-content-reference-syntax|P'anqa qillqa.&lt;ref name="test"&gt;[http://www.example.org T'inki qillqa], yapasqa qillqa.&lt;/ref&gt;
 wikieditor-toolbar-help-content-reference-result|P'anqa qillqa.<sup><a href='#'>[1]</a></sup>
 wikieditor-toolbar-help-content-rereference-description|Kay pukyumanta willayta yapalla llamk'achiy
 wikieditor-toolbar-help-content-rereference-result|P'anqa qillqa.<sup><a href='#'>[1]</a></sup>
@@ -860,7 +860,7 @@ group-coder-member|{{GENDER:~{0}\u007C}}wakichi qillqaq
 group-inactive|Puñuchkaq ruraqkuna
 group-inactive-member|{{GENDER:~{0}\u007C}}puñuchkaq ruraq
 grouppage-inactive|{{ns:project}}:Puñuchkaq ruraqkuna
-wikimedia-copyright|Kay qillqataqa <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike License</a> nisqapi ch\\'uyanchasqa saqillaykamam chaskinki;\nyapasqa phatakunachá kanqaku.\n<a href="https://wikimediafoundation.org/wiki/Terms_of_Use">Llamk\\'apuypaq phatakuna</a> p\\'anqapi qhaway astawan willasunaykipaq.
+wikimedia-copyright|Kay qillqataqa <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike License</a> nisqapi ch'uyanchasqa saqillaykamam chaskinki;\nyapasqa phatakunachá kanqaku.\n<a href="https://wikimediafoundation.org/wiki/Terms_of_Use">Llamk'apuypaq phatakuna</a> p'anqapi qhaway astawan willasunaykipaq.
 wikimedia-copyrightwarning|"{{int:savearticle}}" butunta ñit'ispaykiqa, [https://wikimediafoundation.org/wiki/Terms_of_Use kuspay phatakuna] nisqaman arí ninkim. Llamk'asqaykikunata mana kutinalla [https://creativecommons.org/licenses/by-sa/3.0/ CC-BY-SA 3.0] nisqa saqillayman, [https://www.gnu.org/copyleft/fdl.html GFDL] nisqa saqillaymanpas saqimpunki.\nArí ninki musuq llamk'apuqkunap qillqasqaykimanta willaspan mast'arinanman, llikapi tiyaypura llamk'apusqayki p'anqaman t'inkimuqwan, chaytaq lliwmanta aswan pisi.
 cant-delete-main-page|Qhapaq p'anqataqa manam qulluyta icha astayta atinkichu.
 tog-underline|T'inkikunata uranpi sikwiy

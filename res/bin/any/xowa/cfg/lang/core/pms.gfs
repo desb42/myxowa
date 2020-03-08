@@ -16,7 +16,7 @@ this
 10|Stamp
 11|Discussion dlë stamp
 12|Agiut
-13|Discussion ant sl\\'agiut
+13|Discussion ant sl'agiut
 14|Categorìa
 15|Discussion ant sla categorìa
 ']:>
@@ -182,18 +182,18 @@ cite_error_ref_no_key|Tichëtta <code>&lt;ref&gt;</code> pa bon-a;\nj'arferiment
 cite_error_ref_too_many_keys|Tichëtta <code>&lt;ref&gt;</code> pa bon-a;\nnòm pa bon, për esempi tròpi
 cite_error_ref_no_input|Tichëtta <code>&lt;ref&gt;</code> pa bon-a;\nj'arferiment sensa nòm a devo avèj un contnù
 cite_error_references_invalid_parameters|Tichëtta <code>&lt;references&gt;</code> pa bon-a;\npa gnun paràmetr përmëttù.\nCh'a deuvra <code>&lt;references /&gt;</code>
-cite_error_references_invalid_parameters_group|Tichëtta <code>&lt;references&gt;</code> pa bon-a;\nas peul mach dovresse ël paràmetr "group".\nCh\\'a deuvra <code>&lt;references /&gt;</code>, o <code>&lt;references group="..." /&gt;</code>
+cite_error_references_invalid_parameters_group|Tichëtta <code>&lt;references&gt;</code> pa bon-a;\nas peul mach dovresse ël paràmetr "group".\nCh'a deuvra <code>&lt;references /&gt;</code>, o <code>&lt;references group="..." /&gt;</code>
 cite_error_references_no_backlink_label|Etichëtte ëd backlink përsonalisà esaurìe.\nDefiniss-ne ëd pì ant ël messagi <nowiki>[[MediaWiki:Cite references link many format backlink labels]]</nowiki>
 cite_error_no_link_label_group|Surtì fòra dle tichëtte dij colegament utent për la partìa "~{0}".\nDefinissne ëd pi ant ël mëssagi <nowiki>[[MediaWiki:~{1}]]</nowiki>.
 cite_error_references_no_text|Tichëtta <code>&lt;ref&gt;</code> pa bon-a;\npa gnun test a l'é stàit dàit për l'arferiment ciamà <code>~{0}</code>
 cite_error_included_ref|Saradura <code>&lt;/ref&gt;</code> mancanta për la tichëtta <code>&lt;ref&gt;</code>
 cite_error_refs_without_references|la tichëtta <code>&lt;ref&gt;</code> a esist, ma gnun-a tichëtta <code>&lt;references/&gt;</code> a l'é stàita trovà
-cite_error_group_refs_without_references|Dle tichëtte <code>&lt;ref&gt;</code> a esisto për na partìa ciamà «~{0}», ma gnun-a tichëtta corëspondenta <code>&lt;references group="~{0}"/&gt;</code> a l\\'é stàita trovà opura a-i manca un delimitator final <code>&lt;/ref&gt;</code>
-cite_error_references_group_mismatch|La tichëtta <code>&lt;ref&gt;</code> an <code>&lt;references&gt;</code> a l\\'ha n\\'atribut ëd partìa "~{0}" an conflit.
-cite_error_references_missing_group|La tichëtta <code>&lt;ref&gt;</code> definìa an <code>&lt;references&gt;</code> a l\\'ha n\\'atribut ëd partìa "~{0}" che a l\\'era pa ant ël test prima.
-cite_error_references_missing_key|La tichëtta <code>&lt;ref&gt;</code> con nòm "~{0}" definìa an <code>&lt;references&gt;</code> a l\\'é pa dovrà ant ël test prima.
+cite_error_group_refs_without_references|Dle tichëtte <code>&lt;ref&gt;</code> a esisto për na partìa ciamà «~{0}», ma gnun-a tichëtta corëspondenta <code>&lt;references group="~{0}"/&gt;</code> a l'é stàita trovà opura a-i manca un delimitator final <code>&lt;/ref&gt;</code>
+cite_error_references_group_mismatch|La tichëtta <code>&lt;ref&gt;</code> an <code>&lt;references&gt;</code> a l'ha n'atribut ëd partìa "~{0}" an conflit.
+cite_error_references_missing_group|La tichëtta <code>&lt;ref&gt;</code> definìa an <code>&lt;references&gt;</code> a l'ha n'atribut ëd partìa "~{0}" che a l'era pa ant ël test prima.
+cite_error_references_missing_key|La tichëtta <code>&lt;ref&gt;</code> con nòm "~{0}" definìa an <code>&lt;references&gt;</code> a l'é pa dovrà ant ël test prima.
 cite_error_references_no_key|La tichëtta <code>&lt;ref&gt;</code> definìa an <code>&lt;references&gt;</code> a l'ha pa gnun atribut ëd nòm.
-cite_error_empty_references_define|La tichëtta <code>&lt;ref&gt;</code> definìa an <code>&lt;references&gt;</code> con nòm "~{0}" a l\\'ha pa gnun contnù.
+cite_error_empty_references_define|La tichëtta <code>&lt;ref&gt;</code> definìa an <code>&lt;references&gt;</code> con nòm "~{0}" a l'ha pa gnun contnù.
 cite_references_link_accessibility_label|Andé
 cite_references_link_many_accessibility_label|Sauté a:
 imagemap_desc|A përmëtt "image map" client-side clicàbij an dovrand ël tag <code>&lt;imagemap&gt;</code>
@@ -1289,9 +1289,9 @@ group-coder-member|{{GENDER:~{0}\u007Ccodificator}}
 group-inactive|Utent inativ
 group-inactive-member|{{GENDER:~{0}\u007Cutent inativ}}
 grouppage-inactive|{{ns:project}}:Utent inativ
-wikimedia-copyright|Ël test a l\\'é disponìbil sota la <a href="https://creativecommons.org/licenses/by-sa/3.0/">licensa Creative Commons atribussion-partagi ugual</a>;\na podrìo aplichesse d\\'àutre condission.\nCh\\'a vëdda le <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">Condission d\\'usagi</a> për ij detaj.
-wikidata-copyright|Tuti ij dàit struturà da jë spassi nominaj prinsipal e propietà a son disponìbij sota la <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Definission ëd la licensa Creative Commons CC0">licensa Creative Commons CC0</a>;\nël test ant j\\'àutri spassi nominaj a l\\'é disponìbil sota la <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Definission ëd la licensa Creative Commons Attribution/Share-Alike License">licensa Creative Commons Attribution/Share-Alike</a>;\ndle condission adissionaj a peulo aplichesse.\nCh\\'a vëdda le <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Condission d\\'utilisassion ëd la fondassion Wikimedia">Condission d\\'utilisassion</a> për ij detaj.
-wikidata-shortcopyrightwarning|An sgnacand su "{{int:wikibase-save}}", chiel a aceta le [https://wikimediafoundation.org/wiki/Terms_of_Use condission d\\'usagi], e a aceta ëd fasson irevocàbil d\\'arlassé soa contribussion sota la [https://creativecommons.org/publicdomain/zero/1.0/ licensa CC0].
+wikimedia-copyright|Ël test a l'é disponìbil sota la <a href="https://creativecommons.org/licenses/by-sa/3.0/">licensa Creative Commons atribussion-partagi ugual</a>;\na podrìo aplichesse d'àutre condission.\nCh'a vëdda le <a href="https://wikimediafoundation.org/wiki/Terms_of_Use">Condission d'usagi</a> për ij detaj.
+wikidata-copyright|Tuti ij dàit struturà da jë spassi nominaj prinsipal e propietà a son disponìbij sota la <a href="https://creativecommons.org/publicdomain/zero/1.0/" title="Definission ëd la licensa Creative Commons CC0">licensa Creative Commons CC0</a>;\nël test ant j'àutri spassi nominaj a l'é disponìbil sota la <a href="https://creativecommons.org/licenses/by-sa/3.0/" title="Definission ëd la licensa Creative Commons Attribution/Share-Alike License">licensa Creative Commons Attribution/Share-Alike</a>;\ndle condission adissionaj a peulo aplichesse.\nCh'a vëdda le <a href="https://wikimediafoundation.org/wiki/Terms_of_Use" title="Condission d'utilisassion ëd la fondassion Wikimedia">Condission d'utilisassion</a> për ij detaj.
+wikidata-shortcopyrightwarning|An sgnacand su "{{int:wikibase-save}}", chiel a aceta le [https://wikimediafoundation.org/wiki/Terms_of_Use condission d'usagi], e a aceta ëd fasson irevocàbil d'arlassé soa contribussion sota la [https://creativecommons.org/publicdomain/zero/1.0/ licensa CC0].
 wikimedia-copyrightwarning|An sgnacand ël boton "{{int:savearticle}}", a l'é d'acòrdi con le [https://wikimediafoundation.org/wiki/Terms_of_Use condission d'utilisassion], e a l'é d'acordi ëd lassé irevocabilment soa contribussion sota la [https://creativecommons.org/licenses/by-sa/3.0/ licensa CC-BY-SA 3.0] e la [https://www.gnu.org/copyleft/fdl.html GFDL].\nA l'é d'acòrdi che n'anliura o n'adrëssa dla ragnà a basta com atribussion sota la licensa Creative Commons.
 wikibase-sitelinks-wikivoyage|Pägine ëd Wikivoyage lijà a cost element
 wikibase-sitelinks-commons|Pàgine ëd Wikimedia Commons lijà a cost element

@@ -321,7 +321,10 @@ for (var i = 0; i < redlinks.length; i++) {
     if (elem) {
       var klasses = klass.split(' ');
       for (var j = 0; j < klasses.length; j++)
-        elem.classList.add(klasses[j]);
+      	var kl = klasses[j];
+        elem.classList.add(kl);
+        if (kl == "new")
+        	elem.title += " (page does not exist)" // should be language sensitive
     }
   }
 }

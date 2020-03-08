@@ -40,7 +40,7 @@ this
 <:['
 Allmessages|Alle wikiberjochten
 Allpages|Alle titels~Alle siden
-Ancientpages|Alde siden~Âlde siden~Siden dy\\'t lang net feroare binne
+Ancientpages|Alde siden~Âlde siden~Siden dy't lang net feroare binne
 Block|Slút brûker út~Slút meidogger út
 Booksources|Boekynformaasje
 BrokenRedirects|Misse trochferwizings~Missetrochferwizings
@@ -61,15 +61,15 @@ Listbots|Meidoggerlist Bots
 Listfiles|Ofbyld list~Ofbyldlist
 Listredirects|List fan trochferwizings
 Listusers|Meidoggerlist~Brûkerlist
-Lockdb|Meitsje de database \\'Net-skriuwe\\'~Meitsje de databank \\'Net-skriuwe\\'
+Lockdb|Meitsje de database 'Net-skriuwe'~Meitsje de databank 'Net-skriuwe'
 Log|Loch~Logboek~Logboeken~Lochs
 Lonelypages|Lossteande siden
 Longpages|Lange siden
 MIMEsearch|Sykje op MIME-type
 Mostcategories|Siden mei de measte rubriken~Siden mei de measte kategoryen
-Mostimages|Ofbylden dy\\'t it meast brûkt wurde~Meast brûkte ôfbyldings
-Mostlinked|Siden wêr it meast mei keppele is~Siden dêr\\'t it meast nei ferwiisd wurdt
-Mostlinkedcategories|Kategoryen dy\\'t it meast brûkt wurde~Kategoryen dêr\\'t it meast nei ferwiisd wurdt
+Mostimages|Ofbylden dy't it meast brûkt wurde~Meast brûkte ôfbyldings
+Mostlinked|Siden wêr it meast mei keppele is~Siden dêr't it meast nei ferwiisd wurdt
+Mostlinkedcategories|Kategoryen dy't it meast brûkt wurde~Kategoryen dêr't it meast nei ferwiisd wurdt
 Mostlinkedtemplates|Meast brûkte sjabloanen~Meast brûkte berjochten
 Mostrevisions|Siden mei de measte wizigings~Siden mei de measte bewurkings
 Movepage|Werneam side
@@ -99,16 +99,16 @@ Unlockdb|Meitsje de databank skriuwber
 Unusedcategories|Net-brûkte kategoryen~Lege kategoryen
 Unusedimages|Lossteande ôfbylden
 Unusedtemplates|Net brûkte sjabloanen~Net brûkte berjochten
-Unwatchedpages|Siden dy\\'t net op in folchlist steane
+Unwatchedpages|Siden dy't net op in folchlist steane
 Upload|Bied triem oan~Oanbied~Bied bestân oan
 Userlogin|Oanmelde~Oanmeld
 Userlogout|Ofmelde~Ofmeld~Ôfmelde~Ôfmeld
 Userrights|Meidoggerrjochten~Behear fan meidoggerrjochten
 Version|Ferzje~Programmatuerferzje
-Wantedcategories|Nedige kategoryen~Net-besteande kategoryen dêr\\'t it meast nei ferwiisd wurdt
+Wantedcategories|Nedige kategoryen~Net-besteande kategoryen dêr't it meast nei ferwiisd wurdt
 Wantedpages|Nedige siden
 Watchlist|Folchlist~Jo Folchlist
-Whatlinkshere|Wat is hjirmei keppele~Wat is hjirmei keppele?~List fan alle siden dy\\'t nei dizze side ferwize
+Whatlinkshere|Wat is hjirmei keppele~Wat is hjirmei keppele?~List fan alle siden dy't nei dizze side ferwize
 Withoutinterwiki|Siden sûnder links nei oare talen~Siden sûnder ferwizings nei oare talen~Siden sûnder keppelings nei oare talen
 ']:>
 ).lang

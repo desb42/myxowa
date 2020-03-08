@@ -84,7 +84,7 @@ Lockdb|Заблокувати_базу_даних
 Log|Журнали
 Lonelypages|Ізольовані_сторінки
 Longpages|Найдовші_сторінки
-MergeHistory|Об\\'єднання_історії
+MergeHistory|Об'єднання_історії
 MIMEsearch|Пошук_за_MIME
 Mostcategories|Найбільш_категоризовані
 Mostimages|Найуживаніші_файли
@@ -111,7 +111,7 @@ Protectedtitles|Захищені_назви_сторінок
 Randompage|Випадкова_сторінка
 Randomredirect|Випадкове_перенаправлення
 Recentchanges|Нові_редагування
-Recentchangeslinked|Пов\\'язані_редагування
+Recentchangeslinked|Пов'язані_редагування
 Redirect|Перенаправлення
 Revisiondelete|Вилучити_редагування
 Search|Пошук
@@ -1003,7 +1003,7 @@ wikibase-setsitelink-remove-failed|Не вдалося видалити поси
 wikibase-setsitelink-not-itemid|"~{0}" не є допустимим ідентифікатором елемента. Посилання сайту може бути встановлений тільки для елементів.
 wikibase-modifyentity-id|ID:
 wikibase-modifyterm-language|Код мови:
-wikibase-modifyentity-invalid-id|Ідентифікатор "~{0}" невідомий системі. Будь ласка, використовуйте дійсний ідентифікатор об\\'єкту.
+wikibase-modifyentity-invalid-id|Ідентифікатор "~{0}" невідомий системі. Будь ласка, використовуйте дійсний ідентифікатор об'єкту.
 wikibase-modifyterm-invalid-langcode|Ідентифікатор мови "~{0}" невідомий. Будь ласка, використовуйте ідентифікатор мови, відомий системи, наприклад, "uk".
 special-dispatchstats|Статистика розсилки змін
 wikibase-dispatchstats-intro|Ця сторінка надає статистичні дані про розсилку змін до клієнтів.\nКлієнт вікі сповіщається про зміну на {{SITENAME}} як тільки зміна була відправлена до цього вікі, а черга завдань на цьому вікі вже опрацювала відповідне сповіщення.\n* {{int:wikibase-dispatchstats-changes}} показує кількість і дату найстаріших і найновіших елементів, які зараз перебувають у черзі.\n* {{int:wikibase-dispatchstats-stats}} надає інформацію про найвідсталіший і найшвидший клієнт вікі, а також середнє значення між ними. Про кожну вікі надаються такі відомості:\n** "{{int:wikibase-dispatchstats-site-id}}" - внутрішній ідентифікатор клієнта вікі.\n** "{{int:wikibase-dispatchstats-pos}}" - ідентифікатор останньої зміни, надісланої на це вікі.\n** "{{int:wikibase-dispatchstats-lag-num}}" - число змін ще не надісланих на це вікі.\n** "{{int:wikibase-dispatchstats-lag-time}}" - час між останньою зміною, надісланою на це вікі, і останньою зміною, виконаною на {{SITENAME}}.\n** "{{int:wikibase-dispatchstats-touched}}" - час, коли остання партія змін була надіслана на це вікі.

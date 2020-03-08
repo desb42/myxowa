@@ -349,7 +349,7 @@ categorytree-retry|Wag asseblief 'n rukkie en probeer weer.
 cite-desc|Maak <nowiki><ref[ name=id]></nowiki> en <nowiki><references/></nowiki> etikette beskikbaar vir sitasie.
 cite_error|Citefout: ~{0}
 cite_error_ref_numeric_key|Ongeldige etiket <code>&lt;ref&gt;</code>;\ndie naam kan nie 'n eenvoudige heelgetal wees nie.\nGebruik 'n beskrywende titel
-cite_error_ref_no_key|Ongeldige etiket <code>&lt;ref&gt;</code>;\n"refs" sonder inhoud moet \\'n naam hê
+cite_error_ref_no_key|Ongeldige etiket <code>&lt;ref&gt;</code>;\n"refs" sonder inhoud moet 'n naam hê
 cite_error_ref_too_many_keys|Ongeldig <code>&lt;ref&gt;</code>-etiket;\nongeldige name, byvoorbeeld te veel
 imagemap_no_image|Fout: moet 'n beeld op die eerste lyn spesifiseer
 imagemap_invalid_image|Fout: beeld is ongeldig of bestaan nie
@@ -565,7 +565,7 @@ wikieditor-toolbar-tool-replace-title|Soek en vervang
 wikieditor-toolbar-tool-replace-search|Soek na:
 wikieditor-toolbar-tool-replace-replace|Vervang met:
 wikieditor-toolbar-tool-replace-case|Gevoelig vir hoofletters
-wikieditor-toolbar-tool-replace-regex|Hanteer die soekstring as \\'n "regular expression"
+wikieditor-toolbar-tool-replace-regex|Hanteer die soekstring as 'n "regular expression"
 wikieditor-toolbar-tool-replace-button-findnext|Vind volgende
 wikieditor-toolbar-tool-replace-button-replace|Vervang
 wikieditor-toolbar-tool-replace-button-replaceall|Vervang alles
@@ -714,7 +714,7 @@ wikibase-itembytitle-lookup-fieldset|Items soek volgens webwerf en bladsynaam
 wikibase-itembytitle-lookup-site|Webwerf:
 wikibase-itembytitle-lookup-page|Bladsy:
 wikibase-itembytitle-submit|Soek
-wikibase-itembytitle-description|Werf is \\'n identifikasie, byvoorbeeld "enwiki".
+wikibase-itembytitle-description|Werf is 'n identifikasie, byvoorbeeld "enwiki".
 wikibase-itembytitle-create|U kan ook [~{0} 'n item skep].
 wikibase-itemdisambiguation-lookup-fieldset|Soek vir items volgens taal en eitiket
 wikibase-itemdisambiguation-lookup-language|Taalkode:
@@ -990,7 +990,7 @@ group-inactive|Onaktiewe gebruikers
 group-inactive-member|onaktiewe gebruiker
 grouppage-inactive|{{ns:project}}:Onaktiewe gebruikers
 wikimedia-copyright|Die teks is beskikbaar onder die <a href='//en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License'>Creative Commons Erkenning-Insgelyks Deel</a> lisensie. Dit is moontlik dat aanvullende voorwaardes van toepassing is. Sien die <a href='//wikimediafoundation.org/wiki/Terms_of_Use'>Algemene Voorwaardes</a> vir meer inligting.
-wikimedia-copyrightwarning|Deur op "{{int:savearticle}}" te kliek stem u in tot die [https://wikimediafoundation.org/wiki/Terms_of_Use gebruiksvoorwaardes] en gee u onherroeplik toestemming dat u bydrae onder die [https://creativecommons.org/licenses/by-sa/3.0/deed.af Creative Commons Erkenning-InsgelyksDeel] en die [http://af.wikipedia.org/wiki/GNU-lisensie_vir_vrye_dokumentasie GNU-lisensie vir vrye dokumentasie] gepubliseer word.\nU stem verder in dat \\'n skakel of URL voldoende naamsvermelding is om aan die Creative Commons-lisensie te voldoen.
+wikimedia-copyrightwarning|Deur op "{{int:savearticle}}" te kliek stem u in tot die [https://wikimediafoundation.org/wiki/Terms_of_Use gebruiksvoorwaardes] en gee u onherroeplik toestemming dat u bydrae onder die [https://creativecommons.org/licenses/by-sa/3.0/deed.af Creative Commons Erkenning-InsgelyksDeel] en die [http://af.wikipedia.org/wiki/GNU-lisensie_vir_vrye_dokumentasie GNU-lisensie vir vrye dokumentasie] gepubliseer word.\nU stem verder in dat 'n skakel of URL voldoende naamsvermelding is om aan die Creative Commons-lisensie te voldoen.
 cant-delete-main-page|Jy kan nie verwyder of skuif die hoofblad.
 createacct-helpusername-url|{{ns:Project}}:Beleid_gebruikersname
 createacct-captcha-help-url|{{ns:Project}}:Gebruiker_aanvra

@@ -12,86 +12,86 @@ this
 <:['
 -2|Media
 -1|Arnawlı
-1|Sa\\'wbet
+1|Sa'wbet
 2|Paydalanıwshı
-3|Paydalanıwshı sa\\'wbeti
-5|$1 sa\\'wbeti
-6|Su\\'wret
-7|Su\\'wret sa\\'wbeti
+3|Paydalanıwshı sa'wbeti
+5|$1 sa'wbeti
+6|Su'wret
+7|Su'wret sa'wbeti
 8|MediaWiki
-9|MediaWiki sa\\'wbeti
+9|MediaWiki sa'wbeti
 10|Shablon
-11|Shablon sa\\'wbeti
+11|Shablon sa'wbeti
 12|Anıqlama
-13|Anıqlama sa\\'wbeti
+13|Anıqlama sa'wbeti
 14|Kategoriya
-15|Kategoriya sa\\'wbeti
+15|Kategoriya sa'wbeti
 ']:>
 ).lang
 .specials
   .clear
   .load_text(
 <:['
-Allmessages|Ha\\'mme xabarlar
-Allpages|Ha\\'mme betler
+Allmessages|Ha'mme xabarlar
+Allpages|Ha'mme betler
 Ancientpages|Eski betler
 BrokenRedirects|Jaramsız burıwshılar
 Categories|Kategoriyalar
-Contributions|Paydalanıwshı u\\'lesi
-Deadendpages|Hesh betke siltemeytug\\'ın betler
+Contributions|Paydalanıwshı u'lesi
+Deadendpages|Hesh betke siltemeytug'ın betler
 DoubleRedirects|Qos burıwshılar
 Emailuser|Xat jiberiw
 Export|Eksport
-Fewestrevisions|Az du\\'zetilgenler
+Fewestrevisions|Az du'zetilgenler
 Listadmins|Administratorlar
-Listfiles|Su\\'wretler dizimi
+Listfiles|Su'wretler dizimi
 Listredirects|Burıwshılar dizimi
 Listusers|Paydalanıwshılar~Paydalanıwshı dizimi
 Log|Jurnal~Jurnallar
 Lonelypages|Hesh betten siltelmegen betler
 Longpages|Uzın betler
 MIMEsearch|MIME izlew
-Mostcategories|Ko\\'p kategoriyalang\\'anlar
-Mostimages|Ko\\'p paydalanılg\\'an su\\'wretler
-Mostlinked|Ko\\'p siltelgenler
-Mostlinkedcategories|Ko\\'p paydalanılg\\'an kategoriyalar
-Mostlinkedtemplates|Ko\\'p paydalanılg\\'an shablonlar
-Mostrevisions|Ko\\'p du\\'zetilgenler
-Movepage|Betti ko\\'shiriw
-Mycontributions|Menin\\' u\\'lesim
-Mypage|Menin\\' betim
-Mytalk|Menin\\' sa\\'wbetim
-Newimages|Taza su\\'wretler
+Mostcategories|Ko'p kategoriyalang'anlar
+Mostimages|Ko'p paydalanılg'an su'wretler
+Mostlinked|Ko'p siltelgenler
+Mostlinkedcategories|Ko'p paydalanılg'an kategoriyalar
+Mostlinkedtemplates|Ko'p paydalanılg'an shablonlar
+Mostrevisions|Ko'p du'zetilgenler
+Movepage|Betti ko'shiriw
+Mycontributions|Menin' u'lesim
+Mypage|Menin' betim
+Mytalk|Menin' sa'wbetim
+Newimages|Taza su'wretler
 Newpages|Taza betler
-Popularpages|Ko\\'p ko\\'rilgen betler
+Popularpages|Ko'p ko'rilgen betler
 Preferences|Sazlawlar
-Protectedpages|Qorg\\'alg\\'an betler
-Randompage|Qa\\'legen~Qa\\'legen bet
-Randomredirect|Qa\\'legen burıwshı
-Recentchanges|Aqırg\\'ı o\\'zgerisler
-Recentchangeslinked|Baylanıslı aqırg\\'ı o\\'zgerisler
-Revisiondelete|Nusqanı o\\'shiriw
+Protectedpages|Qorg'alg'an betler
+Randompage|Qa'legen~Qa'legen bet
+Randomredirect|Qa'legen burıwshı
+Recentchanges|Aqırg'ı o'zgerisler
+Recentchangeslinked|Baylanıslı aqırg'ı o'zgerisler
+Revisiondelete|Nusqanı o'shiriw
 Search|İzlew
 Shortpages|Qqısqa betler
 Specialpages|Arnawlı betler
 Statistics|Statistika
 Uncategorizedcategories|Kategoriyasız kategoriyalar
-Uncategorizedimages|Kategoriyasız su\\'wretler
+Uncategorizedimages|Kategoriyasız su'wretler
 Uncategorizedpages|Kategoriyasız betler
 Uncategorizedtemplates|Kategoriyasız shablonlar
-Unusedcategories|Paydalanılmag\\'an kategoriyalar
-Unusedimages|Paydalanılmag\\'an fayllar~Paydalanılmag\\'an su\\'wretler
-Unusedtemplates|Paydalanılmag\\'an shablonlar
-Unwatchedpages|Baqlanılmag\\'an betler
+Unusedcategories|Paydalanılmag'an kategoriyalar
+Unusedimages|Paydalanılmag'an fayllar~Paydalanılmag'an su'wretler
+Unusedtemplates|Paydalanılmag'an shablonlar
+Unwatchedpages|Baqlanılmag'an betler
 Userlogin|Kiriw~Paydalanıwshı kiriw
-Userlogout|Shıg\\'ıw~Paydalanıwshı shıg\\'ıw
+Userlogout|Shıg'ıw~Paydalanıwshı shıg'ıw
 Userrights|Paydalanıwshı huqıqları
 Version|Versiya
-Wantedcategories|Talap qılıng\\'an kategoriyalar
-Wantedpages|Talap qılıng\\'an betler~Jaramsız sıltewler
+Wantedcategories|Talap qılıng'an kategoriyalar
+Wantedpages|Talap qılıng'an betler~Jaramsız sıltewler
 Watchlist|Baqlaw dizimi
 Whatlinkshere|Siltelgen betler
-Withoutinterwiki|Hesh tilge siltemeytug\\'ın betler
+Withoutinterwiki|Hesh tilge siltemeytug'ın betler
 ']:>
 ).lang
 .keywords

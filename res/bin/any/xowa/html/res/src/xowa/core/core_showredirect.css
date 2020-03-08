@@ -45,7 +45,7 @@ a.xowa_display_none,li.xowa_display_none span {display:none;}
   background-position: center; 
   background-repeat:no-repeat;  
   margin:0 auto; /* centers img */
-  height: 22px;
+  height: 20px;
 }
 .xowa_media_info {
   background-image: url(img/info.png);

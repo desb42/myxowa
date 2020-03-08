@@ -297,14 +297,14 @@ cite_error_ref_no_key|Sbàgghiu ni l'usu dû marcaturi <code>&lt;ref&gt;</code>:
 cite_error_ref_too_many_keys|Sbàgghiu ni l'usu dû marcaturi <code>&lt;ref&gt;</code>: nomi non vàlidi (pi es. nùmmiru troppu àutu)
 cite_error_ref_no_input|Sbàgghiu ni l'usu dû marcaturi <code>&lt;ref&gt;</code>: li ref senza nomu non ponnu èssiri vacanti
 cite_error_references_invalid_parameters|Sbàgghiu ni l'usu dû marcaturi <code>&lt;references&gt;</code>: paràmitri non ammittuti, usari li marcaturi <code>&lt;references /&gt;</code>
-cite_error_references_invalid_parameters_group|Sbàgghiu ni l\\'usu dû marcaturi <code>&lt;references&gt;</code>; \nsulu lu paràmitru "group" è pirmittutu.\nUsari <code>&lt;references /&gt;</code> oppuru <code>&lt;references group="..." /&gt;</code>
+cite_error_references_invalid_parameters_group|Sbàgghiu ni l'usu dû marcaturi <code>&lt;references&gt;</code>; \nsulu lu paràmitru "group" è pirmittutu.\nUsari <code>&lt;references /&gt;</code> oppuru <code>&lt;references group="..." /&gt;</code>
 cite_error_references_no_backlink_label|Etichetti di rimannata pirsunalizzati finuti, aumintari lu nùmmiru ntô missàggiu <nowiki>[[MediaWiki:Cite references link many format backlink labels]]</nowiki>
 cite_error_references_no_text|Marcaturi <code>&lt;ref&gt;</code> non vàlidu; non vinni nnicatu nuddu testu pô marcaturi <code>~{0}</code>
 cite_error_included_ref|<code>&lt;/ref&gt;</code> di chiusura mancanti pô marcaturi <code>&lt;ref&gt;</code>
 cite_error_refs_without_references|Sù prisenti dê marcatura <code>&lt;ref&gt;</code> ma nun fu attruvatu nissunu marcaturi <code>&lt;references/&gt;</code>
 cite_error_group_refs_without_references|Sù prisenti dê marcatura <code>&lt;ref&gt;</code> pi nu gruppu chiamatu "~{0}" ma nun fu truvatu nissunu marcaturi <code>&lt;references group="~{0}"/&gt;</code> currispunnenti
 cite_error_references_group_mismatch|Lu tag <code>&lt;ref&gt;</code> n <code>&lt;references&gt;</code> havi attribuiutu lu gruppu "~{0}" n conflittu.
-cite_error_references_missing_group|Lu tag <code>&lt;ref&gt;</code> difinutu n <code>&lt;references&gt;</code> havi n\\'attributu gruppu "~{0}" ca nun cumpari ni lu testu pricidenti.
+cite_error_references_missing_group|Lu tag <code>&lt;ref&gt;</code> difinutu n <code>&lt;references&gt;</code> havi n'attributu gruppu "~{0}" ca nun cumpari ni lu testu pricidenti.
 cite_error_references_missing_key|Lu tag <code>&lt;ref&gt;</code> cu nomu "~{0}" difinutu n <code>&lt;references&gt;</code> nun è usatu nô testu pricidenti.
 cite_error_references_no_key|Lu tag <code>&lt;ref&gt;</code> difinutu n <code>&lt;references&gt;</code> nun havi n'attributu nomu.
 cite_error_empty_references_define|Lu tag <code>&lt;ref&gt;</code> difinutu n <code>&lt;references&gt;</code> cu lu nomu "~{0}" nun havi alcun cuntinutu.

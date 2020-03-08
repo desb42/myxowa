@@ -17,17 +17,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 document.addEventListener('DOMContentLoaded', function () {
 
-	function importStylesheetURI( url, media ) {
-		var l = document.createElement( 'link' );
-		l.rel = 'stylesheet';
-		l.href = url;
-		if ( media ) {
-			l.media = media;
-		}
-		document.head.appendChild( l );
-		return l;
-	}
-
 function initCollapsible () {
     /* from jquery.makeCollapsible.css */
 /*    xowa.css.add('.mw-collapsible-toggle{float:right;}li .mw-collapsible-toggle{float:none;}.mw-collapsible-toggle-li{list-style:none;}');
@@ -68,7 +57,7 @@ function init () {
     }
     if (needCollapsible) {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/jquery/jquery.makeCollapsible.js', initCollapsible);
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery.makeCollapsible.styles.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery.makeCollapsible.styles.css')
     }
     if (needSortable) {
       //xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki.language/mediawiki.language.init.js');
@@ -84,9 +73,9 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki.page/mediawiki.page.gallery.js');
     }
     if (needGallerySlideshow) {
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/oojs-ui/oojs-ui-core-apex.css')
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki_gen/oojs-ui.styles.icons-movement.css')
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki_gen/oojs-ui.styles.icons-content.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/oojs-ui/oojs-ui-core-apex.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki_gen/oojs-ui.styles.icons-movement.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki_gen/oojs-ui.styles.icons-content.css')
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki/mediawiki.Title.js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki/mediawiki.Title.phpCharToUpper.js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/oojs/oojs.jquery.js');
@@ -124,38 +113,40 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/karto/modules/maplink/maplink.js');
     }
     if (document.querySelectorAll('.mw-kartographer-container').length || document.querySelectorAll('.mw-kartographer-maplink').length) {
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/karto/ext.kartographer.style.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/karto/ext.kartographer.style.css')
     }
       
     // proofread (wikisource) pages
     if (document.querySelectorAll('table.pr_quality').length) {
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/proof/ext.proofreadpage.base.css')
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/proof/ext.proofreadpage.article.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/proof/ext.proofreadpage.base.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/proof/ext.proofreadpage.article.css')
     }
     else if (document.querySelectorAll('.prp-page-container').length) {
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/proof/ext.proofreadpage.base.css')
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/proof/ext.proofreadpage.page.css')
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/ProofreadPage/ext.proofreadpage.page.navigation.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/proof/ext.proofreadpage.base.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/proof/ext.proofreadpage.page.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/ProofreadPage/ext.proofreadpage.page.navigation.css')
     }
 
     if (document.querySelectorAll('.wikibase-entityview-main').length) {
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery.wikibase.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery.wikibase.css')
     }
 
+    if (document.querySelectorAll('.mw-category-group').length) {
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/mediawiki.action.view.categoryPage.styles.css')
+    }
     if (document.querySelectorAll('.CategoryTreeSection').length) {
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.css')
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/mediawiki.action.view.categoryPage.styles.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.css')
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki/mediawiki.api.js');
     }
 
     if (document.querySelectorAll('.mw-templatedata-doc-params').length) {
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/templatedata/ext.templateData.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/templatedata/ext.templateData.css')
     }
 
     if (document.querySelectorAll('.oo-ui-widget').length) {
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/oojs-ui/oojs-ui-core-wikimediaui.css')
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/templatedata/ext.templateData.images.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/oojs-ui/oojs-ui-core-wikimediaui.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/templatedata/ext.templateData.images.css')
     }
 
     if (document.querySelectorAll('.prettyprint').length) {
@@ -170,11 +161,11 @@ function init () {
 
 // PageBanner stuff?
     if (document.querySelectorAll('.wpb-topbanner').length) {
-//      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.css')
+//      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.css')
 //      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.js');
 //      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.ba-throttle-debounce.js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/WikidataPageBanner/resources/ext.WikidataPageBanner.positionBanner/ext.WikidataPageBanner.positionBanner.js');
-      importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/PageBanner/ext.WikidataPageBanner.toc.styles.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/PageBanner/ext.WikidataPageBanner.toc.styles.css')
     }
 
     if (xowa_global_values['proofreadpage_source_href'] !== undefined) {
@@ -191,8 +182,12 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/readmore/ext.relatedArticles.whole.js');
     }
 
-    if (x_p.wiki == 'en.wikivoyage.org' || x_p.wiki == 'en.wikipedia.org') {
+    if (x_p.wiki == 'en.wikivoyage.org' || x_p.wiki.substring(3) == 'wikipedia.org') {
+//      || x_p.wiki == 'it.wikipedia.org' || x_p.wiki == 'fr.wikipedia.org') {
       $(document).ready( xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/ext.popups.images.js') );
+    }
+    if (document.querySelectorAll('.switcher-container').length) {
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext.gadget.switch.js');
     }
 /*
 ????? wikibooks

@@ -39,13 +39,15 @@ function getwikix(popup_itm, ev)
       req.send(null);
 }
 
-jQuery( document ).ready( function ( $ ) {
+/*jQuery( document ).ready( function ( $ ) {
 	  var locjs = '/';
     if (window.location.pathname.substring(0,5) == '/xowa')
       locjs = '/xowa/';
-    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '.js');
+    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '/extra.js');
+    xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '/extra.css')
+    //xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '.js');
     var pageurl = locjs + x_p.wiki + '/wiki/' + xowa_global_values.wgPageName;
     //if (pageurl != location.pathname)
     //  window.history.pushState('page2', xowa_global_values.wgTitle, pageurl);
 } );
-
+*/
