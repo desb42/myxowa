@@ -92,9 +92,12 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 
                 Bry_bfr tmp = wtr.Bfr();
 		//wtr.Write_js_global_ini_atr_val(Key_wgPopupsRestGatewayEndpoint, Bry_.new_a7("/api/rest_v1/page/summary/"));
-		tmp.Add(Bry_.new_a7("\n \"wgPopupsRestGatewayEndpoint\" : \"/xowa/api/"));
+		//tmp.Add(Bry_.new_a7("\n \"wgPopupsRestGatewayEndpoint\" : \"/xowa/api/"));
+		//tmp.Add(page.Wiki().Domain_bry());
+		//tmp.Add(Bry_.new_a7("/rest_v1/page/summary/\","));
+		tmp.Add(Bry_.new_a7("\n \"wgPopupsRestGatewayEndpoint\" : \"/xowa/"));
 		tmp.Add(page.Wiki().Domain_bry());
-		tmp.Add(Bry_.new_a7("/rest_v1/page/summary/\","));
+		tmp.Add(Bry_.new_a7("/wiki/\","));
 
 		tmp.Add(Bry_.new_a7("\n \"wgArticlePath\" : \"/xowa/"));
 		tmp.Add(page.Wiki().Domain_bry());

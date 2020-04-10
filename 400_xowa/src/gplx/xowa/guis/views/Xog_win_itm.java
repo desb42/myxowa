@@ -161,7 +161,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 	public void Page__mode_edit_() {	// only called from by link
 		// HACK: when "edit" is clicked, always reload page from database; handles rarely-reproducible issue of "edit-after-rename" causing older versions to show up
 		Xog_tab_itm tab = tab_mgr.Active_tab(); Xoae_page page = tab.Page(); Xowe_wiki wiki = tab.Wiki();
-		page = wiki.Page_mgr().Load_page(page.Url(), page.Ttl(), tab, (byte)0);
+		page = wiki.Page_mgr().Load_page(page.Url(), page.Ttl(), tab, (byte)0, (byte)0);
 		Page__mode_(Xopg_view_mode_.Tid__edit);
 	}
 	public void Page__mode_(byte new_mode_tid) {
@@ -202,6 +202,8 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 			view_mode = Xopg_view_mode_.Tid__edit;
 		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__html))
 			view_mode = Xopg_view_mode_.Tid__html;
+		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__firstpara))
+			view_mode = Xopg_view_mode_.Tid__firstpara;
 		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__wikitextver))
 			display_mode = Xopg_display_mode_.Tid__wikitextver;
 		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__htmlver))
@@ -225,7 +227,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 			// fixes bug wherein dump_html points images to wrong repo and causes images to be blank when going backwards / forwards
 			// note that this workaround will cause Wikitext Wikinews pages to reload page when going bwd / fwd, but this should be a smalldifference
 			if (new_page.Wiki().Domain_tid() == gplx.xowa.wikis.domains.Xow_domain_tid_.Tid__wikinews)
-				new_page = new_page.Wikie().Page_mgr().Load_page(new_page.Url(), new_page.Ttl(), tab, (byte)0);
+				new_page = new_page.Wikie().Page_mgr().Load_page(new_page.Url(), new_page.Ttl(), tab, (byte)0, (byte)0);
 		}
 		byte history_nav_type = fwd ? Xog_history_stack.Nav_fwd : Xog_history_stack.Nav_bwd;
 		boolean new_page_is_same = Bry_.Eq(cur_page.Ttl().Full_txt_by_orig(), new_page.Ttl().Full_txt_by_orig());
@@ -237,7 +239,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 		if (tab.History_mgr().Count() == 0) return; // MISSING_PAGES will generate NPE if (a) is a startup tab and (b) View -> Reload Page is called; FOOTNOTE:MISSING_PAGES_NPE ISSUE#:608; DATE:2019-11-03
 		Xoae_page page = tab.History_mgr().Cur_page(tab.Wiki());	// NOTE: must set to CurPage() else changes will be lost when going Bwd,Fwd
 		tab.Page_(page);
-		page = page.Wikie().Page_mgr().Load_page(page.Url(), page.Ttl(), tab, (byte)0);	// NOTE: must reparse page if (a) Edit -> Read; or (b) "Options" save
+		page = page.Wikie().Page_mgr().Load_page(page.Url(), page.Ttl(), tab, (byte)0, (byte)0);	// NOTE: must reparse page if (a) Edit -> Read; or (b) "Options" save
 		Page__refresh();
 	}
 	public void Page__refresh() {
@@ -245,7 +247,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 	}
 	public void Page__refresh(Xog_tab_itm tab) {
 		Xoae_page page = tab.Page(); Xog_html_itm html_itm = tab.Html_itm();
-		page = page.Wikie().Page_mgr().Load_page(page.Url(), page.Ttl(), tab, (byte)0);	// NOTE: refresh should always reload and regen page; DATE:2017-02-15
+		page = page.Wikie().Page_mgr().Load_page(page.Url(), page.Ttl(), tab, (byte)0, (byte)0);	// NOTE: refresh should always reload and regen page; DATE:2017-02-15
 		page.Html_data().Bmk_pos_(html_itm.Html_box().Html_js_eval_proc_as_str(Xog_js_procs.Win__vpos_get));
 		html_itm.Show(page);
 		if (page.Url().Anch_str() == null)
@@ -317,7 +319,7 @@ public class Xog_win_itm implements Gfo_invk, Gfo_evt_itm {
 			Xog_tab_itm tab = tab_mgr.Active_tab();
 
 			// get page
-			Xoae_page new_page = wiki.Page_mgr().Load_page(url, ttl, tab, (byte)0);
+			Xoae_page new_page = wiki.Page_mgr().Load_page(url, ttl, tab, (byte)0, (byte)0);
 			if (new_page.Db().Page().Exists_n()) {return Bry_.Empty;}
 
 			// update tab-specific vars

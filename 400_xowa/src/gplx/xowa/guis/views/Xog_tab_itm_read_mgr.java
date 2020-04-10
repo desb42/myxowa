@@ -34,6 +34,8 @@ public class Xog_tab_itm_read_mgr {
 			view_mode = Xopg_view_mode_.Tid__edit;
 		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__html))
 			view_mode = Xopg_view_mode_.Tid__html;
+		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__firstpara))
+			view_mode = Xopg_view_mode_.Tid__firstpara;
 		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__wikitextver))
 			display_mode = Xopg_display_mode_.Tid__wikitextver;
 		else if (Bry_.Eq(action_val, Xoa_url_.Qarg__action__htmlver))

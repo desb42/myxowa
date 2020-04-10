@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa; import gplx.*;
 import gplx.langs.htmls.*;
 /*
+remove __TOC__
 remove {{ .... }} matching
 remove <ref ... </ref>
 remove any elements? <b> ... </b>??
@@ -42,6 +43,7 @@ if '=' check previous char for '\n', if so find next '\n'
 */
 public class Db_wikistrip {
 
+	private Xoa_ttl ttl;
 	private int nowikicheck(byte[] src, int src_len, int pos) {
             return pos;
 	}
@@ -83,7 +85,7 @@ public class Db_wikistrip {
 		return false;
 	}
 	private int findclosingsquare(byte[] src, int src_len, int pos, Bry_bfr bfr) {
-		int levelcount = 0;
+		int levelcount = 1;
 		int endpos = 0;
 		int startpos = pos;
 		int barpos = 0;
@@ -94,24 +96,33 @@ public class Db_wikistrip {
 					levelcount++;
 					break;
 				case ']':
+					levelcount--;
 					if (levelcount == 0) {
 						endpos = pos;
 						pos = src_len; // terminate loop
 					}
-					levelcount--;
 					break;
 				case '|':
 					barpos = pos;
 					break;
 			}
 		}
-		if (levelcount != 0)
-                {int a = 1;}
+		if (levelcount != 0 || endpos == 0) {
 			// report/note an error
-		// check for File: and Category: [what about ther langage wikis?]
+			int beg = startpos - 10;
+			int end = startpos + 10;
+			if (beg < 0) beg = 0;
+			if (end >= src_len) end = src_len;
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed [ pos=~{2} ttl=~{0} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end), startpos);
+			return startpos + 1; // skip the '['
+		}
+		// check for File: and Category: [what about other langage wikis?]
 		if (!check_ns(src, startpos, endpos)) {
-			if (barpos > 0)
+			// beware bad links
+			// beware pipe trick (currently use full link)
+			if (barpos > 0 && barpos < endpos - 3) {
 				bfr.Add_mid(src, barpos, endpos-2);
+			}
 			else
 				bfr.Add_mid(src, startpos+1, endpos-2);
 		}
@@ -158,6 +169,12 @@ public class Db_wikistrip {
 						return pos;
 				}
 			}
+			else if (pos - namestart > 15) // no more than 15 character name!
+				return namestart;
+			else if ((b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z')) // allow only alpha?????????
+				continue;
+			else
+				return namestart; // ignore the '<'
 		}
 		// now find the close (or a nesting!)
 		while (pos < src_len) {
@@ -204,7 +221,7 @@ public class Db_wikistrip {
                 return pos;
 	}
 
-	public byte[] Strip_wiki(byte[] src) {
+	public byte[] Strip_wiki(byte[] src, boolean firstparaonly) {
 		Bry_bfr bfr = Bry_bfr_.New();
 		int src_len = src.length;
 		int startpos = 0;
@@ -213,55 +230,59 @@ public class Db_wikistrip {
 			byte b = src[pos++];
 			switch (b) {
 				case '{':
-					b = src[pos];
-					if (b == '|') { // check for a table
-						bfr.Add_mid(src, startpos, pos-1);
-						while (pos < src_len) { // find close table
-							b = src[pos++];
-							if (b == '|' && pos < src_len && src[pos] == '}') {
-								pos++;
-								break;
+					if (pos < src_len) {
+						b = src[pos];
+						/*if (b == '|') { // check for a table
+							bfr.Add_mid(src, startpos, pos-1);
+							while (pos < src_len) { // find close table
+								b = src[pos++];
+								if (b == '|' && pos < src_len && src[pos] == '}') {
+									pos++;
+									break;
+								}
 							}
+							startpos = pos;
 						}
-						startpos = pos;
-					}
-					else if (b == '{') {
-						bfr.Add_mid(src, startpos, pos-1);
-						pos = findclosingsquiggle(src, src_len, pos);
-						startpos = pos;
+						else*/ if (b == '{' || b == '|') {
+							bfr.Add_mid(src, startpos, pos-1);
+							pos = findclosingsquiggle(src, src_len, pos);
+							startpos = pos;
+						}
 					}
 					break;
 				case '[':
-					// check for [http...]
-					b = src[pos];
-					if (b == 'h') {
-						if (pos + 4 < src_len) {
-							if (src[pos+1] == 't' && src[pos+2] == 't' && src[pos+3] == 'p') {
-								bfr.Add_mid(src, startpos, pos-1);
-								while (pos < src_len) { // find ' ' or close
-									b = src[pos++];
-									if (b == ']')
-										break;
-									else if (b == ' ') {
-										// copy to ']'
-										startpos = pos;
-										while (pos < src_len) { // find ']'
-											b = src[pos++];
-											if (b == ']')
-												break;
+					if (pos < src_len) {
+						// check for [http...]
+						b = src[pos];
+						if (b == 'h') {
+							if (pos + 4 < src_len) {
+								if (src[pos+1] == 't' && src[pos+2] == 't' && src[pos+3] == 'p') {
+									bfr.Add_mid(src, startpos, pos-1);
+									while (pos < src_len) { // find ' ' or close
+										b = src[pos++];
+										if (b == ']')
+											break;
+										else if (b == ' ') {
+											// copy to ']'
+											startpos = pos;
+											while (pos < src_len) { // find ']'
+												b = src[pos++];
+												if (b == ']')
+													break;
+											}
+											bfr.Add_mid(src, startpos, pos-1);
+											break;
 										}
-										bfr.Add_mid(src, startpos, pos-1);
-										break;
 									}
+									startpos = pos;
 								}
-								startpos = pos;
 							}
 						}
-					}
-					else if (b == '[') {
-						bfr.Add_mid(src, startpos, pos-1);
-						pos = findclosingsquare(src, src_len, pos, bfr);
-						startpos = pos;
+						else if (b == '[') {
+							bfr.Add_mid(src, startpos, pos-1);
+							pos = findclosingsquare(src, src_len, pos, bfr);
+							startpos = pos;
+						}
 					}
 					break;
 				case '<':
@@ -272,8 +293,21 @@ public class Db_wikistrip {
 				case '=':
 					if ((pos > 1 && src[pos-2] == '\n') || (pos == 1)) { // '\n='
 						bfr.Add_mid(src, startpos, pos-1);
-						while (pos < src_len) { // find next '=\n'
+						while (pos + 1 < src_len) { // find next '=\n'
 							if (src[pos++] == '=' && src[pos] == '\n')
+								break;
+						}
+						startpos = pos;
+						if (firstparaonly)
+							return bfr.To_bry();
+					}
+					break;
+				case '_':
+					if ((pos > 1 && src[pos-2] == '\n') || (pos == 1)) { // '\n_'
+						if (pos < src_len && src[pos] == '_')
+						bfr.Add_mid(src, startpos, pos-1);
+						while (pos + 1 < src_len) { // find next '_\n'
+							if (src[pos++] == '_' && src[pos] == '\n')
 								break;
 						}
 						startpos = pos;
@@ -292,7 +326,7 @@ public class Db_wikistrip {
 							break;
 					}
 					if (listcount > 0) {
-						if (src[pos] == ' ')
+						if (pos < src_len && src[pos] == ' ')
 							pos++;
 						bfr.Add_mid(src, startpos, listpos);
 						startpos = pos;
@@ -303,8 +337,9 @@ public class Db_wikistrip {
 		bfr.Add_mid(src, startpos, src_len);
 		return bfr.To_bry();
 	}
-	public byte[] Search_text(byte[] src) {
-		src = Strip_wiki(src);
+	public byte[] Search_text(byte[] src, Xoa_ttl ttl) {
+		this.ttl = ttl;
+		src = Strip_wiki(src, false);
 		// now remove '', ''', () and &...; and multiple newlines
 		Bry_bfr bfr = Bry_bfr_.New();
 		int src_len = src.length;
@@ -314,15 +349,17 @@ public class Db_wikistrip {
 			byte b = src[pos++];
 			switch (b) {
 				case '\'':
-					b = src[pos];
-					if (b == '\'') { // more than one '
-						bfr.Add_mid(src, startpos, pos-1);
-						while (pos < src_len) {
-							b = src[pos++];
-							if (b != '\'')
-								break;
+					if (pos < src_len) {
+						b = src[pos];
+						if (b == '\'') { // more than one '
+							bfr.Add_mid(src, startpos, pos-1);
+							while (pos < src_len) {
+								b = src[pos++];
+								if (b != '\'')
+									break;
+							}
+							startpos = pos - 1;
 						}
-						startpos = pos - 1;
 					}
 					break;
 				case '&': // replace all &...; with a space (upto a max of 10 chars)
@@ -343,10 +380,12 @@ public class Db_wikistrip {
 					}
 					break;
 				case '(':
+                                    if (pos < src_len) {
 					if (src[pos] == ')') {
 						bfr.Add_mid(src, startpos, pos-1);
 						startpos = pos + 1;
 					}
+                                    }
 					break;
 				case '\n':
 					// check for multiple \n (only \n\n)
@@ -371,8 +410,9 @@ public class Db_wikistrip {
 		bfr.Add_mid(src, startpos, src_len);
 		return bfr.To_bry();
 	}
-	public byte[] First_para(byte[] src) {
-		src = Strip_wiki(src);
+	public byte[] First_para(byte[] src, Xoa_ttl ttl) {
+		this.ttl = ttl;
+		src = Strip_wiki(src, true);
 		// now change '' and '''
 		Bry_bfr bfr = Bry_bfr_.New();
 		int src_len = src.length;
@@ -420,6 +460,8 @@ public class Db_wikistrip {
 						// could be 5!!
 						startpos = pos - 1;
 					}
+                                        if (pos < src_len)
+                                            pos--; // because we looked ahead
 					break;
 				case '(':
 					if (firstbracket) {
@@ -430,7 +472,13 @@ public class Db_wikistrip {
 								break;
 						}
 						startpos = pos;
+						pos--;
 					}
+					break;
+				case '"': // convet to &quot;
+					bfr.Add_mid(src, startpos, pos-1);
+					bfr.Add_str_a7("&quot;");
+					startpos = pos;
 					break;
 				case '\n':
 					// check for multiple \n (only \n\n)
@@ -459,8 +507,9 @@ public class Db_wikistrip {
 						else
 							break;
 					}
+					bfr.Add_mid(src, startpos, nlpos-1).Add_byte((byte)'\\').Add_byte((byte)'n');
 					if (nlcount > 1) {
-						bfr.Add_mid(src, startpos, nlpos+1);
+						//bfr.Add_mid(src, startpos, nlpos+1);
 						if (startpara)
 							pos = src_len; // break out
 						else {
@@ -468,6 +517,8 @@ public class Db_wikistrip {
 							startpos = pos;
 						}
 					}
+					else
+						startpos = pos;
 					break;
 			}
 		}

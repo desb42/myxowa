@@ -139,6 +139,7 @@ public class Xowv_wiki implements Xow_wiki, Xow_ttl_parser, Gfo_invk {
         public Pp_quality Quality() {return null;} // nothing
         public Db_breadcrumb Bread() {return null;} // nothing
         public Db_maxpage Maxpage() {return null;} // nothing
+        public Db_index_page Index_page() {return null;} // nothing
 	public void Pages_get(Xoh_page rv, Gfo_url url, Xoa_ttl ttl) {
 		if (init_needed) Init_by_wiki();
 		if (ttl.Ns().Id_is_special())

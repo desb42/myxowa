@@ -60,7 +60,7 @@ public class Gfo_usr_dlg_base implements Gfo_usr_dlg {
 		finally {
 			rwl.writeLock().unlock();
 		}
-}
+	}
 	private String Bld_msg_one(String grp_key, String msg_key, String fmt, Object val) {
 		synchronized (tmp_fmtr) {
 			tmp_fmtr.Fmt_(fmt).Bld_bfr_one(tmp_bfr, val);

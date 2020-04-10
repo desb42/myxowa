@@ -30,7 +30,7 @@ public class Load_page_wkr implements Gfo_thread_wkr {
 			Running_(true);
 
 			// wait_for_popups; free mem check;
-			this.page = wiki.Page_mgr().Load_page(url, ttl, tab, tab.Display_mode());
+			this.page = wiki.Page_mgr().Load_page(url, ttl, tab, tab.Display_mode(), (byte)0);
 
 			// launch thread to show page
 			Gfo_invk_.Invk_by_val(tab.Cmd_sync(), Xog_tab_itm.Invk_show_url_loaded_swt, this);

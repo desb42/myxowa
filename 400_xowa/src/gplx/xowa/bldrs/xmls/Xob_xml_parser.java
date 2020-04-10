@@ -141,6 +141,9 @@ class Xob_xml_parse_model_format {
 //3      <model>css</model>
 //4      <model>javascript</model>
 //5      <model>sanitized-css</model>
+//6      <model>MassMessageListContent</model> // species
+//7      <model>flow-board</model> // species
+//8      <model>proofread-page</model> // wikisource
 //
 //1      <format>text/x-wiki</format>
 //2      <format>text/plain</format>
@@ -154,7 +157,10 @@ class Xob_xml_parse_model_format {
 		if (b == 'c') return 3;
 		if (b == 'j') return 4;
 		if (b == 's') return 5;
-                return 6;
+		if (b == 'M') return 6;
+		if (b == 'f') return 7;
+		if (b == 'p') return 8;
+                return 9;
 	}
 	public int Parse_format(byte[] src, int bgn, int end) {
 		byte b = src[bgn + 5];

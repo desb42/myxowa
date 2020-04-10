@@ -23,6 +23,7 @@ import gplx.xowa.htmls.core.htmls.*; import gplx.langs.htmls.encoders.*; import 
 import gplx.xowa.apps.apis.xowa.html.*;
 import gplx.xowa.langs.vnts.*; import gplx.xowa.htmls.portal.vnts.*;
 import gplx.xowa.parsers.amps.*;
+import gplx.xowa.xtns.proofreadPage.*;
 public class Xow_portal_mgr implements Gfo_invk {
 	private Xowe_wiki wiki; private boolean lang_is_rtl; private Xoapi_toggle_itm toggle_itm;
 	private final    Vnt_mnu_grp_fmtr vnt_menu_fmtr = new Vnt_mnu_grp_fmtr();
@@ -126,7 +127,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 		return rv;
 	}
 
-	public byte[] Div_ns_bry(Xowe_wiki wiki, Xoa_ttl ttl, boolean ispage_in_wikisource) {
+	public byte[] Div_ns_bry(Xowe_wiki wiki, Xoa_ttl ttl, boolean ispage_in_wikisource, Xoae_page page) {
 		Bry_bfr_mkr bfr_mkr = wiki.Utl__bfr_mkr();
 		Xow_ns_mgr ns_mgr = wiki.Ns_mgr();
 		Xow_ns ns = ttl.Ns();
@@ -166,31 +167,69 @@ public class Xow_portal_mgr implements Gfo_invk {
 		byte[] extra = Bry_.Empty;
 		if (ispage_in_wikisource) {
 			Xoa_ttl idx_ttl = Xoa_ttl.Parse(wiki, wiki.Ns_mgr().Ns_index_id(), ttl.Root_txt());
-			Xoae_page page = wiki.Data_mgr().Load_page_by_ttl(idx_ttl);
-			int maxpagecount = wiki.Maxpage().Get_maxpage(page.Db().Page().Id());
-
-			int currentpageno = 1;
-			if (ttl.Leaf_bgn() > 0)
-				currentpageno = Bry_.To_int(ttl.Leaf_txt());
+			Xoae_page idx_page = wiki.Data_mgr().Load_page_by_ttl(idx_ttl);
 
 			byte[] lnk_txt, lnk;
+			int currentpageno;
 			Bry_bfr bfr = Bry_bfr_.New();
-			lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_image");
-		//lnk = ??
-		//Fmt__image.Bld_many(bfr, lnk, lnk_txt);
 
-			lnk = idx_ttl.Page_href(); //remove Index: (that is, not the Leaf)
-			if (currentpageno - 1 > 0) {
-				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_prevpage");
-				Fmt__prev.Bld_many(bfr, lnk, currentpageno - 1, lnk_txt);
+			if (!idx_page.Db().Page().Exists()) { // does not exist
+				// need another strategy
+				idx_ttl = wiki.Index_page().Get_index_page(page.Db().Page().Id());
+				if (idx_ttl != null) {
+					idx_page = wiki.Data_mgr().Load_page_by_ttl(idx_ttl);
+					List_adp lnks = Pp_index_parser.Parse_pages_param(wiki, idx_page.Db().Text().Text_bry());
+					int maxpagecount = lnks.Count();
+					byte[] pagename = page.Ttl().Full_db();
+					int i;
+					for (i = 0; i < maxpagecount; i++) {
+						Xoa_ttl lnkttl = (Xoa_ttl)lnks.Get_at(i);
+						if (Bry_.Eq(pagename, lnkttl.Full_db()))
+							break;
+					}
+					currentpageno = i; // range 0..maxpagecount-1
+	
+					if (currentpageno - 1 >= 0) {
+						lnk = ((Xoa_ttl)lnks.Get_at(currentpageno - 1)).Page_href();
+						lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_prevpage");
+						Fmt__prev_lnk.Bld_many(bfr, lnk, lnk_txt);
+					}
+					if (currentpageno + 1 < maxpagecount) {
+						lnk = ((Xoa_ttl)lnks.Get_at(currentpageno + 1)).Page_href();
+						lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_nextpage");
+						Fmt__next_lnk.Bld_many(bfr, lnk, lnk_txt);
+					}
+	
+					lnk = idx_ttl.Full_url();
+					lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_index");
+					Fmt__index_lnk.Bld_many(bfr, lnk, lnk_txt);
+				}
 			}
-			if (currentpageno + 1 < maxpagecount) {
-				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_nextpage");
-				Fmt__next.Bld_many(bfr, lnk, currentpageno + 1, lnk_txt);
+			else {
+				int maxpagecount = wiki.Maxpage().Get_maxpage(idx_page.Db().Page().Id());
+	
+				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_image");
+			//lnk = ??
+			//Fmt__image.Bld_many(bfr, lnk, lnk_txt);
+
+				currentpageno = 1;
+				if (ttl.Leaf_bgn() > 0)
+					currentpageno = Bry_.To_int(ttl.Leaf_txt());
+	
+				lnk = idx_ttl.Page_href(); //remove Index: (that is, not the Leaf)
+				if (currentpageno - 1 > 0) {
+					lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_prevpage");
+					Fmt__prev.Bld_many(bfr, lnk, currentpageno - 1, lnk_txt);
+				}
+				if (currentpageno + 1 < maxpagecount) {
+					lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_nextpage");
+					Fmt__next.Bld_many(bfr, lnk, currentpageno + 1, lnk_txt);
+				}
+
+				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_index");
+				Fmt__index.Bld_many(bfr, lnk, lnk_txt);
 			}
 
-			lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_index");
-			Fmt__index.Bld_many(bfr, lnk, lnk_txt);
 			extra = bfr.To_bry_and_clear();
 		}
 
@@ -205,11 +244,20 @@ public class Xow_portal_mgr implements Gfo_invk {
 	,Fmt__prev = Bry_fmt.Auto_nl_skip_last
 	 ( "<li id=\"ca-proofreadPagePrevLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}/~{cnt}\" class=\"xowa-hover-off\" rel=\"prev\" title=\"~{lnk_txt}\">~{lnk_txt}</a></span></li>"
 	 )
+	,Fmt__prev_lnk = Bry_fmt.Auto_nl_skip_last
+	 ( "<li id=\"ca-proofreadPagePrevLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}\" class=\"xowa-hover-off\" rel=\"prev\" title=\"~{lnk_txt}\">~{lnk_txt}</a></span></li>"
+	 )
 	,Fmt__next = Bry_fmt.Auto_nl_skip_last
 	 ( "<li id=\"ca-proofreadPageNextLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}/~{cnt}\" class=\"xowa-hover-off\" rel=\"next\" title=\"~{lnk_txt}\">~{lnk_txt}</a></span></li>"
 	 )
+	,Fmt__next_lnk = Bry_fmt.Auto_nl_skip_last
+	 ( "<li id=\"ca-proofreadPageNextLink\" class=\"icon\"><span><a href=\"/wiki/Page:~{lnk}\" class=\"xowa-hover-off\" rel=\"next\" title=\"~{lnk_txt}\">~{lnk_txt}</a></span></li>"
+	 )
 	,Fmt__index = Bry_fmt.Auto_nl_skip_last
 	 ( "<li id=\"ca-proofreadPageIndexLink\" class=\"icon\"><span><a href=\"/wiki/Index:~{lnk}\" class=\"xowa-hover-off\" title=\"~{img_txt}\">~{img_txt}</a></span></li>"
+	 )
+	,Fmt__index_lnk = Bry_fmt.Auto_nl_skip_last
+	 ( "<li id=\"ca-proofreadPageIndexLink\" class=\"icon\"><span><a href=\"/wiki/~{lnk}\" class=\"xowa-hover-off\" title=\"~{img_txt}\">~{img_txt}</a></span></li>"
 	 )
 	;
 	private byte[] Ns_cls_by_ord(Xow_ns_mgr ns_mgr, int ns_ord) {
@@ -319,9 +367,9 @@ public class Xow_portal_mgr implements Gfo_invk {
 			}
 		}
 		if (changed) {
-                    tmp_bfr.Add_mid(src, bgn, len);
+			tmp_bfr.Add_mid(src, bgn, len);
 			return tmp_bfr.To_bry_and_clear();
-                }
+		}
 		else
 			return src;
 	}

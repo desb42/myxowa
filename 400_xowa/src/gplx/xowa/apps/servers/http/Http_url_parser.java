@@ -100,6 +100,8 @@ class Http_url_parser {
 							this.action = Xopg_view_mode_.Tid__edit;
 						else if (Bry_.Eq(qarg_val, Xoa_url_.Qarg__action__html))
 							this.action = Xopg_view_mode_.Tid__html;
+						else if (Bry_.Eq(qarg_val, Xoa_url_.Qarg__action__firstpara))
+							this.action = Xopg_view_mode_.Tid__firstpara;
 						else if (Bry_.Eq(qarg_val, Qarg__action__popup))
 							this.popup = true;
 						else if (Bry_.Eq(qarg_val, Xoa_url_.Qarg__action__wikitextver))

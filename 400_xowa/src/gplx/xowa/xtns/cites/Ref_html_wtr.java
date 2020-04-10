@@ -129,6 +129,7 @@ public class Ref_html_wtr {
 					, Grp_id(head_itm, cfg.Itm_crslp(), cfg.Itm_crsls())	// NOTE: use head_itm for back ref to work (^ must link to same id)
 					, Itm_id(head_itm, true, cfg.Itm_crlp(), cfg.Itm_crls())
 					, tmp
+					, null // 20200409 (fourth arg) strictly this should be $extraAttributes = Html::expandAttributes( [ 'class' => 'mw-cite-dir-' . $dir ] );
 					);
 			}
 			else {							// ref has 1+ itms; EX: "123 ^ a b c text"

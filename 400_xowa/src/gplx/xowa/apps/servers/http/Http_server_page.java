@@ -17,7 +17,7 @@ package gplx.xowa.apps.servers.http; import gplx.*; import gplx.xowa.*; import g
 import gplx.core.envs.*;
 import gplx.xowa.guis.views.*;
 import gplx.xowa.specials.*; import gplx.xowa.specials.xowa.errors.*;
-import gplx.xowa.wikis.nss.*;
+import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.pages.*;
 public class Http_server_page {
 	private final    Xoae_app app;
 	private Http_url_parser url_parser;
@@ -38,18 +38,24 @@ public class Http_server_page {
 	//Http_data__client data__client, byte[] wiki_domain, byte[] ttl_bry, byte[] qarg, byte retrieve_mode, byte mode, boolean popup_enabled, String popup_mode, String popup_id) {
 		Http_server_page page = new Http_server_page(app, url_parser);
 		if (!page.Make_url(url_parser.Wiki())) return page; // exit early if xwiki
-                // check for Special:Api
-                if (page.ttl.Ns().Id() == Xow_ns_.Tid__special) {
-                    if (Bry_.Has_at_bgn(page.ttl.Base_txt(), Bry_.new_a7("Api"))) {
-                        page.html = String_.new_u8(Db_special_api.Gen(page));
-                        page.content_type = Bry_.new_a7("Content-Type: application/json; charset=utf-8\n");
-                        return page;
-                    }
-                }
+		// check for Special:Api
+		if (page.ttl.Ns().Id() == Xow_ns_.Tid__special) {
+			if (Bry_.Has_at_bgn(page.ttl.Base_txt(), Bry_.new_a7("Api"))) {
+				page.html = String_.new_u8(Db_special_api.Gen(page));
+				page.content_type = json_mime;
+				return page;
+			}
+		}
 		page.Make_page(data__client);
+		// special first para processing
+		if (url_parser.Action() == Xopg_view_mode_.Tid__firstpara) {
+			page.content_type = json_mime;
+			return page;
+		}
 		page.Make_html(retrieve_mode);
 		return page;
 	}
+	private static final byte[] json_mime = Bry_.new_a7("Content-Type: application/json; charset=utf-8\n");
 	public boolean Make_url(byte[] wiki_domain) {
 
 		// get wiki
@@ -101,7 +107,7 @@ public class Http_server_page {
 	public void Make_page(Http_data__client data__client) {
 		// get the page
 		this.tab = Gxw_html_server.Assert_tab2(app, wiki);	// HACK: assert tab exists
-		this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display());
+		this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display(), url_parser.Action());
 		app.Gui_mgr().Browser_win().Active_page_(page);	// HACK: init gui_mgr's page for output (which server ordinarily doesn't need)
 		if (page.Db().Page().Exists_n()) { // if page does not exist, replace with message; else null_ref error; DATE:2014-03-08
 			page.Db().Text().Text_bry_(Bry_.new_a7("'''Page not found.'''"));
@@ -148,7 +154,7 @@ public class Http_server_page {
 
 							rebuild_html = true;
 							gplx.xowa.guis.views.Xog_async_wkr.Async(page, tab.Html_itm());
-							this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display());	// HACK: fetch page again so that HTML will now include img data
+							this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display(), url_parser.Action());	// HACK: fetch page again so that HTML will now include img data
 						}
 					}
 					//rebuild_html = true;

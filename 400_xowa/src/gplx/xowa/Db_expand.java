@@ -174,6 +174,8 @@ public class Db_expand {
 						}
 						// could be 5!!
 					}
+					else
+						tmp_bfr.Add_byte(b);
 				}
 				else if (b == 0) {
 					substitute(tmp_bfr, src[pos++]);

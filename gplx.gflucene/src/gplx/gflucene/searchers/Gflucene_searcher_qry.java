@@ -17,8 +17,11 @@ package gplx.gflucene.searchers; import gplx.*; import gplx.gflucene.*;
 public class Gflucene_searcher_qry {
 	public String query;
 	public int match_max;
-	public Gflucene_searcher_qry(String query, int match_max) {
+	public int match_min;
+	public long total = 0;
+	public Gflucene_searcher_qry(String query, int match_min, int match_max) {
 		this.query = query;
+		this.match_min = match_min;
 		this.match_max = match_max;
 	}
 }

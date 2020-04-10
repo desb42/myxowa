@@ -94,6 +94,7 @@ public class Http_request_parser {
 					case Tid_sec_fetch_mode:            break;
 					case Tid_sec_fetch_site:            break;
 					case Tid_sec_fetch_dest:            break;
+					case Tid_sec_fetch_user:            break;
 					default:							throw Err_.new_unhandled(tid);
 				}
 			}
@@ -164,7 +165,7 @@ public class Http_request_parser {
 	private static final int Tid_get = 1, Tid_post = 2, Tid_host = 3, Tid_user_agent = 4, Tid_accept = 5, Tid_accept_language = 6, Tid_accept_encoding = 7, Tid_dnt = 8
 	, Tid_x_requested_with = 9, Tid_cookie = 10, Tid_referer = 11, Tid_content_length = 12, Tid_content_type = 13, Tid_connection = 14, Tid_pragma = 15, Tid_cache_control = 16
 	, Tid_origin = 17, Tid_accept_charset = 188, Tid_upgrade_request = 19, Tid_x_host = 20, Tid_x_real_ip = 21
-	, Tid_sec_fetch_mode = 22, Tid_sec_fetch_site = 23, Tid_sec_fetch_dest = 24;
+	, Tid_sec_fetch_mode = 22, Tid_sec_fetch_site = 23, Tid_sec_fetch_dest = 24, Tid_sec_fetch_user = 25;
 	private static final    Btrie_slim_mgr trie = Btrie_slim_mgr.ci_a7()
 	.Add_str_int("GET"                                    , Tid_get)
 	.Add_str_int("POST"                                   , Tid_post)
@@ -190,6 +191,7 @@ public class Http_request_parser {
 	.Add_str_int("Sec-Fetch-Mode:"                        , Tid_sec_fetch_mode)
 	.Add_str_int("Sec-Fetch-Site:"                        , Tid_sec_fetch_site)
 	.Add_str_int("Sec-Fetch-Dest:"                        , Tid_sec_fetch_dest)
+	.Add_str_int("Sec-Fetch-User:"                        , Tid_sec_fetch_user)
 	;
 	private static final    byte[] Tkn_boundary = Bry_.new_a7("boundary="), Tkn_content_type_boundary_end = Bry_.new_a7("--")
 	, Tkn_content_disposition = Bry_.new_a7("Content-Disposition:"), Tkn_form_data = Bry_.new_a7("form-data;")

@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import gplx.core.brys.fmtrs.*;
 public class Http_server_wkr implements Gfo_invk {
         private static String rootdir;
 	private final    int uid;
@@ -119,23 +120,43 @@ public class Http_server_wkr implements Gfo_invk {
 			page_html = url_parser.Err_msg();
 		}
 		else {
+			byte[] wikitext = null;
+			Db_wikistrip ws = new Db_wikistrip();
 			Http_server_page page = app.Http_server().Parse_page_to_html(data__client, url_parser);
 			if (page.Redirect() != null) {
 				Xosrv_http_wkr_.Write_redirect(client_wtr, page.Redirect());
 				return;
 			}
+                        else if (url_parser.Action() == Xopg_view_mode_.Tid__firstpara) {
+				if (page.Page() != null) {
+					wikitext = page.Page().Db().Text().Text_bry();
+				}
+                                Bry_bfr bfr = Bry_bfr_.New();
+                                byte[] stype = Bry_.new_a7("standard");
+                                byte[] page_title = page.Ttl().Full_db_wo_ns();
+                                json_fmtr.Bld_bfr_many(bfr, stype, page_title, page.Page().Db().Page().Id(), Bry_.Empty, Bry_.Empty, ws.First_para(wikitext, page.Ttl()));
+
+                                page_html = String_.new_u8(bfr.To_bry());
+                            
+                        }
 			else {
 				page_html = page.Html();
+				byte[] stripped = null;
+				if (page.Page() != null) {
+					wikitext = page.Page().Db().Text().Text_bry();
+					stripped = ws.Search_text(wikitext, page.Ttl()); //.Strip_wiki(wikitext);
+				}
+				if (stripped != null) {
+					page_html += "----\n" + String_.new_u8(stripped);
+					page_html += "----\n" + String_.new_u8(ws.First_para(wikitext, page.Ttl()));
+				}
 			}
 			if (page_html == null) {
 				page_html = "Strange! no data";
 			} else {
-                        byte[] wikitext = page.Page().Db().Text().Text_bry();
-            Db_wikistrip ws = new Db_wikistrip();
-            byte[] stripped = ws.Search_text(wikitext); //.Strip_wiki(wikitext);
+
 				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()));
-                                page_html += "----\n" + String_.new_u8(stripped);
-                                page_html += "----\n" + String_.new_u8(ws.First_para(wikitext));
+
 				if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // change some more things
 					//page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
 					page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\">");
@@ -415,7 +436,7 @@ public class Http_server_wkr implements Gfo_invk {
 	private static String test_wikistrip() {
             byte[] wiki = Load_from_file_as_bry(rootdir + "wiki_test.txt");
             Db_wikistrip ws = new Db_wikistrip();
-            byte[] stripped = ws.Strip_wiki(wiki);
+            byte[] stripped = ws.Strip_wiki(wiki, false);
             return String_.new_u8(stripped);
 	}
         private static void perform() {
@@ -732,6 +753,11 @@ public class Http_server_wkr implements Gfo_invk {
 	  Url__fsys = Bry_.new_a7("/fsys/")
 	;
 	private static final    int Url__fsys_len = Url__fsys.length;
+        private static final    Bry_fmtr
+                json_fmtr = Bry_fmtr.new_
+	("{\"type\":\"~{stype}\",\"title\":\"~{page_title}\",\"displaytitle\":\"~{page_title}\",\"namespace\":{\"id\":0,\"text\":\"\"},\"wikibase_item\":\"Q820802\",\"titles\":{\"canonical\":\"Berkane_Province\",\"normalized\":\"Berkane Province\",\"display\":\"Berkane Province\"},\"pageid\":~{page_id},~{thumb}~{orig}\"lang\":\"en\",\"dir\":\"ltr\",\"revision\":\"922573281\",\"tid\":\"1005aac0-f526-11e9-b822-5d02d224142b\",\"timestamp\":\"2019-10-22T23:45:38Z\",\"description\":\"Province in Oriental, Morocco\",\"coordinates\":{\"lat\":34.917614,\"lon\":-2.317469},\"content_urls\":{\"desktop\":{\"page\":\"https://en.wikipedia.org/wiki/Berkane_Province\",\"revisions\":\"https://en.wikipedia.org/wiki/Berkane_Province?action=history\",\"edit\":\"https://en.wikipedia.org/wiki/Berkane_Province?action=edit\",\"talk\":\"https://en.wikipedia.org/wiki/Talk:Berkane_Province\"},\"mobile\":{\"page\":\"https://en.m.wikipedia.org/wiki/Berkane_Province\",\"revisions\":\"https://en.m.wikipedia.org/wiki/Special:History/Berkane_Province\",\"edit\":\"https://en.m.wikipedia.org/wiki/Berkane_Province?action=edit\",\"talk\":\"https://en.m.wikipedia.org/wiki/Talk:Berkane_Province\"}},\"api_urls\":{\"summary\":\"https://en.wikipedia.org/api/rest_v1/page/summary/Berkane_Province\",\"metadata\":\"https://en.wikipedia.org/api/rest_v1/page/metadata/Berkane_Province\",\"references\":\"https://en.wikipedia.org/api/rest_v1/page/references/Berkane_Province\",\"media\":\"https://en.wikipedia.org/api/rest_v1/page/media/Berkane_Province\",\"edit_html\":\"https://en.wikipedia.org/api/rest_v1/page/html/Berkane_Province\",\"talk_page_html\":\"https://en.wikipedia.org/api/rest_v1/page/html/Talk:Berkane_Province\"},\"extract\":\"abcdfe\",\"extract_html\":\"~{para}\"}",
+                "stype", "page_title", "page_id", "thumb", "orig", "para");
+	;
 }
 class Xosrv_http_wkr_ {
     public static void Set_content_type(byte[] content_type) {Rsp__content_type_html = content_type;}
@@ -775,5 +801,5 @@ class Xosrv_http_wkr_ {
 	  Rsp__http_ok				= Bry_.new_a7("HTTP/1.1 200 OK:\n")
 	, Rsp__http_redirect        = Bry_.new_a7("HTTP/1.1 302 Found:\n")
 	, Rsp__location             = Bry_.new_a7("Location: /") // "/" to start from root
-	;
+        ;
 }

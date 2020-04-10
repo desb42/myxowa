@@ -66,4 +66,5 @@ public interface Xow_wiki extends Xow_ttl_parser, Gfo_invk {
         Pp_quality   Quality();
         Db_breadcrumb   Bread();
         Db_maxpage  Maxpage();
+        Db_index_page Index_page();
 }

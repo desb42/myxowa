@@ -32,6 +32,7 @@ public class Xofulltext_searcher_ui {
 			.Add_bool("expand_pages", expand_pages)
 			.Add_int("rng_bgn", rng_bgn + List_adp_.Base1)
 			.Add_int("rng_end", rng_end)
+			.Add_bool("has_prev", rng_bgn != 0)
 			);
 	}
 	public void Send_wiki_update(byte[] wiki, int found, int searched) {
@@ -71,7 +72,9 @@ public class Xofulltext_searcher_ui {
 			.Add_bool("show_all_snips", show_all_snips)
 			);
 	}
-	public void Send_done() {
-		cbk_mgr.Send_json(cbk_trg, "xo.fulltext_searcher.results__done__recv", gplx.core.gfobjs.Gfobj_nde.New());
+	public void Send_done(byte[] wiki_domain) {
+		cbk_mgr.Send_json(cbk_trg, "xo.fulltext_searcher.results__done__recv", gplx.core.gfobjs.Gfobj_nde.New()
+			.Add_bry("wiki", wiki_domain)
+			);
 	}
 }

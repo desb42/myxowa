@@ -18,16 +18,19 @@ public class Xopg_view_mode_ {
 	public static final byte
 	  Tid__read = 0
 	, Tid__edit = 1
-	, Tid__html = 2;
+	, Tid__html = 2
+	, Tid__firstpara = 3;
 	public static final    byte[]
 	  Bry__read = Bry_.new_a7("read")
 	, Bry__edit = Bry_.new_a7("edit")
-	, Bry__html = Bry_.new_a7("html");
+	, Bry__html = Bry_.new_a7("html")
+	, Bry__firstpara = Bry_.new_a7("firstpara");
 	public static byte[] To_bry(byte tid) {
 		switch (tid) {
 			case Tid__read: return Bry__read;
 			case Tid__edit: return Bry__edit;
 			case Tid__html: return Bry__html;
+			case Tid__firstpara: return Bry__firstpara;
 			default: throw Err_.new_unhandled_default(tid);
 		}
 	}

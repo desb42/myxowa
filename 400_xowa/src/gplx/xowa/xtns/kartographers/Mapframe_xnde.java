@@ -121,9 +121,10 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 
 		height = Bry_.Add(this.height, Bry_.new_a7("px"));
 
+		byte[] klass = Bry_.new_a7("mw-kartographer-map");
+		byte[] style = Bry_.Add(Bry_.new_a7("width: "), width, Bry_.new_a7(";"), Bry_.new_a7(" height: "), height, Bry_.new_a7(";"));
 		byte[] attrs = Bry_.Add(
-		Bry_.new_a7("class=\"mw-kartographer-map\""),
-		Bry_.new_a7(" mw-data=\"interface\""),
+		Bry_.new_a7(" data-mw=\"interface\""),
 		Bry_.new_a7(" data-style=\""), this.mapstyle,
 		Bry_.new_a7("\" data-width=\""), this.width,
 		Bry_.new_a7("\" data-height=\""), this.height,
@@ -135,7 +136,7 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			staticZoom = this.zoom;
 			attrs = Bry_.Add(attrs, Bry_.new_a7(" data-zoom=\""), this.zoom, Bry_.new_a7("\""));
 		} else {
-			staticZoom = Bry_.new_a7("2");
+			staticZoom = Bry_.new_a7("a");
 		}
 
 		byte[] staticLat, staticLon;
@@ -146,9 +147,15 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			staticLat = this.lat;
 			staticLon = this.lon;
 		} else {
-			staticLat = Bry_.new_a7("30");
-			staticLon = Bry_.new_a7("0");
+			staticLat = Bry_.new_a7("a");
+			staticLon = Bry_.new_a7("a");
 		}
+
+		byte[] containerClass = Bry_.new_a7("mw-kartographer-container");
+		if ( fullWidth ) {
+			containerClass = Bry_.Add(containerClass, Bry_.new_a7(" mw-kartographer-full"));
+		}
+
 /*
 				if ( $this->showGroups ) {
 					$attrs['data-overlays'] = FormatJson::encode( $this->showGroups, false,
@@ -157,8 +164,21 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 				}
 				break;
 */
-		byte[] style = Bry_.Empty;
 /*
+		$alignClasses = [
+			'left' => 'floatleft',
+			'center' => 'center',
+			'right' => 'floatright',
+			'none' => '',
+		];
+
+		$thumbAlignClasses = [
+			'left' => 'tleft',
+			'center' => 'tnone center',
+			'right' => 'tright',
+			'none' => 'tnone',
+		];
+
 		$containerClass = 'mw-kartographer-container';
 		if ( $fullWidth ) {
 			$containerClass .= ' mw-kartographer-full';
@@ -182,12 +202,27 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		$attrs['href'] = SpecialMap::link( $staticLat, $staticLon, $staticZoom )->getLocalURL();
 
 		if ( !$framed ) {
-			$attrs['style'] .= " width: {$width}; height: {$height};";
 			$attrs['class'] .= " {$containerClass} {$alignClasses[$this->align]}";
 
 			return Html::rawElement( 'a', $attrs );
 		}
+*/
+		if ( !framed ) {
+			//$attrs['class'] .= " {$containerClass} {$alignClasses[$this->align]}";
+			klass = Bry_.Add(klass, 
+				Bry_.new_a7(" "),
+				containerClass,
+				Bry_.new_a7(" "));
+			if (this.align[0] == 'n')
+				this.align = Bry_.Empty;
+			else if (this.align[0] != 'c')
+				this.align = Bry_.Add(Bry_.new_a7("float"), this.align);
+			klass = Bry_.Add(klass, this.align);
 
+			Fmt__raw.Bld_many(bfr, klass, attrs, style);
+			return;
+		}
+/*
 		$attrs['style'] .= " height: {$height};";
 		$containerClass .= " thumb {$thumbAlignClasses[$this->align]}";
 
@@ -196,12 +231,6 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 
 		$mapDiv = Html::rawElement( 'a', $attrs );
 */
-		byte[] containerClass = Bry_.new_a7("mw-kartographer-container");
-		if ( fullWidth ) {
-			containerClass = Bry_.Add(containerClass, Bry_.new_a7(" mw-kartographer-full"));
-		}
-
-		style = Bry_.Add(style, Bry_.new_a7(" height: "), height, Bry_.new_a7(";"));
 		if (this.align[0] != 'c')
 			this.align = Bry_.Add(Bry_.new_a7("t"), this.align);
 		containerClass = Bry_.Add(containerClass, Bry_.new_a7(" thumb "), this.align);
@@ -219,5 +248,10 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	, "  </div>"
 	, " </div>"
 	, "</div>"
+	);
+	private static final	Bry_fmt
+	  Fmt__raw = Bry_fmt.Auto_nl_skip_last
+	( ""
+	, "<a class=\"~{klass}\" ~{attrs} style=\"~{style}\"></a>"
 	);
 }

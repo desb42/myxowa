@@ -147,7 +147,7 @@ public class Xoh_page_wtr_wkr {
 		// sidebar divs
 		, portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect)
 		//, portal_mgr.Div_ns_bry(wiki.Utl__bfr_mkr(), page_ttl, wiki.Ns_mgr())
-		, portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource)
+		, portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page)
 		, portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect)
 		, portal_mgr.Div_logo_bry(nightmode_enabled), portal_mgr.Div_home_bry(), new Xopg_xtn_skin_fmtr_arg(page, Xopg_xtn_skin_itm_tid.Tid_sidebar)
 		, portal_mgr.Div_sync_bry(tmp_bfr, wiki.Page_mgr().Sync_mgr().Manual_enabled(), wiki, page)

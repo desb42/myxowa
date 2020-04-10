@@ -16,11 +16,14 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.addons.wikis.fulltexts.core; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.wikis.*; import gplx.xowa.addons.wikis.fulltexts.*;
 import gplx.core.btries.*;
 import gplx.xowa.parsers.htmls.*;
+import gplx.xowa.wikis.pages.dbs.*;
 public class Xofulltext_extractor implements Mwh_doc_wkr {
 	private final    Mwh_doc_parser doc_parser = new Mwh_doc_parser();
 	private final    Bry_bfr bfr = Bry_bfr_.New();
 	private final    Btrie_slim_mgr punct_trie = Btrie_slim_mgr.cs();
 	private final    Btrie_rv trv = new Btrie_rv();
+        private final Db_wikistrip wikistrip = new Db_wikistrip();
+
 	public Xofulltext_extractor() {
 		punct_trie.Add_many_str(Xofulltext_punct_.Punct_bgn_ary);
 		punct_trie.Add_many_str("/", ")", "]", ">", "�");
@@ -66,8 +69,20 @@ public class Xofulltext_extractor implements Mwh_doc_wkr {
 		// add to bfr
 		bfr.Add_mid(src, itm_bgn, itm_end);
 	}
-	public byte[] Extract(byte[] src) {
-		doc_parser.Parse(this, src, 0, src.length);
+	public byte[] Extract(Xopg_db_data db, Xoa_ttl ttl) {
+		byte[] src;
+		if (false) {
+			src = db.Html().Html_bry();
+			doc_parser.Parse(this, src, 0, src.length);
+			return bfr.To_bry_and_clear();
+		}
+		else {
+			src = db.Text().Text_bry();
+			return wikistrip.Search_text(src, ttl);
+		}
+	}
+	public byte[] Extract(byte[] src) { // for testing
+ 		doc_parser.Parse(this, src, 0, src.length);
 		return bfr.To_bry_and_clear();
 	}
 }

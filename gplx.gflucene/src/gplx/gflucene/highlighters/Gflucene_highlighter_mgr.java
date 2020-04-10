@@ -64,7 +64,8 @@ public class Gflucene_highlighter_mgr {
 		// create highlighter
 		SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter("<span class='snip_highlight'>", "</span>");
 		QueryScorer scorer = new QueryScorer(query);
-		scorer.setExpandMultiTermQuery(false);
+		//scorer.setExpandMultiTermQuery(false);
+		scorer.setExpandMultiTermQuery(true);
 		Highlighter highlighter = new Highlighter(htmlFormatter, scorer);
 		SimpleFragmenter fragmenter = new SimpleFragmenter(100);
 		highlighter.setTextFragmenter(fragmenter);
@@ -74,7 +75,8 @@ public class Gflucene_highlighter_mgr {
 		TokenStream tokenStream = null;
 		try {
 			tokenStream = analyzer.tokenStream("body", text);
-		} catch (IOException e) {
+		//} catch (IOException e) {
+		} catch (Exception e) {
 			throw Err_.new_exc(e, "lucene_index", "failed to get stream", "query", qry_data.query);
 		}
 		

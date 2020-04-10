@@ -474,6 +474,9 @@ public class Xoh_css_minify_v3 {
 		if (css.charAt(0) != '@')
 			css = ".mw-parser-output " + css;
 
+		// change some url(...) entries
+		css = my_replaceAll(css, "//upload.wikimedia.org", "//www.xowa.com/xowa/fsys/bin/any/xowa/upload.wikimedia.org");
+
 		return css;
 	}
 	public String readFileAsString(String filePath) {

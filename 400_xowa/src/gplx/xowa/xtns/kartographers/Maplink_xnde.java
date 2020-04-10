@@ -120,6 +120,7 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			Json_kv props_kv = (Json_kv)firstGrp.Get_at(j);
 			if (Bry_.Eq(props_kv.Key_as_bry(), Bry_.new_a7("marker-color"))) {
 				Json_itm_str itm_str = (Json_itm_str)props_kv.Val();
+				// should do some validating
 				return Bry_.Add(Bry_.new_a7("background: #"), itm_str.Data_bry(), Bry_.new_a7(";"));
 			}
 		}
@@ -145,7 +146,7 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
                 
 		byte[] klass = Bry_.new_a7("mw-kartographer-maplink");
 		byte[] attrs = Bry_.Add(
-		Bry_.new_a7(" mw-data=\"interface\""),
+		Bry_.new_a7(" data-mw=\"interface\""),
 		Bry_.new_a7(" data-style=\""), this.mapstyle,
 		//Bry_.new_a7("\" href=\""), SpecialMap_link( this.lat, this.lon, this.zoom ),
 		Bry_.new_a7("\""));

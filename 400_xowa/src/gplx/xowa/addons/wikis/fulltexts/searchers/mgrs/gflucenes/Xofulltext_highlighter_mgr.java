@@ -63,13 +63,19 @@ class Xofulltext_highlighter_mgr implements Gfo_invk {
 	private void Highlight_item(Gflucene_doc_data item) {
 		// init hpg
 		Xoa_ttl page_ttl = wiki.Ttl_parse(item.page_full_db);
+		byte[] html;
 		Xoa_url page_url = wiki.Utl__url_parser().Parse(page_ttl.Full_db());
 		hpg.Ctor_by_hview(wiki, page_url, page_ttl, item.page_id);
 
 		// load db.html.html
-		wiki.Html__hdump_mgr().Load_mgr().Load_by_xowh(hpg, page_ttl, false); // don't load categories for perf reasons
-		byte[] html = hpg.Db().Html().Html_bry();
-		html = extractor.Extract(html);
+		if (false) {
+			wiki.Html__hdump_mgr().Load_mgr().Load_by_xowh(hpg, page_ttl, false); // don't load categories for perf reasons
+		}
+		else {
+			wiki.Html__hdump_mgr().Load_mgr().Load_by_wiki(hpg, page_ttl, false); // don't load categories for perf reasons
+		}
+		//byte[] html = hpg.Db().Html().Html_bry();
+		html = extractor.Extract(hpg.Db(), page_ttl);
 		item.body = String_.new_u8(html);
 
 		// loop pages

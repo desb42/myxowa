@@ -28,7 +28,7 @@ public class Xowe_page_mgr {
 	public void Init_by_wiki(Xowe_wiki wiki) {
 		read_mgr.Init_by_wiki(wiki);
 	}
-	public Xoae_page Load_page(Xoa_url url, Xoa_ttl ttl, Xog_tab_itm tab, byte display_override) {	// NOTE: called by GUI and HTTP_SERVER; not called by MASS_PARSE
+	public Xoae_page Load_page(Xoa_url url, Xoa_ttl ttl, Xog_tab_itm tab, byte display_override, byte action) {	// NOTE: called by GUI and HTTP_SERVER; not called by MASS_PARSE
 		Xoa_app_.Usr_dlg().Log_many("", "", "page.load: url=~{0}", url.To_str());			
 		Wait_for_popups(wiki.App());
 		Xowe_wiki_.Rls_mem_if_needed(wiki);
@@ -58,7 +58,7 @@ public class Xowe_page_mgr {
 			}
 		}
 
-		// load page meta; wait_for_popups
+                // load page meta; wait_for_popups
 		Xoae_page page = wiki.Data_mgr().Load_page_and_parse(url, ttl, wiki.Lang(), tab, false);
 		ttl = page.Ttl();	// note that Load_page_and_parse can redirect ttl; EX: Special:Random -> A; DATE:2017-01-05
 		Wait_for_popups(wiki.App());
@@ -72,6 +72,9 @@ public class Xowe_page_mgr {
 			// reload metadata, needed to pick up Html_db_id; DATE:2017-03-13
 			page = wiki.Data_mgr().Load_page_and_parse(url, ttl, wiki.Lang(), tab, false);
 		}
+
+                if (action == Xopg_view_mode_.Tid__firstpara)
+                    return page;
 
 		// load from html_db
 		boolean from_html_db = page.Db().Page().Html_db_id() != -1;

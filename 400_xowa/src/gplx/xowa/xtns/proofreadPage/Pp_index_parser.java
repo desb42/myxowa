@@ -17,7 +17,8 @@ package gplx.xowa.xtns.proofreadPage; import gplx.*; import gplx.xowa.*; import 
 import gplx.core.primitives.*;
 import gplx.xowa.wikis.nss.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.logs.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.tmpls.*;
-class Pp_index_parser {
+import gplx.xowa.langs.*;
+public class Pp_index_parser {
 	public static Pp_index_page Parse(Xowe_wiki wiki, Xop_ctx ctx, Xoa_ttl index_ttl, int ns_page_id) {
 		byte[] src = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(index_ttl);
 		if (src == null) return Pp_index_page.Null;
@@ -83,6 +84,120 @@ class Pp_index_parser {
 	}
 	private static byte[] Get_bry(byte[] src, Arg_itm_tkn itm) {
 		return Bry_.Mid(src, itm.Dat_bgn(), itm.Dat_end());
+	}
+	public static List_adp Parse_pages_param(Xowe_wiki wiki, byte[] src) {
+		// depends on wiki
+		// en - Pages=
+		// de - SEITEN=
+		// it ?
+		// fr ?
+                byte[] keyword;
+                switch (wiki.Lang().Lang_id()) {
+                    default:
+                    case Xol_lang_stub_.Id_en: keyword = Bry_.new_a7("Pages"); break;
+                    //case Xol_lang_stub_.Id_fr: keyword = Bry_.new_a7("Pages"); break;
+                    case Xol_lang_stub_.Id_de: keyword = Bry_.new_a7("SEITEN"); break;
+                    case Xol_lang_stub_.Id_it: keyword = Bry_.new_a7("Pagine"); break;
+                }
+		return Parse_pages_param(wiki, src, keyword);
+	}
+	private static List_adp Parse_pages_param(Xowe_wiki wiki, byte[] src, byte[] keyword) {
+		List_adp page_lnkis = List_adp_.New();
+		//Pp_index_page rv = new Pp_index_page();
+		int src_len = src.length;
+		int levelcount = 0;
+		int pos = 0;
+		byte b;
+		byte c = keyword[0];
+		int key_len = keyword.length;
+		while (pos < src_len) {
+			b = src[pos++];
+			if (b != c)
+				continue;
+			int i;
+			for (i = 1; i < key_len; i++) {
+				if (src[pos + i - 1] != keyword[i])
+					break;
+			}
+			if (i != key_len)
+				continue;
+			if (src[pos + i - 1] != '=')
+				continue;
+			pos += key_len;
+			break;
+		}
+		while (pos < src_len) {
+			b = src[pos++];
+			switch (b) {
+				case '[': //find balancing close ]
+					levelcount = 0;
+					int pipepos = -1;
+					int startpos = pos;
+					int endpos = -1;
+					while (pos < src_len) {
+						b = src[pos++];
+						switch (b) {
+							case '[':
+								levelcount++;
+								break;
+							case ']':
+								if (levelcount == 0) {
+									endpos = pos;
+									break;
+								}
+								levelcount--;
+								break;
+							case '|':
+								pipepos = pos;
+						}
+						if (endpos > 0)
+							break;
+					}
+					if (src[startpos] == '[') {
+						if (pipepos < 0)
+							pipepos = pos - 2;
+						Xoa_ttl ttl = Xoa_ttl.Parse(wiki, Bry_.Mid(src, startpos + 1, pipepos - 1));
+						//rv.Page_ttls().Add(ttl); // Addpage(src, startpos + 2, pipepos);
+						page_lnkis.Add(ttl);
+					}
+					break;
+				case '<': // check for 'pagelist'
+					if (src[pos] == 'p' && src[pos+1] == 'a' /*...*/)
+						pos = src_len; // break out
+						// should check that nothing has been added
+					break;
+				case '{': // check for start of a table '{{{!}}' else find closing }
+					if (src[pos] == '{' && src[pos+1] == '{'&& src[pos+2] == '!'&& src[pos+3] == '}' /*...*/)
+						break;
+					levelcount = 0;
+					endpos = -1;
+					while (pos < src_len) {
+						b = src[pos++];
+						switch (b) {
+							case '{':
+								levelcount++;
+								break;
+							case '}':
+								if (levelcount == 0) {
+									endpos = pos;
+									break;
+								}
+								levelcount--;
+								break;
+						}
+						if (endpos > 0)
+							break;
+					}
+					if (levelcount != 0)
+						{int a = 1;}
+						// report/note an error
+					break;
+				case '|': // end of parameter
+					pos = src_len; // break out
+					break;
+			}
+		}
+                return page_lnkis;
 	}
 }
 class Pp_index_arg {

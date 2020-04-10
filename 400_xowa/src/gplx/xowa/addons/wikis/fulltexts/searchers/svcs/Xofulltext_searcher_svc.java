@@ -99,7 +99,7 @@ class Xofulltext_searcher_svc implements Gfo_invk {
 				if (qry != null) {
 					boolean all_shown = Display_cached_qry(args, ui, wiki, qry, qry_id, wiki_args);
 					if (all_shown || qry.done) {
-						ui.Send_done();
+						ui.Send_done(wiki_domain);
 						return;
 					}
 				}
@@ -107,7 +107,7 @@ class Xofulltext_searcher_svc implements Gfo_invk {
 			args.qry_id = qry_id;
 
 			searcher.Search(ui, wiki, qry, args, wiki_args);
-			ui.Send_done();
+			ui.Send_done(wiki_domain);
 		}
 		catch (Exception exc) {
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "failed to search_wiki; err=~{0}", Err_.Message_gplx_log(exc));

@@ -43,6 +43,8 @@ public class Xow_page_cache {
 	}
 	public Xow_page_cache_itm Get_itm_else_load_or_null(Xoa_ttl ttl) {
 		synchronized (thread_lock) {
+                    if (ttl.Ns().Id() == wiki.Ns_mgr().Ns_page_id())
+                        System.out.println(ttl.Full_db_as_str());
 			cache_tries++;
 			Xow_page_cache_itm rv = (Xow_page_cache_itm)cache.Get_or_null(ttl.Full_db_as_str());
 			if (rv == Xow_page_cache_itm.Missing)

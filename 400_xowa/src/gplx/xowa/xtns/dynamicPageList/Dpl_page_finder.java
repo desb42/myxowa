@@ -120,6 +120,8 @@ class Dpl_page_finder {
 		int i;
 		int catCount = itm.Ctg_include_ids().length;
 		for ( i = 0; i < catCount; i++ ) {
+			int id = itm.Ctg_include_ids()[i];
+			if (id == -1) continue; // ignore invalid entries
 			table_fmt.format("INNER JOIN <link_db_%d>cat_link c%d on p.page_id = c%d.cl_from AND c%d.cl_to_id=%d\n",
 				link_db_id, currentTableNumber, currentTableNumber, currentTableNumber, itm.Ctg_include_ids()[i]);
 

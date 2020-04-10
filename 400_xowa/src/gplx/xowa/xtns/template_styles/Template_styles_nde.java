@@ -21,7 +21,9 @@ import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.parsers.htmls.*; import gp
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*;
 import gplx.xowa.htmls.hxtns.*; import gplx.xowa.htmls.hxtns.pages.*; import gplx.xowa.htmls.hxtns.blobs.*; import gplx.xowa.htmls.hxtns.wikis.*;
 import gplx.xowa.wikis.nss.*;
+import gplx.xowa.htmls.*;
 public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
+	private static Xoh_css_minify_v3 minify = new Xoh_css_minify_v3();
 	private byte[] css_ttl_bry;
 	private byte[] css_src;
 	private boolean css_ignore;
@@ -87,7 +89,7 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		if (!css_ignore) {
 			Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
 			try {
-				html_head.Bld_many(tmp_bfr, css_page_id, css_src);
+				html_head.Bld_many(tmp_bfr, css_page_id, Bry_.new_u8(minify.cssmin(String_.new_u8(css_src), 0)) );
 				Xoh_head_itm__css_dynamic css_dynamic = ctx.Page().Html_data().Head_mgr().Itm__css_dynamic();
 				css_dynamic.Enabled_y_();
 				css_dynamic.Add(tmp_bfr.To_bry_and_clear());

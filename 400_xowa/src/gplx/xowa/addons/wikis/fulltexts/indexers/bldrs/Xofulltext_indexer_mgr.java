@@ -20,6 +20,7 @@ import gplx.xowa.wikis.data.*;
 import gplx.xowa.htmls.core.dbs.*;
 import gplx.xowa.addons.wikis.fulltexts.indexers.svcs.*;
 public class Xofulltext_indexer_mgr {
+	private static boolean iswiki = true;
 	public void Exec(Xowe_wiki wiki, Xofulltext_indexer_ui ui, Xofulltext_indexer_args args) {
 		// init indexer
 		Xofulltext_indexer_wkr indexer = new Xofulltext_indexer_wkr();
@@ -39,12 +40,23 @@ public class Xofulltext_indexer_mgr {
 		int[] ns_ids = args.ns_ids_ary;
 		Db_stmt stmt = Db_stmt_.Null;
 		Db_rdr rdr = Db_rdr_.Empty;
+		Db_wikistrip wikistrip = new Db_wikistrip();
 		try {
-			stmt = Db_stmt_.New_sql_lines(conn
-			, "SELECT  page_id, page_score, page_namespace, page_title, page_html_db_id"
-			, "FROM    page"
-			, "WHERE   page_namespace IN (" + Db_sql_.Prep_in_from_ary(ns_ids) + ")"
-			);
+			if (iswiki) {
+				stmt = Db_stmt_.New_sql_lines(conn
+				, "SELECT  page_id, page_score, page_namespace, page_title, page_text_db_id"
+				, "FROM    page"
+				, "WHERE   page_namespace IN (" + Db_sql_.Prep_in_from_ary(ns_ids) + ")"
+				, "AND     page_is_redirect=0"
+				);
+			}
+			else {
+				stmt = Db_stmt_.New_sql_lines(conn
+				, "SELECT  page_id, page_score, page_namespace, page_title, page_html_db_id"
+				, "FROM    page"
+				, "WHERE   page_namespace IN (" + Db_sql_.Prep_in_from_ary(ns_ids) + ")"
+				);
+			}
 			for (int ns_id : ns_ids) {
 				stmt.Crt_int("page_namespace", ns_id);
 			}
@@ -55,7 +67,11 @@ public class Xofulltext_indexer_mgr {
 				byte[] page_ttl_bry = rdr.Read_bry_by_str("page_title");
 				int page_id = rdr.Read_int("page_id");
 				int page_score = rdr.Read_int("page_score");
-				int html_db_id = rdr.Read_int("page_html_db_id");
+				int html_db_id;
+				if (iswiki)
+					html_db_id = rdr.Read_int("page_text_db_id");
+				else
+					html_db_id = rdr.Read_int("page_html_db_id");
 
 				// ignore redirects
 				if (html_db_id == -1) continue;
@@ -66,9 +82,16 @@ public class Xofulltext_indexer_mgr {
 						continue;
 					Xow_db_file html_db = html_db_id == -1 ? core_db : wiki.Data__core_mgr().Dbs__get_by_id_or_fail(html_db_id);
 					hpg.Ctor_by_hview(wiki, wiki.Utl__url_parser().Parse(page_ttl.Full_db()), page_ttl, page_id);
-					if (!html_db.Tbl__html().Select_by_page(hpg))
-						continue;
-					byte[] html_text = wiki.Html__hdump_mgr().Load_mgr().Parse(hpg, hpg.Db().Html().Zip_tid(), hpg.Db().Html().Hzip_tid(), hpg.Db().Html().Html_bry());
+					byte[] html_text;
+					if (iswiki) {
+						wiki.Html__hdump_mgr().Load_mgr().Load_by_wiki(hpg, page_ttl, false);
+						html_text = wikistrip.Search_text(hpg.Db().Text().Text_bry(), page_ttl);
+					}
+					else {
+						if (!html_db.Tbl__html().Select_by_page(hpg))
+							continue;
+						html_text = wiki.Html__hdump_mgr().Load_mgr().Parse(hpg, hpg.Db().Html().Zip_tid(), hpg.Db().Html().Hzip_tid(), hpg.Db().Html().Html_bry());
+					}
 
 					// run index
 					indexer.Index(page_id, page_score, page_ttl.Page_txt(), html_text);

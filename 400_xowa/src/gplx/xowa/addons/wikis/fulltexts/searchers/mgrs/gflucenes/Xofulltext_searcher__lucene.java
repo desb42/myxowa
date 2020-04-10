@@ -47,16 +47,22 @@ public class Xofulltext_searcher__lucene implements Xofulltext_searcher {
 		int needed_end = wiki_args.bgn + wiki_args.len;
 		int needed_len = needed_end - needed_bgn;
 		int found = 0;
-		int threshold = 0;
-		Gflucene_searcher_qry searcher_data = new Gflucene_searcher_qry(String_.new_u8(args.search_text), 100);
-		while (found < needed_len) {
+		//int threshold = 0;
+		//Gflucene_searcher_qry searcher_data = new Gflucene_searcher_qry(String_.new_u8(args.search_text), 100);
+		Gflucene_searcher_qry searcher_data = new Gflucene_searcher_qry(String_.new_u8(args.search_text), needed_bgn, needed_end + 1);
+                boolean more = true;
+		while (found < needed_len && more) {
 			if (args.Canceled()) return;
 
-			threshold += wiki_args.len;
-			searcher_data.match_max = threshold;
+			//threshold += wiki_args.len;
 			searcher.Exec(temp_list, searcher_data);
+			// prepare to advance
+			searcher_data.match_min += wiki_args.len;
+			searcher_data.match_max += wiki_args.len;
 
 			int temp_list_len = temp_list.Len();
+			if (temp_list_len <= wiki_args.len)
+                        more = false;
 			for (int i = 0; i < temp_list_len; i++) {
 				if (args.Canceled()) return;
 				Gflucene_doc_data doc_data = (Gflucene_doc_data)temp_list.Get_at(i);

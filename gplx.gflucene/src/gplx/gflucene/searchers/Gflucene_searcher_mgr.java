@@ -17,20 +17,24 @@ package gplx.gflucene.searchers; import gplx.*; import gplx.gflucene.*;
 import gplx.gflucene.core.*;
 import gplx.gflucene.analyzers.*;
 import java.io.IOException;
-import org.lukhnos.portmobile.file.Path;
-import org.lukhnos.portmobile.file.Paths;
+//import org.lukhnos.portmobile.file.Path;
+//import org.lukhnos.portmobile.file.Paths;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queries.CustomScoreQuery;
+//import org.apache.lucene.queries.CustomScoreQuery;
+import org.apache.lucene.queries.function.FunctionScoreQuery;
 import org.apache.lucene.queries.function.FunctionQuery;
 import org.apache.lucene.queries.function.valuesource.LongFieldSource;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.DoubleValuesSource;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -68,12 +72,14 @@ public class Gflucene_searcher_mgr {
 			// creates query that boosts by page_score; not sure if this is needed, but 1st release of fts uses this
 			Query multi_query = MultiFieldQueryParser.parse(data.query, new String[] {"body"}, new BooleanClause.Occur []{BooleanClause.Occur.SHOULD}, analyzer);
 			FunctionQuery boost_query = new FunctionQuery(new LongFieldSource("page_score"));			
-			CustomScoreQuery query = new CustomScoreQuery(multi_query, boost_query);
+			//CustomScoreQuery query = new CustomScoreQuery(multi_query, boost_query);
+                        FunctionScoreQuery query = new FunctionScoreQuery(multi_query, DoubleValuesSource.fromIntField("page_score"));
  
 			TopDocs docs = searcher.search(query, data.match_max);
+                        data.total = docs.totalHits.value;
 			ScoreDoc[] hits = docs.scoreDocs;
 			
-			for(int i = 0; i < hits.length; i++) {
+			for(int i = data.match_min; i < hits.length; i++) {
 				int docId = hits[i].doc;
 				Document d = searcher.doc(docId);
 //				Gflucene_doc_data doc = new Gflucene_doc_data(Integer.parseInt(d.get("page_id")), Integer.parseInt(d.get("page_score")), d.get("title"), "");

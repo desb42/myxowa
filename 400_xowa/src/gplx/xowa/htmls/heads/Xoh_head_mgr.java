@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.htmls.heads; import gplx.*; import gplx.xowa.*; import gplx.xowa.htmls.*;
 import gplx.core.bits.*;
 import gplx.xowa.wikis.pages.*;
+import gplx.xowa.wikis.domains.Xow_domain_tid_;
 public class Xoh_head_mgr implements gplx.core.brys.Bfr_arg {
 	private Xoae_app app; private Xowe_wiki wiki; private Xoae_page page; 
 	private Xoh_head_itm__base[] itms; private int itms_len;
@@ -118,16 +119,23 @@ public class Xoh_head_mgr implements gplx.core.brys.Bfr_arg {
 				itm.Write_js_head_global(app, wiki, page, wtr);
 			}
 			// if wikisource and main: namespace and there is an index page (how do we tell?)
+			if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource) {
 			// by the presence of pp_indexpage
-			byte[] index_page = page.Pp_indexpage();
-			if (index_page != null) {
-				wtr.Bfr().Add(Bry_.new_a7("\n \"proofreadpage_source_href\" : \"\\u003Ca href=\\\"/wiki/"));
-				wtr.Bfr().Add(gplx.langs.htmls.encoders.Gfo_url_encoder_.Href.Encode(index_page));
-				wtr.Bfr().Add(Bry_.new_a7("\\\" title=\\\""));
-				wtr.Bfr().Add(wiki.Msg_mgr().Val_by_key_obj("proofreadpage_source_message"));
-				wtr.Bfr().Add(Bry_.new_a7("\\\"\\u003E"));
-				wtr.Bfr().Add(wiki.Msg_mgr().Val_by_key_obj("proofreadpage_source"));
-				wtr.Bfr().Add(Bry_.new_a7("\\u003C/a\\u003E\""));
+				byte[] index_page = page.Pp_indexpage();
+				if (index_page == null) {
+					Xoa_ttl ttl = wiki.Index_page().Get_index_page(page.Db().Page().Id());
+					if (ttl != null)
+						index_page = ttl.Full_db();
+				}
+				if (index_page != null) {
+					wtr.Bfr().Add(Bry_.new_a7("\n \"proofreadpage_source_href\" : \"\\u003Ca href=\\\"/wiki/"));
+					wtr.Bfr().Add(gplx.langs.htmls.encoders.Gfo_url_encoder_.Href.Encode(index_page));
+					wtr.Bfr().Add(Bry_.new_a7("\\\" title=\\\""));
+					wtr.Bfr().Add(wiki.Msg_mgr().Val_by_key_obj("proofreadpage_source_message"));
+					wtr.Bfr().Add(Bry_.new_a7("\\\"\\u003E"));
+					wtr.Bfr().Add(wiki.Msg_mgr().Val_by_key_obj("proofreadpage_source"));
+					wtr.Bfr().Add(Bry_.new_a7("\\u003C/a\\u003E\""));
+				}
 			}
 			wtr.Write_js_head_global_end();
 			wtr.Write_js_script_end();

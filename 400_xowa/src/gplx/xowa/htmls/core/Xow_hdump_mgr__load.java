@@ -78,6 +78,25 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 			return true;
 		}
 	}
+	public boolean Load_by_wiki(Xoh_page hpg, Xoa_ttl ttl, boolean load_ctg) {
+		synchronized (tmp_dbpg) {
+			if (override_mgr__page == null) {
+				Io_url override_root_url = wiki.Fsys_mgr().Root_dir().GenSubDir_nest("data", "wiki");
+				this.override_mgr__page = new Xow_override_mgr(override_root_url.GenSubDir_nest("page"));
+				this.override_mgr__html = new Xow_override_mgr(override_root_url.GenSubDir_nest("html"));
+			}
+			Load__dbpg(wiki, tmp_dbpg.Clear(), hpg, ttl);
+			hpg.Ctor_by_hview(wiki, hpg.Url(), ttl, tmp_dbpg.Id());
+			Xow_db_file text_db = wiki.Data__core_mgr().Dbs__get_by_id_or_fail(tmp_dbpg.Text_db_id());
+                        byte[] src = text_db.Tbl__text().Select(tmp_dbpg.Id());
+			//if (!text_db.Tbl__text().Select(hpg.Db().Page().Id())) return Load__fail(hpg);			// nothing in "html" table
+			//byte[] src = Parse(hpg, hpg.Db().Html().Zip_tid(), hpg.Db().Html().Hzip_tid(), hpg.Db().Html().Html_bry());
+
+			hpg.Db().Text().Text_bry_(src);
+			//wiki.Hxtn_mgr().Load_by_page(hpg, ttl);
+			return true;
+		}
+	}
 	public byte[] Decode_as_bry(Bry_bfr bfr, Xoh_page hpg, byte[] src, boolean mode_is_diff) {hzip_mgr.Hctx().Mode_is_diff_(mode_is_diff); hzip_mgr.Decode(bfr, wiki, hpg, src); return bfr.To_bry_and_clear();}
 	public byte[] Parse(Xoh_page hpg, int zip_tid, int hzip_tid, byte[] src) {
 		if (zip_tid > gplx.core.ios.streams.Io_stream_tid_.Tid__raw)
