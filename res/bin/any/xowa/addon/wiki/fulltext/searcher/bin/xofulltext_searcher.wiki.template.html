@@ -21,15 +21,17 @@
     <div class='xo_flex_div xo_results_wiki_paging_div'>
     
       <!-- BTN:paging_bwd -->
+      {{#has_prev}}
       <span
         id="results_wiki_{{wiki}}_bwd"
         class='xo_imgbtn_x20 xoimg_paging_bwd xo_results_wiki_paging_btn'
         onclick='xo.fulltext_searcher.paging_bwd("{{wiki}}")'
       >&nbsp;</span>
+      {{/has_prev}}
       
       <!-- TEXT:results; EX: "Results: 1 of 10" -->
       <div class='xo_flex_div'>
-        Results: <div style='text-align:center;width:40px'>{{rng_bgn}}</div> - <div style='text-align:center;width:40px'>{{rng_end}}</div>
+        Results: <div style='text-align:center;width:40px'>{{rng_bgn}}</div> - <div id="rng_end_{{wiki}}" style='text-align:center;width:40px'>{{rng_end}}</div>
       </div>
 
       <!-- BTN:paging_fwd -->

@@ -58,6 +58,7 @@ function init () {
     if (needCollapsible) {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/jquery/jquery.makeCollapsible.js', initCollapsible);
       xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery.makeCollapsible.styles.css')
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/src/collapsible.css')
     }
     if (needSortable) {
       //xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki.language/mediawiki.language.init.js');

@@ -23,6 +23,7 @@ ns_mgr.get_by_id_or_new(4).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(5).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(7).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(9).subpages_enabled_('y');
+ns_mgr.get_by_id_or_new(10).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(11).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(12).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(13).subpages_enabled_('y');

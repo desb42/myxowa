@@ -3,10 +3,11 @@
   xo.app.mode = 'http_server';
   xo.http_server = new function() {
     var timeout = 30000; // note that Safari is lowest with 30 seconds
+    var stopped = false;
     this.post_url = function() {
       return location.protocol === 'file:' // handle DEV debugging with local file
         ? "http://localhost:8080/exec/json"
-        : location.protocol + '//' + location.host + '/exec/json';  // EX:"http:" + "//" + "localhost:8080" + "/exec/json"
+        : location.protocol + '//' + location.host + '/xowa/exec/json';  // EX:"http:" + "//" + "localhost:8080" + "/exec/json"
         ;
     }
     this.send_and_poll = function(msg_str) {      
@@ -21,7 +22,11 @@
       form_data.append('app_mode', 'http_server');
       xreq.send(form_data);
     }
+    this.cancel = function() {
+      stopped = true;    
+    }
     this.poll = function() {
+    	if (stopped) return;
       var xreq = new XMLHttpRequest();
       
       // set-up callback for timeout

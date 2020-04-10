@@ -251,25 +251,27 @@ ol.references li:target,sup.reference:target {
 
 @font-face {
     font-family: 'KulminoituvaRegular';
-    src: url('http://www.miketaylr.com/f/kulminoituva.ttf');
+    /*src: url('http://www.miketaylr.com/f/kulminoituva.ttf');*/
+    src: url('//www.xowa.com/fsys/bin/any/font/www.miketaylr.com/f/kulminoituva.ttf');
 }
 @font-face {
     font-family: 'Phetsarath-Regular';
-    src: url('http://localhost/fsys/bin/any/xowa/html/res/lib/ext/data/fontrepo/fonts/Phetsarath/Phetsarath-Regular.eot');
-    src: url('http://localhost/fsys/bin/any/xowa/html/res/lib/ext/data/fontrepo/fonts/Phetsarath/Phetsarath-Regular.eot?#iefix') format('embedded-opentype'),
-         url('http://localhost/fsys/bin/any/xowa/html/res/lib/ext/data/fontrepo/fonts/Phetsarath/Phetsarath-Regular.woff') format('woff'),
-         url('http://localhost/fsys/bin/any/xowa/html/res/lib/ext/data/fontrepo/fonts/Phetsarath/Phetsarath-Regular.ttf') format('truetype'),
+    src: url('//www.xowa.com/fsys/bin/any/xowa/html/res/lib/ext/data/fontrepo/fonts/Phetsarath/Phetsarath-Regular.eot');
+    src: url('//www.xowa.com/fsys/bin/any/xowa/html/res/lib/ext/data/fontrepo/fonts/Phetsarath/Phetsarath-Regular.eot?#iefix') format('embedded-opentype'),
+         url('//www.xowa.com/fsys/bin/any/xowa/html/res/lib/ext/data/fontrepo/fonts/Phetsarath/Phetsarath-Regular.woff') format('woff'),
+         url('//www.xowa.com/fsys/bin/any/xowa/html/res/lib/ext/data/fontrepo/fonts/Phetsarath/Phetsarath-Regular.ttf') format('truetype'),
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'Code New Roman';
     src: 
-         url('http://localhost/fsys/bin/any/xowa/html/res/lib/myfonts/Code New Roman/Code New Roman.woff') format('woff')
+         url('//www.xowa.com/fsys/bin/any/xowa/html/res/lib/myfonts/Code New Roman/Code New Roman.woff') format('woff')
     font-weight: normal;
     font-style: normal;
 }
 @import url(http://fonts.googleapis.com/css?family=Lobster);
+/*@import url(http://fonts.googleapis.com/css?family=Lobster);*/
 
 /* not sure wherethis comes from - but needed for popups to show icons */
 .mw-editfont-monospace{font-family:monospace,monospace}.mw-editfont-sans-serif{font-family:sans-serif}.mw-editfont-serif{font-family:serif} .mw-editfont-monospace,.mw-editfont-sans-serif,.mw-editfont-serif{font-size:13px; }.mw-editfont-monospace.oo-ui-textInputWidget,.mw-editfont-sans-serif.oo-ui-textInputWidget,.mw-editfont-serif.oo-ui-textInputWidget{font-size:inherit}.mw-editfont-monospace > .oo-ui-inputWidget-input,.mw-editfont-sans-serif > .oo-ui-inputWidget-input,.mw-editfont-serif > .oo-ui-inputWidget-input{font-size:13px}
@@ -287,4 +289,4 @@ ol.references li:target,sup.reference:target {
 @media print{#centralNotice{display:none}}.cn-closeButton{display:inline-block;zoom:1;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUBAMAAAB/pwA+AAAAElBMVEUAAAAQEBDPz88AAABAQEDv7+9oe1vvAAAABnRSTlMA3rLe3rJS22KzAAAARElEQVQI12PAAUIUQCSTK5BwFgIxFU1AhKECUFAYKAAioXwwBeZChMGCEGGQIFQYJohgIhQgtCEMQ7ECYTHCOciOxA4AADgJTXIb9s8AAAAASUVORK5CYII=) no-repeat;width:20px;height:20px;text-indent:20px;white-space:nowrap;overflow:hidden}
 
 /* mediawiki.action.view.redirectPage.css */
-.redirectMsg p{overflow:hidden;height:0}.redirectText{list-style:none none;display:inline;margin:0 !important;padding:0 !important}.mw-content-ltr .redirectText li{display:inline;margin:0;padding:0;padding-left:42px;background:transparent url(http://localhost/xowa/fsys/bin/any/xowa/mediawiki.action/images/nextredirect-ltr.png) bottom left no-repeat;background-image:linear-gradient(transparent,transparent),url(http://localhost/xowa/fsys/bin/any/xowa/mediawiki.action/images/nextredirect-ltr.svg)}.mw-content-ltr .redirectText li:first-child{padding-left:47px;background:transparent url(http://localhost/xowa/fsys/bin/any/xowa/mediawiki.action/images/redirect-ltr.png) bottom left no-repeat;background-image:linear-gradient(transparent,transparent),url(http://localhost/xowa/fsys/bin/any/xowa/mediawiki.action/images/redirect-ltr.svg)}.mw-content-rtl .redirectText li{display:inline;margin:0;padding:0;padding-right:42px;background:transparent url(http://localhost/xowa/fsys/bin/any/xowa/mediawiki.action/images/nextredirect-rtl.png) bottom right no-repeat;background-image:linear-gradient(transparent,transparent),url(http://localhost/xowa/fsys/bin/any/xowa/mediawiki.action/images/nextredirect-rtl.svg)}.mw-content-rtl .redirectText li:first-child{padding-right:47px;background:transparent url(http://localhost/xowa/fsys/bin/any/xowa/mediawiki.action/images/redirect-rtl.png) bottom right no-repeat;background-image:linear-gradient(transparent,transparent),url(http://localhost/xowa/fsys/bin/any/xowa/mediawiki.action/images/redirect-rtl.svg)}.redirectText{font-size:140%}.redirectMsg p{margin:0}
+.redirectMsg p{overflow:hidden;height:0}.redirectText{list-style:none none;display:inline;margin:0 !important;padding:0 !important}.mw-content-ltr .redirectText li{display:inline;margin:0;padding:0;padding-left:42px;background:transparent url(//www.xowa.com/xowa/fsys/bin/any/xowa/mediawiki.action/images/nextredirect-ltr.png) bottom left no-repeat;background-image:linear-gradient(transparent,transparent),url(//www.xowa.com/xowa/fsys/bin/any/xowa/mediawiki.action/images/nextredirect-ltr.svg)}.mw-content-ltr .redirectText li:first-child{padding-left:47px;background:transparent url(//www.xowa.com/xowa/fsys/bin/any/xowa/mediawiki.action/images/redirect-ltr.png) bottom left no-repeat;background-image:linear-gradient(transparent,transparent),url(//www.xowa.com/xowa/fsys/bin/any/xowa/mediawiki.action/images/redirect-ltr.svg)}.mw-content-rtl .redirectText li{display:inline;margin:0;padding:0;padding-right:42px;background:transparent url(//www.xowa.com/xowa/fsys/bin/any/xowa/mediawiki.action/images/nextredirect-rtl.png) bottom right no-repeat;background-image:linear-gradient(transparent,transparent),url(//www.xowa.com/xowa/fsys/bin/any/xowa/mediawiki.action/images/nextredirect-rtl.svg)}.mw-content-rtl .redirectText li:first-child{padding-right:47px;background:transparent url(//www.xowa.com/xowa/fsys/bin/any/xowa/mediawiki.action/images/redirect-rtl.png) bottom right no-repeat;background-image:linear-gradient(transparent,transparent),url(//www.xowa.com/xowa/fsys/bin/any/xowa/mediawiki.action/images/redirect-rtl.svg)}.redirectText{font-size:140%}.redirectMsg p{margin:0}

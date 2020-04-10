@@ -1,5 +1,6 @@
 (function (xo) {
   xo.fulltext_searcher = new function() {
+  	var linecount = 0;
     //{ SECTION:util
     this.send = function(proc, args) {
       args.page_guid = xo_page_guid;
@@ -100,12 +101,12 @@
       try {
         // get search_text
         var search_text = xo.elem.get_val_or_null('search_txt');
-        search_text = encodeURI(search_text);
 
         // if search_text has changed, reset offsets; EX: on 21-40 of 'earth'; changing search to 'moon' should start from 1, not 21
         if (search_text !== xo.elem.get_val_or_null('qarg_search')) {
           xo.elem.get('qarg_offsets').value = '0';
         }
+        search_text = encodeURI(search_text);
         
         // build url
         var path_prefix = xowa.app.mode == 'http_server'
@@ -254,6 +255,35 @@
     this.results__done = function(msg) {
       this.search_cxl__show(false);
       this.search_is_running = false;
+      xo.http_server.cancel();
+      //alert(linecount);
+        // get wiki_idx for wiki from qarg_wikis; needed for offset / limit; EX: wikis=a|b offsets=0|20
+        var wiki_idx = -1;
+        var qarg_wikis_str = xo.elem.get_val_or_null('qarg_wikis');
+        var qarg_wikis_ary = qarg_wikis_str.split('|');
+        var qarg_wikis_len = qarg_wikis_ary.length;
+        for (var i = 0; i < qarg_wikis_len; i++) {
+          var qarg_wiki = qarg_wikis_ary[i];
+          if (msg.wiki === qarg_wiki) {
+            wiki_idx = i;
+            break;
+          }
+        }
+        if (wiki_idx == -1) {
+          this.handle_err('could not find wiki_idx; wiki=' + wiki + ' qargs=' + qarg_wikis_str);
+          return;
+        }
+
+        // get offset / limit
+        var limit      = this.paging_dir__get_val_or_0th(wiki_idx, 'qarg_limits');
+        var old_offset = this.paging_dir__get_val_or_0th(wiki_idx, 'qarg_offsets');
+
+      if (linecount < limit) {
+          var elem = document.getElementById("results_wiki_" + msg.wiki + "_fwd");
+          elem.style.display = 'none';
+          elem = document.getElementById("rng_end_" + msg.wiki);
+          elem.innerHTML = old_offset + linecount;
+      }
       return true;
     }
     //}
@@ -283,6 +313,7 @@
     }
     this.results__page__add__recv = function(msg) {return this.results__page__add(JSON.parse(msg));}
     this.results__page__add = function(msg) {
+    	linecount += 1;
       try {
         // get vars
         var wiki = msg.wiki;

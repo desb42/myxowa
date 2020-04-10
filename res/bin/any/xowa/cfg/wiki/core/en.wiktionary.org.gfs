@@ -3,7 +3,14 @@ ns_mgr.add_alias_bulk("
 4|WT
 6|Image
 7|Image_talk
+10|T
+14|CAT
+100|AP
 110|WS
+110|Wikisaurus
+111|Wikisaurus_talk
+118|RC
+828|MOD
 ");
 // wiki.ns_mgr.aliases.end
 // wiki.ns_mgr.subpages.bgn

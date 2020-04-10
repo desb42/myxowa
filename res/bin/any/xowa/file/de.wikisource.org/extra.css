@@ -36,3 +36,261 @@ ol.references li:target,sup.reference:target{background-color:#eaf3ff}
 /* ext.cite.styles, */
 @media print{.mw-cite-backlink{display:none}
 }
+
+/* mediawiki.ui.button */
+.mw-ui-button {
+    background-color: #f8f9fa;
+    color: #222222;
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    min-width: 4em;
+    max-width: 28.75em;
+    margin: 0;
+    padding: 6px 12px;
+    border: 1px solid #a2a9b1;
+    border-radius: 2px;
+    cursor: pointer;
+    vertical-align: middle;
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: bold;
+    line-height: 1.28571429em;
+    text-align: center;
+    -webkit-appearance: none
+}
+
+.mw-ui-button:visited {
+    color: #222222
+}
+
+.mw-ui-button:hover {
+    background-color: #ffffff;
+    color: #444444;
+    border-color: #a2a9b1
+}
+
+.mw-ui-button:focus {
+    background-color: #ffffff;
+    color: #222222;
+    border-color: #3366cc;
+    box-shadow: inset 0 0 0 1px #3366cc,inset 0 0 0 2px #ffffff;
+    outline-width: 0
+}
+
+.mw-ui-button:focus::-moz-focus-inner {
+    border-color: transparent;
+    padding: 0
+}
+
+.mw-ui-button:active,.mw-ui-button.is-on {
+    background-color: #c8ccd1;
+    color: #000000;
+    border-color: #72777d;
+    box-shadow: none
+}
+
+.mw-ui-button:disabled {
+    background-color: #c8ccd1;
+    color: #ffffff;
+    border-color: #c8ccd1;
+    cursor: default
+}
+
+.mw-ui-button:disabled:hover,.mw-ui-button:disabled:active {
+    background-color: #c8ccd1;
+    color: #ffffff;
+    box-shadow: none;
+    border-color: #c8ccd1
+}
+
+.mw-ui-button:not(:disabled) {
+    -webkit-transition: background-color 100ms,color 100ms,border-color 100ms,box-shadow 100ms;
+    -moz-transition: background-color 100ms,color 100ms,border-color 100ms,box-shadow 100ms;
+    transition: background-color 100ms,color 100ms,border-color 100ms,box-shadow 100ms
+}
+
+.mw-ui-button.mw-ui-quiet,.mw-ui-button.mw-ui-quiet.mw-ui-progressive,.mw-ui-button.mw-ui-quiet.mw-ui-destructive {
+    background-color: transparent;
+    color: #222222;
+    border-color: transparent
+}
+
+.mw-ui-button.mw-ui-quiet:hover,.mw-ui-button.mw-ui-quiet.mw-ui-progressive:hover,.mw-ui-button.mw-ui-quiet.mw-ui-destructive:hover {
+    background-color: transparent;
+    color: #444444;
+    border-color: transparent;
+    box-shadow: none
+}
+
+.mw-ui-button.mw-ui-quiet:active,.mw-ui-button.mw-ui-quiet.mw-ui-progressive:active,.mw-ui-button.mw-ui-quiet.mw-ui-destructive:active {
+    background-color: transparent;
+    color: #000000;
+    border-color: transparent
+}
+
+.mw-ui-button.mw-ui-quiet:focus,.mw-ui-button.mw-ui-quiet.mw-ui-progressive:focus,.mw-ui-button.mw-ui-quiet.mw-ui-destructive:focus {
+    background-color: transparent;
+    color: #222222;
+    border-color: transparent;
+    box-shadow: none
+}
+
+.mw-ui-button.mw-ui-quiet:disabled,.mw-ui-button.mw-ui-quiet.mw-ui-progressive:disabled,.mw-ui-button.mw-ui-quiet.mw-ui-destructive:disabled,.mw-ui-button.mw-ui-quiet:disabled:hover,.mw-ui-button.mw-ui-quiet.mw-ui-progressive:disabled:hover,.mw-ui-button.mw-ui-quiet.mw-ui-destructive:disabled:hover,.mw-ui-button.mw-ui-quiet:disabled:active,.mw-ui-button.mw-ui-quiet.mw-ui-progressive:disabled:active,.mw-ui-button.mw-ui-quiet.mw-ui-destructive:disabled:active {
+    background-color: transparent;
+    color: #72777d;
+    border-color: transparent
+}
+
+.mw-ui-button.mw-ui-progressive {
+    background-color: #3366cc;
+    color: #fff;
+    border: 1px solid #3366cc
+}
+
+.mw-ui-button.mw-ui-progressive:hover {
+    background-color: #447ff5;
+    border-color: #447ff5
+}
+
+.mw-ui-button.mw-ui-progressive:focus {
+    box-shadow: inset 0 0 0 1px #3366cc,inset 0 0 0 2px #ffffff
+}
+
+.mw-ui-button.mw-ui-progressive:active,.mw-ui-button.mw-ui-progressive.is-on {
+    background-color: #2a4b8d;
+    border-color: #2a4b8d;
+    box-shadow: none
+}
+
+.mw-ui-button.mw-ui-progressive:disabled {
+    background-color: #c8ccd1;
+    color: #fff;
+    border-color: #c8ccd1
+}
+
+.mw-ui-button.mw-ui-progressive:disabled:hover,.mw-ui-button.mw-ui-progressive:disabled:active {
+    background-color: #c8ccd1;
+    color: #fff;
+    border-color: #c8ccd1;
+    box-shadow: none
+}
+
+.mw-ui-button.mw-ui-progressive.mw-ui-quiet {
+    color: #3366cc
+}
+
+.mw-ui-button.mw-ui-progressive.mw-ui-quiet:hover {
+    background-color: transparent;
+    color: #447ff5
+}
+
+.mw-ui-button.mw-ui-progressive.mw-ui-quiet:active {
+    color: #2a4b8d
+}
+
+.mw-ui-button.mw-ui-progressive.mw-ui-quiet:focus {
+    background-color: transparent;
+    color: #3366cc
+}
+
+.mw-ui-button.mw-ui-destructive {
+    background-color: #dd3333;
+    color: #fff;
+    border: 1px solid #dd3333
+}
+
+.mw-ui-button.mw-ui-destructive:hover {
+    background-color: #ff4242;
+    border-color: #ff4242
+}
+
+.mw-ui-button.mw-ui-destructive:focus {
+    box-shadow: inset 0 0 0 1px #dd3333,inset 0 0 0 2px #ffffff
+}
+
+.mw-ui-button.mw-ui-destructive:active,.mw-ui-button.mw-ui-destructive.is-on {
+    background-color: #b32424;
+    border-color: #b32424;
+    box-shadow: none
+}
+
+.mw-ui-button.mw-ui-destructive:disabled {
+    background-color: #c8ccd1;
+    color: #fff;
+    border-color: #c8ccd1
+}
+
+.mw-ui-button.mw-ui-destructive:disabled:hover,.mw-ui-button.mw-ui-destructive:disabled:active {
+    background-color: #c8ccd1;
+    color: #fff;
+    border-color: #c8ccd1;
+    box-shadow: none
+}
+
+.mw-ui-button.mw-ui-destructive.mw-ui-quiet {
+    color: #dd3333
+}
+
+.mw-ui-button.mw-ui-destructive.mw-ui-quiet:hover {
+    background-color: transparent;
+    color: #ff4242
+}
+
+.mw-ui-button.mw-ui-destructive.mw-ui-quiet:active {
+    color: #b32424
+}
+
+.mw-ui-button.mw-ui-destructive.mw-ui-quiet:focus {
+    background-color: transparent;
+    color: #dd3333
+}
+
+.mw-ui-button.mw-ui-big {
+    font-size: 1.3em
+}
+
+.mw-ui-button.mw-ui-block {
+    display: block;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto
+}
+
+input.mw-ui-button::-moz-focus-inner,button.mw-ui-button::-moz-focus-inner {
+    margin-top: -1px;
+    margin-bottom: -1px
+}
+
+a.mw-ui-button {
+    text-decoration: none
+}
+
+a.mw-ui-button:hover,a.mw-ui-button:focus {
+    text-decoration: none
+}
+
+.mw-ui-button-group > * {
+    min-width: 48px;
+    border-radius: 0;
+    float: left
+}
+
+.mw-ui-button-group > *:first-child {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px
+}
+
+.mw-ui-button-group > *:not(:first-child) {
+    border-left: 0
+}
+
+.mw-ui-button-group > *:last-child {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px
+}
+
+.mw-ui-button-group .is-on .button {
+    cursor: default
+}
