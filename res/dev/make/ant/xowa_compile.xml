@@ -56,7 +56,7 @@
         <javac includeantruntime="false" target="${jdk}" source="${jdk}" sourcepath=""
 		  srcdir   ="${root_dir}/src/gplx.gflucene"
 		  destdir  ="${root_dir}/src/gplx.gflucene/bin"
-		  classpath="${root_dir}/src/lib/junit.jar:${root_dir}/bin/any/java/lucene/5.3.0.drd/lucene-core-5.3.0-mobile-2.jar:${root_dir}/bin/any/java/lucene/5.3.0.drd/lucene-highlighter-5.3.0-mobile-2.jar:${root_dir}/bin/any/java/lucene/5.3.0.drd/lucene-memory-5.3.0-mobile-2.jar:${root_dir}/bin/any/java/lucene/5.3.0.drd/lucene-queryparser-5.3.0-mobile-2.jar:${root_dir}/bin/any/java/lucene/5.3.0.drd/lucene-analyzers-common-5.3.0-mobile-2.jar:${root_dir}/bin/any/java/lucene/5.3.0.drd/lucene-queries-5.3.0-mobile-2.jar:${root_dir}/src/100_core/bin">
+		  classpath="${root_dir}/src/lib/junit.jar:${root_dir}/bin/any/java/lucene/8.4.1/lucene-core-8.4.1.jar:${root_dir}/bin/any/java/lucene/8.4.1/lucene-highlighter-8.4.1.jar:${root_dir}/bin/any/java/lucene/8.4.1/lucene-memory-8.4.1.jar:${root_dir}/bin/any/java/lucene/8.4.1/lucene-queryparser-8.4.1.jar:${root_dir}/bin/any/java/lucene/8.4.1/lucene-analyzers-common-8.4.1.jar:${root_dir}/bin/any/java/lucene/8.4.1/lucene-queries-8.4.1.jar:${root_dir}/src/100_core/bin">
           <include name="**/*.java"/>
         </javac>
     </target>
