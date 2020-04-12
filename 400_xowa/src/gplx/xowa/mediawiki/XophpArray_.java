@@ -14,18 +14,36 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.mediawiki; import gplx.*; import gplx.xowa.*;
+import gplx.core.strings.*;
 public class XophpArray_ {
+	// REF.PHP:https://www.php.net/manual/en/function.array-merge.php
 	public static XophpArray array_merge(XophpArray... vals) {
 		XophpArray rv = new XophpArray();
 		for (XophpArray ary : vals) {
 			XophpArrayItm[] itms = ary.To_ary();
 			for (XophpArrayItm itm : itms) {
-				array_add(rv, itm);
+				array_itm_add(rv, itm);
 			}
 		}
 		return rv;
 	}
-	private static void array_add(XophpArray ary, XophpArrayItm itm) {
+	// REF.PHP:https://www.php.net/manual/en/function.array-merge.php
+	// "If you want to append array elements from the second array to the first array while not overwriting the elements from the first array and not re-indexing, use the + array union operator:"
+	public static XophpArray array_add(XophpArray lhs, XophpArray... vals) {
+		for (XophpArray ary : vals) {
+			XophpArrayItm[] itms = ary.To_ary();
+			for (XophpArrayItm itm : itms) {
+				if (lhs.Has(itm.Key())) {
+					continue;
+				}
+				else {
+					lhs.Add(itm.Key(), itm.Val());
+				}
+			}
+		}
+		return lhs;
+	}
+	private static void array_itm_add(XophpArray ary, XophpArrayItm itm) {
 		if (itm.Key_is_int())
 			ary.Add(itm.Val());
 		else
@@ -50,14 +68,14 @@ public class XophpArray_ {
 
 		// add src from 0 to bgn
 		for (int i = 0; i < bgn; i++) {
-			array_add(src, itms[i]);
+			array_itm_add(src, itms[i]);
 		}
 
 		// add repl
 		if (repl != null) {
 			XophpArrayItm[] repl_itms = repl.To_ary();
 			for (XophpArrayItm itm : repl_itms) {
-				array_add(src, itm);
+				array_itm_add(src, itm);
 			}
 		}
 
@@ -78,13 +96,13 @@ public class XophpArray_ {
 
 		// add src from end to len
 		for (int i = end; i < src_len; i++) {
-			array_add(src, itms[i]);
+			array_itm_add(src, itms[i]);
 		}
 
 		// add del to rv
 		XophpArray rv = new XophpArray();
 		for (int i = bgn; i < end; i++) {
-			array_add(rv, itms[i]);
+			array_itm_add(rv, itms[i]);
 		}
 		return rv;
 	}
@@ -95,6 +113,16 @@ public class XophpArray_ {
 		int end = offset + length;
 		for (int i = offset; i< end; i++) {
 			rv.Add(array.Get_at(i));
+		}
+		return rv;
+	}
+
+	public static XophpArray array_keys(XophpArray array) {
+		XophpArray rv = XophpArray.New();
+		int len = array.count();
+		for (int i = 0; i < len; i++) {
+			XophpArrayItm itm = array.Get_at_itm(i);
+			rv.Add(itm.Key());
 		}
 		return rv;
 	}
@@ -124,6 +152,11 @@ public class XophpArray_ {
 	public static boolean array_is_empty(Ordered_hash array) {
 		return array.Len() == 0;
 	}
+
+	public static boolean array_key_exists(String key, XophpArray array) {return array.Has(key);}
+	public static boolean array_key_exists(int key, XophpArray array)    {return array.Has(Int_.To_str(key));}
+
+	public static void unset(XophpArray array, int i) {array.unset(i);}
 	public static void unset(Ordered_hash array, Object key) {
 		array.Del(key);
 	}
@@ -135,12 +168,6 @@ public class XophpArray_ {
 		for (int i = idx + 1; i < ary_len; i++)
 			rv[i - 1] = ary[i];
 		return rv;
-	}
-	public static boolean in_array(String needle, String[] haystack) {
-		for (String hay : haystack)
-			if (String_.Eq(hay, needle))
-				return true;
-		return false;
 	}
 
 	// REF.PHP:https://www.php.net/manual/en/function.array-map.php
@@ -163,5 +190,60 @@ public class XophpArray_ {
 			rv.Set(Object_.Xto_str_strict_or_null(itm.Val()), itm.Key());
 		}
 		return rv;
+	}
+
+	// REF.PHP:https://www.php.net/manual/en/function.implode.php
+	public static String implode(String glue, XophpArray pieces) {
+		String_bldr sb = String_bldr_.new_();
+		int len = pieces.count();
+		for (int i = 0; i < len; i++) {
+			if (i != 0) sb.Add(glue);
+			sb.Add(pieces.Get_at_str(i));
+		}
+		return sb.To_str_and_clear();
+	}
+
+	public static int count(XophpArray array) {return array.count();}
+	public static boolean count_bool(XophpArray array) {return array.count_bool();}
+	public static Object array_pop(XophpArray array) {return array.pop();}
+	public static boolean isset(XophpArray array, int key) {return XophpObject_.isset_obj(array.Get_at(key));}
+	public static boolean isset(XophpArray array, String key) {return XophpObject_.isset_obj(array.Get_by(key));}
+	public static boolean is_array(XophpArray array) {return array != null;}
+
+	// REF.PHP: https://www.php.net/manual/en/function.in-array.php
+	public static boolean in_array(Object needle, XophpArray haystack) {return in_array(needle, haystack, false);}
+	public static boolean in_array(Object needle, XophpArray haystack, boolean strict) {
+		// if strict, cache needleType
+		Class<?> needleType = null;
+		if (strict && needle != null) {
+			needleType = Type_.Type_by_obj(needle);
+		}
+
+		// loop haystack to find match
+		int haystack_len = haystack.Len();
+		for (int i = 0; i < haystack_len; i++) {
+			Object val = haystack.Get_at(i);
+
+			// if strict, compare types
+			if (strict) {
+				if      (needle != null && val == null) {
+					return false;
+				}
+				else if (needle == null && val != null) {
+					return false;
+				}
+				else if (needle != null && val != null) {
+					if (!Type_.Eq_by_obj(val, needleType)) {
+						return false;
+					}
+				}
+			}
+
+			// compare objects
+			if (Object_.Eq(needle, val)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

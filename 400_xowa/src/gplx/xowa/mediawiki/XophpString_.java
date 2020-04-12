@@ -18,9 +18,13 @@ import gplx.core.btries.*;
 import gplx.core.intls.*;
 import gplx.objects.strings.unicodes.*;
 import gplx.core.primitives.*;
+import gplx.objects.strings.bfrs.*;
 public class XophpString_ implements XophpCallbackOwner {
-	public static final    String Null = null;
-	public static boolean is_true(String s) {return s != null;} // handles code like "if ($var)" where var is an Object;
+	public static final    String False = null;
+	public static boolean is_true (String s) {return s != null;} // handles code like "if ($var)" where var is an Object;
+	public static boolean is_false(String s) {return s == null;}
+	public static boolean eq(String lhs, String rhs)     {return  String_.Eq(lhs, rhs);}
+	public static boolean eq_not(String lhs, String rhs) {return !String_.Eq(lhs, rhs);}
 
 	// REF.PHP: https://www.php.net/manual/en/function.strpos.php
 	public static int strpos(String haystack, String needle) {return strpos(haystack, needle, 0);}
@@ -80,16 +84,36 @@ public class XophpString_ implements XophpCallbackOwner {
 		}
 		return rv;
 	}
-	public static int strspn(String subject, Hash_adp mask, int start) {return strspn(subject, mask, start, Int_.Null);}
+	public static int strspn(String subject, Hash_adp mask, int start) {return strspn(subject, mask, start, Int_.Zero);}
 	public static int strspn(String subject, Hash_adp mask, int start, int length) {
 		int subject_len = String_.Len(subject);
-
-		// get subject_end
+		start = strspn__start(start, subject_len);
+		int subject_end = strspn__subject_end(start, length, subject_len);
+		return strspn__rslt(Bool_.Y, subject, mask, start, subject_end);
+	}
+	// REF.PHP:https://www.php.net/manual/en/function.strcspn.php
+	public static int strcspn(String subject, Hash_adp mask)                        {return strcspn(subject, mask, Int_.Zero, Int_.Zero);}
+	public static int strcspn(String subject, Hash_adp mask, int start)             {return strcspn(subject, mask,     start, Int_.Zero);}
+	public static int strcspn(String subject, Hash_adp mask, int start, int length) {
+		int subject_len = String_.Len(subject);
+		start = strspn__start(start, subject_len);
+		int subject_end = strspn__subject_end(start, length, subject_len);
+		return strspn__rslt(Bool_.N, subject, mask, start, subject_end);
+	}
+	private static int strspn__start(int start, int subject_len) {
+		if (start < 0) { // adjust start if -1
+			start = subject_len + start;
+			if (start < 0)
+				start = 0;
+		}
+		return start;
+	}
+	private static int strspn__subject_end(int start, int length, int subject_len) {
 		int subject_end = 0;
-		if (length == Int_.Null) {
+		if (length == Int_.Zero) {
 			subject_end = subject_len;
 		}
-		else if (length < 0) {
+		else if (length < Int_.Zero) {
 			subject_end = subject_len + length; // If length is given and is negative, then subject will be examined from the starting position up to length characters from the end of subject.
 			if (subject_end < start)
 				subject_end = start;
@@ -99,9 +123,11 @@ public class XophpString_ implements XophpCallbackOwner {
 			if (subject_end > subject_len)
 				subject_end = subject_len;
 		}
-
+		return subject_end;
+	}
+	private static int strspn__rslt(boolean is_strspn, String subject, Hash_adp mask, int start, int subject_end) {
 		// loop subject until encountering character not in mask
-		int rv = 0;
+		int strspn_rv = 0;
 		int i = start;
 		while (i < subject_end) {
 			char subject_char = String_.CharAt(subject, i);
@@ -117,14 +143,21 @@ public class XophpString_ implements XophpCallbackOwner {
 			}
 
 			if (mask.Has(mask_key)) {
-				rv++;
+				if (is_strspn) {
+					strspn_rv++;
+				}
+				else {
+					break;
+				}
 			}
 			else {
-				break;
+				if (is_strspn) {
+					break;
+				}
 			}
 			i++;
 		}
-		return rv;
+		return is_strspn ? strspn_rv : i - start;
 	}
 	public static int strspn_fwd__ary(byte[] src, boolean[] find, int bgn, int max, int src_len) {
 		if (max == -1) max = src_len;
@@ -240,6 +273,9 @@ public class XophpString_ implements XophpCallbackOwner {
 	public static byte[] str_replace(byte[] find, byte[] repl, byte[] src) {
 		return Bry_.Replace(src, find, repl);
 	}
+	public static String str_replace(String find, String repl, String src) {
+		return String_.Replace(src, find, repl);
+	}
 	public static byte[] strstr(byte[] src, byte[] find) {
 		int pos = Bry_find_.Find_fwd(src, find);
 		return pos == Bry_find_.Not_found ? null : Bry_.Mid(src, pos, src.length);
@@ -256,105 +292,145 @@ public class XophpString_ implements XophpCallbackOwner {
 		, Int_obj_ref.New(Byte_ascii.Null)
 		, Int_obj_ref.New(Byte_ascii.Vertical_tab)
 		);
-	public static String rtrim(String src) {return rtrim(src, null);}
-	public static String rtrim(String src_str, String pad_str) {
-		Hash_adp pad_hash = null;
-		if (pad_str == null) pad_hash = trim_ws_hash;
-
+	public static String trim (String src)             {return trim_outer( 0, src, null);}
+	public static String trim (String src, String pad) {return trim_outer( 0, src, pad);}
+	public static String ltrim(String src)             {return trim_outer( 1, src, null);}
+	public static String ltrim(String src, String pad) {return trim_outer( 1, src, pad);}
+	public static String rtrim(String src)             {return trim_outer(-1, src, null);}
+	public static String rtrim(String src, String pad) {return trim_outer(-1, src, pad);}
+	private static String trim_outer(int type, String src_str, String pad_str) {
 		// init brys / lens
 		byte[] src_bry = Bry_.new_u8(src_str);
 		int src_len = src_bry.length;
 		byte[] pad_bry = Bry_.new_u8(pad_str);
 		int pad_len = pad_bry.length;
 
+		// create pad_hash if not ws_hash
+		// NOTE: this does not support mutlibyte chars, and PHP does not support multibyte chars; see TEST
+		Hash_adp pad_hash = null;
+		if (pad_len > 1) {
+			if (pad_str == null) {
+				pad_hash = trim_ws_hash;
+			}
+			else {
+				pad_hash = Hash_adp_.New();
+				byte prv_byte = Byte_.Zero;
+				for (int i = 0; i < pad_len; i++) {
+					byte pad_byte = pad_bry[i];
+					if (pad_byte == Byte_ascii.Dot && i < pad_len - 1) {
+						byte nxt_byte = pad_bry[i + 1];
+						if (nxt_byte == Byte_ascii.Dot) {
+							if (i == 0) {
+								throw new XophpError(".. found but at start of String; src=" + pad_str);
+							}
+							else if (i == pad_len - 2) {
+								throw new XophpError(".. found but at end of String; src=" + pad_str);
+							}
+							else {
+								nxt_byte = pad_bry[i + 2];
+								if (nxt_byte > prv_byte) {
+									for (byte j = prv_byte; j < nxt_byte; j++) {
+										Byte_obj_ref rng_obj = Byte_obj_ref.new_(j);
+										if (!pad_hash.Has(rng_obj))
+											pad_hash.Add_as_key_and_val(rng_obj);
+									}
+									i += 2;
+									continue;
+								}
+								else {
+									throw new XophpError(".. found but next byte must be greater than previous byte; src=" + pad_str);
+								}
+							}
+						}
+					}
+					prv_byte = pad_byte;
+					Byte_obj_ref pad_obj = Byte_obj_ref.new_(pad_byte);
+					if (!pad_hash.Has(pad_obj))
+						pad_hash.Add_as_key_and_val(pad_obj);
+				}
+			}
+		}
+
+		// do trim
+		int[] rv = new int[2];
+		rv[0] = 0;
+		rv[1] = src_len;
+		if (type <= 0) { // trim or rtrim
+			trim_inner(Bool_.N, rv, src_bry, src_len, pad_bry, pad_len, pad_hash);
+		}
+		if (type >= 0) { // trim or ltrim
+			trim_inner(Bool_.Y, rv, src_bry, src_len, pad_bry, pad_len, pad_hash);
+		}
+
+		// return String
+		int trim_bgn = rv[0];
+		int trim_end = rv[1];
+		return trim_bgn == 0 && trim_end == src_len
+			? src_str
+			: String_.new_u8(Bry_.Mid(src_bry, trim_bgn, trim_end));
+	}
+	private static void trim_inner(boolean is_bos, int[] rv, byte[] src_bry, int src_len, byte[] pad_bry, int pad_len, Hash_adp pad_hash) {
 		// ----------------------
-		// 0, 1 chars (optimized)
+		// init vars
 		// ----------------------
-		int last = 0;
+		int rv_idx = 1;
+		int trim_bgn = src_len - 1;
+		int trim_end = -1;
+		int trim_add = -1;
+		int trim_adj = 1;
+		if (is_bos) {
+			rv_idx = 0;
+			trim_bgn = 0;
+			trim_end = src_len;
+			trim_add = 1;
+			trim_adj = 0;
+		}
+		int trim_pos = trim_end;
+
 		switch (pad_len) {
-			// pad is ""
+			// pad is 0 char; aka: ""
 			case 0:
-				return src_str;
+				break;
 			// pad is 1 char
 			case 1:
-				last = src_len;
 				byte pad_byte = pad_bry[0];
-				for (int i = src_len - 1; i > -1; i--) {
+				for (int i = trim_bgn; i != trim_end; i += trim_add) {
 					byte cur = src_bry[i];
-					last = i + 1;
+					trim_pos = i + trim_adj;
 					if (cur != pad_byte) {
 						break;
 					}
 				}
-				return (last == src_len) ? src_str : String_.new_u8(Bry_.Mid(src_bry, 0, last));
-		}
-
-		// --------
-		// 2+ chars
-		// --------
-		// create pad_hash if not ws_hash
-		// NOTE: PHP does not support multibyte strings; see TEST
-		if (pad_hash == null) {
-			pad_hash = Hash_adp_.New();
-			byte prv_byte = Byte_.Zero;
-			for (int i = 0; i < pad_len; i++) {
-				byte pad_byte = pad_bry[i];
-				if (pad_byte == Byte_ascii.Dot && i < pad_len - 1) {
-					byte nxt_byte = pad_bry[i + 1];
-					if (nxt_byte == Byte_ascii.Dot) {
-						if (i == 0) {
-							throw new XophpError(".. found but at start of String; src=" + pad_str);
-						}
-						else if (i == pad_len - 2) {
-							throw new XophpError(".. found but at end of String; src=" + pad_str);
-						}
-						else {
-							nxt_byte = pad_bry[i + 2];
-							if (nxt_byte > prv_byte) {
-								for (byte j = prv_byte; j < nxt_byte; j++) {
-									Byte_obj_ref rng_obj = Byte_obj_ref.new_(j);
-									if (!pad_hash.Has(rng_obj))
-										pad_hash.Add_as_key_and_val(rng_obj);
-								}
-								i += 2;
-								continue;
-							}
-							else {
-								throw new XophpError(".. found but next byte must be greater than previous byte; src=" + pad_str);
-							}
-						}
+				break;
+			// pad is 2+ chars
+			default:
+				// loop src until non-matching pad int
+				Byte_obj_ref temp = Byte_obj_ref.zero_();
+				trim_pos = src_len;
+				for (int i = trim_bgn; i != trim_end; i += trim_add) {
+					temp.Val_(src_bry[i]);
+					trim_pos = i + trim_adj;
+					if (!pad_hash.Has(temp)) {
+						break;
 					}
 				}
-				prv_byte = pad_byte;
-				Byte_obj_ref pad_obj = Byte_obj_ref.new_(pad_byte);
-				if (!pad_hash.Has(pad_obj))
-					pad_hash.Add_as_key_and_val(pad_obj);
-			}
+				break;
 		}
 
-		// loop src until non-matching pad int
-		Byte_obj_ref temp = Byte_obj_ref.zero_();
-		last = src_len;
-		for (int i = src_len - 1; i > -1; i--) {
-			temp.Val_(src_bry[i]);
-			last = i + 1;
-			if (!pad_hash.Has(temp)) {
-				break;
-			}
+		// set return
+		if (trim_pos != trim_end) {
+			rv[rv_idx] = trim_pos;
 		}
-		return (last == src_len) ? src_str : String_.new_u8(Bry_.Mid(src_bry, 0, last));
 	}
-	public static String str_repeat(String val, int count) {
-		int val_len = String_.Len(val);
-		int chry_len = val_len * count;
-		char[] chry = new char[chry_len];
-		for (int i = 0; i < count; i++) {
-			for (int j = 0; j < val_len; j++) {
-				chry[(i * val_len) + j] = String_.CharAt(val, j);
-			}
+	// REF.PHP: https://www.php.net/manual/en/function.str-repeat.php
+	public static String str_repeat(String input, int multiplier) {
+		String_bfr sb = new String_bfr();
+		for (int i = 0; i < multiplier; i++) {
+			sb.Add(input);
 		}
-		return String_.new_charAry_(chry, 0, chry_len);
+		return sb.To_str_and_clear();
 	}
+
 	public static boolean is_string(Object o) {
 		return String_.as_(o) != null;
 	}
@@ -467,6 +543,26 @@ public class XophpString_ implements XophpCallbackOwner {
 				return b >= 128 && b <= 255;
 		}
 	}
+
+	// REF.PHP: https://www.php.net/manual/en/function.strrev.php
+	public static String strrev(String src) {
+		String_bfr sb = new String_bfr();
+		Ustring usrc = Ustring_.New_codepoints(src);
+		int usrc_len = usrc.Len_in_data();
+		for (int i = usrc_len - 1; i > -1; i--) {
+			int c = usrc.Get_data(i);
+			sb.Add_char_by_code(c);
+		}
+		return sb.To_str_and_clear();
+	}
+
+	public static String Char_as_str(String s, int idx) {
+		return Char_.To_str(String_.CharAt(s, idx));
+	}
+	public static boolean Char_eq(String s, int idx, String comp) {
+		return String_.Eq(Char_as_str(s, idx), comp);
+	}
+
 	public Object Callback(String method, Object... args) {
 		if (String_.Eq(method, "strtoupper")) {
 			String val = (String)args[0];

@@ -110,14 +110,18 @@ public class Xow_portal_mgr implements Gfo_invk {
 
 	// assuming Div_personal_bry is followed by Div_ns_bry is followed by Div_view_bry
 	private byte[] subj_href = null;
+	private byte[] talk_href = null;
 	public byte[] Div_personal_bry(boolean from_hdump, Xoa_ttl ttl, byte html_gen_tid, boolean isnoredirect) {
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
+		Xoh_href_wtr href_wtr = wiki.Html__href_wtr();
 		byte[] wiki_user_name = wiki.User().Name();
+		byte[] user_href = href_wtr.Build_to_bry(wiki, Bry_.Add(wiki.Ns_mgr().Ids_get_or_null(Xow_ns_.Tid__user).Name_db_w_colon(), wiki_user_name));
+		talk_href = href_wtr.Build_to_bry(wiki, Bry_.Add(wiki.Ns_mgr().Ids_get_or_null(Xow_ns_.Tid__user_talk).Name_db_w_colon(), wiki_user_name));
 		byte[] rv = Init_fmtr(tmp_bfr, wiki.Eval_mgr(), div_personal_fmtr
-			, Bry_.Add(Xoh_href_.Bry__wiki, wiki.Ns_mgr().Ids_get_or_null(Xow_ns_.Tid__user).Name_db_w_colon(), wiki_user_name)
+			, user_href
 			, wiki_user_name
 			, Ns_cls_by_id(wiki.Ns_mgr(), Xow_ns_.Tid__user)
-			, Bry_.Add(Xoh_href_.Bry__wiki, wiki.Ns_mgr().Ids_get_or_null(Xow_ns_.Tid__user_talk).Name_db_w_colon(), wiki_user_name)
+			, talk_href
 			, Ns_cls_by_id(wiki.Ns_mgr(), Xow_ns_.Tid__user_talk)
 			, indicators_pagesource_enabled
 				? display_type(from_hdump, ttl, html_gen_tid)
@@ -146,7 +150,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 		// NOTE: need to escape args href for Search page b/c user can enter in quotes and apos; EX:localhost:8080/en.wikipedia.org/wiki/Special:XowaSearch?search=title:(%2Breturn%20%2B"abc") ; DATE:2017-07-16
 		Bry_bfr tmp_bfr = bfr_mkr.Get_k004();
 		//byte[] talk_href = Xoh_html_wtr_escaper.Escape(Xop_amp_mgr.Instance, tmp_bfr, Bry_.Add(Xoh_href_.Bry__wiki, ttl.Talk_txt()));
-		byte[] talk_href = Bry_.Add(Xoh_href_.Bry__wiki, ttl.Talk_href());
+		//byte[] talk_href = Bry_.Add(Xoh_href_.Bry__wiki, ttl.Talk_href());
 
 		// Adds namespace links
 		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
@@ -375,8 +379,10 @@ public class Xow_portal_mgr implements Gfo_invk {
 	}
 	private byte[] display_type(boolean from_hdump, Xoa_ttl ttl, byte html_gen_tid) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		Xoh_href_wtr href_wtr = wiki.Html__href_wtr();
+		subj_href = href_wtr.Build_to_bry(wiki, ttl.Subj_txt()); // or ttl.Full_url()?????
 		//subj_href = Xoh_html_wtr_escaper.Escape(Xop_amp_mgr.Instance, tmp_bfr, Bry_.Add(Xoh_href_.Bry__wiki, ttl.Subj_url()));
-		subj_href = Bry_.Add(Xoh_href_.Bry__wiki, ttl.Full_url());
+		//subj_href = Bry_.Add(Xoh_href_.Bry__wiki, ttl.Full_url());
 		//subj_href = Bry_.Replace(subj_href, Bry_.new_a7("%"), Bry_.new_a7("%25"));
 		subj_href = Checkpercent(subj_href);
 		if (html_gen_tid != 0) return Bry_.Empty; // edit & html are irrelevant

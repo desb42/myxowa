@@ -52,8 +52,11 @@ public class Xop_xatr_whitelist_mgr {
 		}
 		return rv;
 	}
-	public Xop_xatr_whitelist_mgr Ini() {	// REF.MW:Sanitizer.php|setupAttributeWhitelist
-		Ini_grp("common"		, null			,
+
+	// REF.MW:Sanitizer.php|setupAttributeWhitelist
+	public Xop_xatr_whitelist_mgr Ini() {
+		// REF.MW: https://github.com/wikimedia/mediawiki/blob/master/includes/parser/Sanitizer.php#L1767
+		Ini_grp("common", null,
 			// HTML
 			"id",
 			"class",
@@ -61,13 +64,16 @@ public class Xop_xatr_whitelist_mgr {
 			"lang",
 			"dir",
 			"title",
+
 			// WAI-ARIA
 			"aria-describedby",
 			"aria-flowto",
+			"aria-hidden",
 			"aria-label",
 			"aria-labelledby",
 			"aria-owns",
 			"role",
+
 			// RDFa
 			// These attributes are specified in section 9 of
 			// https://www.w3.org/TR/2008/REC-rdfa-syntax-20081014
@@ -75,7 +81,8 @@ public class Xop_xatr_whitelist_mgr {
 			"property",
 			"resource",
 			"datatype",
-			"typeof",
+			"type"+"of",
+
 			// Microdata. These are specified by
 			// https://html.spec.whatwg.org/multipage/microdata.html#the-microdata-model
 			"itemid",
@@ -86,7 +93,7 @@ public class Xop_xatr_whitelist_mgr {
 		);
 		Ini_grp("block" 		, "common"		, "align");
 		Ini_grp("tablealign"	, null			, "align", "valign");
-		Ini_grp("tablecell"		, null			,
+		Ini_grp("tablecell"		, null,
 			"abbr",
 			"axis",
 			"headers",
@@ -98,11 +105,14 @@ public class Xop_xatr_whitelist_mgr {
 			"height", // deprecated
 			"bgcolor" // deprecated
 		);
-		
+
+		// Numbers refer to sections in HTML 4.01 standard describing the element.
+		// See: https://www.w3.org/TR/html4/
 		// 7.5.4
 		Ini_nde(Xop_xnde_tag_.Tid__div			, "block");
 		Ini_nde(Xop_xnde_tag_.Tid__center		, "common"); // deprecated
 		Ini_nde(Xop_xnde_tag_.Tid__span			, "block");
+
 		// 7.5.5
 		Ini_nde(Xop_xnde_tag_.Tid__h1			, "block");
 		Ini_nde(Xop_xnde_tag_.Tid__h2			, "block");
@@ -110,10 +120,13 @@ public class Xop_xatr_whitelist_mgr {
 		Ini_nde(Xop_xnde_tag_.Tid__h4			, "block");
 		Ini_nde(Xop_xnde_tag_.Tid__h5			, "block");
 		Ini_nde(Xop_xnde_tag_.Tid__h6			, "block");
+
 		// 7.5.6
 		// address
+
 		// 8.2.4
 		Ini_nde(Xop_xnde_tag_.Tid__bdo			, "common");
+
 		// 9.2.1
 		Ini_nde(Xop_xnde_tag_.Tid__em			, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__strong		, "common");
@@ -125,65 +138,79 @@ public class Xop_xatr_whitelist_mgr {
 		Ini_nde(Xop_xnde_tag_.Tid__var			, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__abbr			, "common");
 		// acronym
+
 		// 9.2.2
 		Ini_nde(Xop_xnde_tag_.Tid__blockquote	, "common", "cite");
-		Ini_nde(Xop_xnde_tag_.Tid__q			, "common", "cite");
+		Ini_nde(Xop_xnde_tag_.Tid__q            , "common", "cite");
+
 		// 9.2.3
 		Ini_nde(Xop_xnde_tag_.Tid__sub			, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__sup			, "common");
+
 		// 9.3.1
 		Ini_nde(Xop_xnde_tag_.Tid__p			, "block");
+
 		// 9.3.2
 		Ini_nde(Xop_xnde_tag_.Tid__br			, "common", "clear");
+
 		// https://www.w3.org/TR/html5/text-level-semantics.html#the-wbr-element
 		Ini_nde(Xop_xnde_tag_.Tid__wbr			, "common");
+
 		// 9.3.4
 		Ini_nde(Xop_xnde_tag_.Tid__pre			, "common", "width");
+
 		// 9.4
 		Ini_nde(Xop_xnde_tag_.Tid__ins			, "common", "cite", "datetime");
 		Ini_nde(Xop_xnde_tag_.Tid__del			, "common", "cite", "datetime");
+
 		// 10.2
 		Ini_nde(Xop_xnde_tag_.Tid__ul			, "common", "type");
 		Ini_nde(Xop_xnde_tag_.Tid__ol			, "common", "type", "start", "reversed");
 		Ini_nde(Xop_xnde_tag_.Tid__li			, "common", "type", "value");
+
 		// 10.3
 		Ini_nde(Xop_xnde_tag_.Tid__dl			, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__dd			, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__dt			, "common");
+
 		// 11.2.1
-		Ini_nde(Xop_xnde_tag_.Tid__table		, "common",
-								"summary", "width", "border", "frame",
-										"rules", "cellspacing", "cellpadding",
-										"align", "bgcolor"
-								);
+		Ini_nde(Xop_xnde_tag_.Tid__table		, "common", "summary", "width", "border", "frame", "rules", "cellspacing", "cellpadding", "align", "bgcolor");
+
 		// 11.2.2
 		Ini_nde(Xop_xnde_tag_.Tid__caption		, "block");
+
 		// 11.2.3
 		Ini_nde(Xop_xnde_tag_.Tid__thead		, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__tfoot		, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__tbody		, "common");
+
 		// 11.2.4
 		Ini_nde(Xop_xnde_tag_.Tid__colgroup		, "common", "span");
 		Ini_nde(Xop_xnde_tag_.Tid__col			, "common", "span");
+
 		// 11.2.5
 		Ini_nde(Xop_xnde_tag_.Tid__tr			, "common", "bgcolor", "tablealign");
+
 		// 11.2.6
 		Ini_nde(Xop_xnde_tag_.Tid__td			, "common", "tablecell", "tablealign");
 		Ini_nde(Xop_xnde_tag_.Tid__th			, "common", "tablecell", "tablealign");
+
 		// 12.2
 		// NOTE: <a> is not allowed directly, but the attrib
-		// whitelist is used from the Parser object
-		Ini_nde(Xop_xnde_tag_.Tid__a			, "common", "href", "rel", "rev"); // rel/rev esp. for RDFa
+		// whitelist is used from the Parser Object
+		Ini_nde(Xop_xnde_tag_.Tid__a			, "common", "href", "rel", "rev"); // # rel/rev esp. for RDFa
+
 		// 13.2
 		// Not usually allowed, but may be used for extension-style hooks
 		// such as <math> when it is rasterized, or if $wgAllowImageTag is
 		// true
 		Ini_nde(Xop_xnde_tag_.Tid__img			, "common", "alt", "src", "width", "height", "srcset");
 		// Attributes for A/V tags added in T163583 / T133673
-		Ini_nde(Xop_xnde_tag_.Tid__audio			, "common", "controls", "preload", "width", "height");
-		Ini_nde(Xop_xnde_tag_.Tid__video			, "common", "poster", "controls", "preload", "width", "height");
-		Ini_nde(Xop_xnde_tag_.Tid__source			, "common", "type", "src");
-		Ini_nde(Xop_xnde_tag_.Tid__track			, "common", "type", "src", "srclang", "kind", "label");
+		Ini_nde(Xop_xnde_tag_.Tid__audio		, "common", "controls", "preload", "width", "height");
+		Ini_nde(Xop_xnde_tag_.Tid__video		, "common", "poster", "controls", "preload", "width", "height");
+		Ini_nde(Xop_xnde_tag_.Tid__source		, "common", "type", "src");
+		Ini_nde(Xop_xnde_tag_.Tid__track		, "common", "type", "src", "srclang", "kind", "label");
+
 		// 15.2.1
 		Ini_nde(Xop_xnde_tag_.Tid__tt			, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__b			, "common");
@@ -193,34 +220,43 @@ public class Xop_xatr_whitelist_mgr {
 		Ini_nde(Xop_xnde_tag_.Tid__strike		, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__s			, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__u			, "common");
+
 		// 15.2.2
 		Ini_nde(Xop_xnde_tag_.Tid__font			, "common", "size", "color", "face");
 		// basefont
+
 		// 15.3
 		Ini_nde(Xop_xnde_tag_.Tid__hr			, "common", "width");
+
+
 		// HTML Ruby annotation text module, simple ruby only.
 		// https://www.w3.org/TR/html5/text-level-semantics.html#the-ruby-element
 		Ini_nde(Xop_xnde_tag_.Tid__ruby			, "common");
 		// rbc
 		Ini_nde(Xop_xnde_tag_.Tid__rb			, "common");
-		Ini_nde(Xop_xnde_tag_.Tid__rt			, "common");
 		Ini_nde(Xop_xnde_tag_.Tid__rp			, "common");
+		Ini_nde(Xop_xnde_tag_.Tid__rt			, "common"); // $merge( $common, [ 'rbspan' ] ),
 		Ini_nde(Xop_xnde_tag_.Tid__rtc			, "common");
+
 		// MathML root element, where used for extensions
 		// 'title' may not be 100% valid here; it's XHTML
 		// https://www.w3.org/TR/REC-MathML/
 		Ini_nde(Xop_xnde_tag_.Tid__math			, "class", "style", "id", "title");
+
 		// HTML 5 section 4.5
-		Ini_nde(Xop_xnde_tag_.Tid__figure			, "common");
-		Ini_nde(Xop_xnde_tag_.Tid__figure_inline	, "common"); // T118520
-		Ini_nde(Xop_xnde_tag_.Tid__figcaption	, "common");
+		Ini_nde(Xop_xnde_tag_.Tid__figure       , "common");
+		Ini_nde(Xop_xnde_tag_.Tid__figure_inline, "common"); // T118520
+		Ini_nde(Xop_xnde_tag_.Tid__figcaption   , "common");
+
 		// HTML 5 section 4.6
 		Ini_nde(Xop_xnde_tag_.Tid__bdi			, "common");
+
 		// HTML5 elements, defined by:
 		// https://html.spec.whatwg.org/multipage/semantics.html#the-data-element
 		Ini_nde(Xop_xnde_tag_.Tid__data			, "common", "value");
 		Ini_nde(Xop_xnde_tag_.Tid__time			, "common", "datetime");
 		Ini_nde(Xop_xnde_tag_.Tid__mark			, "common");
+
 		// meta and link are only permitted by removeHTMLtags when Microdata
 		// is enabled so we don't bother adding a conditional to hide these
 		// Also meta and link are only valid in WikiText as Microdata elements
@@ -228,7 +264,8 @@ public class Xop_xatr_whitelist_mgr {
 		// So we don't bother including $common attributes that have no purpose.
 		Ini_nde(Xop_xnde_tag_.Tid__meta			, "itemprop", "content");
 		Ini_nde(Xop_xnde_tag_.Tid__link			, "itemprop", "href", "title");
-		//?? Ini_nde(Xop_xnde_tag_.Tid__q			, "common");
+
+		// NOTE: not in MW, but needed for "data-sort-type"; check if needed later; DATE:2020-03-08
 		Ini_all_loose("data");
 		return this;
 	}

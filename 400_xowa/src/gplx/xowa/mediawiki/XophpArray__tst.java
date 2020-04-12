@@ -20,44 +20,51 @@ public class XophpArray__tst { // REF:https://www.php.net/manual/en/function.arr
 	@Test  public void array_merge__basic() {
 		XophpArray ary1 = fxt.Make().Add("key1", "val1").Add("a");
 		XophpArray ary2 = fxt.Make().Add("key2", "val2").Add("b");
-		fxt.Test__array_merge
+		fxt.Test__eq
 		( fxt.Make().Add("key1", "val1").Add("a").Add("key2", "val2").Add("b")
-		, ary1, ary2);
+		, XophpArray_.array_merge(ary1, ary2));
 	}
 	@Test  public void array_merge__same_key() {
 		XophpArray ary1 = fxt.Make().Add("key", "val1");
 		XophpArray ary2 = fxt.Make().Add("key", "val2");
-		fxt.Test__array_merge
+		fxt.Test__eq
 		( fxt.Make().Add("key", "val2")
-		, ary1, ary2);
+		, XophpArray_.array_merge(ary1, ary2));
 	}
 	@Test  public void array_merge__same_idx() {
 		XophpArray ary1 = fxt.Make().Add(0, "a");
 		XophpArray ary2 = fxt.Make().Add(0, "b");
-		fxt.Test__array_merge
+		fxt.Test__eq
 		( fxt.Make().Add(0, "a").Add(1, "b")
-		, ary1, ary2);
+		, XophpArray_.array_merge(ary1, ary2));
 	}
 	@Test  public void array_merge__renumber() {
 		XophpArray ary1 = fxt.Make().Add(3, "a");
 		XophpArray ary2 = fxt.Make().Add(2, "b");
-		fxt.Test__array_merge
+		fxt.Test__eq
 		( fxt.Make().Add(0, "a").Add(1, "b")
-		, ary1, ary2);
+		, XophpArray_.array_merge(ary1, ary2));
 	}
 	@Test  public void array_merge__example_1() {
 		XophpArray ary1 = fxt.Make().Add("color", "red").Add_many(2, 4);
 		XophpArray ary2 = fxt.Make().Add_many("a", "b").Add("color", "green").Add("shape", "trapezoid").Add(4);
-		fxt.Test__array_merge
+		fxt.Test__eq
 		( fxt.Make().Add("color", "green").Add_many(2, 4, "a", "b").Add("shape", "trapezoid").Add(4)
-		, ary1, ary2);
+		, XophpArray_.array_merge(ary1, ary2));
 	}
 	@Test  public void array_merge__example_2() {
 		XophpArray ary1 = fxt.Make();
 		XophpArray ary2 = fxt.Make().Add(1, "data");
-		fxt.Test__array_merge
+		fxt.Test__eq
 		( fxt.Make().Add(0, "data")
-		, ary1, ary2);
+		, XophpArray_.array_merge(ary1, ary2));
+	}
+	@Test  public void array_add() {
+		XophpArray ary1 = fxt.Make().Add(0, "zero_a").Add(2, "two_a").Add(3, "three_a");
+		XophpArray ary2 = fxt.Make().Add(1, "one_b").Add(3, "three_b").Add(4, "four_b");
+		fxt.Test__eq
+		( fxt.Make().Add(0, "zero_a").Add(2, "two_a").Add(3, "three_a").Add(1, "one_b").Add(4, "four_b")
+		, XophpArray_.array_add(ary1, ary2));
 	}
 	@Test  public void array_splice__bgn_is_positive() {
 		XophpArray src = fxt.Make().Add_many("a", "b", "c", "d");
@@ -243,13 +250,35 @@ public class XophpArray__tst { // REF:https://www.php.net/manual/en/function.arr
 			, XophpArray_.array_flip(orig)
 			);
 	}
+	@Test  public void implode() {
+		XophpArray orig = fxt.Make().Add_many("a", "b", "c");
+		Gftest.Eq__str
+			( "a b c"
+			, XophpArray_.implode(" ", orig)
+			);
+	}
+	@Test  public void in_array() {
+		// PHP samples
+		XophpArray array;
+		// Example #1
+		array = XophpArray.New("Mac", "NT", "Irix", "Linux");
+		Gftest.Eq__bool(Bool_.Y, XophpArray_.in_array("Irix", array));
+		Gftest.Eq__bool(Bool_.N, XophpArray_.in_array("mac" , array));
+
+		// Example #2
+		array = XophpArray.New(12.4d, 1.13d);
+		Gftest.Eq__bool(Bool_.N, XophpArray_.in_array("12.4", array, true));
+		Gftest.Eq__bool(Bool_.Y, XophpArray_.in_array( 1.13d, array, true));
+
+		// Example #3
+		array = XophpArray.New(XophpArray.New('p', 'h'), XophpArray.New('p', 'r'), 'o');
+		Gftest.Eq__bool(Bool_.Y, XophpArray_.in_array(XophpArray.New('p', 'h'), array));
+		Gftest.Eq__bool(Bool_.N, XophpArray_.in_array(XophpArray.New('f', 'i'), array));
+		Gftest.Eq__bool(Bool_.Y, XophpArray_.in_array('o', array));
+	}
 }
 class XophpArray__fxt {
 	public XophpArray Make() {return new XophpArray();}
-	public void Test__array_merge(XophpArray expd, XophpArray... vals) {
-		XophpArray actl = XophpArray_.array_merge(vals);
-		Gftest.Eq__str(expd.To_str(), actl.To_str());
-	}
 	public void Test__eq(XophpArray expd, XophpArray actl) {
 		Gftest.Eq__str(expd.To_str(), actl.To_str());
 	}

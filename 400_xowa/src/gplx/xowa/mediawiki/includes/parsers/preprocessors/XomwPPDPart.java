@@ -22,36 +22,21 @@ public abstract class XomwPPDPart {
 	/**
 	* @var String Output accumulator String
 	*/
-//		public final    byte[] output;
+	public String output;
 
+	// REF.MW:https://manual.phpdoc.org/HTMLSmartyConverter/PHP/phpDocumentor/tutorial_tags.property.pkg.html
 	// Optional member variables:
 	//   eqpos        Position of equals sign in output accumulator
 	//   commentEnd   Past-the-end input pointer for the last comment encountered
 	//   visualEnd    Past-the-end input pointer for the end of the accumulator minus comments
-	public int eqpos = -1;
-	public int commentEnd = -1;
-	public int visualEnd = -1;
+	public int eqpos;
+	public int commentEnd;
+	public int visualEnd;
 
 	public XomwPPDPart(String output) {
-//			accum.Add_bry(Bry_.new_u8(output));
-//			bfr = ((Xomw_prepro_accum__dom)accum).Bfr();
+		this.output = output;
 	}
 	public abstract Xomw_prepro_accum Accum();
 
 	public abstract XomwPPDPart Make_new(String val);
 }
-//	class XomwPPDPart {
-//		/**
-//		* @var String Output accumulator String
-//		*/
-//		public String output;
-//
-//		// Optional member variables:
-//		//   eqpos        Position of equals sign in output accumulator
-//		//   commentEnd   Past-the-end input pointer for the last comment encountered
-//		//   visualEnd    Past-the-end input pointer for the end of the accumulator minus comments
-//
-//		public XomwPPDPart(String output) {
-//			this.output = output;
-//		}
-//	}

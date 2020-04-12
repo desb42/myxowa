@@ -32,6 +32,10 @@ public abstract class XomwPPFrame {
 	/** This constant exists when $indexOffset is supported in newChild() */
 	public static final int SUPPORTS_INDEX_OFFSET = 1;
 
+	// https://github.com/wikimedia/mediawiki/blob/ce615343ee8d192a65cf65f35f853c5ffcfad390/includes/parser/PPFrame.php#L25-L26
+	public int depth;
+	public XomwPPFrame parent;
+
 	/**
 	* Create a child frame
 	*
@@ -41,6 +45,7 @@ public abstract class XomwPPFrame {
 	*
 	* @return PPFrame
 	*/
+	public XomwPPFrame newChild(Object args, XomwTitle title) {return newChild(args, title, 0);}
 	@gplx.Virtual public XomwPPFrame newChild(Object args, XomwTitle title, int indexOffset) {return null;}
 
 	/**
@@ -50,6 +55,7 @@ public abstract class XomwPPFrame {
 	* @param int $flags
 	* @return String
 	*/
+	public String cachedExpand(String key, XomwPPNode root) {return cachedExpand(key, root, 0);}
 	@gplx.Virtual public String cachedExpand(String key, XomwPPNode root, int flags) {return null;}
 
 	/**
@@ -58,7 +64,8 @@ public abstract class XomwPPFrame {
 	* @param int $flags
 	* @return String
 	*/
-	@gplx.Virtual public String expand(XomwPPNode root, int flags) {return null;}
+	@gplx.Virtual public String expand(Object root) {return expand(root, 0);}
+	@gplx.Virtual public String expand(Object root, int flags) {return null;}
 
 	/**
 	* Implode with flags for expand()

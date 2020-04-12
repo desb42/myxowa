@@ -146,16 +146,16 @@ public class Xop_xnde_tag_ {
 , Tid__meta = 121
 , Tid__link = 122
 , Tid__template_styles = 123
-, Tid__chem = 124
-, Tid__audio = 125
-, Tid__video = 126
-, Tid__track = 127
-, Tid__rtc = 128
-, Tid__figure = 129
-, Tid__figure_inline = 130
+, Tid__audio = 124
+, Tid__video = 125
+, Tid__track = 126
+, Tid__rtc = 127
+, Tid__figure = 128
+, Tid__figure_inline = 129
 , Tid__figcaption = 130
+, Tid__chem = 131
 	;
-	public static final int Tid__len = 131;
+	public static final int Tid__len = 132;
 	public static final    Xop_xnde_tag[] Ary = new Xop_xnde_tag[Tid__len];
 	private static Xop_xnde_tag New(int id, String name) {
 		Xop_xnde_tag rv = new Xop_xnde_tag(id, name);

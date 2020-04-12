@@ -60,12 +60,6 @@ public class XophpString__tst {
 		fxt.Test__strpos("aba", "a", 1, 2);
 		fxt.Test__strpos("aba", "a", -2, 2);
 	}
-	@Test  public void strspn() {
-		fxt.Test__strspn("42 is the answer to the 128th question", fxt.Init__strspn_hash("1234567890"), 0, Int_.Min_value, 2);
-		fxt.Test__strspn("foo", fxt.Init__strspn_hash("o"), 0, Int_.Min_value, 0);
-		fxt.Test__strspn("foo", fxt.Init__strspn_hash("o"), 1, 2, 2);
-		fxt.Test__strspn("foo", fxt.Init__strspn_hash("o"), 1, 1, 1);
-	}
     @Test  public void rtrim() {
 		// pad is 0, 1 char
 		fxt.Test__rtrim("0100", "", "0100"); // empty pad returns String
@@ -94,6 +88,48 @@ public class XophpString__tst {
 		// REF.MW:https://www.php.net/manual/en/function.trim.php
 		fxt.Test__rtrim("\u00A0µ déjà\u00A0", "\u00A0", "\u00A0µ déj�");// NOTE: technically should be "...j\xC3", but String_.new_u8 ignores invalid bytes
 	}
+    @Test  public void ltrim() {
+		// pad is 0, 1 char
+		fxt.Test__ltrim("0010", "", "0010"); // empty pad returns String
+		fxt.Test__ltrim("010", "0", "10"); // basic test; trim 1;
+		fxt.Test__ltrim("0010", "0", "10"); // basic test; trim 2;
+		fxt.Test__ltrim("10", "0", "10"); // nothing to trim
+
+		// pad is 2+char
+		fxt.Test__ltrim("10ab10", "01", "ab10"); // basic test
+		fxt.Test__ltrim("10ab10", "34", "10ab10"); // nothing to trim
+		fxt.Test__ltrim("10ab10", "010", "ab10"); // don't fail if repeated chars
+
+		// pad has ..
+		fxt.Test__ltrim("23ab23", "0..4", "ab23"); // basic test
+		fxt.Test__ltrim(".23ab23", "0.4", "23ab23"); // single dot is not range
+
+		// PHP samples
+		fxt.Test__ltrim("\t\tThese are a few words :) ...  ", " \t.", "These are a few words :) ...  ");
+		fxt.Test__ltrim("Hello World", "Hdle", "o World");
+		fxt.Test__ltrim("\u0009Example String\n", "\u0000..\u001F", "Example String\n");
+	}
+    @Test  public void trim() {
+		// pad is 0, 1 char
+		fxt.Test__trim("0010", "", "0010"); // empty pad returns String
+		fxt.Test__trim("010", "0", "1"); // basic test; trim 1;
+		fxt.Test__trim("00100", "0", "1"); // basic test; trim 2;
+		fxt.Test__trim("10", "0", "1"); // nothing to trim
+
+		// pad is 2+char
+		fxt.Test__trim("10ab10", "01", "ab"); // basic test
+		fxt.Test__trim("10ab10", "34", "10ab10"); // nothing to trim
+		fxt.Test__trim("10ab10", "010", "ab"); // don't fail if repeated chars
+
+		// pad has ..
+		fxt.Test__trim("23ab23", "0..4", "ab"); // basic test
+		fxt.Test__trim(".23ab23.", "0.4", "23ab23"); // single dot is not range
+
+		// PHP samples
+		fxt.Test__trim("\t\tThese are a few words :) ...  ", " \t.", "These are a few words :)");
+		fxt.Test__trim("Hello World", "Hdle", "o Wor");
+		fxt.Test__trim("\u0009Example String\n", "\u0000..\u001F", "Example String");
+	}
 	@Test  public void ord() {
 		fxt.Test__ord("a", 97); // 1 char
 		fxt.Test__ord("abc", 97); // 2+ chars takes first
@@ -108,6 +144,36 @@ public class XophpString__tst {
 		fxt.Test__Fmt("axyz", "a$xb$yc$zd", "x", "y", "z"); // multiple
 		fxt.Test__Fmt("a$0b", "a$0b", "z"); // invalid identifier
 		fxt.Test__Fmt("a0", "a$xyz0b", "0"); // long identifier
+	}
+	@Test  public void strrev() {
+		fxt.Test__strrev("", "");
+		fxt.Test__strrev("Hello world!", "!dlrow olleH");
+		fxt.Test__strrev("☆❤world", "dlrow❤☆");
+		fxt.Test__strrev("a¢€𤭢b", "b𤭢€¢a");
+	}
+	@Test  public void str_repeat() {
+		fxt.Test__str_repeat("-=", 10, "-=-=-=-=-=-=-=-=-=-=");
+	}
+	@Test  public void strspn() {
+		fxt.Test__strspn(1, "<-", "abc", "abc", -1);
+
+		// PHP samples
+		fxt.Test__strspn(2, "<-", "42 is the answer to the 128th question", "1234567890");
+		fxt.Test__strspn(0, "<-", "foo", "o");
+		fxt.Test__strspn(2, "<-", "foo", "o", 1, 2);
+		fxt.Test__strspn(1, "<-", "foo", "o", 1, 1);
+	}
+	@Test  public void strcspn() {
+		fxt.Test__strcspn(3, "abc", "x", 0);
+		fxt.Test__strcspn(3, "abc", "x", -5);
+
+		// PHP samples
+		fxt.Test__strcspn(0, "abcd", "apple");
+		fxt.Test__strcspn(0, "abcd", "banana");
+		fxt.Test__strcspn(2, "hello", "l");
+		fxt.Test__strcspn(2, "hello", "world");
+		fxt.Test__strcspn(5, "abcdhelloabcd", "abcd", -9);
+		fxt.Test__strcspn(4, "abcdhelloabcd", "abcd", -9, -5);
 	}
 }
 class XophpString__fxt {
@@ -149,8 +215,10 @@ class XophpString__fxt {
 		Gftest.Eq__int(expd, XophpString_.strpos(haystack, needle, offset));
 	}
 	public Hash_adp Init__strspn_hash(String mask) {return XophpString_.strspn_hash(mask);}
-	public void Test__strspn(String subject, Hash_adp mask, int start, int length, int expd) {
-		int actl = XophpString_.strspn(subject, mask, start, length);
+	public void Test__strspn(int expd, String ignore, String subject, String mask)            {Test__strspn(expd, ignore, subject, mask, Int_.Zero, Int_.Zero);}
+	public void Test__strspn(int expd, String ignore, String subject, String mask, int start) {Test__strspn(expd, ignore, subject, mask,     start, Int_.Zero);}
+	public void Test__strspn(int expd, String ignore, String subject, String mask, int start, int length) {
+		int actl = XophpString_.strspn(subject, XophpString_.strspn_hash(mask), start, length);
 		Gftest.Eq__int(expd, actl);
 	}
 	public void Test__rtrim(String str, String character_mask, String expd) {
@@ -168,10 +236,27 @@ class XophpString__fxt {
 		}
 		Gftest.Fail("expected failure, but got none: " + character_mask);
 	}
+	public void Test__ltrim(String str, String character_mask, String expd) {
+		Gftest.Eq__str(expd, XophpString_.ltrim(str, character_mask));
+	}
+	public void Test__trim(String str, String character_mask, String expd) {
+		Gftest.Eq__str(expd, XophpString_.trim(str, character_mask));
+	}
 	public void Test__ord(String str, int expd) {
 		Gftest.Eq__int(expd, XophpString_.ord(str));
 	}
 	public void Test__Fmt(String expd, String fmt, Object... args) {
 		Gftest.Eq__str(expd, XophpString_.Fmt(fmt, args));
+	}
+	public void Test__strrev(String src, String expd) {
+		Gftest.Eq__str(expd, XophpString_.strrev(src));
+	}
+	public void Test__str_repeat(String input, int multiplier, String expd) {
+		Gftest.Eq__str(expd, XophpString_.str_repeat(input, multiplier));
+	}
+	public void Test__strcspn(int expd, String subject, String mask)            {Test__strcspn(expd, subject, mask, Int_.Zero, Int_.Zero);}
+	public void Test__strcspn(int expd, String subject, String mask, int start) {Test__strcspn(expd, subject, mask,     start, Int_.Zero);}
+	public void Test__strcspn(int expd, String subject, String mask, int start, int length) {
+		Gftest.Eq__int(expd, XophpString_.strcspn(subject, XophpString_.strspn_hash(mask), start, length));
 	}
 }

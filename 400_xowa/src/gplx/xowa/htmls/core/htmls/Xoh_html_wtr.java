@@ -694,6 +694,14 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__maplink:
 			case Xop_xnde_tag_.Tid__template_styles:
 			case Xop_xnde_tag_.Tid__categoryTree:
+			// added new tags below; ISSUE#:636 DATE:2020-03-08
+			case Xop_xnde_tag_.Tid__audio:
+			case Xop_xnde_tag_.Tid__video:
+			case Xop_xnde_tag_.Tid__track:
+			case Xop_xnde_tag_.Tid__rtc:
+			case Xop_xnde_tag_.Tid__figure:
+			case Xop_xnde_tag_.Tid__figure_inline:
+			case Xop_xnde_tag_.Tid__figcaption:
 				Xox_xnde xtn = xnde.Xnde_xtn();
 				xtn.Xtn_write(bfr, app, ctx, this, hctx, page, xnde, src);
 				break;
