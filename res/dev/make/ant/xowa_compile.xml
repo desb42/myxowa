@@ -36,7 +36,7 @@
         <javac includeantruntime="false" target="${jdk}" source="${jdk}" sourcepath=""
 		  srcdir   ="${root_dir}/src/140_dbs"
 		  destdir  ="${root_dir}/src/140_dbs/bin"
-		  classpath="${root_dir}/src/lib/junit.jar:${root_dir}/src/100_core/bin:${root_dir}/bin/any/java/jdbc/sqlite/sqlite-jdbc-3.18.0.jar">
+		  classpath="${root_dir}/src/lib/junit.jar:${root_dir}/src/100_core/bin:${root_dir}/bin/any/java/jdbc/sqlite/sqlite-jdbc-3.30.1.jar">
           <include name="**/*.java"/>
         </javac>
     </target>
