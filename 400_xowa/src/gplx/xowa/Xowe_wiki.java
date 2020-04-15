@@ -88,6 +88,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		this.maxpage = new Db_maxpage(this);
 		this.index_page = new Db_index_page(this);
 		this.tz_mgr = new Db_tz_mgr(this);
+		this.page_image = new Db_page_image(this);
 	}
 	public Gfo_evt_mgr				Evt_mgr() {return ev_mgr;} private final    Gfo_evt_mgr ev_mgr;
 	public Xow_ns_mgr				Ns_mgr() {return ns_mgr;} private final    Xow_ns_mgr ns_mgr;
@@ -161,6 +162,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public Db_maxpage				Maxpage() {return maxpage;} private Db_maxpage maxpage;
 	public Db_index_page			Index_page() {return index_page;} private Db_index_page index_page;
 	public Db_tz_mgr				Tz_mgr() {return tz_mgr;} private Db_tz_mgr tz_mgr;
+	public Db_page_image			Page_image() {return page_image;} private Db_page_image page_image;
 	private byte[] tagline = null;
 	public byte[] Tagline() {
 		tagline = msg_mgr.Val_by_key_obj("tagline");

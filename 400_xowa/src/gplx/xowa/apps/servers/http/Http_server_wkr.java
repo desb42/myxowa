@@ -31,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import gplx.core.brys.fmtrs.*;
+import gplx.xowa.files.Xof_file_wkr_;
+import gplx.xowa.files.*;
 public class Http_server_wkr implements Gfo_invk {
         private static String rootdir;
 	private final    int uid;
@@ -127,18 +129,76 @@ public class Http_server_wkr implements Gfo_invk {
 				Xosrv_http_wkr_.Write_redirect(client_wtr, page.Redirect());
 				return;
 			}
-                        else if (url_parser.Action() == Xopg_view_mode_.Tid__firstpara) {
+			else if (url_parser.Action() == Xopg_view_mode_.Tid__firstpara) {
 				if (page.Page() != null) {
 					wikitext = page.Page().Db().Text().Text_bry();
 				}
-                                Bry_bfr bfr = Bry_bfr_.New();
-                                byte[] stype = Bry_.new_a7("standard");
-                                byte[] page_title = page.Ttl().Full_db_wo_ns();
-                                json_fmtr.Bld_bfr_many(bfr, stype, page_title, page.Page().Db().Page().Id(), Bry_.Empty, Bry_.Empty, ws.First_para(wikitext, page.Ttl()));
+				byte[] thumb = null;
+				byte[] orig = null;
+				Db_page_image_ pi = page.Wiki().Page_image().Get_page_image(page.Page().Db().Page().Id());
+				Bry_bfr bfr = Bry_bfr_.New();
+				if (pi.height > 0) {
+					Xoa_ttl ttl = Xoa_ttl.Parse(page.Wiki(), pi.pi_title);
+					Xof_ext ext = Xof_ext_.new_by_ttl_(pi.pi_title);
+					byte[] fname = ttl.Full_db_href();
+					byte[] site = Bry_.new_a7("commons");
+					if (pi.site_id == 1 || pi.site_id == 11)
+						site = Bry_.new_a7("en"); // should be the wiki language?
+					byte[] md5 = Xof_file_wkr_.Md5(pi.pi_title);
+					byte[] md5_subdir = Bry_.Add(Bry_.Mid(md5, 0, 1), Byte_ascii.Slash_bry, Bry_.Mid(md5, 0, 2));
+					byte[] extension = null;
+					switch (ext.Id()) {
+						case Xof_ext_.Id_svg:
+						case Xof_ext_.Id_stl:
+						case Xof_ext_.Id_xcf:
+						case Xof_ext_.Id_bmp:
+							extension = Bry_.new_a7(".png");
+							break;
+						case Xof_ext_.Id_webm:
+						case Xof_ext_.Id_webp:
+						case Xof_ext_.Id_ogv:
+						case Xof_ext_.Id_oga:
+						case Xof_ext_.Id_ogg:
+						case Xof_ext_.Id_tif:
+						case Xof_ext_.Id_tiff:
+						case Xof_ext_.Id_pdf:
+						case Xof_ext_.Id_djvu:
+							extension = Bry_.new_a7(".jpg");
+							break;
+					}
 
-                                page_html = String_.new_u8(bfr.To_bry());
-                            
-                        }
+/*					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 's') // .svg .stl
+						ext = Bry_.new_a7(".png");
+					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 'x') // .xcf
+						ext = Bry_.new_a7(".png");
+					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 'b') // .bmp
+						ext = Bry_.new_a7(".png");
+					if (fname[fname.length-5] == '.' && fname[fname.length-4] == 'w') // .webm
+						ext = Bry_.new_a7(".jpg");
+					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 'o') // .ogv .oga
+						ext = Bry_.new_a7(".jpg");
+					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 't') // .tif
+						ext = Bry_.new_a7(".jpg");
+					if (fname[fname.length-5] == '.' && fname[fname.length-4] == 't') // .tiff
+						ext = Bry_.new_a7(".jpg");
+					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 'p') // .pdf
+						ext = Bry_.new_a7(".jpg");
+					if (fname[fname.length-5] == '.' && fname[fname.length-4] == 'd') // .djvu
+						ext = Bry_.new_a7(".jpg");*/
+					thumb_fmtr.Bld_bfr_many(bfr, site, md5_subdir, fname, extension, pi.width/2, pi.height/2);
+					thumb = bfr.To_bry_and_clear();
+    //thumb = Bry_.new_u8("\"thumbnail\": {\"source\": \"/xowa/api/wikipedia/en/thumb/1/12/Flag_of_Poland.svg/40px-Flag_of_Poland.svg.png\",\"width\":640,\"height\":400},");
+					orig_fmtr.Bld_bfr_many(bfr, site, md5_subdir, fname, pi.width, pi.height);
+					orig = bfr.To_bry_and_clear();
+    //orig = Bry_.new_u8("\"originalimage\":{\"source\":\"/xowa/api/wikipedia/en/1/12/Flag_of_Poland.svg\",\"width\":1280,\"height\":800},");
+				}
+				byte[] stype = Bry_.new_a7("standard");
+				byte[] page_title = page.Ttl().Full_db_wo_ns();
+				json_fmtr.Bld_bfr_many(bfr, stype, page_title, page.Page().Db().Page().Id(), thumb, orig, ws.First_para(wikitext, page.Ttl()));
+
+				page_html = String_.new_u8(bfr.To_bry());
+
+			}
 			else {
 				page_html = page.Html();
 				byte[] stripped = null;
@@ -536,7 +596,7 @@ public class Http_server_wkr implements Gfo_invk {
 	public static byte[] Replace_fsys_hack(byte[] html_bry) {
 		// init
 		Bry_bfr bfr = Bry_bfr_.New();
-                if (html_bry == null) return null;
+		if (html_bry == null) return null;
 		int len = html_bry.length;
 		int pos = 0;
 	  int bgn = 0;
@@ -753,10 +813,14 @@ public class Http_server_wkr implements Gfo_invk {
 	  Url__fsys = Bry_.new_a7("/fsys/")
 	;
 	private static final    int Url__fsys_len = Url__fsys.length;
-        private static final    Bry_fmtr
-                json_fmtr = Bry_fmtr.new_
+	private static final    Bry_fmtr
+	  json_fmtr = Bry_fmtr.new_
 	("{\"type\":\"~{stype}\",\"title\":\"~{page_title}\",\"displaytitle\":\"~{page_title}\",\"namespace\":{\"id\":0,\"text\":\"\"},\"wikibase_item\":\"Q820802\",\"titles\":{\"canonical\":\"Berkane_Province\",\"normalized\":\"Berkane Province\",\"display\":\"Berkane Province\"},\"pageid\":~{page_id},~{thumb}~{orig}\"lang\":\"en\",\"dir\":\"ltr\",\"revision\":\"922573281\",\"tid\":\"1005aac0-f526-11e9-b822-5d02d224142b\",\"timestamp\":\"2019-10-22T23:45:38Z\",\"description\":\"Province in Oriental, Morocco\",\"coordinates\":{\"lat\":34.917614,\"lon\":-2.317469},\"content_urls\":{\"desktop\":{\"page\":\"https://en.wikipedia.org/wiki/Berkane_Province\",\"revisions\":\"https://en.wikipedia.org/wiki/Berkane_Province?action=history\",\"edit\":\"https://en.wikipedia.org/wiki/Berkane_Province?action=edit\",\"talk\":\"https://en.wikipedia.org/wiki/Talk:Berkane_Province\"},\"mobile\":{\"page\":\"https://en.m.wikipedia.org/wiki/Berkane_Province\",\"revisions\":\"https://en.m.wikipedia.org/wiki/Special:History/Berkane_Province\",\"edit\":\"https://en.m.wikipedia.org/wiki/Berkane_Province?action=edit\",\"talk\":\"https://en.m.wikipedia.org/wiki/Talk:Berkane_Province\"}},\"api_urls\":{\"summary\":\"https://en.wikipedia.org/api/rest_v1/page/summary/Berkane_Province\",\"metadata\":\"https://en.wikipedia.org/api/rest_v1/page/metadata/Berkane_Province\",\"references\":\"https://en.wikipedia.org/api/rest_v1/page/references/Berkane_Province\",\"media\":\"https://en.wikipedia.org/api/rest_v1/page/media/Berkane_Province\",\"edit_html\":\"https://en.wikipedia.org/api/rest_v1/page/html/Berkane_Province\",\"talk_page_html\":\"https://en.wikipedia.org/api/rest_v1/page/html/Talk:Berkane_Province\"},\"extract\":\"abcdfe\",\"extract_html\":\"~{para}\"}",
-                "stype", "page_title", "page_id", "thumb", "orig", "para");
+                "stype", "page_title", "page_id", "thumb", "orig", "para")
+	, thumb_fmtr = Bry_fmtr.new_("\"thumbnail\": {\"source\": \"/xowa/api/wikipedia/~{site}/thumb/~{md5}/~{fname}/40px-~{fname}~{ext}\",\"width\":~{width},\"height\":~{height}},",
+	              "site", "md5", "fname", "ext", "width", "height")
+	, orig_fmtr = Bry_fmtr.new_("\"originalimage\":{\"source\":\"/xowa/api/wikipedia/~{site}/~{md5}/~{fname}\",\"width\":~{width},\"height\":~{height}},",
+	              "site", "md5", "fname", "width", "height")
 	;
 }
 class Xosrv_http_wkr_ {

@@ -48,7 +48,9 @@ public class Db_wikistrip {
             return pos;
 	}
 	private int findclosingsquiggle(byte[] src, int src_len, int pos) {
-		int levelcount = 0;
+		int levelcount = 1;
+		int endpos = 0;
+		int startpos = pos;
 		while (pos < src_len) {
 			byte b = src[pos++];
 			switch (b) {
@@ -56,20 +58,57 @@ public class Db_wikistrip {
 					levelcount++;
 					break;
 				case '}':
-					if (levelcount == 0) {
-						return pos;
-					}
 					levelcount--;
+					if (levelcount == 0) {
+						endpos = pos;
+						pos = src_len; // terminate loop
+					}
 					break;
 				case '<':
 					pos = nowikicheck(src, src_len, pos);
 					break;
 			}
 		}
-		if (levelcount != 0)
-                {int a = 1;}
+		if (levelcount != 0 || endpos == 0) {
 			// report/note an error
-		return pos;
+			int beg = startpos - 10;
+			int end = startpos + 10;
+			if (beg < 0) beg = 0;
+			if (end >= src_len) end = src_len;
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed squiggle { ttl=~{0} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end));
+			return startpos + 1; // skip the '{'
+		}
+		return endpos;
+	}
+	private int findclosingbracket(byte[] src, int src_len, int pos) {
+		int levelcount = 1;
+		int endpos = 0;
+		int startpos = pos;
+		while (pos < src_len) {
+			byte b = src[pos++];
+			switch (b) {
+				case '(':
+					levelcount++;
+					break;
+				case ')':
+					levelcount--;
+					if (levelcount == 0) {
+						endpos = pos;
+						pos = src_len; // terminate loop
+					}
+					break;
+			}
+		}
+		if (levelcount != 0 || endpos == 0) {
+			// report/note an error
+			int beg = startpos - 10;
+			int end = startpos + 10;
+			if (beg < 0) beg = 0;
+			if (end >= src_len) end = src_len;
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed bracket ( ttl=~{0} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end));
+			return startpos + 1; // skip the '('
+		}
+		return endpos;
 	}
 	private boolean check_ns(byte[] src, int bgn, int end) {
 		int sz = end - bgn;
@@ -457,19 +496,35 @@ public class Db_wikistrip {
 								inbold = true;
 							}
 						}
-						// could be 5!!
+						else if (apos_count == 5) {
+							if (inbold && initalic) {
+								bfr.Add(Gfh_tag_.I_rhs);
+								initalic = false;
+								bfr.Add(Gfh_tag_.B_rhs);
+								inbold = false;
+							}
+							else {
+								bfr.Add(Gfh_tag_.B_lhs);
+								inbold = true;
+								bfr.Add(Gfh_tag_.I_lhs);
+								initalic = true;
+							}
+							// there are other combos!!
+						}
 						startpos = pos - 1;
 					}
-                                        if (pos < src_len)
-                                            pos--; // because we looked ahead
+					if (pos < src_len)
+						pos--; // because we looked ahead
 					break;
 				case '(':
 					if (firstbracket) {
-						bfr.Add_mid(src, startpos, pos-1);
 						firstbracket = false;
-						while (pos < src_len) {
-							if (src[pos++] == ')')
-								break;
+						bfr.Add_mid(src, startpos, pos-1);
+						// find matching close bracket
+						pos = findclosingbracket(src, src_len, pos);
+						if (src[pos] == ',') {
+							if (bfr.Bfr()[bfr.Len()-1] == ' ')
+								bfr.Len_(bfr.Len() - 1);
 						}
 						startpos = pos;
 						pos--;
@@ -490,19 +545,8 @@ public class Db_wikistrip {
 							nlcount++;
 							pos++;
 						}
-						else if (b == ' ') { // allow for lines just with spaces
-							int lpos = pos + 1;
-							while (lpos < src_len) {
-								b = src[lpos++];
-								if (b != ' ')
-									break;
-							}
-							if (b == '\n') {
-								nlcount++;
-								pos = lpos + 1;
-							}
-							else
-								break;
+						else if (b == ' ' || b == '\t') { // allow for lines just with spaces
+							pos++;
 						}
 						else
 							break;
