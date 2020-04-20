@@ -45,9 +45,23 @@ public class Db_wikistrip {
 
 	private Xoa_ttl ttl;
 	private int nowikicheck(byte[] src, int src_len, int pos) {
-            return pos;
+		return findclosingangle(src, src_len, pos);
+/*		if (pos < src_len) {
+			byte b = src[pos++];
+			if (b == '!') { // assume a comment
+				while (pos < src_len) {
+					b = src[pos++];
+					if (b == '-' && pos+2 < src_len) {
+						if (src[pos] == '-' && src[pos+1] == '>')
+							return pos + 2;
+					}
+				}
+				return pos;
+			}
+		}
+            return pos;*/
 	}
-	private int findclosingsquiggle(byte[] src, int src_len, int pos) {
+	private int findclosingsquiggle(byte[] src, int src_len, int pos, byte upchar) {
 		int levelcount = 1;
 		int endpos = 0;
 		int startpos = pos;
@@ -55,13 +69,26 @@ public class Db_wikistrip {
 			byte b = src[pos++];
 			switch (b) {
 				case '{':
-					levelcount++;
+					if (pos < src_len && src[pos] == upchar) { // must be {{ OR {|
+						levelcount++;
+						pos++;
+					}
 					break;
 				case '}':
-					levelcount--;
-					if (levelcount == 0) {
-						endpos = pos;
-						pos = src_len; // terminate loop
+					if (upchar == '|' && src[pos-2] == '|') {
+						levelcount--;
+						if (levelcount == 0) {
+							endpos = pos;
+							pos = src_len; // terminate loop
+						}
+					}
+					else if (pos < src_len && src[pos] == '}') { // must be }}
+						levelcount--;
+  					pos++;
+						if (levelcount == 0) {
+							endpos = pos;
+							pos = src_len; // terminate loop
+						}
 					}
 					break;
 				case '<':
@@ -152,7 +179,7 @@ public class Db_wikistrip {
 			int end = startpos + 10;
 			if (beg < 0) beg = 0;
 			if (end >= src_len) end = src_len;
-			Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed [ pos=~{2} ttl=~{0} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end), startpos);
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed [ ttl=~{0} pos=~{2} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end), startpos);
 			return startpos + 1; // skip the '['
 		}
 		// check for File: and Category: [what about other langage wikis?]
@@ -189,7 +216,7 @@ public class Db_wikistrip {
 				nameend = pos - 1;
 				break;
 			}
-			else if (b == ' ') { // find close (check for self closing)
+			else if (b == ' ' || b == '\t' || b == '\n') { // find close (check for self closing)
 				nameend = pos - 1;
 				while (pos < src_len) {
 					b = src[pos++];
@@ -214,6 +241,18 @@ public class Db_wikistrip {
 				continue;
 			else
 				return namestart; // ignore the '<'
+		}
+		// check for special <br > <hr > <img >
+                //System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend)));
+		if (nameend - namestart == 2) {
+			if (src[namestart] == 'b' && src[namestart+1] == 'r')
+				return pos;
+			if (src[namestart] == 'h' && src[namestart+1] == 'r')
+				return pos;
+		}
+		else if (nameend - namestart == 3) {
+			if (src[namestart] == 'i' && src[namestart+1] == 'm' && src[namestart+1] == 'g')
+				return pos;
 		}
 		// now find the close (or a nesting!)
 		while (pos < src_len) {
@@ -284,7 +323,7 @@ public class Db_wikistrip {
 						}
 						else*/ if (b == '{' || b == '|') {
 							bfr.Add_mid(src, startpos, pos-1);
-							pos = findclosingsquiggle(src, src_len, pos);
+							pos = findclosingsquiggle(src, src_len, pos, b);
 							startpos = pos;
 						}
 					}
@@ -522,7 +561,7 @@ public class Db_wikistrip {
 						bfr.Add_mid(src, startpos, pos-1);
 						// find matching close bracket
 						pos = findclosingbracket(src, src_len, pos);
-						if (src[pos] == ',') {
+						if (pos < src_len && src[pos] == ',') {
 							if (bfr.Bfr()[bfr.Len()-1] == ' ')
 								bfr.Len_(bfr.Len() - 1);
 						}

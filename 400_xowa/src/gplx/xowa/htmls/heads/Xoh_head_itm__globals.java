@@ -33,12 +33,18 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 			Io_url j_dir = app.Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "html", "res", "lib", "jquery");
                         Url_jquery = j_dir.GenSubFil("jquery-3.3.1.js").To_http_file_bry();
                         Url_jquery_webfont = j_dir.GenSubFil("jquery.webfonts.js").To_http_file_bry();
+			Url_redirect_js = app.Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "html", "res", "lib").GenSubFil("mediawiki.action.view.redirect.js").To_http_file_bry();
 		}
 		wtr.Write_js_include(Url_jquery);
 		wtr.Write_js_include(Url_jquery_webfont);
 		wtr.Write_js_include(Url_core_js);
 //		wtr.Write_js_include(Url_exec_js);
 		wtr.Write_js_include(Url_DOMContentLoaded_js);
+
+                if (page.Redirect_trail().Itms__len() > 0) {
+		wtr.Write_js_include(Url_redirect_js);
+                }
+                    
 	}
 	@Override public void Write_js_head_script(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Xoh_head_wtr wtr) {
 		wtr.Write_js_var(Var_xowa_root_dir			, Bool_.Y, app.Fsys_mgr().Root_dir().To_http_file_bry());
@@ -103,6 +109,12 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		tmp.Add(page.Wiki().Domain_bry());
 		tmp.Add(Bry_.new_a7("/wiki/$1\","));
 
+                if (page.Redirect_trail().Itms__len() > 0) {
+		tmp.Add(Bry_.new_a7("\n \"wgInternalRedirectTargetUrl\" : \""));
+		tmp.Add(page.Ttl().Page_url_w_anch());
+		tmp.Add(Bry_.new_a7("\","));
+                    
+                }
 		// list of categories (not hidden)
 		tmp.Add(Bry_.new_a7("\n \"wgCategories\":["));
 		Xoctg_double_grp grp = page.Grp_normal();
@@ -170,5 +182,5 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	, Var_xowa_root_dir				= Bry_.new_a7("xowa_root_dir")
 	, Var_xowa_mode_is_server		= Bry_.new_a7("xowa_mode_is_server")
 	;
-	private static byte[] Url_core_css, Url_core_js, Url_exec_js, Url_DOMContentLoaded_js, Url_jquery, Url_jquery_webfont;
+	private static byte[] Url_core_css, Url_core_js, Url_exec_js, Url_DOMContentLoaded_js, Url_jquery, Url_jquery_webfont, Url_redirect_js;
 }
