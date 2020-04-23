@@ -207,6 +207,18 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			return Html::rawElement( 'a', $attrs );
 		}
 */
+		byte[] groups = cvt(this.show);
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		Fmt__params.Bld_many(tmp_bfr, this.lang, ctx.Wiki().Domain_bry(), cvt(ctx.Page().Ttl().Full_txt()), groups);
+		byte[] params = tmp_bfr.To_bry_and_clear();
+
+		//byte[] server = Bry_.new_a7("https://maps.wikimedia.org");
+		byte[] server = Bry_.new_a7("//www.xowa.com/xowa/api/maps.wikimedia.org");
+		Fmt__img.Bld_many(tmp_bfr, server, this.mapstyle, staticZoom, staticLat, staticLon, staticWidth, this.height, params, staticWidth, this.height);
+		byte[] img = tmp_bfr.To_bry_and_clear();
+		//System.out.println(String_.new_a7(img));
+		Gfo_usr_dlg_.Instance.Warn_many("", "", "mapping: page=~{0} mapimg=~{1}", ctx.Page().Ttl().Full_db(), img);
+
 		if ( !framed ) {
 			//$attrs['class'] .= " {$containerClass} {$alignClasses[$this->align]}";
 			klass = Bry_.Add(klass, 
@@ -219,7 +231,7 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 				this.align = Bry_.Add(Bry_.new_a7("float"), this.align);
 			klass = Bry_.Add(klass, this.align);
 
-			Fmt__raw.Bld_many(bfr, klass, attrs, style);
+			Fmt__raw.Bld_many(bfr, klass, attrs, style, img);
 			return;
 		}
 /*
@@ -235,14 +247,14 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			this.align = Bry_.Add(Bry_.new_a7("t"), this.align);
 		containerClass = Bry_.Add(containerClass, Bry_.new_a7(" thumb "), this.align);
 
-		Fmt__frame.Bld_many(bfr, containerClass, width, attrs, style, caption);
+		Fmt__frame.Bld_many(bfr, containerClass, width, klass, attrs, style, img, caption);
 	}
 	private static final	Bry_fmt
 	  Fmt__frame = Bry_fmt.Auto_nl_skip_last
 	( ""
 	, "<div class=\"~{conatinerClass}\">"
 	, " <div class=\"thumbinner\" style=\"width: ~{width};\">"
-	, "  <a ~{attrs} style=\"~{style}\"></a>"
+	, "  <a class=\"~{klass}\" ~{attrs} style=\"~{style}\">~{img}</a>"
 	, "  <div class=\"thumbcaption\">"
 	, "   ~{caption}"
 	, "  </div>"
@@ -252,6 +264,62 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	private static final	Bry_fmt
 	  Fmt__raw = Bry_fmt.Auto_nl_skip_last
 	( ""
-	, "<a class=\"~{klass}\" ~{attrs} style=\"~{style}\"></a>"
+	, "<a class=\"~{klass}\" ~{attrs} style=\"~{style}\">~{img}</a>"
 	);
+	private static final	Bry_fmt
+	  Fmt__params = Bry_fmt.Auto_nl_skip_last
+	( "lang=~{lang}&domain=~{domain}&title=~{title}&groups=~{groups}"
+	);
+	private static final	Bry_fmt
+	  Fmt__img = Bry_fmt.Auto_nl_skip_last
+	( ""
+	, "<img src=\"~{mapserver}/img/~{mapstyle},~{zoom},~{lat},~{lon},~{width}x~{height}.png?~{params}\" alt=\"\" width=\"~{width}\" height=\"~{height}\" decoding=\"async\" />"
+	);
+	private byte[] cvt (byte[] src) {
+		int pos = 0;
+		int src_len = src.length;
+		Bry_bfr bfr = Bry_bfr_.New();
+		int start = 0;
+		while (pos < src_len) {
+			byte b = src[pos++];
+			switch (b) {
+				case '/':
+					bfr.Add_mid(src, start, pos - 1);
+					bfr.Add_str_a7("%2F");
+					start = pos;
+					break;
+
+				case ',':
+					bfr.Add_mid(src, start, pos - 1);
+					bfr.Add_str_a7("%2C");
+					start = pos;
+					break;
+
+				case ' ':
+					bfr.Add_mid(src, start, pos - 1);
+					bfr.Add_byte(Byte_ascii.Plus);
+					start = pos;
+					break;
+			}
+			if (b < 0) {
+				if (pos - start > 0)
+					bfr.Add_mid(src, start, pos - 1);
+				int b_int = b & 0xFF;// PATCH.JAVA:need to convert to unsigned byte
+				bfr.Add_byte(Byte_ascii.Percent);
+				bfr.Add_byte(HexBytes[b_int >> 4]);
+				bfr.Add_byte(HexBytes[b_int & 15]);
+				start = pos;
+			}
+		}
+		if (start > 0) {
+			bfr.Add_mid(src, start, pos);
+			return bfr.To_bry_and_clear();
+		}
+		else
+			return src;
+	}
+	private static final    byte[] HexBytes = new byte[] 
+	{	Byte_ascii.Num_0, Byte_ascii.Num_1, Byte_ascii.Num_2, Byte_ascii.Num_3, Byte_ascii.Num_4, Byte_ascii.Num_5, Byte_ascii.Num_6, Byte_ascii.Num_7
+	,	Byte_ascii.Num_8, Byte_ascii.Num_9, Byte_ascii.Ltr_A, Byte_ascii.Ltr_B, Byte_ascii.Ltr_C, Byte_ascii.Ltr_D, Byte_ascii.Ltr_E, Byte_ascii.Ltr_F
+	};
 }

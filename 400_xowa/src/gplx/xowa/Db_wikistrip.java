@@ -218,6 +218,8 @@ public class Db_wikistrip {
 			}
 			else if (b == ' ' || b == '\t' || b == '\n') { // find close (check for self closing)
 				nameend = pos - 1;
+                                if (nameend - namestart == 0)
+                                    return pos;
 				while (pos < src_len) {
 					b = src[pos++];
 					if (b == '>') {
@@ -243,15 +245,15 @@ public class Db_wikistrip {
 				return namestart; // ignore the '<'
 		}
 		// check for special <br > <hr > <img >
-                //System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend)));
+                System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend)));
 		if (nameend - namestart == 2) {
-			if (src[namestart] == 'b' && src[namestart+1] == 'r')
+			if ((src[namestart] | 32) == 'b' && (src[namestart+1] | 32) == 'r')
 				return pos;
-			if (src[namestart] == 'h' && src[namestart+1] == 'r')
+			if ((src[namestart] | 32) == 'h' && (src[namestart+1] | 32) == 'r')
 				return pos;
 		}
 		else if (nameend - namestart == 3) {
-			if (src[namestart] == 'i' && src[namestart+1] == 'm' && src[namestart+1] == 'g')
+			if ((src[namestart] | 32) == 'i' && (src[namestart+1] | 32) == 'm' && (src[namestart+1] | 32) == 'g')
 				return pos;
 		}
 		// now find the close (or a nesting!)
@@ -310,20 +312,37 @@ public class Db_wikistrip {
 				case '{':
 					if (pos < src_len) {
 						b = src[pos];
-						/*if (b == '|') { // check for a table
+						if (b == '{' || b == '|') {
 							bfr.Add_mid(src, startpos, pos-1);
-							while (pos < src_len) { // find close table
-								b = src[pos++];
-								if (b == '|' && pos < src_len && src[pos] == '}') {
-									pos++;
-									break;
+							int namestart = pos + 1;
+							pos = findclosingsquiggle(src, src_len, pos, b);
+							if (b == '{' && pos-startpos > 10) {
+								int npos = 0; 
+								int textstart = -1;
+								if (src[namestart] == 'l' && src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && src[namestart+4] == '|') {
+									npos = namestart + 5;
+									while (npos < pos) {
+										b = src[npos++];
+										if (b == '|') {
+											textstart = npos;
+											break;
+										}
+									}
+								}
+								else if (src[namestart] == 'n' && src[namestart+1] == 'i' && src[namestart+2] == 'h' && src[namestart+3] == 'o' && src[namestart+4] == 'n' && src[namestart+5] == 'g' && src[namestart+6] == 'o' && src[namestart+7] == '|') {
+									npos = namestart + 8;
+									textstart = npos;
+								}
+								if (textstart > 0) {
+									while (npos < pos) {
+										b = src[npos++];
+										if (b == '|' || b == '}') {
+											break;
+										}
+									}
+									bfr.Add_mid(src, textstart, npos-1);
 								}
 							}
-							startpos = pos;
-						}
-						else*/ if (b == '{' || b == '|') {
-							bfr.Add_mid(src, startpos, pos-1);
-							pos = findclosingsquiggle(src, src_len, pos, b);
 							startpos = pos;
 						}
 					}
