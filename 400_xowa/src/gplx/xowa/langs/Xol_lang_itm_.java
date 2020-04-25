@@ -279,6 +279,6 @@ kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_pagelanguage, "PAGELANGUAGE");
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_expectunusedcategory, "__EXPECTUNUSEDCATEGORY__");
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_nonewsectionlink, "__NONEWSECTIONLINK__");
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_shortdesc, "SHORTDESC");
-kwd_mgr.New(Bool_.N, Xol_kwd_grp_.Id_related, "#related");
+kwd_mgr.New(Bool_.N, Xol_kwd_grp_.Id_related, "#xxxrelated"); // duplicate
 	}
 }

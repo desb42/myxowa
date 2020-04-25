@@ -61,7 +61,81 @@ public class Db_wikistrip {
 		}
             return pos;*/
 	}
-	private int findclosingsquiggle(byte[] src, int src_len, int pos, byte upchar) {
+	// find matching two {{ or three {{{
+	private int findclosingsquiggle(byte[] src, int src_len, int pos) {
+		int startpos = pos;
+		int scount = 2;
+		while (pos < src_len) {
+			if (src[pos] == '{') {
+				pos++;
+				scount++;
+			}
+			else
+				break;
+		}
+		if (scount >= 3) {
+			pos = findclosingsquiggle(src, src_len, pos - scount + 3, 3);
+		}
+		else
+			pos = findclosingsquiggle(src, src_len, pos, 2);
+		if (pos < 0) {
+			// report/note an error
+			int beg = startpos - 10;
+			int end = startpos + 10;
+			if (beg < 0) beg = 0;
+			if (end >= src_len) end = src_len;
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed squiggle { ttl=~{0} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end));
+			return startpos;
+		}
+		return pos;
+	}
+
+	private int findclosingsquiggle(byte[] src, int src_len, int pos, int count) {
+		int scount;
+		while (pos < src_len) {
+			byte b = src[pos++];
+			switch (b) {
+				case '{':
+					scount = 1;
+					while (pos < src_len) {
+						if (src[pos] == '{') {
+							pos++;
+							scount++;
+						}
+						else
+							break;
+					}
+					if (scount == 1)
+						break; // do nutting
+					if (scount >= 3) {
+						pos = findclosingsquiggle(src, src_len, pos - scount + 3, 3);
+					}
+					else
+						pos = findclosingsquiggle(src, src_len, pos, 2);
+					break;
+				case '}':
+					scount = 1;
+					while (pos < src_len) {
+						if (src[pos] == '}') {
+							pos++;
+							scount++;
+						}
+						else
+							break;
+					}
+					if (scount == 1)
+						break; // do nutting
+					if (scount == count)
+						return pos;
+					return pos - scount + count;
+				case '<':
+					pos = nowikicheck(src, src_len, pos);
+					break;
+			}
+		}
+		return pos;
+	}
+	private int findclosingtable(byte[] src, int src_len, int pos) {
 		int levelcount = 1;
 		int endpos = 0;
 		int startpos = pos;
@@ -69,22 +143,14 @@ public class Db_wikistrip {
 			byte b = src[pos++];
 			switch (b) {
 				case '{':
-					if (pos < src_len && src[pos] == upchar) { // must be {{ OR {|
+					if (pos < src_len && src[pos] == '|') { // must be {|
 						levelcount++;
 						pos++;
 					}
 					break;
 				case '}':
-					if (upchar == '|' && src[pos-2] == '|') {
+					if (src[pos-2] == '|') {
 						levelcount--;
-						if (levelcount == 0) {
-							endpos = pos;
-							pos = src_len; // terminate loop
-						}
-					}
-					else if (pos < src_len && src[pos] == '}') { // must be }}
-						levelcount--;
-  					pos++;
 						if (levelcount == 0) {
 							endpos = pos;
 							pos = src_len; // terminate loop
@@ -102,7 +168,7 @@ public class Db_wikistrip {
 			int end = startpos + 10;
 			if (beg < 0) beg = 0;
 			if (end >= src_len) end = src_len;
-			Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed squiggle { ttl=~{0} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end));
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed table ttl=~{0} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end));
 			return startpos + 1; // skip the '{'
 		}
 		return endpos;
@@ -245,7 +311,7 @@ public class Db_wikistrip {
 				return namestart; // ignore the '<'
 		}
 		// check for special <br > <hr > <img >
-                System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend)));
+		//System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend+40)));
 		if (nameend - namestart == 2) {
 			if ((src[namestart] | 32) == 'b' && (src[namestart+1] | 32) == 'r')
 				return pos;
@@ -312,11 +378,16 @@ public class Db_wikistrip {
 				case '{':
 					if (pos < src_len) {
 						b = src[pos];
-						if (b == '{' || b == '|') {
+						if (b == '|') {
+							bfr.Add_mid(src, startpos, pos-1);
+							pos = findclosingtable(src, src_len, pos);
+							startpos = pos;
+						}
+						else if (b == '{') {
 							bfr.Add_mid(src, startpos, pos-1);
 							int namestart = pos + 1;
-							pos = findclosingsquiggle(src, src_len, pos, b);
-							if (b == '{' && pos-startpos > 10) {
+							pos = findclosingsquiggle(src, src_len, pos);
+							if (pos - startpos > 10) {
 								int npos = 0; 
 								int textstart = -1;
 								if (src[namestart] == 'l' && src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && src[namestart+4] == '|') {
@@ -431,6 +502,7 @@ public class Db_wikistrip {
 					break;
 			}
 		}
+                if (startpos < src_len)
 		bfr.Add_mid(src, startpos, src_len);
 		return bfr.To_bry();
 	}

@@ -94,7 +94,7 @@ class XoCssMinTstr {
     public void Test(String note, String orig, String expd, TestAssert.Grp... expdRules) {
         if (expdRules != null)
             min.DataCollectorMgr_(dataCollectorMgr);
-        String actl = min.cssmin(orig, -1, mode);
+        String actl = min.cssmin(orig, -1, "", mode);
         if (expdRules != null) {
             TestAssert.Test(note, dataCollectorMgr, expdRules);
         }
