@@ -129,9 +129,15 @@ public class Xoh_page_wtr_wkr {
 			redlinks = tmp_bfr.To_bry_and_clear();
 		}
 
+		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
+		byte[] page_mask_msg = Bry_.new_a7("pagetitle");
+		if (Bry_.Eq(Xoa_ttl.Replace_unders(page.Ttl().Raw()), wiki.Props().Main_page()))
+			page_mask_msg = Bry_.new_a7("pagetitle-view-mainpage");
+		byte[] page_title = Db_expand.Extracheck( msg_mgr.Val_by_key_args(page_mask_msg, page_name), "");
+
 		fmtr.Bld_bfr_many(bfr
 		, root_dir_bry, Xoa_app_.Version, Xoa_app_.Build_date, app.Tcp_server().Running_str()
-		, page.Db().Page().Id(), page.Ttl().Full_db_href(), page_name
+		, page.Db().Page().Id(), page.Ttl().Full_db_href(), page_title
 		, page.Html_data().Page_heading().Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), page_display_title)
 		, modified_on_msg
 		, mgr.Css_common_bry(), mgr.Css_wiki_bry()

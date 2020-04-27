@@ -29,6 +29,7 @@ class Http_url_parser {
 	public boolean Popup() {return popup;} public Http_url_parser Popup_(boolean v) {this.popup = v; return this;} private boolean popup;
 	public String Popup_id() {return popup_id;} public Http_url_parser Popup_id_(String v) {this.popup_id = v; return this;} private String popup_id;
 	public String Err_msg() {return err_msg;} public Http_url_parser Err_msg_(String v) {this.err_msg = v; return this;} private String err_msg;
+	public boolean Is_main_page() {return is_main_page;} public void Is_main_page_set() {is_main_page = true;}  private boolean is_main_page;
 //	public Gfo_qarg_mgr Qarg_mgr() {return qarg_mgr;} private Gfo_qarg_mgr qarg_mgr;
 
 	public String To_str() {
@@ -82,6 +83,7 @@ class Http_url_parser {
 				}
 			}
 
+                        is_main_page = false;
 			// get qargs
 			Gfo_qarg_itm[] qargs = url_obj.Qargs();
 			int qargs_len = qargs.length;
