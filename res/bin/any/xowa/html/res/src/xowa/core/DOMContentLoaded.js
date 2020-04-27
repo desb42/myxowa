@@ -183,7 +183,7 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/readmore/ext.relatedArticles.whole.js');
     }
 
-    if (x_p.wiki == 'en.wikivoyage.org' || x_p.wiki.substring(3) == 'wikipedia.org') {
+    if (x_p.wiki == 'en.wikivoyage.org' || x_p.wiki.substring(3) == 'wikipedia.org' || x_p.wiki == 'simple.wikipedia.org') {
 //      || x_p.wiki == 'it.wikipedia.org' || x_p.wiki == 'fr.wikipedia.org') {
       $(document).ready( xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/ext.popups.images.js') );
     }

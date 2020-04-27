@@ -40,7 +40,7 @@ module.exports = ( function ( $, mw, kartolink, router ) {
 			captionText = '';
 
 		// Prevent users from adding map divs directly via wikitext
-		if ( $el.attr( 'mw-data' ) !== 'interface' ) {
+		if ( $el.attr( 'mw-data' ) !== 'interface' && $el.attr( 'data-mw' ) !== 'interface') {
 			return null;
 		}
 
