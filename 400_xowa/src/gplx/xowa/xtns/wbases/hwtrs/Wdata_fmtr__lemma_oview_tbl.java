@@ -19,12 +19,12 @@ import gplx.langs.htmls.encoders.*; import gplx.xowa.langs.*; import gplx.langs.
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.apps.apis.xowa.xtns.*;
 class Wdata_fmtr__lemma_oview_tbl implements gplx.core.brys.Bfr_arg {
 	private Xoapi_wikibase wikibase_api; private Gfo_url_encoder href_encoder;
-        private Wdata_wiki_mgr wdata_mgr;
+	private Wdata_wiki_mgr wdata_mgr;
 	private Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(255);
 	private Wdata_doc wdoc;
 	public void Init_by_ctor(Xoapi_wikibase wikibase_api, Wdata_wiki_mgr wdata_mgr) {
-            this.wikibase_api = wikibase_api; this.wdata_mgr = wdata_mgr;
-        }
+		this.wikibase_api = wikibase_api; this.wdata_mgr = wdata_mgr;
+	}
 	public void Init_by_lang(byte[] lang_0, Wdata_hwtr_msgs msgs) {
 	}
 	public void Init_by_wdoc(Wdata_doc wdoc) {

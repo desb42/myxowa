@@ -32,9 +32,9 @@ public class Xoh_page_body_cls {	// REF.MW:Skin.php|getPageClasses
 					tmp_bfr.Add_byte_space().Add(Bry_wb_itempage).Add_byte(Byte_ascii.Dash).Add(ttl.Page_db());
 					break;
 				case 120: // Property
-					//tmp_bfr.Add_byte_space().Add(Bry_wb_entitypage);
-					//tmp_bfr.Add_byte_space().Add(Bry_wb_propertypage);
-					//tmp_bfr.Add_byte_space().Add(Bry_wb_propertypage).Add_byte(Byte_ascii.Dash).Add(ttl.Page_db());
+					tmp_bfr.Add_byte_space().Add(Bry_wb_entitypage);
+					tmp_bfr.Add_byte_space().Add(Bry_wb_propertypage);
+					tmp_bfr.Add_byte_space().Add(Bry_wb_propertypage).Add_byte(Byte_ascii.Dash).Add(ttl.Page_db());
 					break;
 				case 146: // Lexeme
 					tmp_bfr.Add_byte_space().Add(Bry_wb_entitypage);

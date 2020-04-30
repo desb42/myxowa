@@ -27,4 +27,5 @@ public interface Wdata_doc_parser {
 	Wbase_claim_grp_list Parse_qualifiers(byte[] qid, Json_nde nde);
 	int[] Parse_pid_order(byte[] qid, Json_ary ary);
 	Wbase_references_grp[] Parse_references(byte[] qid, Json_ary owner);
+	byte[] Parse_datatype(byte[] qid, Json_doc doc);
 }

@@ -31,10 +31,10 @@ public class Xotdb_page_itm_ {
 			( Base85_.To_int_by_bry	(bry, bgn +  0, bgn +  4)
 			, Base85_.To_int_by_bry	(bry, bgn +  6, bgn + 10)
 			, Base85_.To_int_by_bry	(bry, bgn + 12, bgn + 16)
-			,							 bry[18] == Byte_ascii.Num_1
+			, bry[18] == Byte_ascii.Num_1
 			, Base85_.To_int_by_bry	(bry, bgn + 20, bgn + 24)
 			, page.Ns_id()
-			, Bry_.Mid					(bry, bgn + 26, end)
+			, Bry_.Mid(bry, bgn + 26, end)
 			);
 		} catch (Exception e) {throw Err_.new_exc(e, "xo", "parse_by_ttl failed", "ttl", String_.new_u8(bry, bgn, end));}
 	}

@@ -29,6 +29,7 @@ public class Xopg_db_page {
 	public int			Html_db_id()		{return html_db_id;}		private int html_db_id;	
 	public int			Redirect_to_id()	{return redirect_to_id;}	private int redirect_to_id;
 	public int			Score()				{return score;}				private int score;
+	public int		Model_format()				{return model_format;}				private int model_format;
 
 	public void Exists_y_()							{this.Exists_(Bool_.Y);}
 	public void Exists_n_()							{this.Exists_(Bool_.N);}
@@ -37,6 +38,7 @@ public class Xopg_db_page {
 	public Xopg_db_page Score_(int v)				{this.score = v; return this;}
 	public Xopg_db_page Modified_on_(DateAdp v)		{this.modified_on = v; return this;}
 	public Xopg_db_page Html_db_id_(int v)			{this.html_db_id = v; return this;}
+	public void Model_format_(int v)			{this.model_format = v;}
 
 	// wiki-related
 	public Xow_ns		Ns()				{return ns;}				private Xow_ns ns;

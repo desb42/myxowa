@@ -32,6 +32,7 @@ public class Wdata_hwtr_mgr {
 	private final    Wdata_fmtr__slink_grp fmtr_slink = new Wdata_fmtr__slink_grp();
 	private final    Wdata_fmtr__oview_tbl fmtr_oview = new Wdata_fmtr__oview_tbl();
 	private final    Wdata_fmtr__lemma_oview_tbl fmtr_lemma_oview = new Wdata_fmtr__lemma_oview_tbl();
+	private final    Wdata_fmtr__datatype fmtr_datatype = new Wdata_fmtr__datatype();
 	private Wdata_lang_sorter lang_sorter = new Wdata_lang_sorter();		
 	public Bry_fmtr Fmtr_main() {return fmtr_main;} private final    Bry_fmtr fmtr_main = Bry_fmtr.new_("~{oview}~{toc}~{claims}~{links}~{labels}~{descriptions}~{aliases}~{json}", "oview", "toc", "claims", "links", "labels", "descriptions", "aliases", "json");
 	public Wdata_hwtr_msgs Msgs() {return msgs;} private Wdata_hwtr_msgs msgs;
@@ -76,6 +77,8 @@ public class Wdata_hwtr_mgr {
 		fmtr_alias.Init_by_wdoc(wdoc.Alias_list());
 		fmtr_json.Init_by_wdoc (wdoc.Jdoc());
 		lbl_mgr.Gather_labels(wdoc, lang_sorter);
+		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__property)
+			fmtr_datatype.Init_by_wdoc(wdoc.Datatype());
 	}
 	public byte[] Popup(Wdata_doc wdoc) {
 		Object fmtr;
@@ -109,6 +112,8 @@ public class Wdata_hwtr_mgr {
 		bfr.Add_str_a7("<div class=\"wikibase-entityview-main\">");
 		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme)
 			fmtr_main.Bld_bfr_many(bfr, fmtr_lemma_oview, fmtr_toc, fmtr_claim, fmtr_slink, fmtr_json); // senses and forms?
+		else if (wdoc.Type() == Wbase_claim_entity_type_.Tid__property)
+			fmtr_main.Bld_bfr_many(bfr, fmtr_oview, fmtr_toc, fmtr_datatype, fmtr_claim, fmtr_slink, fmtr_label, fmtr_descr, fmtr_alias, fmtr_json);
 		else
 			fmtr_main.Bld_bfr_many(bfr, fmtr_oview, fmtr_toc, fmtr_claim, fmtr_slink, fmtr_label, fmtr_descr, fmtr_alias, fmtr_json);
 		bfr.Add_str_a7("</div>");

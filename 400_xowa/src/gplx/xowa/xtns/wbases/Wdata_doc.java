@@ -30,6 +30,8 @@ public class Wdata_doc {
 	public int Jdoc_size() {return jdoc == null ? 1 : jdoc.Src().length;}
 	public byte[][] Sort_langs() {return sort_langs;} public void Sort_langs_(byte[][] v) {sort_langs = v;} private byte[][] sort_langs = Bry_.Ary_empty;
 
+	public byte[] Datatype() {if (datatype == null) datatype = mgr.Wdoc_parser(jdoc).Parse_datatype(qid, jdoc); return datatype;} private byte[] datatype;
+
 	// NOTE: lazy instantiation b/c we don't want to parse entire json unless called; particulary necessary for {{#property}} calls;
 	public Ordered_hash Slink_list() {if (slink_list == null) slink_list = mgr.Wdoc_parser(jdoc).Parse_sitelinks(qid, jdoc);			return slink_list;} private Ordered_hash slink_list;
 	public Ordered_hash Label_list() {if (label_list == null) label_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_labels); return label_list;} private Ordered_hash label_list;

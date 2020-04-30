@@ -38,7 +38,6 @@ public class Xoa_url {
 		, byte[] wiki, byte[] page, Gfo_qarg_itm[] qargs,  byte[] anch
 		, byte[][] segs_ary, byte[] vnt_bry, boolean wiki_is_missing, boolean wiki_is_same, boolean page_is_main) {
 		this.tid = tid; this.orig = orig; this.raw = raw;
-                System.out.println(String_.new_a7(raw));
 		this.protocol_tid = protocol_tid; this.protocol_bry = protocol_bry; this.protocol_is_relative = protocol_is_relative;
 		this.wiki_bry = wiki; this.page_bry = page; this.qargs_ary = qargs; this.anch_bry = anch;
 		this.segs_ary = segs_ary; this.vnt_bry = vnt_bry;

@@ -241,6 +241,7 @@ public class Wdata_doc_parser_v1 implements Wdata_doc_parser {
 	public int[] Parse_pid_order(byte[] qid, Json_ary ary) {throw Err_.new_unimplemented();}
 	public Ordered_hash Parse_sense(byte[] qid, Json_doc doc) {throw Err_.new_unimplemented();}
 	public Ordered_hash Parse_form(byte[] qid, Json_doc doc) {throw Err_.new_unimplemented();}
+	public byte[] Parse_datatype(byte[] qid, Json_doc doc) {throw Err_.new_unimplemented();}
 	public static final String
 	  Str_entity								= "entity"
 	, Str_id									= "id"

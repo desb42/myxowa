@@ -114,8 +114,10 @@ public class Xoh_page_wtr_wkr {
 		byte[] page_name = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, null);		// NOTE: page_name does not show display_title (<i>). always pass in null
 		byte[] page_display_title;
 		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikidata && page_data.length > 40 &&
-                        (page_ttl.Ns().Id_is_main() || page_ttl.Ns().Id() == 120 || page_ttl.Ns().Id() == 146)) // short pages use orig title, main, property or lexeme
+		   (page_ttl.Ns().Id_is_main() || page_ttl.Ns().Id() == 120 || page_ttl.Ns().Id() == 146)) { // short pages use orig title, main, property or lexeme
 			page_display_title = app.Wiki_mgr().Wdata_mgr().Page_display_title();
+			page_name = app.Wiki_mgr().Wdata_mgr().Overview_label();
+		}
 		else
 			page_display_title = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, page.Html_data().Display_ttl());
 		page.Html_data().Custom_tab_name_(page_name);	// set tab_name to page_name; note that if null, gui code will ignore and use Ttl.Page_txt; PAGE: zh.w:釣魚臺列嶼主權問題 DATE:2015-10-05

@@ -256,6 +256,24 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 				break;
 			case Xot_defn_.Tid_func:
 				try {
+/*                                    System.out.println(String_.new_a7(caller.Frame_ttl()));
+                                    if (true) {//(caller.Frame_ttl().length == 22 && caller.Frame_ttl()[21] == 't') {
+                                        int alen = caller.Args_len();
+                                        String s = "";
+                                        for (int i = 0; i < alen; i++) {
+                                            Arg_nde_tkn atkn = caller.Args_get_by_idx(i);
+                                            if (atkn.KeyTkn_exists()) {
+                                                Arg_itm_tkn argtkn = atkn.Key_tkn();
+                                                s += String_.new_a7(argtkn.Dat_ary()) + ":";
+                                            }
+                                            else
+                                                s += String.valueOf(i);
+                                            s += String_.new_a7(atkn.Val_tkn().Dat_ary()) + "\n";
+                                        }
+                                        System.out.println(s);
+                                    	int  a=1;
+                                    }
+*/
 					Xot_invk_tkn_.Eval_func(ctx, src, caller, this, bfr, defn, argx_ary);
 					rv = true;
 				}	catch (Exception e) {

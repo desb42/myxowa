@@ -47,7 +47,7 @@ public class Xowd_page_itm {
 		id_val = null;
 		return this;
 	}
-	public void Init_by_load__idx(int id, int ns_id, byte[] ttl_page_db, int text_len, boolean redirected) {
+	public void Init_by_load__idx(int id, int ns_id, byte[] ttl_page_db, int text_len, boolean redirected, int model_format) {
 //            System.out.println(String_.new_u8(ttl_page_db) + " " + redirected);
 		this.exists			= true;	// COMMENT: DATE:2016-08-28
 		this.id				= id;
@@ -56,8 +56,9 @@ public class Xowd_page_itm {
 		this.ttl_page_db	= ttl_page_db;
 		this.text_len		= text_len;
 		this.redirected		= redirected;
+		this.model_format = model_format;
 	}
-	public void	Init_by_load__all(int id, int ns_id, byte[] ttl_page_db, DateAdp modified_on, boolean redirected, int text_len, int random_int, int text_db_id, int html_db_id, int redirect_id, int score, int cat_db_id) {
+	public void	Init_by_load__all(int id, int ns_id, byte[] ttl_page_db, DateAdp modified_on, boolean redirected, int text_len, int random_int, int text_db_id, int html_db_id, int redirect_id, int score, int cat_db_id, int model_format) {
 		// same as Init_by_load__idx; COMMENT: DATE:2016-08-28
 		this.exists			= true;
 		this.id				= id;
@@ -66,6 +67,7 @@ public class Xowd_page_itm {
 		this.ttl_page_db	= ttl_page_db;
 		this.text_len		= text_len;
 		this.redirected		= redirected;
+		this.model_format = model_format;
 
 		// other props
 		this.text_db_id		= text_db_id;
@@ -84,6 +86,7 @@ public class Xowd_page_itm {
 		this.ns_id			= ns_id;
 		this.ttl_page_db	= ttl_page_db;
 		this.text_len		= text_len;
+		this.model_format = 0;
 
 		// other props
 		this.redirected		= redirected;
@@ -131,7 +134,7 @@ public class Xowd_page_itm {
 		id_val = null;
 		html_db_id = cat_db_id = -1;
 		redirect_id = -1;
-                model_format = 0;
+		model_format = 0;
 		return this;
 	}
 	public void Copy(Xowd_page_itm orig) {
@@ -150,6 +153,7 @@ public class Xowd_page_itm {
 		this.id_val = null;
 		this.html_db_id = orig.html_db_id;
 		this.cat_db_id = orig.cat_db_id;
+		this.model_format = orig.model_format;
 	}
 	public void Srl_save(Bry_bfr bfr) {gplx.xowa.wikis.tdbs.Xotdb_page_itm_.Txt_id_save(bfr, this);}
 	public static final int Id_null = -1, Modified_on_null_int = 0, Redirect_id_null = -1;

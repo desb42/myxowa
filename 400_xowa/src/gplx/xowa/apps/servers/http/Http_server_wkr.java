@@ -202,7 +202,7 @@ public class Http_server_wkr implements Gfo_invk {
 			else {
 				page_html = page.Html();
 				byte[] stripped = null;
-				if (page.Page() != null) {
+				if (page.Page() != null && (page.Page().Db().Page().Model_format() & 0xf) == 1) { //1 <format>text/x-wiki</format>
 					wikitext = page.Page().Db().Text().Text_bry();
 					stripped = ws.Search_text(wikitext, page.Ttl()); //.Strip_wiki(wikitext);
 				}

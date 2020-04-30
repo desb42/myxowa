@@ -41,12 +41,12 @@ class Wdata_fmtr__langtext_tbl implements gplx.core.brys.Bfr_arg {
 	}
 	private final    Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "  <div class='wikibase-sitelinkgroupview'>"
-	, "    <div class='wikibase-sitelinkgroupview-heading-container'>"
-	, "      <h2 class='wb-section-heading wikibase-sitelinkgroupview-heading' dir='auto' id='~{hdr_href}'>~{hdr_text}~{toggle_btn}</h2>"
+	, "  <div class=\"wikibase-sitelinkgroupview\">"
+	, "    <div class=\"wikibase-sitelinkgroupview-heading-container\">"
+	, "      <h2 class=\"wb-section-heading wikibase-sitelinkgroupview-heading\" dir=\"auto\" id=\"~{hdr_href}\">~{hdr_text}~{toggle_btn}</h2>"
 	, "    </div>"
-	, "    <div class='wikibase-sitelinklistview'~{toggle_hdr}>"			
-	, "      <ul class='wikibase-sitelinklistview-listview'>~{rows}"
+	, "    <div class=\"wikibase-sitelinklistview\"~{toggle_hdr}>"
+	, "      <ul class=\"wikibase-sitelinklistview-listview\">~{rows}"
 	, "      </ul>"
 	, "    </div>"
 	, "  </div>"
@@ -69,11 +69,11 @@ class Wdata_fmtr__langtext_row_base implements gplx.core.brys.Bfr_arg, Wdata_fmt
 	}
 	private final    Bry_fmtr row_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "        <li class='wikibase-sitelinkview'>"
-	, "          <span class='wikibase-sitelinkview-siteid-container'>"
-	, "            <span class='wikibase-sitelinkview-siteid'>~{lang_code}</span>"
+	, "        <li class=\"wikibase-sitelinkview\">"
+	, "          <span class=\"wikibase-sitelinkview-siteid-container\">"
+	, "            <span class=\"wikibase-sitelinkview-siteid\">~{lang_code}</span>"
 	, "          </span>"
-	, "          <span class='wikibase-sitelinkview-link' lang='~{lang_code}' dir='auto'>~{text}</span>"
+	, "          <span class=\"wikibase-sitelinkview-link\" lang=\"~{lang_code}\" dir=\"auto\">~{text}</span>"
 	, "        </li>"
 	), "lang_code", "lang_name", "text"
 	);

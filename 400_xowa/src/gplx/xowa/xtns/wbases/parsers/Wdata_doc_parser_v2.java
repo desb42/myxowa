@@ -166,6 +166,20 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 			} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse form", "lid", String_.new_u8(doc.Src()));}
 		}
 	}
+	public byte[] Parse_datatype(byte[] qid, Json_doc doc) {
+		synchronized (this) {// ?
+			try {
+				byte[] datatype = doc.Get_val_as_bry_or(Bry_datatype, Bry_.Empty);
+                                int len = datatype.length;
+				// remove wikibase-
+				if (len > 9 && datatype[0] == 'w' && datatype[8] == '-')
+					datatype = DB_case_cvt.Upper_1st(Bry_.Mid(datatype, 9, len), 0, len-9);
+                                else
+                                    datatype = DB_case_cvt.Uppercase(datatype, datatype.length);
+                                return datatype;
+			} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse datatype", "lid", String_.new_u8(doc.Src()));}
+		}
+	}
 
 	public static final String
 	  Str_id									= "id"
@@ -178,6 +192,7 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 	, Str_lemmas								= "lemmas"
 	, Str_senses								= "senses"
 	, Str_forms								= "forms"
+	, Str_datatype								= "datatype"
 	;
 	public static final    byte[] 
 	  Bry_id									= Bry_.new_a7(Str_id)
@@ -190,5 +205,6 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 	, Bry_lemmas								= Bry_.new_a7(Str_lemmas)
 	, Bry_senses								= Bry_.new_a7(Str_senses)
 	, Bry_forms								= Bry_.new_a7(Str_forms)
+	, Bry_datatype							= Bry_.new_a7(Str_datatype)
 	;
 }

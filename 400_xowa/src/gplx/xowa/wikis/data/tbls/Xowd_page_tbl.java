@@ -53,10 +53,12 @@ public class Xowd_page_tbl implements Db_tbl {
 		if (fld_model_format_exists) {
 			fld_model_format	= flds.Add_int_dflt("page_model_format", -1);
 			flds_select_all = String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id, fld_model_format);
+			flds_select_idx = String_.Ary_wo_null(fld_ns, fld_title, fld_id, fld_len, fld_score, fld_is_redirect, fld_model_format);
 		}
-		else
+		else {
 			flds_select_all = String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id);
-		flds_select_idx = String_.Ary_wo_null(fld_ns, fld_title, fld_id, fld_len, fld_score, fld_is_redirect);
+			flds_select_idx = String_.Ary_wo_null(fld_ns, fld_title, fld_id, fld_len, fld_score, fld_is_redirect);
+		}
 		conn.Rls_reg(this);
 	}
 	public Db_conn Conn()						{return conn;} private final    Db_conn conn; 
@@ -366,12 +368,17 @@ public class Xowd_page_tbl implements Db_tbl {
 		rslt_count.Val_(rslt_idx);
 	}
 	public void Read_page__idx(Xowd_page_itm page, Db_rdr rdr) {
+		int model_format = 0;
+		if (fld_model_format_exists) {
+			model_format = rdr.Read_int(fld_model_format);
+		}
 		page.Init_by_load__idx
 		( rdr.Read_int(fld_id)
 		, rdr.Read_int(fld_ns)
 		, rdr.Read_bry_by_str(fld_title)
 		, rdr.Read_int(fld_len)
 		, rdr.Read_bool_by_byte(fld_is_redirect)
+		, model_format
 		);
 	}
 	public void Read_page__all(Xowd_page_itm page, Db_rdr rdr) {
@@ -380,6 +387,10 @@ public class Xowd_page_tbl implements Db_tbl {
 		int page_score = fld_score == Dbmeta_fld_itm.Key_null ? page_len : rdr.Read_int(fld_score);
 		int cat_db_id = fld_cat_db_id == Dbmeta_fld_itm.Key_null ? -1 : rdr.Read_int(fld_cat_db_id);
 
+		int model_format = 0;
+		if (fld_model_format_exists) {
+			model_format = rdr.Read_int(fld_model_format);
+		}
 		page.Init_by_load__all
 		( rdr.Read_int(fld_id)
 		, rdr.Read_int(fld_ns)
@@ -393,6 +404,7 @@ public class Xowd_page_tbl implements Db_tbl {
 		, rdr.Read_int(fld_redirect_id)
 		, page_score
 		, cat_db_id
+		, model_format
 		);
 	}
 	public void Update__html_db_id(int page_id, int html_db_id) {

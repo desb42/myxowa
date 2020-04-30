@@ -53,12 +53,13 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);
 		return rv;
 	}
-//	public byte[] Page_txt_w_anchor()	{return Bry_.Mid(full_txt, page_bgn, qarg_bgn == -1 ? full_txt.length : qarg_bgn - 1);}
-	public byte[] Page_txt_w_anchor()	{return Bry_.Mid(full_txt, page_bgn, anch_bgn == -1 ? full_txt.length : anch_bgn - 1);}
-	//public byte[] Page_txt()			{return Bry_.Mid(full_txt, page_bgn, anch_bgn == -1 ? full_txt.length : anch_bgn - 1);}
-	public byte[] Page_txt()			{return Bry_.Mid(full_txt, page_bgn, qarg_bgn == -1 ? full_txt.length : qarg_bgn - 1);}
+	public byte[] Page_txt_w_anchor()	{return Bry_.Mid(full_txt, page_bgn, qarg_bgn == -1 ? full_txt.length : qarg_bgn - 1);}
+//	public byte[] Page_txt_w_anchor()	{return Bry_.Mid(full_txt, page_bgn, anch_bgn == -1 ? full_txt.length : anch_bgn - 1);}
+	public byte[] Page_txt()			{return Bry_.Mid(full_txt, page_bgn, anch_bgn == -1 ? full_txt.length : anch_bgn - 1);}
+//	public byte[] Page_txt()			{return Bry_.Mid(full_txt, page_bgn, qarg_bgn == -1 ? full_txt.length : qarg_bgn - 1);}
 	public byte[] Page_db() {
-		byte[] rv = this.Page_txt_w_anchor();
+//		byte[] rv = this.Page_txt_w_anchor();
+		byte[] rv = this.Page_txt();
 		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);
 		return rv;
 	}

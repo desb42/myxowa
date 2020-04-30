@@ -23,6 +23,7 @@ import gplx.xowa.wikis.domains.*; import gplx.xowa.htmls.*; import gplx.xowa.par
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.claims.enums.*; import gplx.xowa.xtns.wbases.claims.itms.*; import gplx.xowa.xtns.wbases.parsers.*; import gplx.xowa.xtns.wbases.pfuncs.*; import gplx.xowa.xtns.wbases.hwtrs.*; import gplx.xowa.xtns.wbases.stores.*;
 import gplx.xowa.mediawiki.extensions.Wikibase.client.includes.dataAccess.scribunto.*;
 import gplx.core.brys.fmtrs.*;
+import gplx.langs.htmls.*;
 public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	private final    Xoae_app app;
 //	private final    Wdata_prop_val_visitor prop_val_visitor;
@@ -30,6 +31,9 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	private final    Object thread_lock = new Object();
 	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
 	private byte[]   page_display_title, no_label;
+	private byte[]   oview_label;
+	public byte[] Overview_label() { return oview_label;}
+
 	public Wdata_wiki_mgr(Xoae_app app) {
 		this.app = app;
 		this.evt_mgr = new Gfo_evt_mgr(this);
@@ -237,15 +241,41 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		return Wdata_langtext_itm.Get_text_or_empty(list, core_langs);
 	}
 	private byte[] Wdata_display_title(Wdata_doc wdoc) {
-		byte[] oview_label = Doc_name(wdoc);
+		// P, Q, or L
+		byte[] ttl_label;
 		byte[] cls = Bry_.Empty;
-		if (oview_label.length == 0) {
-			oview_label = no_label;
-			cls = Bry_.new_a7("wb-empty");
+		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme) {
+			Ordered_hash list = wdoc.Lemma_list();
+			//Bry_bfr tmp_bfr = Bry_bfr_.New();
+			Bry_bfr oview_bfr = Bry_bfr_.New();
+			int len = list.Count();
+			for (int i = 0; i < len; ++i) {
+				if (i > 0) {
+					oview_bfr.Add_byte(Byte_ascii.Slash);
+					tmp_bfr.Add_byte(Byte_ascii.Slash);
+				}
+				Wdata_langtext_itm itm = (Wdata_langtext_itm)list.Get_at(i);
+				Xol_lang_stub lang_itm = Xol_lang_stub_.Get_by_key_or_intl(itm.Lang());
+				byte[] txt = Gfh_utl.Escape_html_as_bry(itm.Text());
+                                byte[] dir = Bry_.new_a7("ltr");
+				lemma_first_fmtr.Bld_bfr_many(tmp_bfr, dir, Gfh_utl.Escape_html_as_bry(itm.Lang()), txt);
+				oview_bfr.Add(txt);
+			}
+			oview_label = oview_bfr.To_bry_and_clear();
+			ttl_label = tmp_bfr.To_bry_and_clear();
 		}
-		Bry_bfr bfr = Bry_bfr_.New();
-		display_fmtr.Bld_bfr_many(bfr, cls, oview_label, Bry_.Mid(wdoc.Qid(), wdoc.Name_ofs()));
-		return bfr.To_bry_and_clear();
+		else {
+			Xoapi_wikibase wikibase_api = app.Api_root().Xtns().Wikibase();
+			byte[][] core_langs = wikibase_api.Core_langs();
+			oview_label = Wdata_langtext_itm.Get_text_or_empty(wdoc.Label_list(), core_langs);
+			if (oview_label.length == 0) {
+				oview_label = no_label;
+				cls = Bry_.new_a7("wb-empty");
+			}
+			ttl_label = oview_label;
+		}
+		display_fmtr.Bld_bfr_many(tmp_bfr, cls, ttl_label, Bry_.Mid(wdoc.Qid(), wdoc.Name_ofs()));
+		return tmp_bfr.To_bry_and_clear();
 	}
 	private Bry_fmtr display_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
@@ -254,6 +284,11 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	, "<span class=\"wikibase-title-id\">(~{ttl_id})</span>"
 	, "</span>"
 	), "cls", "ttl_label", "ttl_id"
+	);
+	private Bry_fmtr lemma_first_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
+	( ""
+	, "<span class=\"mw-content-~{dir}\" dir=\"~{dir}\" lang=\"~{lang}\">~{name}</span>"
+	), "dir", "lang", "name"
 	);
 }
 /*
