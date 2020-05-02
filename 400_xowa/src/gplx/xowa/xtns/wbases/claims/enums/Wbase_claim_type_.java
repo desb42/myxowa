@@ -59,10 +59,38 @@ public class Wbase_claim_type_ {
 	, Itm__form					= New(Tid__form			, "wikibase-form")				// EX:wd:Property:P5193
 	, Itm__musical_notation		= New(Tid__musical_notation			, "musical-notation")				// EX:wd:Property:P6604
 	;
+// from https://github.com/wikimedia/mediawiki-extensions-Wikibase/blob/lib/i18n/en.json
+// strictly should be language sensitive
+	private static byte[][] names = {
+	  Bry_.new_a7("unknown")
+	, Bry_.new_a7("bad")
+	, Bry_.new_a7("String") // "datatypes-type-string"
+	, Bry_.new_a7("Quantity") // "datatypes-type-quantity"
+	, Bry_.new_a7("Point in time") // "datatypes-type-time"
+	, Bry_.new_a7("Geographic coordinates") // "datatypes-type-globe-coordinate"
+	, Bry_.new_a7("Monolingual text") // "datatypes-type-monolingualtext"
+	, Bry_.new_a7("Entity") // ?
+	, Bry_.new_a7("Property") // ?
+	, Bry_.new_a7("Mathematical expression") // ?
+	, Bry_.new_a7("URL") // ?
+	, Bry_.new_a7("External identifier") // ?
+	, Bry_.new_a7("Commons media file") // "datatypes-type-commonsMedia"
+	, Bry_.new_a7("Geographic shape") // "datatypes-type-geo-shape"
+	, Bry_.new_a7("Tabular data") // "datatypes-type-tabular-data"
+	, Bry_.new_a7("Lexeme") // ?
+	, Bry_.new_a7("Sense") // ?
+	, Bry_.new_a7("Form") // ?
+	, Bry_.new_a7("Musical Notation") // possibly mediawiki\extensions\Math\i18n\en.json "datatypes-type-math"
+        };
+
 	private static Wbase_enum_itm New(byte tid, String key)						{return New(tid, key, key);}
 	private static Wbase_enum_itm New(byte tid, String key, String scrib)		{return Reg.Add(new Wbase_claim_type(tid, key, scrib));}
 	public static String Get_scrib_or_unknown(byte tid)	{return ((Wbase_claim_type)Reg.Get_itm_or(tid, Itm__unknown)).Key_for_scrib();}
 	public static byte Get_tid_or_unknown(String key)					{return Get_tid_or_unknown(Bry_.new_u8(key));}
 	public static byte Get_tid_or_unknown(byte[] key)					{return Get_tid_or_unknown(key, 0, key.length);}
 	public static byte Get_tid_or_unknown(byte[] key, int bgn, int end) {return Reg.Get_tid_or(key, bgn, end, Tid__unknown);}
+        public static byte[] Get_name(byte[] key) {
+            byte tid = Get_tid_or_unknown(key);
+            return names[tid];
+        }
 }

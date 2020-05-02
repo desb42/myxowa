@@ -35,6 +35,8 @@ public class Wdata_hwtr_mgr {
 	private final    Wdata_fmtr__datatype fmtr_datatype = new Wdata_fmtr__datatype();
 	private Wdata_lang_sorter lang_sorter = new Wdata_lang_sorter();		
 	public Bry_fmtr Fmtr_main() {return fmtr_main;} private final    Bry_fmtr fmtr_main = Bry_fmtr.new_("~{oview}~{toc}~{claims}~{links}~{labels}~{descriptions}~{aliases}~{json}", "oview", "toc", "claims", "links", "labels", "descriptions", "aliases", "json");
+	private final    Bry_fmtr fmtr_main_L = Bry_fmtr.new_("~{oview}~{toc}~{claims}~{links}~{json}", "oview", "toc", "claims", "links", "json");
+	private final    Bry_fmtr fmtr_main_P = Bry_fmtr.new_("~{oview}~{toc}~{datatype}~{claims}~{links}~{labels}~{descriptions}~{aliases}~{json}", "oview", "toc", "datatype", "claims", "links", "labels", "descriptions", "aliases", "json");
 	public Wdata_hwtr_msgs Msgs() {return msgs;} private Wdata_hwtr_msgs msgs;
 	public Wdata_lbl_mgr Lbl_mgr() {return lbl_mgr;} private final    Wdata_lbl_mgr lbl_mgr = new Wdata_lbl_mgr();
 	public void Init_by_ctor(Xoapi_wikibase wikibase_api, Wdata_wiki_mgr wdata_mgr, Wdata_lbl_wkr lbl_wkr, Gfo_url_encoder href_encoder, Xoapi_toggle_mgr toggle_mgr, Xow_xwiki_mgr xwiki_mgr) {
@@ -111,9 +113,9 @@ public class Wdata_hwtr_mgr {
 		bfr.Add_str_a7("\" lang=\"en\" dir=\"ltr\">");
 		bfr.Add_str_a7("<div class=\"wikibase-entityview-main\">");
 		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme)
-			fmtr_main.Bld_bfr_many(bfr, fmtr_lemma_oview, fmtr_toc, fmtr_claim, fmtr_slink, fmtr_json); // senses and forms?
+			fmtr_main_L.Bld_bfr_many(bfr, fmtr_lemma_oview, fmtr_toc, fmtr_claim, fmtr_slink, fmtr_json); // senses and forms?
 		else if (wdoc.Type() == Wbase_claim_entity_type_.Tid__property)
-			fmtr_main.Bld_bfr_many(bfr, fmtr_oview, fmtr_toc, fmtr_datatype, fmtr_claim, fmtr_slink, fmtr_label, fmtr_descr, fmtr_alias, fmtr_json);
+			fmtr_main_P.Bld_bfr_many(bfr, fmtr_oview, fmtr_toc, fmtr_datatype, fmtr_claim, fmtr_slink, fmtr_label, fmtr_descr, fmtr_alias, fmtr_json);
 		else
 			fmtr_main.Bld_bfr_many(bfr, fmtr_oview, fmtr_toc, fmtr_claim, fmtr_slink, fmtr_label, fmtr_descr, fmtr_alias, fmtr_json);
 		bfr.Add_str_a7("</div>");
