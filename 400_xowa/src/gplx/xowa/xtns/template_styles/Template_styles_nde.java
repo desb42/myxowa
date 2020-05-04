@@ -1,3 +1,18 @@
+/*
+XOWA: the XOWA Offline Wiki Application
+Copyright (C) 2012-2020 gnosygnu@gmail.com
+
+XOWA is licensed under the terms of the General Public License (GPL) Version 3,
+or alternatively under the terms of the Apache License Version 2.0.
+
+You may use XOWA according to either of these licenses as is most appropriate
+for your project on a case-by-case basis.
+
+The terms of each license can be found in the source code repository:
+
+GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
+Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
+*/
 package gplx.xowa.xtns.template_styles;
 
 import gplx.*;
@@ -12,7 +27,6 @@ import gplx.xowa.htmls.heads.Xoh_head_itm__css_dynamic;
 import gplx.xowa.htmls.hxtns.blobs.Hxtn_blob_tbl;
 import gplx.xowa.htmls.hxtns.pages.Hxtn_page_mgr;
 import gplx.xowa.htmls.hxtns.wikis.Hxtn_wiki_itm;
-import gplx.xowa.htmls.minifys.XoCssMin;
 import gplx.xowa.parsers.Xop_ctx;
 import gplx.xowa.parsers.Xop_root_tkn;
 import gplx.xowa.parsers.htmls.Mwh_atr_itm;
@@ -25,20 +39,21 @@ import gplx.xowa.xtns.Xox_xnde;
 import gplx.xowa.xtns.Xox_xnde_;
 public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	private byte[] css_ttl_bry;
-	private byte[] wrapper_bry = Bry_.Empty;
 	private byte[] css_src;
 	private boolean css_ignore;
 	private int css_page_id;
 	private Xoa_ttl css_ttl;
-	private static XoCssMin cssMin = new XoCssMin();
+	private String prepend = ".mw-parser-output";
+
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, byte xatr_id) {
 		switch (xatr_id) {
 			case Xatr__src:			css_ttl_bry = xatr.Val_as_bry(); break;
-			case Xatr__wrapper:			wrapper_bry = xatr.Val_as_bry(); break;
+			case Xatr__wrapper:
+				prepend = prepend + " " + xatr.Val_as_str();
+				break;
 		}
 	}
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
-            //System.out.println(String_.new_a7(Bry_.Mid(src, xnde.Tag_open_bgn(), xnde.Tag_close_end())));
 		ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_bgn);
 		Xox_xnde_.Parse_xatrs(wiki, this, xatrs_hash, src, xnde);
 		// get css_ttl
@@ -88,7 +103,13 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		if (!css_ignore) {
 			Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
 			try {
-				html_head.Bld_many(tmp_bfr, css_page_id, Bry_.new_u8(cssMin.cssmin(String_.new_u8(css_src), -1, String_.new_u8(wrapper_bry))) );
+				css_src = new XoCssTransformer(String_.new_u8(css_src))
+					.Minify()
+					.Prepend(prepend)
+//					.Url("upload.wikimedia.org", "www.xowa.org/xowa/fsys/bin/any/xowa/upload.wikimedia.org")
+					.Url("upload.wikimedia.org", "www.xowa.com/xowa/fsys/bin/any/xowa/upload.wikimedia.org")
+					.ToBry();
+				html_head.Bld_many(tmp_bfr, css_page_id, css_src);
 				Xoh_head_itm__css_dynamic css_dynamic = ctx.Page().Html_data().Head_mgr().Itm__css_dynamic();
 				css_dynamic.Enabled_y_();
 				css_dynamic.Add(tmp_bfr.To_bry_and_clear());
@@ -109,9 +130,12 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	}
 
 	public static final byte Xatr__src = 0, Xatr__wrapper = 1;
-	private static final    Hash_adp_bry xatrs_hash = Hash_adp_bry.ci_a7().Add_str_byte("src", Xatr__src).Add_str_byte("wrapper", Xatr__wrapper);
+	private static final    Hash_adp_bry xatrs_hash = Hash_adp_bry.ci_a7()
+		.Add_str_byte("src", Xatr__src)
+		.Add_str_byte("wrapper", Xatr__wrapper)
+	;
 	private static final    Bry_fmt
-	  html_head  = Bry_fmt.Auto("\n/*TemplateStyles:r~{id}*/\n~{css}") // .mw-parser-output needs to be added to all TemplateStyles CSS, else TS ids called "portal" will affect sidebar; ISSUE#:426; PAGE:en.w:Poland DATE:2020-04-10
+	  html_head  = Bry_fmt.Auto("\n/*TemplateStyles:r~{id}*/\n~{css}")
 	, html_error = Bry_fmt.Auto("<strong class=\"error\">~{msg}</strong>")
 	;
 }

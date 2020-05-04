@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,9 +13,14 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.mediawiki.includes.content; import gplx.*; import gplx.xowa.*; import gplx.xowa.mediawiki.*; import gplx.xowa.mediawiki.includes.*;
-import gplx.xowa.mediawiki.includes.exception.*;
-import gplx.xowa.mediawiki.includes.parsers.*;
+package gplx.xowa.mediawiki.includes.content;
+
+import gplx.Err_;
+import gplx.xowa.mediawiki.includes.XomwMagicWord;
+import gplx.xowa.mediawiki.includes.XomwTitleOld;
+import gplx.xowa.mediawiki.includes.exception.XomwMWException;
+import gplx.xowa.mediawiki.includes.parsers.XomwParserOptions;
+import gplx.xowa.mediawiki.includes.parsers.XomwParserOutput;
 /**
 * A content Object represents page content, e.g. the text to show on a page.
 * Content objects have no knowledge about how they relate to Wiki pages.
@@ -243,8 +248,8 @@ public abstract class XomwAbstractContent implements XomwContent {
 	*
 	* @see Content::getRedirectChain
 	*/
-	public XomwTitle[] getRedirectChain() {
-//			XomwTitle title = this.getRedirectTarget();
+	public XomwTitleOld[] getRedirectChain() {
+//			XomwTitleOld title = this.getRedirectTarget();
 //			if (title == null) {
 //				return null;
 //			}
@@ -253,7 +258,7 @@ public abstract class XomwAbstractContent implements XomwContent {
 //
 //			List_adp titles = List_adp_.New_by_many(title);
 //			while (--recurse > 0) {
-//				XomwTitle newtitle = null;
+//				XomwTitleOld newtitle = null;
 //				if (title.isRedirect()) {
 //					$page = WikiPage::factory(title);
 //					$newtitle = $page.getRedirectTarget();
@@ -261,7 +266,7 @@ public abstract class XomwAbstractContent implements XomwContent {
 //					break;
 //				}
 //				// Redirects to some special pages are not permitted
-//				if (Type_.Eq_by_obj(newtitle, typeof(XomwTitle)) && newtitle.isValidRedirectTarget()) {
+//				if (Type_.Eq_by_obj(newtitle, typeof(XomwTitleOld)) && newtitle.isValidRedirectTarget()) {
 //					// The new title passes the checks, so make that our current
 //					// title so that further recursion can be checked
 //					title = newtitle;
@@ -271,7 +276,7 @@ public abstract class XomwAbstractContent implements XomwContent {
 //				}
 //			}
 //
-//			return (XomwTitle[])titles.To_ary_and_clear(typeof(XomwTitle));
+//			return (XomwTitleOld[])titles.To_ary_and_clear(typeof(XomwTitleOld));
 		throw Err_.new_unimplemented();
 	}
 
@@ -530,7 +535,7 @@ public abstract class XomwAbstractContent implements XomwContent {
 //		}
 	public abstract byte[] getTextForSearchIndex();
 
-	public abstract byte[] getWikitextForTransclusion();
+	public abstract String getWikitextForTransclusion();
 
 	public abstract byte[] getTextForSummary(int maxLength);
 
@@ -542,29 +547,29 @@ public abstract class XomwAbstractContent implements XomwContent {
 
 	public abstract boolean isCountable(boolean hasLinks);
 
-	public abstract XomwParserOutput getParserOutput(XomwTitle title, int revId,
+	public abstract XomwParserOutput getParserOutput(XomwTitleOld title, int revId,
 		XomwParserOptions options, boolean generateHtml);
 
-	public abstract Object getSecondaryDataUpdates(XomwTitle title, XomwContent old,
+	public abstract Object getSecondaryDataUpdates(XomwTitleOld title, XomwContent old,
 		boolean recursive, XomwParserOutput parserOutput);
 
-	public abstract XomwTitle getRedirectTarget();
+	public abstract XomwTitleOld getRedirectTarget();
 
-	public abstract XomwTitle getUltimateRedirectTarget();
+	public abstract XomwTitleOld getUltimateRedirectTarget();
 
 	public abstract boolean isRedirect();
 
-	public abstract XomwContent updateRedirect(XomwTitle target);
+	public abstract XomwContent updateRedirect(XomwTitleOld target);
 
 	public abstract XomwContent getSection(String sectionId);
 
 	public abstract byte[] replaceSection(String sectionId, XomwContent with, String sectionTitle);
 
-	public abstract XomwContent preSaveTransform(XomwTitle title, Object user, XomwParserOptions parserOptions);
+	public abstract XomwContent preSaveTransform(XomwTitleOld title, Object user, XomwParserOptions parserOptions);
 
 	public abstract XomwContent addSectionHeader(byte[] header);
 
-	public abstract XomwContent preloadTransform(XomwTitle title, XomwParserOptions parserOptions, Object[] ary);
+	public abstract XomwContent preloadTransform(XomwTitleOld title, XomwParserOptions parserOptions, Object[] ary);
 
 	public abstract Object prepareSave(Object page, int flags, int parentRevId, Object user);
 

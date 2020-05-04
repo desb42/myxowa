@@ -1,3 +1,18 @@
+/*
+XOWA: the XOWA Offline Wiki Application
+Copyright (C) 2012-2020 gnosygnu@gmail.com
+
+XOWA is licensed under the terms of the General Public License (GPL) Version 3,
+or alternatively under the terms of the Apache License Version 2.0.
+
+You may use XOWA according to either of these licenses as is most appropriate
+for your project on a case-by-case basis.
+
+The terms of each license can be found in the source code repository:
+
+GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
+Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
+*/
 package gplx.xowa.htmls.minifys;
 
 import gplx.core.bits.Bitmask_;
@@ -20,14 +35,12 @@ public class XoCssMin {
 	public static final int
 	      MODE_NODEJS = 1
 		, MODE_YCSS_MIN = 2
-		, MODE_XOWA = 4
-		, MODE_ALL = MODE_NODEJS | MODE_YCSS_MIN | MODE_XOWA
+		, MODE_ALL = MODE_NODEJS | MODE_YCSS_MIN
 		;
 	public void DataCollectorMgr_(GfoDataCollectorMgr v) {this.dataCollectorMgr = v;} private GfoDataCollectorMgr dataCollectorMgr;
-	public String cssmin(String css, int linebreakpos, String wrapper) {return cssmin(css, linebreakpos, wrapper, MODE_ALL);}
-	public String cssmin(String css, int linebreakpos, String wrapper, int mode) {
+	public String cssmin(String css, int linebreakpos) {return cssmin(css, linebreakpos, MODE_ALL);}
+	public String cssmin(String css, int linebreakpos, int mode) {
 		boolean isModeYcssMin = Bitmask_.Has_int(mode, MODE_YCSS_MIN);
-		boolean isModeXowa = Bitmask_.Has_int(mode, MODE_XOWA);
 
 		int startIndex = 0,
 			endIndex = 0,
@@ -272,22 +285,6 @@ public class XoCssMin {
 
 		// Trim the final string (for any leading or trailing white spaces)
 		css = JsString_.replace(css, patterns, "^\\s+|\\s+$", "");
-
-		if (isModeXowa) {
-                    String common_class = ".mw-parser-output";
-                    if (wrapper.length() > 0)
-                        common_class += " " + wrapper;
-			// add the '.mw-parser-output ' selector
-			// XO: commented out; handled in TemplateStyles to improve performance
-			css = JsString_.replace(css, patterns, "\\}([^@}].{2})", "}" + common_class + " $1");
-			css = JsString_.replace(css, patterns, "(@media[^\\{]*\\{)", "$1" + common_class + " ");
-			if (css.charAt(0) != '@')
-			     css = common_class + " " + css;
-
-			// change some url(...) entries
-//			css = css.replace("//upload.wikimedia.org", "//www.xowa.org/xowa/fsys/bin/any/xowa/upload.wikimedia.org");
-			css = css.replace("//upload.wikimedia.org", "//www.xowa.com/xowa/fsys/bin/any/xowa/upload.wikimedia.org");
-		}
 
 		return css;
 	}

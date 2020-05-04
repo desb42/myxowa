@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,19 +13,50 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.htmls; import gplx.*; import gplx.xowa.*;
-import gplx.core.brys.fmtrs.*;
-import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.langs.htmls.*;import gplx.langs.jsons.Json_doc;
-import gplx.xowa.langs.vnts.*; import gplx.xowa.htmls.core.htmls.*;
-import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.pages.skins.*; 
-import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.*; import gplx.xowa.wikis.domains.*; import gplx.xowa.parsers.*; import gplx.xowa.xtns.wbases.*;
-import gplx.xowa.apps.gfs.*; import gplx.xowa.htmls.portal.*;
-import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.*;
-import gplx.xowa.htmls.core.*;
+package gplx.xowa.htmls;
+
+import gplx.Bool_;
+import gplx.Bry_;
+import gplx.Bry_bfr;
+import gplx.Bry_bfr_;
+import gplx.DateAdp;
+import gplx.DateAdp_;
+import gplx.core.brys.fmtrs.Bry_fmtr;
+import gplx.langs.htmls.Gfh_utl;
+import gplx.xowa.Xoa_app_;
+import gplx.xowa.Xoa_ttl;
+import gplx.xowa.Xoae_app;
+import gplx.xowa.Xoae_page;
+import gplx.xowa.Xowe_wiki;
+import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.Xoctg_pagebox_itm;
+import gplx.xowa.apps.gfs.Gfs_php_converter;
+import gplx.xowa.htmls.core.Xow_hdump_mode;
+import gplx.xowa.htmls.core.htmls.Xoh_html_wtr_escaper;
+import gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx;
+import gplx.xowa.htmls.portal.Xoh_page_body_cls;
+import gplx.xowa.htmls.portal.Xow_portal_mgr;
+import gplx.xowa.langs.vnts.Xol_vnt_mgr;
+import gplx.xowa.parsers.Xop_ctx;
+import gplx.xowa.wikis.Xow_page_tid;
+import gplx.xowa.wikis.domains.Xow_domain_tid_;
+import gplx.xowa.wikis.nss.Xow_ns_;
+import gplx.xowa.wikis.pages.Xopg_view_mode_;
+import gplx.xowa.wikis.pages.skins.Xopg_xtn_skin_fmtr_arg;
+import gplx.xowa.wikis.pages.skins.Xopg_xtn_skin_itm_tid;
+import gplx.xowa.xtns.wbases.Wdata_xwiki_link_wtr;
+
+import gplx.xowa.langs.msgs.Xow_msg_mgr;
+import gplx.xowa.Db_expand;
 import gplx.xowa.wikis.pages.lnkis.Xopg_redlink_mgr;
+import gplx.xowa.htmls.hxtns.pages.Hxtn_page_mgr;
+import gplx.xowa.htmls.hxtns.blobs.Hxtn_blob_tbl;
 import gplx.langs.jsons.*;
-import gplx.xowa.htmls.hxtns.pages.*; import gplx.xowa.htmls.hxtns.blobs.*; import gplx.xowa.htmls.hxtns.wikis.*;
-import gplx.xowa.parsers.utils.*;
+//import gplx.langs.jsons.Json_doc;
+//import gplx.langs.jsons.Json_nde;
+//import gplx.langs.jsons.Json_kv;
+//import gplx.langs.jsons.Json_ary;
+import gplx.Bry_fmt;
+import gplx.xowa.parsers.utils.Xop_redirect_mgr;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
@@ -111,18 +142,24 @@ public class Xoh_page_wtr_wkr {
 				converted_title = vnt_mgr.Convert_lang().Auto_convert(vnt_mgr.Cur_itm(), page_ttl.Page_txt());
 			page_ttl = Xoa_ttl.Parse(wiki, page_ttl.Ns().Id(), converted_title);
 		}
+
 		byte[] page_name = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, null);		// NOTE: page_name does not show display_title (<i>). always pass in null
-		byte[] page_display_title;
+		// get pagename for <h1 id="firstHeading" class="firstHeading"></h1>
+		byte[] pagename_for_h1;
 		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikidata && page_data.length > 40 &&
 		   (page_ttl.Ns().Id_is_main() || page_ttl.Ns().Id() == 120 || page_ttl.Ns().Id() == 146)) { // short pages use orig title, main, property or lexeme
-			page_display_title = app.Wiki_mgr().Wdata_mgr().Page_display_title();
+			pagename_for_h1 = app.Wiki_mgr().Wdata_mgr().Page_display_title();
 			page_name = app.Wiki_mgr().Wdata_mgr().Overview_label();
 		}
 		else
-			page_display_title = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, page.Html_data().Display_ttl());
+			pagename_for_h1 = Xoh_page_wtr_wkr_.Bld_page_name(tmp_bfr, page_ttl, page.Html_data().Display_ttl());
 		page.Html_data().Custom_tab_name_(page_name);	// set tab_name to page_name; note that if null, gui code will ignore and use Ttl.Page_txt; PAGE: zh.w:釣魚臺列嶼主權問題 DATE:2015-10-05
-		Xow_portal_mgr portal_mgr = wiki.Html_mgr().Portal_mgr().Init_assert();
-		boolean nightmode_enabled = app.Gui_mgr().Nightmode_mgr().Enabled();
+
+		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
+		byte[] page_mask_msg = Bry_.new_a7("pagetitle");
+		if (Bry_.Eq(Xoa_ttl.Replace_unders(page.Ttl().Raw()), wiki.Props().Main_page()))
+			page_mask_msg = Bry_.new_a7("pagetitle-view-mainpage");
+		byte[] page_title = Db_expand.Extracheck( msg_mgr.Val_by_key_args(page_mask_msg, page_name), "");
 
 		byte[] redlinks = null;
 		if (wiki.App().Mode().Tid_is_http()) {
@@ -131,16 +168,13 @@ public class Xoh_page_wtr_wkr {
 			redlinks = tmp_bfr.To_bry_and_clear();
 		}
 
-		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
-		byte[] page_mask_msg = Bry_.new_a7("pagetitle");
-		if (Bry_.Eq(Xoa_ttl.Replace_unders(page.Ttl().Raw()), wiki.Props().Main_page()))
-			page_mask_msg = Bry_.new_a7("pagetitle-view-mainpage");
-		byte[] page_title = Db_expand.Extracheck( msg_mgr.Val_by_key_args(page_mask_msg, page_name), "");
-
+		// main build
+		Xow_portal_mgr portal_mgr = wiki.Html_mgr().Portal_mgr().Init_assert();
+		boolean nightmode_enabled = app.Gui_mgr().Nightmode_mgr().Enabled();
 		fmtr.Bld_bfr_many(bfr
 		, root_dir_bry, Xoa_app_.Version, Xoa_app_.Build_date, app.Tcp_server().Running_str()
 		, page.Db().Page().Id(), page.Ttl().Full_db_href(), page_title
-		, page.Html_data().Page_heading().Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), page_display_title)
+		, page.Html_data().Page_heading().Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), pagename_for_h1)
 		, modified_on_msg
 		, mgr.Css_common_bry(), mgr.Css_wiki_bry()
 		, mgr.Css_night_bry(nightmode_enabled)
@@ -432,6 +466,31 @@ public class Xoh_page_wtr_wkr {
 		Json_ary data_ary = Json_ary.cast(jdoc.Get_grp(Bry_.new_a7("data")));
 		if (data_ary == null)
 			return;
+		byte[] sources = jdoc.Get_val_as_bry_or(Bry_.new_a7("sources"), Bry_.Empty);
+		byte[] license = jdoc.Get_val_as_bry_or(Bry_.new_a7("license"), Bry_.Empty);
+		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
+		byte[] tmp = Bry_.Add(Bry_.new_a7("jsonconfig-license-name-"), license);
+		byte[] license_name = Db_expand.Extracheck( msg_mgr.Val_by_key_args(tmp), "");
+		tmp = Bry_.Add(Bry_.new_a7("jsonconfig-license-url-"), license);
+		byte[] license_url = Db_expand.Extracheck( msg_mgr.Val_by_key_args(tmp), "");
+		byte[] license_a = Bry_.Add(
+		  Bry_.new_a7("<a href=\"")
+		, license_url
+		, Bry_.new_a7("\">")
+		, license_name
+		, Bry_.new_a7("</a>")
+		);
+		byte[] license_txt = Bry_.Add(
+		  Bry_.new_a7("<p class=\"mw-jsonconfig-license\">")
+		, Db_expand.Extracheck( msg_mgr.Val_by_key_args(Bry_.new_a7("jsonconfig-license"), license_a), "")
+		, Bry_.new_a7("</p>")
+		);
+		byte[] sources_txt = Bry_.Add(
+		  Bry_.new_a7("<p class=\"mw-jsonconfig-sources\">")
+		, Db_expand.Extracheck( sources, "")
+		, Bry_.new_a7("</p>")
+		);
+
 		int data_rows_len = data_ary.Len();
 		// check enough keys
 		Json_kv fields_nde = Json_kv.cast(list_nde.Get_at(0));
@@ -507,7 +566,7 @@ public class Xoh_page_wtr_wkr {
 				if (itm instanceof Json_itm_null)
 					bfr.Add_str_a7("\" class=\"mw-tabular-value-null");
 				bfr.Add_str_a7("\">");
-				if (itm instanceof Json_itm_str)
+				if (itm instanceof Json_itm_str || itm instanceof Json_itm_int || itm instanceof Json_itm_long || itm instanceof Json_itm_decimal)
 					bfr.Add(itm.Data_bry());
 				else if (itm instanceof Json_nde) {
 					bfr.Add(Get_text((Json_nde)itm));
@@ -526,6 +585,8 @@ public class Xoh_page_wtr_wkr {
 			bfr.Add_str_a7("</tr>\n");
 		}
 		bfr.Add_str_a7("</table>\n");
+		bfr.Add(sources_txt);
+		bfr.Add(license_txt);
 
 		//String oput = bfr.To_str_and_clear();
 		//System.out.print(oput);

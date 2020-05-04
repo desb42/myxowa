@@ -13,16 +13,17 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.mediawiki; import gplx.*; import gplx.xowa.*;
+package gplx.xowa.mediawiki; import gplx.*;
 import gplx.core.btries.*;
 import gplx.core.intls.*;
 import gplx.objects.strings.unicodes.*;
 import gplx.core.primitives.*;
 import gplx.objects.strings.bfrs.*;
-public class XophpString_ implements XophpCallbackOwner {
+public class XophpString_ implements XophpCallableOwner {
 	public static final    String False = null;
 	public static boolean is_true (String s) {return s != null;} // handles code like "if ($var)" where var is an Object;
 	public static boolean is_false(String s) {return s == null;}
+	public static boolean is_null(String s) {return s == null;}
 	public static boolean eq(String lhs, String rhs)     {return  String_.Eq(lhs, rhs);}
 	public static boolean eq_not(String lhs, String rhs) {return !String_.Eq(lhs, rhs);}
 
@@ -572,5 +573,5 @@ public class XophpString_ implements XophpCallbackOwner {
 			throw Err_.new_unhandled_default(method);
 		}
 	}
-	public static final    XophpCallbackOwner Callback_owner = new XophpString_();
+	public static final XophpCallableOwner Callback_owner = new XophpString_();
 }
