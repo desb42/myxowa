@@ -19,7 +19,7 @@ import gplx.core.intls.*;
 import gplx.objects.strings.unicodes.*;
 import gplx.core.primitives.*;
 import gplx.objects.strings.bfrs.*;
-public class XophpString_ implements XophpCallableOwner {
+public class XophpString_ implements XophpCallbackOwner {
 	public static final    String False = null;
 	public static boolean is_true (String s) {return s != null;} // handles code like "if ($var)" where var is an Object;
 	public static boolean is_false(String s) {return s == null;}
@@ -268,6 +268,9 @@ public class XophpString_ implements XophpCallableOwner {
 	public static byte[] strtr(byte[] src, byte find, byte repl) {
 		return Bry_.Replace(src, 0, src.length, find, repl);
 	}
+	public static String strtr(String src, String find, String repl) {
+		return String_.Replace(src, find, repl);
+	}
 	public static byte[] str_replace(byte find, byte repl, byte[] src) {
 		return Bry_.Replace(src, 0, src.length, find, repl);
 	}
@@ -322,10 +325,10 @@ public class XophpString_ implements XophpCallableOwner {
 						byte nxt_byte = pad_bry[i + 1];
 						if (nxt_byte == Byte_ascii.Dot) {
 							if (i == 0) {
-								throw new XophpError(".. found but at start of String; src=" + pad_str);
+								throw new XophpException(".. found but at start of String; src=" + pad_str);
 							}
 							else if (i == pad_len - 2) {
-								throw new XophpError(".. found but at end of String; src=" + pad_str);
+								throw new XophpException(".. found but at end of String; src=" + pad_str);
 							}
 							else {
 								nxt_byte = pad_bry[i + 2];
@@ -339,7 +342,7 @@ public class XophpString_ implements XophpCallableOwner {
 									continue;
 								}
 								else {
-									throw new XophpError(".. found but next byte must be greater than previous byte; src=" + pad_str);
+									throw new XophpException(".. found but next byte must be greater than previous byte; src=" + pad_str);
 								}
 							}
 						}
@@ -564,7 +567,7 @@ public class XophpString_ implements XophpCallableOwner {
 		return String_.Eq(Char_as_str(s, idx), comp);
 	}
 
-	public Object Callback(String method, Object... args) {
+	public Object Call(String method, Object... args) {
 		if (String_.Eq(method, "strtoupper")) {
 			String val = (String)args[0];
 			return strtoupper(val);
@@ -573,5 +576,5 @@ public class XophpString_ implements XophpCallableOwner {
 			throw Err_.new_unhandled_default(method);
 		}
 	}
-	public static final XophpCallableOwner Callback_owner = new XophpString_();
+	public static final XophpCallbackOwner Callback_owner = new XophpString_();
 }

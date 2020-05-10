@@ -18,8 +18,8 @@ import gplx.xowa.mediawiki.includes.XomwTitleOld;
 
 public class XophpObject_ {
 	public static final    Object False = null; // handles code like "if ($var === false)" where var is an Object;
-	public static boolean is_true(Object val) {return val != null;}
-	public static boolean is_false(Object val) {return val == null;}
+	public static boolean is_true(Object val) {return !empty_obj(val);}
+	public static boolean is_false(Object val) {return empty_obj(val);}
 	public static boolean is_null(Object val) {return val == null;}
 
 	// REF.PHP:http://php.net/manual/en/function.empty.php
@@ -89,4 +89,11 @@ public class XophpObject_ {
     public static boolean is_object(Object o) {
     	return o != null;
     }
+
+	// REF.PHP:https://www.php.net/manual/en/language.operators.comparison.php#language.operators.comparison.ternary
+	// equivalent to ?:
+    public static Object Elvis(Object o, Object or) {return is_true(o) ? o : or;}
+
+    // equivalent to ??
+	public static Object Coalesce(Object o, Object or) {return isset_obj(o) ? o : or;}
 }

@@ -13,7 +13,8 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.mediawiki.includes.site; import gplx.*; import gplx.xowa.*; import gplx.xowa.mediawiki.*; import gplx.xowa.mediawiki.includes.*;
+package gplx.xowa.mediawiki.includes.site; import gplx.*;
+import gplx.xowa.mediawiki.*;
 import gplx.xowa.mediawiki.includes.libs.*;
 /**
 * Collection of Site objects.
@@ -103,14 +104,14 @@ public class XomwSiteList extends XomwGenericArrayObject {	public int Len() {ret
 			*/
 			XomwSite site = (XomwSite)this.offsetGet(index);
 
-			XophpArray_.unset(this.byGlobalId, site.getGlobalId());
-			XophpArray_.unset(this.byInternalId, site.getInternalId());
+			XophpArray.unset(this.byGlobalId, site.getGlobalId());
+			XophpArray.unset(this.byInternalId, site.getInternalId());
 
 			Ordered_hash ids = site.getNavigationIds();
 			int len = ids.Len();
 			for (int i = 0; i < len; i++) {
 				int navId = Int_.Cast(ids.Get_at(i));
-				XophpArray_.unset(this.byNavigationId, navId);
+				XophpArray.unset(this.byNavigationId, navId);
 			}
 		}
 
@@ -126,7 +127,7 @@ public class XomwSiteList extends XomwGenericArrayObject {	public int Len() {ret
 	* @return array
 	*/
 	public String[] getGlobalIdentifiers() {
-		return XophpArray_.array_keys_str(this.byGlobalId);
+		return XophpArray.array_keys_str(this.byGlobalId);
 	}
 
 	/**
@@ -137,7 +138,7 @@ public class XomwSiteList extends XomwGenericArrayObject {	public int Len() {ret
 	* @return boolean
 	*/
 	public boolean hasSite(String globalSiteId) {
-		return XophpArray_.array_key_exists(globalSiteId, this.byGlobalId);
+		return XophpArray.array_key_exists(globalSiteId, this.byGlobalId);
 	}
 
 	/**
@@ -174,7 +175,7 @@ public class XomwSiteList extends XomwGenericArrayObject {	public int Len() {ret
 	* @return boolean
 	*/
 	@Override public boolean isEmpty() {
-		return XophpArray_.array_is_empty(this.byGlobalId);
+		return XophpArray.empty(this.byGlobalId);
 	}
 
 	/**
@@ -185,7 +186,7 @@ public class XomwSiteList extends XomwGenericArrayObject {	public int Len() {ret
 	* @return boolean
 	*/
 	public boolean hasInternalId(int id) {
-		return XophpArray_.array_key_exists(id, this.byInternalId);
+		return XophpArray.array_key_exists(id, this.byInternalId);
 	}
 
 	/**
@@ -222,7 +223,7 @@ public class XomwSiteList extends XomwGenericArrayObject {	public int Len() {ret
 	* @return boolean
 	*/
 	public boolean hasNavigationId(String id) {
-		return XophpArray_.array_key_exists(id, this.byNavigationId);
+		return XophpArray.array_key_exists(id, this.byNavigationId);
 	}
 
 	/**
