@@ -28,6 +28,8 @@ public class Lst_pfunc_itm {
 		// init wiki, ttl
 		Xowe_wiki wiki = ctx.Wiki();
 		Xoa_ttl ttl = wiki.Ttl_parse(ttl_bry); if (ttl == null) return null;		// EX:{{#lst:<>}} -> ""
+//                    if (ttl.Ns().Id() == wiki.Ns_mgr().Ns_page_id())
+//                        System.out.println("New_sect_or_null " + ttl.Full_db_as_str());
 
 		// get from cache
 		Lst_pfunc_itm rv = (Lst_pfunc_itm)wiki.Cache_mgr().Lst_cache().Get_by_bry(ttl_bry);

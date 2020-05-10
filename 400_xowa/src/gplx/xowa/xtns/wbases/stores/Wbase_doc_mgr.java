@@ -71,6 +71,7 @@ public class Wbase_doc_mgr {
 	public Wdata_doc Get_by_exact_id_or_null(byte[] ttl_bry) {// must correct case and ns; EX:"Q2" or "Property:P1"; not "q2" or "P2"
 		// load from cache
 		Wdata_doc rv = null;
+		//System.out.println(String_.new_u8(ttl_bry));
 		synchronized (thread_lock) {
 			rv = doc_cache.Get_or_null(ttl_bry);
 			if (rv == null) {

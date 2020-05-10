@@ -20,9 +20,16 @@ public class Rndm_root_special implements Xow_special_page {
 		Xowe_wiki wiki = (Xowe_wiki)wikii; Xoae_page page = (Xoae_page)pagei;
 		Xow_ns ns = wiki.Ns_mgr().Names_get_or_main(ttl.Rest_txt());
 		// Rndm_addon.Get(wiki).Mgr().Regy().Get_rndm_page_by_ns(ns);
-		byte[] random_ttl_bry = wiki.Db_mgr().Load_mgr().Find_random_ttl(ns);
-		byte[] root_bry = Xoa_ttl.Parse(wiki, random_ttl_bry).Root_txt();
-		wiki.Data_mgr().Redirect(page, ns.Gen_ttl(root_bry));
+		//byte[] random_ttl_bry = wiki.Db_mgr().Load_mgr().Find_random_ttl(ns);
+                //byte[] random_ttl_bry = Bry_.new_a7("Tlingit_Myths_and_Texts/3");
+		//byte[] root_bry = Xoa_ttl.Parse(wiki, random_ttl_bry).Page_txt(); //.Root_txt();
+		byte[] root_bry = wiki.Db_mgr().Load_mgr().Find_random_ttl(ns);
+                byte[] page_bry = ns.Gen_ttl(root_bry);
+		Xoa_ttl trg_ttl = Xoa_ttl.Parse(wiki, page_bry);
+		Xoa_url trg_url = Xoa_url.New(wiki.Domain_bry(), page_bry);
+		page.Ttl_(trg_ttl).Url_(trg_url);
+		page.Redirect_trail().Itms__add__article(trg_url, trg_ttl, null);
+		//wiki.Data_mgr().Redirect(page, ns.Gen_ttl(root_bry));
 	}
 
 	public static final String SPECIAL_KEY = "RandomRootPage";

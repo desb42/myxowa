@@ -208,7 +208,10 @@ public class Db_wikistrip {
 		if (sz > 6 && ((src[bgn+1] | 32) == 'f') && src[bgn+5] ==':') { // File:
 			return true;
 		}
-		else if (sz > 7 && ((src[bgn+1] | 32) == 'i') && src[bgn+6] ==':') { // Image:
+		else if (sz > 7 && (
+		  (((src[bgn+1] | 32) == 'i') && src[bgn+6] ==':') // Image:
+		  || (((src[bgn+1] | 32) == 'd') && src[bgn+6] ==':') // Datei:
+		  )) {
 			return true;
 		}
 		else if (sz > 10 && ((src[bgn+1] | 32) == 'c') && src[bgn+9] ==':') { // Category:
@@ -284,8 +287,8 @@ public class Db_wikistrip {
 			}
 			else if (b == ' ' || b == '\t' || b == '\n') { // find close (check for self closing)
 				nameend = pos - 1;
-                                if (nameend - namestart == 0)
-                                    return pos;
+				if (nameend - namestart == 0)
+					return pos;
 				while (pos < src_len) {
 					b = src[pos++];
 					if (b == '>') {
@@ -310,6 +313,7 @@ public class Db_wikistrip {
 			else
 				return namestart; // ignore the '<'
 		}
+		int tagend = pos;
 		// check for special <br > <hr > <img >
 		//System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend+40)));
 		if (nameend - namestart == 2) {
@@ -330,16 +334,18 @@ public class Db_wikistrip {
 				if (b == '<')
 					break;
 			}
-			if (pos >= src_len)
-				return pos; //??
+			if (pos >= src_len) { //no other angle found at all - skip this entity
+				break;
+			}
 			boolean isclose = false;
 			if (src[pos] == '/') {
 				isclose = true;
 				pos++;
 			}
 			// is this the same as the opener?
-			if (pos + nameend - namestart >= src_len)
-				return src_len;
+			if (pos + nameend - namestart >= src_len) { // not enough chars
+				break;
+			}
 			int i;
 			for (i = namestart; i < nameend; i++) {
 				if ((src[i] | 32) != (src[pos++] | 32))
@@ -349,8 +355,9 @@ public class Db_wikistrip {
 				continue;
 			b = src[pos++];
 			if (isclose) {
-				if (b != '>')
-					return src_len; // fail: skip to end
+				if (b != '>') {  // fail: skip tag
+					break;
+				}
 				if (levelcount == 0)
 					return pos;
 				levelcount--;
@@ -359,12 +366,15 @@ public class Db_wikistrip {
 				if (b == ' ' || b == '>') { // matching keyword
 					levelcount++;
 				}
-				else {
-					continue;
-				}
 			}
 		}
-                return pos;
+		// report/note an error
+		int beg = namestart - 10;
+		int end = tagend + 10;
+		if (beg < 0) beg = 0;
+		if (end >= src_len) end = src_len;
+		Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed angle { ttl=~{0} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end));
+		return tagend;
 	}
 
 	public byte[] Strip_wiki(byte[] src, boolean firstparaonly) {
@@ -380,17 +390,17 @@ public class Db_wikistrip {
 						b = src[pos];
 						if (b == '|') {
 							bfr.Add_mid(src, startpos, pos-1);
-							pos = findclosingtable(src, src_len, pos);
+							pos = findclosingtable(src, src_len, pos + 1);
 							startpos = pos;
 						}
 						else if (b == '{') {
 							bfr.Add_mid(src, startpos, pos-1);
 							int namestart = pos + 1;
-							pos = findclosingsquiggle(src, src_len, pos);
+							pos = findclosingsquiggle(src, src_len, pos + 1);
 							if (pos - startpos > 10) {
 								int npos = 0; 
 								int textstart = -1;
-								if (src[namestart] == 'l' && src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && src[namestart+4] == '|') {
+								if (src[namestart] == 'l' && src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && src[namestart+4] == '|') { // lang
 									npos = namestart + 5;
 									while (npos < pos) {
 										b = src[npos++];
@@ -400,8 +410,12 @@ public class Db_wikistrip {
 										}
 									}
 								}
-								else if (src[namestart] == 'n' && src[namestart+1] == 'i' && src[namestart+2] == 'h' && src[namestart+3] == 'o' && src[namestart+4] == 'n' && src[namestart+5] == 'g' && src[namestart+6] == 'o' && src[namestart+7] == '|') {
+								else if (src[namestart] == 'n' && src[namestart+1] == 'i' && src[namestart+2] == 'h' && src[namestart+3] == 'o' && src[namestart+4] == 'n' && src[namestart+5] == 'g' && src[namestart+6] == 'o' && src[namestart+7] == '|') { // nihongo
 									npos = namestart + 8;
+									textstart = npos;
+								}
+								else if (src[namestart] == 'd' && src[namestart+1] == 'a' && src[namestart+2] == 't' && src[namestart+3] == 'e') { // fr:template:date
+									npos = namestart + 5;
 									textstart = npos;
 								}
 								if (textstart > 0) {
@@ -518,17 +532,19 @@ public class Db_wikistrip {
 			byte b = src[pos++];
 			switch (b) {
 				case '\'':
-					if (pos < src_len) {
-						b = src[pos];
-						if (b == '\'') { // more than one '
-							bfr.Add_mid(src, startpos, pos-1);
-							while (pos < src_len) {
-								b = src[pos++];
-								if (b != '\'')
-									break;
-							}
-							startpos = pos - 1;
+					int apos_count = 1;
+					while (pos < src_len) {
+						if (src[pos++] == '\'') {
+							apos_count++;
 						}
+						else
+							break;
+					}
+					if (apos_count > 1) {
+						bfr.Add_mid(src, startpos, pos - apos_count - 1);
+						if (apos_count == 4) // equiv ''' '
+							pos--;
+						startpos = pos - 1;
 					}
 					break;
 				case '&': // replace all &...; with a space (upto a max of 10 chars)
@@ -616,7 +632,7 @@ public class Db_wikistrip {
 								initalic = true;
 							}
 						}
-						else if (apos_count == 3) {
+						else if (apos_count == 3 || apos_count == 4) {
 							if (inbold) {
 								bfr.Add(Gfh_tag_.B_rhs);
 								inbold = false;
@@ -625,6 +641,8 @@ public class Db_wikistrip {
 								bfr.Add(Gfh_tag_.B_lhs);
 								inbold = true;
 							}
+							if (apos_count == 4)
+								pos--;	// bold plus apos
 						}
 						else if (apos_count == 5) {
 							if (inbold && initalic) {
@@ -647,17 +665,41 @@ public class Db_wikistrip {
 						pos--; // because we looked ahead
 					break;
 				case '(':
-					if (firstbracket) {
+					int epos = findclosingbracket(src, src_len, pos);
+					if (firstbracket && !inbold) { // Egyptian_Air_Force
 						firstbracket = false;
 						bfr.Add_mid(src, startpos, pos-1);
 						// find matching close bracket
-						pos = findclosingbracket(src, src_len, pos);
-						if (pos < src_len && src[pos] == ',') {
-							if (bfr.Bfr()[bfr.Len()-1] == ' ')
-								bfr.Len_(bfr.Len() - 1);
+						pos = epos;
+						// look for a successive '('
+						if (pos + 3 < src_len) {
+							if (src[pos] == ' ' && src[pos+1] == '(')
+								pos = findclosingbracket(src, src_len, pos + 2);
 						}
 						startpos = pos;
-						pos--;
+						//pos--;
+					}
+					else {
+						// check for empty!! 
+						epos--;
+						int opos = pos;
+						boolean spaced = true;
+						while (pos < epos) {
+							b = src[pos++];
+							if (b != ' ' && b != ';' && b != ',' && b != '\'') {
+								spaced = false;
+								break;
+							}
+						}
+						if (spaced) {
+							bfr.Add_mid(src, startpos, opos-1);
+							startpos = epos + 1;
+							pos = startpos;
+						}
+					}
+					if (pos < src_len && src[pos] == ',') {
+						if (bfr.Bfr()[bfr.Len()-1] == ' ')
+							bfr.Len_(bfr.Len() - 1);
 					}
 					break;
 				case '"': // convet to &quot;

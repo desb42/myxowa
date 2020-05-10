@@ -24,6 +24,8 @@ public class Xow_page_mgr implements Gfo_invk {
 	public Xoae_page Load_page_by_ttl			(Xoa_ttl ttl)	{return Load_page(ttl, Bool_.N);}
 	public Xoae_page Load_page_by_ttl_for_msg	(Xoa_ttl ttl)	{return Load_page(ttl, Bool_.Y);}
 	private Xoae_page Load_page(Xoa_ttl ttl, boolean called_from_msg) {
+//                    if (ttl.Ns().Id() == wiki.Ns_mgr().Ns_page_id())
+//                        System.out.println("Load_page " + ttl.Full_db_as_str());
 		Xoae_page rv = Xoae_page.New(wiki, ttl);
 		Load_by_ns(rv, wiki.Utl__url_parser().Parse(ttl.Raw()), ttl, called_from_msg);
 		return rv;

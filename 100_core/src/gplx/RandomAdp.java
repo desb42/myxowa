@@ -19,4 +19,5 @@ public class RandomAdp {
 	private final Random under;
 	public RandomAdp(Random v) {this.under = v;}
 	public int Next(int max) {return under.nextInt(max);}	
+	//public int Next(int max) {int val = under.nextInt(max); System.out.println(val); return val;}	
 }

@@ -120,9 +120,10 @@ public class Xoh_head_mgr implements gplx.core.brys.Bfr_arg {
 			}
 			// if wikisource and main: namespace and there is an index page (how do we tell?)
 			if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource) {
-			// by the presence of pp_indexpage
+				// by the presence of pp_indexpage
 				byte[] index_page = page.Pp_indexpage();
 				if (index_page == null) {
+					// or look it up?
 					Xoa_ttl ttl = wiki.Index_page().Get_index_page(page.Db().Page().Id());
 					if (ttl != null)
 						index_page = ttl.Full_db();

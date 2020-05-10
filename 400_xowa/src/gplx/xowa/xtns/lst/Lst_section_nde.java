@@ -24,7 +24,22 @@ public class Lst_section_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		byte xatr_id = ((Byte_obj_val)xatr_id_obj).Val();
 		switch (xatr_id) {
 			case Xatr_name: case Xatr_bgn: case Xatr_end:
-				section_name = xatr.Val_as_bry(); name_tid = xatr_id; break;
+				//section_name = xatr.Val_as_bry(); name_tid = xatr_id; break;
+				name_tid = xatr_id;
+				int valpos = xatr.Val_bgn();
+				byte b = src[valpos-1];
+				if (b == '"' || b == '\'')
+					section_name = xatr.Val_as_bry();
+				else {
+					int src_len = src.length;
+					while (valpos < src_len) {
+						if (src[valpos] == '/')
+							break;
+						valpos++;
+					}
+					section_name = Bry_.Trim(Bry_.Mid(src, xatr.Val_bgn(), valpos));
+				}
+				break;
 		}
 	}
 	public Xop_xnde_tkn Xnde() {return xnde;} private Xop_xnde_tkn xnde;
