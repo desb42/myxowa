@@ -696,12 +696,19 @@ public class Db_wikistrip {
 							startpos = epos + 1;
 							pos = startpos;
 						}
-					}
-					if (pos < src_len && src[pos] == ',') {
-						if (bfr.Bfr()[bfr.Len()-1] == ' ')
-							bfr.Len_(bfr.Len() - 1);
+						else
+							pos = opos;
 					}
 					break;
+				case ',':
+				{
+					bfr.Add_mid(src, startpos, pos-1);
+					int blen = bfr.Len();
+					if (blen > 0 && bfr.Bfr()[blen-1] == ' ')
+						bfr.Len_(blen - 1);
+					startpos = pos - 1;
+					break;
+				}
 				case '"': // convet to &quot;
 					bfr.Add_mid(src, startpos, pos-1);
 					bfr.Add_str_a7("&quot;");

@@ -207,17 +207,23 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			return Html::rawElement( 'a', $attrs );
 		}
 */
-		byte[] groups = cvt(this.show);
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		Fmt__params.Bld_many(tmp_bfr, this.lang, ctx.Wiki().Domain_bry(), cvt(ctx.Page().Ttl().Full_txt()), groups);
-		byte[] params = tmp_bfr.To_bry_and_clear();
-
-		//byte[] server = Bry_.new_a7("https://maps.wikimedia.org");
-		byte[] server = Bry_.new_a7("//www.xowa.com/xowa/api/maps.wikimedia.org");
-		Fmt__img.Bld_many(tmp_bfr, server, this.mapstyle, staticZoom, staticLat, staticLon, staticWidth, this.height, params, staticWidth, this.height);
-		byte[] img = tmp_bfr.To_bry_and_clear();
-		//System.out.println(String_.new_a7(img));
-		Gfo_usr_dlg_.Instance.Warn_many("", "", "mapping: page=~{0} mapimg=~{1}", ctx.Page().Ttl().Full_db(), img);
+		byte[] img = null;
+		if (this.show != null) {
+			byte[] groups = cvt(this.show);
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			Fmt__params.Bld_many(tmp_bfr, this.lang, ctx.Wiki().Domain_bry(), cvt(ctx.Page().Ttl().Full_txt()), groups);
+			byte[] params = tmp_bfr.To_bry_and_clear();
+	
+			//byte[] server = Bry_.new_a7("https://maps.wikimedia.org");
+			byte[] server = Bry_.new_a7("//www.xowa.com/xowa/api/maps.wikimedia.org");
+			Fmt__img.Bld_many(tmp_bfr, server, this.mapstyle, staticZoom, staticLat, staticLon, staticWidth, this.height, params, staticWidth, this.height);
+			img = tmp_bfr.To_bry_and_clear();
+			//System.out.println(String_.new_a7(img));
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "mapping: page=~{0} mapimg=~{1}", ctx.Page().Ttl().Full_db(), img);
+		}
+		else {
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "mapping: page=~{0} ~{1} ~{2} ~{3} ~{4} ~{5} ~{6} ", ctx.Page().Ttl().Full_db(), this.mapstyle, staticZoom, staticLat, staticLon, staticWidth, this.height);
+		}
 
 		if ( !framed ) {
 			//$attrs['class'] .= " {$containerClass} {$alignClasses[$this->align]}";
