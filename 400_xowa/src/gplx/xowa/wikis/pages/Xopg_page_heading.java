@@ -22,17 +22,19 @@ public class Xopg_page_heading implements Bfr_arg {
 	private byte[] ttl_full_db;
 	private byte[] display_title;
 	private boolean mode_is_read;
-	public Xopg_page_heading Init(Xowe_wiki wiki, boolean mode_is_read, Xopg_html_data html_data, byte[] ttl_full_db, byte[] display_title) {
+	private byte[] lang_code;
+	public Xopg_page_heading Init(Xowe_wiki wiki, boolean mode_is_read, Xopg_html_data html_data, byte[] ttl_full_db, byte[] display_title, byte[] lang_code) {
 		this.wiki = wiki;
 		this.mode_is_read = mode_is_read;
 		this.ttl_full_db = ttl_full_db;
 		this.html_data = html_data;
 		this.display_title = display_title;
+		this.lang_code = lang_code;
 		return this;
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		if (html_data.Xtn_pgbnr() != null) {
-			fmtr.Bld_many(bfr, Bry_.Empty, Bry_.Empty);
+			fmtr.Bld_many(bfr, Bry_.Empty, Bry_.Empty, Bry_.Empty);
 			return;
 		}	// pgbnr exists; don't add title
 		byte[] edit_lead_section = Bry_.Empty;
@@ -43,8 +45,8 @@ public class Xopg_page_heading implements Bfr_arg {
 			edit_lead_section = tmp_bfr.To_bry_and_clear();
 		}
 
-		fmtr.Bld_many(bfr, display_title, edit_lead_section);
+		fmtr.Bld_many(bfr, lang_code, display_title, edit_lead_section);
 	}
 	private static final    byte[] Bry__lead_section_hint = Bry_.new_u8("(Lead)");
-	private final    Bry_fmt fmtr = Bry_fmt.Auto_nl_apos("<h1 id=\"firstHeading\" class=\"firstHeading\">~{page_title}~{edit_lead_section}</h1>");	// <span>~{page_title}</span>
+	private final    Bry_fmt fmtr = Bry_fmt.Auto_nl_apos("<h1 id=\"firstHeading\" class=\"firstHeading\" lang=\"~{lang}\">~{page_title}~{edit_lead_section}</h1>");	// <span>~{page_title}</span>
 }

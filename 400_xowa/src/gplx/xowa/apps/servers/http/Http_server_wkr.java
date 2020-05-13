@@ -33,6 +33,8 @@ import java.util.Locale;
 import gplx.core.brys.fmtrs.*;
 import gplx.xowa.files.Xof_file_wkr_;
 import gplx.xowa.files.*;
+import gplx.xowa.langs.Xol_lang_stub_;
+import gplx.xowa.langs.Xol_lang_itm;
 public class Http_server_wkr implements Gfo_invk {
         private static String rootdir;
 	private final    int uid;
@@ -48,6 +50,7 @@ public class Http_server_wkr implements Gfo_invk {
 	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(64);
 	private Socket_adp socket;
 	private Http_data__client data__client;
+        private Xosrv_http_wkr_ response;
 	private final    Gfo_url_parser url_parser = new Gfo_url_parser();
 	public Http_server_wkr(Http_server_mgr server_mgr, int uid){
 		this.server_mgr = server_mgr; this.uid = uid;
@@ -68,6 +71,7 @@ public class Http_server_wkr implements Gfo_invk {
 				client_wtr.Stream_(socket.Get_output_stream());
 				request = request_parser.Parse(client_rdr);
 				this.data__client = new Http_data__client(request.Host(), socket.Ip_address());
+                                this.response = new Xosrv_http_wkr_();
 				byte[] url_bry = request.Url();
 				if (Bry_.Eq(url_bry, Url__home)) url_bry = server_mgr.Home();	// "localhost:8080" comes thru as url of "/"; transform to custom home page; DATE:2015-10-11
 				switch (request.Type()) {
@@ -126,7 +130,7 @@ public class Http_server_wkr implements Gfo_invk {
 			Db_wikistrip ws = new Db_wikistrip();
 			Http_server_page page = app.Http_server().Parse_page_to_html(data__client, url_parser);
 			if (page.Redirect() != null) {
-				Xosrv_http_wkr_.Write_redirect(client_wtr, page.Redirect());
+				response.Write_redirect(client_wtr, page.Redirect());
 				return;
 			}
 			else if (url_parser.Action() == Xopg_view_mode_.Tid__firstpara) {
@@ -194,7 +198,10 @@ public class Http_server_wkr implements Gfo_invk {
 				}
 				byte[] stype = Bry_.new_a7("standard");
 				byte[] page_title = page.Ttl().Full_db_wo_ns();
-				json_fmtr.Bld_bfr_many(bfr, stype, page_title, page.Page().Db().Page().Id(), thumb, orig, ws.First_para(wikitext, page.Ttl()));
+				json_fmtr.Bld_bfr_many(bfr, 
+                                        stype, page_title, page.Page().Db().Page().Id(), 
+                                        thumb, orig, ws.First_para(wikitext, page.Ttl()),
+                                        page.Wiki().Lang().Key_bry(), page.Wiki().Lang().Dir_ltr_bry());
 
 				page_html = String_.new_u8(bfr.To_bry());
 
@@ -224,10 +231,11 @@ public class Http_server_wkr implements Gfo_invk {
 					page_html = String_.Replace(page_html, "<textarea", "<textarea name=\"wpTextbox1\"");
 				}
 			}
-			Xosrv_http_wkr_.Set_content_type(page.Content_type());
+			response.Set_content_type(page.Content_type());
+                        response.Set_content_lang(page.Wiki().Lang());
 		}
 		writeFile(page_html, rootdir + "html.htm");
-		Xosrv_http_wkr_.Write_response_as_html(client_wtr, Bool_.N, page_html);
+		response.Write_response_as_html(client_wtr, Bool_.N, page_html);
 	}
 	private void Process_post(Http_request_itm request, byte[] url_bry) {
 		int question_pos = Bry_find_.Find_fwd(url_bry, Byte_ascii.Question);
@@ -254,7 +262,7 @@ public class Http_server_wkr implements Gfo_invk {
 		server_wtr.Write_str_w_nl(String_.new_u8(request.Host()) + "|POST|" + page_name);
 		String page_html = app.Http_server().Preview_page_to_html(data__client, Bry_.new_u8(wiki_domain), Bry_.new_u8(page_name), msg);
 		page_html = Convert_page(page_html, root_dir_http, wiki_domain);
-		Xosrv_http_wkr_.Write_response_as_html(client_wtr, Bool_.N, page_html);
+		response.Write_response_as_html(client_wtr, Bool_.N, page_html);
 	}
 	private static final    byte[] Key__tbox = Bry_.new_a7("wpTextbox1");
 	private void Process_exec_post(Http_request_itm request) {
@@ -274,7 +282,7 @@ public class Http_server_wkr implements Gfo_invk {
 		}
 		if (app_mode_itm.Tid_is_http())
 			rv = Convert_page(rv, root_dir_http			, "<<MISSING_WIKI>>");
-		Xosrv_http_wkr_.Write_response_as_html(client_wtr, app_mode_itm.Tid() == Xoa_app_mode.Itm_file.Tid(), rv);
+		response.Write_response_as_html(client_wtr, app_mode_itm.Tid() == Xoa_app_mode.Itm_file.Tid(), rv);
 	}
 	private static final    byte[] Key__msg = Bry_.new_a7("msg"), Key__app_mode = Bry_.new_a7("app_mode");
 	private static final int Tid_post_url_json = 1, Tid_post_url_gfs = 2;
@@ -815,8 +823,8 @@ public class Http_server_wkr implements Gfo_invk {
 	private static final    int Url__fsys_len = Url__fsys.length;
 	private static final    Bry_fmtr
 	  json_fmtr = Bry_fmtr.new_
-	("{\"type\":\"~{stype}\",\"title\":\"~{page_title}\",\"displaytitle\":\"~{page_title}\",\"namespace\":{\"id\":0,\"text\":\"\"},\"wikibase_item\":\"Q820802\",\"titles\":{\"canonical\":\"Berkane_Province\",\"normalized\":\"Berkane Province\",\"display\":\"Berkane Province\"},\"pageid\":~{page_id},~{thumb}~{orig}\"lang\":\"en\",\"dir\":\"ltr\",\"revision\":\"922573281\",\"tid\":\"1005aac0-f526-11e9-b822-5d02d224142b\",\"timestamp\":\"2019-10-22T23:45:38Z\",\"description\":\"Province in Oriental, Morocco\",\"coordinates\":{\"lat\":34.917614,\"lon\":-2.317469},\"content_urls\":{\"desktop\":{\"page\":\"https://en.wikipedia.org/wiki/Berkane_Province\",\"revisions\":\"https://en.wikipedia.org/wiki/Berkane_Province?action=history\",\"edit\":\"https://en.wikipedia.org/wiki/Berkane_Province?action=edit\",\"talk\":\"https://en.wikipedia.org/wiki/Talk:Berkane_Province\"},\"mobile\":{\"page\":\"https://en.m.wikipedia.org/wiki/Berkane_Province\",\"revisions\":\"https://en.m.wikipedia.org/wiki/Special:History/Berkane_Province\",\"edit\":\"https://en.m.wikipedia.org/wiki/Berkane_Province?action=edit\",\"talk\":\"https://en.m.wikipedia.org/wiki/Talk:Berkane_Province\"}},\"api_urls\":{\"summary\":\"https://en.wikipedia.org/api/rest_v1/page/summary/Berkane_Province\",\"metadata\":\"https://en.wikipedia.org/api/rest_v1/page/metadata/Berkane_Province\",\"references\":\"https://en.wikipedia.org/api/rest_v1/page/references/Berkane_Province\",\"media\":\"https://en.wikipedia.org/api/rest_v1/page/media/Berkane_Province\",\"edit_html\":\"https://en.wikipedia.org/api/rest_v1/page/html/Berkane_Province\",\"talk_page_html\":\"https://en.wikipedia.org/api/rest_v1/page/html/Talk:Berkane_Province\"},\"extract\":\"abcdfe\",\"extract_html\":\"~{para}\"}",
-                "stype", "page_title", "page_id", "thumb", "orig", "para")
+	("{\"type\":\"~{stype}\",\"title\":\"~{page_title}\",\"displaytitle\":\"~{page_title}\",\"namespace\":{\"id\":0,\"text\":\"\"},\"wikibase_item\":\"Q820802\",\"titles\":{\"canonical\":\"Berkane_Province\",\"normalized\":\"Berkane Province\",\"display\":\"Berkane Province\"},\"pageid\":~{page_id},~{thumb}~{orig}\"lang\":\"~{lang}\",\"dir\":\"~{dir}\",\"revision\":\"922573281\",\"tid\":\"1005aac0-f526-11e9-b822-5d02d224142b\",\"timestamp\":\"2019-10-22T23:45:38Z\",\"description\":\"Province in Oriental, Morocco\",\"coordinates\":{\"lat\":34.917614,\"lon\":-2.317469},\"content_urls\":{\"desktop\":{\"page\":\"https://en.wikipedia.org/wiki/Berkane_Province\",\"revisions\":\"https://en.wikipedia.org/wiki/Berkane_Province?action=history\",\"edit\":\"https://en.wikipedia.org/wiki/Berkane_Province?action=edit\",\"talk\":\"https://en.wikipedia.org/wiki/Talk:Berkane_Province\"},\"mobile\":{\"page\":\"https://en.m.wikipedia.org/wiki/Berkane_Province\",\"revisions\":\"https://en.m.wikipedia.org/wiki/Special:History/Berkane_Province\",\"edit\":\"https://en.m.wikipedia.org/wiki/Berkane_Province?action=edit\",\"talk\":\"https://en.m.wikipedia.org/wiki/Talk:Berkane_Province\"}},\"api_urls\":{\"summary\":\"https://en.wikipedia.org/api/rest_v1/page/summary/Berkane_Province\",\"metadata\":\"https://en.wikipedia.org/api/rest_v1/page/metadata/Berkane_Province\",\"references\":\"https://en.wikipedia.org/api/rest_v1/page/references/Berkane_Province\",\"media\":\"https://en.wikipedia.org/api/rest_v1/page/media/Berkane_Province\",\"edit_html\":\"https://en.wikipedia.org/api/rest_v1/page/html/Berkane_Province\",\"talk_page_html\":\"https://en.wikipedia.org/api/rest_v1/page/html/Talk:Berkane_Province\"},\"extract\":\"abcdfe\",\"extract_html\":\"~{para}\"}",
+                "stype", "page_title", "page_id", "thumb", "orig", "para", "lang", "dir")
 	, thumb_fmtr = Bry_fmtr.new_("\"thumbnail\": {\"source\": \"/xowa/api/wikipedia/~{site}/thumb/~{md5}/~{fname}/40px-~{fname}~{ext}\",\"width\":~{width},\"height\":~{height}},",
 	              "site", "md5", "fname", "ext", "width", "height")
 	, orig_fmtr = Bry_fmtr.new_("\"originalimage\":{\"source\":\"/xowa/api/wikipedia/~{site}/~{md5}/~{fname}\",\"width\":~{width},\"height\":~{height}},",
@@ -824,9 +832,18 @@ public class Http_server_wkr implements Gfo_invk {
 	;
 }
 class Xosrv_http_wkr_ {
-    public static void Set_content_type(byte[] content_type) {Rsp__content_type_html = content_type;}
-	public static void Write_response_as_html(Http_client_wtr client_wtr, boolean cross_domain, String html) {Write_response_as_html(client_wtr, cross_domain, Bry_.new_u8(html));}
-	public static void Write_response_as_html(Http_client_wtr client_wtr, boolean cross_domain, byte[] html) {
+    private byte[] lang_rsp;
+    public Xosrv_http_wkr_() {
+        lang_rsp = null;
+    }
+	public void Set_content_lang(Xol_lang_itm lang) {
+            if (lang.Lang_id() != Xol_lang_stub_.Id_en) {
+                lang_rsp = Bry_.Add(Rsp__lang, lang.Key_bry(), Byte_ascii.Nl_bry);
+                        }
+        }
+	public void Set_content_type(byte[] content_type) {content_type_html = content_type;}
+	public void Write_response_as_html(Http_client_wtr client_wtr, boolean cross_domain, String html) {Write_response_as_html(client_wtr, cross_domain, Bry_.new_u8(html));}
+	public void Write_response_as_html(Http_client_wtr client_wtr, boolean cross_domain, byte[] html) {
 		try{
 			// TODO_OLD: add command-line argument to allow testing from local file
 			// if (cross_domain)
@@ -834,7 +851,8 @@ class Xosrv_http_wkr_ {
 			client_wtr.Write_bry
 			( Bry_.Add
 			(   Rsp__http_ok
-			,   Rsp__content_type_html
+			,   content_type_html
+                                , lang_rsp
 			,   Byte_ascii.Nl_bry
 			,   html
 			));
@@ -843,7 +861,7 @@ class Xosrv_http_wkr_ {
 			client_wtr.Rls();
 		}		
 	}
-	public static void Write_redirect(Http_client_wtr client_wtr, byte[] redirect) {
+	public void Write_redirect(Http_client_wtr client_wtr, byte[] redirect) {
 		try{
 			client_wtr.Write_bry
 			(   Bry_.Add
@@ -860,10 +878,11 @@ class Xosrv_http_wkr_ {
 			client_wtr.Rls();
 		}
 	}
-	public static byte[] Rsp__content_type_html;
+	public byte[] content_type_html;
 	public static final    byte[]
 	  Rsp__http_ok				= Bry_.new_a7("HTTP/1.1 200 OK:\n")
 	, Rsp__http_redirect        = Bry_.new_a7("HTTP/1.1 302 Found:\n")
 	, Rsp__location             = Bry_.new_a7("Location: /") // "/" to start from root
+	, Rsp__lang                 = Bry_.new_a7("Content-language: ")
         ;
 }

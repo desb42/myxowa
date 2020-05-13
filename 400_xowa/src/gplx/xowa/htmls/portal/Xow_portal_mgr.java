@@ -160,7 +160,8 @@ public class Xow_portal_mgr implements Gfo_invk {
 		else
 			subjectId = Bry_.Lcase__all(subjectId);
 		String subjectKey = "nstab-" + String_.new_u8(subjectId);
-		if (Bry_.Has_at_end(wiki.Props().Siteinfo_mainpage(), ttl.Page_db()))
+//		if (Bry_.Has_at_end(wiki.Props().Siteinfo_mainpage(), ttl.Page_db()))
+		if (Bry_.Eq(Xoa_ttl.Replace_unders(page.Ttl().Raw()), wiki.Props().Main_page()))
 			subjectKey = "mainpage-nstab";
 		byte[] portal_main = msg_mgr.Val_by_key_obj(subjectKey);
 		// if no mapping use the Namespace name
@@ -415,8 +416,10 @@ public class Xow_portal_mgr implements Gfo_invk {
 	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_div_personal_))					div_personal_fmtr.Fmt_(m.ReadBry("v"));
-		else if	(ctx.Match(k, Invk_div_ns_))						div_ns_fmtr.Fmt_(Reverse_li(m.ReadBry("v")));
-		else if	(ctx.Match(k, Invk_div_view_))						div_view_fmtr.Fmt_(Reverse_li(m.ReadBry("v")));
+//		else if	(ctx.Match(k, Invk_div_ns_))						div_ns_fmtr.Fmt_(Reverse_li(m.ReadBry("v")));
+//		else if	(ctx.Match(k, Invk_div_view_))						div_view_fmtr.Fmt_(Reverse_li(m.ReadBry("v")));
+		else if	(ctx.Match(k, Invk_div_ns_))						div_ns_fmtr.Fmt_(m.ReadBry("v"));
+		else if	(ctx.Match(k, Invk_div_view_))						div_view_fmtr.Fmt_(m.ReadBry("v"));
 		else if	(ctx.Match(k, Invk_div_logo_))						div_logo_fmtr.Fmt_(m.ReadBry("v"));
 		else if	(ctx.Match(k, Invk_div_home_))						div_home_fmtr.Fmt_(m.ReadBry("v"));
 		else if	(ctx.Match(k, Invk_div_sync_))						div_sync_fmtr.Fmt_(m.ReadBry("v"));

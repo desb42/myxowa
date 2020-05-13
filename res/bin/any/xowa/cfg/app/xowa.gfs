@@ -168,8 +168,7 @@ app.wikis.get('~{wiki_key}').html.portal {
       <ul>
         <li id="ca-view"    class="~{portal_view_read_cls}"><span><a href="~{portal_view_read_href}" class="xowa-hover-off">~{<>msgs.get('vector-view-view');<>}</a></span></li>
         <li id="ca-edit"    class="~{portal_view_edit_cls}"><span><a href="~{portal_view_edit_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-edit');<>}>~{<>msgs.get('vector-view-edit');<>}</a></span></li>
-        <li id="ca-history" class="~{portal_view_html_cls}"><span><a href="~{portal_view_html_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('xowa-portal-view_html');<>}>~{<>msgs.get('xowa-portal-view_html');<>}</a></span>
-        </li>
+        <li id="ca-history" class="~{portal_view_html_cls}"><span><a href="~{portal_view_html_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('xowa-portal-view_html');<>}>~{<>msgs.get('xowa-portal-view_html');<>}</a></span></li>
       </ul>
     </div>
     <div id="p-search" role="search">

@@ -89,8 +89,8 @@ public class Wbase_claim_type_ {
 	public static byte Get_tid_or_unknown(String key)					{return Get_tid_or_unknown(Bry_.new_u8(key));}
 	public static byte Get_tid_or_unknown(byte[] key)					{return Get_tid_or_unknown(key, 0, key.length);}
 	public static byte Get_tid_or_unknown(byte[] key, int bgn, int end) {return Reg.Get_tid_or(key, bgn, end, Tid__unknown);}
-        public static byte[] Get_name(byte[] key) {
-            byte tid = Get_tid_or_unknown(key);
-            return names[tid];
-        }
+	public static byte[] Get_name(byte[] key) {
+		byte tid = Get_tid_or_unknown(key);
+		return names[tid];
+	}
 }

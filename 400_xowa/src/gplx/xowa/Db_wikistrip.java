@@ -205,16 +205,19 @@ public class Db_wikistrip {
 	}
 	private boolean check_ns(byte[] src, int bgn, int end) {
 		int sz = end - bgn;
-		if (sz > 6 && ((src[bgn+1] | 32) == 'f') && src[bgn+5] ==':') { // File:
+		if (sz > 6 && ((src[bgn+1] | 32) == 'f') && src[bgn+5] == ':') { // File:
 			return true;
 		}
 		else if (sz > 7 && (
-		  (((src[bgn+1] | 32) == 'i') && src[bgn+6] ==':') // Image:
-		  || (((src[bgn+1] | 32) == 'd') && src[bgn+6] ==':') // Datei:
+		  (((src[bgn+1] | 32) == 'i') && src[bgn+6] == ':') // Image:
+		  || (((src[bgn+1] | 32) == 'd') && src[bgn+6] == ':') // Datei:
 		  )) {
 			return true;
 		}
-		else if (sz > 10 && ((src[bgn+1] | 32) == 'c') && src[bgn+9] ==':') { // Category:
+		else if (sz > 10 && (
+		  (((src[bgn+1] | 32) == 'c') && src[bgn+9] == ':') // Category:
+		  || (src[bgn+1] == -41 && src[bgn+9] == ':') // %d7%a7%d7%95%d7%91%d7%a5: hebrew
+		  )) {
 			return true;
 		}
 		return false;
@@ -715,7 +718,11 @@ public class Db_wikistrip {
 					startpos = pos;
 					break;
 				case '\n':
-					// check for multiple \n (only \n\n)
+					// ignore
+					bfr.Add_mid(src, startpos, pos-1);
+					startpos = pos;
+					break;
+/*					// check for multiple \n (only \n\n)
 					int nlcount = 1;
 					int nlpos = pos;
 					while (pos < src_len) { 
@@ -742,7 +749,7 @@ public class Db_wikistrip {
 					}
 					else
 						startpos = pos;
-					break;
+					break;*/
 			}
 		}
 		bfr.Add(Gfh_tag_.P_rhs);
