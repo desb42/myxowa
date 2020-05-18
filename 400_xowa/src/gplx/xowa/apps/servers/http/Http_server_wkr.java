@@ -36,7 +36,7 @@ import gplx.xowa.files.*;
 import gplx.xowa.langs.Xol_lang_stub_;
 import gplx.xowa.langs.Xol_lang_itm;
 public class Http_server_wkr implements Gfo_invk {
-        private static String rootdir;
+	private static String rootdir;
 	private final    int uid;
 	private final    Http_server_mgr server_mgr;
 	private final    Http_server_wtr server_wtr;
@@ -50,7 +50,7 @@ public class Http_server_wkr implements Gfo_invk {
 	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(64);
 	private Socket_adp socket;
 	private Http_data__client data__client;
-        private Xosrv_http_wkr_ response;
+	private Xosrv_http_wkr_ response;
 	private final    Gfo_url_parser url_parser = new Gfo_url_parser();
 	public Http_server_wkr(Http_server_mgr server_mgr, int uid){
 		this.server_mgr = server_mgr; this.uid = uid;
@@ -58,7 +58,7 @@ public class Http_server_wkr implements Gfo_invk {
 		this.root_dir_http = app.Fsys_mgr().Root_dir().To_http_file_str();
 		this.root_dir_fsys = Bry_.new_u8(app.Fsys_mgr().Root_dir().Raw());
 		this.request_parser = server_mgr.Request_parser();
-                rootdir = app.Fsys_mgr().Root_dir().toString();
+		rootdir = app.Fsys_mgr().Root_dir().toString();
 	}
 	public void Init_by_thread(Socket_adp socket) {
 		this.socket = socket;
@@ -170,25 +170,6 @@ public class Http_server_wkr implements Gfo_invk {
 							extension = Bry_.new_a7(".jpg");
 							break;
 					}
-
-/*					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 's') // .svg .stl
-						ext = Bry_.new_a7(".png");
-					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 'x') // .xcf
-						ext = Bry_.new_a7(".png");
-					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 'b') // .bmp
-						ext = Bry_.new_a7(".png");
-					if (fname[fname.length-5] == '.' && fname[fname.length-4] == 'w') // .webm
-						ext = Bry_.new_a7(".jpg");
-					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 'o') // .ogv .oga
-						ext = Bry_.new_a7(".jpg");
-					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 't') // .tif
-						ext = Bry_.new_a7(".jpg");
-					if (fname[fname.length-5] == '.' && fname[fname.length-4] == 't') // .tiff
-						ext = Bry_.new_a7(".jpg");
-					if (fname[fname.length-4] == '.' && fname[fname.length-3] == 'p') // .pdf
-						ext = Bry_.new_a7(".jpg");
-					if (fname[fname.length-5] == '.' && fname[fname.length-4] == 'd') // .djvu
-						ext = Bry_.new_a7(".jpg");*/
 					thumb_fmtr.Bld_bfr_many(bfr, site, md5_subdir, fname, extension, pi.width/2, pi.height/2);
 					thumb = bfr.To_bry_and_clear();
     //thumb = Bry_.new_u8("\"thumbnail\": {\"source\": \"/xowa/api/wikipedia/en/thumb/1/12/Flag_of_Poland.svg/40px-Flag_of_Poland.svg.png\",\"width\":640,\"height\":400},");
@@ -603,6 +584,7 @@ public class Http_server_wkr implements Gfo_invk {
 	}
 	public static byte[] Replace_fsys_hack(byte[] html_bry) {
 		// init
+                String ss = String_.new_u8(html_bry);
 		Bry_bfr bfr = Bry_bfr_.New();
 		if (html_bry == null) return null;
 		int len = html_bry.length;
@@ -832,15 +814,15 @@ public class Http_server_wkr implements Gfo_invk {
 	;
 }
 class Xosrv_http_wkr_ {
-    private byte[] lang_rsp;
-    public Xosrv_http_wkr_() {
-        lang_rsp = null;
-    }
+	private byte[] lang_rsp;
+	public Xosrv_http_wkr_() {
+		lang_rsp = null;
+	}
 	public void Set_content_lang(Xol_lang_itm lang) {
-            if (lang.Lang_id() != Xol_lang_stub_.Id_en) {
-                lang_rsp = Bry_.Add(Rsp__lang, lang.Key_bry(), Byte_ascii.Nl_bry);
-                        }
-        }
+		if (lang.Lang_id() != Xol_lang_stub_.Id_en) {
+			lang_rsp = Bry_.Add(Rsp__lang, lang.Key_bry(), Byte_ascii.Nl_bry);
+		}
+	}
 	public void Set_content_type(byte[] content_type) {content_type_html = content_type;}
 	public void Write_response_as_html(Http_client_wtr client_wtr, boolean cross_domain, String html) {Write_response_as_html(client_wtr, cross_domain, Bry_.new_u8(html));}
 	public void Write_response_as_html(Http_client_wtr client_wtr, boolean cross_domain, byte[] html) {
@@ -852,7 +834,7 @@ class Xosrv_http_wkr_ {
 			( Bry_.Add
 			(   Rsp__http_ok
 			,   content_type_html
-                                , lang_rsp
+			,   lang_rsp
 			,   Byte_ascii.Nl_bry
 			,   html
 			));
@@ -867,7 +849,7 @@ class Xosrv_http_wkr_ {
 			(   Bry_.Add
 				( Rsp__http_redirect
 				, Rsp__location
-                                        , Bry_.new_a7("xowa/")
+				, Bry_.new_a7("xowa/")
 				, redirect
 				, Byte_ascii.Nl_bry
 				, Byte_ascii.Nl_bry // proxy servers like nginx require 2 line breaks; ISSUE#:600; DATE:2019-11-05
@@ -884,5 +866,5 @@ class Xosrv_http_wkr_ {
 	, Rsp__http_redirect        = Bry_.new_a7("HTTP/1.1 302 Found:\n")
 	, Rsp__location             = Bry_.new_a7("Location: /") // "/" to start from root
 	, Rsp__lang                 = Bry_.new_a7("Content-language: ")
-        ;
+	;
 }

@@ -34,12 +34,17 @@ class Dpl_page_finder {
 		// get include_ttls
 		List_adp include_ttls = itm.Ctg_includes();
 		List_adp exclude_ttls = itm.Ctg_excludes();
-		if (include_ttls == null) return null; // exit early if none exists
+		if (include_ttls == null && exclude_ttls == null) return null; // exit early if none exists
 
 		Xow_db_mgr db_mgr = wiki.Data__core_mgr();
 		Xowd_page_tbl page_tbl = db_mgr.Db__core().Tbl__page();
-		int len = include_ttls.Len();
-		int[] cat_ids = new int[len];
+                int len;
+                int[] cat_ids;
+		if (include_ttls == null)
+			len = 0;
+		else
+			len = exclude_ttls.Len();
+		cat_ids = new int[len];
 		for (int i = 0; i < len; i++) {
 			// get cat page ids
 			cat_ids[i] = Get_ctg_ttl_page_id(include_ttls, i, page_tbl);
