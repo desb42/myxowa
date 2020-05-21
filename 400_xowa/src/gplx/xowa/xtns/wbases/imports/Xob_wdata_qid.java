@@ -61,7 +61,7 @@ public class Xob_wdata_qid extends Xob_itm_dump_base implements Xob_page_wkr, Gf
 			for (int i = 0; i < sitelinks_len; i++) { // iterate sitelinks
 				Wdata_sitelink_itm sitelink = (Wdata_sitelink_itm)sitelinks.Get_at(i);
 				byte[] sitelink_site = sitelink.Site(), sitelink_ttl = sitelink.Name();
-				ns_parser.Find(ns_parser_rslt, sitelink_site, sitelink_ttl);
+				ns_parser.Find(ns_parser_rslt, sitelink_site, sitelink_ttl, qid);
 				int sitelink_ns = ns_parser_rslt.Ns_id();
 				if (sitelink_ns != Xow_ns_.Tid__main)	// ttl not in main; chop off ns portion; EX:Aide:French_title -> French_title
 					sitelink_ttl = Bry_.Mid(sitelink_ttl, ns_parser_rslt.Ttl_bgn(), sitelink_ttl.length);

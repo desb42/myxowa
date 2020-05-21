@@ -63,6 +63,7 @@ public class Fsdb_db_mgr__v2_bldr {
 		Fsm_mnt_mgr.Patch(cfg_tbl);
 		Fsm_mnt_mgr.Patch_core(cfg_tbl);
 		Xof_orig_tbl orig_tbl = new Xof_orig_tbl(core_conn, schema_is_1); orig_tbl.Create_tbl();
+		Xof_orig_tbl invalid_tbl = new Xof_orig_tbl(core_conn, schema_is_1, true); invalid_tbl.Create_tbl();
 		if (mnt_id == Fsm_mnt_mgr.Mnt_idx_main) {
 			Fsm_mnt_tbl mnt_tbl = new Fsm_mnt_tbl(core_conn, schema_is_1); mnt_tbl.Create_tbl();
 			cfg_tbl.Insert_int("core", "mnt.insert_idx", Fsm_mnt_mgr.Mnt_idx_user);

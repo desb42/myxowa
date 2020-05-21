@@ -179,7 +179,7 @@ public class Scrib_lib_title implements Scrib_lib {
 		// get file info from db / wmf
 		wiki.File_mgr().Init_file_mgr_by_load(wiki);
 		Xof_orig_itm itm = wiki.File__orig_mgr().Find_by_ttl_or_null(ttl.Page_db());	// NOTE: MW registers image if deleted; XOWA doesn't register b/c needs width / height also, not just image name
-		Keyval[] rv = itm == Xof_orig_itm.Null
+		Keyval[] rv = itm == Xof_orig_itm.Null || itm.Ext_id() == -1
 			? GetFileInfo_absent
 			: Keyval_.Ary
 			( Keyval_.new_("exists"		, true)

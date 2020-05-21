@@ -435,9 +435,8 @@ public class Xoh_page_wtr_wkr {
 			&& html_gen_tid != Xopg_view_mode_.Tid__edit // not Edit page
 			) {
 			//if (app.Mode().Tid_is_gui()) app.Usr_dlg().Prog_many("", "", "loading categories: count=~{0}", ctgs_len);
-			Xoctg_pagebox_itm[] pagebox_itms = wiki.Ctg__pagebox_wtr().Get_catlinks_by_page(wiki, page);
-//			if (pagebox_itms.length > 0)
-				wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, wiki, page, pagebox_itms);
+			//wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, wiki, page);
+			wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, page);
 		}
 		return tmp_bfr.To_bry_and_clear();
 	}

@@ -52,6 +52,7 @@ public class Xof_orig_mgr {
 			if (orig.Insert_new()) this.Insert(orig.Repo(), ttl, orig.Ext_id(), orig.W(), orig.H(), orig.Redirect()); // NOTE: orig_page must be same as find_arg not orig.Page() else will not be found for next call; DATE:2015-04-14
 			return orig;
 		}
+                this.Insert((byte)0, ttl, -1, 0, 0, Bry_.Empty); // make sure this is 'cached'
 		return Xof_orig_itm.Null;
 	}
 	public void Find_by_list(Ordered_hash rv, List_adp itms, int exec_tid) {
@@ -78,7 +79,7 @@ public class Xof_orig_mgr {
 		for (int i = 0; i < wkrs_len; i++) {
 			Xof_orig_wkr wkr = wkrs[i];
 			if (wkr.Add_orig(repo, page, ext, w, h, redirect)) break;
-		}			
+		}
 	}
 	private void		Wkrs__clear() {wkrs = Xof_orig_wkr_.Ary_empty; wkrs_len = 0;}
 	public void			Wkrs__add(Xof_orig_wkr... v) {

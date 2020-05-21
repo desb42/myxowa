@@ -19,14 +19,31 @@ import gplx.dbs.*; import gplx.dbs.utls.*;
 import gplx.xowa.files.fsdb.*; import gplx.xowa.files.repos.*;
 public class Xof_orig_tbl implements Db_tbl {
 	public final    Dbmeta_fld_list flds = new Dbmeta_fld_list();
-	public final    String fld_repo, fld_ttl, fld_status, fld_ext, fld_w, fld_h, fld_redirect;
-	public final    Db_conn conn; private final    Xof_orig_tbl__in_wkr select_in_wkr = new Xof_orig_tbl__in_wkr();
+	public /*final*/    String fld_repo, fld_ttl, fld_status, fld_ext, fld_w, fld_h, fld_redirect;
+	public /*final*/    Db_conn conn; private final    Xof_orig_tbl__in_wkr select_in_wkr = new Xof_orig_tbl__in_wkr();
 	public Db_conn Conn() {return conn;}
+	private boolean isinvalid = false;
+	public Xof_orig_tbl(Db_conn conn, boolean schema_is_1, boolean is_invalid_tbl) {
+		init_orig_tbl(conn, schema_is_1, is_invalid_tbl);
+	}
 	public Xof_orig_tbl(Db_conn conn, boolean schema_is_1) {
-		this.conn = conn;
+		init_orig_tbl(conn, schema_is_1, false);
+	}
+	private void init_orig_tbl(Db_conn conn, boolean schema_is_1, boolean is_invalid_tbl) {
 		String fld_status_name = "orig_status";
-		if (schema_is_1)		{tbl_name = "wiki_orig"; fld_status_name = "status";}
-		else					{tbl_name = "orig_reg";}
+		this.isinvalid = is_invalid_tbl;
+		if (schema_is_1)
+		{
+			tbl_name = "wiki_orig";
+			fld_status_name = "status";
+		}
+		else {
+			if (is_invalid_tbl)
+				tbl_name = "invalid";
+			else
+				tbl_name = "orig_reg";
+		}
+		this.conn = conn;
 		fld_ttl					= flds.Add_str("orig_ttl", 1024);
 		fld_repo				= flds.Add_byte("orig_repo");
 		fld_status				= flds.Add_byte(fld_status_name);
@@ -37,7 +54,7 @@ public class Xof_orig_tbl implements Db_tbl {
 		select_in_wkr.Ctor(this, tbl_name, flds, fld_ttl);
 		conn.Rls_reg(this);
 	}
-	public String Tbl_name() {return tbl_name;} private final    String tbl_name;
+	public String Tbl_name() {return tbl_name;} private /*final*/    String tbl_name = "";
 	public void Create_tbl() {conn.Meta_tbl_create(Dbmeta_tbl_itm.New(tbl_name, flds, Dbmeta_idx_itm.new_normal_by_tbl(tbl_name, "main", fld_ttl)));}
 	public void Select_by_list(Ordered_hash rv, List_adp itms) {select_in_wkr.Init(rv, itms).Select_in(Cancelable_.Never, conn, 0, itms.Count());}
 	public Xof_orig_itm Select_itm(byte[] ttl) {
@@ -51,6 +68,9 @@ public class Xof_orig_tbl implements Db_tbl {
 		finally {rdr.Rls();}
 	}
 	public void Insert(byte repo, byte[] ttl, int ext, int w, int h, byte[] redirect) {
+		if (ext < 0) {
+			if (!isinvalid) return;
+		}
 		Db_stmt stmt = conn.Stmt_insert(tbl_name, flds);
 		this.Insert(stmt, repo, ttl, ext, w, h, redirect);
 	}

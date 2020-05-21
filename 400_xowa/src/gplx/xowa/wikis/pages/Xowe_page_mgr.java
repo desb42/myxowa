@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,21 +13,37 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.wikis.pages; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*;
-import gplx.core.net.qargs.*;
-import gplx.xowa.guis.views.*;
-import gplx.xowa.addons.wikis.pages.syncs.core.*;
-import gplx.xowa.htmls.Xoh_page_wtr_wkr_;
-import gplx.xowa.wikis.data.tbls.*;
+package gplx.xowa.wikis.pages;
+
+import gplx.Bry_;
+import gplx.Bry_bfr;
+import gplx.Bry_bfr_;
+import gplx.Err_;
+import gplx.Gfo_usr_dlg_;
+import gplx.core.net.qargs.Gfo_qarg_itm;
+import gplx.core.net.qargs.Gfo_qarg_mgr;
+import gplx.xowa.Xoa_app;
+import gplx.xowa.Xoa_app_;
+import gplx.xowa.Xoa_ttl;
+import gplx.xowa.Xoa_url;
+import gplx.xowa.Xoa_url_;
+import gplx.xowa.Xoae_page;
+import gplx.xowa.Xowe_wiki;
+import gplx.xowa.Xowe_wiki_;
+import gplx.xowa.addons.wikis.pages.syncs.core.Xosync_read_mgr;
+import gplx.xowa.guis.views.Xog_tab_itm;
+import gplx.xowa.wikis.data.tbls.Xowd_page_itm;
+
 public class Xowe_page_mgr {
-	private final    Xowe_wiki wiki;
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.New();
-	private final    Gfo_qarg_mgr tmp_qarg_mgr = new Gfo_qarg_mgr();
+	private final Xowe_wiki wiki;
+	private final Bry_bfr tmp_bfr = Bry_bfr_.New();
+	private final Gfo_qarg_mgr tmp_qarg_mgr = new Gfo_qarg_mgr();
 	public Xowe_page_mgr(Xowe_wiki wiki) {this.wiki = wiki;}
-	public Xosync_read_mgr Sync_mgr() {return read_mgr;} private final    Xosync_read_mgr read_mgr = new Xosync_read_mgr();
+	public Xosync_read_mgr Sync_mgr() {return read_mgr;} private final Xosync_read_mgr read_mgr = new Xosync_read_mgr();
 	public void Init_by_wiki(Xowe_wiki wiki) {
 		read_mgr.Init_by_wiki(wiki);
 	}
+
 	public Xoae_page Load_page(Xoa_url url, Xoa_ttl ttl, Xog_tab_itm tab, byte display_override, byte action) {	// NOTE: called by GUI and HTTP_SERVER; not called by MASS_PARSE
 		Xoa_app_.Usr_dlg().Log_many("", "", "page.load: url=~{0}", url.To_str());			
 		Wait_for_popups(wiki.App());

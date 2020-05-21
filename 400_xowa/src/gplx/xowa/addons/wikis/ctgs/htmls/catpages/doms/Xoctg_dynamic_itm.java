@@ -29,7 +29,13 @@ public class Xoctg_dynamic_itm extends Xoctg_catpage_itm {
 		byte[] sortkey_prefix = rdr.Read_bry_by_str("cl_sortkey_prefix");
 		String cat_date = rdr.Read_str("cl_timestamp");
 		String touch_date = rdr.Read_str("page_touched");
-		Xoctg_dynamic_itm rv = new Xoctg_dynamic_itm(rdr.Read_byte("cl_type_id"), rdr.Read_int("cl_from")
+		byte cl_type_id = 0;
+		int cl_from = 0;
+		if (cat_date != null) {
+			cl_type_id = rdr.Read_byte("cl_type_id");
+			cl_from = rdr.Read_int("cl_from");
+		}
+		Xoctg_dynamic_itm rv = new Xoctg_dynamic_itm(cl_type_id, cl_from
 			, sortkey_prefix, sortkey_binary, cat_date, touch_date
 			);
 

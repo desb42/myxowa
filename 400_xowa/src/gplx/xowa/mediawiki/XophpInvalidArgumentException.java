@@ -13,7 +13,11 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.mediawiki; import gplx.*; import gplx.xowa.*;
+package gplx.xowa.mediawiki;
+
+import gplx.Err;
+import gplx.String_;
+
 public class XophpInvalidArgumentException extends Err {
     public XophpInvalidArgumentException(String fmt, Object... args) {
         super(true, "", "", String_.Format(fmt, args));

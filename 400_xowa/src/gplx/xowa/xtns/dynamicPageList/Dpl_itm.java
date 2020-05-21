@@ -74,7 +74,7 @@ public class Dpl_itm {
 						Parse_missing_key(usr_dlg, page_ttl, src, fld_bgn, fld_end);
 						fld_bgn = Bry_find_.Find_fwd(src, Byte_ascii.Nl, pos);
 						if (fld_bgn == Bry_find_.Not_found)
-                                                    badfield = true;
+							badfield = true;
 							//loop = false;
 						//else {
 							pos = fld_bgn;	// set pos after \n else bounds error if multiple bad keys on same line; NOTE: ++pos below; EX: \nbad1=a bad2=b\n; PAGE:de.n:Brandenburg DATE:2016-04-21
@@ -87,15 +87,19 @@ public class Dpl_itm {
 					ws_bgn_chk = true; ws_bgn_idx = ws_end_idx = -1;
 					break;
 				}
-				case Byte_ascii.Nl: {						// dlm is nl; EX: "\n" in "category=abc\n"
-					if (fld_bgn != pos) {					// ignores blank lines
+				case Byte_ascii.Nl: { // dlm is nl; EX: "\n" in "category=abc\n"
+					if (fld_bgn == pos) { // blank arg - still needs to process
+                                            if (ws_bgn_chk == false)
+						Parse_cmd(wiki, key_id, Bry_.Empty, usr_dlg, page_ttl);
+                                        }
+					else {
 						if (ws_bgn_idx != -1) fld_bgn = ws_bgn_idx + 1;	// +1 to position after last known ws
 						int fld_end = ws_end_idx == -1 ? pos : ws_end_idx;
 						byte[] val = Bry_.Mid(src, fld_bgn, fld_end);
-                                                if (badfield) // ignore
-                                                    badfield = false;
-                                                else
-                                                    Parse_cmd(wiki, key_id, val, usr_dlg, page_ttl);
+						if (badfield) // ignore
+							badfield = false;
+						else
+							Parse_cmd(wiki, key_id, val, usr_dlg, page_ttl);
 					}
 					fld_bgn = pos + Byte_ascii.Len_1;
 					ws_bgn_chk = true; ws_bgn_idx = ws_end_idx = -1;
@@ -112,12 +116,16 @@ public class Dpl_itm {
 	public void Parse_cmd(Xowe_wiki wiki, byte key_id, byte[] val, Gfo_usr_dlg usr_dlg, byte[] page_ttl) {
 		sub_root.Clear();
 		val = wiki.Parser_mgr().Main().Expand_tmpl(sub_root, sub_ctx, sub_tkn_mkr, val);
-                System.out.println(String_.new_a7(val));
-	        System.out.println(key_id);
+//                System.out.println(String_.new_a7(val));
+//	        System.out.println(key_id);
 		switch (key_id) {
 			case Dpl_itm_keys.Key_category: 			if (ctg_includes == null) ctg_includes = List_adp_.New(); ctg_includes.Add(Xoa_ttl.Replace_spaces(val)); break;
 			case Dpl_itm_keys.Key_notcategory:		 	if (ctg_excludes == null) ctg_excludes = List_adp_.New(); ctg_excludes.Add(Xoa_ttl.Replace_spaces(val)); break;
-			case Dpl_itm_keys.Key_ns:		 			{Xow_ns ns = (Xow_ns)wiki.Ns_mgr().Names_get_or_null(val, 0, val.length); ns_filter = ns == null ? Xow_ns_.Tid__main : ns.Id(); break;}
+			case Dpl_itm_keys.Key_ns: {
+				Xow_ns ns = (Xow_ns)wiki.Ns_mgr().Names_get_or_null(val, 0, val.length);
+				ns_filter = ns == null ? Xow_ns_.Tid__main : ns.Id();
+				break;
+			}
 			case Dpl_itm_keys.Key_order:				sort_ascending = Dpl_sort.Parse_as_bool_byte(val); break;
 			case Dpl_itm_keys.Key_suppresserrors:		suppress_errors = Dpl_itm_keys.Parse_as_bool(val, false); break;
 			case Dpl_itm_keys.Key_nofollow:				no_follow = Dpl_itm_keys.Parse_as_bool(val, true); break;	// NOTE: default to true; allows passing nofollow=nofollow; MW: if ('false' != $arg)

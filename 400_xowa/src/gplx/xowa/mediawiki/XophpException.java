@@ -19,6 +19,7 @@ import gplx.Err;
 
 // REF.PHP:https://www.php.net/manual/en/class.exception.php
 public class XophpException extends Err {
+	public XophpException() {this("", 0, null);}
 	public XophpException(String message) {this(message, 0, null);}
 	public XophpException(String message, int code, XophpException previous) {
 		super(true, "", "", message);

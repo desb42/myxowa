@@ -43,7 +43,7 @@ class Dpl_page_finder {
 		if (include_ttls == null)
 			len = 0;
 		else
-			len = exclude_ttls.Len();
+			len = include_ttls.Len();
 		cat_ids = new int[len];
 		for (int i = 0; i < len; i++) {
 			// get cat page ids
@@ -113,6 +113,9 @@ class Dpl_page_finder {
 				where.append(" and page_is_redirect=0");
 				break;
 		}
+
+		// filter by namespace
+		where.append(" and page_namespace=" + Integer.toString(itm.Ns_filter()));
 
 		if ( itm.IgnoreSubpages() ) {
 			where.append(" and page_title NOT like %/%");
