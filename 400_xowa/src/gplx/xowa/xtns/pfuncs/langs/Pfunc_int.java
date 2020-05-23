@@ -25,7 +25,7 @@ public class Pfunc_int extends Pf_func_base {
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
 		byte[] msg_key = Eval_argx(ctx, src, caller, self);
 		boolean langflag = false;
-		if ((msg_key[0] == 'l' || msg_key[0] == 'L') && msg_key.length == 4) {
+		if (msg_key.length == 4 && (msg_key[0] == 'l' || msg_key[0] == 'L')) {
 			if (msg_key[1] == 'a' || msg_key[1] == 'A') {
 				if (msg_key[2] == 'n' || msg_key[2] == 'N') {
 					if (msg_key[3] == 'g' || msg_key[3] == 'G') {
