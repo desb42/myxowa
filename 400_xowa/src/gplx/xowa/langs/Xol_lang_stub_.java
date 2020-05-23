@@ -1025,6 +1025,18 @@ Regy_add(stub_hash, Id_zu, "zu", "isiZulu");
 		Xol_lang_stub rv = Get_by_key_or_null(key, bgn, end);
 		return rv == null ? Intl : rv;
 	}
+	public static void Set_local_name(Xoae_app app) {
+		Get_by_key_or_en(Bry_.new_a7("en")); // make sure initialised
+		Xoa_lang_mgr lm = app.Lang_mgr();
+		Ordered_hash hash = lm.Name_mgr().fetchLanguageNames("en", "all", Bry_.Empty);
+		int len = hash.Count();
+		for (int i = 0; i < len; i++) {
+			Keyval lang_key = (Keyval)hash.Get_at(i);
+			Xol_lang_stub stub = Get_by_key_or_null(Bry_.new_a7(lang_key.Key()));
+			if (stub != null)
+				stub.Local_name_(Bry_.new_u8(lang_key.Val_to_str_or_empty()));
+		}
+	}
 	public static final    Xol_lang_stub Intl = new Xol_lang_stub(Xol_lang_stub_.Id__intl, Bry_.Empty, Bry_.Empty);	// intended for international wikis like commons, wikidata, etc..
 }
 class Xol_sub_itm_comparer implements ComparerAble {

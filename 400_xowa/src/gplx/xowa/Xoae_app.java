@@ -71,6 +71,8 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 		this.html__bridge_mgr = new Xoh_bridge_mgr(utl__json_parser);
 		this.site_cfg_mgr = new Xoa_site_cfg_mgr(this);
 
+		Xol_lang_stub_.Set_local_name(this);
+
 		usr_dlg.Log_wkr().Log_to_session_fmt("app.ctor.end");
 	}
 	public boolean						Tid_is_edit()				{return Bool_.Y;}

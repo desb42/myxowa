@@ -20,9 +20,9 @@ import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.htmls.hrefs.*; import gplx
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*;
 public class Xop_languages_xnde implements Xox_xnde {
 	public Xop_xnde_tkn Xnde() {return xnde;} private Xop_xnde_tkn xnde;
-        private byte[] main_leaf;
+	private byte[] main_leaf;
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
-                main_leaf = ctx.Page().Ttl().Leaf_txt();
+		main_leaf = ctx.Page().Ttl().Leaf_txt();
 		this.xnde = xnde;
 		langs = Find_lang_pages(ctx, wiki);
 	}
@@ -75,7 +75,7 @@ public class Xop_languages_xnde implements Xox_xnde {
 		fmtr_mgr_itms.Init(langs, ctx.Wiki(), root_ttl, ctx.Page().Lang().Key_bry(), main_leaf);
 		fmtr_all.Bld_bfr_many(bfr, "Other languages", fmtr_mgr_itms);
 	}
-	private static final    Xop_languages_fmtr fmtr_mgr_itms = new Xop_languages_fmtr();
+	private final Xop_languages_fmtr fmtr_mgr_itms = new Xop_languages_fmtr(); // static is not thread safe
 	public static final    Bry_fmtr fmtr_all = Bry_fmtr.new_(String_.Concat_lines_nl
 //	(	"<table>"
 //	,	"  <tbody>"
@@ -117,9 +117,9 @@ class Xop_languages_fmtr implements gplx.core.brys.Bfr_arg {
 		this.wiki = wiki;
 		this.root_ttl = root_ttl;
 		this.cur_lang = cur_lang;
-                this.main_leaf = main_leaf;
+		this.main_leaf = main_leaf;
 	}
-        private List_adp langs; private Xowe_wiki wiki; private Xoa_ttl root_ttl; private byte[] cur_lang; private byte[] main_leaf;
+	private List_adp langs; private Xowe_wiki wiki; private Xoa_ttl root_ttl; private byte[] cur_lang; private byte[] main_leaf;
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		int len = langs.Count();
 		Xoh_href_wtr href_wtr = wiki.Html__href_wtr();
@@ -138,8 +138,8 @@ class Xop_languages_fmtr implements gplx.core.brys.Bfr_arg {
 			//else if	(Bry_.Eq(lang_key, cur_lang))			fmtr = Xop_languages_xnde.fmtr_itm_selected;
 			else if	(Bry_.Eq(lang_key, main_leaf))			fmtr = Xop_languages_xnde.fmtr_itm_selected;
 			else 												fmtr = Xop_languages_xnde.fmtr_itm_basic;
-                        if (i > 0)
-                            bfr.Add_str_u8("&#160;•");
+			if (i > 0)
+				bfr.Add_str_u8("&#160;•");
 			fmtr.Bld_bfr_many(bfr, lang_href, lang_title, lang.Canonical_name());
 		}
 	}

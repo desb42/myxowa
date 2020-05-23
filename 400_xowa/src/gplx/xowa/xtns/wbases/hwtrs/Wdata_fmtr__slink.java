@@ -132,7 +132,7 @@ class Wdata_fmtr__slink_row implements gplx.core.brys.Bfr_arg {
 			byte[] wmf_key			= domain_info.Abrv_wm();
 			Xol_lang_stub lang_itm	= domain_info.Lang_actl_itm();
 			byte[] lang_key			= lang_itm.Key();
-			byte[] lang_name		= lang_itm.Canonical_name();
+			byte[] lang_name		= lang_itm.Local_name();
 			byte[] domain_bry		= domain_info.Domain_bry();
 			byte[] page_name		= itm.Name();
 			fmtr_badges.Init_by_itm(itm.Badges());
