@@ -499,8 +499,8 @@ public class Db_wikistrip {
 					}
 					break;
 				case '\n':
-					int listcount = 0;
 					int listpos = pos;
+					int listcount = 0;
 					while (pos < src_len) { 
 						b = src[pos];
 						if (b == '*' || b == '#' || b == ';' || b == ':') { // remove list characters
@@ -604,15 +604,24 @@ public class Db_wikistrip {
 		// now change '' and '''
 		Bry_bfr bfr = Bry_bfr_.New();
 		int src_len = src.length;
-		int startpos = 0;
+		int startpos;
 		int pos = 0;
 		boolean inbold = false;
 		boolean initalic = false;
 		boolean firstbracket = true;
 		boolean startpara = false;
 		bfr.Add(Gfh_tag_.P_lhs);
+		byte b;
+		// remove initial '\n's
 		while (pos < src_len) {
-			byte b = src[pos++];
+			b = src[pos];
+			if (b != '\n' && b != '\t' && b != ' ') 
+				break;
+			pos++;
+		}
+		startpos = pos;
+		while (pos < src_len) {
+			b = src[pos++];
 			switch (b) {
 				case '\'':
 					int apos_count = 1;
@@ -720,36 +729,40 @@ public class Db_wikistrip {
 				case '\n':
 					// ignore
 					bfr.Add_mid(src, startpos, pos-1);
-					startpos = pos;
-					break;
-/*					// check for multiple \n (only \n\n)
+					// check for multiple \n (only \n\n)
 					int nlcount = 1;
 					int nlpos = pos;
 					while (pos < src_len) { 
 						b = src[pos];
-						if (b == '\n') {
+						if (b == '\n')
 							nlcount++;
-							pos++;
-						}
-						else if (b == ' ' || b == '\t') { // allow for lines just with spaces
-							pos++;
-						}
-						else
+						else if (b != ' ' && b != '\t') // allow for lines just with spaces
 							break;
+						pos++;
 					}
-					bfr.Add_mid(src, startpos, nlpos-1).Add_byte((byte)'\\').Add_byte((byte)'n');
 					if (nlcount > 1) {
-						//bfr.Add_mid(src, startpos, nlpos+1);
-						if (startpara)
-							pos = src_len; // break out
-						else {
-							startpara = true;
-							startpos = pos;
-						}
+						pos = src_len; // break out
 					}
 					else
 						startpos = pos;
-					break;*/
+					break;
+				case '&': // replace all &...; with a space (upto a max of 10 chars)
+					bfr.Add_mid(src, startpos, pos-1);
+					startpos = pos;
+					while (pos < src_len && pos - startpos < 12) {
+						b = src[pos++];
+						if (b == ';')
+							break;
+					}
+					if (b == ';') {
+						bfr.Add_byte(Byte_ascii.Space);
+						startpos = pos;
+					}
+					else {
+						bfr.Add_byte(Byte_ascii.Amp);
+						pos = startpos;
+					}
+					break;
 			}
 		}
 		bfr.Add(Gfh_tag_.P_rhs);
