@@ -17,7 +17,7 @@ package gplx;
 public class Gfo_usr_dlg_ {
 	private static Gfo_usr_dlg_base test__list, test__show;
 	public static Gfo_usr_dlg			Instance	= Gfo_usr_dlg_noop.Instance;	// NOTE: global instance which can be reassigned
-        public static final    Gfo_usr_dlg	Noop		= Gfo_usr_dlg_noop.Instance;
+	public static final    Gfo_usr_dlg	Noop		= Gfo_usr_dlg_noop.Instance;
 	public static Gfo_usr_dlg__gui Test__list__init() {
 		if (test__list == null)
 			test__list = new Gfo_usr_dlg_base(Gfo_usr_dlg__log_.Noop, Gfo_usr_dlg__gui_.Test);

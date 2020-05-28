@@ -36,16 +36,34 @@ import gplx.xowa.parsers.xndes.Xop_xnde_tkn;
 import gplx.xowa.xtns.Xox_xnde;
 import gplx.xowa.xtns.Xox_xnde_;
 
+import gplx.xowa.Xoa_ttl;
+import gplx.Gfo_usr_dlg_;
 public class Lst_section_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
+    private Xoa_ttl ttl;
 	public byte[] Section_name() {return section_name;} private byte[] section_name;
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {
 		if (xatr_id_obj == null) return;
 		byte xatr_id = ((Byte_obj_val)xatr_id_obj).Val();
 		switch (xatr_id) {
 			case Xatr_name: case Xatr_bgn: case Xatr_end:
+				if (section_name != null) break;
+				// keyword but no '='?
+				if (!xatr.Key_exists()) {
+					// log error
+					int bgn = xatr.Atr_bgn() - 10;
+					if (bgn < 0) bgn = 0;
+					int end = xatr.Atr_end() + 10;
+					if (end > src.length) end = src.length;
+					Gfo_usr_dlg_.Instance.Warn_many("", "", "section name invalid: page=~{0} tag=~{1}", ttl.Full_db(), Bry_.Mid(src, bgn, end));
+					
+					break;
+				}
 				name_tid = xatr_id;
 
 				int valBgn = xatr.Val_bgn();
+                                if (valBgn < 0) {
+                                    int a=1;
+                                }
 				byte b = src[valBgn - 1];
 				// previous byte is a quote
 				if (b == '"' || b == '\'') {
@@ -82,6 +100,7 @@ public class Lst_section_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	public Xop_xnde_tkn Xnde() {return xnde;} private Xop_xnde_tkn xnde;
 	public byte Name_tid() {return name_tid;} private byte name_tid;
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
+            ttl = ctx.Page().Ttl();
 		Mwh_atr_itm[] atrs = Xox_xnde_.Xatr__set(wiki, this, wiki.Lang().Xatrs_section(), src, xnde);
 		this.xnde = xnde;
 		xnde.Atrs_ary_(atrs);

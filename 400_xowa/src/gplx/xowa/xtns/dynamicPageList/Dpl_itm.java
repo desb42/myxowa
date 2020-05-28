@@ -31,7 +31,7 @@ public class Dpl_itm {
 	public boolean Show_ns() {return show_ns;} private boolean show_ns;
 	public boolean Show_date() {return ctg_date;} private boolean ctg_date = false;
 	public byte Sort_ascending() {return sort_ascending;} private byte sort_ascending = Bool_.__byte;
-	public int Ns_filter() {return ns_filter;} private int ns_filter = Ns_filter_null;
+	public int Ns_filter() {return ns_filter;} private int ns_filter = 0;
 	public boolean Gallery_filesize() {return gallery_filesize;} private boolean gallery_filesize;
 	public boolean Gallery_filename() {return gallery_filename;} private boolean gallery_filename;
 	public int Gallery_imgs_per_row() {return gallery_imgs_per_row;} private int gallery_imgs_per_row;

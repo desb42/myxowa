@@ -38,26 +38,38 @@ class Dpl_page_finder {
 
 		Xow_db_mgr db_mgr = wiki.Data__core_mgr();
 		Xowd_page_tbl page_tbl = db_mgr.Db__core().Tbl__page();
-                int len;
-                int[] cat_ids;
+		int len;
+		int[] cat_ids;
 		if (include_ttls == null)
 			len = 0;
 		else
 			len = include_ttls.Len();
 		cat_ids = new int[len];
+		int realincludecats = 0;
 		for (int i = 0; i < len; i++) {
 			// get cat page ids
-			cat_ids[i] = Get_ctg_ttl_page_id(include_ttls, i, page_tbl);
+			int id = Get_ctg_ttl_page_id(include_ttls, i, page_tbl);
+			if (id != -1)
+				realincludecats++;
+			cat_ids[i] = id;
 		}
+		if (realincludecats == 0 && exclude_ttls == null)
+			return null; // exit early if none exists
 		itm.Ctg_include_ids_(cat_ids);
 		if (exclude_ttls == null)
 			len = 0;
 		else
 			len = exclude_ttls.Len();
 		cat_ids = new int[len];
+		int realexcludecats = 0;
 		for (int i = 0; i < len; i++) {
-			cat_ids[i] = Get_ctg_ttl_page_id(exclude_ttls, i, page_tbl);
+			int id = Get_ctg_ttl_page_id(exclude_ttls, i, page_tbl);
+			if (id != -1)
+				realexcludecats++;
+			cat_ids[i] = id;
 		}
+		if (realincludecats == 0 && realexcludecats == 0)
+			return null; // exit early if none exists
 		itm.Ctg_exclude_ids_(cat_ids);
 
 		//Xoctg_catpage_ctg ctg = wiki.Ctg__catpage_mgr().Get_by_cache_or_null(page_ttl, Xoctg_catpage_url.New__blank(), cat_ttl, 10000, itm);
@@ -163,7 +175,7 @@ class Dpl_page_finder {
 				sqlSort = "page_id"; // Since they're never reused and increasing
 				break;
 			case Dpl_sort.Tid_categorysortkey:
-				sqlSort = "c1.cl_type " + sqlOrder + ", c1.cl_sortkey";
+				sqlSort = "c1.cl_type_id " + sqlOrder + ", c1.cl_sortkey";
 				break;
 			case Dpl_sort.Tid_popularity:
 				sqlSort = "page_counter";
@@ -264,8 +276,8 @@ class Dpl_page_finder {
 				if (cp_itm.Page_ttl() == null) continue; // cat_link can exist without entry in page_db.page
 				page.Id_(itm_page_id);
 				page.Ttl_(cp_itm.Page_ttl());
-                                if (itm.Show_date())
-                                    page.Modified_on_(DateAdp_.seg_(dateParser.Parse_iso8651_like(cp_itm.Cat_date())));
+				if (itm.Show_date())
+					page.Modified_on_(DateAdp_.seg_(dateParser.Parse_iso8651_like(cp_itm.Cat_date())));
 				result_pages.Add(page);
 			}
 		return result_pages;

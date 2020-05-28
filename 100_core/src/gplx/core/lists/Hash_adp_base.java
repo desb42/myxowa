@@ -35,9 +35,6 @@ public abstract class Hash_adp_base implements Hash_adp {
 		Add(key, val);
 		return true;
 	}
-        public java.util.Enumeration Enumerate() {
-            return hash.keys();
-        }
 	@gplx.Virtual public void Del(Object key) {Del_base(key);}
 	protected Object Get_by_or_fail_base(Object key) {
 		if (key == null) throw Err_.new_wo_type("key cannot be null");

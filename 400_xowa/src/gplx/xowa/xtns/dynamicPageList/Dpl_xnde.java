@@ -29,16 +29,19 @@ public class Dpl_xnde implements Xox_xnde {
 		// ??? should there be a sort check?
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
-            if (pages == null) return; //??
-		Xowe_wiki wiki = ctx.Wiki();
-		Dpl_html_data html_mode = Dpl_html_data.new_(itm.Mode_tid());
-		//Dpl_html_data html_mode = Dpl_html_data.new_(itm.Mode_tid()); //Dpl_itm_keys.Key_unordered);
-		int itms_len = pages.Count();
+		int itms_len;
+		if (pages == null)
+			itms_len = 0;
+		else
+			itms_len = pages.Count();
 		if (itms_len == 0) {
 			if (!itm.Suppress_errors())
 				bfr.Add_str_a7("No pages meet these criteria.");
 			return;
 		}
+		Xowe_wiki wiki = ctx.Wiki();
+		Dpl_html_data html_mode = Dpl_html_data.new_(itm.Mode_tid());
+		//Dpl_html_data html_mode = Dpl_html_data.new_(itm.Mode_tid()); //Dpl_itm_keys.Key_unordered);
 		int itms_bgn = 0;
 		if (itm.Offset() != Int_.Min_value) {
 			itms_bgn = itm.Offset();

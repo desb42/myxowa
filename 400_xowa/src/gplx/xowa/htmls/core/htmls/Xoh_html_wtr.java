@@ -605,7 +605,7 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__h1: case Xop_xnde_tag_.Tid__h2: case Xop_xnde_tag_.Tid__h3: case Xop_xnde_tag_.Tid__h4: case Xop_xnde_tag_.Tid__h5: case Xop_xnde_tag_.Tid__h6:
 			case Xop_xnde_tag_.Tid__dt: case Xop_xnde_tag_.Tid__dd: case Xop_xnde_tag_.Tid__ol: case Xop_xnde_tag_.Tid__ul:
 			case Xop_xnde_tag_.Tid__table: case Xop_xnde_tag_.Tid__tr: case Xop_xnde_tag_.Tid__td: case Xop_xnde_tag_.Tid__th: case Xop_xnde_tag_.Tid__caption: case Xop_xnde_tag_.Tid__tbody:
-			case Xop_xnde_tag_.Tid__ruby: case Xop_xnde_tag_.Tid__rt: case Xop_xnde_tag_.Tid__rb: case Xop_xnde_tag_.Tid__rp: 
+			case Xop_xnde_tag_.Tid__ruby: case Xop_xnde_tag_.Tid__rt: case Xop_xnde_tag_.Tid__rb: case Xop_xnde_tag_.Tid__rp: case Xop_xnde_tag_.Tid__rtc: 
 			case Xop_xnde_tag_.Tid__time: case Xop_xnde_tag_.Tid__bdi: case Xop_xnde_tag_.Tid__data: case Xop_xnde_tag_.Tid__mark: case Xop_xnde_tag_.Tid__wbr: case Xop_xnde_tag_.Tid__bdo:	// HTML 5: write literally and let browser handle them
 			case Xop_xnde_tag_.Tid__q:
 				Write_xnde(bfr, ctx, hctx, xnde, tag, tag_id, src);
@@ -698,11 +698,14 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__audio:
 			case Xop_xnde_tag_.Tid__video:
 			case Xop_xnde_tag_.Tid__track:
-			case Xop_xnde_tag_.Tid__rtc:
 			case Xop_xnde_tag_.Tid__figure:
 			case Xop_xnde_tag_.Tid__figure_inline:
 			case Xop_xnde_tag_.Tid__figcaption:
 				Xox_xnde xtn = xnde.Xnde_xtn();
+                                if (xtn == null) {
+                                    int a=1;
+                                    Write_xnde(bfr, ctx, hctx, xnde, tag, tag_id, src);
+                                } else
 				xtn.Xtn_write(bfr, app, ctx, this, hctx, page, xnde, src);
 				break;
 			// do not write <meta/> <link/>; PAGE:fr.s:La_Dispute DATE:2017-05-28
