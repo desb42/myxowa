@@ -16,7 +16,8 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.wikis.pages.htmls; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*; import gplx.xowa.wikis.pages.*;
 import gplx.xowa.wikis.pages.skins.*; import gplx.xowa.wikis.pages.tags.*; import gplx.xowa.wikis.pages.lnkis.*;
 import gplx.langs.htmls.*; import gplx.xowa.htmls.heads.*; import gplx.xowa.addons.htmls.tocs.*;
-import gplx.xowa.xtns.pagebanners.*; import gplx.xowa.xtns.indicators.*;
+import gplx.xowa.xtns.pagebanners.*; import gplx.xowa.xtns.indicators.*; import gplx.xowa.xtns.geoCrumbs.*;
+import gplx.xowa.xtns.related.*;
 public class Xopg_html_data {
 	public Xopg_lnki_list		Redlink_list()		{return redlink_list;} private final    Xopg_lnki_list redlink_list = new Xopg_lnki_list();
 
@@ -36,7 +37,6 @@ public class Xopg_html_data {
 	public boolean				Mode_wtxt_shown() {synchronized (this) {return mode_wtxt_shown;}} public void Mode_wtxt_shown_y_() {synchronized (this) {this.mode_wtxt_shown = true;}} private boolean mode_wtxt_shown; 
 	public byte[]				Display_ttl_vnt() {return display_ttl_vnt;} public void Display_ttl_vnt_(byte[] v) {display_ttl_vnt = v;} private byte[] display_ttl_vnt;
 	public byte[]				Content_sub() {return content_sub;} public void Content_sub_(byte[] v) {content_sub = v;} private byte[] content_sub;
-	public byte[]				Pgbnr_isin() {return pgbnr_isin;} public void Pgbnr_isin_(byte[] v) {pgbnr_isin = v;} private byte[] pgbnr_isin = null;
 	public byte[]				Pgbnr_bry() {return pgbnr_bry;} public void Pgbnr_bry_(byte[] v) {pgbnr_bry = v;} private byte[] pgbnr_bry = null;
 	public Xopg_page_heading	Page_heading() {return page_heading;} private final    Xopg_page_heading page_heading = new Xopg_page_heading();
 	public String				Bmk_pos() {return html_bmk_pos;} public void Bmk_pos_(String v) {html_bmk_pos = v;} private String html_bmk_pos;
@@ -56,6 +56,8 @@ public class Xopg_html_data {
 	public boolean				Lang_convert_title() {return lang_convert_title;} public void Lang_convert_title_(boolean v) {lang_convert_title = v;} private boolean lang_convert_title = true;
 	public Xopg_xtn_skin_mgr	Xtn_skin_mgr() {return xtn_skin_mgr;} private Xopg_xtn_skin_mgr xtn_skin_mgr = new Xopg_xtn_skin_mgr();
 	public Indicator_html_bldr	Indicators() {return indicators;} private final    Indicator_html_bldr indicators = new Indicator_html_bldr();
+	public GeoCrumbs_html_bldr	GeoCrumb() {return geocrumb;} private final    GeoCrumbs_html_bldr geocrumb = new GeoCrumbs_html_bldr();
+	public Related_html_bldr	Related() {return related;} private final    Related_html_bldr related = new Related_html_bldr();
 	public int					Xtn_gallery_next_id() {return ++xtn_gallery_next_id;} private int xtn_gallery_next_id = -1;
 	public boolean				Xtn_gallery_packed_exists() {return xtn_gallery_packed_exists;} public void Xtn_gallery_packed_exists_y_() {xtn_gallery_packed_exists = true;} private boolean xtn_gallery_packed_exists;
 	public boolean				Xtn_imap_exists() {return xtn_imap_exists;} public void Xtn_imap_exists_y_() {xtn_imap_exists = true;} private boolean xtn_imap_exists;
@@ -91,7 +93,8 @@ public class Xopg_html_data {
 		custom_html = custom_tab_name = null;
 		indicators.Clear();
 		this.mode_wtxt_shown = false;
-		pgbnr_isin = null;
+		geocrumb.Clear();
+                related.Clear();
 		pgbnr_bry = null;
 	}
 	public void Init_by_page(Xoa_ttl ttl) {

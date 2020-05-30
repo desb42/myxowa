@@ -19,7 +19,7 @@ import gplx.xowa.bldrs.wkrs.*;
 public class Related_addon implements Xoax_addon_itm, Xoax_addon_itm__init {
 	public void Init_addon_by_app(Xoa_app app) {}
 	public void Init_addon_by_wiki(Xow_wiki wiki) {
-		wiki.Hxtn_mgr().Reg_wkr(new Hxtn_page_wkr__related(wiki.Hxtn_mgr().Blob_tbl()));
+		wiki.Hxtn_mgr().Reg_wkr(new Related_hxtn_page_wkr(wiki.Hxtn_mgr().Blob_tbl()));
 	}
 
 	public String Addon__key() {return "xowa.related";}

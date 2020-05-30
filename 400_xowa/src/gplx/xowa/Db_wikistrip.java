@@ -609,13 +609,12 @@ public class Db_wikistrip {
 		boolean inbold = false;
 		boolean initalic = false;
 		boolean firstbracket = true;
-		boolean startpara = false;
 		bfr.Add(Gfh_tag_.P_lhs);
 		byte b;
 		// remove initial '\n's
 		while (pos < src_len) {
 			b = src[pos];
-			if (b != '\n' && b != '\t' && b != ' ') 
+			if (b != '\n' && b != '\t' && b != ' ' && b != '|' && b != '}') 
 				break;
 			pos++;
 		}
@@ -731,7 +730,6 @@ public class Db_wikistrip {
 					bfr.Add_mid(src, startpos, pos-1);
 					// check for multiple \n (only \n\n)
 					int nlcount = 1;
-					int nlpos = pos;
 					while (pos < src_len) { 
 						b = src[pos];
 						if (b == '\n')

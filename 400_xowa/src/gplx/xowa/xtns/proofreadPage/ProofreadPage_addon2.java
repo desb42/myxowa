@@ -19,7 +19,7 @@ import gplx.xowa.bldrs.wkrs.*;
 public class ProofreadPage_addon2 implements Xoax_addon_itm, Xoax_addon_itm__init {
 	public void Init_addon_by_app(Xoa_app app) {}
 	public void Init_addon_by_wiki(Xow_wiki wiki) {
-		wiki.Hxtn_mgr().Reg_wkr(new Hxtn_page_wkr__indexpage(wiki.Hxtn_mgr().Blob_tbl()));
+//		wiki.Hxtn_mgr().Reg_wkr(new Hxtn_page_wkr__indexpage(wiki.Hxtn_mgr().Blob_tbl()));
 	}
 
 	public String Addon__key() {return "xowa.pp_indexpage";}

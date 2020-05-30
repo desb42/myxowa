@@ -46,7 +46,7 @@ public class Db_breadcrumb {
 		}
 		initialised = true;
 	}
-	public byte[] Get_breadcrumbs(Xowe_wiki wiki, Xop_ctx ctx, Xoa_ttl ttl, byte[] isin, byte[] redirect_msg) {
+	public List_adp Get_breadcrumbs(Xoa_ttl ttl, byte[] isin) {
 		if (!initialised) Init();
 		int nsid = ttl.Ns().Id();
 		List_adp breadcrumb_list = List_adp_.New();
@@ -67,35 +67,7 @@ public class Db_breadcrumb {
 		} else {
 			breadcrumb_list.Add(isin);
 		}
-
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		int len = breadcrumb_list.Count();
-		if (len > 0) {
-			for (int i = 0; i < len; i++) {
-				byte[] parent = (byte[])breadcrumb_list.Get_at(i);
-				if (i > 0)
-					tmp_bfr.Add_str_a7( " > " );
-				byte[] lnk;
-				if (nsid > 0) // not Main:
-					lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, Byte_ascii.Colon_bry, ttl.Ns().Name_db_w_colon(), parent, Byte_ascii.Pipe_bry, parent, Xop_tkn_.Lnki_end);		// make "[[xx:ttl ttl]]"
-				else
-					lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, parent, Xop_tkn_.Lnki_end);		// make "[[ttl]]"
-				tmp_bfr.Add( lnk );
-			}
-			if (len > 0)
-				tmp_bfr.Add_str_a7( " > " );
-			tmp_bfr.Add(ttl.Page_txt());
-		}
-		byte[] bread = tmp_bfr.To_bry_and_clear();
-		wiki.Parser_mgr().Main().Parse_text_to_html(tmp_bfr, ctx, ctx.Page(), false, bread);
-		bread = tmp_bfr.To_bry_and_clear();
-		tmp_bfr.Add_str_a7("<div class=\"ext-wpb-pagebanner-subtitle\">");
-		if (redirect_msg.length != 0) {
-			tmp_bfr.Add(redirect_msg).Add_str_a7("<br/>\n");
-		}
-		tmp_bfr.Add(bread);
-		tmp_bfr.Add_str_a7("</div>");
-		return tmp_bfr.To_bry_and_clear();
+		return breadcrumb_list;
 	}
 	public void Insert(Xoa_ttl ttl, byte[] isin) {
 		if (!initialised) Init();

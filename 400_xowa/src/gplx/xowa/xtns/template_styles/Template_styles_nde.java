@@ -116,7 +116,7 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 				css_dynamic.Add(tmp_bfr.To_bry_and_clear());
 			} finally {tmp_bfr.Mkr_rls();}
 
-			if (hctx.Mode_is_hdump()) {
+			if (hctx.Mode_is_hdump() && !hctx.Mode_is_embeddable()) {
 				int page_id = wpg.Db().Page().Id();
 				Hxtn_page_mgr html_data_mgr = wpg.Wikie().Hxtn_mgr();
 				html_data_mgr.Page_tbl__insert(page_id, Hxtn_page_mgr.Id__template_styles, css_page_id);
@@ -143,5 +143,5 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 class Template_styles_kv_itm implements gplx.xowa.apps.kvs.Xoa_kv_itm {
 	public String Kv__key() {return "TemplateStyles";}
 	public Object Kv__val_make() {return new Hash_adp__int();}
-        public static final    Template_styles_kv_itm Instance = new Template_styles_kv_itm(); Template_styles_kv_itm() {}
+	public static final    Template_styles_kv_itm Instance = new Template_styles_kv_itm(); Template_styles_kv_itm() {}
 }

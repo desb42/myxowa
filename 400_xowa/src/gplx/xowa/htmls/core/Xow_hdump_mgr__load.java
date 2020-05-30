@@ -42,6 +42,7 @@ import gplx.xowa.wikis.pages.Xopg_module_mgr;
 import gplx.xowa.wikis.pages.htmls.Xopg_html_data;
 import gplx.xowa.wikis.pages.lnkis.Xopg_lnki_list;
 import gplx.xowa.wikis.pages.skins.Xopg_xtn_skin_itm_stub;
+import gplx.xowa.xtns.indicators.Indicator_hxtn_page_wkr;
 
 import gplx.xowa.xtns.pagebanners.Pgbnr_itm;
 public class Xow_hdump_mgr__load implements Gfo_invk {
@@ -65,6 +66,7 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 	public void Load_by_xowe(Xoae_page wpg) {
 		tmp_hpg.Ctor_by_hview(wpg.Wiki(), wpg.Url(), wpg.Ttl(), wpg.Db().Page().Id());
 		Load_by_xowh(tmp_hpg, wpg.Ttl(), Bool_.Y);
+		wpg.Db().Html().Html_bry_(tmp_hpg.Db().Html().Html_bry());
 		wpg.Root_(new gplx.xowa.parsers.Xop_root_tkn());	// HACK: set root, else load page will fail
 		Fill_page(wpg, tmp_hpg);
 	}
@@ -146,25 +148,17 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 	public void Fill_page(Xoae_page wpg, Xoh_page hpg) {
 		Xopg_html_data html_data = wpg.Html_data();
 
-		// copy to 'real' page
-		wpg.Quality_tots().Deserialise(tmp_hpg.Quality_tots_serial());
-		wpg.Db().Html().Html_bry_(tmp_hpg.Db().Html().Html_bry());
-		byte[] pgbnr = null;
-		if (tmp_hpg.Pgbnr_bry() != null) {
-			pgbnr = Parse(tmp_hpg, 1, Xoh_hzip_dict_.Hdb__htxt, tmp_hpg.Pgbnr_bry());
-			Pgbnr_itm itm = new Pgbnr_itm();
-			itm.Pgbnr_bry_( pgbnr );
-			html_data.Xtn_pgbnr_(itm);
-		}
-		html_data.Pgbnr_isin_(tmp_hpg.Pgbnr_isin());
-		html_data.Indicators().Deserialise(tmp_hpg.Indicators_serial());
-		wpg.Pp_indexpage_(tmp_hpg.Pp_indexpage());
-		wpg.Related().Deserialise(tmp_hpg.Related_serial());
-
 		html_data.Display_ttl_(tmp_hpg.Display_ttl());
 		html_data.Content_sub_(tmp_hpg.Content_sub());			
 		html_data.Xtn_skin_mgr().Add(new Xopg_xtn_skin_itm_stub(tmp_hpg.Sidebar_div()));
 		html_data.Custom_head_tags().Add(hpg.Html_data().Custom_head_tags().To_ary());
+		html_data.Indicators().Deserialise(wiki, hpg, (byte[])tmp_hpg.Props().Get_by(Indicator_hxtn_page_wkr.KEY));
+		//html_data.Indicators().Deserialise(wiki, hpg, tmp_hpg.Props());
+//		wpg.Quality_tots().Deserialise(wiki, hpg, tmp_hpg.Props());
+//		html_data.Xtn_pgbnr().Deserialise(wiki, hpg, tmp_hpg.Props());
+		html_data.GeoCrumb().Deserialise(wiki, hpg, tmp_hpg.Props());
+//		wpg.Pp_indexpage().Deserialise(wiki, hpg, tmp_hpg.Props());
+//		wpg.Related().Deserialise(wiki, hpg, tmp_hpg.Props());
 
 		Xoh_head_mgr wpg_head = html_data.Head_mgr();
 		Xopg_module_mgr hpg_head = hpg.Head_mgr();			
