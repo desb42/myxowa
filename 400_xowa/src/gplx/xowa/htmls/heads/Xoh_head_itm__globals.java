@@ -123,7 +123,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		tmp.Add(Bry_.new_a7("],"));
 
 		// if any related entries generate
-		List_adp lst = page.Related().List();
+		List_adp lst = page.Html_data().Related().List();
 		int len = lst.Count();
 		if (len > 0) {
 			tmp.Add(Bry_.new_a7("\n \"wgRelatedArticles\":["));

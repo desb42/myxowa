@@ -349,13 +349,8 @@ public class Xow_portal_mgr implements Gfo_invk {
 		div_wikis_fmtr.Bld_bfr_many(tmp_bfr, toggle_itm.Html_toggle_btn(), toggle_itm.Html_toggle_hdr());
 		return tmp_bfr.To_bry_and_rls();
 	}
-	public byte[] Div_after_bry(Xoae_page page) {
-		List_adp lst = page.Related().List();
-		int len = lst.Count();
-		if (len == 0) return Bry_.Empty;
-		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
-		div_after_fmtr.Bld_bfr_many(tmp_bfr, Bry_.new_a7("<div class=\"read-more-container\"></div>"));
-		return tmp_bfr.To_bry_and_rls();
+	public Bry_fmtr Div_after_fmtr() {
+		return div_after_fmtr;
 	}
 
 	private final    Bry_fmtr 

@@ -13,14 +13,14 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.pagebanners; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
+package gplx.xowa.xtns.geoCrumbs; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import gplx.xowa.addons.*;
 import gplx.xowa.bldrs.wkrs.*;
-public class Pagebanners_addon implements Xoax_addon_itm, Xoax_addon_itm__init {
+public class GeoCrumbs_addon implements Xoax_addon_itm, Xoax_addon_itm__init {
 	public void Init_addon_by_app(Xoa_app app) {}
 	public void Init_addon_by_wiki(Xow_wiki wiki) {
-		wiki.Hxtn_mgr().Reg_wkr(new Pgbnr_hxtn_page_wkr(wiki.Hxtn_mgr().Blob_tbl()));
+		wiki.Hxtn_mgr().Reg_wkr(new GeoCrumbs_hxtn_page_wkr(wiki.Hxtn_mgr().Blob_tbl()));
 	}
 
-	public String Addon__key() {return "xowa.pgbnr";}
+	public String Addon__key() {return "xowa.geocrumb";}
 }

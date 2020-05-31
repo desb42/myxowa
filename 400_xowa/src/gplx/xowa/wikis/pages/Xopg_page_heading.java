@@ -41,7 +41,8 @@ public class Xopg_page_heading implements Bfr_arg {
 		return this;
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
-		if (html_data.Xtn_pgbnr() != null) {
+		if (html_data.Pagebanner().IsValid()) {
+			// just an empty firstHeading
 			fmtr.Bld_many(bfr, Bry_.Empty, Bry_.Empty, Bry_.Empty);
 			return;
 		}	// pgbnr exists; don't add title

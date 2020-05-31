@@ -77,7 +77,7 @@ public class Pgbnr_xtn_mgr extends Xox_mgr_base implements Bfr_arg {
 		return this;
 	}	private Xoae_page wpg; private Xop_ctx pctx; private Xoh_wtr_ctx hctx;
 	public void Bfr_arg__add(Bry_bfr bfr) {
-		Pgbnr_itm itm = wpg.Html_data().Xtn_pgbnr(); if (itm == null) return;
+		Pgbnr_itm itm = wpg.Html_data().Pagebanner().Get_itm(); if (itm == null) return;
 		Pgbnr_func.Add_banner(bfr, wpg, pctx, hctx, itm);
 	}
 

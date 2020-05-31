@@ -1,5 +1,7 @@
-package gplx.xowa.xtns.related;
+package gplx.xowa.xtns.indicators;
 
+import gplx.Ordered_hash;
+import gplx.Ordered_hash_;
 import gplx.core.serials.binarys.BinaryLoadMgr;
 import gplx.core.serials.core.SerialCoreFactory;
 import gplx.core.serials.core.SerialLoadMgr;
@@ -7,13 +9,10 @@ import gplx.core.serials.core.SerialLoadWkr;
 import gplx.core.serials.core.SerialSaveMgr;
 import gplx.core.serials.core.SerialSaveWkr;
 
-import gplx.List_adp;
-import gplx.List_adp_;
-
-public class RelatedSerialCore {
+public class IndicatorSerialCore {
     private static final int DATA_VERSION = 0;
 
-    public static byte[] Save(List_adp related) {
+    public static byte[] Save(Ordered_hash list) {
         // get wkr
         SerialSaveMgr mgr = SerialCoreFactory.NewSaveMgr(BinaryLoadMgr.CORE_VERSION);
         SerialSaveWkr wkr = mgr.NewSaveWkr();
@@ -22,16 +21,17 @@ public class RelatedSerialCore {
         wkr.SaveHdr(DATA_VERSION);
 
         // save items
-        int len = related.Count();
+        int len = list.Len();
         wkr.SaveInt(len);
         for (int i = 0; i < len; i++) {
-            byte[] rel = (byte[])related.Get_at(i);
-            wkr.SaveBry(rel);
+            Indicator_xnde xnde = (Indicator_xnde)list.Get_at(i);
+            wkr.SaveStr(xnde.Name());
+            wkr.SaveBry(xnde.Html());
         }
         return wkr.ToBry();
     }
 
-    public static List_adp Load(byte[] data) {
+    public static Ordered_hash Load(byte[] data) {
         // get wkr
         SerialLoadMgr mgr = SerialCoreFactory.NewLoadMgr(data);
         SerialLoadWkr wkr = mgr.NewLoadWkr();
@@ -41,9 +41,12 @@ public class RelatedSerialCore {
 
         // load items
         int len = wkr.LoadInt();
-        List_adp list = List_adp_.New();
+        Ordered_hash list = Ordered_hash_.New();
         for (int i = 0; i < len; i++) {
-            list.Add(wkr.LoadBry());
+            Indicator_xnde xnde = new Indicator_xnde();
+            xnde.Name_(wkr.LoadStr());
+            xnde.Html_(wkr.LoadBry());
+            list.Add_if_dupe_use_nth(xnde.Name(), xnde);
         }
         return list;
     }

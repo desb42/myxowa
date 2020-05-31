@@ -58,7 +58,7 @@ public class Xoh_toc_wtr implements gplx.core.brys.Bfr_arg, Xoh_wtr_itm {
 		if (hctx.Mode_is_hdump())	// NOTE: only write TOC tag in hdump; DATE:2016-08-20
 			Xoh_toc_wtr.Write_tag(rv, false);
 		else
-			pg.Html_data().Toc_mgr().To_html(rv, hctx, pg.Html_data().Xtn_pgbnr() != null);
+			pg.Html_data().Toc_mgr().To_html(rv, hctx, pg.Html_data().Pagebanner().IsValid());
 		rv.Add_mid(bry, toc_bgn, bry.length);
 	}
 }

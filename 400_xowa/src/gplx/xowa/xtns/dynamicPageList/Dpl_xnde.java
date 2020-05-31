@@ -36,6 +36,7 @@ public class Dpl_xnde implements Xox_xnde {
 			itms_len = pages.Count();
 		if (itms_len == 0) {
 			if (!itm.Suppress_errors())
+			// should use "intersection_noresults": "No pages meet these criteria."
 				bfr.Add_str_a7("No pages meet these criteria.");
 			return;
 		}

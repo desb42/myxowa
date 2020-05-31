@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.related;
+package gplx.xowa.xtns.pagebanners;
 
 import gplx.Bool_;
 import gplx.Bry_;
@@ -36,46 +36,58 @@ import gplx.xowa.parsers.Xop_parser_;
 import gplx.xowa.Xoa_ttl;
 import gplx.xowa.parsers.Xop_ctx;
 import gplx.List_adp;
-import gplx.List_adp_;
 import gplx.Byte_ascii;
 import gplx.Hash_adp;
 import gplx.xowa.parsers.tmpls.Xop_tkn_;
-public class Related_html_bldr implements gplx.core.brys.Bfr_arg {
-	private List_adp related = List_adp_.New();
+public class Pgbnr_html_bldr implements gplx.core.brys.Bfr_arg {
+	private Pgbnr_itm pgbnr = null;
+	private Xoa_ttl ttl = null;
 	private Xowe_wiki wiki;
 	private Xop_ctx ctx;
-	private Bry_fmtr div_after_fmtr;
-	public void Clear() { related.Clear(); }
-	public void Add(Object obj) { related.Add(obj); }
-	public int Count() { return related.Count(); }
-	public List_adp List() { return related; }
-	public void Set_fmtr(Bry_fmtr div_after_fmtr) {
-		this.div_after_fmtr = div_after_fmtr;
+        private Xoh_wtr_ctx hctx;
+	public void Clear() {
+		pgbnr = null;
+	}
+	public boolean IsValid() {return pgbnr != null;}
+	public Pgbnr_itm Get_itm() { return pgbnr; }
+	public void Add(Pgbnr_itm pgbnr, Xoa_ttl ttl, Xop_ctx ctx) {
+		this.pgbnr = pgbnr;
+		this.ttl = ttl;
+		this.wiki = ctx.Wiki();
+		this.ctx = ctx;
+	}
+        public void Add(Xoh_wtr_ctx hctx) {
+            this.hctx = hctx;
+        }
+	public boolean Show_toc_in_html() {
+		if (pgbnr == null) return true;
+		return pgbnr.Show_toc_in_html();
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
-		int len = related.Count();
-		if (len == 0) return;
-		div_after_fmtr.Bld_bfr_many(bfr, Bry_.new_a7("<div class=\"read-more-container\"></div>"));
-		//bfr.Add_str_a7("<div class=\"read-more-container\"></div>");
+		if (pgbnr == null) return;		// do not build html if no item
+		if (pgbnr.Precoded())
+			bfr.Add(pgbnr.Pgbnr_bry());
+		else {
+			ctx.Wiki().Xtn_mgr().Xtn_pgbnr().Write_html(ctx.Page(), ctx, hctx).Bfr_arg__add(bfr);
+		}
 	}
 
 	public void HxtnSave(Xowe_wiki wiki, Hxtn_page_mgr hxtnPageMgr, Xoae_page page, int pageId) {
-		int len = related.Count();
 		// exit if empty
-		if (len == 0) return;
+		if (pgbnr == null) return;
 
 		// serialize and save to db
-		byte[] rel = RelatedSerialCore.Save(related);
-		hxtnPageMgr.Page_tbl__insert(pageId, Hxtn_page_mgr.Id__related, pageId);
-		hxtnPageMgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Id__related, pageId, rel);
+		byte[] crumb = PgbnrSerialCore.Save(pgbnr.Pgbnr_bry());
+		hxtnPageMgr.Page_tbl__insert(pageId, Hxtn_page_mgr.Id__pgbnr, pageId);
+		hxtnPageMgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Id__pgbnr, pageId, crumb);
 	}
 
 	public void Deserialise(Xow_wiki wiki, Xoh_page hpg, Hash_adp props) {
-		byte[] data = (byte[])props.Get_by(Related_hxtn_page_wkr.KEY);
+		byte[] data = (byte[])props.Get_by(Pgbnr_hxtn_page_wkr.KEY);
 		// exit if empty
 		if (Bry_.Len_eq_0(data)) return;
 
 		// deserialize data
-		this.related = RelatedSerialCore.Load(data);
+		//this.pgbnr = PgbnrSerialCore.Load(data);
 	}
 }

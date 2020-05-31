@@ -64,7 +64,7 @@ public class Xopg_html_data {
 	public int					Xtn_imap_next_id() {return ++xtn_imap_next_id;} private int xtn_imap_next_id;	// NOTE: must keep separate imap_id b/c html_elem_id is not always set;
 	public byte[]				Xtn_search_text() {return xtn_search_txt;} public void Xtn_search_text_(byte[] v) {xtn_search_txt = v;} private byte[] xtn_search_txt = Bry_.Empty;
 	public byte[]				Xtn_scribunto_dbg() {return xtn_scribunto_dbg;} public void Xtn_scribunto_dbg_(byte[] v) {xtn_scribunto_dbg = Bry_.Add(xtn_scribunto_dbg, v);} private byte[] xtn_scribunto_dbg = Bry_.Empty;
-	public Pgbnr_itm			Xtn_pgbnr() {return xtn_pgbnr;} public void Xtn_pgbnr_(Pgbnr_itm v) {xtn_pgbnr = v;} private Pgbnr_itm xtn_pgbnr;
+	public Pgbnr_html_bldr		Pagebanner() {return xtn_pgbnr;} private Pgbnr_html_bldr xtn_pgbnr = new Pgbnr_html_bldr();
 	public Xoh_head_mgr			Head_mgr() {return module_mgr;} private Xoh_head_mgr module_mgr = new Xoh_head_mgr();
 	public boolean					Skip_parse() {return skip_parse;} public void Skip_parse_(boolean v) {skip_parse = v;} private boolean skip_parse;
 	public Xopg_tag_mgr			Custom_head_tags() {return head_tags;} private final    Xopg_tag_mgr head_tags = new Xopg_tag_mgr(Bool_.Y);
@@ -88,13 +88,13 @@ public class Xopg_html_data {
 		xtn_imap_exists = false;
 		xtn_search_txt = Bry_.Empty;
 		xtn_scribunto_dbg = Bry_.Empty;
-		xtn_pgbnr = null;
+		xtn_pgbnr.Clear();
 		module_mgr.Clear();
 		custom_html = custom_tab_name = null;
 		indicators.Clear();
 		this.mode_wtxt_shown = false;
 		geocrumb.Clear();
-                related.Clear();
+		related.Clear();
 		pgbnr_bry = null;
 	}
 	public void Init_by_page(Xoa_ttl ttl) {

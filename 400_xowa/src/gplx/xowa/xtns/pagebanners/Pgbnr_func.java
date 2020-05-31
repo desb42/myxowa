@@ -104,7 +104,7 @@ public class Pgbnr_func extends Pf_func_base {
 
 		Pgbnr_itm itm = new Pgbnr_itm();
 		itm.Init_from_wtxt(banner_ttl, banner_file_itm, tooltip, title, bottomtoc, toc, data_pos_x, data_pos_y, origin_x, icons_list == null ? Pgbnr_icon.Ary_empty : (Pgbnr_icon[])icons_list.To_ary_and_clear(Pgbnr_icon.class), enabletoc);
-		page.Html_data().Xtn_pgbnr_(itm);
+		page.Html_data().Pagebanner().Add(itm, banner_ttl, ctx);
 		page.Html_data().Head_mgr().Itm__pgbnr().Enabled_y_();	// register css / js during parse stage
 		page.Wtxt().Toc().Flag__toc_(true);	// NOTE: must mark toc_manual else will show 2nd TOC in edit mode; DATE:2016-07-10
 	}

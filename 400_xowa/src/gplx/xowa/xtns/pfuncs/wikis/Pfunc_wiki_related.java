@@ -21,10 +21,7 @@ public class Pfunc_wiki_related extends Pf_func_base {
 		int args_len = self.Args_len();
 		byte[] argx = Eval_argx(ctx, src, caller, self); if (argx == null) return; // no argx; return empty
 		// get related item from page
-		// add arg
-                //Xoa_ttl ttl = Xoa_ttl.Parse(ctx.Wiki(), argx);
-		//ctx.Page().Related().Add(ttl.Full_txt());
-		ctx.Page().Related().Add(argx);
+		ctx.Page().Html_data().Related().Add(argx);
 	}
 	public Pfunc_wiki_related(int id) {this.id = id;}
 	@Override public int Id() {return id;} private int id;

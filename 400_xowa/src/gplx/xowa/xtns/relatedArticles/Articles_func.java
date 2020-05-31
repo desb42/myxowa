@@ -29,7 +29,7 @@ public class Articles_func extends Pf_func_base {
 			ctx.Page().Html_data().Xtn_skin_mgr().Add(xtn_itm);
 		}
 		Parse(xtn_itm, argx);
-		ctx.Page().Related().Add(argx);
+		ctx.Page().Html_data().Related().Add(argx);
 	}
 	private void Parse(Articles_xtn_skin_itm xtn_itm, byte[] argx) {
 		int pos = Bry_find_.Find_fwd(argx, Const_dlm);
