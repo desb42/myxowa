@@ -27,7 +27,7 @@ class Wdata_fmtr__json implements gplx.core.brys.Bfr_arg {
 		toc_data.Orig_(msgs.Json_div_hdr());
 		toggle_itm.Init_msgs(msgs.Toggle_title_y(), msgs.Toggle_title_n());
 	}
-	public void Init_by_wdoc(Json_doc jdoc) {			
+	public void Init_by_wdoc(Json_doc jdoc) {
 		this.jdoc = jdoc;
 		toc_data.Make(0);
 	}

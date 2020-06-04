@@ -32,7 +32,17 @@ class Wdata_slink_grp {
 		for (int i = 0; i < list_len; ++i) {
 			Wdata_sitelink_itm itm = (Wdata_sitelink_itm)list.Get_at(i);				
 			int idx = Idx_by_tid(itm.Domain_info().Domain_type_id());
-			rv[idx].Rows().Add(itm.Site(), itm);
+                        // ignore some specials!
+                        if (idx == Idx_x) {
+                            switch (itm.Domain_info().Domain_type_id()) {
+                                case Xow_domain_tid_.Tid__incubator:
+                                case Xow_domain_tid_.Tid__wikisource_org:
+                                    continue;
+                                default:
+                                    break;
+                            }
+                        }
+        		rv[idx].Rows().Add(itm.Site(), itm);
 		}
 	}
 	public static int Idx_by_tid(int tid) {

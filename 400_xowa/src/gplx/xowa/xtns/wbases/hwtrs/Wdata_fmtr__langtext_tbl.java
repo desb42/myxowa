@@ -113,14 +113,14 @@ class Wdata_fmtr__alias_row implements gplx.core.brys.Bfr_arg, Wdata_fmtr__langt
 			}
 		}
 	}
-	private static final    byte[] lang_code_style_n = Bry_.new_a7("border:1px solid white;background:none;");
+	private static final    byte[] lang_code_style_n = Bry_.new_a7(" style=\"border:1px solid white;background:none;\"");
 	private final    Bry_fmtr row_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "        <li class='wikibase-sitelinkview'>"
-	, "          <span class='wikibase-sitelinkview-siteid-container' style='~{lang_code_style}>"
-	, "            <span class='wikibase-sitelinkview-siteid''>~{lang_code}</span>"
+	, "        <li class=\"wikibase-sitelinkview\">"
+	, "          <span class=\"wikibase-sitelinkview-siteid-container\"~{lang_code_style}>"
+	, "            <span class=\"wikibase-sitelinkview-siteid\">~{lang_code}</span>"
 	, "          </span>"
-	, "          <span class='wikibase-sitelinkview-link' lang='~{lang_code}' dir='auto'>~{text}</span>"
+	, "          <span class=\"wikibase-sitelinkview-link\" lang=\"~{lang_code}\" dir=\"auto\">~{text}</span>"
 	, "        </li>"
 	), "lang_code", "lang_code_style", "text"
 	);

@@ -34,8 +34,8 @@ class Wdata_fmtr__slink_grp implements gplx.core.brys.Bfr_arg {
 	}
 	private final    Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "  <div class='wikibase-sitelinkgrouplistview'>"
-	, "    <div class='wb-listview'>~{grps}"
+	, "  <div class=\"wikibase-sitelinkgrouplistview\">"
+	, "    <div class=\"wb-listview\">~{grps}"
 	, "    </div>"
 	, "  </div>"
 	), "grps"
@@ -77,23 +77,23 @@ class Wdata_fmtr__slink_tbl implements gplx.core.brys.Bfr_arg {
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		for (int i = 0; i < Wdata_slink_grp.Idx__len; ++i) {
 			Wdata_slink_grp grp = grps[i];
-                        int len = grp.Rows().Count();
+			int len = grp.Rows().Count();
 			//if (len == 0) continue;
 			fmtr_row.Init_by_page(grp.Rows());
 			//Xoapi_toggle_itm toggle_itm = grp.Toggle_itm();
-                        //byte[] lcase = Bry_.Mid(grp.Toc_data().Href(), 0);
-                        //lcase[0] += 32; // eeek
-                        byte[] entries;
-                        if (len == 1)
-                            entries = Bry_.new_a7("entry");
-                        else
-                            entries = Bry_.new_a7("entries");
-                        byte[] collapse;
-                        if (len > 1)
-                            collapse = Bry_.new_a7(" mw-collapsible");
-                        else
-                            collapse = Bry_.Empty;
-                        fmtr.Bld_bfr_many(bfr, grp.Toc_data().Href(), grp.Toc_data().Href(), len, fmtr_row, Wdata_slink_grp.Name_by_tid(i), collapse, entries);
+			//byte[] lcase = Bry_.Mid(grp.Toc_data().Href(), 0);
+			//lcase[0] += 32; // eeek
+			byte[] entries;
+			if (len == 1)
+				entries = Bry_.new_a7("entry");
+			else
+				entries = Bry_.new_a7("entries");
+			byte[] collapse;
+			if (len > 1)
+				collapse = Bry_.new_a7(" mw-collapsible");
+			else
+				collapse = Bry_.Empty;
+			fmtr.Bld_bfr_many(bfr, grp.Toc_data().Href(), grp.Toc_data().Orig(), len, fmtr_row, Wdata_slink_grp.Name_by_tid(i), collapse, entries);
 		}
 	}
 	private final    Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
@@ -129,14 +129,20 @@ class Wdata_fmtr__slink_row implements gplx.core.brys.Bfr_arg {
 		for (int i = 0; i < len; ++i) {
 			Wdata_sitelink_itm itm = (Wdata_sitelink_itm)list.Get_at(i);
 			Xow_domain_itm domain_info = itm.Domain_info();
-			byte[] wmf_key			= domain_info.Abrv_wm();
-			Xol_lang_stub lang_itm	= domain_info.Lang_actl_itm();
-			byte[] lang_key			= lang_itm.Key();
-			byte[] lang_name		= lang_itm.Local_name();
-			byte[] domain_bry		= domain_info.Domain_bry();
-			byte[] page_name		= itm.Name();
+			byte[] wmf_key = domain_info.Abrv_wm();
+			Xol_lang_stub lang_itm = domain_info.Lang_actl_itm();
+			byte[] lang_key = lang_itm.Key();
+			byte[] lang_name;
+			if (lang_key == Bry_.Empty) {
+				lang_key = itm.Site();
+				lang_name = itm.Domain_info().Domain_type().Display_bry();
+			}
+			else
+				lang_name = lang_itm.Local_name();
+			byte[] domain_bry = domain_info.Domain_bry();
+			byte[] page_name = itm.Name();
 			fmtr_badges.Init_by_itm(itm.Badges());
-			byte[] href_site		= xwiki_mgr.Get_by_key(domain_bry) == null ? Href_site_http : Href_site_xowa;
+			byte[] href_site = xwiki_mgr.Get_by_key(domain_bry) == null ? Href_site_http : Href_site_xowa;
 			fmtr_row.Bld_bfr_many(bfr, lang_name, lang_key, wmf_key, href_site, domain_bry, href_encoder.Encode(page_name), Gfh_utl.Escape_html_as_bry(itm.Name()), fmtr_badges);
 		}
 	}
@@ -153,10 +159,10 @@ class Wdata_fmtr__slink_row implements gplx.core.brys.Bfr_arg {
 //	, "                </span>"
 //	, "              </span>"
 //	, "              <span class='wikibase-sitelinkview-link' lang='~{lang_code}' dir='auto'>"						// wikibase-sitelinkview-link-~{wmf_key}
-	, "                <span class='wikibase-sitelinkview-page'>"
-	, "                  <a href='~{href_site}~{href_domain}/wiki/~{href_page}' hreflang='~{lang_code}' dir='auto'>~{page_name}</a>"
+	, "                <span class=\"wikibase-sitelinkview-page\">"
+	, "                  <a href=\"~{href_site}~{href_domain}/wiki/~{href_page}\" hreflang=\"~{lang_code}\" dir=\"auto\">~{page_name}</a>"
 	, "                </span>"
-	, "                <span class='wikibase-badgeselector wikibase-sitelinkview-badges'>~{badges}"
+	, "                <span class=\"wikibase-badgeselector wikibase-sitelinkview-badges\">~{badges}"
 	, "                </span>"
 	, "  </span>"
 	, "</li>"
@@ -181,7 +187,7 @@ class Wdata_fmtr__slink_badges implements gplx.core.brys.Bfr_arg {
 		}
 	}
 	private final    Bry_fmtr fmtr_row = Bry_fmtr.new_
-	( "\n                  <span class='wb-badge wb-badge-~{ttl} wb-badge-~{cls}' title='~{name}'></span>"
+	( "\n                  <span class=\"wb-badge wb-badge-~{ttl} wb-badge-~{cls}\" title=\"~{name}\"></span>"
 	, "ttl", "cls", "name"
 	);
 }

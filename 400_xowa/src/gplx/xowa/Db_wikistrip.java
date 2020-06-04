@@ -403,7 +403,7 @@ public class Db_wikistrip {
 							if (pos - startpos > 10) {
 								int npos = 0; 
 								int textstart = -1;
-								if (src[namestart] == 'l' && src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && src[namestart+4] == '|') { // lang
+								if ((src[namestart] | 32) == 'l' && src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && src[namestart+4] == '|') { // lang
 									npos = namestart + 5;
 									while (npos < pos) {
 										b = src[npos++];
@@ -413,11 +413,11 @@ public class Db_wikistrip {
 										}
 									}
 								}
-								else if (src[namestart] == 'n' && src[namestart+1] == 'i' && src[namestart+2] == 'h' && src[namestart+3] == 'o' && src[namestart+4] == 'n' && src[namestart+5] == 'g' && src[namestart+6] == 'o' && src[namestart+7] == '|') { // nihongo
+								else if ((src[namestart] | 32) == 'n' && src[namestart+1] == 'i' && src[namestart+2] == 'h' && src[namestart+3] == 'o' && src[namestart+4] == 'n' && src[namestart+5] == 'g' && src[namestart+6] == 'o' && src[namestart+7] == '|') { // nihongo
 									npos = namestart + 8;
 									textstart = npos;
 								}
-								else if (src[namestart] == 'd' && src[namestart+1] == 'a' && src[namestart+2] == 't' && src[namestart+3] == 'e') { // fr:template:date
+								else if ((src[namestart] | 32) == 'd' && src[namestart+1] == 'a' && src[namestart+2] == 't' && src[namestart+3] == 'e') { // fr:template:date
 									npos = namestart + 5;
 									textstart = npos;
 								}
