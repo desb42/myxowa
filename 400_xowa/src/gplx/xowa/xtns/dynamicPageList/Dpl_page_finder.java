@@ -196,23 +196,25 @@ class Dpl_page_finder {
 	}
 /* copied from 400_xowa\src\gplx\xowa\addons\wikis\ctgs\htmls\catpages\dbs\Xoctg_catlink_loader.java */
 	private void Load_catlinks(List_adp catlink_list, String sql, Db_attach_mgr attach_mgr) {
-		Db_rdr rdr = Db_rdr_.Empty;
-		int count = 0;
-		try {
-			attach_mgr.Attach();
-			rdr = attach_mgr.Conn_main().Stmt_sql(sql).Exec_select__rls_auto();
-			while (rdr.Move_next()) {
-				Xoctg_dynamic_itm itm = Xoctg_dynamic_itm.New_by_rdr(wiki, rdr);
-				catlink_list.Add(itm);
-				if (count >= 1000 && (count % 1000) == 0) Gfo_usr_dlg_.Instance.Prog_many("", "", "loading cat_links: count=~{0}", count);
-				count++;
+		synchronized (this) {
+			Db_rdr rdr = Db_rdr_.Empty;
+			int count = 0;
+			try {
+				attach_mgr.Attach();
+				rdr = attach_mgr.Conn_main().Stmt_sql(sql).Exec_select__rls_auto();
+				while (rdr.Move_next()) {
+					Xoctg_dynamic_itm itm = Xoctg_dynamic_itm.New_by_rdr(wiki, rdr);
+					catlink_list.Add(itm);
+					if (count >= 1000 && (count % 1000) == 0) Gfo_usr_dlg_.Instance.Prog_many("", "", "loading cat_links: count=~{0}", count);
+					count++;
+				}
 			}
-		}
-		catch (Exception e) {
-			throw Err_.new_exc(e, "db", "db.xxxxxx failed", "sql", sql);}
-		finally {
-			rdr.Rls();
-			attach_mgr.Detach();
+			catch (Exception e) {
+				throw Err_.new_exc(e, "db", "db.xxxxxx failed", "sql", sql);}
+			finally {
+				rdr.Rls();
+				attach_mgr.Detach();
+			}
 		}
 	}
 	public List_adp Dpl_loader(Xow_wiki wiki, Xowd_page_tbl page_tbl, Xow_db_mgr db_mgr, Db_conn cat_core_conn) {

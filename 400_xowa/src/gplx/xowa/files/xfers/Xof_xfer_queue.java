@@ -73,6 +73,7 @@ public class Xof_xfer_queue {
 		int list_len = xfer_list.Count();
 		for (int i = 0; i < list_len; i++) {
 			Xof_file_itm xfer = (Xof_file_itm)xfer_list.Get_at(i);
+                        System.out.println(String_.new_u8(xfer.Lnki_ttl()));
 			if (xfer.Hdump_mode() == Xof_fsdb_itm.Hdump_mode__null) {
 				Xof_fsdb_itm fsdb = new Xof_fsdb_itm();
 				fsdb.Init_at_lnki(xfer.Lnki_exec_tid(), xfer.Lnki_wiki_abrv(), xfer.Lnki_ttl(), xfer.Lnki_type(), xfer.Lnki_upright(), xfer.Lnki_w(), xfer.Lnki_h(), xfer.Lnki_time(), xfer.Lnki_page(), upright_patch);

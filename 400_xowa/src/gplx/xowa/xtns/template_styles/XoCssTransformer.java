@@ -6,6 +6,7 @@ import gplx.xowa.htmls.minifys.XoCssMin;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class XoCssTransformer {
     private final static ConcurrentHashMap<String, Pattern> patterns = new ConcurrentHashMap<>();
@@ -21,12 +22,46 @@ public class XoCssTransformer {
     }
     public XoCssTransformer Prepend(String prepend) {
         // prepend any classes to all declarations; primarily for '.mw-parser-output ' selector
-        css = JsString_.replace(css, patterns, "\\}([^@}].{2})", "} " + prepend + " $1");
-        css = JsString_.replace(css, patterns, "(@media[^\\{]*\\{)", "$1" + prepend + " ");
+        css = my_addselector(css, "\\}([^\\{\\}]*)\\{", prepend, "}", "{");
+        //css = JsString_.replace(css, patterns, "\\}([^@}].{2})", "} " + prepend + " $1");
+        css = my_addselector(css, "\\{([^\\{\\}]*)\\{", prepend, "{", "{");
+        //css = JsString_.replace(css, patterns, "(@media[^\\{]*\\{)", "$1" + prepend + " ");
         if (css.charAt(0) != '@')
-            css = prepend + " " + css;
+            css = my_addselector(css, "^([^\\{]*)\\{", prepend, "", "{");
+            //css = prepend + " " + css;
         return this;
     }
+	String my_addselector(String base, String regex, String prepend, String before, String after) {
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(base);
+		StringBuffer sb = new StringBuffer();
+		boolean found = false;
+		
+		while (m.find()) {
+			found = true;
+                        String replacement = before;
+                        String grp = m.group(1);
+                        if (grp.length() > 0) {
+                            if (grp.charAt(0) != '@') {
+                                String[] st = grp.split(",");
+                                for (int i = 0; i < st.length; i++) {
+                                    if (i > 0)
+                                        replacement += ",";
+                                    replacement += prepend + " " + st[i] + " ";
+                                }
+                            }
+                            else
+                                replacement += grp;
+                        }
+			m.appendReplacement(sb, replacement + after);
+		}
+		if (found) {
+			m.appendTail(sb);
+			return sb.toString();
+		}
+		else
+			return base;
+	}
     public XoCssTransformer Url(String src, String trg) {
         // change some url(...) entries
         css = css.replace("//" + src, "//" + trg);

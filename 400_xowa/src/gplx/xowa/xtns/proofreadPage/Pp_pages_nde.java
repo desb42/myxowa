@@ -116,6 +116,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		if (xtn_literal)
+			// should actually publish an error message
 			Xox_mgr_base.Xtn_write_escape(app, bfr, src, xnde);
 		else {
 			if (badindex) {
@@ -180,8 +181,18 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			}
 			//if (ttls == Ttls_null) {Fail_msg("no index ttls found"); return null;}
 			//rv = Bld_wikitext_from_ttls(full_bfr, lst_page_regy, ttls);
+			if (list == null) return null;
 			if (list.Count() == 0) {Fail_msg("no index ttls found"); return null;}
-			rv = Bld_wikitext_from_ttls(full_bfr, lst_page_regy, list, pl_nde, tots);
+			if (index_page.Is_jpg()) {
+				Pp_pages_file fle = (Pp_pages_file)list.Get_at(0);
+				//page_no = fle.Page_no();
+				Xoa_ttl ttl = fle.Ttl();
+				// check for quality
+				int quality = wiki.Quality().getQualityFromCatlink(ttl, wiki);
+				tots.Increment(quality);
+			}
+			else
+				rv = Bld_wikitext_from_ttls(full_bfr, lst_page_regy, list, pl_nde, tots);
 		}
 		else {
 			header = Toc_bry;
@@ -447,6 +458,8 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				// check for quality
 				int quality = wiki.Quality().getQualityFromCatlink(ttl, wiki);
 				tots.Increment(quality);
+//				if (header_flag)
+//					continue;
 				if (quality != Pp_quality.Quality_without_text) {
 					page_bfr.Add(Bry_tmpl_page).Add(ttl.Full_db());
 					if (pl_nde != null) {
@@ -481,7 +494,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		finally {
 			page_bfr.Mkr_rls();
 		}
-				//Xoh_page_wtr_wkr_.Set_quality(qualitycount, qualitytot);
+		//Xoh_page_wtr_wkr_.Set_quality(qualitycount, qualitytot);
 		return full_bfr.To_bry_and_clear();
 	}
 	private Xop_root_tkn Bld_root_nde(Bry_bfr page_bfr, Hash_adp_bry lst_page_regy, byte[] wikitext) {

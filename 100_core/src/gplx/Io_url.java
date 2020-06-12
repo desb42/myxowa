@@ -19,6 +19,7 @@ public class Io_url implements CompareAble, ParseAble, Gfo_invk {	//_20101005 UR
 	public IoUrlInfo Info() {return info;} IoUrlInfo info;
 	public String Raw() {return raw;} final    String raw;
 	public byte[] RawBry() {return Bry_.new_u8(raw);}
+	public byte[] RawUnixBry() {return Bry_.new_u8(Http_file_str_encoder.Encode_str(raw));}
 	public String To_http_file_str() {return String_.Len_eq_0(raw) ? String_.Empty : String_.Concat	(Http_file_str, Http_file_str_encoder.Encode_str(raw));}
 	public byte[] To_http_file_bry() {return String_.Len_eq_0(raw) ? Bry_.Empty		: Bry_.Add		(Http_file_bry, Http_file_str_encoder.Encode_bry(raw));}
 	public static Url_encoder_interface Http_file_str_encoder = Url_encoder_interface_same.Instance;

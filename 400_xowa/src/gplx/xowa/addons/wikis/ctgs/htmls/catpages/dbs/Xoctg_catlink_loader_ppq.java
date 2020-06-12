@@ -140,24 +140,27 @@ enwikisource
 		return attach_mgr.Resolve_sql(bfr.To_str_and_clear());
 	}
 	private int Load_catlinks_ppq(List_adp catlink_list, String sql) {
-		Db_rdr rdr = Db_rdr_.Empty;
-		int count = 0;
-		try {
-			attach_mgr.Attach();
-			rdr = attach_mgr.Conn_main().Stmt_sql(sql).Exec_select__rls_auto();
-			while (rdr.Move_next()) {
-				Xoctg_catpage_ppq itm = Xoctg_catpage_ppq.New_by_rdr(wiki, rdr);
-				catlink_list.Add(itm);
-				count++;
+		synchronized (this) {
+			Db_rdr rdr = Db_rdr_.Empty;
+			int count = 0;
+			try {
+				attach_mgr.Attach();
+				rdr = attach_mgr.Conn_main().Stmt_sql(sql).Exec_select__rls_auto();
+				while (rdr.Move_next()) {
+					Xoctg_catpage_ppq itm = Xoctg_catpage_ppq.New_by_rdr(wiki, rdr);
+					catlink_list.Add(itm);
+					count++;
+				}
 			}
+			catch (Exception e) {
+				throw Err_.new_exc(e, "db", "db.yyyy failed", "sql", sql);
+			}
+			finally {
+				rdr.Rls();
+				attach_mgr.Detach();
+			}
+			return count;
 		}
-		catch (Exception e) {
-                    throw Err_.new_exc(e, "db", "db.yyyy failed", "sql", sql);}
-		finally {
-			rdr.Rls();
-			attach_mgr.Detach();
-		}
-                return count;
 	}
 	public static Xoctg_catlink_loader_ppq Create(Xow_wiki wiki, Xowd_page_tbl page_tbl, Xow_db_mgr db_mgr, Db_conn cat_core_conn) {
 		// init db vars

@@ -56,7 +56,7 @@ public class Http_server_wkr implements Gfo_invk {
 		this.server_mgr = server_mgr; this.uid = uid;
 		this.app = server_mgr.App(); this.server_wtr = server_mgr.Server_wtr(); this.url_encoder = server_mgr.Encoder();
 		this.root_dir_http = app.Fsys_mgr().Root_dir().To_http_file_str();
-		this.root_dir_fsys = Bry_.new_u8(app.Fsys_mgr().Root_dir().Raw());
+		this.root_dir_fsys = app.Fsys_mgr().Root_dir().RawUnixBry();
 		this.request_parser = server_mgr.Request_parser();
 		rootdir = app.Fsys_mgr().Root_dir().toString();
 	}

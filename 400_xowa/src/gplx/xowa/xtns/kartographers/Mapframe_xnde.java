@@ -22,9 +22,9 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	private int json_bgn, json_end;
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, byte xatr_id) {
 		switch (xatr_id) {
-			case Map_atrs.Tid__latitude:   lat = xatr.Val_as_bry(); break;
-			case Map_atrs.Tid__longitude:  lon = xatr.Val_as_bry(); break;
-			case Map_atrs.Tid__zoom:       zoom = xatr.Val_as_bry(); break;
+			case Map_atrs.Tid__latitude:   lat = Bry_.Zerotrim(xatr.Val_as_bry()); break;
+			case Map_atrs.Tid__longitude:  lon = Bry_.Zerotrim(xatr.Val_as_bry()); break;
+			case Map_atrs.Tid__zoom:       zoom = Bry_.Zerotrim(xatr.Val_as_bry()); break;
 			case Map_atrs.Tid__show:       show = xatr.Val_as_bry(); break;
 			case Map_atrs.Tid__group:      group = xatr.Val_as_bry(); break;
 			case Map_atrs.Tid__mapstyle:   mapstyle = xatr.Val_as_bry(); break;
@@ -219,7 +219,7 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 
 		Fmt__img.Bld_many(tmp_bfr, server, this.mapstyle, staticZoom, staticLat, staticLon, staticWidth, this.height, params, staticWidth, this.height);
 		img = tmp_bfr.To_bry_and_clear();
-		Gfo_usr_dlg_.Instance.Warn_many("", "", "mapping: page=~{0} mapimg=~{1}", ctx.Page().Ttl().Full_db(), img);
+		Gfo_usr_dlg_.Instance.Warn_many("", "", "mapping: page=~{0} mapimg=~{1}", ctx.Page().Ttl().Full_db(), Bry_.Mid(img, 66, img.length-44));
 
 		if ( !framed ) {
 			//$attrs['class'] .= " {$containerClass} {$alignClasses[$this->align]}";
@@ -277,7 +277,7 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	( ""
 	, "<img src=\"~{mapserver}/img/~{mapstyle},~{zoom},~{lat},~{lon},~{width}x~{height}.png?~{params}\" alt=\"\" width=\"~{width}\" height=\"~{height}\" decoding=\"async\" />"
 	);
-	private byte[] cvt (byte[] src) {
+	private byte[] cvt(byte[] src) {
 		int pos = 0;
 		int src_len = src.length;
 		Bry_bfr bfr = Bry_bfr_.New();
@@ -294,6 +294,30 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 				case ',':
 					bfr.Add_mid(src, start, pos - 1);
 					bfr.Add_str_a7("%2C");
+					start = pos;
+					break;
+
+				case '&':
+					bfr.Add_mid(src, start, pos - 1);
+					bfr.Add_str_a7("%26");
+					start = pos;
+					break;
+
+				case '"':
+					bfr.Add_mid(src, start, pos - 1);
+					bfr.Add_str_a7("%22");
+					start = pos;
+					break;
+
+				case '+':
+					bfr.Add_mid(src, start, pos - 1);
+					bfr.Add_str_a7("%2B");
+					start = pos;
+					break;
+
+				case ':':
+					bfr.Add_mid(src, start, pos - 1);
+					bfr.Add_str_a7("%3A");
 					start = pos;
 					break;
 

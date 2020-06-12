@@ -1243,4 +1243,33 @@ public class Bry_ {
 			}
 		}
 	}
+	public static byte[] Zerotrim(byte[] val) {
+		int spos = 0;
+		int len = val.length;
+		boolean dp = false;
+		while (spos < len && val[spos] == '0') {
+			spos++;
+		}
+		int pos = spos;
+		while (pos < len) {
+			if (val[pos++] == '.') {
+				dp = true;
+				break;
+			}
+		}
+		int epos = len - 1;
+		if (dp) {
+			while (epos >= 0 && val[epos] == '0')
+				epos--;
+		}
+		if (spos > 0 || epos < len - 1) {
+			int sz = epos + 1 - spos; // len - spos - (len - 1 - epos);
+			byte[] newval = new byte[sz];
+			for (int i = 0; i < sz; i++) {
+				newval[i] = val[spos++];
+			}
+			return newval;
+		}
+		return val;
+	}
 }

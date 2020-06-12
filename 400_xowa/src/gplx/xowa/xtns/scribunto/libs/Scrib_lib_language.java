@@ -235,7 +235,7 @@ public class Scrib_lib_language implements Scrib_lib {
 				int dash_pos = Bry_find_.Find_fwd(date_bry, Byte_ascii.Dash);
 				if (dash_pos <= 0) { // handle dash as first char (dash_pos = 0) as well as no dash found (dash_pos = -1)
 					tmp_bfr.Mkr_rls();
-					return rslt.Init_fail("bad argument #2 to 'formatDate' (not a valid timestamp)");
+					return rslt.Init_fail("bad argument #2 to 'formatDate' (not a valid timestamp) wikistyledate");
 				}
 				date_bry = Bry_.Mid(date_bry, dash_pos - 4, date_bry.length); // take only 4 digits for years; lops off "+0000000" as well as "+"; FOOTNOTE:WIKIDATA_DATES
 			}

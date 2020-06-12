@@ -32,6 +32,7 @@ public class Xobldr__fsdb_db__create_data extends Xob_cmd__base implements Xob_c
 	private boolean exec_done, resume_enabled; private int exec_count, exec_count_max = Int_.Max_value, exec_fail, exec_fail_max = 10000; // 115 errors over 900k images		
 	private int tier_id_bmk = -1, tier_id_val = -1; private int page_id_bmk = -1, page_id_val = -1, page_id_end = Int_.Max_value; private int lnki_id_bmk = -1, lnki_id_val = -1;
 	private boolean exit_after_commit, exit_now;
+        private int total_pending;
 	public Xobldr__fsdb_db__create_data(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);
 		if (bldr != null) {
 			this.poll_mgr = new Xobu_poll_mgr(bldr.App());
@@ -87,7 +88,7 @@ public class Xobldr__fsdb_db__create_data extends Xob_cmd__base implements Xob_c
 	@Override public void Cmd_run() {
 		Init_bldr_bmks();
 		this.time_bgn = System_.Ticks();
-		int total_pending = Xob_xfer_regy_tbl.Select_total_pending(bldr_conn);
+		total_pending = Xob_xfer_regy_tbl.Select_total_pending(bldr_conn);
 		// if (total_pending > 250000 && src_bin_mgr__fsdb_version == null) 
 		usr_dlg.Note_many("", "", "total pending: ~{0}", total_pending);
 		List_adp list = List_adp_.New();
@@ -296,7 +297,7 @@ public class Xobldr__fsdb_db__create_data extends Xob_cmd__base implements Xob_c
 	}
 	private void Print_progress(Xodb_tbl_oimg_xfer_itm itm) {
 		int time_elapsed = System_.Ticks__elapsed_in_sec(time_bgn);
-		usr_dlg.Prog_many("", "", "prog: num=~{0} err=~{1} time=~{2} rate=~{3} page=~{4} lnki=~{5} ttl=~{6}", exec_count, exec_fail, time_elapsed, Math_.Div_safe_as_int(exec_count, time_elapsed), page_id_val, lnki_id_val, itm.Orig_ttl());
+		usr_dlg.Prog_many("", "", "prog: num=~{0} of=~{1} err=~{2} time=~{3} rate=~{4} page=~{5} lnki=~{6} ttl=~{7}", exec_count, total_pending, exec_fail, time_elapsed, Math_.Div_safe_as_int(exec_count, time_elapsed), page_id_val, lnki_id_val, itm.Orig_ttl());
 	}
 	private void Delete_files() {}// TODO_OLD: purge /xowa/file/ dir to free up hard disk space
 	@Override public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

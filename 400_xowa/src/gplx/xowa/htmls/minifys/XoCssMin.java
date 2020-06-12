@@ -103,11 +103,12 @@ public class XoCssMin {
 		for (i = 0, max = comments.size(); i < max; i = i + 1) {
 
 			token = comments.get(i);
+                        int len = token.length();
 			placeholder = "___YUICSSMIN_PRESERVE_CANDIDATE_COMMENT_" + i + "___";
 
 			// ! in the first position of the comment means preserve
 			// so push to the preserved tokens keeping the !
-			if (token.charAt(0) == '!') {
+			if (len > 0 && token.charAt(0) == '!') {
 				preservedTokens.add(token);
 				css = css.replace(placeholder,  "___YUICSSMIN_PRESERVED_TOKEN_" + (preservedTokens.size() - 1) + "___");
 				continue;
@@ -115,7 +116,7 @@ public class XoCssMin {
 
 			// \ in the last position looks like hack for Mac/IE5
 			// shorten that to /*\*/ and the next one to /**/
-			if (token.charAt(token.length() - 1) == '\\') {
+			if (len > 0 && token.charAt(len - 1) == '\\') {
 				preservedTokens.add("\\");
 				css = css.replace(placeholder,  "___YUICSSMIN_PRESERVED_TOKEN_" + (preservedTokens.size() - 1) + "___");
 				i = i + 1; // attn: advancing the loop
@@ -126,7 +127,7 @@ public class XoCssMin {
 
 			// keep empty comments after child selectors (IE7 hack)
 			// e.g. html >/**/ body
-			if (token.length() == 0) {
+			if (len == 0) {
 				startIndex = css.indexOf(placeholder);
 				if (startIndex > 2) {
 					if (css.charAt(startIndex - 3) == '>') {

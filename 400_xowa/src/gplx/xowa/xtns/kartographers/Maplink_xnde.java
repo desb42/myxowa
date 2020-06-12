@@ -22,9 +22,9 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	private int json_bgn, json_end;
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, byte xatr_id) {
 		switch (xatr_id) {
-			case Map_atrs.Tid__latitude:   lat = xatr.Val_as_bry(); break;
-			case Map_atrs.Tid__longitude:  lon = xatr.Val_as_bry(); break;
-			case Map_atrs.Tid__zoom:       zoom = xatr.Val_as_bry(); break;
+			case Map_atrs.Tid__latitude:   lat = Bry_.Zerotrim(xatr.Val_as_bry()); break;
+			case Map_atrs.Tid__longitude:  lon = Bry_.Zerotrim(xatr.Val_as_bry()); break;
+			case Map_atrs.Tid__zoom:       zoom = Bry_.Zerotrim(xatr.Val_as_bry()); break;
 			case Map_atrs.Tid__show:       show = xatr.Val_as_bry(); break;
 			case Map_atrs.Tid__group:      group = xatr.Val_as_bry(); break;
 			case Map_atrs.Tid__mapstyle:   mapstyle = xatr.Val_as_bry(); break;
