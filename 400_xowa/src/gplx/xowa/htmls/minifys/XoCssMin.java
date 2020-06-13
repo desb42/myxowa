@@ -103,12 +103,11 @@ public class XoCssMin {
 		for (i = 0, max = comments.size(); i < max; i = i + 1) {
 
 			token = comments.get(i);
-                        int len = token.length();
 			placeholder = "___YUICSSMIN_PRESERVE_CANDIDATE_COMMENT_" + i + "___";
 
 			// ! in the first position of the comment means preserve
 			// so push to the preserved tokens keeping the !
-			if (len > 0 && token.charAt(0) == '!') {
+			if (JsString_.charAtEq(token, 0, '!')) {
 				preservedTokens.add(token);
 				css = css.replace(placeholder,  "___YUICSSMIN_PRESERVED_TOKEN_" + (preservedTokens.size() - 1) + "___");
 				continue;
@@ -116,7 +115,7 @@ public class XoCssMin {
 
 			// \ in the last position looks like hack for Mac/IE5
 			// shorten that to /*\*/ and the next one to /**/
-			if (len > 0 && token.charAt(len - 1) == '\\') {
+			if (JsString_.charAtEq(token, token.length() - 1, '\\')) {
 				preservedTokens.add("\\");
 				css = css.replace(placeholder,  "___YUICSSMIN_PRESERVED_TOKEN_" + (preservedTokens.size() - 1) + "___");
 				i = i + 1; // attn: advancing the loop
@@ -127,10 +126,10 @@ public class XoCssMin {
 
 			// keep empty comments after child selectors (IE7 hack)
 			// e.g. html >/**/ body
-			if (len == 0) {
+			if (token.length() == 0) {
 				startIndex = css.indexOf(placeholder);
 				if (startIndex > 2) {
-					if (css.charAt(startIndex - 3) == '>') {
+					if (JsString_.charAtEq(css, startIndex - 3, '>')) {
 						preservedTokens.add("");
 						css = css.replace(placeholder,  "___YUICSSMIN_PRESERVED_TOKEN_" + (preservedTokens.size() - 1) + "___");
 					}
@@ -268,7 +267,7 @@ public class XoCssMin {
 			// XO: desb42 comments this
 			while (i < css.length()) {
 				i = i + 1;
-				if (css.charAt(i - 1) == '}' && i - startIndex > linebreakpos) {
+				if (JsString_.charAtEq(css, i - 1, '}') && i - startIndex > linebreakpos) {
 					css = JsString_.slice(css, 0, i) + '\n' + JsString_.slice(css, i);
 					startIndex = i;
 				}
@@ -327,7 +326,7 @@ public class XoCssMin {
 				endIndex = css.indexOf(terminator, endIndex + 1);
 
 				// endIndex == 0 doesn't really apply here
-				if ((endIndex > 0) && (css.charAt(endIndex - 1) != '\\')) {// XO:found terminator; check it isn't escaped; EX: `\'`
+				if ((endIndex > 0) && JsString_.charAtEqNot(css, endIndex - 1, '\\')) {// XO:found terminator; check it isn't escaped; EX: `\'`
 					foundTerminator = true;
 					if (!(")".equals(terminator))) {// XO:cur terminator is either `'` or `"`; grab next `)`
 						endIndex = css.indexOf(")", endIndex);
