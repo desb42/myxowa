@@ -84,11 +84,11 @@ for (int i = 0; i < alen; i++) {
 }
 System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + " " + args);
 */
-//			core.Invoke(wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
-//			if (invoke_wkr != null)
-//				invoke_wkr.Eval_end(ctx.Page(), mod_name, fnc_name, log_time_bgn);
+			core.Invoke(wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
+			if (invoke_wkr != null)
+				invoke_wkr.Eval_end(ctx.Page(), mod_name, fnc_name, log_time_bgn);
 
-			int timeoutInMs = 5000;
+/*			int timeoutInMs = 5000;
 			long timeBgn = System_.Ticks();
 
 			InvokeInvoker invoker = new InvokeInvoker(core, wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
@@ -101,6 +101,7 @@ System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + "
 			}
 			if (invoke_wkr != null)
 				invoke_wkr.Eval_end(ctx.Page(), mod_name, fnc_name, log_time_bgn);
+*/
 		}
 		catch (Throwable e) {
 			Err err = Err_.Cast_or_make(e);

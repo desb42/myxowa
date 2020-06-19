@@ -307,8 +307,8 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				break;
 		}*/
 		if (end - bgn == 0) return false;
-                src = firstpass(src, bfr, amp_mgr);
-                end = src.length; // hope this is ok
+		src = firstpass(src, bfr, amp_mgr);
+		end = src.length; // hope this is ok
 		this.raw = src;
 		ns = ns_mgr.Ns_main();
 		boolean add_ws = false, ltr_bgn_reset = false;
@@ -317,7 +317,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		byte[] b_ary = null;
 		int cur = bgn;
 		int match_pos = -1;
-                int equal_pos = -1;
+		int equal_pos = -1;
 		while (cur != end) {
 			byte b = src[cur];
 			switch (b) {
@@ -393,12 +393,12 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				case Byte_ascii.Underline: if (ltr_bgn != -1) add_ws = true; ++cur;
 					continue;	// only mark add_ws if ltr_seen; this ignores ws at bgn; also, note "continue"
 				case Byte_ascii.Question:
-                                    if (qarg_bgn >= 0) {
-                                            if (equal_pos < qarg_bgn) 
-                                                qarg_bgn = txt_bb_len + 1;
-                                    }
-                                    else
-                                        qarg_bgn = txt_bb_len + 1;
+					if (qarg_bgn >= 0) {
+						if (equal_pos < qarg_bgn) 
+							qarg_bgn = txt_bb_len + 1;
+					}
+					else
+						qarg_bgn = txt_bb_len + 1;
 					//if (txt_bb_len + 1 < end)	// guard against trailing ? (which shouldn't happen)
 					//	qarg_bgn = txt_bb_len + 1;
 					break;
@@ -510,7 +510,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 								case Char__ws:		// treat extended_ws as space; PAGE:ja.w:Template:Location_map_USA New_York; DATE:2015-07-28
 									if (ltr_bgn != -1) add_ws = true;
 									continue;
-							}								
+							}
 						}
 					}
 					break;
@@ -520,25 +520,26 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				bfr.Add_byte(Byte_ascii.Space); ++txt_bb_len;
 				add_ws = false;
 			}
-			if (ltr_bgn == -1) ltr_bgn = txt_bb_len; // if 1st letter not seen, mark 1st letter					
+			if (ltr_bgn == -1) ltr_bgn = txt_bb_len; // if 1st letter not seen, mark 1st letter
 			if (b_ary == null) {
-                            bfr.Add_byte(b);
-                            if (b == Byte_ascii.Eq)
-				equal_pos = txt_bb_len;
-                            ++txt_bb_len;
-                        } // add to bfr
-                        else {
-                            bfr.Add(b_ary);
-                            txt_bb_len += b_ary.length;
-                            b_ary = null;
-                            cur = match_pos;}	// NOTE: b_ary != null only for amp_trie
+				bfr.Add_byte(b);
+				if (b == Byte_ascii.Eq)
+					equal_pos = txt_bb_len;
+					++txt_bb_len;
+				} // add to bfr
+				else {
+					bfr.Add(b_ary);
+				txt_bb_len += b_ary.length;
+				b_ary = null;
+				cur = match_pos;	// NOTE: b_ary != null only for amp_trie
+			}
 			if (ltr_bgn_reset)  {// colon found; set ws to bgn mode; note that # and / do not reset 
 				ltr_bgn_reset = false;
 				ltr_bgn = -1;
 			}
 		}
-                if (qarg_bgn >= 0 && equal_pos < qarg_bgn)
-                    qarg_bgn = -1; // reset (if not a valid qarg string(must have '=')
+		if (qarg_bgn >= 0 && equal_pos < qarg_bgn)
+			qarg_bgn = -1; // reset (if not a valid qarg string(must have '=')
 		txt_bb_len = stripwhitespace(bfr, txt_bb_len);
 		if (txt_bb_len == 0) return false;
 		if (wik_bgn == -1 && page_bgn == txt_bb_len) return false;	// if no wiki, but page_bgn is at end, then ttl is ns only; EX: "Help:"; NOTE: "fr:", "fr:Help" is allowed 
@@ -585,13 +586,17 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 	private byte[] firstpass(byte[] src, Bry_bfr buf, Xop_amp_mgr amp_mgr) {
 		boolean whitespace = false;
 		int cur = 0, end = src.length;
-                int match_pos = 0;
-                Btrie_slim_mgr amp_trie = amp_mgr.Amp_trie();
+		int match_pos = 0;
+		Btrie_slim_mgr amp_trie = amp_mgr.Amp_trie();
 		while (cur < end) {
 			byte b = src[cur++];
 			byte[] b_ary = null;
 			Btrie_rv trv = null;
 			if (b == Byte_ascii.Amp) {
+				if (whitespace) {
+					buf.Add_byte(Byte_ascii.Space);
+					whitespace = false;
+				}
 				if (cur == end) {}	// guards against terminating &; EX: [[Bisc &]]; NOTE: needed b/c Match_bgn does not do bounds checking for cur in src; src[src.length] will be called when & is last character;
 				else {
 					if (trv == null) trv = new Btrie_rv();
@@ -602,9 +607,9 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 						if (amp_itm.Tid() == Gfh_entity_itm.Tid_name_std) {
 							switch (amp_itm.Char_int()) {
 								case 160:	// NOTE: &nbsp must convert to space; EX:w:United States [[Image:Dust Bowl&nbsp;- Dallas, South Dakota 1936.jpg|220px|alt=]]
-									b = ' '; // apply same ws rules as Space, NewLine; needed for converting multiple ws into one; EX:" &nbsp; " -> " " x> "   "; PAGEen.w:Greek_government-debt_crisis; DATE:2014-09-25
+									b = Byte_ascii.Space; // apply same ws rules as Space, NewLine; needed for converting multiple ws into one; EX:" &nbsp; " -> " " x> "   "; PAGEen.w:Greek_government-debt_crisis; DATE:2014-09-25
 									cur = match_pos; // set cur after ";"
-                                                                        break;
+									break;
 								case Byte_ascii.Amp:
 									b_ary = Byte_ascii.Amp_bry;		// NOTE: if &amp; convert to &; PAGE:en.w:Amadou Bagayoko?redirect=n; DATE:2014-09-23
 									break;
@@ -632,8 +637,8 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 							if (amp_rv.Pass()) {
 								match_pos = amp_rv.Pos();
 								b_ary = gplx.core.intls.Utf16_.Encode_int_to_bry(amp_rv.Val());
-								if (b_ary.length == 1 && (b_ary[0] == ' ' || b_ary[0] == 160)) {
-									b = ' ';
+								if (b_ary.length == 1 && (b_ary[0] == Byte_ascii.Space || b_ary[0] == 160)) {
+									b = Byte_ascii.Space;
 									b_ary = null;
 									cur = match_pos;
 								}
@@ -658,7 +663,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				cur = match_pos;
 			}
 			else {
-				if (b == ' ' || b == '\n' || b == '\r') {
+				if (b == Byte_ascii.Space || b == Byte_ascii.Nl || b == Byte_ascii.Cr || b == Byte_ascii.Tab) {
 					whitespace = true;
 				} else {
 					if (whitespace) {

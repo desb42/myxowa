@@ -14,13 +14,12 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.proofreadPage;
-import gplx.xowa.*; import gplx.*; import gplx.dbs.*; import gplx.xowa.wikis.dbs.*; import gplx.dbs.qrys.*;
+import gplx.xowa.*;
 import gplx.xowa.addons.wikis.ctgs.htmls.catpages.dbs.*;
 import gplx.xowa.wikis.data.*; import gplx.xowa.wikis.data.tbls.*; import gplx.xowa.addons.wikis.ctgs.dbs.*;
-import gplx.xowa.wikis.data.*;
 public class Pp_quality {
 	private boolean initialised = false;
-        public boolean Not_colouring() { return !colouring; } private boolean colouring;
+	public boolean Not_colouring() { return !colouring; } private final boolean colouring;
 	
 	public static final int
 	  Quality_unknown = -1
@@ -31,12 +30,12 @@ public class Pp_quality {
 	, Quality_validated = 4
 	;
 
-        public Pp_quality(boolean iswikisource) {
-            colouring = iswikisource;
-        }
+	public Pp_quality(boolean iswikisource) {
+		colouring = iswikisource;
+	}
 	public void initialiseit(Xow_wiki wiki) {
-            Init(wiki);
-			initialised = true;
+		Init(wiki);
+		initialised = true;
 	}
 
 	private Xoctg_catlink_loader_ppq loader;

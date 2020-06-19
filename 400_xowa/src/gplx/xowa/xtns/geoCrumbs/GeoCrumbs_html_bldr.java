@@ -55,12 +55,14 @@ public class GeoCrumbs_html_bldr implements gplx.core.brys.Bfr_arg {
 	public void Add(byte[] redirect_msg) {
 		this.redirect_msg = redirect_msg;
 	}
-	public void Add(byte[] isin, Xoa_ttl ttl, Xop_ctx ctx) {
+	public void Set_ctx(Xop_ctx ctx) {
+		this.ctx = ctx;
+                this.wiki = ctx.Wiki();
+	}
+	public void Add(byte[] isin, Xoa_ttl ttl) {
 		if (!enabled) return;  // ??
 		this.isin = isin;
 		this.ttl = ttl;
-		this.wiki = ctx.Wiki();
-		this.ctx = ctx;
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		if (isin == null) return;		// do not build html if no item
@@ -89,12 +91,19 @@ public class GeoCrumbs_html_bldr implements gplx.core.brys.Bfr_arg {
 		wiki.Parser_mgr().Main().Parse_text_to_html(tmp_bfr, ctx, ctx.Page(), false, bread);
 		bread = tmp_bfr.To_bry_and_clear();
 
-		bfr.Add_str_a7("<div class=\"ext-wpb-pagebanner-subtitle\">");
+//		bfr.Add_str_a7("<div class=\"ext-wpb-pagebanner-subtitle\">");
 		if (redirect_msg.length != 0) {
 			bfr.Add(redirect_msg).Add_str_a7("<br/>\n");
 		}
 		bfr.Add(bread);
-		bfr.Add_str_a7("</div>");
+//		bfr.Add_str_a7("</div>");
+		bfr.Add_str_a7("<br />");
+	}
+	public byte[] Generate() {
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		Bfr_arg__add(tmp_bfr);
+
+		return tmp_bfr.To_bry();
 	}
 
 	public void HxtnSave(Xowe_wiki wiki, Hxtn_page_mgr hxtnPageMgr, Xoae_page page, int pageId) {
@@ -108,6 +117,7 @@ public class GeoCrumbs_html_bldr implements gplx.core.brys.Bfr_arg {
 	}
 
 	public void Deserialise(Xow_wiki wiki, Xoh_page hpg, Hash_adp props) {
+            ttl = hpg.Ttl();
             byte[] data = (byte[])props.Get_by(GeoCrumbs_hxtn_page_wkr.KEY);
 		// exit if empty
 		if (Bry_.Len_eq_0(data)) return;

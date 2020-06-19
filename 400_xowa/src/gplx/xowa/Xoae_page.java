@@ -84,9 +84,6 @@ public class Xoae_page implements Xoa_page {
 	public Wdata_external_lang_links_data Wdata_external_lang_links() {return wdata_external_lang_links;} private Wdata_external_lang_links_data wdata_external_lang_links = new Wdata_external_lang_links_data();
 	public int						Bldr__ns_ord() {return bldr__ns_ord;} public void Bldr__ns_ord_(int v) {bldr__ns_ord = v;} private int bldr__ns_ord;
 	public Xopg_tmpl_prepend_mgr	Tmpl_prepend_mgr() {return tmpl_prepend_mgr;} private Xopg_tmpl_prepend_mgr tmpl_prepend_mgr = new Xopg_tmpl_prepend_mgr();
-	public Db_quality_tots	Quality_tots() {return qualitytots;} private Db_quality_tots qualitytots = new Db_quality_tots();
-	public void	Quality_tots(Db_quality_tots tots) {qualitytots = tots;}
-	public byte[] Pp_indexpage() {return pp_indexpage; } public void Pp_indexpage_(byte[] v) {pp_indexpage = v;} private byte[] pp_indexpage;
 	public Db_karto_counters Karto_counters() {return karto_counters;} Db_karto_counters karto_counters = new Db_karto_counters();
 	public Xoctg_double_grp Grp_normal() {return grp_normal;}
 	public void Grp_normal_(Xoctg_double_grp v) {grp_normal = v;}
@@ -113,8 +110,6 @@ public class Xoae_page implements Xoa_page {
 		popup_mgr.Clear();
 		tmpl_prepend_mgr.Clear();
 		commons_mgr.Clear();
-		qualitytots.Clear();
-		pp_indexpage = null;
 		grp_normal = null;
 		karto_counters.Clear();
 	}

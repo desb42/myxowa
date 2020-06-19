@@ -17,7 +17,7 @@ package gplx.xowa.wikis.pages.htmls; import gplx.*; import gplx.xowa.*; import g
 import gplx.xowa.wikis.pages.skins.*; import gplx.xowa.wikis.pages.tags.*; import gplx.xowa.wikis.pages.lnkis.*;
 import gplx.langs.htmls.*; import gplx.xowa.htmls.heads.*; import gplx.xowa.addons.htmls.tocs.*;
 import gplx.xowa.xtns.pagebanners.*; import gplx.xowa.xtns.indicators.*; import gplx.xowa.xtns.geoCrumbs.*;
-import gplx.xowa.xtns.related.*;
+import gplx.xowa.xtns.related.*; import gplx.xowa.xtns.proofreadPage.*;
 public class Xopg_html_data {
 	public Xopg_lnki_list		Redlink_list()		{return redlink_list;} private final    Xopg_lnki_list redlink_list = new Xopg_lnki_list();
 
@@ -58,6 +58,9 @@ public class Xopg_html_data {
 	public Indicator_html_bldr	Indicators() {return indicators;} private final    Indicator_html_bldr indicators = new Indicator_html_bldr();
 	public GeoCrumbs_html_bldr	GeoCrumb() {return geocrumb;} private final    GeoCrumbs_html_bldr geocrumb = new GeoCrumbs_html_bldr();
 	public Related_html_bldr	Related() {return related;} private final    Related_html_bldr related = new Related_html_bldr();
+	public Pp_qualitytot_html_bldr	Quality_tots() {return qualitytots;} private Pp_qualitytot_html_bldr qualitytots = new Pp_qualitytot_html_bldr();
+	public Pp_index_html_bldr Pp_indexpage() {return pp_indexpage; } private Pp_index_html_bldr pp_indexpage = new Pp_index_html_bldr();
+
 	public int					Xtn_gallery_next_id() {return ++xtn_gallery_next_id;} private int xtn_gallery_next_id = -1;
 	public boolean				Xtn_gallery_packed_exists() {return xtn_gallery_packed_exists;} public void Xtn_gallery_packed_exists_y_() {xtn_gallery_packed_exists = true;} private boolean xtn_gallery_packed_exists;
 	public boolean				Xtn_imap_exists() {return xtn_imap_exists;} public void Xtn_imap_exists_y_() {xtn_imap_exists = true;} private boolean xtn_imap_exists;
@@ -96,6 +99,8 @@ public class Xopg_html_data {
 		geocrumb.Clear();
 		related.Clear();
 		pgbnr_bry = null;
+		qualitytots.Clear();
+		pp_indexpage.Clear();
 	}
 	public void Init_by_page(Xoa_ttl ttl) {
 		redlink_list.Disabled_(ttl.Ns().Id_is_module());

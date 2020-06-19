@@ -22,14 +22,16 @@ public class Pgbnr_itm implements Mustache_doc_itm {
 	public byte[] banner_img_src;
 	public byte[] toc;
 	public Xof_file_itm banner_file_itm;
-	private byte[] banner_anch_title, banner_hdr_text, originx, banner_anch_href, srcset;
+	private byte[] banner_anch_title, banner_hdr_text, originx, srcset;
 	private double data_pos_x, data_pos_y;
-	private int max_width;
-	private boolean bottomtoc, isHeadingOverrideEnabled;
+	public /**/ int max_width;
+	public /**/ byte[] banner_anch_href;
+	private boolean bottomtoc;
+	public /**/ boolean isHeadingOverrideEnabled;
 	private byte[] file_ttl;
 	private Pgbnr_icon[] icons;
 	private byte[] img_id_atr, img_xottl_atr, img_xoimg_atr;
-	private boolean isPanorama;
+	public /**/ boolean isPanorama;
 	private boolean enable_toc = true;
 	private boolean hasPosition = false;
 

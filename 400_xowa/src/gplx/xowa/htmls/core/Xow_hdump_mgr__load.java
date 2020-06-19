@@ -154,10 +154,10 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		html_data.Custom_head_tags().Add(hpg.Html_data().Custom_head_tags().To_ary());
 		html_data.Indicators().Deserialise(wiki, hpg, (byte[])tmp_hpg.Props().Get_by(Indicator_hxtn_page_wkr.KEY));
 		//html_data.Indicators().Deserialise(wiki, hpg, tmp_hpg.Props());
-//		wpg.Quality_tots().Deserialise(wiki, hpg, tmp_hpg.Props());
+		html_data.Quality_tots().Deserialise(wiki, hpg, tmp_hpg.Props());
 		html_data.Pagebanner().Deserialise(wiki, hpg, tmp_hpg.Props());
 		html_data.GeoCrumb().Deserialise(wiki, hpg, tmp_hpg.Props());
-//		wpg.Pp_indexpage().Deserialise(wiki, hpg, tmp_hpg.Props());
+		html_data.Pp_indexpage().Deserialise(wiki, hpg, tmp_hpg.Props());
 		html_data.Related().Deserialise(wiki, hpg, tmp_hpg.Props());
 
 		Xoh_head_mgr wpg_head = html_data.Head_mgr();

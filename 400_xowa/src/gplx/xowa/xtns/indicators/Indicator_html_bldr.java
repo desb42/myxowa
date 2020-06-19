@@ -55,7 +55,7 @@ public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 	private static final    Bry_fmtr
 	  fmtr_grp = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "  <div class=\"mw-indicators\">~{itms}"
+	, "  <div class=\"mw-indicators mw-body-content\">~{itms}"
 	, "  </div>"
 	), "itms")
 	;

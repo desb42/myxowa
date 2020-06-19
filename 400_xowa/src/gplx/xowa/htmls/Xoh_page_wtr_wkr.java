@@ -136,6 +136,9 @@ public class Xoh_page_wtr_wkr {
 			page.Html_data().GeoCrumb().Add(redirect_msg);
 		}
 		page.Html_data().Pagebanner().Add(hctx);
+		page.Html_data().GeoCrumb().Set_ctx(ctx);
+		page.Html_data().Pagebanner().Set_ctx(ctx);
+                page.Html_data().Pp_indexpage().Set_ctx(ctx);
 		byte[] page_body_class = Xoh_page_body_cls.Calc(tmp_bfr, page_ttl, page_tid);
 		// byte[] html_content_editable = wiki.Gui_mgr().Cfg_browser().Content_editable() ? Content_editable_bry : Bry_.Empty;
 		byte[] html_content_editable = Bry_.Empty;
@@ -176,8 +179,8 @@ public class Xoh_page_wtr_wkr {
 
 		// main build
 		Xow_portal_mgr portal_mgr = wiki.Html_mgr().Portal_mgr().Init_assert();
-		page.Html_data().Related().Set_fmtr(portal_mgr.Div_after_fmtr());
 		boolean nightmode_enabled = app.Gui_mgr().Nightmode_mgr().Enabled();
+		page.Html_data().Related().Set_fmtr(portal_mgr.Div_after_fmtr());
 		fmtr.Bld_bfr_many(bfr
 		, root_dir_bry, Xoa_app_.Version, Xoa_app_.Build_date, app.Tcp_server().Running_str()
 		, page.Db().Page().Id(), page.Ttl().Full_db_href(), page_title
@@ -188,7 +191,7 @@ public class Xoh_page_wtr_wkr {
 		, page.Html_data().Head_mgr().Init(app, wiki, page).Init_dflts(html_gen_tid)
 		, page.Lang().Dir_ltr_bry(), page.Html_data().Indicators(), page_content_sub
 		, wiki.Html_mgr().Portal_mgr().Div_jump_to()
-		, page.Html_data().Pagebanner()  // Pagebanner(ctx, hctx)
+		, Bry_.Empty /*page.Html_data().Pagebanner()  // Pagebanner(ctx, hctx)*/
 		, page_body_class, html_content_editable
 		, page_data, wdata_lang_wtr
 		, portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date)
@@ -207,7 +210,7 @@ public class Xoh_page_wtr_wkr {
 		, page.Lang().Key_bry()
 						, redlinks
 						, Printfooter(app, wiki, ctx, hctx, page, html_gen_tid)
-						, page.Html_data().GeoCrumb()
+						, Bry_.Empty/*page.Html_data().GeoCrumb()*/
 						, Bry_.new_a7("app_icon.png")
 						, wiki.Tagline()
 		);
@@ -225,12 +228,12 @@ public class Xoh_page_wtr_wkr {
 		if (!hctx.Mode_is_embeddable()) {
 			wpg.Html_data().Indicators().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
 			wpg.Html_data().GeoCrumb().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
+			wpg.Html_data().Pagebanner().Add(hctx);
+			wpg.Html_data().Pagebanner().Set_ctx(ctx);
 			wpg.Html_data().Pagebanner().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
-//			if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && wpg.Quality_tots().Qualitycount() > 0) {
-//				wpg.Quality_tots().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
-//			}
-//			wpg.Pp_indexpage().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
 			wpg.Html_data().Related().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
+			wpg.Html_data().Quality_tots().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
+			wpg.Html_data().Pp_indexpage().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
 		}
 	}
 	public void Write_body(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page) {

@@ -141,6 +141,7 @@ public class Http_server_wkr implements Gfo_invk {
 				byte[] orig = null;
 				Db_page_image_ pi = page.Wiki().Page_image().Get_page_image(page.Page().Db().Page().Id());
 				Bry_bfr bfr = Bry_bfr_.New();
+				byte[] stype = Bry_.new_a7("standard");
 				if (pi.height > 0) {
 					Xoa_ttl ttl = Xoa_ttl.Parse(page.Wiki(), pi.pi_title);
 					Xof_ext ext = Xof_ext_.new_by_ttl_(pi.pi_title);
@@ -177,12 +178,14 @@ public class Http_server_wkr implements Gfo_invk {
 					orig = bfr.To_bry_and_clear();
     //orig = Bry_.new_u8("\"originalimage\":{\"source\":\"/xowa/api/wikipedia/en/1/12/Flag_of_Poland.svg\",\"width\":1280,\"height\":800},");
 				}
-				byte[] stype = Bry_.new_a7("standard");
+				else if (pi.height < 0) {
+					stype = Bry_.new_a7("disambiguation");
+				}
 				byte[] page_title = page.Ttl().Full_db_wo_ns();
 				json_fmtr.Bld_bfr_many(bfr, 
-                                        stype, page_title, page.Page().Db().Page().Id(), 
-                                        thumb, orig, ws.First_para(wikitext, page.Ttl()),
-                                        page.Wiki().Lang().Key_bry(), page.Wiki().Lang().Dir_ltr_bry());
+                                stype, page_title, page.Page().Db().Page().Id(), 
+                                thumb, orig, ws.First_para(wikitext, page.Ttl()),
+                                page.Wiki().Lang().Key_bry(), page.Wiki().Lang().Dir_ltr_bry());
 
 				page_html = String_.new_u8(bfr.To_bry());
 

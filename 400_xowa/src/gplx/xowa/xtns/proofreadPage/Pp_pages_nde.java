@@ -104,7 +104,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			wiki.Parser_mgr().Lst__recursing_(true);
 			Hash_adp_bry lst_page_regy = ctx.Lst_page_regy(); if (lst_page_regy == null) lst_page_regy = Hash_adp_bry.cs();	// SEE:NOTE:page_regy; DATE:2014-01-01
 			page.Html_data().Indicators().Enabled_(Bool_.N);				// disable <indicator> b/c <page> should not add to current page; PAGE:en.s:The_Parochial_System_(Wilberforce,_1838); DATE:2015-04-29
-			byte[] page_bry = Bld_wikitext(full_bfr, wiki.Parser_mgr().Pp_num_parser(), lst_page_regy, ctx.Page().Quality_tots());
+			byte[] page_bry = Bld_wikitext(full_bfr, wiki.Parser_mgr().Pp_num_parser(), lst_page_regy, page);
 			if (page_bry != null)
 				xtn_root = Bld_root_nde(full_bfr, lst_page_regy, page_bry);	// NOTE: this effectively reparses page twice; needed b/c of "if {| : ; # *, auto add new_line" which can build different tokens
 		} finally {
@@ -112,7 +112,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			full_bfr.Mkr_rls();
 		}
 		page.Html_data().Indicators().Enabled_(Bool_.Y);
-		page.Pp_indexpage_(index_ttl.Full_db());
+		page.Html_data().Pp_indexpage().Add(index_ttl.Full_db());
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		if (xtn_literal)
@@ -148,7 +148,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			bgn_sect_bry = end_sect_bry = null;
 		return true;
 	}
-	private byte[] Bld_wikitext(Bry_bfr full_bfr, Gfo_number_parser num_parser, Hash_adp_bry lst_page_regy, Db_quality_tots tots) {
+	private byte[] Bld_wikitext(Bry_bfr full_bfr, Gfo_number_parser num_parser, Hash_adp_bry lst_page_regy, Xoae_page page) {
 		Pp_index_page index_page = Pp_index_parser.Parse(wiki, ctx, index_ttl, ns_page_id);
 		int index_page_xndes_len = index_page.Pagelist_xndes().Count();
 		int index_page_ttls_len = index_page.Page_ttls().Count();
@@ -188,11 +188,10 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				//page_no = fle.Page_no();
 				Xoa_ttl ttl = fle.Ttl();
 				// check for quality
-				int quality = wiki.Quality().getQualityFromCatlink(ttl, wiki);
-				tots.Increment(quality);
+                                page.Html_data().Quality_tots().Check_quality(ttl, wiki);
 			}
 			else
-				rv = Bld_wikitext_from_ttls(full_bfr, lst_page_regy, list, pl_nde, tots);
+				rv = Bld_wikitext_from_ttls(full_bfr, lst_page_regy, list, pl_nde, page);
 		}
 		else {
 			header = Toc_bry;
@@ -433,7 +432,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		return true;
 	}
 //	private byte[] Bld_wikitext_from_ttls(Bry_bfr full_bfr, Hash_adp_bry lst_page_regy, Xoa_ttl[] ary) {
-	private byte[] Bld_wikitext_from_ttls(Bry_bfr full_bfr, Hash_adp_bry lst_page_regy, List_adp list, Pp_pagelist_nde pl_nde, Db_quality_tots tots) {
+	private byte[] Bld_wikitext_from_ttls(Bry_bfr full_bfr, Hash_adp_bry lst_page_regy, List_adp list, Pp_pagelist_nde pl_nde, Xoae_page page) {
 		Xoa_ttl ttl;
 		int page_no;
 		int list_len = list.Count();
@@ -456,8 +455,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				else
 					continue;
 				// check for quality
-				int quality = wiki.Quality().getQualityFromCatlink(ttl, wiki);
-				tots.Increment(quality);
+                            int quality = page.Html_data().Quality_tots().Check_quality(ttl, wiki);
 //				if (header_flag)
 //					continue;
 				if (quality != Pp_quality.Quality_without_text) {

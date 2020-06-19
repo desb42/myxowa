@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.pagebanners;
+package gplx.xowa.xtns.proofreadPage;
 
 import gplx.core.serials.binarys.BinaryLoadMgr;
 import gplx.core.serials.core.SerialCoreFactory;
@@ -24,7 +24,7 @@ import gplx.core.serials.core.SerialSaveWkr;
 import gplx.objects.brys.Bry_;
 import gplx.xowa.xtns.pagebanners.Pgbnr_itm;
 
-public class PgbnrSerialCore {
+public class Pp_index_serialCore {
     private static final int DATA_VERSION = 0;
 
     public static byte[] Save(byte[] txt) {

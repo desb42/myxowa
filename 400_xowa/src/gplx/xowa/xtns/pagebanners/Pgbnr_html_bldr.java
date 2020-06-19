@@ -50,15 +50,17 @@ public class Pgbnr_html_bldr implements gplx.core.brys.Bfr_arg {
 	}
 	public boolean IsValid() {return pgbnr != null;}
 	public Pgbnr_itm Get_itm() { return pgbnr; }
-	public void Add(Pgbnr_itm pgbnr, Xoa_ttl ttl, Xop_ctx ctx) {
+	public void Add(Pgbnr_itm pgbnr, Xoa_ttl ttl) {
 		this.pgbnr = pgbnr;
 		this.ttl = ttl;
-		this.wiki = ctx.Wiki();
-		this.ctx = ctx;
 	}
-        public void Add(Xoh_wtr_ctx hctx) {
-            this.hctx = hctx;
-        }
+	public void Set_ctx(Xop_ctx ctx) {
+		this.ctx = ctx;
+		this.wiki = ctx.Wiki();
+	}
+	public void Add(Xoh_wtr_ctx hctx) {
+		this.hctx = hctx;
+	}
 	public boolean Show_toc_in_html() {
 		if (pgbnr == null) return true;
 		return pgbnr.Show_toc_in_html();
@@ -71,13 +73,19 @@ public class Pgbnr_html_bldr implements gplx.core.brys.Bfr_arg {
 			ctx.Wiki().Xtn_mgr().Xtn_pgbnr().Write_html(ctx.Page(), ctx, hctx).Bfr_arg__add(bfr);
 		}
 	}
+	public byte[] Generate() {
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		Bfr_arg__add(tmp_bfr);
+
+		return tmp_bfr.To_bry();
+	}
 
 	public void HxtnSave(Xowe_wiki wiki, Hxtn_page_mgr hxtnPageMgr, Xoae_page page, int pageId) {
 		// exit if empty
 		if (pgbnr == null) return;
 
 		// serialize and save to db
-		byte[] crumb = PgbnrSerialCore.Save(pgbnr.Pgbnr_bry());
+		byte[] crumb = PgbnrSerialCore.Save(Generate());
 		hxtnPageMgr.Page_tbl__insert(pageId, Hxtn_page_mgr.Id__pgbnr, pageId);
 		hxtnPageMgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Id__pgbnr, pageId, crumb);
 	}
@@ -88,6 +96,9 @@ public class Pgbnr_html_bldr implements gplx.core.brys.Bfr_arg {
 		if (Bry_.Len_eq_0(data)) return;
 
 		// deserialize data
-		//this.pgbnr = PgbnrSerialCore.Load(data);
+                data = PgbnrSerialCore.Load(data);
+                byte[] html = wiki.Html__hdump_mgr().Load_mgr().Make_mgr().Parse(data, wiki, hpg);
+                pgbnr = new Pgbnr_itm();
+                pgbnr.Pgbnr_bry_(html);
 	}
 }

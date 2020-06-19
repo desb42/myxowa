@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,82 +13,41 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa; import gplx.*;
-import gplx.dbs.*;
-import gplx.xowa.parsers.tmpls.*;
-import gplx.xowa.wikis.data.Xow_db_mgr;
-import gplx.xowa.wikis.data.tbls.Xowd_page_tbl;
-public class Db_quality_tots {
+package gplx.xowa.xtns.proofreadPage;
+
+import gplx.Bry_;
+import gplx.Bry_bfr;
+import gplx.Bry_bfr_;
+import gplx.xowa.Xoae_page;
+import gplx.xowa.Xow_wiki;
+import gplx.xowa.Xowe_wiki;
+import gplx.xowa.htmls.Xoh_page;
+import gplx.xowa.htmls.hxtns.blobs.Hxtn_blob_tbl;
+import gplx.xowa.htmls.hxtns.pages.Hxtn_page_mgr;
+
+import gplx.xowa.Xoa_ttl;
+import gplx.Hash_adp;
+public class Pp_qualitytot_html_bldr implements gplx.core.brys.Bfr_arg {
 	private int[] qualitycount = new int[6]; // 5 quality levels plus unknown
 	private int qualitytot;
-	public Db_quality_tots() {
-		this.qualitytot = 0;
-	}
 	public void Clear() {
 		for (int i = 0; i < 6; i++)
 			qualitycount[i] = 0;
 		qualitytot = 0;
 	}
-	public void Increment(int slot) {
-		if (slot >= 0)
-			qualitycount[slot]++;
+
+	public int Check_quality(Xoa_ttl ttl, Xowe_wiki wiki) {
+		int quality = wiki.Quality().getQualityFromCatlink(ttl, wiki);
+		if (quality >= 0)
+			qualitycount[quality]++;
 		else
 			qualitycount[5]++;
 
 		qualitytot++;
+		return quality;
 	}
-	public int[] Qualitycounts() { return qualitycount; }
-	public int Qualitycount() { return qualitytot; }
-
-	public byte[] Serialise() {
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		tmp_bfr
-			 .Add_int_variable(qualitycount[0])
-			 .Add_byte(Byte_ascii.Bang)
-			 .Add_int_variable(qualitycount[1])
-			 .Add_byte(Byte_ascii.Bang)
-			 .Add_int_variable(qualitycount[2])
-			 .Add_byte(Byte_ascii.Bang)
-			 .Add_int_variable(qualitycount[3])
-			 .Add_byte(Byte_ascii.Bang)
-			 .Add_int_variable(qualitycount[4])
-			 .Add_byte(Byte_ascii.Bang)
-			 .Add_int_variable(qualitycount[5])
-			 ;
-		return tmp_bfr.To_bry();
-	}
-	public void Deserialise(byte[] serial) {
-		this.qualitytot = 0;
-		if (serial == null) return;
-		int len = serial.length;
-		int pos = 0, startpos;
-		for (int i = 0; i < 5; i++) {
-			startpos = pos;
-			while (pos < len) {
-				byte b = serial[pos++];
-				if (b == Byte_ascii.Bang) {
-					qualitycount[i] = makeint(serial, startpos, pos - 1);
-					qualitytot += qualitycount[i];
-					break;
-				}
-			}
-		}
-		qualitycount[5] = makeint(serial, pos, len);
-		qualitytot += qualitycount[5];
-	}
-	private int makeint(byte[] b, int bgn, int end) {
-		int result = 0;
-		for (int i = bgn; i < end; i++) {
-			result *= 10;
-			result += b[i] - '0';
-		}
-		return result;
-	}
-
-	public static byte[] Generate_quality(Xowe_wiki wiki, Xoae_page page) {
-		int qualitytot = page.Quality_tots().Qualitycount();
+	public byte[] Generate_quality(Xowe_wiki wiki) {
 		if (qualitytot == 0) return null;
-		int[] qualitycount = page.Quality_tots().Qualitycounts();
 		Bry_bfr bfr = Bry_bfr_.New();
 		int q0 = qualitycount[0] * 100 / qualitytot;
 		int q1 = qualitycount[1] * 100 / qualitytot;
@@ -108,5 +67,26 @@ public class Db_quality_tots {
 			bfr.Add_str_a7("<td class=\"qualitye\" style=\"width:").Add_long_variable(qe).Add_str_a7("%;\"></td>\n");
 		bfr.Add_str_a7("</tr>\n</table>\n");
 		return bfr.To_bry();
+	}
+	public void Bfr_arg__add(Bry_bfr bfr) {
+	}
+
+	public void HxtnSave(Xowe_wiki wiki, Hxtn_page_mgr hxtnPageMgr, Xoae_page page, int pageId) {
+		// exit if empty
+		if (qualitytot == 0) return;
+
+		// serialize and save to db
+		byte[] crumb = Pp_quality_serialCore.Save(qualitycount);
+		hxtnPageMgr.Page_tbl__insert(pageId, Hxtn_page_mgr.Id__pp_pagequality, pageId);
+		hxtnPageMgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Id__pp_pagequality, pageId, crumb);
+	}
+
+	public void Deserialise(Xow_wiki wiki, Xoh_page hpg, Hash_adp props) {
+		byte[] data = (byte[])props.Get_by(Pp_quality_hxtn_page_wkr.KEY);
+		// exit if empty
+		if (Bry_.Len_eq_0(data)) return;
+
+		// deserialize data
+		qualitycount = Pp_quality_serialCore.Load(data);
 	}
 }

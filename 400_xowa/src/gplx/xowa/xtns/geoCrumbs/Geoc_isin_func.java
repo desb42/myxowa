@@ -37,7 +37,7 @@ public class Geoc_isin_func extends Pf_func_base {
 			// insert into parent table
 			wiki.Bread().Insert(page_ttl, ttl_bry);
 		}
-		ctx.Page().Html_data().GeoCrumb().Add(ttl_bry, page_ttl, ctx);
+		ctx.Page().Html_data().GeoCrumb().Add(ttl_bry, page_ttl);
 	}
 	public static final    Geoc_isin_func Instance = new Geoc_isin_func();
 }
