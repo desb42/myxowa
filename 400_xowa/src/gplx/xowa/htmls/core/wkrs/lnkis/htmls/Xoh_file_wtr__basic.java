@@ -28,6 +28,7 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 	private Xoae_page page; private byte[] msg_file_enlarge;
 	private Xoh_file_fmtr__basic html_fmtr;		
 	private boolean alt_in_caption = true, alt_defaults_to_caption = true;
+        private boolean ishttp = false;
 	public Xoh_file_wtr__basic(Xowe_wiki wiki, Xow_html_mgr html_mgr, Xoh_html_wtr html_wtr) {
 		this.wiki = wiki; this.html_mgr = html_mgr; this.html_wtr = html_wtr;
 		this.alt_fmtr = new Xoh_lnki_text_fmtr(wiki.Utl__bfr_mkr(), html_wtr);
@@ -37,6 +38,7 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 	public boolean Alt_show_in_html() {return alt_show_in_html;} private boolean alt_show_in_html;
 	public void Init_by_wiki(Xowe_wiki wiki) {
 		wiki.App().Cfg().Bind_many_wiki(this, wiki, Cfg__alt_in_caption, Cfg__alt_defaults_to_caption, Cfg__alt_show_in_html);
+		ishttp = wiki.App().Mode().Tid_is_http();
 	}
 	public void Init_by_page(Xoh_wtr_ctx hctx, Xoae_page page) {
 		this.page = page;
@@ -47,6 +49,12 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 		// init
 		int uid = xfer_itm.Html_uid();
 		Xof_ext orig_ext = xfer_itm.Orig_ext();
+
+		boolean hdump_set = false;
+		if (ishttp && html_fmtr == fmtr__basic && !xfer_itm.File_exists()) {
+			html_fmtr = fmtr__hdump;
+			hdump_set = true;
+		}
 
 		// lnki_ttl; note if orig exists and orig_ttl is different, use it; PAGE:en.w:Switzerland; EX:[[File:Wappen_Schwyz_matt.svg]] which has redirect of Wappen_des_Kantons_Schwyz.svg; DATE:2016-08-11
 		Xoa_ttl lnki_ttl = lnki.Ttl();
@@ -123,6 +131,10 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 				page.Stat_itm().Image_count++;
 			}
 		}
+		// restore
+		if (hdump_set) {
+			html_fmtr = fmtr__basic;
+		}
 	}
 	private void Write_file_audio(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_lnki_tkn lnki, byte[] img_orig_src, int uid, int div_width, byte[] lnki_halign_bry, byte[] lnki_href, byte[] alt, byte[] lnki_ttl) {
 		// init
@@ -175,7 +187,7 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 		byte[] anch_ttl = html_wtr.Cfg().Lnki__title()
 			? Bld_anch_title(tmp_bfr, src, lnki, lnki_ttl)	// NOTE: Bld_anch_title should only be called if there is no caption, else refs may not show; DATE:2014-03-05
 			: Bry_.Empty;
-
+                    
 		// get fmtr; note conditional is for imap, which has its own img_fmtr to put in 'imagemap=""'
 		Xoh_file_fmtr img_fmtr = lnki.Lnki_file_wkr(); if (img_fmtr == null) img_fmtr = html_fmtr;
 

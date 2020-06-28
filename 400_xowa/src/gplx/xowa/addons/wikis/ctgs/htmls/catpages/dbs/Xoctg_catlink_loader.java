@@ -131,6 +131,7 @@ class Xoctg_catlink_loader {
 		Db_rdr rdr = Db_rdr_.Empty;
 		int count = 0;
 		try {
+			Xoctg_catpage_mgr.rwl.writeLock().lock();
 			attach_mgr.Attach();
 			rdr = attach_mgr.Conn_main().Stmt_sql(sql).Exec_select__rls_auto();
 			while (rdr.Move_next()) {
@@ -145,6 +146,7 @@ class Xoctg_catlink_loader {
 		finally {
 			rdr.Rls();
 			attach_mgr.Detach();
+			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 		}
 	}
 	private void Load_sortkey(Xoctg_catpage_grp grp, Xoctg_catpage_itm zth_itm) {

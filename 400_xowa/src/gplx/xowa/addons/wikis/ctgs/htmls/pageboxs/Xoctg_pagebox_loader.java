@@ -14,7 +14,8 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.addons.wikis.ctgs.htmls.pageboxs; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.wikis.*; import gplx.xowa.addons.wikis.ctgs.*; import gplx.xowa.addons.wikis.ctgs.htmls.*;
-import gplx.dbs.*; import gplx.xowa.addons.wikis.ctgs.dbs.*; import gplx.xowa.wikis.data.tbls.*;	
+import gplx.dbs.*; import gplx.xowa.addons.wikis.ctgs.dbs.*; import gplx.xowa.wikis.data.tbls.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.Xoctg_catpage_mgr;
 class Xoctg_pagebox_loader implements Select_in_cbk {
 	private final    Xoctg_pagebox_hash hash; private final    byte[] page_url;
 	public Xoctg_pagebox_loader(Xoctg_pagebox_hash hash, byte[] page_url) {
@@ -47,10 +48,11 @@ class Xoctg_pagebox_loader implements Select_in_cbk {
 		);
 		sql = attach_mgr.Resolve_sql(sql);
 
-		// select
-		attach_mgr.Attach();
 		Db_rdr rdr = Db_rdr_.Empty;
+		// select
 		try {
+			Xoctg_catpage_mgr.rwl.writeLock().lock();
+		attach_mgr.Attach();
 			rdr = cat_link_conn.Stmt_sql(sql).Exec_select__rls_auto();
 			while (rdr.Move_next()) {
 				Xoa_ttl ttl = wiki.Ttl_parse(rdr.Read_int("page_namespace"), rdr.Read_bry_by_str("page_title"));
@@ -67,6 +69,7 @@ class Xoctg_pagebox_loader implements Select_in_cbk {
 		finally {
 			rdr.Rls();
 			attach_mgr.Detach();
+			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 		}
 
 		// hash items by id

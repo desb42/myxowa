@@ -1262,6 +1262,9 @@ public class Bry_ {
 			while (epos >= 0 && val[epos] == '0')
 				epos--;
 		}
+		// remove trailing decimal point (if any)
+		if (epos > 0 && val[epos] == '.')
+			epos--;
 		if (spos > 0 || epos < len - 1) {
 			int sz = epos + 1 - spos; // len - spos - (len - 1 - epos);
 			byte[] newval = new byte[sz];

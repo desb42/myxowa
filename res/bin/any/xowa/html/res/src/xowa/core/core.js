@@ -137,7 +137,8 @@ if (!window.xowa) {
     jQuery.ready(); //fire the ready event
   };
   xowa.js.jquery.init = function(document) {
-    jQuery.cookie = xowa.cookie;
+  	if (jQuery.cookie !== undefined) return;
+    return; jQuery.cookie = xowa.cookie;
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.webfonts.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.preferences.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.webfonts.repository.js');
@@ -554,6 +555,7 @@ if (!window.xowa) {
         	set: function (key, val) { xowa.cfg.set(key, val); }
         }
     };
+    //xowa.js.jquery.init_callback() // possibly
     xowa.js.mediaWiki.init_done = true;
   }
 

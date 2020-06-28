@@ -38,38 +38,38 @@ class Gfo_usr_dlg__gui_console implements Gfo_usr_dlg__gui {
 	public Ring__string Prog_msgs() {return ring;} private final    Ring__string ring = new Ring__string().Max_(0);
 	public void Write_prog(String text) {
             try {
-		rwl.writeLock().lock();
+//		rwl.writeLock().lock();
                 console.Write_tmp(text);
             }
             finally {
-		rwl.writeLock().unlock();
+//		rwl.writeLock().unlock();
             }
         }
 	public void Write_note(String text) {
             try {
-		rwl.writeLock().lock();
+//		rwl.writeLock().lock();
                 console.Write_str_w_nl(text);
             }
             finally {
-		rwl.writeLock().unlock();
+//		rwl.writeLock().unlock();
             }
         }
 	public void Write_warn(String text) {
             try {
-		rwl.writeLock().lock();
+//		rwl.writeLock().lock();
                 console.Write_str_w_nl(text);
             }
             finally {
-		rwl.writeLock().unlock();
+//		rwl.writeLock().unlock();
             }
         }
 	public void Write_stop(String text) {
             try {
-		rwl.writeLock().lock();
+//		rwl.writeLock().lock();
                 console.Write_str_w_nl(text);
             }
             finally {
-		rwl.writeLock().unlock();
+//		rwl.writeLock().unlock();
             }
         }
 }

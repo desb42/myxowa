@@ -161,7 +161,10 @@ public class Bry_rdr {
 	}
 	public int Chk(byte[] find) {
 		int find_end = pos + find.length;
-		if (!Bry_.Match(src, pos, find_end, find)) {err_wkr.Fail("failed check", "chk", String_.new_u8(find)); return Bry_find_.Not_found;}
+		if (!Bry_.Match(src, pos, find_end, find)) {
+			err_wkr.Fail("failed check", "chk", String_.new_u8(find));
+			return Bry_find_.Not_found;
+		}
 		pos = find_end;
 		return pos;
 	}

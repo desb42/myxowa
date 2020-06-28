@@ -44,7 +44,7 @@ public class Pgbnr_html_bldr implements gplx.core.brys.Bfr_arg {
 	private Xoa_ttl ttl = null;
 	private Xowe_wiki wiki;
 	private Xop_ctx ctx;
-        private Xoh_wtr_ctx hctx;
+	private Xoh_wtr_ctx hctx;
 	public void Clear() {
 		pgbnr = null;
 	}
@@ -96,9 +96,9 @@ public class Pgbnr_html_bldr implements gplx.core.brys.Bfr_arg {
 		if (Bry_.Len_eq_0(data)) return;
 
 		// deserialize data
-                data = PgbnrSerialCore.Load(data);
-                byte[] html = wiki.Html__hdump_mgr().Load_mgr().Make_mgr().Parse(data, wiki, hpg);
-                pgbnr = new Pgbnr_itm();
-                pgbnr.Pgbnr_bry_(html);
+		data = PgbnrSerialCore.Load(data);
+		byte[] html = wiki.Html__hdump_mgr().Load_mgr().Make_mgr().Parse(data, wiki, hpg);
+		pgbnr = new Pgbnr_itm();
+		pgbnr.Pgbnr_bry_(html);
 	}
 }

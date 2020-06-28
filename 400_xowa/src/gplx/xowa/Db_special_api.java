@@ -22,9 +22,18 @@ public class Db_special_api {
 	private Gfo_qarg_mgr_old arg_hash = new Gfo_qarg_mgr_old();
 	private Xoctg_catpage_mgr cat_mgr;
 	private Categorytree_params_ params;
+	public byte[] Gen_json_xowa(Xowe_wiki wiki, String stitle, String soptions) {
+		byte[] category = Bry_.new_u8(stitle);
+		byte[] options = Bry_.new_u8(soptions);
+
+		Bry_bfr bfr = wiki.Utl__bfr_mkr().Get_m001();
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		bfr.Add_str_a7("{\"categorytree\":{\"html\":\"");
+		Categorytree(wiki, tmp_bfr, category, options);
+		return tidyup(bfr, tmp_bfr);
+	}
+
 	public byte[] Gen_json(Xowe_wiki wiki, Xoae_page page, Xoa_url url, Xoa_ttl ttl) {
-		cat_mgr = wiki.Ctg__catpage_mgr();
-		params = new Categorytree_params_();
 		arg_hash.Load(url.Qargs_ary());
 		byte[] cmd_type_bry = arg_hash.Get_val_bry_or(Arg_action, null);
 		if (cmd_type_bry == null) {
@@ -40,8 +49,17 @@ public class Db_special_api {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		bfr.Add_str_a7("{\"categorytree\":{\"html\":\"");
 		switch (cmd_type_val.Val()) {
-			case Type_categorytree:	Categorytree(tmp_bfr, wiki.App(), url, arg_hash); break;
+			case Type_categorytree:
+				byte[] category = arg_hash.Get_val_bry_or(Arg_category, null);
+				byte[] options = arg_hash.Get_val_bry_or(Arg_options, null);
+				Categorytree(wiki, tmp_bfr, category, options);
+				break;
 		}
+		
+		return tidyup(bfr, tmp_bfr);
+	}
+
+	private byte[] tidyup(Bry_bfr bfr, Bry_bfr tmp_bfr) {
 		// convert to json (ugh!)
 //				String str = String_.new_u8(tmp_bfr.To_bry_and_clear());
 //				str = str.replace("\"", "\\\"").replace("\n","").replace("\t","");
@@ -62,12 +80,12 @@ public class Db_special_api {
 		bfr.Add_str_a7("\"}}");
 		return bfr.To_bry_and_clear();
 	}
-	private void Categorytree(Bry_bfr bfr, Xoa_app app, Xoa_url url, Gfo_qarg_mgr_old arg_hash) {
-		byte[] category = arg_hash.Get_val_bry_or(Arg_category, null);
-		byte[] options = arg_hash.Get_val_bry_or(Arg_options, null);
+	private void Categorytree(Xowe_wiki wiki, Bry_bfr bfr, byte[] category, byte[] options) {
+		cat_mgr = wiki.Ctg__catpage_mgr();
+		params = new Categorytree_params_();
 		//params.Depth_(0);
 		// need to take the parsed in parameters into accout (at a later date)
-                Checkparams(options);
+		Checkparams(options);
 		params.Hideroot_(true);
 		//params.Showcount_(true);
 		params.Isjson_(true);
@@ -86,6 +104,11 @@ public class Db_special_api {
 	static public byte[] Gen(Http_server_page page) {
 		Db_special_api api = new Db_special_api();
 		return api.Gen_json(page.Wiki(), page.Page(), page.Url(), page.Ttl());
+	}
+
+	static public byte[] Gen_gui(Xowe_wiki wiki, String title, String options) {
+		Db_special_api api = new Db_special_api();
+		return api.Gen_json_xowa(wiki, title, options);
 	}
 
 	private static final int

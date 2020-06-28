@@ -293,8 +293,12 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 							break;
 						// rest -> add to val
 						default:
-							if (qte_closed)
-								area = Area__invalid;
+							if (qte_closed) {
+								//area = Area__invalid; // was unti 20200628
+								Make(src, pos);	// NOTE: set atr_end *after* quote
+								if (atr_bgn == -1) atr_bgn = pos;	// NOTE: process ws just like Area__atr_limbo
+								pos -= b_len; // force a reread
+							}
 							else {
 								prv_is_ws = false;
 								if (val_bfr_on) val_bfr.Add_mid(src, pos, pos + b_len);

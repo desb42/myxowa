@@ -65,7 +65,7 @@ public class Dpl_xnde implements Xox_xnde {
 					case Dpl_html_data.Tid_list_ul:
 					case Dpl_html_data.Tid_list_ol:
 						bfr.Add(Xoh_consts.Space_2).Add(html_mode.Itm_bgn());
-						if (show_date) {
+						if (show_date && page.Modified_on().Year() > 10) {
 							wiki.Parser_mgr().Date_fmt_bldr().Format(bfr, wiki, wiki.Lang(), page.Modified_on(), wiki.Lang().Time_format_mgr().Get_date_format(null));
 							bfr.Add_str_a7(": ");
 						}

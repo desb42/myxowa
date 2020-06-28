@@ -22,3 +22,155 @@
 
 /* not sure where this comes from - needed for listing-sister */
 .listing-col{display:block;float:left;margin:1% 0 0 3%}.listing-col:first-child{margin-left:0}.listing-span_1_of_2{width:48.5%} @media only screen and (max-width:640px){.listing-col{margin:1% 0 0 0}}@media only screen and (max-width:640px){.listing-span_1_of_2{width:100%}}  .editor-fullwidth{width:100%}.editor-partialwidth{width:55%}.editor-label-col{width:80px}.listing-tooltip{border-bottom:1px dotted;cursor:help}#span-minor,#span-last-edit,#span-wikidata-wp,#span-wikidata-img,#span-wikidata-link{margin-left:15px}.listing-divider{border-width:1px 0 0 0;border-color:#ccc;margin:10px 0;border-style:dotted}  @media screen{span.vcard-edit-button a{color:#969696}body .ui-dialog .ui-widget-header{background:#a9c8d6 !important}#progress-dialog{font-size:large;padding-top:22px;text-align:center}#listing-editor{padding:0 1.5em 1em}#listing-help{margin-right:30px}.listingeditor-add{margin-left:0.25em}.listing-license{width:60%;padding-top:0.8em;font-size:0.8em}.listing-editor-dialog{margin:0 5%}.listing-editor-dialog a:hover,.listing-editor-dialog a:focus{text-decoration:underline}.listing-sister{padding-bottom:0.1em}.listing-sister:hover{border-bottom:1px solid #0645ad }.listing-sister-icons{padding-right:0.2em}.wikidata-update,.wikivoyage-update{display:inline-block;margin:0 5px 0 2px}.wikidata-update{background-image:url(https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Wikidata-logo.svg/16px-Wikidata-logo.svg.png);width:10px;height:9px}.wikivoyage-update{background-image:url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Wikivoyage-logo.svg/16px-Wikivoyage-logo.svg.png);width:16px;height:16px}label .wikidata-update{margin-bottom:3px}fieldset .listing-span_1_of_2:nth-of-type(1){float:left;border-right:black solid 1px}fieldset .listing-span_1_of_2:nth-of-type(2){float:right;width:unset}#listing-editor-sync fieldset{margin:0 }#listing-editor td > *:not(input):not(.ui-helper-hidden-accessible):not(.wikidata-update):not(.listing-charinsert):not([style*="display:none"]):not([style*="display:none"]) + *:before{content:' |' }#listing-editor td > .listing-charinsert + *:before{content:' ' }#listing-editor-sync .clear,#listing-editor-sync #autoSelect{display:block }#listing-editor-sync h4{display:inline;color:unset}#listing-editor-sync table td{text-align:center;width:3.33%; }#listing-editor-sync table td:nth-of-type(2){border:1px solid black;border-left:none }#listing-editor-sync table td:nth-of-type(4){border:1px solid black;border-right:none }#listing-editor-sync table td:first-child{text-align:right;width:45%;border:1px solid black;border-right:none}#listing-editor-sync table td:last-child{text-align:left;width:45%;border:1px solid black;border-left:none}}
+
+/* extras as of 20200618 - changes in pagebanner on mw side */
+/* ?https://en.wikivoyage.org/w/load.php?lang=en&modules=ext.WikidataPageBanner%2CwikimediaBadges%7Cext.WikidataPageBanner.print.styles%7Cext.WikidataPageBanner.toc.styles%7Cext.kartographer.style%7Cext.uls.interlanguage%7Cext.visualEditor.desktopArticleTarget.noscript%7Cmediawiki.toc.styles%7Cskins.vector.styles.legacy%7Cwikibase.client.init&only=styles&skin=vector?*/
+/* probably ext.WikidataPageBanner */
+#firstHeading:empty {
+    display: none
+}
+
+.ext-wpb-pagebanner {
+    position: relative;
+    width: 100%;
+    margin: 1em 0
+}
+
+.ext-wpb-pagebanner-subtitle {
+    font-size: 0.875em
+}
+
+.wpb-banner-image {
+    visibility: hidden
+}
+
+.wpb-topbanner {
+    position: relative;
+    max-width: 1800px;
+    height: auto;
+    overflow: hidden;
+    max-height: 300px
+}
+
+.wpb-topbanner .image {
+    position: relative;
+    display: block;
+    height: 100%;
+    width: 100%
+}
+
+.ext-wpb-pagebanner .wpb-topbanner .wpb-name {
+    position: absolute;
+    z-index: 1;
+    margin: 0.6em 0 0 0.4em;
+    padding: 8px 7px;
+    font-size: 1em;
+    font-weight: bold;
+    background: none repeat scroll 0% 0% rgba(0,0,0,0.3);
+    border-radius: 4px;
+    color: #fff;
+    white-space: nowrap;
+    line-height: 0.9em;
+    overflow: hidden;
+    -webkit-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    max-width: 95%
+}
+
+.wpb-topbanner .wpb-banner-image {
+    width: 100%;
+    height: auto
+}
+
+.wpb-iconbox {
+    top: 0;
+    position: absolute;
+    right: 0;
+    padding: 3px;
+    z-index: 3;
+    background: rgba(0,0,0,0.7) none repeat scroll 0% 0%;
+    border-bottom-left-radius: 5px
+}
+
+.wpb-iconbox p {
+    float: left
+}
+
+@media screen and (min-width: 768px) {
+    .ext-wpb-pagebanner .wpb-topbanner .wpb-name {
+        font-size:2.2em;
+        white-space: normal;
+        overflow: auto
+    }
+}
+
+.client-nojs .wpb-banner-image,.client-js .wpb-positioned-banner .wpb-banner-image {
+    visibility: visible
+}
+
+@media screen and (max-width: 400px) {
+    .wpb-topbanner {
+    }
+
+    .wpb-topbanner .wpb-banner-image {
+        max-width: none !important;
+        min-height: 180px;
+        margin-left: 50%;
+        -ms-transform: translateX(-50%);
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%)
+    }
+
+    .wpb-topbanner .wpb-left {
+        -ms-transform: translateX(-25%);
+        -webkit-transform: translateX(-25%);
+        -moz-transform: translateX(-25%);
+        -o-transform: translateX(-25%);
+        transform: translateX(-25%)
+    }
+
+    .wpb-topbanner .wpb-right {
+        -ms-transform: translateX(-75%);
+        -webkit-transform: translateX(-75%);
+        -moz-transform: translateX(-75%);
+        -o-transform: translateX(-75%);
+        transform: translateX(-75%)
+    }
+}
+
+#contentSub {
+    margin-left: 0 !important
+}
+
+#contentSub > div {
+    margin-left: 1em
+}
+
+#contentSub > .ext-wpb-pagebanner {
+    margin-left: 0
+}
+
+/* some more bits from https://en.wikivoyage.org/w/load.php?lang=en&modules=site.styles&only=styles&skin=vector */
+.mw-indicators {
+    z-index: 2
+}
+
+#contentSub,#contentSub2 {
+    font-size: 100%
+}
+
+.page-Main_Page .firstHeading,.page-Main_Page #contentSub {
+    display: none
+}
+
+#firstHeading:empty {
+    display: none
+}
+
+@media print {
+    .nourlexpansion a.external.text:after {
+        display: none !important
+    }
+}

@@ -32,7 +32,7 @@ public class Xoh_hzip_mgr implements Xoh_hzip_wkr {
 	public Gfo_poolable_itm	Encode1(Xoh_hzip_bfr bfr, Xoh_hdoc_wkr hdoc_wkr, Xoh_hdoc_ctx hctx, Xoh_page hpg, boolean wkr_is_root, byte[] src, Object data_obj) {throw Err_.new_unimplemented();}
 	public void Encode(Xoh_hzip_bfr bfr, Xow_wiki wiki, Xoh_page hpg, byte[] src) {
 		hctx.Init_by_page(wiki, hpg);
-		hdoc_parser.Parse(bfr, hpg, hctx, src);
+		hdoc_parser.Parse(bfr, hpg, hctx, src, false);
 	}
 	public void Decode(Bry_bfr bfr, Xow_wiki wiki, Xoh_page hpg, byte[] src) {
 		hctx.Init_by_page(wiki, hpg);

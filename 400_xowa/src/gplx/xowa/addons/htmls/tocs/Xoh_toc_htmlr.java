@@ -27,7 +27,11 @@ class Xoh_toc_htmlr implements gplx.core.brys.Bfr_arg {
 		this.toc_label = toc_label;
 	}
 	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, Ordered_hash toc_itms, boolean toc_mode_is_pgbnr) {
+            To_html(rv, hctx, toc_itms, toc_mode_is_pgbnr, 0);
+        }
+	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, Ordered_hash toc_itms, boolean toc_mode_is_pgbnr, int minimum) {
 		this.toc_itms = toc_itms;
+                if (toc_itms.Len() <= minimum) return;
 		fmtr_div.Bld_many(rv, toc_mode_is_pgbnr ? Bry_.Empty : Bry_toc_cls, toc_label, this);
 	}
 	public void Test__to_html(Bry_bfr rv, Ordered_hash toc_itms) {

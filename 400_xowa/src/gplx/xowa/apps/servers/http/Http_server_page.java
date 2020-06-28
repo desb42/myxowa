@@ -126,17 +126,11 @@ public class Http_server_page {
 				page_html = wiki.Html_mgr().Head_mgr().Popup_mgr().Show_more(popup_id);
 			else
 				page_html = wiki.Html_mgr().Head_mgr().Popup_mgr().Show_init(popup_id, ttl_bry, ttl_bry, url_parser.Popup_link());
-			//page_html = Bry_.Replace_many(page_html, app.Fsys_mgr().Root_dir().To_http_file_bry(), Http_server_wkr.Url__fsys);
-			page_html = Http_server_wkr.Replace_fsys_hack(page_html);
-			this.html = String_.new_u8(page_html);
 		}
 		else {
 			byte mode = url_parser.Action();
 			page_html = wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode);
-
-			//page_html = Bry_.Replace_many(page_html, app.Fsys_mgr().Root_dir().To_http_file_bry(), Http_server_wkr.Url__fsys);
-			page_html = Http_server_wkr.Replace_fsys_hack(page_html);
-			this.html = String_.new_u8(page_html); // NOTE: must generate HTML now in order for "wait" and "async_server" to work with text_dbs; DATE:2016-07-10
+                        this.html = String_.new_u8(page_html);
 			boolean rebuild_html = false;
 			switch (retrieve_mode) {
 				case File_retrieve_mode.Mode_skip:	// noop
@@ -148,14 +142,15 @@ public class Http_server_page {
 				case File_retrieve_mode.Mode_wait:
 					if (page != null) {
 						if (page.File_queue().Count() > 0
-						    || page.Html_data().Xtn_gallery_packed_exists()
+						    //|| page.Html_data().Xtn_gallery_packed_exists()
 						    || page.Html_data().Xtn_imap_exists()
 						    || page.File_math().Count() > 0
 						    || page.Html_cmd_mgr().Count() > 0) {
 
 							rebuild_html = true;
 							gplx.xowa.guis.views.Xog_async_wkr.Async(page, tab.Html_itm());
-							this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display(), url_parser.Action());	// HACK: fetch page again so that HTML will now include img data
+                                                        this.html = String_.new_u8(page_html);
+							//this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display(), url_parser.Action());	// HACK: fetch page again so that HTML will now include img data
 						}
 					}
 					//rebuild_html = true;
@@ -164,11 +159,12 @@ public class Http_server_page {
 					break;
 			}
 			if (rebuild_html) {
-				page_html = wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode);
-				//page_html = Bry_.Replace_many(page_html, app.Fsys_mgr().Root_dir().To_http_file_bry(), Http_server_wkr.Url__fsys);
-				page_html = Http_server_wkr.Replace_fsys_hack(page_html);
-				this.html = String_.new_u8(page_html);
+                            page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);
+				//page_html = wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode);
+                                this.html = String_.new_u8(page_html);
 			}
 		}
+			page_html = Http_server_wkr.Replace_fsys_hack(page_html);
+			this.html = String_.new_u8(page_html); // NOTE: must generate HTML now in order for "wait" and "async_server" to work with text_dbs; DATE:2016-07-10
 	}
 }

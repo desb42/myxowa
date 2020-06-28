@@ -34,9 +34,9 @@ public class Xoh_hdoc_parser {
 	public void Init_by_wiki(Xow_wiki wiki) {
 		tag_parser.Init_by_wiki(wiki);
 	}
-	public void Parse(Xoh_hzip_bfr bfr, Xoh_page hpg, Xoh_hdoc_ctx hctx, byte[] src) {
+	public void Parse(Xoh_hzip_bfr bfr, Xoh_page hpg, Xoh_hdoc_ctx hctx, byte[] src, boolean secondpass) {
 		int src_len = src.length;
-		tag_parser.Init(hctx, src, 0, src_len);
+		tag_parser.Init(hctx, src, 0, src_len, secondpass);
 		hdoc_wkr.On_page_bgn(bfr, hpg, hctx, src, 0, src_len);
 		hdoc_parser.Parse(hctx.Page__url(), src, 0, src_len);
 		hdoc_wkr.On_page_end();

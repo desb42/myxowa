@@ -58,8 +58,8 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	public Xoctg_catpage_ctg Get_by_cache_or_null(byte[] page_ttl, Xoctg_catpage_url catpage_url, Xoa_ttl cat_ttl, int limit) {
 		Xoctg_catpage_ctg ctg = null;
                 // DynamicPageList categories only (b/c of many members); for regular catpages, always retrieve on demand
-		try { //synchronized (thread_lock) {	// LOCK:used by multiple wrks; DATE:2019-09-09
-			rwl.writeLock().lock();
+//		try { //synchronized (thread_lock) {	// LOCK:used by multiple wrks; DATE:2019-09-09
+//			rwl.writeLock().lock();
 		ctg = (Xoctg_catpage_ctg)cache.Get_by(cat_ttl.Full_db());
 		if (ctg == null) {
 			if (gplx.core.envs.Env_.Mode_testing()) return null;	// needed for dpl test
@@ -68,22 +68,22 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 			if (ctg == null) return null;	// not in cache or db; exit
 			cache.Add(cat_ttl.Full_db(), ctg);
 		}
-		}
-		finally {
-			rwl.writeLock().unlock();
-		}
+//		}
+//		finally {
+//			rwl.writeLock().unlock();
+//		}
 		return ctg;
 	}
 	public Xoctg_catpage_ctg Get_by_db_or_null(byte[] page_ttl, Xoctg_catpage_url catpage_url, Xoa_ttl cat_ttl, int limit) {
 		// load categories from cat dbs; exit if not found
 		Xoctg_catpage_ctg ctg = null;
-		try { //synchronized (thread_lock) {	// LOCK:used by multiple wrks; DATE:2016-09-12
-			rwl.writeLock().lock();
+//		try { //synchronized (thread_lock) {	// LOCK:used by multiple wrks; DATE:2016-09-12
+//			rwl.writeLock().lock();
 			ctg = loader.Load_ctg_or_null(wiki, page_ttl, this, catpage_url, cat_ttl, limit);
-		}
-		finally {
-			rwl.writeLock().unlock();
-		}
+//		}
+//		finally {
+//			rwl.writeLock().unlock();
+//		}
 		return ctg;
 	}
 	public void Write_catpage(Bry_bfr bfr, Xoa_page page) {

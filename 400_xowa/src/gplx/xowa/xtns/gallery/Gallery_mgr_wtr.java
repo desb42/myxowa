@@ -81,6 +81,8 @@ public class Gallery_mgr_wtr {
 		// get file_found
 		boolean file_found = xfer_itm.File_exists();
 		if (File_found_mode != Bool_.__byte) file_found = File_found_mode == Bool_.Y_byte;	// TEST: override File_found
+		
+		if (app.Mode().Tid_is_http() && !file_found) hctx_is_hdump = true; // HACK
 
 		// make itm_html; 1st clause is for "missing" itms; 2nd clause is for "found" itms
 		byte[] itm_html = Bry_.Empty;

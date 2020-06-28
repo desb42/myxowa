@@ -156,46 +156,53 @@
 			return;
 		}
 
-		new mw.Api().get( {
-			action: 'categorytree',
-			category: ctTitle,
-			options: ctOptions,
-			uselang: mw.config.get( 'wgUserLanguage' ),
-			formatversion: 2
-		} ).done( function ( data ) {
-			var $data;
+	function processData(data) {
+		var $data;
 
-			data = data.categorytree.html;
+		data = data.categorytree.html;
 
-			if ( data === '' ) {
-				switch ( ctMode ) {
-					// CategoryTreeMode::CATEGORIES = 0
-					case 0:
-						data = mw.msg( 'categorytree-no-subcategories' );
-						break;
-					// CategoryTreeMode::PAGES = 10
-					case 10:
-						data = mw.msg( 'categorytree-no-pages' );
-						break;
-					// CategoryTreeMode::PARENTS = 100
-					case 100:
-						data = mw.msg( 'categorytree-no-parent-categories' );
-						break;
-					// CategoryTreeMode::ALL = 20
-					default:
-						data = mw.msg( 'categorytree-nothing-found' );
-				}
-
-				$data = $( '<i class="CategoryTreeNotice"></i>' ).text( data );
-			} else {
-				$data = $( $.parseHTML( data ) );
-				attachHandler( $data );
+		if ( data === '' ) {
+			switch ( ctMode ) {
+				// CategoryTreeMode::CATEGORIES = 0
+				case 0:
+					data = mw.msg( 'categorytree-no-subcategories' );
+					break;
+				// CategoryTreeMode::PAGES = 10
+				case 10:
+					data = mw.msg( 'categorytree-no-pages' );
+					break;
+				// CategoryTreeMode::PARENTS = 100
+				case 100:
+					data = mw.msg( 'categorytree-no-parent-categories' );
+					break;
+				// CategoryTreeMode::ALL = 20
+				default:
+					data = mw.msg( 'categorytree-nothing-found' );
 			}
 
-			$children.empty().append( $data );
-		} )
-			.fail( error );
+			$data = $( '<i class="CategoryTreeNotice"></i>' ).text( data );
+		} else {
+			$data = $( $.parseHTML( data ) );
+			attachHandler( $data );
+		}
+
+		$children.empty().append( $data );
 	};
+		/* xowa-gui specific */
+		var mydata = xowa_exec('category_tree', ctTitle, ctOptions);
+		if (mydata != '')
+			processData( JSON.parse(mydata) );
+		else
+			new mw.Api().get( {
+				action: 'categorytree',
+				category: ctTitle,
+				options: ctOptions,
+				uselang: mw.config.get( 'wgUserLanguage' ),
+				formatversion: 2
+			} ).done( processData  )
+				.fail( error );
+	};
+
 
 	// Register click events
 	mw.hook( 'wikipage.content' ).add( attachHandler );

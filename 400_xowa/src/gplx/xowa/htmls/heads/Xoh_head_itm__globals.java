@@ -105,7 +105,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		tmp.Add(page.Wiki().Domain_bry());
 		tmp.Add(Bry_.new_a7("/wiki/\","));
 
-		tmp.Add(Bry_.new_a7("\n \"wgArticlePath\" : \"/xowa/"));
+		tmp.Add(Bry_.new_a7("\n \"wgArticlePath\" : \"/site/"));
 		tmp.Add(page.Wiki().Domain_bry());
 		tmp.Add(Bry_.new_a7("/wiki/$1\","));
 

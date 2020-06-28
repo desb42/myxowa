@@ -92,6 +92,7 @@ public class Pgbnr_itm implements Mustache_doc_itm {
 	}
 	public void Init_hdump(boolean mode_is_hdump) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
+//		if (mode_is_hdump || !banner_file_itm.File_exists()) { // trying to get xowa-http to reload banner
 		if (mode_is_hdump) {
 			this.img_id_atr = Bry_.Empty;
 			this.img_xottl_atr = Gfh_atr_.Add_to_bry(tmp_bfr, Xoh_img_xoimg_data.Bry__data_xowa_title, file_ttl);

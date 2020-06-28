@@ -44,24 +44,28 @@ public class Xow_page_cache {
 	public Xow_page_cache_itm Get_itm_else_load_or_null(Xoa_ttl ttl) {
 		synchronized (thread_lock) {
 			cache_tries++;
+                }
 			Xow_page_cache_itm rv = (Xow_page_cache_itm)cache.Get_or_null(ttl.Full_db_as_str());
 			if (rv == Xow_page_cache_itm.Missing)
 				return null;
 			else if (rv == null) {
+		synchronized (thread_lock) {
 				cache_misses++;
 				return Load_page(ttl);
+                }
 			}
 			else {
+		synchronized (thread_lock) {
 				rv.Access_count_increment();
 				return rv;
 			}
 		}
 	}
 	public byte[] Get_src_else_load_or_null(Xoa_ttl ttl) {
-		synchronized (thread_lock) {
+		//synchronized (thread_lock) {
 			Xow_page_cache_itm rv = Get_itm_else_load_or_null(ttl);
 			return rv == null ? null : rv.Wtxt__direct();
-		}
+		//}
 	}
 	public void Free_mem(boolean clear_permanent_itms) {
 		synchronized (thread_lock) {	// LOCK:app-level; DATE:2016-07-06

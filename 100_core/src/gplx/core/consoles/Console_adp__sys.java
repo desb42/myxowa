@@ -57,9 +57,11 @@ public class Console_adp__sys implements Console_adp {
 	}
 	public void Write_str_w_nl_utf8(String s) {
 				java.io.PrintStream ps;
+		synchronized (this) {
 		try {ps = new java.io.PrintStream(System.out, true, "UTF-8");}
 		catch (java.io.UnsupportedEncodingException e) {throw Err_.new_wo_type("unsupported exception");}
 	    ps.println(s);
 	    	}
+	    }
 	public static final    Console_adp__sys Instance = new Console_adp__sys();
 }

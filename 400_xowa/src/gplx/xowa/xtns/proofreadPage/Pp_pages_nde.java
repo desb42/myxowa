@@ -183,15 +183,15 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			//rv = Bld_wikitext_from_ttls(full_bfr, lst_page_regy, ttls);
 			if (list == null) return null;
 			if (list.Count() == 0) {Fail_msg("no index ttls found"); return null;}
-			if (index_page.Is_jpg()) {
+			/*if (index_page.Is_jpg()) {
 				Pp_pages_file fle = (Pp_pages_file)list.Get_at(0);
 				//page_no = fle.Page_no();
 				Xoa_ttl ttl = fle.Ttl();
 				// check for quality
                                 page.Html_data().Quality_tots().Check_quality(ttl, wiki);
 			}
-			else
-				rv = Bld_wikitext_from_ttls(full_bfr, lst_page_regy, list, pl_nde, page);
+			//else*/
+				rv = Bld_wikitext_from_ttls(full_bfr, lst_page_regy, list, pl_nde, page, header != null && XophpBool_.is_true(header));
 		}
 		else {
 			header = Toc_bry;
@@ -432,7 +432,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		return true;
 	}
 //	private byte[] Bld_wikitext_from_ttls(Bry_bfr full_bfr, Hash_adp_bry lst_page_regy, Xoa_ttl[] ary) {
-	private byte[] Bld_wikitext_from_ttls(Bry_bfr full_bfr, Hash_adp_bry lst_page_regy, List_adp list, Pp_pagelist_nde pl_nde, Xoae_page page) {
+	private byte[] Bld_wikitext_from_ttls(Bry_bfr full_bfr, Hash_adp_bry lst_page_regy, List_adp list, Pp_pagelist_nde pl_nde, Xoae_page page, boolean header_flag) {
 		Xoa_ttl ttl;
 		int page_no;
 		int list_len = list.Count();
@@ -455,9 +455,9 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				else
 					continue;
 				// check for quality
-                            int quality = page.Html_data().Quality_tots().Check_quality(ttl, wiki);
-//				if (header_flag)
-//					continue;
+					int quality = page.Html_data().Quality_tots().Check_quality(ttl, wiki);
+				//if (header_flag)
+				//	continue;
 				if (quality != Pp_quality.Quality_without_text) {
 					page_bfr.Add(Bry_tmpl_page).Add(ttl.Full_db());
 					if (pl_nde != null) {

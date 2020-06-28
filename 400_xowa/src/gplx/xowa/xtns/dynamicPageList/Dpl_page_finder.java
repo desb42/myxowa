@@ -21,6 +21,7 @@ import gplx.xowa.addons.wikis.ctgs.*; import gplx.xowa.addons.wikis.ctgs.htmls.c
 import gplx.xowa.wikis.data.Xow_db_mgr;
 import gplx.dbs.*; import gplx.xowa.wikis.data.*; import gplx.xowa.addons.wikis.ctgs.dbs.*;
 import gplx.core.times.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.Xoctg_catpage_mgr;
 class Dpl_page_finder {
 	private final    DateAdp_parser dateParser = DateAdp_parser.new_();
 	private final    Dpl_itm itm;
@@ -200,6 +201,7 @@ class Dpl_page_finder {
 			Db_rdr rdr = Db_rdr_.Empty;
 			int count = 0;
 			try {
+			Xoctg_catpage_mgr.rwl.writeLock().lock();
 				attach_mgr.Attach();
 				rdr = attach_mgr.Conn_main().Stmt_sql(sql).Exec_select__rls_auto();
 				while (rdr.Move_next()) {
@@ -213,7 +215,13 @@ class Dpl_page_finder {
 				throw Err_.new_exc(e, "db", "db.xxxxxx failed", "sql", sql);}
 			finally {
 				rdr.Rls();
+                                try {
 				attach_mgr.Detach();
+                                }
+                                catch (Exception e) {
+                                    System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
+                                }
+			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 			}
 		}
 	}
@@ -278,7 +286,7 @@ class Dpl_page_finder {
 				if (cp_itm.Page_ttl() == null) continue; // cat_link can exist without entry in page_db.page
 				page.Id_(itm_page_id);
 				page.Ttl_(cp_itm.Page_ttl());
-				if (itm.Show_date())
+				if (itm.Show_date() && cp_itm.Cat_date() != null)
 					page.Modified_on_(DateAdp_.seg_(dateParser.Parse_iso8651_like(cp_itm.Cat_date())));
 				result_pages.Add(page);
 			}

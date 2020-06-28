@@ -68,6 +68,16 @@ public class Xoh_js_cbk implements Gfo_invk {
 			return String_.new_u8(page.Db().Text().Text_bry());
 		} catch (Exception e) {Err_.Noop(e); return null;}
 	}
+
+	private String Category_tree_json(GfoMsg m) {
+		try {
+			String ctTitle = m.Args_getAt(0).Val_to_str_or_empty();
+			String options = m.Args_getAt(1).Val_to_str_or_empty();
+                        byte[] data = Db_special_api.Gen_gui(html_itm.Owner_tab().Wiki(), ctTitle, options);
+
+			return String_.new_u8(data);
+		} catch (Exception e) {Err_.Noop(e); return null;}
+	}
 	private String Popups_get_html(GfoMsg m) {
 		try {
 			String mode			= m.Args_getAt(0).Val_to_str_or_empty();
@@ -188,6 +198,7 @@ public class Xoh_js_cbk implements Gfo_invk {
 		else if	(ctx.Match(k, Invk_xowa_exec_test_as_array))			return Xowa_exec_test_as_array(m);
 		else if	(ctx.Match(k, Invk_exec_json))							return app.Html__bridge_mgr().Cmd_mgr().Exec(m);
 		else if	(ctx.Match(k, Invk_bldr_exec))							return app.Bldr().Exec_json((String)m.ReadValAt(0));
+		else if	(ctx.Match(k, Invk_category_tree))					return Category_tree_json(m);
 		else	return Gfo_invk_.Rv_unhandled;
 	}
 	public static final    String Invk_parse_to_html = "parse_to_html", Invk_wikidata_get_label = "wikidata_get_label", Invk_get_page = "get_page", Invk_cmd = "cmd", Invk_scripts_exec = "scripts_exec"
@@ -196,5 +207,6 @@ public class Xoh_js_cbk implements Gfo_invk {
 	, Invk_popups_get_html = "popups_get_html"
 	, Invk_exec_json = "exec_json"
 	, Invk_bldr_exec = "bldr_exec"
+	, Invk_category_tree = "category_tree"
 	;
 }

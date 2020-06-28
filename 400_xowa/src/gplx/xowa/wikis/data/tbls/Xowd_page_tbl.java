@@ -141,8 +141,8 @@ public class Xowd_page_tbl implements Db_tbl {
 	public boolean Select_by_ttl(Xowd_page_itm rv, Xow_ns ns, byte[] ttl) {
 		if (stmt_select_all_by_ttl == null) stmt_select_all_by_ttl = conn.Stmt_select(tbl_name, flds, String_.Ary(fld_ns, fld_title));
 		synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
-		//try {
-		//	Xoctg_catpage_mgr.rwl.writeLock().lock();
+//		try {
+//			Xoctg_catpage_mgr.rwl.writeLock().lock();
 			Db_rdr rdr = stmt_select_all_by_ttl.Clear().Crt_int(fld_ns, ns.Id()).Crt_bry_as_str(fld_title, ttl).Exec_select__rls_manual();
 			try {
 				if (rdr.Move_next()) {
@@ -151,10 +151,10 @@ public class Xowd_page_tbl implements Db_tbl {
 				}
 			}
 			finally {rdr.Rls();}
-                }
-		//finally {
-		//	Xoctg_catpage_mgr.rwl.writeLock().unlock();
-		//}
+//                }
+//		finally {
+//			Xoctg_catpage_mgr.rwl.writeLock().unlock();
+		}
 			return false;
 		
 	}
@@ -164,6 +164,7 @@ public class Xowd_page_tbl implements Db_tbl {
 		return exists ? rv : null;
 	}
 	public boolean Select_by_id(Xowd_page_itm rv, int page_id) {
+//System.out.println("a");
 		if (stmt_select_all_by_id == null) stmt_select_all_by_id = conn.Stmt_select(tbl_name, flds_select_all, fld_id);
 		Db_rdr rdr = stmt_select_all_by_id.Clear().Crt_int(fld_id, page_id).Exec_select__rls_manual();
 		try {
@@ -176,17 +177,27 @@ public class Xowd_page_tbl implements Db_tbl {
 		return false;
 	}
 	public Db_rdr Select_all__id__ttl() {
+//System.out.println("b");
 		Db_qry__select_cmd qry = new Db_qry__select_cmd().From_(tbl_name).Cols_(fld_id, fld_title).Order_asc_(fld_id);
 		return conn.Stmt_new(qry).Exec_select__rls_auto();
 	}
 	public int Select_id(int ns_id, byte[] ttl) {
+//System.out.println("c");
 		if (stmt_select_id_by_ttl == null) stmt_select_id_by_ttl = conn.Stmt_select(tbl_name, flds_select_all, fld_ns, fld_title);
+//		synchronized (thread_lock) {
+		try {
+			Xoctg_catpage_mgr.rwl.writeLock().lock();
 		Db_rdr rdr = stmt_select_id_by_ttl.Clear().Crt_int(fld_ns, ns_id).Crt_bry_as_str(fld_title, ttl).Exec_select__rls_manual(); 
 		try {
 			return rdr.Move_next() ? rdr.Read_int(fld_id) : Xowd_page_itm.Id_null;
 		}	finally {rdr.Rls();}
+                }
+		finally {
+			Xoctg_catpage_mgr.rwl.writeLock().unlock();
+		}
 	}
 	public void Select_in__id(Select_in_cbk cbk) {
+//System.out.println("d");
 		int pos = 0;
 		Bry_bfr bfr = Bry_bfr_.New();
 		Select_in_wkr wkr = Select_in_wkr.New(bfr, tbl_name, Flds_select_all(), fld_id);
@@ -201,12 +212,14 @@ public class Xowd_page_tbl implements Db_tbl {
 		}
 	}
 	public void Select_in__ttl(Cancelable cancelable, Ordered_hash rv, int ns_id, int bgn, int end) {
+//System.out.println("e");
 		Xowd_page_tbl__ttl wkr = new Xowd_page_tbl__ttl();
 		wkr.Ctor(this, tbl_name, fld_title);
 		wkr.Init(rv, ns_id);
 		wkr.Select_in(cancelable, conn, bgn, end);
 	}
 	public void Select_in__ns_ttl(Cancelable cancelable, Ordered_hash rv, Xow_ns_mgr ns_mgr, boolean fill_idx_fields_only, int bgn, int end) {
+//System.out.println("f");
 		Xowd_page_tbl__ttl_ns wkr = new Xowd_page_tbl__ttl_ns();
 		wkr.Fill_idx_fields_only_(fill_idx_fields_only);
 		wkr.Ctor(this, tbl_name, fld_title);
@@ -215,6 +228,7 @@ public class Xowd_page_tbl implements Db_tbl {
 	}
 	public boolean Select_in__id(Cancelable cancelable, boolean show_progress, List_adp rv)	{return Select_in__id(cancelable, false, show_progress, rv, 0, rv.Count());}
 	public boolean Select_in__id(Cancelable cancelable, boolean skip_table_read, boolean show_progress, List_adp rv, int bgn, int end) {
+//System.out.println("g");
 		Xowd_page_itm[] page_ary = (Xowd_page_itm[])rv.To_ary(Xowd_page_itm.class);
 		int len = page_ary.length; if (len == 0) return false;
 		Ordered_hash hash = Ordered_hash_.New();
@@ -294,6 +308,7 @@ public class Xowd_page_tbl implements Db_tbl {
 		return stmt.Exec_select__rls_auto();
 	}
 	public void Select_for_languages(List_adp rslt_list, Int_obj_ref rslt_count, Xow_ns ns, byte[] key) {
+//System.out.println("y");
 		int rslt_idx = 0;
 		Db_rdr rdr = Load_ttls_language_range_rdr(ns.Id(), key);
 		try {
@@ -308,6 +323,7 @@ public class Xowd_page_tbl implements Db_tbl {
 		rslt_count.Val_(rslt_idx);
 	}
 	private Db_rdr Load_ttls_language_range_rdr(int ns_id, byte[] ttl_frag) {
+//System.out.println("x");
 		String ttl_frag_str = String_.new_u8(ttl_frag);
 		String bgn_str = ttl_frag_str + "/";
 		String end_str = ttl_frag_str + "0";
@@ -408,14 +424,17 @@ public class Xowd_page_tbl implements Db_tbl {
 		);
 	}
 	public void Update__html_db_id(int page_id, int html_db_id) {
+//System.out.println("m");
 		Db_stmt stmt = conn.Stmt_update(tbl_name, String_.Ary(fld_id), fld_html_db_id);
 		stmt.Val_int(fld_html_db_id, html_db_id).Crt_int(fld_id, page_id).Exec_update();
 	}
 	public void Update__cat_db_id(int page_id, int cat_db_id) {
+//System.out.println("n");
 		Db_stmt stmt = conn.Stmt_update(tbl_name, String_.Ary(fld_id), fld_cat_db_id);
 		stmt.Val_int(fld_cat_db_id, cat_db_id).Crt_int(fld_id, page_id).Exec_update();
 	}
 	public void Update__ns__ttl(int page_id, int trg_ns, byte[] trg_ttl) {
+//System.out.println("o");
 		for (int i = 0; i < 2; ++i) {
 			try {
 				conn.Stmt_update(tbl_name, String_.Ary(fld_id), fld_ns, fld_title)
@@ -432,6 +451,7 @@ public class Xowd_page_tbl implements Db_tbl {
 		}
 	}
 	public void Update__redirect__modified(int page_id, boolean redirect, DateAdp modified, int len) {
+//System.out.println("p");
 		conn.Stmt_update(tbl_name, String_.Ary(fld_id), fld_is_redirect, fld_touched, fld_len)
 			.Val_int(fld_is_redirect, redirect ? 1 : 0)
 			.Val_str(fld_touched, modified.XtoStr_fmt(Page_touched_fmt))
@@ -441,6 +461,7 @@ public class Xowd_page_tbl implements Db_tbl {
 			;
 	}
 	public void Update__redirect(int redirect_to_id, int page_id) {
+//System.out.println("q");
 		conn.Stmt_update(tbl_name, String_.Ary(fld_id), fld_is_redirect, fld_redirect_id)
 			.Val_int(fld_is_redirect, Bool_.Y_int)
 			.Val_int(fld_redirect_id, redirect_to_id)
@@ -455,6 +476,7 @@ public class Xowd_page_tbl implements Db_tbl {
 		Gfo_usr_dlg_.Instance.Log_many("", "", "db.page: delete done");
 	}
 	public void Update_page_id(int old_id, int new_id) {
+//System.out.println("r");
 		Gfo_usr_dlg_.Instance.Log_many("", "", "db.page: update page_id started: old_id=~{0} new_id=~{1}", old_id, new_id);
 		conn.Stmt_update(tbl_name, String_.Ary(fld_id), fld_id).Val_int(fld_id, new_id).Crt_int(fld_id, old_id).Exec_update();
 		Gfo_usr_dlg_.Instance.Log_many("", "", "db.page: update page_id done");

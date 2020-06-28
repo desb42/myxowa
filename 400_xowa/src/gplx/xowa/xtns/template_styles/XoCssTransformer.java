@@ -53,7 +53,7 @@ public class XoCssTransformer {
                             else
                                 replacement += grp;
                         }
-			m.appendReplacement(sb, replacement + after);
+			m.appendReplacement(sb, replacement.replace("$", "\\$") + after);
 		}
 		if (found) {
 			m.appendTail(sb);

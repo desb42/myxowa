@@ -63,7 +63,12 @@ public class Xoh_toc_mgr {
 		itms.Add(itm.Anch(), itm);
 		return itm;
 	}
-	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, boolean toc_mode_is_pgbnr) {htmlr.To_html(rv, hctx, itms, toc_mode_is_pgbnr);}
+	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, boolean toc_mode_is_pgbnr) {
+            To_html(rv, hctx, toc_mode_is_pgbnr, 0);
+        }
+	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, boolean toc_mode_is_pgbnr, int minimum) {
+            htmlr.To_html(rv, hctx, itms, toc_mode_is_pgbnr, minimum);
+        }
 	public byte[] Test__to_html() {
 		Bry_bfr bfr = Bry_bfr_.New();
 		htmlr.Test__to_html(bfr, itms);

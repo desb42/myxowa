@@ -27,9 +27,12 @@ public class Xoh_make_mgr {
 		make_parser.Init_by_wiki(wiki);
 	}
 	public byte[] Parse(byte[] src, Xow_wiki wiki, Xoh_page hpg) {
+            return Parse(src, wiki, hpg, false);
+        }
+	public byte[] Parse(byte[] src, Xow_wiki wiki, Xoh_page hpg, boolean secondpass) {
 		hctx.Init_by_page(wiki, hpg);
 		hpg.Section_mgr().Add(0, 2, Bry_.Empty, Bry_.Empty).Content_bgn_(0);	// +1 to skip \n
-		make_parser.Parse(bfr, hpg, hctx, src);
+		make_parser.Parse(bfr, hpg, hctx, src, secondpass);
 		hpg.Section_mgr().Set_content(hpg.Section_mgr().Len() - 1, src, src.length);
 		return bfr.To_bry_and_clear();
 	}

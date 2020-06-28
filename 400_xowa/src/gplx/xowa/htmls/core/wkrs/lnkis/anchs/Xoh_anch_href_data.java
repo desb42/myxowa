@@ -70,7 +70,7 @@ public class Xoh_anch_href_data implements Xoh_itm_parser {
 						tid = Tid__site;
 						site_bgn = rdr.Pos();
 						site_end = rdr.Find_fwd_lr();
-						rdr.Chk(Bry__wiki);
+						//??rdr.Chk(Bry__wiki);
 					}
 					else
 						tid = Tid__wiki;

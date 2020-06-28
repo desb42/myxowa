@@ -7,6 +7,8 @@ function xowa_exec(act, arg1, arg2, arg3)
 	{
 	    getwikix(arg1, arg2); //'<p>here</p>';
 	}
+	else if (act == 'category_tree')
+		return '';
 }
 
 function getsuggestions(word)

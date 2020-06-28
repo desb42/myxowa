@@ -44,12 +44,8 @@ class Pp_index_page {
 				    && (raw[ttl_len-3] | 32) == 'g'
 				    && raw[ttl_len-2] == '/'
 				    && raw[ttl_len-1] == '1'
-				    && bgn_page_bry[0] == '1'
-				    && end_page_bry[0] == '1'
 				    )
-				rv.Add(new Pp_pages_file(ttl, i+1));
-				is_jpg = true;
-				break;
+                                    add = true;
 			}
 			if (ttl.Eq_page_db(bgn_page_ttl)) {
 				add = Bool_.Y;

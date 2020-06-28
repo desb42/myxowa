@@ -30,6 +30,7 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 	private final    Xoh_thm_data		wkr__thm = new Xoh_thm_data();
 	private final    Xoh_gly_grp_data	wkr__gly = new Xoh_gly_grp_data();
 	private final    Xoh_form_data      wkr__form = new Xoh_form_data();
+        private boolean secondpass;
 	private Ordered_hash hdump_wkrs;
 	public byte[] Hook() {return Byte_ascii.Angle_bgn_bry;}
 	public Xoh_tag_parser(Xoh_hdoc_wkr hdoc_wkr) {
@@ -38,8 +39,9 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 	public void Init_by_wiki(Xow_wiki wiki) {
 		hdump_wkrs = wiki.Html__hdump_mgr().Wkrs();
 	}
-	public void Init(Xoh_hdoc_ctx hctx, byte[] src, int src_bgn, int src_end) {
+	public void Init(Xoh_hdoc_ctx hctx, byte[] src, int src_bgn, int src_end, boolean secondpass) {
 		this.hctx = hctx;
+                this.secondpass = secondpass;
 		tag_rdr.Init(hctx.Page__url(), src, src_bgn, src_end);
 	}
 	public int Parse(byte[] src, int src_bgn, int src_end, int pos) {
@@ -68,6 +70,7 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 
 			Gfh_tag nxt = null;
 			int cur_name_id = cur.Name_id();
+                        if (!secondpass || cur_name_id == Gfh_tag_.Id__img)
 			switch (cur_name_id) {
 				case Gfh_tag_.Id__h2: case Gfh_tag_.Id__h3: case Gfh_tag_.Id__h4: case Gfh_tag_.Id__h5: case Gfh_tag_.Id__h6:
 					nxt = tag_rdr.Tag__peek_fwd_head();

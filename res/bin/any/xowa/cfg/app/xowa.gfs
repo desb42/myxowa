@@ -168,7 +168,8 @@ app.wikis.get('~{wiki_key}').html.portal {
       <ul>
         <li id="ca-view"    class="~{portal_view_read_cls}"><span><a href="~{portal_view_read_href}" class="xowa-hover-off">~{<>msgs.get('vector-view-view');<>}</a></span></li>
         <li id="ca-edit"    class="~{portal_view_edit_cls}"><span><a href="~{portal_view_edit_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-edit');<>}>~{<>msgs.get('vector-view-edit');<>}</a></span></li>
-        <li id="ca-history" class="~{portal_view_html_cls}"><span><a href="~{portal_view_html_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('xowa-portal-view_html');<>}>~{<>msgs.get('xowa-portal-view_html');<>}</a></span></li>
+        <li id="ca-history" class="~{portal_view_html_cls}"><span><a href="~{portal_view_html_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('xowa-portal-view_html');<>}>~{<>msgs.get('xowa-portal-view_html');<>}</a></span>
+        </li>
       </ul>
     </div>
     <div id="p-search" role="search">
@@ -254,6 +255,7 @@ app.wikis.get('~{wiki_key}').html.article {
 <html dir="~{page_lang_ltr}" class="client-js" lang="~{page_lang}">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta charset="UTF-8"/>
   <title>~{page_name} - XOWA ~{wiki_key}</title>
   <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/~{app_icon}" />
   <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
@@ -346,6 +348,7 @@ for (var i = 0; i < redlinks.length; i++) {
 <html dir="~{page_lang_ltr}" class="client-js" lang="~{page_lang}">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta charset="UTF-8"/>
   <title>~{page_name} - XOWA ~{wiki_key}</title>
   <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/~{app_icon}" />
   <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
@@ -433,6 +436,7 @@ for (var i = 0; i < redlinks.length; i++) {
 <html dir="~{page_lang_ltr}" class="client-js" lang="~{page_lang}">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta charset="UTF-8"/>
   <title>~{page_name} - XOWA ~{wiki_key}</title>
   <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/~{app_icon}" />
   <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
