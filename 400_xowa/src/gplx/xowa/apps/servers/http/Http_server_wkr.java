@@ -206,7 +206,7 @@ public class Http_server_wkr implements Gfo_invk {
 				page_html = "Strange! no data";
 			} else {
 
-				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()));
+				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()), page.Redlink());
 
 				if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // change some more things
 					//page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
@@ -245,7 +245,7 @@ public class Http_server_wkr implements Gfo_invk {
 		}
 		server_wtr.Write_str_w_nl(String_.new_u8(request.Host()) + "|POST|" + page_name);
 		String page_html = app.Http_server().Preview_page_to_html(data__client, Bry_.new_u8(wiki_domain), Bry_.new_u8(page_name), msg);
-		page_html = Convert_page(page_html, root_dir_http, wiki_domain);
+		page_html = Convert_page(page_html, root_dir_http, wiki_domain, "");
 		response.Write_response_as_html(client_wtr, Bool_.N, page_html);
 	}
 	private static final    byte[] Key__tbox = Bry_.new_a7("wpTextbox1");
@@ -265,7 +265,7 @@ public class Http_server_wkr implements Gfo_invk {
 				break;
 		}
 		if (app_mode_itm.Tid_is_http())
-			rv = Convert_page(rv, root_dir_http			, "<<MISSING_WIKI>>");
+			rv = Convert_page(rv, root_dir_http, "<<MISSING_WIKI>>", "");
 		response.Write_response_as_html(client_wtr, app_mode_itm.Tid() == Xoa_app_mode.Itm_file.Tid(), rv);
 	}
 	private static final    byte[] Key__msg = Bry_.new_a7("msg"), Key__app_mode = Bry_.new_a7("app_mode");
@@ -277,7 +277,7 @@ public class Http_server_wkr implements Gfo_invk {
 	private static String karto = "<span title=\"Map for this &#39;listing&#39; marker\"><a class=\"mw-kartographer-maplink mw-kartographer-autostyled\" mw-data=\"interface\" data-style=\"osm-intl\" href=\"/wiki/Special:Map/17/37.8013/-122.3988/en\" data-zoom=\"17\" data-lat=\"37.8013\" data-lon=\"-122.3988\" style=\"background: #228B22;\" data-overlays=\"[&quot;mask&quot;,&quot;around&quot;,&quot;buy&quot;,&quot;city&quot;,&quot;do&quot;,&quot;drink&quot;,&quot;eat&quot;,&quot;go&quot;,&quot;listing&quot;,&quot;other&quot;,&quot;see&quot;,&quot;sleep&quot;,&quot;vicinity&quot;,&quot;view&quot;,&quot;black&quot;,&quot;blue&quot;,&quot;brown&quot;,&quot;chocolate&quot;,&quot;forestgreen&quot;,&quot;gold&quot;,&quot;gray&quot;,&quot;grey&quot;,&quot;lime&quot;,&quot;magenta&quot;,&quot;maroon&quot;,&quot;mediumaquamarine&quot;,&quot;navy&quot;,&quot;red&quot;,&quot;royalblue&quot;,&quot;silver&quot;,&quot;steelblue&quot;,&quot;teal&quot;,&quot;fuchsia&quot;]\">1</a>&#32;</span>";
 	//private static Pattern pwiki = Pattern.compile("https?://(commons\\.wikimedia|de\\.wikipedia|en\\.wikibooks|en\\.wikinews|en\\.wikipedia|en\\.wikiquote|en\\.wikisource|en\\.wikiversity|en\\.wikivoyage|en\\.wiktionary|fr\\.wikipedia|fr\\.wikisource|he\\.wikipedia|it\\.wikipedia|it\\.wikisource|ja\\.wikipedia|simple\\.wikipedia|species\\.wikimedia|www\\.wikidata)\\.org");
 	//private static Matcher mwiki = pwiki.matcher("");
-	private static String Convert_page(String page_html, String root_dir_http, String wiki_domain) {
+	private static String Convert_page(String page_html, String root_dir_http, String wiki_domain, String redlink) {
 		//page_html = String_.Replace(page_html, root_dir_http		, "/fsys/");
 		page_html = String_.Replace(page_html, "xowa-cmd:"			, "/exec/");
 		//page_html = String_.Replace(page_html, " href=\"/wiki/"	, " href=\"/xowa/" + wiki_domain + "/wiki/");
@@ -325,6 +325,7 @@ public class Http_server_wkr implements Gfo_invk {
                 DateAdp dte = DateAdp_.parse_fmt("2016-02-01 18:34:08", "yyyy-MM-dd HH:mm:ss");
                 long timestamp = dte.Timestamp_unix();*/
                 //page_html += test_wikistrip();
+                page_html = page_html.replace("redlinks = [\"\"]", "redlinks = [\"\"" + redlink + "]");
 		return page_html;
 	}
         private static String collapser(String html)

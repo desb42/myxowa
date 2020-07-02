@@ -95,7 +95,8 @@ public class Xoh_page_wtr_wkr {
 						Write_page_by_tid(ctx, hctx, page_mode, rv, mgr.Page_html_fmtr(), Gfh_utl.Escape_html_as_bry(html_bry));
 					}
 					else {
-						hctx = Xoh_wtr_ctx.Basic;
+						// NOTE: if HTTP, generate hdump html b/c of async image download; HTTP will later call make_mgr to substitute out <xoimg>; ISSUE#:686; DATE:2020-06-27
+						hctx = app.Mode().Tid_is_http() ? Xoh_wtr_ctx.HttpServer : Xoh_wtr_ctx.Basic;
 						Write_body(page_bfr, ctx, hctx, page);
 						Write_page_by_tid(ctx, hctx, view_mode, rv, fmtr, page_bfr.To_bry_and_rls());
 						scripting_mgr.Write(rv, wiki, page);
@@ -171,11 +172,11 @@ public class Xoh_page_wtr_wkr {
 		byte[] page_title = Db_expand.Extracheck( msg_mgr.Val_by_key_args(page_mask_msg, page_name), "");
 
 		byte[] redlinks = null;
-		if (wiki.App().Mode().Tid_is_http()) {
+/*		if (wiki.App().Mode().Tid_is_http()) {
 			Xopg_redlink_mgr red_mgr = new Xopg_redlink_mgr(page, null);
 			red_mgr.Redlink(tmp_bfr);
 			redlinks = tmp_bfr.To_bry_and_clear();
-		}
+		}*/
 
 		// main build
 		Xow_portal_mgr portal_mgr = wiki.Html_mgr().Portal_mgr().Init_assert();
@@ -225,7 +226,7 @@ public class Xoh_page_wtr_wkr {
 
 		this.Write_body(bfr, ctx, hctx, wpg);
 
-		if (!hctx.Mode_is_embeddable()) {
+		if (!hctx.Mode_is_hdump_wo_db()) {
 			wpg.Html_data().Indicators().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
 			wpg.Html_data().GeoCrumb().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
 			wpg.Html_data().Pagebanner().Add(hctx);
@@ -361,9 +362,9 @@ public class Xoh_page_wtr_wkr {
 	}
 	private void Write_body_pre(Bry_bfr bfr, Xoae_app app, Xowe_wiki wiki, Xoh_wtr_ctx hctx, byte[] data_raw, Bry_bfr tmp_bfr, int page_tid) {
 		Xoh_html_wtr_escaper.Escape(app.Parser_amp_mgr(), tmp_bfr, data_raw, 0, data_raw.length, false, false);
-		if (hctx.Mode_is_hdump())
-			bfr.Add(data_raw);
-		else {
+//		if (hctx.Mode_is_hdump())
+//			bfr.Add(data_raw);
+//		else {
 			byte[] lang = Bry_.Empty;
 			switch (page_tid) {
 				case Xow_page_tid.Tid_msg: lang = Bry_.new_a7("msg"); break;
@@ -374,7 +375,7 @@ public class Xoh_page_wtr_wkr {
 			Bry_fmt content_code_fmt = Bry_fmt.Auto("<pre class=\"prettyprint lang-~{lang} linenums\">~{page_text}</pre>");
 			content_code_fmt.Bld_many(bfr, lang, tmp_bfr);
 			//app.Html_mgr().Page_mgr().Content_code_fmt().Bld_many(bfr, tmp_bfr);
-		}
+//		}
 		tmp_bfr.Clear();
 	}
 	private void Write_body_edit(Bry_bfr bfr, byte[] data_raw, int ns_id, byte page_tid) {

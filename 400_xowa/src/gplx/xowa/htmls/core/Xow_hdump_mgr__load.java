@@ -124,12 +124,22 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		}
 	}
 	public byte[] Decode_as_bry(Bry_bfr bfr, Xoh_page hpg, byte[] src, boolean mode_is_diff) {hzip_mgr.Hctx().Mode_is_diff_(mode_is_diff); hzip_mgr.Decode(bfr, wiki, hpg, src); return bfr.To_bry_and_clear();}
-	public byte[] Parse(byte[] src, Xoae_page page) {
-            Xoh_page hpg = new Xoh_page();
-            hpg.Ctor_by_hview(page.Wiki(), page.Url(), page.Ttl(), page.Db().Page().Id());
+	public byte[] Parse(byte[] src, Xoae_page page) { // NOTE: currently, only used by HTTP_SERVER; may generalize later
+		Xoh_page hpg = new Xoh_page();
+		hpg.Ctor_by_hview(page.Wiki(), page.Url(), page.Ttl(), page.Db().Page().Id());
 
-            return make_mgr.Parse(src, wiki, hpg, true);
-        }
+		byte[] html = make_mgr.Parse(src, wiki, hpg);
+                
+                // transfer redlinks
+		Xopg_lnki_list src_list = hpg.Html_data().Redlink_list();
+		Xopg_lnki_list trg_list = page.Html_data().Redlink_list();
+                trg_list.Clear();
+		int len = src_list.Len();
+		for (int i = 0; i < len; ++i) {
+			trg_list.Add_direct(src_list.Get_at(i));
+		}
+                return html;
+	}
 	public byte[] Parse(Xoh_page hpg, int zip_tid, int hzip_tid, byte[] src) {
 		if (zip_tid > gplx.core.ios.streams.Io_stream_tid_.Tid__raw)
 			src = zip_mgr.Unzip((byte)zip_tid, src);

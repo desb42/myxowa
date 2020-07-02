@@ -32,7 +32,8 @@ public class Gfo_invk_ {
 	public static Object Invk_by_val(Gfo_invk invk, String k, Object v)	{return Invk_by_msg(invk, k	, GfoMsg_.new_cast_(k).Add("v", v));}
 	public static Object Invk_by_msg(Gfo_invk invk, String k, GfoMsg m)	{
 		Object rv = invk.Invk(GfsCtx.Instance, 0, k, m);
-		if (rv == Gfo_invk_.Rv_unhandled) throw Err_.new_wo_type("invkable did not handle message", "key", k);
+		if (rv == Gfo_invk_.Rv_unhandled)
+                    throw Err_.new_wo_type("invkable did not handle message", "key", k);
 		return rv;
 	}
 }

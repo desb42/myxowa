@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,11 +13,29 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.apps.servers.http; import gplx.*; import gplx.xowa.*; import gplx.xowa.apps.*; import gplx.xowa.apps.servers.*;
-import gplx.core.envs.*;
-import gplx.xowa.guis.views.*;
-import gplx.xowa.specials.*; import gplx.xowa.specials.xowa.errors.*;
-import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.pages.*;
+package gplx.xowa.apps.servers.http;
+
+import gplx.Bry_;
+import gplx.Bry_bfr;
+import gplx.Bry_bfr_;
+import gplx.Io_mgr;
+import gplx.String_;
+import gplx.core.envs.Runtime_;
+import gplx.xowa.Xoa_ttl;
+import gplx.xowa.Xoa_url;
+import gplx.xowa.Xoae_app;
+import gplx.xowa.Xoae_page;
+import gplx.xowa.Xowe_wiki;
+import gplx.xowa.Xowe_wiki_;
+import gplx.xowa.apps.servers.Gxw_html_server;
+import gplx.xowa.guis.views.Xog_tab_itm;
+import gplx.xowa.specials.Xow_special_meta_;
+import gplx.xowa.specials.xowa.errors.Xoerror_special;
+
+import gplx.xowa.wikis.nss.Xow_ns_;
+import gplx.xowa.Db_special_api;
+import gplx.xowa.wikis.pages.Xopg_view_mode_;
+import gplx.xowa.wikis.pages.lnkis.Xopg_redlink_mgr;
 public class Http_server_page {
 	private final    Xoae_app app;
 	private Http_url_parser url_parser;
@@ -32,6 +50,7 @@ public class Http_server_page {
 	public Xog_tab_itm Tab() {return tab;} private Xog_tab_itm tab;
 	public Xoae_page Page() {return page;} private Xoae_page page;
 	public String Html() {return html;} private String html;
+	public String Redlink() {return redlink;} private String redlink;
 	public byte[] Redirect() {return redirect;} private byte[] redirect;
 	public byte[] Content_type() {return content_type;} private byte[] content_type = Bry_.new_a7("Content-Type: text/html; charset=utf-8\n"); // default
 	public static Http_server_page Make(Xoae_app app, Http_data__client data__client, Http_url_parser url_parser, byte retrieve_mode) {
@@ -107,6 +126,7 @@ public class Http_server_page {
 	}
 	public void Make_page(Http_data__client data__client) {
 		// get the page
+                this.redlink = "";
 		this.tab = Gxw_html_server.Assert_tab2(app, wiki);	// HACK: assert tab exists
 		this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display(), url_parser.Action());
 		app.Gui_mgr().Browser_win().Active_page_(page);	// HACK: init gui_mgr's page for output (which server ordinarily doesn't need)
@@ -128,43 +148,35 @@ public class Http_server_page {
 				page_html = wiki.Html_mgr().Head_mgr().Popup_mgr().Show_init(popup_id, ttl_bry, ttl_bry, url_parser.Popup_link());
 		}
 		else {
+			// NOTE: generates HTML, but substitutes xoimg tags for <img>; ISSUE#:686; DATE:2020-06-27
+//			byte[] page_html = wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode);
+//			page_html = Bry_.Replace_many(page_html, app.Fsys_mgr().Root_dir().To_http_file_bry(), Http_server_wkr.Url__fsys);
+//			this.html = String_.new_u8(page_html); // NOTE: must generate HTML now in order for "wait" and "async_server" to work with text_dbs; DATE:2016-07-10
+
 			byte mode = url_parser.Action();
 			page_html = wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode);
                         this.html = String_.new_u8(page_html);
-			boolean rebuild_html = false;
 			switch (retrieve_mode) {
 				case File_retrieve_mode.Mode_skip:	// noop
 					break;
 				case File_retrieve_mode.Mode_async_server:
-					rebuild_html = true;
 					app.Gui_mgr().Browser_win().Page__async__bgn(tab);
 					break;
 				case File_retrieve_mode.Mode_wait:
-					if (page != null) {
-						if (page.File_queue().Count() > 0
-						    //|| page.Html_data().Xtn_gallery_packed_exists()
-						    || page.Html_data().Xtn_imap_exists()
-						    || page.File_math().Count() > 0
-						    || page.Html_cmd_mgr().Count() > 0) {
-
-							rebuild_html = true;
-							gplx.xowa.guis.views.Xog_async_wkr.Async(page, tab.Html_itm());
-                                                        this.html = String_.new_u8(page_html);
-							//this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display(), url_parser.Action());	// HACK: fetch page again so that HTML will now include img data
-						}
-					}
-					//rebuild_html = true;
-					//gplx.xowa.guis.views.Xog_async_wkr.Async(page, tab.Html_itm());
-					//this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display());	// HACK: fetch page again so that HTML will now include img data
+					gplx.xowa.guis.views.Xog_async_wkr.Async(page, tab.Html_itm());
 					break;
 			}
-			if (rebuild_html) {
-                            page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);
-				//page_html = wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode);
-                                this.html = String_.new_u8(page_html);
-			}
-		}
-			page_html = Http_server_wkr.Replace_fsys_hack(page_html);
-			this.html = String_.new_u8(page_html); // NOTE: must generate HTML now in order for "wait" and "async_server" to work with text_dbs; DATE:2016-07-10
+			// NOTE: substitutes xoimg tags for actual file; ISSUE#:686; DATE:2020-06-27
+			page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);
+		byte[] redlinks = null;
+                Bry_bfr tmp_bfr = Bry_bfr_.New();
+			Xopg_redlink_mgr red_mgr = new Xopg_redlink_mgr(page, null);
+			red_mgr.Redlink(tmp_bfr);
+			redlinks = tmp_bfr.To_bry_and_clear();
+                        //System.out.println(String_.new_u8(redlinks));
+                        this.redlink = String_.new_u8(redlinks);
+                }
+		page_html = Http_server_wkr.Replace_fsys_hack(page_html);
+		this.html = String_.new_u8(page_html);
 	}
 }

@@ -66,7 +66,7 @@ public class Xoh_anch_href_data implements Xoh_itm_parser {
 					break;
 				case Byte_ascii.Slash:
 					rdr.Move_by_one();		// skip "/"
-					if (rdr.Chk(trie) == Tid__site) {	// EX: "/site/wiki/A"
+					if (src[rng_bgn+1] != Byte_ascii.Slash && rdr.Chk(trie) == Tid__site) {	// EX: "/site/wiki/A"
 						tid = Tid__site;
 						site_bgn = rdr.Pos();
 						site_end = rdr.Find_fwd_lr();

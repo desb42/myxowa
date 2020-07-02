@@ -40,8 +40,11 @@ public class Xopg_lnki_list {
 			||	ns.Id_is_special()								// ignore special, especially Search; EX: Special:Search/Earth
 			||	ttl.Anch_bgn() == Anch_bgn_anchor_only			// anchor only link; EX: [[#anchor]]
 			||	ttl.Wik_itm() != null							// xwiki lnki; EX: simplewiki links in homewiki; [[simplewiki:Earth]]
+                        ||      ttl.Qarg_bgn() != -1
+                        || ttl.Full_db()[0] == '/'
 			)
-			return;				
+			return;
+                //System.out.println(String_.new_u8(ttl.Full_db()));
 		list.Add(lnki);
 	}
 	public void	Clear() {

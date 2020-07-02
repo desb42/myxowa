@@ -24,6 +24,9 @@ import gplx.xowa.wikis.nss.*;
 import gplx.xowa.htmls.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.logs.*; import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.xtns.pfuncs.*;
+import gplx.xowa.xtns.scribunto.cfgs.ScribCfg;
+import gplx.xowa.xtns.scribunto.cfgs.ScribCfgResolver;
+
 public class Scrib_invoke_func extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_invoke;}
 	@Override public Pf_func New(int id, byte[] name) {return new Scrib_invoke_func().Name_(name);}
@@ -84,24 +87,41 @@ for (int i = 0; i < alen; i++) {
 }
 System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + " " + args);
 */
-			core.Invoke(wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
-			if (invoke_wkr != null)
-				invoke_wkr.Eval_end(ctx.Page(), mod_name, fnc_name, log_time_bgn);
+			if (String_.Eq(String_.new_u8(mod_name), "Authority control")) {
+				Tfds.Write(String_.new_u8(ctx.Page().Ttl().Page_db()), String_.new_u8(mod_name), String_.new_u8(fnc_name));
+			}
+			// check if configured for threaded execution
+			boolean exec = true;
+			ScribCfgResolver resolver = wiki.Parser_mgr().Scrib().CfgResolver();
+			if (resolver != null) {
+				ScribCfg cfg = resolver.Resolve(ctx.Page().Ttl().Page_db(), Xoa_ttl.Replace_spaces(mod_name), fnc_name);
+				if (cfg != null) {
+					if (cfg.TimeoutInMs() != 0) {
+						exec = false;
+						int timeoutInMs = cfg.TimeoutInMs();
+						long timeBgn = System_.Ticks();
 
-/*			int timeoutInMs = 5000;
-			long timeBgn = System_.Ticks();
-
-			InvokeInvoker invoker = new InvokeInvoker(core, wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
-			Thread_adp thread = Thread_adp_.Start_by_key("scribunto", invoker, "default");
-			while (thread.Thread__is_alive()) {
-				if (System_.Ticks__elapsed_in_frac(timeBgn) > timeoutInMs) {
-					thread.Thread__interrupt();
-					throw Err_.new_wo_type(String_.Format("scribunto timeout: page={0} mod={1} func={2} time={3}", ctx.Page_url_str(), mod_name, fnc_name, timeoutInMs));
+						InvokeInvoker invoker = new InvokeInvoker(core, wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
+						Thread_adp thread = Thread_adp_.Start_by_key("scribunto", invoker, "default");
+						while (thread.Thread__is_alive()) {
+							Thread_adp_.Sleep(cfg.SleepInMs());
+							if (System_.Ticks__elapsed_in_frac(timeBgn) > timeoutInMs) {
+								thread.Thread__stop();
+								invoker.Exc = Err_.new_wo_type(String_.Format("scribunto timeout: page={0} mod={1} func={2} time={3}", ctx.Page_url_str(), mod_name, fnc_name, timeoutInMs));
+							}
+						}
+						if (invoker.Exc != null) {
+							throw invoker.Exc;
+						}
+					}
 				}
+			}
+			// no threaded execution; run sequentially
+			if (exec) {
+				core.Invoke(wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
 			}
 			if (invoke_wkr != null)
 				invoke_wkr.Eval_end(ctx.Page(), mod_name, fnc_name, log_time_bgn);
-*/
 		}
 		catch (Throwable e) {
 			Err err = Err_.Cast_or_make(e);
@@ -161,8 +181,14 @@ System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + "
 			this.mod_raw = mod_raw;
 			this.fnc_name = fnc_name;
 		}
+		public Exception Exc;
 		public Object Invk(GfsCtx gctx, int ikey, String k, GfoMsg m) {
-			core.Invoke(wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
+			try {
+				core.Invoke(wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
+			}
+			catch (Exception exc) {
+				this.Exc = exc;
+			}
 			return null;
 		}
 	}

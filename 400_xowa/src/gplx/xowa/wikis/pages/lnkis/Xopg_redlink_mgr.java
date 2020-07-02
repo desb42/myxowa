@@ -33,7 +33,9 @@ public class Xopg_redlink_mgr implements Gfo_invk {
 		usr_dlg.Log_many("", "", "redlink.redlink_bgn: page=~{0} total_links=~{1}", page.Ttl().Raw(), len);
 		for (int i = 0; i < len; ++i) {
 			if (usr_dlg.Canceled()) return;
-			Xoa_ttl ttl = lnki_list.Get_at(i).Ttl();
+			Xopg_lnki_itm lnki = lnki_list.Get_at(i);
+			Xoa_ttl ttl = lnki.Ttl();
+			//Xoa_ttl ttl = lnki_list.Get_at(i).Ttl();
 			Xowd_page_itm page_row = new Xowd_page_itm().Ttl_(ttl);
 			byte[] full_db = ttl.Full_db();
 			if (!lnki_hash.Has(full_db))	// only search page_table once for multiple identical redlinks; EX: "[[Missing]] [[Missing]]"

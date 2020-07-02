@@ -158,16 +158,16 @@ public class Pgbnr_func extends Pf_func_base {
 		byte[] banner_file = null;   // $bannerfile->getLocalUrl();
 
 		byte[] toc_html = null;
-		//if (hctx.Mode_is_hdump()) {
-		//	gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_tag(tmp_bfr, true);
-		//	toc_html = tmp_bfr.To_bry_and_clear();
-		//	banner_file = Bry_.Add(gplx.xowa.htmls.hrefs.Xoh_href_.Bry__wiki, gplx.xowa.wikis.nss.Xow_ns_.Bry__file, Byte_ascii.Colon_bry
-		//		, Gfo_url_encoder_.Href.Encode(banner_ttl.Full_db()));	// NOTE: must encode so "'" becomes "%27", not "&#39;"; PAGE:en.v:'s-Hertogenbosch; DATE:2016-07-12
-		//}
-		//else {
+		if (hctx.Mode_is_hdump()) {
+			gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_tag(tmp_bfr, true);
+			toc_html = tmp_bfr.To_bry_and_clear();
+			banner_file = Bry_.Add(gplx.xowa.htmls.hrefs.Xoh_href_.Bry__wiki, gplx.xowa.wikis.nss.Xow_ns_.Bry__file, Byte_ascii.Colon_bry
+				, Gfo_url_encoder_.Href.Encode(banner_ttl.Full_db()));	// NOTE: must encode so "'" becomes "%27", not "&#39;"; PAGE:en.v:'s-Hertogenbosch; DATE:2016-07-12
+		}
+		else {
 			ctx.Page().Html_data().Toc_mgr().To_html(tmp_bfr, Xoh_wtr_ctx.Basic, true, 3);
 			toc_html = tmp_bfr.To_bry_and_clear();
-		//}
+		}
 		itm.Init_from_html(max_width, banner_file, banner_url, srcset, cfg.enable_heading_override, toc_html, isPanorama);
 
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(itm);

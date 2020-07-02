@@ -21,8 +21,11 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	@Override public byte[] Key() {return Xoh_head_itm_.Key__globals;}
 	@Override public int Flags() {return Flag__css_include | Flag__js_include | Flag__js_head_script | Flag__js_tail_script | Flag__js_head_global;}
 	@Override public void Write_css_include(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Xoh_head_wtr wtr) {
-		if (Url_core_css == null) Url_core_css = app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "html", "res", "src", "xowa", "core", "core.css").To_http_file_bry();
-		wtr.Write_css_include(Url_core_css);
+		if (Url_core_css == null) {
+			Url_core_css = app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "html", "res", "src", "xowa", "core", "core.css").To_http_file_bry();
+			Url_core_redirect_css = app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "html", "res", "src", "xowa", "core", "core_redirect.css").To_http_file_bry();
+		}
+		wtr.Write_css_include(app.Gui_mgr().Redirect_mgr().Enabled() ? Url_core_redirect_css : Url_core_css);
 	}
 	@Override public void Write_js_include(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Xoh_head_wtr wtr) {
 		if (Url_core_js == null) {
@@ -182,5 +185,5 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	, Var_xowa_root_dir				= Bry_.new_a7("xowa_root_dir")
 	, Var_xowa_mode_is_server		= Bry_.new_a7("xowa_mode_is_server")
 	;
-	private static byte[] Url_core_css, Url_core_js, Url_exec_js, Url_DOMContentLoaded_js, Url_jquery, Url_jquery_webfont, Url_redirect_js;
+	private static byte[] Url_core_css, Url_core_redirect_css, Url_core_js, Url_exec_js, Url_DOMContentLoaded_js, Url_jquery, Url_jquery_webfont, Url_redirect_js;
 }
