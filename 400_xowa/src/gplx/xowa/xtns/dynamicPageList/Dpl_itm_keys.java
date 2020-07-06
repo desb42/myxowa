@@ -77,6 +77,7 @@ class Dpl_itm_keys {
 	, Key_false = 40
 	, Key_true = 41
 	, Key_ignoresubpages = 42
+	, Key_showcurid = 43 // eg: Wikinews:2009/May/22
 	;
 	private static final Hash_adp_bry keys = Hash_adp_bry.ci_a7()
 	.Add_str_byte("category", Dpl_itm_keys.Key_category)
@@ -121,5 +122,6 @@ class Dpl_itm_keys {
 	.Add_str_byte("false", Dpl_itm_keys.Key_false)
 	.Add_str_byte("true", Dpl_itm_keys.Key_true)
 	.Add_str_byte("ignoresubpages", Dpl_itm_keys.Key_ignoresubpages)
+	.Add_str_byte("showcurid", Dpl_itm_keys.Key_showcurid)
 	;
 }

@@ -139,10 +139,15 @@ public class Xowd_page_tbl implements Db_tbl {
 	}
 	public boolean Select_by_ttl(Xowd_page_itm rv, Xoa_ttl ttl) {return Select_by_ttl(rv, ttl.Ns(), ttl.Page_db());}
 	public boolean Select_by_ttl(Xowd_page_itm rv, Xow_ns ns, byte[] ttl) {
+//            System.out.println(Integer.toString(ns.Id()) + " " + String_.new_u8(ttl));
+            if (ns.Id() == 112) {
+            int a = 1; 
+            
+            }
 		if (stmt_select_all_by_ttl == null) stmt_select_all_by_ttl = conn.Stmt_select(tbl_name, flds, String_.Ary(fld_ns, fld_title));
-		synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
-//		try {
-//			Xoctg_catpage_mgr.rwl.writeLock().lock();
+//		synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
+		try {
+			Xoctg_catpage_mgr.rwl.writeLock().lock();
 			Db_rdr rdr = stmt_select_all_by_ttl.Clear().Crt_int(fld_ns, ns.Id()).Crt_bry_as_str(fld_title, ttl).Exec_select__rls_manual();
 			try {
 				if (rdr.Move_next()) {
@@ -151,9 +156,9 @@ public class Xowd_page_tbl implements Db_tbl {
 				}
 			}
 			finally {rdr.Rls();}
-//                }
-//		finally {
-//			Xoctg_catpage_mgr.rwl.writeLock().unlock();
+                }
+		finally {
+			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 		}
 			return false;
 		
@@ -165,6 +170,8 @@ public class Xowd_page_tbl implements Db_tbl {
 	}
 	public boolean Select_by_id(Xowd_page_itm rv, int page_id) {
 //System.out.println("a");
+//            System.out.println("a " + Integer.toString(page_id));
+
 		if (stmt_select_all_by_id == null) stmt_select_all_by_id = conn.Stmt_select(tbl_name, flds_select_all, fld_id);
 		Db_rdr rdr = stmt_select_all_by_id.Clear().Crt_int(fld_id, page_id).Exec_select__rls_manual();
 		try {
@@ -183,6 +190,8 @@ public class Xowd_page_tbl implements Db_tbl {
 	}
 	public int Select_id(int ns_id, byte[] ttl) {
 //System.out.println("c");
+//            System.out.println("c " + Integer.toString(ns_id) + " " + String_.new_u8(ttl));
+
 		if (stmt_select_id_by_ttl == null) stmt_select_id_by_ttl = conn.Stmt_select(tbl_name, flds_select_all, fld_ns, fld_title);
 //		synchronized (thread_lock) {
 		try {

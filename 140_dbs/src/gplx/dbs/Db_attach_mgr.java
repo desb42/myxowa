@@ -53,7 +53,18 @@ public class Db_attach_mgr {
                 if (len > 0)
 		for (int i = len-1; i >= 0; i--) {
 			Db_attach_itm itm = (Db_attach_itm)attach_list.Get_at(i);
+			int loopcount = 0;
+			while (loopcount++ < 5) {
+                                try {
 			main_conn.Env_db_detach(itm.Key);
+                        break;
+                                }
+                                catch (Exception e) {
+                                    System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXX\n" + e);
+                                }
+			}
+                        if (loopcount >= 5)
+                            System.out.println("NOT CLEARED");
 		}
 		attach_list.Clear();	// clear list so multiple detachs don't fail
 	}

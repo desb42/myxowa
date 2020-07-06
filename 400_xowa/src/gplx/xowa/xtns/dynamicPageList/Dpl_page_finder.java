@@ -215,12 +215,7 @@ class Dpl_page_finder {
 				throw Err_.new_exc(e, "db", "db.xxxxxx failed", "sql", sql);}
 			finally {
 				rdr.Rls();
-                                try {
 				attach_mgr.Detach();
-                                }
-                                catch (Exception e) {
-                                    System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
-                                }
 			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 			}
 		}

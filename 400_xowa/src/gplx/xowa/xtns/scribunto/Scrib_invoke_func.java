@@ -87,9 +87,9 @@ for (int i = 0; i < alen; i++) {
 }
 System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + " " + args);
 */
-			if (String_.Eq(String_.new_u8(mod_name), "Authority control")) {
-				Tfds.Write(String_.new_u8(ctx.Page().Ttl().Page_db()), String_.new_u8(mod_name), String_.new_u8(fnc_name));
-			}
+			//if (String_.Eq(String_.new_u8(mod_name), "Authority control")) {
+			//	Tfds.Write(String_.new_u8(ctx.Page().Ttl().Page_db()), String_.new_u8(mod_name), String_.new_u8(fnc_name));
+			//}
 			// check if configured for threaded execution
 			boolean exec = true;
 			ScribCfgResolver resolver = wiki.Parser_mgr().Scrib().CfgResolver();
