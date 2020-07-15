@@ -87,7 +87,8 @@ end
 -- @param s
 local function htmlEncode( s )
 	-- The parentheses ensure that there is only one return value
-	return ( string.gsub( s, '[<>&"]', htmlencodeMap ) )
+	-- return ( string.gsub( s, '[<>&"]', htmlencodeMap ) )
+	return ( string.gsub_x1( s ) ) -- special hook
 end
 
 local function cssEncode( s )

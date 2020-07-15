@@ -2,7 +2,7 @@
 
 $(".geo, #GPX-track").parents("#content").find("#mw-indicator-GPX").css("display","inline");
 
-/* from toctree */
+/* from toctree https://github.com/wikimedia/mediawiki-extensions-TocTree/blob/master/modules/ext.toctree.js */
 /*
  * JavaScript functions for the TocTree extension
  * to display the toc structure
@@ -52,17 +52,17 @@ $(".geo, #GPX-track").parents("#content").find("#mw-indicator-GPX").css("display
 				$toggleSymbol = $( '<span>' ).addClass( 'toggleSymbol' );
 
 				//if ( mw.user.options.get( 'toc-expand' ) ) {
-					$toggleSymbol
-						.text( '-' )
-						.attr( 'title', mw.msg( 'hidetoc' ) );
+//					$toggleSymbol
+//						.text( '-' )
+//						.attr( 'title', mw.msg( 'hidetoc' ) );
 
-					$subList.show();
+//					$subList.show();
 				//} else {
-				//	$toggleSymbol
-				//		.text( '+' )
-				//		.attr( 'title', mw.msg( 'showtoc' ) );
+					$toggleSymbol
+						.text( '+' )
+						.attr( 'title', mw.msg( 'showtoc' ) );
 
-				//	$subList.hide();
+					$subList.hide();
 				//}
 				$toggleSymbol.click( processClickEvent );
 

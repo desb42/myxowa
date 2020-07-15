@@ -20,9 +20,10 @@
 				format: 'json'
 			},
 			ajax: {
-				url: '/xowa/api/' + x_p.wiki + '/api', //mw.util.wikiScript( 'api' ),
+				//url: '/xowa/api/' + x_p.wiki + '/api', //mw.util.wikiScript( 'api' ),
+				url: '/xowa/' + x_p.wiki + '/Special:Api', //mw.util.wikiScript( 'api' ),
 				timeout: 30 * 1000, // 30 seconds
-				dataType: 'json'
+				dataType: 'json',
 			}
 		},
 

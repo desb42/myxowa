@@ -162,11 +162,11 @@ function init () {
 
 // PageBanner stuff?
     if (document.querySelectorAll('.wpb-topbanner').length) {
-//      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.css')
-//      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/Categorytree/ext.categoryTree.js');
-//      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.ba-throttle-debounce.js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/xtns/WikidataPageBanner/resources/ext.WikidataPageBanner.positionBanner/ext.WikidataPageBanner.positionBanner.js');
-      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/PageBanner/ext.WikidataPageBanner.toc.styles.css')
+      if (document.querySelectorAll('.mw-parser-output .toctitle').length == 0) {
+        xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/WikidataPageBanner/resources/ext.WikidataPageBanner.toc.styles/ext.WikidataPageBanner.toc.css')
+        xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/xtns/WikidataPageBanner/resources/ext.WikidataPageBanner.toc.styles/ext.WikidataPageBanner.bottomtoc.css')
+      }
     }
 
     if (xowa_global_values['proofreadpage_source_href'] !== undefined) {

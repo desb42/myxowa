@@ -133,12 +133,12 @@ end
 -- @param message The message from PHP
 -- @return A response message to send back to PHP
 function MWServer:handleLoadString( message )
-	if string.find( message.text, '\27Lua', 1, true ) then
-		return {
-			op = 'error',
-			value = 'cannot load code with a Lua binary chunk marker escape sequence in it'
-		}
-	end
+--	if string.find( message.text, '\27Lua', 1, true ) then
+--		return {
+--			op = 'error',
+--			value = 'cannot load code with a Lua binary chunk marker escape sequence in it'
+--		}
+--	end
 	local chunk, errorMsg = loadstring( message.text, message.chunkName )
 	if chunk then
 		setfenv( chunk, self.baseEnv )
