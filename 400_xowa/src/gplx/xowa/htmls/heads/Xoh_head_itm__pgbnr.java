@@ -28,8 +28,8 @@ public class Xoh_head_itm__pgbnr extends Xoh_head_itm__base {
 		}
 		wtr.Write_css_include(Url__css__oojs_ui);
 //		wtr.Write_css_include(Url__css__styles);
-		wtr.Write_css_include(Url__css__toc);
-		wtr.Write_css_include(Url__css__bottomtoc);
+		//wtr.Write_css_include(Url__css__toc);       // loaded by DOMContentLoader.js (20200714)
+		//wtr.Write_css_include(Url__css__bottomtoc); // loaded by DOMContentLoader.js (20200714)
 	}
 	private static byte[] Url__css__styles, Url__css__toc, Url__css__bottomtoc, Url__css__oojs_ui;
 }

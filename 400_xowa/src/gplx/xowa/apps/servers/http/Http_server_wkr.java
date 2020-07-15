@@ -151,26 +151,7 @@ public class Http_server_wkr implements Gfo_invk {
 						site = Bry_.new_a7("en"); // should be the wiki language?
 					byte[] md5 = Xof_file_wkr_.Md5(pi.pi_title);
 					byte[] md5_subdir = Bry_.Add(Bry_.Mid(md5, 0, 1), Byte_ascii.Slash_bry, Bry_.Mid(md5, 0, 2));
-					byte[] extension = null;
-					switch (ext.Id()) {
-						case Xof_ext_.Id_svg:
-						case Xof_ext_.Id_stl:
-						case Xof_ext_.Id_xcf:
-						case Xof_ext_.Id_bmp:
-							extension = Bry_.new_a7(".png");
-							break;
-						case Xof_ext_.Id_webm:
-						case Xof_ext_.Id_webp:
-						case Xof_ext_.Id_ogv:
-						case Xof_ext_.Id_oga:
-						case Xof_ext_.Id_ogg:
-						case Xof_ext_.Id_tif:
-						case Xof_ext_.Id_tiff:
-						case Xof_ext_.Id_pdf:
-						case Xof_ext_.Id_djvu:
-							extension = Bry_.new_a7(".jpg");
-							break;
-					}
+					byte[] extension = Xof_ext_.Id_view(ext.Id()) == Xof_ext_.Id_png ? Bry_.new_a7(".png") : Bry_.Empty;
 					thumb_fmtr.Bld_bfr_many(bfr, site, md5_subdir, fname, extension, pi.width/2, pi.height/2);
 					thumb = bfr.To_bry_and_clear();
     //thumb = Bry_.new_u8("\"thumbnail\": {\"source\": \"/xowa/api/wikipedia/en/thumb/1/12/Flag_of_Poland.svg/40px-Flag_of_Poland.svg.png\",\"width\":640,\"height\":400},");

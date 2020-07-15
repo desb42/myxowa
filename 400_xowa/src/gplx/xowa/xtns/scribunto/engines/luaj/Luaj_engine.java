@@ -37,7 +37,27 @@ public class Luaj_engine implements Scrib_engine {
 		msg.set("op", Val_loadString);
 		msg.set("text", LuaValue.valueOf(text));
 		msg.set("chunkName", LuaValue.valueOf(name));
+		return load_dispatch(name, msg);
+	}
+	public Scrib_lua_proc LoadString(String name, byte[] text) {
+		LuaTable msg = LuaValue.tableOf();
+		msg.set("op", Val_loadString);
+		msg.set("text", LuaValue.valueOf(text));
+		msg.set("chunkName", LuaValue.valueOf(name));
+		return load_dispatch(name, msg);
+	}
+	private Scrib_lua_proc load_dispatch(String name, LuaTable msg) {
 		LuaTable rsp = server.Dispatch(msg);
+		// need to check for error
+		String op = Luaj_value_.Get_val_as_str(rsp, "op");
+		char firstchr = op.charAt(0);
+		//if (String_.Eq(op, "error"))
+		if (firstchr == 'e') {
+			String err = Luaj_value_.Get_val_as_str(rsp, "value");
+			throw Scrib_xtn_mgr.err_(err);
+		}
+		// assume OK
+
 		LuaTable values_tbl = Luaj_value_.Get_val_as_lua_table(rsp, "values");
 		LuaInteger proc_id = (LuaInteger)values_tbl.rawget(1);
 		return new Scrib_lua_proc(name, proc_id.v);
@@ -58,6 +78,12 @@ public class Luaj_engine implements Scrib_engine {
 		msg.set("args", Luaj_value_.Obj_to_lua_val(server, args));
 		return this.Dispatch_as_kv_ary(msg);
 	}
+	public Keyval[] CompileFunction(String name) {
+		LuaTable msg = LuaValue.tableOf();
+		msg.set("op", Val_compile);
+		msg.set("text", LuaValue.valueOf(name));
+		return this.Dispatch_as_kv_ary(msg);
+	}
 	public Keyval[] ExecuteModule(int mod_id) {
 		return this.CallFunction(core.Lib_mw().Mod().Fncs_get_id("executeModule"), Scrib_kv_utl_.base1_obj_(new Scrib_lua_proc("", mod_id)));
 	}
@@ -71,7 +97,7 @@ public class Luaj_engine implements Scrib_engine {
 		while (true) {
 			LuaTable rsp = server.Dispatch(msg);
 			String op = Luaj_value_.Get_val_as_str(rsp, "op");
-                        char firstchr = op.charAt(0);
+			char firstchr = op.charAt(0);
 			//if		(String_.Eq(op, "return"))
 			if		(firstchr == 'r')
 				return Luaj_value_.Get_val_as_kv_ary(server, rsp, "values");
@@ -123,5 +149,6 @@ public class Luaj_engine implements Scrib_engine {
 	, Val_callFunction 		= LuaValue.valueOf("call")
 	, Val_returnMessage 	= LuaValue.valueOf("return")
 	, Val_error 			= LuaValue.valueOf("error")
+	, Val_compile 			= LuaValue.valueOf("compile")
 	;
 }

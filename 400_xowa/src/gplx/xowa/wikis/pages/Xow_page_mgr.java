@@ -80,8 +80,10 @@ public class Xow_page_mgr implements Gfo_invk {
 			// load from page table
 			boolean exists = wiki.Db_mgr().Load_mgr().Load_by_ttl(page_row, ns, ttl.Page_db());
 			if (!exists) {rv.Db().Page().Exists_n_(); return ttl;}
-			if (wiki.App().Mode().Tid_is_gui())	// NOTE: must check if gui, else will write during mass build; DATE:2014-05-03
+			if (wiki.App().Mode().Tid_is_gui()) {	// NOTE: must check if gui, else will write during mass build; DATE:2014-05-03
 				wiki.Appe().Usr_dlg().Prog_many("", "", "loading page for ~{0}", ttl.Raw());
+				System.out.println("loading " + String_.new_u8(ttl.Raw()));
+			}
 
 			// load page_info
 			rv.Db().Page().Id_(page_row.Id()).Modified_on_(page_row.Modified_on()).Html_db_id_(page_row.Html_db_id());

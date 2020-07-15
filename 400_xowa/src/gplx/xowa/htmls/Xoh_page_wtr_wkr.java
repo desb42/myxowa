@@ -57,6 +57,7 @@ import gplx.langs.jsons.*;
 //import gplx.langs.jsons.Json_kv;
 //import gplx.langs.jsons.Json_ary;
 import gplx.Bry_fmt;
+import gplx.xowa.Db_lua_comp;
 import gplx.xowa.parsers.utils.Xop_redirect_mgr;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
@@ -245,8 +246,10 @@ public class Xoh_page_wtr_wkr {
 			byte[] data_raw = page.Db().Text().Text_bry();
 			int bfr_page_bgn = bfr.Len();
 			boolean page_tid_uses_pre = false;
-			if (page_mode == Xopg_view_mode_.Tid__edit)
+			if (page_mode == Xopg_view_mode_.Tid__edit) {
+				data_raw = Db_lua_comp.Text(data_raw);
 				Write_body_edit(bfr, data_raw, page_ns_id, page_tid);
+                        }
 			else {
 				switch (page_tid) {
 					case Xow_page_tid.Tid_msg:
@@ -361,17 +364,20 @@ public class Xoh_page_wtr_wkr {
 		wiki.Parser_mgr().Uniq_mgr().Parse(bfr);
 	}
 	private void Write_body_pre(Bry_bfr bfr, Xoae_app app, Xowe_wiki wiki, Xoh_wtr_ctx hctx, byte[] data_raw, Bry_bfr tmp_bfr, int page_tid) {
+		byte[] lang = Bry_.Empty;
+		switch (page_tid) {
+			case Xow_page_tid.Tid_msg: lang = Bry_.new_a7("msg"); break;
+			case Xow_page_tid.Tid_js: lang = Bry_.new_a7("js"); break;
+			case Xow_page_tid.Tid_css: lang = Bry_.new_a7("css"); break;
+			case Xow_page_tid.Tid_lua:
+				lang = Bry_.new_a7("lua");
+				data_raw = Db_lua_comp.Text(data_raw);
+				break;
+		}
 		Xoh_html_wtr_escaper.Escape(app.Parser_amp_mgr(), tmp_bfr, data_raw, 0, data_raw.length, false, false);
 //		if (hctx.Mode_is_hdump())
 //			bfr.Add(data_raw);
 //		else {
-			byte[] lang = Bry_.Empty;
-			switch (page_tid) {
-				case Xow_page_tid.Tid_msg: lang = Bry_.new_a7("msg"); break;
-				case Xow_page_tid.Tid_js: lang = Bry_.new_a7("js"); break;
-				case Xow_page_tid.Tid_css: lang = Bry_.new_a7("css"); break;
-				case Xow_page_tid.Tid_lua: lang = Bry_.new_a7("lua"); break;
-			}
 			Bry_fmt content_code_fmt = Bry_fmt.Auto("<pre class=\"prettyprint lang-~{lang} linenums\">~{page_text}</pre>");
 			content_code_fmt.Bld_many(bfr, lang, tmp_bfr);
 			//app.Html_mgr().Page_mgr().Content_code_fmt().Bld_many(bfr, tmp_bfr);

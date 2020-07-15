@@ -71,11 +71,11 @@ public class Xob_xml_parser {
 						break;
 					case Xob_xml_parser_.Id_model_bgn:  data_bgn = pos; break;
 					case Xob_xml_parser_.Id_model_end:
-						rv.Model_( model_format.Parse_model(src, data_bgn, hook_bgn) );
+						rv.Model_( model_format.Parse_model(src, data_bgn, hook_bgn, rv.Ttl_full_db()) );
 						break;
 					case Xob_xml_parser_.Id_format_bgn:  data_bgn = pos; break;
 					case Xob_xml_parser_.Id_format_end:
-						rv.Format_( model_format.Parse_format(src, data_bgn, hook_bgn) );
+						rv.Format_( model_format.Parse_format(src, data_bgn, hook_bgn, rv.Ttl_full_db()) );
 						break;
 					case Xob_xml_parser_.Id_title_bgn:		if (title_needed) data_bfr_add = true; break;
 					case Xob_xml_parser_.Id_text_bgn:		data_bfr_add = true; break;
@@ -142,15 +142,16 @@ class Xob_xml_parse_model_format {
 //4      <model>javascript</model>
 //5      <model>sanitized-css</model>
 //6      <model>MassMessageListContent</model> // species
-//7      <model>flow-board</model> // species
+//7      <model>flow-board</model> // species, wikidata
 //8      <model>proofread-page</model> // wikisource
+//9      <model>EntitySchema</model> // wikidata
 //
 //1      <format>text/x-wiki</format>
 //2      <format>text/plain</format>
 //3      <format>text/css</format>
 //4      <format>text/javascript</format>
 
-	public int Parse_model(byte[] src, int bgn, int end) {
+	public int Parse_model(byte[] src, int bgn, int end, byte[] ttl) {
 		byte b = src[bgn];
 		if (b == 'w') return 1;
 		if (b == 'S') return 2;
@@ -160,14 +161,17 @@ class Xob_xml_parse_model_format {
 		if (b == 'M') return 6;
 		if (b == 'f') return 7;
 		if (b == 'p') return 8;
-                return 9;
+		if (b == 'E') return 9;
+				Gfo_usr_dlg_.Instance.Log_many("", "", "Model unknown: model=~{0} ttl=~{1}", Bry_.Mid(src, bgn, end), ttl);
+                return 10;
 	}
-	public int Parse_format(byte[] src, int bgn, int end) {
+	public int Parse_format(byte[] src, int bgn, int end, byte[] ttl) {
 		byte b = src[bgn + 5];
 		if (b == 'x') return 1;
 		if (b == 'p') return 2;
 		if (b == 'c') return 3;
 		if (b == 'j') return 4;
+				Gfo_usr_dlg_.Instance.Log_many("", "", "Format unknown: format=~{0} ttl=~{1}", Bry_.Mid(src, bgn, end), ttl);
                 return 5;
 	}
 }

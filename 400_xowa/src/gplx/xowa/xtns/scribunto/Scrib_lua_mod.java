@@ -38,6 +38,14 @@ public class Scrib_lua_mod {
 		lua_id = init_chunk_func.Id();
 		return init_chunk_func;
 	}
+	public Scrib_lua_proc LoadString(byte[] text) {
+		if (lua_id != -1) return init_chunk_func;
+		//text = String_.Replace(text, "&#09;", "\t");	// NOTE: this should only get called once per module
+		text_bry = text;
+		init_chunk_func = core.Interpreter().LoadString("=" + name, text);	// MW: Scribunto: Prepending an "=" to the chunk name avoids truncation or a "[string" prefix;
+		lua_id = init_chunk_func.Id();
+		return init_chunk_func;
+	}
 	public void Execute() {
 		hash.Clear();	// NOTE: questionable. should probably be removed, as it forces all modules to be "loadString"'d again; DATE:2013-10-16
 		this.LoadString(name);	// assert lua_id;

@@ -307,7 +307,8 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				break;
 		}*/
 		if (end - bgn == 0) return false;
-		src = firstpass(src, bfr, amp_mgr);
+		src = firstpass(src, bgn, end, bfr, amp_mgr);
+                bgn = 0;
 		end = src.length; // hope this is ok
 		this.raw = src;
 		ns = ns_mgr.Ns_main();
@@ -583,9 +584,8 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 // convert &...; ->
 // convert multiwhitespace to one space
 // convert %xx to one char
-	private byte[] firstpass(byte[] src, Bry_bfr buf, Xop_amp_mgr amp_mgr) {
+	private byte[] firstpass(byte[] src, int cur, int end, Bry_bfr buf, Xop_amp_mgr amp_mgr) {
 		boolean whitespace = false;
-		int cur = 0, end = src.length;
 		int match_pos = 0;
 		Btrie_slim_mgr amp_trie = amp_mgr.Amp_trie();
 		while (cur < end) {

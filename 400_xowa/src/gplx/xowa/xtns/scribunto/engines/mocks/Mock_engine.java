@@ -27,6 +27,9 @@ public class Mock_engine implements Scrib_engine {
 	public Scrib_lua_proc LoadString(String name, String text) {
 		return (Scrib_lua_proc)mod_init_hash.Get_by(name);
 	}
+	public Scrib_lua_proc LoadString(String name, byte[] text) {
+		return (Scrib_lua_proc)mod_init_hash.Get_by(name);
+	}
 	public Keyval[] CallFunction(int id, Keyval[] args) {
 		Mock_proc_stub fnc = (Mock_proc_stub)fnc_hash.Get_by_or_fail(id);
 		return fnc.Exec_by_scrib(args);

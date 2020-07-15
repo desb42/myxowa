@@ -95,7 +95,7 @@ System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + "
 			ScribCfgResolver resolver = wiki.Parser_mgr().Scrib().CfgResolver();
 			if (resolver != null) {
 				ScribCfg cfg = resolver.Resolve(ctx.Page().Ttl().Page_db(), Xoa_ttl.Replace_spaces(mod_name), fnc_name);
-				if (cfg != null) {
+				if (false/*cfg != null*/) {
 					if (cfg.TimeoutInMs() != 0) {
 						exec = false;
 						int timeoutInMs = cfg.TimeoutInMs();

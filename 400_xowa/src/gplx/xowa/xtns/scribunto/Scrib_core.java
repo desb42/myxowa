@@ -27,6 +27,7 @@ import gplx.Ordered_hash;
 import gplx.Ordered_hash_;
 import gplx.String_;
 import gplx.core.envs.Env_;
+import gplx.xowa.Db_lua_comp;
 import gplx.xowa.Xoae_app;
 import gplx.xowa.Xoae_page;
 import gplx.xowa.Xow_wiki;
@@ -214,6 +215,8 @@ public class Scrib_core {
 		this.frame_parent = parent_frame; this.frame_current = current_frame;
 		parent_frame.Frame_tid_(Scrib_frame_.Tid_parent); current_frame.Frame_tid_(Scrib_frame_.Tid_current);
 
+                mod_text = Db_lua_comp.Check(mod_text);
+
 		try {
 			Scrib_lua_mod mod = Mods_get_or_new(mod_name, mod_text);
 			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), String_.new_u8(fnc_name));
@@ -247,7 +250,9 @@ public class Scrib_core {
 		Scrib_lua_mod rv = (Scrib_lua_mod)mods.Get_by(mod_name);
 		if (rv == null) {
 			rv = new Scrib_lua_mod(this, "Module:" + String_.new_u8(mod_name));
-			rv.LoadString(String_.new_u8(mod_text));
+//                        System.out.println("MOD " + String_.new_u8(mod_name));
+			//rv.LoadString(String_.new_u8(mod_text));
+			rv.LoadString(mod_text);
 			mods.Add(mod_name, rv);
 		}
 		return rv;

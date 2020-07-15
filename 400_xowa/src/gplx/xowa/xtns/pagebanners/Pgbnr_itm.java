@@ -80,6 +80,7 @@ public class Pgbnr_itm implements Mustache_doc_itm {
 		this.banner_img_src = banner_file_itm.Html_view_url().To_http_file_bry();
 		this.file_ttl = Gfo_url_encoder_.Href_quotes.Encode(banner_file_itm.Lnki_ttl());	// NOTE: Encode(Lnki_ttl) not Orig_ttl; else "%27s" instead of "'s" PAGE:en.v:'s-Hertogenbosch; DATE:2016-07-12
 		this.enable_toc = enable_toc;
+                show_toc_in_html = !enable_toc;
 	}
 	public void Init_from_html(int max_width, byte[] banner_anch_href, byte[] banner_img_src, byte[] srcset, boolean isHeadingOverrideEnabled, byte[] toc, boolean isPanorama) {
 		this.max_width = max_width;

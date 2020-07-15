@@ -101,7 +101,8 @@ public class Scrib_lib_mw implements Scrib_lib {
 		byte[] page_db = cur_wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl);
 		if (page_db == null) return rslt.Init_ary_empty();
 		Scrib_lua_mod mod = new Scrib_lua_mod(core, mod_name);
-		return rslt.Init_obj(mod.LoadString(String_.new_u8(page_db)));
+                page_db = Db_lua_comp.Check(page_db);
+		return rslt.Init_obj(mod.LoadString(page_db));
 	}
 	public boolean LoadPHPLibrary(Scrib_proc_args args, Scrib_proc_rslt rslt) { // NOTE: noop; Scribunto uses this to load the Scribunto_*Library classses (EX: Scribunto_TitleLibrary); DATE:2015-01-21
 		return rslt.Init_obj(null);
