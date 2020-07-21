@@ -8,6 +8,7 @@ ns_mgr.add_alias_bulk("
 7|Image_talk
 120|P
 146|L
+640|E
 ");
 // wiki.ns_mgr.aliases.end
 // wiki.ns_mgr.subpages.bgn

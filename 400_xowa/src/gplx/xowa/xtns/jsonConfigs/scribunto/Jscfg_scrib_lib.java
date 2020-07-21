@@ -63,7 +63,7 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 			//throw Err_.new_wo_type("bad argument #1 to 'get' (not a valid title) " + String_.new_u8(ttl_bry));
 		} else {
 			rv = Scrib_lib_text.JsonDecodeStatic(args, core, json_util, page, Scrib_lib_text__json_util.Opt__force_assoc, Scrib_lib_text__json_util.Flag__none);
-			rv = localizer.Localize(core.Wiki().Lang(), page, rv);
+			//?? rv = localizer.Localize(core.Wiki().Lang(), page, rv);
 		}
 		return rslt.Init_obj(rv);
 	}

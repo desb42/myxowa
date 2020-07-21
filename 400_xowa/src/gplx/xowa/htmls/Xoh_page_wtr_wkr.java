@@ -158,7 +158,7 @@ public class Xoh_page_wtr_wkr {
 		// get pagename for <h1 id="firstHeading" class="firstHeading"></h1>
 		byte[] pagename_for_h1;
 		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikidata && page_data.length > 40 &&
-		   (page_ttl.Ns().Id_is_main() || page_ttl.Ns().Id() == 120 || page_ttl.Ns().Id() == 146)) { // short pages use orig title, main, property or lexeme
+		   (page_ttl.Ns().Id_is_main() || page_ttl.Ns().Id() == 120 || page_ttl.Ns().Id() == 146 || page_ttl.Ns().Id() == 640)) { // short pages use orig title, main, property, lexeme, or entityschema
 			pagename_for_h1 = app.Wiki_mgr().Wdata_mgr().Page_display_title();
 			page_name = app.Wiki_mgr().Wdata_mgr().Overview_label();
 		}

@@ -38,6 +38,7 @@ public class Wbase_claim_entity extends Wbase_claim_base {
 	public boolean				Entity_tid_is_qid() {return entity_tid == Wbase_claim_entity_type_.Tid__item;}
 	public boolean				Entity_tid_is_pid() {return entity_tid == Wbase_claim_entity_type_.Tid__property;}
 	public boolean				Entity_tid_is_lid() {return entity_tid == Wbase_claim_entity_type_.Tid__lexeme;}
+	public boolean				Entity_tid_is_eid() {return entity_tid == Wbase_claim_entity_type_.Tid__entityschema;}
 	public String			Entity_tid_str()	{return Wbase_claim_entity_type_.Reg.Get_str_or_fail(entity_tid);}
 	public byte[]			Entity_tid_bry()	{return Wbase_claim_entity_type_.Reg.Get_bry_or_fail(entity_tid);}
 
@@ -59,6 +60,7 @@ public class Wbase_claim_entity extends Wbase_claim_base {
                 case Wbase_claim_entity_type_.Tid__item:    etype = Wdata_wiki_mgr.Ttl_prefix_qid_bry_gui; break;
                 case Wbase_claim_entity_type_.Tid__property:    etype = Wdata_wiki_mgr.Ttl_prefix_pid_bry; break;
                 case Wbase_claim_entity_type_.Tid__lexeme:    etype = Wdata_wiki_mgr.Ttl_prefix_lid_bry; break;
+                case Wbase_claim_entity_type_.Tid__entityschema:    etype = Wdata_wiki_mgr.Ttl_prefix_eid_bry; break;
 //                case Wbase_claim_entity_type_.Tid__sense:    etype = Wdata_wiki_mgr.Ttl_prefix_sid_bry; break;
                 default:
                     etype = Bry_.new_a7("xxx:x");

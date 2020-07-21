@@ -86,14 +86,14 @@ public class Wdata_hwtr_mgr {
 		Object fmtr;
 		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme) {
 			fmtr_lemma_oview.Init_by_wdoc(wdoc);
-                        fmtr = fmtr_lemma_oview;
-                }
+			fmtr = fmtr_lemma_oview;
+		}
 		else {
 			fmtr_oview.Init_by_wdoc(wdoc);
 			//fmtr_label.Init_by_wdoc(wdoc.Label_list());
 			//fmtr_descr.Init_by_wdoc(wdoc.Descr_list());
 			//fmtr_alias.Init_by_wdoc(wdoc.Alias_list());
-                        fmtr = fmtr_oview;
+			fmtr = fmtr_oview;
 		}
 		bfr.Add_str_a7("<div id='wb-item' class='wikibase-entityview wb-item' lang='en' dir='ltr'>");
 		bfr.Add_str_a7("<div class='wikibase-entityview-main'>");

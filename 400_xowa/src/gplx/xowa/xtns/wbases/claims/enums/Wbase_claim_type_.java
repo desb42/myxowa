@@ -36,6 +36,7 @@ public class Wbase_claim_type_ {
 	, Tid__sense								= 16
 	, Tid__form								= 17
 	, Tid__musical_notation		= 18
+	, Tid__entityschema = 100 // not currently (20200720) part of the enum_hash
 	;
 	public static final    Wbase_enum_hash Reg = new Wbase_enum_hash("claim.data_type", 19);
 	public static final    Wbase_enum_itm

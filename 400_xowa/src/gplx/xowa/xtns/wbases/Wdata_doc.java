@@ -99,6 +99,10 @@ public class Wdata_doc {
 					type = Wbase_claim_entity_type_.Tid__lexeme;
 					name = 7; // Lexeme:
 					break;
+				case 'E':
+					type = Wbase_claim_entity_type_.Tid__entityschema;
+					name = 13; // EntitySchema:
+					break;
 			}
 		}
 	}

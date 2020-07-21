@@ -63,19 +63,28 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 		int list_len = list_nde.Len();
 		for (int i = 0; i < list_len; ++i) {
 			Json_kv data_kv		= Json_kv.cast(list_nde.Get_at(i));
-			Json_nde data_nde	= Json_nde.cast(data_kv.Val());
-			Json_kv text_kv = null;
-			int data_nde_len = data_nde.Len();
-			for (int j = 0; j < data_nde_len; ++j) {
-				Json_kv sub = Json_kv.cast(data_nde.Get_at(j));
-				byte tid = Wdata_dict_langtext.Reg.Get_tid_or_max_and_log(qid, sub.Key().Data_bry()); if (tid == Byte_.Max_value_127) continue;
-				switch (tid) {
-					case Wdata_dict_langtext.Tid__language:		break;
-					case Wdata_dict_langtext.Tid__value:		text_kv	= Json_kv.cast(sub); break;
+			Json_itm val_itm = data_kv.Val();
+			byte[] lang_bry;
+			Wdata_langtext_itm itm;
+			if (val_itm instanceof Json_nde) {
+				Json_nde data_nde = Json_nde.cast(val_itm);
+				Json_kv text_kv = null;
+				int data_nde_len = data_nde.Len();
+				for (int j = 0; j < data_nde_len; ++j) {
+					Json_kv sub = Json_kv.cast(data_nde.Get_at(j));
+					byte tid = Wdata_dict_langtext.Reg.Get_tid_or_max_and_log(qid, sub.Key().Data_bry()); if (tid == Byte_.Max_value_127) continue;
+					switch (tid) {
+						case Wdata_dict_langtext.Tid__language:		break;
+						case Wdata_dict_langtext.Tid__value:		text_kv	= Json_kv.cast(sub); break;
+					}
 				}
+				lang_bry = data_kv.Key().Data_bry();
+				itm = new Wdata_langtext_itm(lang_bry, text_kv.Val().Data_bry());
 			}
-			byte[] lang_bry			= data_kv.Key().Data_bry();
-			Wdata_langtext_itm itm = new Wdata_langtext_itm(lang_bry, text_kv.Val().Data_bry());
+			else {
+				lang_bry = data_kv.Key().Data_bry();
+				itm = new Wdata_langtext_itm(lang_bry, val_itm.Data_bry());
+			}
 			rv.Add(lang_bry, itm);
 		}
 		return rv;

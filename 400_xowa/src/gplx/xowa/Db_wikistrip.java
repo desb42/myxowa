@@ -358,6 +358,12 @@ public class Db_wikistrip {
 				continue;
 			b = src[pos++];
 			if (isclose) {
+				// ignore trailing whitespace
+				while (pos < src_len) {
+					if (b != '\n' && b != '\t' && b != ' ') 
+						break;
+					b = src[pos++];
+				}
 				if (b != '>') {  // fail: skip tag
 					break;
 				}
@@ -376,6 +382,7 @@ public class Db_wikistrip {
 		int end = tagend + 10;
 		if (beg < 0) beg = 0;
 		if (end >= src_len) end = src_len;
+		if (end - beg > 100) end = beg + 100;
 		Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed angle { ttl=~{0} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end));
 		return tagend;
 	}

@@ -197,6 +197,8 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	public static final String Ns_property_name = "Property";
 	public static final int Ns_lexeme = 146;
 	public static final String Ns_lexeme_name = "Lexeme";
+	public static final int Ns_entityschema = 640;
+	public static final String Ns_entityschema_name = "EntitySchema";
 	public static final    byte[] Ns_property_name_bry = Bry_.new_a7(Ns_property_name);
 	public static final    byte[] Ns_lexeme_name_bry = Bry_.new_a7(Ns_lexeme_name);
 	public static final    byte[] Bry_q = Bry_.new_a7("q");
@@ -205,12 +207,13 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	, Ttl_prefix_qid_bry_gui	= Bry_.new_a7("Q")	// NOTE: use uppercase Q for writing html; DATE:2015-06-12
 	, Ttl_prefix_pid_bry		= Bry_.new_a7("Property:P")
 	, Ttl_prefix_lid_bry		= Bry_.new_a7("Lexeme:L")
+	, Ttl_prefix_eid_bry		= Bry_.new_a7("EntitySchema:E")
 	;
 	public static final    byte[] Html_json_id = Bry_.new_a7("xowa-wikidata-json");
 	public static boolean Wiki_page_is_json(int wiki_tid, int ns_id) {
 		switch (wiki_tid) {
 			case Xow_domain_tid_.Tid__wikidata:
-				if (ns_id == Xow_ns_.Tid__main || ns_id == gplx.xowa.xtns.wbases.Wdata_wiki_mgr.Ns_property || ns_id == gplx.xowa.xtns.wbases.Wdata_wiki_mgr.Ns_lexeme)
+				if (ns_id == Xow_ns_.Tid__main || ns_id == gplx.xowa.xtns.wbases.Wdata_wiki_mgr.Ns_property || ns_id == gplx.xowa.xtns.wbases.Wdata_wiki_mgr.Ns_lexeme || ns_id == gplx.xowa.xtns.wbases.Wdata_wiki_mgr.Ns_entityschema)
 					return true;
 				break;
 			case Xow_domain_tid_.Tid__home:
@@ -241,7 +244,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		return Wdata_langtext_itm.Get_text_or_empty(list, core_langs);
 	}
 	private byte[] Wdata_display_title(Wdata_doc wdoc) {
-		// P, Q, or L
+		// P, Q, L or E
 		byte[] ttl_label;
 		byte[] cls = Bry_.Empty;
 		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme) {

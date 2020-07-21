@@ -64,6 +64,8 @@ public class Xoh_toc_mgr {
 		return itm;
 	}
 	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, boolean toc_mode_is_pgbnr) {
+            if (toc_mode_is_pgbnr && itms.Len() <= 3)
+                return;
             To_html(rv, hctx, toc_mode_is_pgbnr, 0);
         }
 	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, boolean toc_mode_is_pgbnr, int minimum) {

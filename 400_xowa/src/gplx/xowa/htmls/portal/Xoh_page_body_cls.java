@@ -31,17 +31,22 @@ public class Xoh_page_body_cls {	// REF.MW:Skin.php|getPageClasses
 					tmp_bfr.Add_byte_space().Add(Bry_wb_itempage);
 					tmp_bfr.Add_byte_space().Add(Bry_wb_itempage).Add_byte(Byte_ascii.Dash).Add(ttl.Page_db());
 					break;
-				case 120: // Property
+				case 120: // www.wikidata.org Property
 					tmp_bfr.Add_byte_space().Add(Bry_wb_entitypage);
 					tmp_bfr.Add_byte_space().Add(Bry_wb_propertypage);
 					tmp_bfr.Add_byte_space().Add(Bry_wb_propertypage).Add_byte(Byte_ascii.Dash).Add(ttl.Page_db());
 					break;
-				case 146: // Lexeme
+				case 146: // www.wikidata.org Lexeme
 					tmp_bfr.Add_byte_space().Add(Bry_wb_entitypage);
 					tmp_bfr.Add_byte_space().Add(Bry_wb_lexemepage);
 					tmp_bfr.Add_byte_space().Add(Bry_wb_lexemepage).Add_byte(Byte_ascii.Dash).Add(ttl.Page_db());
 					break;
 				case 486: // commons.wikimedia.org Data:
+					break;
+				case 640: // www.wikidata.org EntitySchema
+					//tmp_bfr.Add_byte_space().Add(Bry_wb_entitypage);
+					//tmp_bfr.Add_byte_space().Add(Bry_wb_entityschema);
+					//tmp_bfr.Add_byte_space().Add(Bry_wb_entityschema).Add_byte(Byte_ascii.Dash).Add(ttl.Page_db());
 					break;
 				default:
 					Gfo_usr_dlg_.Instance.Warn_many("", "", "unexpected ns for page_body_cls; ttl=~{0}", String_.new_u8(ttl.Raw()));
@@ -136,6 +141,7 @@ public class Xoh_page_body_cls {	// REF.MW:Skin.php|getPageClasses
 	, Bry_wb_itempage		= Bry_.new_a7("wb-itempage")
 	, Bry_wb_propertypage	= Bry_.new_a7("wb-propertypage")
 	, Bry_wb_lexemepage	= Bry_.new_a7("wb-lexemepage")
+	, Bry_wb_entityschema	= Bry_.new_a7("wb-entityschema")
 	;
 	public static int Page_tid_wikitext = 0, Page_tid_wikidata_qid = 1, Page_tid_wikidata_pid = 2;
 }

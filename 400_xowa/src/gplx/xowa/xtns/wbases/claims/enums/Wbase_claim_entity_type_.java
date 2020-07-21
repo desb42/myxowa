@@ -22,13 +22,15 @@ public class Wbase_claim_entity_type_ {
 	, Tid__lexeme								=  2
 	, Tid__sense								=  3
 	, Tid__form								=  4
+	, Tid__entityschema						=  5
 	;
-	public static final    Wbase_enum_hash Reg = new Wbase_enum_hash("claim.entity_type", 5);
+	public static final    Wbase_enum_hash Reg = new Wbase_enum_hash("claim.entity_type", 6);
 	public static final    Wbase_enum_itm
 	  Itm__item						= Reg.Add(Tid__item				, "item")
 	, Itm__property					= Reg.Add(Tid__property			, "property")
 	, Itm__lexeme					= Reg.Add(Tid__lexeme			, "lexeme")
 	, Itm__sense					= Reg.Add(Tid__sense			, "sense")
 	, Itm__form					= Reg.Add(Tid__form			, "form")
+	, Itm__entityschema			= Reg.Add(Tid__entityschema			, "entityschema")
 	;
 }
