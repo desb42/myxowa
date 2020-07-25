@@ -26,6 +26,20 @@ public class Pft_func_time extends Pf_func_base {
 		Pft_fmt_itm[] fmt_ary = Pft_fmt_itm_.Parse(arg_fmt);
 		byte[] arg_date = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, self_args_len, 0);
 		byte[] arg_lang = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, self_args_len, 1);
+                // check for four digits
+                System.out.println(String_.new_u8(arg_date));
+                if (arg_date.length == 4) {
+                boolean isyear = true;
+                    for (int i = 0; i < 4; i++) {
+                        byte b = arg_date[i];
+                        if (b < '0' || b > '9') {
+                            isyear = false;
+                            break;
+                        }
+                    }
+                    if (isyear)
+                        arg_date = Bry_.Add(Bry_.new_a7("00:00 "), arg_date);
+                }
 		Bry_bfr error_bfr = Bry_bfr_.New();
 		DateAdp date = ParseDate(arg_date, utc, error_bfr, ctx);
 		Xowe_wiki wiki = ctx.Wiki();

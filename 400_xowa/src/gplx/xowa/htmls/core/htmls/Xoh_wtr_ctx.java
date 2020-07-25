@@ -29,6 +29,7 @@ public class Xoh_wtr_ctx {
 	public byte[] Anch__href__bgn()               {return anch__href__bgn;}   private final byte[] anch__href__bgn;
 	public byte[] Anch__href__end()               {return anch__href__end;}   private final byte[] anch__href__end;
 	public int Hzip_tid()                         {return hzip_tid;}          private final int hzip_tid;
+	public boolean Mode_is_hdump_only()           {return mode == TID_HDUMP || mode == TID_EMBEDDABLE;}
 	public boolean Mode_is_hdump()                {return mode == TID_HDUMP || mode == TID_EMBEDDABLE || mode == TID_HTTP_SERVER;}
 	public boolean Mode_is_file_dump()            {return mode == TID_HDUMP || mode == TID_EMBEDDABLE || mode == TID_HTTP_SERVER;}
 	public boolean Mode_is_hdump_wo_db()          {return mode == TID_EMBEDDABLE || mode == TID_HTTP_SERVER;}

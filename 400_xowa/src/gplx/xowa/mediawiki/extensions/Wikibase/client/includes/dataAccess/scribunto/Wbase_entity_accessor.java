@@ -39,6 +39,7 @@ public class Wbase_entity_accessor {
 			Gfo_usr_dlg_.Instance.Log_many("", "", "Encountered a UnresolvedRedirectException when trying to load {0}; exc={1}", prefixedEntityId, Err_.Message_lang(ex));
 			return null;
 		}
+                if (entity == null) return null; // nothing found
 
 		int selected_rank = ID_NULL;
 		if		(Bry_.Eq(rank, RANK_BEST)) {

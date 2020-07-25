@@ -44,7 +44,7 @@ public class Dbx_strtotime {
 //			Dbx_scan_support.add_warning(in, Dbx_scan_support.TIMELIB_WARN_INVALID_DATE, "The parsed date was invalid");
 //		}
 //		if (in.errors.error_count + in.errors.warning_count > 0)
-        if (in.errors.error_count > 0) {
+        if (in.errors.error_count > 0 /*|| (in.time.have_time == 0 && !in.time.have_date && !in.time.have_relative)*/) {
             throw Err_.new_unhandled(0);
         }
         return in.time;

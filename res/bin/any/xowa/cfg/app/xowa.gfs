@@ -149,7 +149,8 @@ app.wikis.get('~{wiki_key}').html.portal {
   div_ns =
 <:["
   <div id="left-navigation">
-    <div id="p-namespaces" class="vectorTabs">
+    <!--NOTE: fix vertical tabs; ISSUE#:754 DATE:2020-07-02-->
+    <div id="p-namespaces" class="vector-menu vector-menu-tabs vectorTabs">
       <h3>~{<>msgs.get('namespaces');<>}</h3>
       <ul>
         <li  id="ca-nstab-~{portal_ca}" class="~{portal_ns_subj_cls}"><span><a href="~{portal_ns_subj_href}" id="ca-nstab-main-href" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-nstab-main');<>}>~{portal_main}</a></span></li>
@@ -163,7 +164,8 @@ app.wikis.get('~{wiki_key}').html.portal {
   div_view =
 <:["
   <div id="right-navigation">
-    <div id="p-views" class="vectorTabs">
+    <!--NOTE: fix vertical tabs; ISSUE#:754 DATE:2020-07-02-->
+    <div id="p-views" class="vector-menu vector-menu-tabs vectorTabs">
       <h3>~{<>msgs.get('views');<>}</h3>
       <ul>
         <li id="ca-view"    class="~{portal_view_read_cls}"><span><a href="~{portal_view_read_href}" class="xowa-hover-off">~{<>msgs.get('vector-view-view');<>}</a></span></li>
@@ -386,10 +388,10 @@ for (var i = 0; i < redlinks.length; i++) {
   <div id="bodyContent" class="mw-body-content">
     <div id="siteSub" class="noprint">~{tagline}</div>
     <div id="contentSub" class="visible">~{page_content_sub}</div>
-    <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-content-~{page_lang_ltr}">
+    <div id="mw-content-text">
       <div id="xowa_page_edit_preview_id">~{edit_div_preview}</div>
       <form id="editform" name="editform">
-        <textarea id="xowa_edit_data_box" cols="80" rows="25">~{page_data}</textarea>  <!-- NOTE: do not place on different line (EX: \n~{page_text}\n); textarea will interpret new line literally and page saves will include new whitespace -->
+        <textarea id="xowa_edit_data_box" cols="80" rows="25" accesskey="," class="mw-editfont-monospace" lang="~{edit_lang}" dir="~{edit_lang_ltr}">~{page_data}</textarea>  <!-- NOTE: do not place on different line (EX: \n~{page_text}\n); textarea will interpret new line literally and page saves will include new whitespace -->
         <div id="xowa_page_edit_save_id">
           <a href="xowa-cmd:app.gui.main_win.page_edit_save;" class="xowa_anchor_button" style="width:100px;max-width:1024px;">~{<>msgs.get('savearticle');<>}</a>
           <a href="xowa-cmd:app.gui.main_win.page_edit_preview;" class="xowa_anchor_button" style="width:100px;max-width:1024px;">~{<>msgs.get('showpreview');<>}</a>

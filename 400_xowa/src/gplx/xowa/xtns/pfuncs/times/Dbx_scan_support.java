@@ -554,11 +554,14 @@ public class Dbx_scan_support {
 			b = s.src[s.ptr];
 			Object o = trie.Match_at_w_b0(trv, b, s.src, s.ptr, s.src_len);	// now match String against tkn
 			if (o != null && o instanceof Pxd_itm_tz_abbr) {
+                            Pxd_itm_tz_abbr tza = (Pxd_itm_tz_abbr)o;
+                            if (tza.Tz_abbr().length == s.cur - s.ptr) {
 				s.ptr = trv.Pos();
 				t.zone_type = TIMELIB_ZONETYPE_ABBR;
-				retval = ((Pxd_itm_tz_abbr)o).Tz_offset();
-				t.tz_abbr = ((Pxd_itm_tz_abbr)o).Tz_abbr();
+				retval = tza.Tz_offset();
+				t.tz_abbr = tza.Tz_abbr();
 				s.tz_not_found = 0;
+                            }
 			}
 //			offset = timelib_lookup_abbr(ptr, dst, &tz_abbr, &found);
 //			if (found) {

@@ -214,6 +214,9 @@ public class Db_wikistrip {
 		  )) {
 			return true;
 		}
+		else if (sz > 8 && ((src[bgn+1] | 32) == 'f') && src[bgn+8] == ':') { // Fichier:
+			return true;
+		}
 		else if (sz > 10 && (
 		  (((src[bgn+1] | 32) == 'c') && src[bgn+9] == ':') // Category:
 		  || (src[bgn+1] == -41 && src[bgn+9] == ':') // %d7%a7%d7%95%d7%91%d7%a5: hebrew
@@ -319,14 +322,22 @@ public class Db_wikistrip {
 		int tagend = pos;
 		// check for special <br > <hr > <img >
 		//System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend+40)));
-		if (nameend - namestart == 2) {
+		int tag_len = nameend - namestart;
+		if (tag_len == 2) {
 			if ((src[namestart] | 32) == 'b' && (src[namestart+1] | 32) == 'r')
 				return pos;
 			if ((src[namestart] | 32) == 'h' && (src[namestart+1] | 32) == 'r')
 				return pos;
 		}
-		else if (nameend - namestart == 3) {
-			if ((src[namestart] | 32) == 'i' && (src[namestart+1] | 32) == 'm' && (src[namestart+1] | 32) == 'g')
+		else if (tag_len == 3) {
+			if ((src[namestart] | 32) == 'i' && (src[namestart+1] | 32) == 'm' && (src[namestart+2] | 32) == 'g')
+				return pos;
+		}
+		else if (tag_len == 11) { // onlyinclude
+			if ((src[namestart] | 32) == 'o' && (src[namestart+1] | 32) == 'n' && (src[namestart+2] | 32) == 'l'
+			     && (src[namestart+3] | 32) == 'y' && (src[namestart+4] | 32) == 'i' && (src[namestart+5] | 32) == 'n'
+			     && (src[namestart+6] | 32) == 'c' && (src[namestart+7] | 32) == 'l' && (src[namestart+8] | 32) == 'u'
+			     && (src[namestart+9] | 32) == 'd' && (src[namestart+10] | 32) == 'e')
 				return pos;
 		}
 		// now find the close (or a nesting!)

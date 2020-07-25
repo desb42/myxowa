@@ -24,6 +24,7 @@ public class XomwEntityRetrievingTermLookup {
 
 	public byte[] getLabel_or_null(byte[] entityId, byte[] languageCode) {
 		Wdata_doc entity = entity_mgr.Get_by_xid_or_null(entityId);
+                if (entity == null) return null; // entityId may not exist
 		return entity.Get_label_bry_or_null(languageCode);
 	}
 }

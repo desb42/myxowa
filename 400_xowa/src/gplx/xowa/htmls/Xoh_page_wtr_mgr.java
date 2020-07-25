@@ -110,6 +110,7 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	, "portal_sidebar"
 	, "edit_div_rename", "edit_div_preview", "js_edit_toolbar"
 	, "page_lang"
+        , "edit_lang", "edit_lang_ltr"
         , "redlinks"
         , "printfooter"
         , "page_pgbnr_bread"

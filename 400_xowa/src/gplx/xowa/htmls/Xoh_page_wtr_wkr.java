@@ -178,6 +178,13 @@ public class Xoh_page_wtr_wkr {
 			red_mgr.Redlink(tmp_bfr);
 			redlinks = tmp_bfr.To_bry_and_clear();
 		}*/
+		byte[] edit_lang = page.Lang().Key_bry();
+		byte[] edit_lang_ltr = page.Lang().Dir_ltr_bry();
+		// if editing page and editing a module always english
+		if (page_mode == Xopg_view_mode_.Tid__edit && page.Ttl().Ns().Id() == 828) {
+			edit_lang = Bry_.new_a7("en");
+			edit_lang_ltr = Bry_.new_a7("ltr");
+		}
 
 		// main build
 		Xow_portal_mgr portal_mgr = wiki.Html_mgr().Portal_mgr().Init_assert();
@@ -210,6 +217,7 @@ public class Xoh_page_wtr_wkr {
 		, portal_mgr.Sidebar_mgr().Html_bry()
 		, mgr.Edit_rename_div_bry(page_ttl), page.Html_data().Edit_preview_w_dbg(), js_edit_toolbar_bry
 		, page.Lang().Key_bry()
+						, edit_lang, edit_lang_ltr
 						, redlinks
 						, Printfooter(app, wiki, ctx, hctx, page, html_gen_tid)
 						, Bry_.Empty/*page.Html_data().GeoCrumb()*/
@@ -427,7 +435,7 @@ public class Xoh_page_wtr_wkr {
 		if (	ctgs_enabled
 			//&&	ctgs_len > 0						// skip if no categories found while parsing wikitext
 			&&	!wiki.Html_mgr().Importing_ctgs()	// do not show categories if importing categories, page will wait for category import to be done; DATE:2014-10-15
-			&&	!hctx.Mode_is_hdump()				// do not dump categories during hdump; DATE:2016-10-12
+			&&	!hctx.Mode_is_hdump_only()				// do not dump categories during hdump; DATE:2016-10-12
 			&& page.Ttl().Ns().Id() >= 0 // not Special
 			&& html_gen_tid != Xopg_view_mode_.Tid__edit // not Edit page
 			) {
