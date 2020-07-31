@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,25 +13,71 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.wbases; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
-import gplx.core.primitives.*;
-import gplx.xowa.langs.msgs.*; import gplx.langs.jsons.*;
-import gplx.xowa.wikis.nss.*;
-import gplx.xowa.langs.*;
-import gplx.xowa.parsers.*;
-import gplx.xowa.wikis.domains.*; import gplx.xowa.htmls.*; import gplx.xowa.parsers.logs.*; import gplx.xowa.apps.apis.xowa.xtns.*; import gplx.xowa.apps.apis.xowa.html.*; import gplx.xowa.users.*;
-import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.claims.enums.*; import gplx.xowa.xtns.wbases.claims.itms.*; import gplx.xowa.xtns.wbases.parsers.*; import gplx.xowa.xtns.wbases.pfuncs.*; import gplx.xowa.xtns.wbases.hwtrs.*; import gplx.xowa.xtns.wbases.stores.*;
-import gplx.xowa.mediawiki.extensions.Wikibase.client.includes.dataAccess.scribunto.*;
-import gplx.core.brys.fmtrs.*;
-import gplx.langs.htmls.*;
+package gplx.xowa.xtns.wbases;
+
+import gplx.Bool_;
+import gplx.Bry_;
+import gplx.Bry_bfr;
+import gplx.Bry_bfr_;
+import gplx.GfoMsg;
+import gplx.Gfo_evt_itm;
+import gplx.Gfo_evt_mgr;
+import gplx.Gfo_evt_mgr_;
+import gplx.Gfo_invk;
+import gplx.Gfo_invk_;
+import gplx.GfsCtx;
+import gplx.String_;
+import gplx.Yn;
+import gplx.langs.jsons.Json_doc;
+import gplx.langs.jsons.Json_kv;
+import gplx.langs.jsons.Json_parser;
+import gplx.xowa.Xoa_ttl;
+import gplx.xowa.Xoae_app;
+import gplx.xowa.Xoae_page;
+import gplx.xowa.Xowe_wiki;
+import gplx.xowa.apps.apis.xowa.html.Xoapi_toggle_mgr;
+import gplx.xowa.apps.apis.xowa.xtns.Xoapi_wikibase;
+import gplx.xowa.htmls.Xoh_consts;
+import gplx.xowa.langs.Xol_lang_itm;
+import gplx.xowa.langs.msgs.Xol_msg_itm_;
+import gplx.xowa.parsers.Xop_ctx;
+import gplx.xowa.parsers.logs.Xop_log_property_wkr;
+import gplx.xowa.users.Xoue_user;
+import gplx.xowa.wikis.domains.Xow_domain_itm;
+import gplx.xowa.wikis.domains.Xow_domain_tid_;
+import gplx.xowa.wikis.nss.Xow_ns_;
+import gplx.xowa.xtns.wbases.claims.Wbase_claim_grp;
+import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_rank_;
+import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_value_type_;
+import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_base;
+import gplx.xowa.xtns.wbases.hwtrs.Wdata_hwtr_mgr;
+import gplx.xowa.xtns.wbases.hwtrs.Wdata_hwtr_msgs;
+import gplx.xowa.xtns.wbases.hwtrs.Wdata_lbl_wkr_wiki;
+import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser;
+import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v1;
+import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v2;
+import gplx.xowa.xtns.wbases.stores.Wbase_doc_mgr;
+import gplx.xowa.xtns.wbases.stores.Wbase_pid_mgr;
+import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr;
+import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr_loader_;
+import gplx.xowa.xtns.wbases.stores.Wbase_qid_mgr;
+
+import gplx.core.brys.fmtrs.Bry_fmtr;
+import gplx.Byte_ascii;
+import gplx.Ordered_hash;
+import gplx.langs.htmls.Gfh_utl;
+import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_entity_type_;
+import gplx.xowa.xtns.wbases.core.Wdata_langtext_itm;
+import gplx.xowa.langs.Xol_lang_stub;
+import gplx.xowa.langs.Xol_lang_stub_;
 public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
-	private final    Xoae_app app;
-//	private final    Wdata_prop_val_visitor prop_val_visitor;
-	private final    Wdata_doc_parser wdoc_parser_v1 = new Wdata_doc_parser_v1(), wdoc_parser_v2 = new Wdata_doc_parser_v2();
-	private final    Object thread_lock = new Object();
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
-	private byte[]   page_display_title, no_label;
-	private byte[]   oview_label;
+	private final Xoae_app app;
+//	private final Wdata_prop_val_visitor prop_val_visitor;
+	private final Wdata_doc_parser wdoc_parser_v1 = new Wdata_doc_parser_v1(), wdoc_parser_v2 = new Wdata_doc_parser_v2();
+	private final Object thread_lock = new Object();
+	private final Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
+	private byte[] page_display_title, no_label;
+	private byte[] oview_label;
 	public byte[] Overview_label() { return oview_label;}
 
 	public Wdata_wiki_mgr(Xoae_app app) {
@@ -44,11 +90,11 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 //		this.prop_val_visitor = new Wdata_prop_val_visitor(app, this);
 		this.Enabled_(true);
 	}
-	public Gfo_evt_mgr Evt_mgr() {return evt_mgr;} private final    Gfo_evt_mgr evt_mgr;
-	public final    Wbase_qid_mgr		Qid_mgr;
-	public final    Wbase_pid_mgr		Pid_mgr;
-	public final    Wbase_doc_mgr		Doc_mgr;
-	public Wbase_prop_mgr				Prop_mgr() {return prop_mgr;} private final    Wbase_prop_mgr prop_mgr;
+	public Gfo_evt_mgr Evt_mgr() {return evt_mgr;} private final Gfo_evt_mgr evt_mgr;
+	public final Wbase_qid_mgr		Qid_mgr;
+	public final Wbase_pid_mgr		Pid_mgr;
+	public final Wbase_doc_mgr		Doc_mgr;
+	public Wbase_prop_mgr				Prop_mgr() {return prop_mgr;} private final Wbase_prop_mgr prop_mgr;
 	public boolean Enabled() {return enabled;} private boolean enabled;
 	public void Enabled_(boolean v) {
 		this.enabled = v;
@@ -101,7 +147,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		synchronized (thread_lock) {	// LOCK:must synchronized b/c prop_val_visitor has member bfr which can get overwritten; DATE:2016-07-06
 			if (hwtr_mgr == null) Hwtr_mgr_assert();
 
-                        Wdata_prop_val_visitor local_prop_val_visitor = new Wdata_prop_val_visitor(app, this, rv, hwtr_mgr.Msgs(), domain.Lang_orig_key(), Bool_.N);
+			Wdata_prop_val_visitor local_prop_val_visitor = new Wdata_prop_val_visitor(app, this, rv, hwtr_mgr.Msgs(), domain.Lang_orig_key(), Bool_.N);
 			//prop_val_visitor.Init(rv, hwtr_mgr.Msgs(), domain.Lang_orig_key(), Bool_.N);
 			claim_itm.Welcome(local_prop_val_visitor);
 		}
@@ -195,21 +241,15 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	}
 	public static final int Ns_property = 120;
 	public static final String Ns_property_name = "Property";
+	public static final byte[] Ns_property_name_bry = Bry_.new_a7(Ns_property_name);
 	public static final int Ns_lexeme = 146;
 	public static final String Ns_lexeme_name = "Lexeme";
+	public static final byte[] Ns_lexeme_name_bry = Bry_.new_a7(Ns_lexeme_name);
 	public static final int Ns_entityschema = 640;
 	public static final String Ns_entityschema_name = "EntitySchema";
-	public static final    byte[] Ns_property_name_bry = Bry_.new_a7(Ns_property_name);
-	public static final    byte[] Ns_lexeme_name_bry = Bry_.new_a7(Ns_lexeme_name);
-	public static final    byte[] Bry_q = Bry_.new_a7("q");
-	public static final    byte[]
-	  Ttl_prefix_qid_bry_db		= Bry_.new_a7("q")	// NOTE: for historical reasons this is standardized as lowercase q not Q; DATE:2015-06-12
-	, Ttl_prefix_qid_bry_gui	= Bry_.new_a7("Q")	// NOTE: use uppercase Q for writing html; DATE:2015-06-12
-	, Ttl_prefix_pid_bry		= Bry_.new_a7("Property:P")
-	, Ttl_prefix_lid_bry		= Bry_.new_a7("Lexeme:L")
-	, Ttl_prefix_eid_bry		= Bry_.new_a7("EntitySchema:E")
-	;
-	public static final    byte[] Html_json_id = Bry_.new_a7("xowa-wikidata-json");
+	public static final byte[] Ns_entityschema_name_bry = Bry_.new_a7(Ns_entityschema_name);
+
+	public static final byte[] Html_json_id = Bry_.new_a7("xowa-wikidata-json");
 	public static boolean Wiki_page_is_json(int wiki_tid, int ns_id) {
 		switch (wiki_tid) {
 			case Xow_domain_tid_.Tid__wikidata:
@@ -260,7 +300,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 				Wdata_langtext_itm itm = (Wdata_langtext_itm)list.Get_at(i);
 				Xol_lang_stub lang_itm = Xol_lang_stub_.Get_by_key_or_intl(itm.Lang());
 				byte[] txt = Gfh_utl.Escape_html_as_bry(itm.Text());
-                                byte[] dir = Bry_.new_a7("ltr");
+				byte[] dir = Bry_.new_a7("ltr");
 				lemma_first_fmtr.Bld_bfr_many(tmp_bfr, dir, Gfh_utl.Escape_html_as_bry(itm.Lang()), txt);
 				oview_bfr.Add(txt);
 			}

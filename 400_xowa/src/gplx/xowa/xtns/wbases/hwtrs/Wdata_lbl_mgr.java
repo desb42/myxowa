@@ -18,12 +18,24 @@ import gplx.core.primitives.*;
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.claims.itms.*;
 public class Wdata_lbl_mgr {
 	private Hash_adp_bry ttl_hash = Hash_adp_bry.ci_a7();
-	private Hash_adp qid_hash = Hash_adp_.New(), pid_hash = Hash_adp_.New(), lid_hash = Hash_adp_.New(); private Int_obj_ref int_hash_key = Int_obj_ref.New_neg1();
+	private Hash_adp
+                qid_hash = Hash_adp_.New()
+                , pid_hash = Hash_adp_.New()
+                , lid_hash = Hash_adp_.New()
+                , eid_hash = Hash_adp_.New()
+                ;
+        private Int_obj_ref int_hash_key = Int_obj_ref.New_neg1();
 	private Wdata_visitor__lbl_gatherer lbl_gatherer;
 	public Wdata_lbl_mgr() {
 		lbl_gatherer = new Wdata_visitor__lbl_gatherer(this);
 	}
-	public void Clear() {ttl_hash.Clear(); qid_hash.Clear(); pid_hash.Clear(); lid_hash.Clear(); queue.Clear();}
+	public void Clear() {
+		ttl_hash.Clear();
+		qid_hash.Clear();
+		pid_hash.Clear();
+		lid_hash.Clear();
+		eid_hash.Clear();
+		queue.Clear();}
 	public List_adp Queue() {return queue;} private List_adp queue = List_adp_.New();
 	@gplx.Internal protected void Wkr_(Wdata_lbl_wkr v) {this.wkr = v;} private Wdata_lbl_wkr wkr;
 	public Wdata_lbl_itm Get_itm__ttl(byte[] ttl) {
@@ -38,6 +50,7 @@ public class Wdata_lbl_mgr {
 	public byte[] Get_text__qid(int id) {return Get_text(qid_hash, Wdata_lbl_itm.Tid_qid, id);}
 	public byte[] Get_text__pid(int id) {return Get_text(pid_hash, Wdata_lbl_itm.Tid_pid, id);}
 	public byte[] Get_text__lid(int id) {return Get_text(lid_hash, Wdata_lbl_itm.Tid_lid, id);}
+	public byte[] Get_text__eid(int id) {return Get_text(eid_hash, Wdata_lbl_itm.Tid_eid, id);}
 	private byte[] Get_text(Hash_adp hash, int id_type, int id) {
 		Wdata_lbl_itm rv_itm = (Wdata_lbl_itm)hash.Get_by(int_hash_key.Val_(id));
 		if (rv_itm != null) return rv_itm.Text();	// found; return lbl
@@ -53,6 +66,7 @@ public class Wdata_lbl_mgr {
 	public void Queue_if_missing__qid(int id) {Queue_if_missing(qid_hash, Wdata_lbl_itm.Tid_qid, id);}
 	public void Queue_if_missing__pid(int id) {Queue_if_missing(pid_hash, Wdata_lbl_itm.Tid_pid, id);}
 	public void Queue_if_missing__lid(int id) {Queue_if_missing(lid_hash, Wdata_lbl_itm.Tid_lid, id);}
+	public void Queue_if_missing__eid(int id) {Queue_if_missing(eid_hash, Wdata_lbl_itm.Tid_eid, id);}
 	private void Queue_if_missing(Hash_adp hash, int id_type, int id) {
 		boolean has = hash.Has(int_hash_key.Val_(id));
 		if (!has) Queue_add(hash, id_type, id, Bool_.N);

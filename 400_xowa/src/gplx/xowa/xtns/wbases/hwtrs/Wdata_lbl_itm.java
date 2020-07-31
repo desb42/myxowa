@@ -49,5 +49,6 @@ public class Wdata_lbl_itm {
         public static final int Tid_qid = 1
         , Tid_pid = 2
         , Tid_lid = 3
+                , Tid_eid = 4
         ;
 }

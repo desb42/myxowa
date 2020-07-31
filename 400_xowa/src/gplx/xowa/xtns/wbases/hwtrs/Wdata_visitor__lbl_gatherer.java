@@ -14,17 +14,26 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.wbases.hwtrs; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.wbases.*;
-import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.claims.itms.*;
+import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*;import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_entity_type_;
+ import gplx.xowa.xtns.wbases.claims.itms.*;
 class Wdata_visitor__lbl_gatherer implements Wbase_claim_visitor {
 	private Wdata_lbl_mgr lbl_mgr;
 	public Wdata_visitor__lbl_gatherer(Wdata_lbl_mgr lbl_mgr) {this.lbl_mgr = lbl_mgr;}
 	public void Visit_entity(Wbase_claim_entity itm) {
-		if (itm.Entity_tid_is_qid())
+            switch(itm.Entity_tid()) {
+                case Wbase_claim_entity_type_.Tid__item:
 			lbl_mgr.Queue_if_missing__qid(itm.Entity_id());
-                else if (itm.Entity_tid_is_pid())
+                        break;
+                case Wbase_claim_entity_type_.Tid__property:
 			lbl_mgr.Queue_if_missing__pid(itm.Entity_id());
-		else
+                        break;
+                case Wbase_claim_entity_type_.Tid__lexeme:
 			lbl_mgr.Queue_if_missing__lid(itm.Entity_id());
+                        break;
+                case Wbase_claim_entity_type_.Tid__entityschema:
+			lbl_mgr.Queue_if_missing__eid(itm.Entity_id());
+                        break;
+            }
 	}
 	public void Visit_time(Wbase_claim_time itm) {
 		byte[] ttl = Wdata_lbl_itm.Extract_ttl(itm.Calendar());

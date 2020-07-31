@@ -33,33 +33,44 @@ class Wdata_visitor__html_wtr implements Wbase_claim_visitor {
 	}
 	public void Visit_entity(Wbase_claim_entity itm) {
 		int entity_id = itm.Entity_id();
-                byte[] text;
-                byte tid = itm.Entity_tid();
-                if (tid == Wbase_claim_entity_type_.Tid__form)
-                    text = Getformstuff(itm);
-                else if (tid == Wbase_claim_entity_type_.Tid__sense)
-                    text = Getsensestuff(itm);
-                else
-                    text = itm.Entity_tid_is_qid() ? lbl_mgr.Get_text__qid(entity_id) 
-                        : itm.Entity_tid_is_pid() ? lbl_mgr.Get_text__pid(entity_id)
-                        : lbl_mgr.Get_text__lid(entity_id);
+		byte[] text = null;
+		switch (itm.Entity_tid()) {
+			case Wbase_claim_entity_type_.Tid__form:
+				text = Getformstuff(itm);
+				break;
+			case Wbase_claim_entity_type_.Tid__sense:
+				text = Getsensestuff(itm);
+				break;
+			case Wbase_claim_entity_type_.Tid__item:
+				text = lbl_mgr.Get_text__qid(entity_id);
+				break;
+			case Wbase_claim_entity_type_.Tid__property:
+				text = lbl_mgr.Get_text__pid(entity_id);
+				break;
+			case Wbase_claim_entity_type_.Tid__lexeme:
+				text = lbl_mgr.Get_text__lid(entity_id);
+				break;
+//			case Wbase_claim_entity_type_.Tid__entityschema:
+//				text = lbl_mgr.Get_text__eid(entity_id);
+//				break;
+		}
 		if (text == null) {// handle incomplete wikidata dumps; DATE:2015-06-11
 			Xoa_app_.Usr_dlg().Warn_many("", "", "wbase.html_visitor:page does not exists; page=~{0}", entity_id);
 			return;
 		}
 		Wdata_hwtr_mgr.Write_link_wikidata(tmp_bfr, itm.Page_ttl_gui(), text);			
 	}
-        private byte[] Getformstuff(Wbase_claim_entity itm) {
-            //Wdata_doc wdoc = wdata_mgr.Doc_mgr.Get_by_xid_or_null(itm.Ttl());
-            //Form_list()itm.Entity_id_bry()
-            return Bry_.new_a7("FORM");
-        }
-        private byte[] Getsensestuff(Wbase_claim_entity itm) {
-            return Bry_.new_a7("SENSE");
-        }
+	private byte[] Getformstuff(Wbase_claim_entity itm) {
+		//Wdata_doc wdoc = wdata_mgr.Doc_mgr.Get_by_xid_or_null(itm.Ttl());
+		//Form_list()itm.Entity_id_bry()
+		return Bry_.new_a7("FORM");
+	}
+	private byte[] Getsensestuff(Wbase_claim_entity itm) {
+		return Bry_.new_a7("SENSE");
+	}
 	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm) {
-                String langname = wdata_mgr.Wdata_wiki().App().Lang_mgr().Name_mgr().fetchLanguageName(String_.new_a7(itm.Lang()), lang.Key_str(), "", ttl);
-            // "<span lang=\"$2\" class=\"wb-monolingualtext-value\">$1</span> <span class=\"wb-monolingualtext-language-name\" dir=\"auto\">($3)</span>"
+		String langname = wdata_mgr.Wdata_wiki().App().Lang_mgr().Name_mgr().fetchLanguageName(String_.new_a7(itm.Lang()), lang.Key_str(), "", ttl);
+		// "<span lang=\"$2\" class=\"wb-monolingualtext-value\">$1</span> <span class=\"wb-monolingualtext-language-name\" dir=\"auto\">($3)</span>"
 		tmp_bfr.Add(Bry_.new_a7("<span lang=\""));
 		tmp_bfr.Add(itm.Lang());
 		tmp_bfr.Add(Bry_.new_a7("\" class=\"wb-monolingualtext-value\">"));
@@ -92,6 +103,6 @@ class Wdata_visitor__html_wtr implements Wbase_claim_visitor {
                             break;
 		}
 	}
-        private static byte[] someval = Bry_.new_a7("<span class=\"wikibase-snakview-variation-somevaluesnak\">");
-        private static byte[] noval = Bry_.new_a7("<span class=\"wikibase-snakview-variation-novaluesnak\">");
+	private static byte[] someval = Bry_.new_a7("<span class=\"wikibase-snakview-variation-somevaluesnak\">");
+	private static byte[] noval = Bry_.new_a7("<span class=\"wikibase-snakview-variation-novaluesnak\">");
 }
