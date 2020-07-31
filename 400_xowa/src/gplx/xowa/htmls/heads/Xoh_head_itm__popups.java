@@ -47,7 +47,7 @@ public class Xoh_head_itm__popups extends Xoh_head_itm__base {
 			wtr.Write_js_tail_load_lib(app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("popup", "popup-support.js"));
 //			wtr.Write_js_tail_load_lib(app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("popup", "ext.popups.images.js"));
 		}
-		else
+		else if (domain_tid != Xow_domain_tid_.Tid__wikisource)
 			wtr.Write_js_tail_load_lib(app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "html", "res", "src", "xowa", "popups", "xo.popup.js"));
 	}	public static final    byte[] Jquery_init = Bry_.new_a7("xowa.js.jquery.init();"), Mw_init = Bry_.new_a7("xowa.js.mediaWiki.init();");
 	private static byte[] Css_url_day, Css_url_night;

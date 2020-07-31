@@ -30,7 +30,9 @@ public class Xoh_page_wtr_wkr_ {
 	public static byte[] Bld_page_content_sub(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Bry_bfr tmp_bfr, boolean isnoredirect) {
 		byte[] subpages = app.Html_mgr().Page_mgr().Subpages_bldr().Bld(wiki, page.Ttl());
 		byte[] page_content_sub = page.Html_data().Content_sub();		// contentSub exists;
-		byte[] quality_table = page.Html_data().Quality_tots().Generate_quality(wiki);
+		byte[] quality_table = null;
+		if (page.Ttl().Ns().Id() != wiki.Ns_mgr().Ns_index_id())
+			quality_table = page.Html_data().Quality_tots().Generate_quality(wiki);
 		byte[] geocrumb = page.Html_data().GeoCrumb().Generate();
 		byte[] page_banner = page.Html_data().Pagebanner().Generate();
 		byte[] redirect_msg;

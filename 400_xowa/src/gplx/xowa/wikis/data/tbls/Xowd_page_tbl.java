@@ -148,6 +148,7 @@ public class Xowd_page_tbl implements Db_tbl {
 //		synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
 		try {
 			Xoctg_catpage_mgr.rwl.writeLock().lock();
+                        //System.out.println(Integer.toString(ns.Id())+":"+String_.new_u8(ttl));
 			Db_rdr rdr = stmt_select_all_by_ttl.Clear().Crt_int(fld_ns, ns.Id()).Crt_bry_as_str(fld_title, ttl).Exec_select__rls_manual();
 			try {
 				if (rdr.Move_next()) {

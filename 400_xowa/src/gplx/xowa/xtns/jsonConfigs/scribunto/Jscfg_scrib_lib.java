@@ -42,7 +42,13 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 	public static final String Invk_get = "get";
 	private static final    String[] Proc_names = String_.Ary(Invk_get);
 	public boolean Get(Scrib_proc_args args, Scrib_proc_rslt rslt) {
-		byte[] ttl_bry = args.Xstr_bry_or_null(0);	
+		byte[] ttl_bry = args.Xstr_bry_or_null(0);
+		boolean localize = true;
+		if (args.Len() > 1) {
+			byte[] lang = args.Xstr_bry_or_null(1);
+			if (lang.length  == 1 && lang[0] == '_')
+				localize = false;
+		}
 
 		// get commons wiki
 		Xowe_wiki commons_wiki = (Xowe_wiki)core.App().Wiki_mgr().Get_by_or_null(Xow_domain_itm_.Bry__commons);
@@ -63,7 +69,8 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 			//throw Err_.new_wo_type("bad argument #1 to 'get' (not a valid title) " + String_.new_u8(ttl_bry));
 		} else {
 			rv = Scrib_lib_text.JsonDecodeStatic(args, core, json_util, page, Scrib_lib_text__json_util.Opt__force_assoc, Scrib_lib_text__json_util.Flag__none);
-			//?? rv = localizer.Localize(core.Wiki().Lang(), page, rv);
+			if (localize) // sometime should not be called (dewiki) BUT...
+				rv = localizer.Localize(core.Wiki().Lang(), page, rv);
 		}
 		return rslt.Init_obj(rv);
 	}

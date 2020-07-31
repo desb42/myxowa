@@ -27,23 +27,34 @@ import gplx.xowa.htmls.hxtns.pages.Hxtn_page_mgr;
 
 import gplx.xowa.Xoa_ttl;
 import gplx.Hash_adp;
+import gplx.String_;
+import gplx.Ordered_hash;
+import gplx.Ordered_hash_;
 public class Pp_qualitytot_html_bldr implements gplx.core.brys.Bfr_arg {
 	private int[] qualitycount = new int[6]; // 5 quality levels plus unknown
+	Ordered_hash page_hash = Ordered_hash_.New_bry();
 	private int qualitytot;
 	public void Clear() {
 		for (int i = 0; i < 6; i++)
 			qualitycount[i] = 0;
 		qualitytot = 0;
+		page_hash.Clear();
 	}
 
 	public int Check_quality(Xoa_ttl ttl, Xowe_wiki wiki) {
+		byte[] ttl_bry = ttl.Full_db();
 		int quality = wiki.Quality().getQualityFromCatlink(ttl, wiki);
+		if (page_hash.Has(ttl_bry)) return quality;
+		//System.out.println(String_.new_u8(ttl.Full_db()));
+		
 		if (quality >= 0)
 			qualitycount[quality]++;
 		else
 			qualitycount[5]++;
 
 		qualitytot++;
+
+		page_hash.Add(ttl_bry, quality);
 		return quality;
 	}
 	public byte[] Generate_quality(Xowe_wiki wiki) {

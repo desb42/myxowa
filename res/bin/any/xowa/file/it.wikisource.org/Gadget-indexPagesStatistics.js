@@ -1,11 +1,3 @@
-// add some xowa specific code to move the image on Page (it:Page: == 108)
-jQuery( document ).ready( function ( $ ) {
-	if ( mediaWiki.config.get( 'wgNamespaceNumber' ) === 108 ) {
-		$( '#xowa_pp_image' ).appendTo( $( '.prp-page-image' ) );
-	}
-} );
-
-/* from gadgets */
 $(function() {
 	
 	function highlight(claxx) {
@@ -29,7 +21,7 @@ $(function() {
 		pagine50 = $('.tl-testo-quality').filter('[data-quality="50%"]').length + $('.prp-pagequality-2').length;
 		pagine25 = $('.tl-testo-quality').filter('[data-quality="25%"]').length + $('.prp-pagequality-1').length;
 		
-		avviso = '<span class="index-pages-stat-avviso">Attenzione: il testo Ë stato portato al ' + qualityNs0 + ', ma ci sono delle pagine non ancora al ' + qualityNs0 + '</span>';
+		avviso = '<span class="index-pages-stat-avviso">Attenzione: il testo √® stato portato al ' + qualityNs0 + ', ma ci sono delle pagine non ancora al ' + qualityNs0 + '</span>';
 		showAvviso = false;
 		if (qualityNs0 == '100%' && (pagine75 > 0 || pagine50 > 0 || pagine25 > 0)) {
 			showAvviso = true;
@@ -60,7 +52,7 @@ $(function() {
 		perc3 = Math.round(tot3 / totale * 100) || 0;
 		perc4 = Math.round(tot4 / totale * 100) || 0;
 		
-		declaredQuality = $('#dati').data('qualit‡');
+		declaredQuality = $('#dati').data('qualit√†');
 		effectiveQuality = '25%';
 		if (tot1 === 0) {
 			effectiveQuality = '50%';
@@ -109,7 +101,7 @@ $(function() {
 		);
 		
 		if (declaredQuality !== undefined && declaredQuality != effectiveQuality) {
-			$('.quality-msg-text').html('<span class="index-pages-stat-avviso">Attenzione: l\'indice Ë al ' 
+			$('.quality-msg-text').html('<span class="index-pages-stat-avviso">Attenzione: l\'indice √® al ' 
 				+ declaredQuality + ', ma andrebbe portato al ' + effectiveQuality + '</span> ' 
 				+ '(<a id="highlightLink" class="' + effectiveQuality.replace('%', '') + '" href="#">vedi le pagine al ' + effectiveQuality + '</a>)');
 			

@@ -18,6 +18,7 @@ import gplx.core.envs.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.kwds.*; import gplx.xowa.langs.funcs.*;
 import gplx.xowa.xtns.pfuncs.*; import gplx.xowa.xtns.pfuncs.ttls.*;
 import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.caches.*; import gplx.xowa.wikis.data.tbls.*;		
+import gplx.xowa.wikis.domains.Xow_domain_tid_;
 public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 	public Xot_invk_tkn(int bgn, int end) {this.Tkn_ini_pos(false, bgn, end);}
 	@Override public byte Tkn_tid() {return typeId;} private byte typeId = Xop_tkn_itm_.Tid_tmpl_invk;
@@ -400,6 +401,10 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 		if (transclude_tmpl == null && ctx.Tmpl_load_enabled()) {	// ttl is template not in cache, or some other ns; do load
 //                    if (page_ttl.Ns().Id() == wiki.Ns_mgr().Ns_page_id())
 //                        System.out.println("Transclude " + page_ttl.Full_db_as_str());
+
+		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && page_ttl.Ns().Id() == wiki.Ns_mgr().Ns_page_id())
+			ctx.Page().Html_data().Quality_tots().Check_quality(page_ttl, wiki);
+
 			Xow_page_cache_itm cache_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(page_ttl);
 			if (	cache_itm != null) {
 				if (!Bry_.Eq(cache_itm.Ttl().Full_db(), ctx.Page().Ttl().Full_db())) {	// make sure that transcluded item is not same as page_ttl; DATE:2014-01-10

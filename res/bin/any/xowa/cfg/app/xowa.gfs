@@ -323,11 +323,12 @@ for (var i = 0; i < redlinks.length; i++) {
     var elem = document.getElementById(lnk);
     if (elem) {
       var klasses = klass.split(' ');
-      for (var j = 0; j < klasses.length; j++)
-      	var kl = klasses[j];
+      for (var j = 0; j < klasses.length; j++) {
+        var kl = klasses[j];
         elem.classList.add(kl);
         if (kl == "new")
-        	elem.title += " (page does not exist)" // should be language sensitive
+          elem.title += " (page does not exist)" // should be language sensitive
+      }
     }
   }
 }

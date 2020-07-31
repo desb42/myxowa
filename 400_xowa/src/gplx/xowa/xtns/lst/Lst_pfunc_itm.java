@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.lst; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*; import gplx.xowa.parsers.hdrs.*;
 import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.pages.wtxts.*;
+import gplx.xowa.wikis.domains.Xow_domain_tid_;
 public class Lst_pfunc_itm {
 	public Lst_pfunc_itm(byte[] itm_src, Lst_section_nde_mgr sec_mgr, Xopg_toc_mgr toc_mgr) {
 		this.itm_src = itm_src; this.sec_mgr = sec_mgr; this.toc_mgr = toc_mgr;
@@ -30,6 +31,9 @@ public class Lst_pfunc_itm {
 		Xoa_ttl ttl = wiki.Ttl_parse(ttl_bry); if (ttl == null) return null;		// EX:{{#lst:<>}} -> ""
 //                    if (ttl.Ns().Id() == wiki.Ns_mgr().Ns_page_id())
 //                        System.out.println("New_sect_or_null " + ttl.Full_db_as_str());
+
+		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && ttl.Ns().Id() == wiki.Ns_mgr().Ns_page_id())
+			ctx.Page().Html_data().Quality_tots().Check_quality(ttl, wiki);
 
 		// get from cache
 		Lst_pfunc_itm rv = (Lst_pfunc_itm)wiki.Cache_mgr().Lst_cache().Get_by_bry(ttl_bry);
