@@ -314,7 +314,8 @@ if (!window.xowa) {
       	},
         util: {
         escapeRegExp: function (str) {
-        	return str.replace('$', '\\$');
+    return str.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+//        	return str.replace('$', '\\$');
         },
         	$content: window.jQuery ? jQuery('#mw-content-text') : null,
         	//$content: window.jQuery ? jQuery('#content') : null,

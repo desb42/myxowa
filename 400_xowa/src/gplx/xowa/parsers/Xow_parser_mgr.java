@@ -101,6 +101,7 @@ public class Xow_parser_mgr {
 		if (	Xow_page_tid.Identify(wiki.Domain_tid(), ttl.Ns().Id(), ttl.Page_db()) == Xow_page_tid.Tid_wikitext) {	// only parse page if wikitext; skip .js, .css, Module; DATE:2013-11-10
 			byte[] data_raw = page.Db().Text().Text_bry();
 			data_raw = dbp.stripcomments(data_raw);
+		data_raw = Bry_.Add(data_raw, Bry_.new_a7("<references/>\n"));
 			parser.Parse_text_to_wdom(root, ctx, tkn_mkr, data_raw , Xop_parser_.Doc_bgn_bos);
 		}
 		page.Root_(root);

@@ -35,7 +35,7 @@ class Xoh_ref_list_fmtr implements gplx.core.brys.Bfr_arg {
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		int related_len = itm.Related_len();
 		Bry_fmtr itm_fmtr = cfg.Grp_html_list();
-		Fmt(itm_fmtr, wiki, bfr, itm);
+		Fmt(itm_fmtr, wiki, bfr, itm, -1, related_len);
 		for (int i = 0; i < related_len; i++) {
 			Ref_nde link_itm = itm.Related_get(i);
 			if (link_itm.Nested()) continue;
@@ -43,10 +43,10 @@ class Xoh_ref_list_fmtr implements gplx.core.brys.Bfr_arg {
 				bfr.Add_str_u8(cfg.Grp_many_and());
 			else
 				bfr.Add_str_u8(cfg.Grp_many_sep());
-			Fmt(itm_fmtr, wiki, bfr, link_itm);
+			Fmt(itm_fmtr, wiki, bfr, link_itm, i, related_len);
 		}
 	}
-	private void Fmt(Bry_fmtr itm_fmtr, Xowe_wiki wiki, Bry_bfr trg, Ref_nde itm) {
+	private void Fmt(Bry_fmtr itm_fmtr, Xowe_wiki wiki, Bry_bfr trg, Ref_nde itm, int i, int count) {
 		int itm_idx_minor = itm.Idx_minor();
 		if (itm_idx_minor < 0) return;	// HACK: <ref follow created a negative index; ignore these references for now; de.wikisource.org/wiki/Seite:Die Trunksucht.pdf/63; DATE:2013-06-22
 		byte[] backlabel 
@@ -54,11 +54,41 @@ class Xoh_ref_list_fmtr implements gplx.core.brys.Bfr_arg {
 			? cfg.Backlabels()[itm.Idx_minor()]
 			: wiki.Parser_mgr().Main().Parse_text_to_html(wiki.Parser_mgr().Ctx(), wiki.Msg_mgr().Val_by_key_args(Ref_html_wtr_cfg.Msg_backlabels_err, itm.Idx_minor()))
 			;
+		byte[] backref = referencesFormatEntryNumericBacklinkLabel(itm.Idx_major() + 1, i + 1, count);
 		itm_fmtr.Bld_bfr_many(trg
 			, fmtr.Set(cfg.Itm_id_key_one(), cfg.Itm_crlp(), itm.Name(), itm.Idx_major(), itm.Idx_minor(), cfg.Itm_crls())
-			, Bry_.Empty // extra field see https://github.com/wikimedia/mediawiki-extensions-Cite/includes/Cite.php
+			, backref
+			//, Bry_.Empty // extra field see https://github.com/wikimedia/mediawiki-extensions-Cite/includes/Cite.php
 			             // $this->referencesFormatEntryNumericBacklinkLabel( $val['number'], $i, $val['count'] ),
 			, backlabel
 			);
+	}
+	private byte[] referencesFormatEntryNumericBacklinkLabel(int base, int offset, int max) {
+		Bry_bfr bfr = Bry_bfr_.New();
+		bfr.Add_int_variable(base); // language sensitive
+		bfr.Add_byte(Byte_ascii.Dot); // or comma!!! language sensitive
+		int maxwidth;
+		if (max < 10)
+			maxwidth = 1;
+		else if (max < 100)
+			maxwidth = 2;
+		else if (max < 1000)
+			maxwidth = 3;
+		else
+			maxwidth = 4;
+		int width;
+		if (offset < 10)
+			width = 1;
+		else if (offset < 100)
+			width = 2;
+		else if (offset < 1000)
+			width = 3;
+		else
+			width = 4;
+		int zeros = maxwidth - width;
+		for (int i = 0; i < zeros; i++)
+			bfr.Add_byte(Byte_ascii.Num_0);
+		bfr.Add_int_variable(offset);
+		return bfr.To_bry();
 	}
 }

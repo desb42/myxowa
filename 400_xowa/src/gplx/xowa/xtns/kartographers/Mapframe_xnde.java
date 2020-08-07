@@ -62,7 +62,13 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_end);
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
-		Render(bfr, ctx);
+		if (this.width == null || this.height == null) // should do more error checking and explanation
+			bfr.Add_str_u8("<div style=\"white-space:nowrap;\"><div class=\"mw-kartographer-error\"><p>&lt;mapframe&gt; problems:\n" +
+			            "</p>\n" +
+			            "<ul><li>Attribute \"width\" is missing</li>\n" +
+			            "<li>Attribute \"height\" is missing</li></ul></div></div>");
+		else
+			Render(bfr, ctx);
 	}
 	public static Xop_log_basic_wkr Log_wkr = Xop_log_basic_wkr.Null;
 

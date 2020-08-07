@@ -98,7 +98,7 @@ public class Xow_msg_mgr implements Gfo_invk {
 			bfr.Add(CONST_atr_accesskey).Add(accesskey_val).Add_byte(Byte_ascii.Quote);
 		bfr.Add(CONST_atr_title).Add(tooltip_found ? tooltip_val : Bry_.Empty);	// NOTE: if tooltip not found, make blank; don't bother showing tooltip_key
 		if (accesskey_found)
-			bfr.Add_byte(Byte_ascii.Space).Add_byte(Byte_ascii.Brack_bgn).Add(CONST_atr_shift).Add(accesskey_val).Add_byte(Byte_ascii.Brack_end);
+			bfr.Add_byte(Byte_ascii.Space).Add_byte(Byte_ascii.Brack_bgn).Add(accesskey_val).Add_byte(Byte_ascii.Brack_end);
 		bfr.Add_byte(Byte_ascii.Quote);
 		byte[] rv = bfr.To_bry_and_clear();
 		if (itm == null)
@@ -108,7 +108,6 @@ public class Xow_msg_mgr implements Gfo_invk {
 			return null;
 		}
 	}	private static final    byte[] CONST_prefix_tooltip = Bry_.new_a7("tooltip-"), CONST_prefix_accesskey = Bry_.new_a7("accesskey-"), CONST_atr_title = Bry_.new_a7(" title=\""), CONST_atr_accesskey = Bry_.new_a7(" accesskey=\"")
-	, CONST_atr_shift = Bry_.new_a7("alt-shift-")
 	;
 	public Xol_msg_itm Set(String key_str, String val_str) { // TEST
 		Xol_msg_itm msg_itm = this.Get_or_make(Bry_.new_u8(key_str));

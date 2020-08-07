@@ -27,7 +27,7 @@ public class Db_lua_comp {
 		return text;
 	}
 	public static byte[] Text(byte[] text) {
-		if (text[0] == '\032') {
+		if (text.length > 0 && text[0] == '\032') {
 			int size = Size(text, 1);
 			//text = Bry_.Mid(text, size + 5);
 			text = Bry_.Mid(text, 5, size + 5);

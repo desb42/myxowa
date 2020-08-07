@@ -17,6 +17,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 document.addEventListener('DOMContentLoaded', function () {
 
+
+function setaccess() {
+    $('[accesskey]').updateTooltipAccessKeys();
+}
+
 function initCollapsible () {
     /* from jquery.makeCollapsible.css */
 /*    xowa.css.add('.mw-collapsible-toggle{float:right;}li .mw-collapsible-toggle{float:none;}.mw-collapsible-toggle-li{list-style:none;}');
@@ -55,6 +60,8 @@ function init () {
       xowa.js.jquery.init();
       xowa.js.mediaWiki.init();
     }
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/jquery.client.js');
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/jquery.accessKeyLabel.js', setaccess);
     if (needCollapsible) {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/jquery/jquery.makeCollapsible.js', initCollapsible);
       xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery.makeCollapsible.styles.css')
@@ -113,7 +120,9 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/karto/modules/linkbox/Link.js');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/karto/modules/maplink/maplink.js');
     }
-    if (document.querySelectorAll('.mw-kartographer-container').length || document.querySelectorAll('.mw-kartographer-maplink').length) {
+    if (document.querySelectorAll('.mw-kartographer-container').length
+        || document.querySelectorAll('.mw-kartographer-maplink').length
+        || document.querySelectorAll('.mw-kartographer-error').length) {
       xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/lib/karto/ext.kartographer.style.css')
     }
       

@@ -17,7 +17,7 @@ package gplx.xowa.addons.htmls.sidebars; import gplx.*; import gplx.xowa.*; impo
 public class Xoh_sidebar_itm {
 	public Xoh_sidebar_itm(boolean tid_is_itm, byte[] text_key, byte[] text_val, byte[] href) {
 		this.tid_is_itm = tid_is_itm;
-		this.id = gplx.langs.htmls.encoders.Gfo_url_encoder_.Id.Encode(Bry_.Add(CONST_id_prefix, text_key));	// build id; EX:"n-encoded_id"
+		this.id = gplx.langs.htmls.encoders.Gfo_url_encoder_.Id.Encode(Bry_.Add(tid_is_itm ? CONST_id_prefix_n : CONST_id_prefix_p, text_key));	// build id; EX:"n-encoded_id"
 		this.text = text_val;
 		this.href = href;
 	}
@@ -43,5 +43,5 @@ public class Xoh_sidebar_itm {
 		this.atr_accesskey_and_title = atr_accesskey_and_title;
 	}
 
-	private static final    byte[] CONST_id_prefix = Bry_.new_a7("p-"); // 20190415 at some time ago changed from n-
+	private static final    byte[] CONST_id_prefix_n = Bry_.new_a7("n-"), CONST_id_prefix_p = Bry_.new_a7("p-");
 }

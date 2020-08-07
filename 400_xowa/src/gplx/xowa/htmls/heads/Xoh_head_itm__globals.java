@@ -67,6 +67,8 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		wtr.Write_js_global_ini_atr_val(Key_http_port			, app.Http_server().Port());
 		wtr.Write_js_global_ini_atr_msg(wiki, Key_sort_ascending);
 		wtr.Write_js_global_ini_atr_msg(wiki, Key_sort_descending);
+		wtr.Write_js_global_ini_atr_msg(wiki, Key_brackets);
+		wtr.Write_js_global_ini_atr_msg(wiki, Key_word_separator);
 		Xol_lang_itm lang = wiki.Lang(); Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
 		tmp_wtr.Init(tmp_bfr);
@@ -161,6 +163,8 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	, Key_wgPopupsGateway				= Bry_.new_a7("wgPopupsGateway")
 	, Bry_view					= Bry_.new_a7("view")
 	, Bry_other					= Bry_.new_a7("other")
+	, Key_brackets				= Bry_.new_a7("brackets")
+	, Key_word_separator				= Bry_.new_a7("word-separator")
 	;
 	private static byte[] Html_js_table_months(Xoh_head_wtr tmp_wtr, Xow_msg_mgr msg_mgr, int january_id, int december_id) {
 		tmp_wtr.Write_js_ary_bgn();

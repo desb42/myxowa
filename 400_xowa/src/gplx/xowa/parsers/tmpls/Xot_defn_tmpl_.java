@@ -25,8 +25,10 @@ public class Xot_defn_tmpl_ {
 		frame_ttl = DB_case_cvt.Upper_1st(frame_ttl, 0, frame_ttl.length);	// NOTE: always uppercase 1st; EX:{{navbox -> "Template:Navbox"; PAGE:en.w:Achilles DATE:2014-06-21
 
 		frame_ttl = Xoa_ttl.Replace_unders(frame_ttl);
-		if (frame_ns == Xow_ns_.Tid__template)
-			frame_ttl = Bry_.Add(wiki.Ns_mgr().Ns_template().Name_db_w_colon(), Xoa_ttl.Replace_unders(frame_ttl)); // NOTE: always prepend "Template:" to frame_ttl; DATE:2014-06-13; always use spaces; DATE:2014-08-14; must be local language; Russian "Шаблон" not English "Template"; PAGE:ru.w:Королевство_Нидерландов DATE:2016-11-23
+		if (frame_ns != Xow_ns_.Tid__main)
+			frame_ttl = Bry_.Add(Xoa_ttl.Replace_unders(wiki.Ns_mgr().Ids_get_or_null(frame_ns).Name_db_w_colon()), frame_ttl);
+//		if (frame_ns == Xow_ns_.Tid__template)
+//			frame_ttl = Bry_.Add(wiki.Ns_mgr().Ns_template().Name_db_w_colon(), Xoa_ttl.Replace_unders(frame_ttl)); // NOTE: always prepend "Template:" to frame_ttl; DATE:2014-06-13; always use spaces; DATE:2014-08-14; must be local language; Russian "Шаблон" not English "Template"; PAGE:ru.w:Королевство_Нидерландов DATE:2016-11-23
 		rv.Frame_ttl_(frame_ttl);
 		int orig_args_len = orig.Args_len();
 		boolean tmpl_args_parsing_orig = ctx.Tmpl_args_parsing();
