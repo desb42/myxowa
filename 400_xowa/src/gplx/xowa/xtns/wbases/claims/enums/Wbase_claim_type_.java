@@ -59,9 +59,9 @@ public class Wbase_claim_type_ {
 	, Itm__math                 = New(Tid__math                  , "math")              // EX:wd:Property:P2534
 	, Itm__geo_shape            = New(Tid__geo_shape             , "geo-shape")         // EX:wd:Property:P3896
 	, Itm__tabular_data         = New(Tid__tabular_data          , "tabular-data")      // EX:wd:Property:P4179
-	, Itm__lexeme               = New(Tid__lexeme                , "lexeme")            // EX:wd:Lexeme:L2
-	, Itm__form                 = New(Tid__form                  , "form")              // EX:wd:Lexeme:L2 P5830
-	, Itm__sense                = New(Tid__sense                 , "sense")             // EX:wd:Lexeme:L2 P6072
+	, Itm__lexeme               = New(Tid__lexeme                , "wikibase-lexeme")   // EX:wd:Property:P5188
+	, Itm__sense                = New(Tid__sense                 , "wikibase-sense")    // EX:wd:Property:P5972
+	, Itm__form                 = New(Tid__form                  , "wikibase-form")     // EX:wd:Property:P5193
 	, Itm__musical_notation     = New(Tid__musical_notation      , "musical-notation")  // EX:wd:Property:P6604
 	;
 // from https://github.com/wikimedia/mediawiki-extensions-Wikibase/blob/lib/i18n/en.json

@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.parsers.hdrs; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
 import gplx.xowa.parsers.xndes.*;
 import gplx.xowa.parsers.hdrs.sections.*;
+import gplx.xowa.parsers.htmls.Mwh_atr_itm;
 public class Xop_hdr_wkr implements Xop_ctx_wkr {
 	public void Ctor_ctx(Xop_ctx ctx) {}
 	public void Page_bgn(Xop_ctx ctx, Xop_root_tkn root) {}
@@ -46,6 +47,43 @@ public class Xop_hdr_wkr implements Xop_ctx_wkr {
                 new_pos = Bry_find_.Find_fwd_while(src, new_pos, src_len, Byte_ascii.Space); // skip leading space
 		return new_pos;
 	}
+	public int Make_tkn_bgn_from_h(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, int hdr_len, int atrs_bgn, int atrs_end, Mwh_atr_itm[] atrs) {
+		if (bgn_pos == Xop_parser_.Doc_bgn_bos) bgn_pos = 0;	// do not allow -1 pos
+		ctx.Apos().End_frame(ctx, root, src, bgn_pos, false);
+		Close_open_itms(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos);
+		ctx.Para().Process_block__bgn__nl_w_symbol(ctx, root, src, bgn_pos, cur_pos, Xop_xnde_tag_.Tag__h2);	// pass h2; should pass h# where # is correct #, but for purpose of Para_wkr, <h2> tag does not matter
+
+		Xop_hdr_tkn tkn = tkn_mkr.Hdr(bgn_pos, cur_pos, hdr_len);	// make tkn
+                tkn.Set_attrs(atrs_bgn, atrs_end, atrs);
+		ctx.StackTkn_add(root, tkn);
+		int new_pos = Bry_find_.Find_fwd_while_ws(src, cur_pos, src_len);
+		return new_pos;
+        }
+	public int Make_tkn_end_from_h(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, int stackPos, int end_hdr_len) {// REF.MW: Parser|doHeadings
+		if (ctx.Cur_tkn_tid() == Xop_tkn_itm_.Tid_tmpl_curly_bgn) return ctx.Lxr_make_txt_(cur_pos);
+
+		// end frame
+		Xop_hdr_tkn hdr = (Xop_hdr_tkn)ctx.Stack_pop_til(root, src, stackPos, false, bgn_pos, cur_pos, Xop_tkn_itm_.Tid_hdr);
+		ctx.Apos().End_frame(ctx, root, src, bgn_pos, false);	// end any apos; EX: ==''a==
+
+		// handle asymmetrical "="; EX: "== A ==="
+		if (hdr.Num() != end_hdr_len) {
+			// warn about mistmatched <hA> and </hB>
+		}
+
+		// gobble ws; hdr gobbles up trailing ws; EX: "==a== \n\t \n \nb" gobbles up all 3 "\n"s; otherwise para_wkr will process <br/> 
+		cur_pos = Find_fwd_while_ws_hdr_version(src, cur_pos, src_len);
+		ctx.Para().Process_block__bgn_n__end_y(Xop_xnde_tag_.Tag__h2);
+
+                root.Subs_ignore_whitespace();
+		// add to root tkn; other post-processing
+		hdr.Subs_move(root);
+		hdr.Src_end_(cur_pos);
+		if (ctx.Parse_tid() == Xop_parser_tid_.Tid__wtxt) {	// do not add if defn / tmpl mode
+			ctx.Page().Wtxt().Toc().Add(hdr);
+		}
+		return cur_pos;
+        }
 	public int Make_tkn_end(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, int stackPos, int end_hdr_len) {// REF.MW: Parser|doHeadings
 		if (ctx.Cur_tkn_tid() == Xop_tkn_itm_.Tid_tmpl_curly_bgn) return ctx.Lxr_make_txt_(cur_pos);
 

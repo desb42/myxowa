@@ -96,6 +96,7 @@ public class Xou_cache_tbl implements Rls_able {
 					Gfo_usr_dlg_.Instance.Note_many("", "", "user_cache: duplicate key; key=~{0} count=~{1}", itm.Lnki_key(), hash.Count());
 				}
 				else {
+//					System.out.println(String_.new_u8(itm.Lnki_key()));
 					hash.Add(itm.Lnki_key(), itm);
 				}
 			}

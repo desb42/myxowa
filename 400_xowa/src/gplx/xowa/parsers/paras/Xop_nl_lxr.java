@@ -55,6 +55,9 @@ public class Xop_nl_lxr implements Xop_lxr {
 		Xop_para_wkr para_wkr = ctx.Para();
 		switch (ctx.Cur_tkn_tid()) {
 			case Xop_tkn_itm_.Tid_hdr:		// last tkn was hdr; close it; EX: \n==a==\nb; "\n" should close 2nd "=="; DATE:2014-02-17
+                            if (last_tkn instanceof gplx.xowa.parsers.hdrs.Xop_hdr_tkn) {
+                                return Bry_find_.Find_fwd_while_ws(src, cur_pos, src_len);
+                            }
 				int acs_pos = ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_hdr);
 				ctx.Stack_pop_til(root, src, acs_pos, true, bgn_pos, cur_pos, Xop_tkn_itm_.Tid_newLine);
 				para_wkr.Process_block__bgn_n__end_y(Xop_xnde_tag_.Tag__h2);

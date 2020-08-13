@@ -30,6 +30,7 @@ public class Xoh_hdr_data implements Xoh_data_itm {
 	public int Capt_rhs_bgn() {return capt_rhs_bgn;} private int capt_rhs_bgn;
 	public int Capt_rhs_end() {return capt_rhs_end;} private int capt_rhs_end;
 	public boolean Capt_rhs_exists() {return capt_rhs_end > capt_rhs_bgn;}
+	public byte[] Atrs() {return hdr_atrs;} private byte[] hdr_atrs;
 	public void Clear() {
 		this.anch_bgn = anch_end = capt_bgn = capt_end = capt_rhs_bgn = capt_rhs_end = -1;
 		this.anch_is_diff = false;
@@ -37,8 +38,9 @@ public class Xoh_hdr_data implements Xoh_data_itm {
 	public boolean Init_by_parse(Xoh_hdoc_wkr hdoc_wkr, Xoh_hdoc_ctx hctx, Gfh_tag_rdr tag_rdr, byte[] src, Gfh_tag hdr_head, Gfh_tag span_head) {
 		this.Clear();
 		this.src_bgn = hdr_head.Src_bgn(); this.hdr_level = hdr_head.Name_id();
-		if (hdr_head.Atrs__len() > 0) return false;								// skip manual <h2> with atrs; PAGE:fr.w:Wikipédia:LiveRC/ToDo; DATE:2016-07-02
+		//if (hdr_head.Atrs__len() > 0) return false;								// skip manual <h2> with atrs; PAGE:fr.w:Wikipédia:LiveRC/ToDo; DATE:2016-07-02
 		Gfh_atr anch_atr = span_head.Atrs__get_by_or_empty(Gfh_atr_.Bry__id);
+                this.hdr_atrs = hdr_head.Atrs_bry();
 		if (anch_atr.Val_dat_missing()) return false;							// skip manual <h2> without id; PAGE:fr.w:Portail:Nord-Amérindiens/Image_sélectionnée; DATE:2016-07-01
 		this.anch_bgn = anch_atr.Val_bgn(); this.anch_end = anch_atr.Val_end();
 		this.capt_bgn = span_head.Src_end();

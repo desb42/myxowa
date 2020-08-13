@@ -28,6 +28,7 @@ public class Pgbnr_func extends Pf_func_base {
 		Pgbnr_xtn_mgr xtn_mgr = wiki.Xtn_mgr().Xtn_pgbnr();
 		Pgbnr_cfg cfg = xtn_mgr.Cfg();
 		Xoa_ttl ttl = page.Ttl();
+		Pgbnr_itm itm = new Pgbnr_itm();
 		// ?? if (!cfg.Chk_pgbnr_allowed(ttl, wiki)) return;
 		byte[] tooltip = ttl.Page_txt(), title = ttl.Page_txt(), toc = Bry_.Empty, origin_x = Bry_.Empty;
 		boolean bottomtoc = false;
@@ -71,6 +72,7 @@ public class Pgbnr_func extends Pf_func_base {
 					icon_title = icon_ttl.Page_txt();
 				}
 				icons_list.Add(new Pgbnr_icon(tmp_bfr, icon_name, icon_title, icon_href));
+				itm.Add_new_icon(tmp_bfr, icon_name, icon_title, icon_href);
 			}
 			if (tid == Arg__origin) {					// REF.MW:addFocus
 				double tmp_data_pos_x = Double_.NaN, tmp_data_pos_y = Double_.NaN;
@@ -102,7 +104,6 @@ public class Pgbnr_func extends Pf_func_base {
 		}
 		Xof_file_itm banner_file_itm = File__make_tkn(ctx, Xop_file_logger_.Tid__pgbnr_main, banner_ttl, Xop_lnki_tkn.Width_null, Xop_lnki_tkn.Height_null);
 
-		Pgbnr_itm itm = new Pgbnr_itm();
 		itm.Init_from_wtxt(banner_ttl, banner_file_itm, tooltip, title, bottomtoc, toc, data_pos_x, data_pos_y, origin_x, icons_list == null ? Pgbnr_icon.Ary_empty : (Pgbnr_icon[])icons_list.To_ary_and_clear(Pgbnr_icon.class), enabletoc);
 		page.Html_data().Pagebanner().Add(itm, banner_ttl);
 		page.Html_data().Head_mgr().Itm__pgbnr().Enabled_y_();	// register css / js during parse stage
@@ -114,7 +115,7 @@ public class Pgbnr_func extends Pf_func_base {
 		Xoa_ttl ttl = wpg.Ttl();
 		Xoa_ttl banner_ttl = null; byte[] banner_html = null;
 		if (itm != null) {							// {{PAGEBANNER}} exists in wikitext
-			itm.Init_hdump(hctx.Mode_is_hdump());
+			itm.Init_hdump(hctx.Mode_is_hdump_only());
 			banner_ttl = itm.banner_ttl;
 			banner_html = Get_banner_html(wiki, ctx, hctx, cfg, banner_ttl, itm);
 			if (banner_html == null) {	// no banner; try again using title from wikidata; note that this should only happen if no banner_ttl or banner_ttl is invalid; EX:{{PAGEBANNER:|toc=yes}}
@@ -170,7 +171,7 @@ public class Pgbnr_func extends Pf_func_base {
 		}
 		itm.Init_from_html(max_width, banner_file, banner_url, srcset, cfg.enable_heading_override, toc_html, isPanorama);
 
-		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(itm);
+		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(itm.Mustache__json());
 		Mustache_bfr mbfr = Mustache_bfr.New_bfr(tmp_bfr);
 		wiki.Xtn_mgr().Xtn_pgbnr().Template_root().Render(mbfr, mctx);
 		return mbfr.To_bry_and_clear();

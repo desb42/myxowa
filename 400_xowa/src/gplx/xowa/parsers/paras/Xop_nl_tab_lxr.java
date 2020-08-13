@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.parsers.paras; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
 import gplx.core.btries.*; import gplx.xowa.langs.*;
 import gplx.xowa.parsers.tblws.*;
+import gplx.xowa.parsers.lists.Xop_list_tkn_new;
 public class Xop_nl_tab_lxr implements Xop_lxr {
 	public int Lxr_tid() {return Xop_lxr_.Tid_nl_tab;}
 	public void Init_by_wiki(Xowe_wiki wiki, Btrie_fast_mgr core_trie) {core_trie.Add(Hook_nl_tab, this);} private static final byte[] Hook_nl_tab = new byte[] {Byte_ascii.Nl, Byte_ascii.Tab};
@@ -42,8 +43,26 @@ public class Xop_nl_tab_lxr implements Xop_lxr {
 				}
 			}
 		}
-		if (bgn_pos != Xop_parser_.Doc_bgn_bos)		// don't add \n if BOS; EX: "<BOS> a" should be " ", not "\n "
-			ctx.Subs_add(root, tkn_mkr.NewLine(bgn_pos, bgn_pos + 1, Xop_nl_tkn.Tid_char, 1));
+		if (bgn_pos != Xop_parser_.Doc_bgn_bos) { // don't add \n if BOS; EX: "<BOS> a" should be " ", not "\n "
+			Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+			if (prev != null) {
+				if (prev.Src_bgn() > src.length)
+					System.out.println("nl");
+				Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+				ctx.Subs_add_and_stack(root, itm);
+				ctx.Page().Prev_list_tkn_(null);
+			}
+			Xop_para_wkr para_wkr = ctx.Para();
+			if (	ctx.Parse_tid() == Xop_parser_tid_.Tid__wtxt			// parse_mode is wiki
+				&&	para_wkr.Enabled()											// check that para is enabled
+				)
+				para_wkr.Process_nl(ctx, root, src, bgn_pos, cur_pos);
+			else {																// parse mode is tmpl, or para is disabled; for latter, adding \n for pretty-print
+				Xop_nl_tkn nl_tkn = tkn_mkr.NewLine(bgn_pos, cur_pos, Xop_nl_tkn.Tid_char, 1);
+				ctx.Subs_add(root, nl_tkn);
+			}
+//			ctx.Subs_add(root, tkn_mkr.NewLine(bgn_pos, bgn_pos + 1, Xop_nl_tkn.Tid_char, 1));
+		}
 		ctx.Subs_add(root, tkn_mkr.Tab(cur_pos - 1, cur_pos));
 		return cur_pos;
 	}

@@ -153,8 +153,11 @@ public class Json_nde extends Json_itm_base implements Json_grp {
 	}
 	public Json_nde Add_many(Json_itm... ary) {
 		int len = ary.length;
-		for (int i = 0; i < len; i++)
-			Add(ary[i]);
+		for (int i = 0; i < len; i++) {
+                    Json_itm itm = ary[i];
+                    if (itm != null)
+			Add(itm);
+                }
 		return this;
 	}
 	public void Add(Json_itm itm) {

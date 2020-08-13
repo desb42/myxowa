@@ -46,6 +46,8 @@ public class Xoh_hdr_html {
 		if (hdr_is_valid) {													// NOTE: need to check hdr_num b/c it could be dangling
 			Xoh_html_wtr_.Para__assert_tag_starts_on_nl(bfr, hdr.Src_bgn()); 
 			bfr.Add(Bry__hdr_lhs_bgn).Add_int(hdr_num, 1, 1);				// '<h', '2'
+                        if (hdr.Args_bgn() > 0)
+                            bfr.Add_mid(src, hdr.Args_bgn() - 1, hdr.Args_end());
 			bfr.Add_byte(Byte_ascii.Angle_end);								// '>'
 			if (cfg.Toc__show()) {
 				bfr.Add(Bry__span_lhs_bgn);									// "<span class='mw-headline' id='"

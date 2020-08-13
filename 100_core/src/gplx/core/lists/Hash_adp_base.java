@@ -42,14 +42,14 @@ public abstract class Hash_adp_base implements Hash_adp {
 		return Fetch_base(key);
 	}
 
-	// private final    java.util.HashMap<Object, Object> hash = new java.util.HashMap<Object, Object>();			
-	private final    java.util.Hashtable hash = new java.util.Hashtable();			
-	@gplx.Virtual public int Len() {return hash.size();}														
-	@gplx.Virtual public int Count() {return hash.size();}														
-	@gplx.Virtual public void Clear() {hash.clear();}															
-	@gplx.Virtual protected void Add_base(Object key, Object val) {hash.put(key, val);}						
-	@gplx.Virtual protected void Del_base(Object key) {hash.remove(key);}										
-	@gplx.Virtual protected boolean Has_base(Object key) {return hash.containsKey(key);}							
-	@gplx.Virtual protected Object Fetch_base(Object key) {return hash.get(key);}									
-	@gplx.Virtual public java.util.Iterator iterator() {return hash.values().iterator();}	
+	// private final    java.util.HashMap<Object, Object> hash = new java.util.HashMap<Object, Object>();
+	private final    java.util.Hashtable hash = new java.util.Hashtable();
+	@gplx.Virtual public int Len() {return hash.size();}
+	@gplx.Virtual public int Count() {return hash.size();}
+	@gplx.Virtual public void Clear() {hash.clear();}
+	@gplx.Virtual protected void Add_base(Object key, Object val) {hash.put(key, val);}
+	@gplx.Virtual protected void Del_base(Object key) {hash.remove(key);}
+	@gplx.Virtual protected boolean Has_base(Object key) {return hash.containsKey(key);}
+	@gplx.Virtual protected Object Fetch_base(Object key) {return hash.get(key);}
+	@gplx.Virtual public java.util.Iterator iterator() {return hash.values().iterator();}
 }

@@ -370,6 +370,12 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 			ctx.Msg_log().Add_itm_none(Xop_xnde_log.No_inline, src, bgn_pos, gtPos);
 			return gtPos + Int_.Offset_1;
 		}
+
+		// extra check for h2->h6 - convert to a hdr lxr instead
+		if (tagId >= Xop_xnde_tag_.Tid__h2 && tagId <= Xop_xnde_tag_.Tid__h6) {
+			return ctx.Hdr().Make_tkn_bgn_from_h(ctx, tkn_mkr, root, src, src_len, bgn_pos, open_tag_end, tagId - Xop_xnde_tag_.Tid__h2 + 2, atrs_bgn, atrs_end, atrs);
+		}
+
 		Xop_xnde_tkn xnde = null;
 		xnde = Xnde_bgn(ctx, tkn_mkr, root, tag, inline ? Xop_xnde_tkn.CloseMode_inline : Xop_xnde_tkn.CloseMode_open, src, bgn_pos, open_tag_end, atrs_bgn, atrs_end, atrs);
 		if (!inline && tag.Bgn_mode() != Xop_xnde_tag_.Bgn_mode__inline)
@@ -435,6 +441,18 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 	private int Make_xtag_end(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, Xop_xnde_tag end_tag) {
 		int end_tag_id = end_tag.Id();
 		cur_pos = Bry_find_.Find_fwd_while_not_ws(src, cur_pos, src_len) + 1;
+                
+		// extra check for h2->h6 - convert to a hdr lxr instead
+		if (end_tag_id >= Xop_xnde_tag_.Tid__h2 && end_tag_id <= Xop_xnde_tag_.Tid__h6) {
+		int stack_pos = ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_hdr);
+		if (stack_pos == Xop_ctx.Stack_not_found) {	// no hdr; make eq_tkn and return;
+                    
+                }
+			//ctx.Hdr().Make_tkn_end_from_h(ctx, tkn_mkr, root, src, src_len, bgn_pos, open_tag_end, tag id - Xop_xnde_tag_.Tid__h2 + 2, atrs_bgn, atrs_end, atrs);
+                        ctx.Hdr().Make_tkn_end_from_h(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, stack_pos, end_tag_id - Xop_xnde_tag_.Tid__h2 + 2);
+                        return cur_pos;
+		}
+
 		int prv_xnde_pos = ctx.Stack_idx_find_but_stop_at_tbl(Xop_tkn_itm_.Tid_xnde);	// find any previous xnde on stack
 		Xop_xnde_tkn bgn_nde = (Xop_xnde_tkn)ctx.Stack_get(prv_xnde_pos);
 		int bgn_tag_id = bgn_nde == null ? -1 : bgn_nde.Tag().Id();

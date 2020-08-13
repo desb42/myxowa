@@ -14,6 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.parsers.hdrs; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
+import gplx.xowa.parsers.htmls.Mwh_atr_itm;
 public class Xop_hdr_tkn extends Xop_tkn_itm_base {
 	public Xop_hdr_tkn(int bgn, int end, int num) {this.Tkn_ini_pos(false, bgn, end); this.num = num;}
 	@Override public byte Tkn_tid()			{return Xop_tkn_itm_.Tid_hdr;}
@@ -36,4 +37,12 @@ public class Xop_hdr_tkn extends Xop_tkn_itm_base {
 	}
 
 	public static final    Xop_hdr_tkn[] Ary_empty = new Xop_hdr_tkn[0];
+        public int Args_bgn() { return args_bgn; } private int args_bgn;
+        public int Args_end() { return args_end; } private int args_end;
+        public Mwh_atr_itm[] Atrs() { return atrs; } private Mwh_atr_itm[] atrs;
+        public void Set_attrs(int args_bgn, int args_end, Mwh_atr_itm[] atrs) {
+            this.args_bgn = args_bgn;
+            this.args_end = args_end;
+            this.atrs = atrs;
+        }
 }

@@ -89,6 +89,7 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 					}
 					break;
 				case Gfh_tag_.Id__img:
+                                    System.out.println(String_.new_u8(Bry_.Mid(src, cur.Src_bgn(), cur.Src_end())));
 					if		(cur.Atrs__has(gplx.xowa.htmls.core.wkrs.imgs.atrs.Xoh_img_xoimg_data.Bry__data_xowa_image))
 						rv = Parse_by_data(hdoc_wkr, hctx, tag_rdr, src, cur, null, Xoh_hzip_dict_.Tid__img);
 					else {

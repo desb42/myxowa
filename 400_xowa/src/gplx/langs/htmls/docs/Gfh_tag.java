@@ -119,6 +119,11 @@ public class Gfh_tag implements Mwh_atr_wkr {
 		}
 		return rv;
 	}
+        public byte[] Atrs_bry() {
+            int len = atrs_hash.Count();
+            if (len == 0) return Bry_.Empty;
+            return Bry_.Mid(src, atrs_bgn, atrs_end);
+        }
 	public String Atrs__print() {
 		if (atrs_null) Atrs__make();
 		Bry_bfr bfr = Bry_bfr_.New();

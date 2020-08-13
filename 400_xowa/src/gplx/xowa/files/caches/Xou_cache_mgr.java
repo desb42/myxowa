@@ -42,6 +42,7 @@ public class Xou_cache_mgr implements Gfo_invk {
 			this.Page_bgn();
 			byte[] key = Xou_cache_itm.Key_gen(tmp_bfr, wiki, ttl, type, upright, w, h, time, page, user_thumb_w);
 			Xou_cache_itm rv = (Xou_cache_itm)hash.Get_by(key);
+                        System.out.println(String_.new_u8(key) + " " + (rv == Xou_cache_itm.Null));
 			if (rv == Xou_cache_itm.Null) {
 				rv = cache_tbl.Select_one(wiki, ttl, type, upright, w, h, time, page, user_thumb_w);
 				if (rv == Xou_cache_itm.Null) return Xou_cache_itm.Null;
