@@ -17,6 +17,7 @@ package gplx.xowa.xtns.geoCrumbs; import gplx.*; import gplx.xowa.*; import gplx
 import gplx.xowa.xtns.pfuncs.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.kwds.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
+import gplx.xowa.langs.cases.Xol_case_cvt;
 public class Geoc_isin_func extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_geoCrumbs_isin;}
 	@Override public Pf_func New(int id, byte[] name) {return new Geoc_isin_func().Name_(name);}
@@ -28,7 +29,7 @@ public class Geoc_isin_func extends Pf_func_base {
 			ttl_bry = Bry_.Add(page_ttl.Ns().Name_db_w_colon(), ttl_bry);
 		Xoa_ttl ttl = Xoa_ttl.Parse(wiki, ttl_bry); if (ttl == null) return;
 		if (wiki.App().Mode().Tid_is_cmd()) {
-			ttl_bry = DB_case_cvt.Upper_1st(ttl_bry, 0, ttl_bry.length);
+			ttl_bry = Xol_case_cvt.Upper_1st(ttl_bry, 0, ttl_bry.length);
 			// how to remove any trailing r-t-l or l-t-r marks?
 			int tlen = ttl_bry.length;
 			if (tlen > 3 && ttl_bry[tlen - 3] == 0xe2 && ttl_bry[tlen - 2] == 0x82 && (ttl_bry[tlen - 1] == 0x8f || ttl_bry[tlen - 1] == 0x8e)) {

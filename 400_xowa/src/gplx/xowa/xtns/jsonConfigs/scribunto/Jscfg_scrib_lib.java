@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,12 +13,32 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.jsonConfigs.scribunto; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.jsonConfigs.*;
-import gplx.xowa.xtns.scribunto.*; import gplx.xowa.xtns.scribunto.libs.*; import gplx.xowa.xtns.scribunto.procs.*;
-import gplx.xowa.wikis.domains.*;
+package gplx.xowa.xtns.jsonConfigs.scribunto;
+
+import gplx.Bry_;
+import gplx.Byte_ascii;
+import gplx.Err_;
+import gplx.Gfo_usr_dlg_;
+import gplx.Io_url;
+import gplx.Keyval;
+import gplx.Keyval_;
+import gplx.String_;
+import gplx.xowa.Xowe_wiki;
+import gplx.xowa.langs.Xol_lang_itm;
+import gplx.xowa.wikis.domains.Xow_domain_itm_;
+import gplx.xowa.xtns.scribunto.Scrib_core;
+import gplx.xowa.xtns.scribunto.Scrib_lib;
+import gplx.xowa.xtns.scribunto.Scrib_lua_mod;
+import gplx.xowa.xtns.scribunto.libs.Scrib_lib_text;
+import gplx.xowa.xtns.scribunto.libs.Scrib_lib_text__json_util;
+import gplx.xowa.xtns.scribunto.libs.Scrib_lib_title;
+import gplx.xowa.xtns.scribunto.procs.Scrib_proc_args;
+import gplx.xowa.xtns.scribunto.procs.Scrib_proc_mgr;
+import gplx.xowa.xtns.scribunto.procs.Scrib_proc_rslt;
+
 public class Jscfg_scrib_lib implements Scrib_lib {
-	private final    Scrib_lib_text__json_util json_util = new Scrib_lib_text__json_util();
-	private final    Jscfg_localizer localizer = new Jscfg_localizer();
+	private final Scrib_lib_text__json_util json_util = new Scrib_lib_text__json_util();
+	private final Jscfg_localizer localizer = new Jscfg_localizer();
 	private Scrib_core core;
 	public String Key() {return "JCLuaLibrary";}
 	public Scrib_lua_mod Mod() {return mod;} private Scrib_lua_mod mod;
@@ -43,11 +63,18 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 	private static final    String[] Proc_names = String_.Ary(Invk_get);
 	public boolean Get(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		byte[] ttl_bry = args.Xstr_bry_or_null(0);
-		boolean localize = true;
-		if (args.Len() > 1) {
-			byte[] lang = args.Xstr_bry_or_null(1);
-			if (lang.length  == 1 && lang[0] == '_')
-				localize = false;
+		byte[] langCode = args.Xstr_bry_or_null(1);
+
+		// get language; ISSUE#:779; DATE:2020-08-03
+		Xol_lang_itm language = null;
+		if (langCode == null) {
+			language = this.core.Wiki().Lang();
+		}
+		else if (!Bry_.Eq(langCode, Byte_ascii.Underline_bry)) {
+			language = this.core.Wiki().App().Lang_mgr().Get_by_or_null(langCode);
+		}
+		else {
+			language = null;
 		}
 
 		// get commons wiki
@@ -61,17 +88,24 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 		// get page
 		byte[] ttl_in_data_ns = Bry_.Add(gplx.xowa.wikis.nss.Xow_ns_.Bry__data, Byte_ascii.Colon_bry, ttl_bry);
 		byte[] page = Scrib_lib_title.GetContentInternal(core, commons_wiki, ttl_in_data_ns);
-		Keyval[] rv;
+		if (page == null) {
+			throw Err_.new_wo_type("bad argument #1 to 'get' (not a valid title) " + String_.new_u8(ttl_bry));
+		}
+
+		// get content
+		Keyval[] rv = null;
 		if (page == null) {
 			rv = Keyval_.Ary_empty;
-			// possibly a warning message? 20190730
-			Gfo_usr_dlg_.Instance.Warn_many("", "", "bad argument #1 to 'get' (not a valid title): ~{0}", ttl_bry);
-			//throw Err_.new_wo_type("bad argument #1 to 'get' (not a valid title) " + String_.new_u8(ttl_bry));
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "bad argument #1 to 'get' (page does not exist): ~{0}", ttl_bry);
 		} else {
 			rv = Scrib_lib_text.JsonDecodeStatic(args, core, json_util, page, Scrib_lib_text__json_util.Opt__force_assoc, Scrib_lib_text__json_util.Flag__none);
-			if (localize) // sometime should not be called (dewiki) BUT...
-				rv = localizer.Localize(core.Wiki().Lang(), page, rv);
+			if (language == null) { // "_" passed in; return entire document
+			}
+			else {// COMMENT:desb42@: sometime should not be called (dewiki) BUT...
+				rv = localizer.Localize(language, page, rv);
+			}
 		}
+
 		return rslt.Init_obj(rv);
 	}
 }

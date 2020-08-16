@@ -18,6 +18,7 @@ import gplx.xowa.langs.*; import gplx.xowa.langs.names.*;
 import gplx.xowa.mediawiki.*;
 import gplx.xowa.xtns.pfuncs.times.*; import gplx.xowa.langs.numbers.*; import gplx.xowa.xtns.pfuncs.numbers.*; import gplx.xowa.langs.durations.*;
 import gplx.xowa.xtns.scribunto.procs.*;
+import gplx.xowa.langs.cases.Xol_case_cvt;
 public class Scrib_lib_language implements Scrib_lib {
 	public Scrib_lib_language(Scrib_core core) {this.core = core;} private Scrib_core core;
 	public String Key() {return "mw.language";}
@@ -183,7 +184,7 @@ public class Scrib_lib_language implements Scrib_lib {
 		} finally {bfr.Mkr_rls();}
 */
                 byte[] copy_word = Bry_.Mid(word, 0);
-		return rslt.Init_obj(DB_case_cvt.Up_low_1st(copy_word, 0, word.length, upper));
+		return rslt.Init_obj(Xol_case_cvt.Up_low_1st(copy_word, 0, word.length, upper));
 	}
 	public boolean Lc(Scrib_proc_args args, Scrib_proc_rslt rslt) {return Case_all(args, rslt, Bool_.N);}
 	public boolean Uc(Scrib_proc_args args, Scrib_proc_rslt rslt) {return Case_all(args, rslt, Bool_.Y);}
@@ -191,7 +192,7 @@ public class Scrib_lib_language implements Scrib_lib {
 		Xol_lang_itm lang = lang_(args);
 		byte[] word = args.Pull_bry(1);
 //		return rslt.Init_obj(lang.Case_mgr().Case_build(upper, word, 0, word.length));
-		return rslt.Init_obj(DB_case_cvt.Case_cvt(word, word.length, upper));
+		return rslt.Init_obj(Xol_case_cvt.Case_cvt(word, word.length, upper));
 	}
 	public boolean CaseFold(Scrib_proc_args args, Scrib_proc_rslt rslt) {return Uc(args, rslt);}	// REF.MW:Language.php!caseFold; http://www.w3.org/International/wiki/Case_folding
 	public boolean FormatNum(Scrib_proc_args args, Scrib_proc_rslt rslt) {

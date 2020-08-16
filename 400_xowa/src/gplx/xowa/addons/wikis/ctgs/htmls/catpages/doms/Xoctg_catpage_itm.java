@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.wikis.*; import gplx.xowa.addons.wikis.ctgs.*; import gplx.xowa.addons.wikis.ctgs.htmls.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*;
 import gplx.dbs.*; import gplx.xowa.wikis.nss.*;
+import gplx.xowa.langs.cases.Xol_case_cvt;
 public class Xoctg_catpage_itm {
 	private byte version;
 	Xoctg_catpage_itm(byte version, byte grp_tid, int page_id, byte[] sortkey_prefix, byte[] sortkey_binary, int count_subcs, int count_pages, int count_files) {
@@ -74,7 +75,7 @@ public class Xoctg_catpage_itm {
 			else {
 				byte[] sortkey_normalized = Bry_.Replace(sortkey_prefix, Sortkey_prefix_replace__src, Sortkey_prefix_replace__trg);
 				//sortkey_normalized = wiki.Lang().Case_mgr().Case_reuse_1st_upper(sortkey_normalized); // ISSUE#:637
-				sortkey_normalized = DB_case_cvt.Upper_1st(sortkey_normalized, 0, sortkey_normalized.length);
+				sortkey_normalized = Xol_case_cvt.Upper_1st(sortkey_normalized, 0, sortkey_normalized.length);
 				tmp_bfr.Add(sortkey_normalized);
 				tmp_bfr.Add_byte_nl().Add(page_ttl.Page_txt());	// "$prefix\n$unprefixed";
 				sortkey_handle = tmp_bfr.To_bry_and_clear();

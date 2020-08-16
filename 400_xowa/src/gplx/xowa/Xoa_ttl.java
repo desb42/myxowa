@@ -573,8 +573,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 			int page_end = page_bgn + char_1st_len;
 			if (page_end > full_txt_len)	// ttl is too too short for 1st multi-byte char; EX: [[%D0]] is 208 but in utf8, 208 requires at least another char; DATE:2013-11-11
 				return false;				// ttl is invalid
-
-			full_txt = DB_case_cvt.Upper_1st(full_txt, page_bgn, full_txt_len, char_1st_len);
+			full_txt = Xol_case_cvt.Upper_1st(full_txt, page_bgn, full_txt_len, char_1st_len);
 		}
 		Xow_ns tors_ns = ns.Id_is_talk() ? ns_mgr.Ords_get_at(ns.Ord_subj_id()) : ns_mgr.Ords_get_at(ns.Ord_talk_id());
 		tors_txt = tors_ns.Name_ui_w_colon();

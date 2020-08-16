@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,8 +13,15 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.wikis.pages.dbs; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*; import gplx.xowa.wikis.pages.*;
-import gplx.xowa.wikis.nss.*;
+package gplx.xowa.wikis.pages.dbs;
+
+import gplx.Bool_;
+import gplx.DateAdp;
+import gplx.DateAdp_;
+import gplx.xowa.Xoa_ttl;
+import gplx.xowa.Xow_wiki;
+import gplx.xowa.wikis.nss.Xow_ns;
+
 public class Xopg_db_page {
 	public Xopg_db_page() {this.Clear();}
 	// from page table
@@ -63,6 +70,9 @@ public class Xopg_db_page {
 	public void Clear() {
 		this.exists = true;
 		this.modified_on = DateAdp_.MinValue;	// NOTE: must set to MinValue else some tests will fail
-		this.html_db_id = -1;	// NOTE: must set to -1 b/c code checks for -1 to indicate no html; DATE:2016-07-14
+		// NOTE: must set to -1 b/c code checks for -1 to indicate no html; DATE:2016-07-14;
+		// NOTE: this should probably be removed, but would need to change all the checks; DATE:2020-08-06
+		this.html_db_id = Xopg_db_page.HTML_DB_ID_NULL;
 	}
+	public static final int HTML_DB_ID_NULL = -1;
 }
