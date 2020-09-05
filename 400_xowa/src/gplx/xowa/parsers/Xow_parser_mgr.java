@@ -73,6 +73,7 @@ public class Xow_parser_mgr {
 				anchor_encoder_parser = Xop_parser.new_(wiki, wiki.Parser_mgr().Main().Tmpl_lxr_mgr(), Xop_lxr_mgr.new_anchor_encoder());
 				anchor_encoder_parser.Init_by_wiki(wiki);
 				anchor_encoder_parser.Init_by_lang(wiki.Lang());
+                                anchor_encoder_parser.Set_expand(); //anchor ugh
 			}
 			return anchor_encoder_parser;
 		}

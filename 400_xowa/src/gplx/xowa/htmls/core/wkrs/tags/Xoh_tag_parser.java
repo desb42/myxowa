@@ -69,7 +69,7 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 			Gfh_tag nxt = null;
 			int cur_name_id = cur.Name_id();
 			switch (cur_name_id) {
-				case Gfh_tag_.Id__h2: case Gfh_tag_.Id__h3: case Gfh_tag_.Id__h4: case Gfh_tag_.Id__h5: case Gfh_tag_.Id__h6:
+				case Gfh_tag_.Id__h1: case Gfh_tag_.Id__h2: case Gfh_tag_.Id__h3: case Gfh_tag_.Id__h4: case Gfh_tag_.Id__h5: case Gfh_tag_.Id__h6:
 					nxt = tag_rdr.Tag__peek_fwd_head();
 					if (	nxt.Name_id() == Gfh_tag_.Id__span
 						&&	nxt.Atrs__match_pair(Gfh_atr_.Bry__class		, Xoh_hdr_data.Bry__class__mw_headline)) {
@@ -89,7 +89,7 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 					}
 					break;
 				case Gfh_tag_.Id__img:
-                                    System.out.println(String_.new_u8(Bry_.Mid(src, cur.Src_bgn(), cur.Src_end())));
+//                                    System.out.println(String_.new_u8(Bry_.Mid(src, cur.Src_bgn(), cur.Src_end())));
 					if		(cur.Atrs__has(gplx.xowa.htmls.core.wkrs.imgs.atrs.Xoh_img_xoimg_data.Bry__data_xowa_image))
 						rv = Parse_by_data(hdoc_wkr, hctx, tag_rdr, src, cur, null, Xoh_hzip_dict_.Tid__img);
 					else {

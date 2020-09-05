@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.core.btries; import gplx.*; import gplx.core.*;
 public class Btrie_slim_itm {
 	private Btrie_slim_itm[] ary = Btrie_slim_itm.Ary_empty;
+        public Btrie_slim_itm[] Ary() { return ary; } //db
 	public Btrie_slim_itm(byte key_byte, Object val, boolean case_any) {this.key_byte = key_byte; this.val = val; this.case_any = case_any;}
 	public byte Key_byte() {return key_byte;} private byte key_byte;
 	public Object Val() {return val;} public void Val_set(Object val) {this.val = val;} private Object val;

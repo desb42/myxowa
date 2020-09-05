@@ -74,8 +74,9 @@ class Map_math {// REF.MW:MapSources_math.php
 		double angle = Math_.Abs_double(dec);
 		double deg = Math_.Floor(angle);
 		double min = (angle - deg) * 60;
-		double sec = prec > 0
-			? Math_.Round((min - Math_.Floor(min)) * 60, prec - 4)
+		double sec = prec > 4
+			//? Math_.Round((min - Math_.Floor(min)) * 60, prec - 4)
+			? Math_.Round((min - Math_.Floor(min)) * 60, prec - 3)
 			: Math_.Round((min - Math_.Floor(min)) * 60, 0)
 			;
 		min = Math_.Floor(min);

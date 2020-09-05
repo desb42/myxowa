@@ -17,7 +17,14 @@ package gplx.xowa.xtns.lst; import gplx.*; import gplx.xowa.*; import gplx.xowa.
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
 public class Lst_pfunc_lst_ {
 	private static final byte Include_between = 0, Include_to_eos = 1, Include_to_bos = 2;
-	public static void Sect_include(Bry_bfr bfr, Lst_section_nde_mgr sec_mgr, byte[] src, byte[] lst_bgn, byte[] lst_end) {
+	public static void Sect_include(Bry_bfr bfr, Lst_pfunc_itm itm, byte[] lst_bgn, byte[] lst_end) {
+                Db_Section_list sect = itm.Sect();
+                byte[] txt = sect.Include(lst_bgn, lst_end);
+                //System.out.println(String_.new_a7(txt));
+                bfr.Add(txt);
+/*                
+            Lst_section_nde_mgr sec_mgr = itm.Sec_mgr();
+            byte[] src = itm.Itm_src();
 		if		(lst_end == Lst_pfunc_itm.Null_arg) {		// no end arg; EX: {{#lst:page|bgn}}; NOTE: different than {{#lst:page|bgn|}}
 			if	(lst_bgn == Lst_pfunc_itm.Null_arg) {		// no bgn arg; EX: {{#lst:page}}
 				bfr.Add(src);				// write all and exit
@@ -30,7 +37,7 @@ public class Lst_pfunc_lst_ {
 		if		(Bry_.Len_eq_0(lst_end))
 			include_mode = Include_to_eos;
 		else if (Bry_.Len_eq_0(lst_bgn))
-			include_mode = Include_to_bos;				
+			include_mode = Include_to_bos;
 		int bgn_pos = 0; boolean bgn_found = false; int src_page_bry_len = src.length;
 		int sections_len = sec_mgr.Len();
 		for (int i = 0; i < sections_len; i++) {
@@ -66,5 +73,6 @@ public class Lst_pfunc_lst_ {
 		}
 		if (bgn_found)	// bgn_found, but no end; write to end of page; EX: "a <section begin=key/> b" -> " b"
 			bfr.Add_mid(src, bgn_pos, src_page_bry_len);
+*/
 	}
 }

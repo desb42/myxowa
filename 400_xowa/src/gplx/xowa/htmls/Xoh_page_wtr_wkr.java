@@ -271,14 +271,18 @@ public class Xoh_page_wtr_wkr {
 						if (page_ns_id != Xow_ns_.Tid__data)
 							app.Wiki_mgr().Wdata_mgr().Write_json_as_html(bfr, page_ttl, data_raw);
 						else {
-							Json_doc jdoc = app.Utl__json_parser().Parse(data_raw);
-							Jdoc_data_writer(bfr, jdoc);
-							bfr.Add_str_a7("<pre>\n");
-							jdoc.Root_grp().Print_as_json(bfr, 0);
-							bfr.Add_str_a7("</pre>\n");
-						//Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
-						//page_tid_uses_pre = true;
-							//Write_body_wikitext(bfr, app, wiki, wikitext, ctx, hctx, page, page_tid, page_ns_id);
+							if (data_raw[0] == '\'') // is it ''''page not found'''
+								bfr.Add(data_raw);
+							else {
+								Json_doc jdoc = app.Utl__json_parser().Parse(data_raw);
+								Jdoc_data_writer(bfr, jdoc);
+								bfr.Add_str_a7("<pre>\n");
+								jdoc.Root_grp().Print_as_json(bfr, 0);
+								bfr.Add_str_a7("</pre>\n");
+							//Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
+							//page_tid_uses_pre = true;
+								//Write_body_wikitext(bfr, app, wiki, wikitext, ctx, hctx, page, page_tid, page_ns_id);
+							}
 						}
 						break;
 					case Xow_page_tid.Tid_wikitext:

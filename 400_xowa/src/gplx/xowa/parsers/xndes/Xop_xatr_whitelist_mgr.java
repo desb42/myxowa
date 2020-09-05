@@ -33,7 +33,9 @@ public class Xop_xatr_whitelist_mgr {
 			chk_bgn = 0;
 			chk_end = key_bry.length;
 		}
-		Object o = key_trie.Match_at(trv, chk_bry, chk_bgn, chk_end);
+
+		//Object o = key_trie.Match_at(trv, chk_bry, chk_bgn, chk_end);
+		Object o = db_key_trie.Match_expand(trv, chk_bry, chk_bgn, chk_end);
 		if (o == null) return false;// unknown atr_key; EX: <b unknown=1/>
 		Xop_xatr_whitelist_itm itm = (Xop_xatr_whitelist_itm)o;
 		byte itm_key_tid = itm.Key_tid();
@@ -267,6 +269,23 @@ public class Xop_xatr_whitelist_mgr {
 
 		// NOTE: not in MW, but needed for "data-sort-type"; check if needed later; DATE:2020-03-08
 		Ini_all_loose("data");
+
+		byte[] md5 = key_trie.Md5();
+		if (Bry_.Eq(md5, Db_btrie_whitelist.Hash()))
+			db_key_trie = new Db_btrie_whitelist(key_trie.Objs());
+		else {
+			// need to rebuild
+			key_trie.Dumpit("Xop_xatr_whitelist_mgr key_trie");
+			int a = 1/0; // eeeek
+		}
+		md5 = style_trie.Md5();
+		if (Bry_.Eq(md5, Db_btrie_whitelist_style.Hash()))
+			db_style_trie = new Db_btrie_whitelist_style(style_trie.Objs());
+		else {
+			// need to rebuild
+			style_trie.Dumpit("Xop_xatr_whitelist_mgr style_trie");
+			int a = 1/0; // eeeek
+		}
 		return this;
 	}
 	private void Ini_grp(String key_str, String base_grp, String... cur_itms) {
@@ -297,19 +316,22 @@ public class Xop_xatr_whitelist_mgr {
 			Xop_xatr_whitelist_itm itm = (Xop_xatr_whitelist_itm)key_trie.Match_exact(key_bry, 0, key_bry.length);
 			if (itm == null) {
 				itm = Ini_key_trie_add(key_bry, true);
-				key_trie.Add_obj(key_bry, itm);
+				//key_trie.Add_obj(key_bry, itm);
 			}
 			itm.Tags()[tag_tid] = 1;
 		}
 	}
 	private void Ini_all_loose(String key_str) {
 		byte[] key_bry = Bry_.new_a7(key_str);
-		Ini_key_trie_add(key_bry, false);
-		Xop_xatr_whitelist_itm itm = Ini_key_trie_add(key_bry, false);
-		key_trie.Add_obj(key_bry, itm);
-		int len = Xop_xnde_tag_.Tid__len;
-		for (int i = 0; i < len; i++)
-			itm.Tags()[i] = 1;
+		Xop_xatr_whitelist_itm itm = (Xop_xatr_whitelist_itm)key_trie.Match_exact(key_bry, 0, key_bry.length);
+		if (itm == null) {
+			Ini_key_trie_add(key_bry, false);
+			itm = Ini_key_trie_add(key_bry, false);
+			key_trie.Add_obj(key_bry, itm);
+			int len = Xop_xnde_tag_.Tid__len;
+			for (int i = 0; i < len; i++)
+				itm.Tags()[i] = 1;
+		}
 	}
 	private Xop_xatr_whitelist_itm  Ini_key_trie_add(byte[] key, boolean exact) {
 		Object key_tid_obj = tid_hash.Get_by(key);
@@ -324,6 +346,7 @@ public class Xop_xatr_whitelist_mgr {
 	.Add_str_byte("role", Mwh_atr_itm_.Key_tid__role)
 	;
 	private Btrie_slim_mgr key_trie = Btrie_slim_mgr.ci_a7();	// NOTE:ci.ascii:HTML.node_name
+	private Db_btrie db_key_trie, db_style_trie;
 	public boolean Scrub_style(Mwh_atr_itm xatr, byte[] raw) { // REF:Sanitizer.php|checkCss; '! expression | filter\s*: | accelerator\s*: | url\s*\( !ix'; NOTE: this seems to affect MS IE only; DATE:2013-04-01
 		byte[] val_bry = xatr.Val_bry();
 		byte[] chk_bry; int chk_bgn, chk_end;
@@ -340,7 +363,8 @@ public class Xop_xatr_whitelist_mgr {
 		}
 		int pos = chk_bgn;
 		while (pos < chk_end) {
-			Object o = style_trie.Match_at(trv, chk_bry, pos, chk_end);
+			//Object o = style_trie.Match_at(trv, chk_bry, pos, chk_end);
+			Object o = db_style_trie.Match_expand(trv, chk_bry, pos, chk_end);
 			if (o == null)
 				++pos;
 			else {

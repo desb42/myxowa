@@ -63,7 +63,8 @@ public class Xot_defn_tmpl_ {
 			}
 			else
 				rv.Args_add_by_idx(copy_arg);	// NOTE: not a key, so add to idx_hash; DATE:2014-07-23
-			copy_arg.Val_tkn_(Make_itm(true, ctx, tkn_mkr, src, orig_arg.Val_tkn(), caller, orig_arg));
+			copy_arg.Set_arg(tkn_mkr, orig_arg, ctx, caller, src);
+			//copy_arg.Val_tkn_(Make_itm(true, ctx, tkn_mkr, src, orig_arg.Val_tkn(), caller, orig_arg));
 			rv.Args_add(copy_arg);
 		}
 		ctx.Tmpl_args_parsing_(tmpl_args_parsing_orig);
@@ -78,6 +79,15 @@ public class Xot_defn_tmpl_ {
 		byte[] rv_ary = orig_arg.KeyTkn_exists() && val_tkn ? arg_bfr.To_bry_and_clear_and_trim() : arg_bfr.To_bry_and_clear();	// // NOTE: must trim if key_exists; DUPE:TRIM_IF_KEY; PAGE:en.w:Coord in Chernobyl disaster, Sahara
 		rv.Dat_ary_(rv_ary);
 		return rv;
+	}
+	public static Arg_itm_tkn Eval_now(Xop_ctx ctx, Arg_nde_tkn tkn, Xot_invk caller, byte[] src) {
+		boolean tmpl_args_parsing_orig = ctx.Tmpl_args_parsing();
+		ctx.Tmpl_args_parsing_(true);
+		Xop_tkn_mkr tkn_mkr = tkn.Tkn_mkr();
+		Arg_nde_tkn orig_arg = tkn.Orig_arg();
+		Arg_itm_tkn itm = Make_itm(true, ctx, tkn_mkr, src, orig_arg.Val_tkn(), caller, orig_arg);
+		ctx.Tmpl_args_parsing_(tmpl_args_parsing_orig);
+		return itm;
 	}
 }
 /*

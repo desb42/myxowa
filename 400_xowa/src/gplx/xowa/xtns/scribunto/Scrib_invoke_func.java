@@ -125,20 +125,27 @@ System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + "
 		}
 		catch (Throwable e) {
 			Err err = Err_.Cast_or_make(e);
-			Error(bfr, wiki.Msg_mgr(), err);
+			int error_level = Error(bfr, wiki.Msg_mgr(), err);
 			Scrib_err_filter_mgr err_filter_mgr = invoke_wkr == null ? null : invoke_wkr.Err_filter_mgr();
 			if (	err_filter_mgr == null																				// no err_filter_mgr defined;
 				||	err_filter_mgr.Count_eq_0()																		// err_filter_mgr exists, but no definitions
 				||	!err_filter_mgr.Match(String_.new_u8(mod_name), String_.new_u8(fnc_name), err.To_str__msg_only()))	// NOTE: must be To_str__msg_only; err_filter_mgr has defintion and it doesn't match current; print warn; DATE:2015-07-24
+                            if (error_level == '0')
+				ctx.App().Usr_dlg().Warn_many("", "", "invoke failed level 0: ~{0} ~{1} ~{2}", ctx.Page().Ttl().Raw(), Bry_.Replace_nl_w_tab(src, self.Src_bgn(), self.Src_end()), err.To_str__log());
+                            else {
 				ctx.App().Usr_dlg().Warn_many("", "", "invoke failed: ~{0} ~{1} ~{2}", ctx.Page().Ttl().Raw(), Bry_.Replace_nl_w_tab(src, self.Src_bgn(), self.Src_end()), err.To_str__log());
 			wiki.Parser_mgr().Scrib().Terminate_when_page_changes_y_();	// NOTE: terminate core when page changes; not terminating now, else page with many errors will be very slow due to multiple remakes of core; PAGE:th.d:all; DATE:2014-10-03
+                            }
 		}
 		if (stat_enabled) ctx.Page().Stat_itm().Scrib().End();
 	}
-	public static void Error(Bry_bfr bfr, Xow_msg_mgr msg_mgr, Err err) {Error(bfr, msg_mgr, Err_.Cast_or_make(err).To_str__top_wo_args());}// NOTE: must use "short" error message to show in wikitext; DATE:2015-07-27
-	public static void Error(Bry_bfr bfr, Xow_msg_mgr msg_mgr, String error) {
+	public static int Error(Bry_bfr bfr, Xow_msg_mgr msg_mgr, Err err) {return Error(bfr, msg_mgr, Err_.Cast_or_make(err).To_str__top_wo_args());}// NOTE: must use "short" error message to show in wikitext; DATE:2015-07-27
+	public static int Error(Bry_bfr bfr, Xow_msg_mgr msg_mgr, String error) {
 		// for Luaj, msg combines both err; split out traceback else error message will be very long; note that Warn_many will still log traceback; DATE:2016-09-09
+                // also contains error level
 		String error_visible = error;
+                char error_level = error_visible.charAt(0);
+                error_visible = String_.Mid(error_visible, 1); // strip first char
 		int traceback_pos = String_.FindFwd(error, "\nstack traceback:\n");	// NOTE: produced by LuaError.getMessage()
 		if (traceback_pos != String_.Find_none)
 			error_visible = String_.Mid(error_visible, 0, traceback_pos);
@@ -146,6 +153,7 @@ System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + "
 		// write "Script error: some error"
 		byte[] script_error_msg = msg_mgr.Val_by_id(Xol_msg_itm_.Id_scribunto_parser_error);
 		error_fmtr.Bld_bfr_many(bfr, script_error_msg, error_visible);
+                return error_level;
 	}
 	private static final    Bry_fmtr error_fmtr = Bry_fmtr.new_("<strong class=\"error\"><span class=\"scribunto-error\" id=\"mw-scribunto-error-0\">~{0}: ~{1}</span></strong>");	// NOTE: must be "error" not 'error'; iferror checks for quote not apos; DATE:2015-09-17
 	private static void Local_error(Bry_bfr bfr, Xow_msg_mgr msg_mgr, String error) {

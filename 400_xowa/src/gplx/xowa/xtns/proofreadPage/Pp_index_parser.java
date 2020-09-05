@@ -91,14 +91,14 @@ public class Pp_index_parser {
 		// de - SEITEN=
 		// it ?
 		// fr ?
-                byte[] keyword;
-                switch (wiki.Lang().Lang_id()) {
-                    default:
-                    case Xol_lang_stub_.Id_en: keyword = Bry_.new_a7("Pages"); break;
-                    //case Xol_lang_stub_.Id_fr: keyword = Bry_.new_a7("Pages"); break;
-                    case Xol_lang_stub_.Id_de: keyword = Bry_.new_a7("SEITEN"); break;
-                    case Xol_lang_stub_.Id_it: keyword = Bry_.new_a7("Pagine"); break;
-                }
+		byte[] keyword;
+		switch (wiki.Lang().Lang_id()) {
+			default:
+			case Xol_lang_stub_.Id_en: keyword = Bry_.new_a7("Pages"); break;
+			//case Xol_lang_stub_.Id_fr: keyword = Bry_.new_a7("Pages"); break;
+			case Xol_lang_stub_.Id_de: keyword = Bry_.new_a7("SEITEN"); break;
+			case Xol_lang_stub_.Id_it: keyword = Bry_.new_a7("Pagine"); break;
+		}
 		return Parse_pages_param(wiki, src, keyword);
 	}
 	private static List_adp Parse_pages_param(Xowe_wiki wiki, byte[] src, byte[] keyword) {
@@ -197,7 +197,7 @@ public class Pp_index_parser {
 					break;
 			}
 		}
-                return page_lnkis;
+		return page_lnkis;
 	}
 }
 class Pp_index_arg {

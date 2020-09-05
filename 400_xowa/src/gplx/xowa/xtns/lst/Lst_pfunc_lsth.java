@@ -29,7 +29,8 @@ public class Lst_pfunc_lsth extends Pf_func_base {
 
 		// parse
 		Lst_pfunc_itm itm = Lst_pfunc_itm.New_hdr_or_null(ctx, page_ttl); if (itm == null) return;
-		Lst_pfunc_lsth_.Hdr_include(bfr, itm.Itm_src(), itm.Toc_mgr(), hdr_bgn, hdr_end);
+		//Lst_pfunc_lsth_.Hdr_include(bfr, itm.Itm_src(), itm.Toc_mgr(), hdr_bgn, hdr_end);
+		Lst_pfunc_lsth_.Hdr_include(bfr, itm, hdr_bgn, hdr_end);
 	}
 	public static final    Lst_pfunc_lsth Prime = new Lst_pfunc_lsth(); Lst_pfunc_lsth() {}
 }

@@ -20,10 +20,12 @@ import gplx.xowa.langs.kwds.*;
 public class Xol_func_regy {
 	private final    Xoa_lang_mgr lang_mgr; private final    Xol_lang_itm lang;
 	private final    Btrie_slim_mgr cs_trie = Btrie_slim_mgr.cs(), ci_trie = Btrie_slim_mgr.ci_u8();
+	private Db_btrie db_cs_trie = null, db_ci_trie = null;
 	public Xol_func_regy(Xoa_lang_mgr lang_mgr, Xol_lang_itm lang) {this.lang_mgr = lang_mgr; this.lang = lang;}
 	public void Evt_lang_changed(Xol_lang_itm lang) {
 		Xol_kwd_mgr kwd_mgr = lang.Kwd_mgr();
 		ci_trie.Clear(); cs_trie.Clear();
+		db_ci_trie = null; db_cs_trie = null;
 		int[] kwd_ary = Pf_func_.Ary_get(null, !lang.Kwd_mgr__strx());
 		int len = kwd_ary.length;
 		for (int i = 0; i < len; i++) {
@@ -91,8 +93,32 @@ public class Xol_func_regy {
 		}
 		return;
 	}
+	private boolean once = true;
+	private void Set_db_trie() {
+		once = false;
+		byte[] md5 = cs_trie.Md5();
+		if (Bry_.Eq(md5, Db_btrie_cs_trie_en.Hash()))
+			db_cs_trie = new Db_btrie_cs_trie_en(cs_trie.Objs());
+                else if (Bry_.Eq(md5, Db_btrie_cs_trie_de.Hash()))
+			db_cs_trie = new Db_btrie_cs_trie_de(cs_trie.Objs());
+		else
+			cs_trie.Dumpit("cs_trie Xol_func_regy");
+
+		md5 = ci_trie.Md5();
+		if (Bry_.Eq(md5, Db_btrie_ci_trie_en.Hash()))
+			db_ci_trie = new Db_btrie_ci_trie_en(ci_trie.Objs());
+                else if (Bry_.Eq(md5, Db_btrie_ci_trie_de.Hash()))
+			db_ci_trie = new Db_btrie_ci_trie_de(ci_trie.Objs());
+		else
+			ci_trie.Dumpit("ci_trie Xol_func_regy");
+	}
 	private Xot_defn Match_bgn(byte[] src, int bgn, int end) {
-		Object cs_obj = cs_trie.Match_bgn(src, bgn, end);
+		if (once) Set_db_trie();
+		Object cs_obj;
+		if (db_cs_trie == null)
+			cs_obj = cs_trie.Match_bgn(src, bgn, end);
+		else
+			cs_obj = db_cs_trie.Match_bgn(src, bgn, end);
 		Xot_defn rv = null;
 		if (cs_obj != null) {					// match found for cs; could be false_match; EX: NAME"+"SPACE and NAME"+"SPACENUMBER
 			rv = (Xot_defn)cs_obj;
@@ -101,7 +127,11 @@ public class Xol_func_regy {
 			// else {}							// func_name doesn't match cur_name; continue below; EX: NAME"+"SPACENUMBER passed in and matches NAME"+"SPACE (which is cs); note that NAME"+"SPACENUMBER only exists in ci
 		}
 		byte[] ary = lang.Case_mgr().Case_build_lower(src, bgn, end);	// NOTE: cannot call Case_reuse_lower b/c some langs (Turkish) may have differently-sized brys between upper and lower; DATE:2017-01-26
-		Xot_defn rv_alt = (Xot_defn)ci_trie.Match_bgn(ary, 0, ary.length);
+		Xot_defn rv_alt;
+		if (db_ci_trie == null)
+			rv_alt = (Xot_defn)ci_trie.Match_bgn(ary, 0, ary.length);
+		else
+			rv_alt = (Xot_defn)db_ci_trie.Match_bgn(ary, 0, ary.length);
 		return (rv != null && rv_alt == null) 
 			? rv		// name not found in ci, but name was found in cs; return cs; handles NAME"+"SPACENUMBER
 			: rv_alt;	// else return rv_alt

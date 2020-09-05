@@ -113,7 +113,7 @@ public class Xoh_html_wtr {
 		lastParagraph = PARA_NONE;
 		DTopen = false;
 		inPre = false;
-                is_colon_inline = false;
+		is_colon_inline = false;
 		this.Write_tkn(bfr, ctx, hctx, src, grp, sub_idx, tkn);
 	}
 	private void Write_tkn(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_tkn_grp grp, int sub_idx, Xop_tkn_itm tkn) {
@@ -156,6 +156,8 @@ public class Xoh_html_wtr {
 			case Xop_tkn_itm_.Tid_escape:
 				tkn.Html__write(bfr, this, wiki, page, ctx, hctx, cfg, grp, sub_idx, src); break;
 			case Xop_tkn_itm_.Tid_list_new:				List_new		(bfr, ctx, hctx, src, (Xop_list_tkn_new)tkn, grp, sub_idx); break;
+			case Xop_tkn_itm_.Tid_eq:
+				Xoh_html_wtr_escaper.Escape(app.Parser_amp_mgr(), bfr, src, tkn.Src_bgn(), tkn.Src_end(), true, false);	// NOTE: always escape text including (a) lnki_alt text; and (b) any other text, especially failed xndes; DATE:2013-06-18
 			case Xop_tkn_itm_.Tid_colon:
 				if (is_colon_inline) {
 					bfr.Add(nextItem( Byte_ascii.Colon ));

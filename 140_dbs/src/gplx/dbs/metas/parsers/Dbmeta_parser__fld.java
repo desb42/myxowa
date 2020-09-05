@@ -95,7 +95,7 @@ public class Dbmeta_parser__fld {
 		Dbmeta_parser__fld_itm.reg_many(rv, Dbmeta_fld_tid.Tid__double		, Sqlite_tid.Tid_real		, 0, "real", "double");	// "double precision"
 		Dbmeta_parser__fld_itm.reg_many(rv, Dbmeta_fld_tid.Tid__decimal		, Sqlite_tid.Tid_numeric	, 0, "numeric");
 		Dbmeta_parser__fld_itm.reg_many(rv, Dbmeta_fld_tid.Tid__decimal		, Sqlite_tid.Tid_numeric	, 2, "decimal");
-		Dbmeta_parser__fld_itm.reg_many(rv, Dbmeta_fld_tid.Tid__decimal		, Sqlite_tid.Tid_numeric	, 2, "decimal");
+		//Dbmeta_parser__fld_itm.reg_many(rv, Dbmeta_fld_tid.Tid__decimal		, Sqlite_tid.Tid_numeric	, 2, "decimal");
 		Dbmeta_parser__fld_itm.reg_many(rv, Dbmeta_fld_tid.Tid__bool		, Sqlite_tid.Tid_numeric	, 0, "boolean", "bit");		// "bit" is not SQLITE
 		Dbmeta_parser__fld_itm.reg_many(rv, Dbmeta_fld_tid.Tid__date		, Sqlite_tid.Tid_numeric	, 0, "date", "datetime");
 		return rv;

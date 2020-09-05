@@ -58,9 +58,13 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 		}
 		// get node_name
 		Btrie_slim_mgr tag_trie = ctx.Xnde_tag_regy().Get_trie(ctx.Xnde_names_tid());
+		Db_btrie db_tag_trie = ctx.Xnde_tag_regy().Get_trie_expand(ctx.Xnde_names_tid());
 		Object tag_obj; int atrs_bgn_pos;
 		synchronized (trv) {
-			tag_trie.Match_at_w_b0(trv, cur_byt, src, cur_pos, src_len);	// NOTE:tag_obj can be null in wiki_tmpl mode; EX: "<ul" is not a valid tag in wiki_tmpl, but is valid in wiki_main
+			if (db_tag_trie != null)
+				db_tag_trie.Match_expand(trv, src, cur_pos, src_len);
+			else
+				tag_trie.Match_at_w_b0(trv, cur_byt, src, cur_pos, src_len);	// NOTE:tag_obj can be null in wiki_tmpl mode; EX: "<ul" is not a valid tag in wiki_tmpl, but is valid in wiki_main
 			tag_obj = trv.Obj();
 			atrs_bgn_pos = trv.Pos();
 		}
@@ -372,8 +376,8 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 		}
 
 		// extra check for h2->h6 - convert to a hdr lxr instead
-		if (tagId >= Xop_xnde_tag_.Tid__h2 && tagId <= Xop_xnde_tag_.Tid__h6) {
-			return ctx.Hdr().Make_tkn_bgn_from_h(ctx, tkn_mkr, root, src, src_len, bgn_pos, open_tag_end, tagId - Xop_xnde_tag_.Tid__h2 + 2, atrs_bgn, atrs_end, atrs);
+		if (tagId >= Xop_xnde_tag_.Tid__h1 && tagId <= Xop_xnde_tag_.Tid__h6) {
+			return ctx.Hdr().Make_tkn_bgn_from_h(ctx, tkn_mkr, root, src, src_len, bgn_pos, open_tag_end, tagId - Xop_xnde_tag_.Tid__h1 + 1, atrs_bgn, atrs_end, atrs);
 		}
 
 		Xop_xnde_tkn xnde = null;
@@ -443,14 +447,13 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 		cur_pos = Bry_find_.Find_fwd_while_not_ws(src, cur_pos, src_len) + 1;
                 
 		// extra check for h2->h6 - convert to a hdr lxr instead
-		if (end_tag_id >= Xop_xnde_tag_.Tid__h2 && end_tag_id <= Xop_xnde_tag_.Tid__h6) {
-		int stack_pos = ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_hdr);
-		if (stack_pos == Xop_ctx.Stack_not_found) {	// no hdr; make eq_tkn and return;
-                    
-                }
-			//ctx.Hdr().Make_tkn_end_from_h(ctx, tkn_mkr, root, src, src_len, bgn_pos, open_tag_end, tag id - Xop_xnde_tag_.Tid__h2 + 2, atrs_bgn, atrs_end, atrs);
-                        ctx.Hdr().Make_tkn_end_from_h(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, stack_pos, end_tag_id - Xop_xnde_tag_.Tid__h2 + 2);
-                        return cur_pos;
+		if (end_tag_id >= Xop_xnde_tag_.Tid__h1 && end_tag_id <= Xop_xnde_tag_.Tid__h6) {
+			int stack_pos = ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_hdr);
+			// example of extra </h2> species.wikimedia.org/wiki/Wikispecies:Requests_for_Comment/Archive_1
+			if (stack_pos != Xop_ctx.Stack_not_found) { // only if a matching open <h?>
+				ctx.Hdr().Make_tkn_end_from_h(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, stack_pos, end_tag_id - Xop_xnde_tag_.Tid__h1 + 1);
+			}
+			return cur_pos;
 		}
 
 		int prv_xnde_pos = ctx.Stack_idx_find_but_stop_at_tbl(Xop_tkn_itm_.Tid_xnde);	// find any previous xnde on stack
@@ -517,7 +520,7 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 		}
 		if (end_tag.Restricted())	// restricted tags (like <script>) are not placed on stack; for now, just write it out
 			ctx.Subs_add(root, tkn_mkr.Bry_raw(bgn_pos, cur_pos, Bry_.Add(Gfh_entity_.Lt_bry, Bry_.Mid(src, bgn_pos + 1, cur_pos)))); // +1 to skip <
-		else {                
+		else {
 			if (pre2_pending) {
 				pre2_pending = false;
 				return ctx.Lxr_make_txt_(cur_pos);

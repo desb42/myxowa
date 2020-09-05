@@ -29,7 +29,8 @@ public class Lst_pfunc_lst extends Pf_func_base {
 		
 		// parse
 		Lst_pfunc_itm itm = Lst_pfunc_itm.New_sect_or_null(ctx, page_ttl); if (itm == null) return;
-		Lst_pfunc_lst_.Sect_include(bfr, itm.Sec_mgr(), itm.Itm_src(), sect_bgn, sect_end);
+		//Lst_pfunc_lst_.Sect_include(bfr, itm.Sec_mgr(), itm.Itm_src(), sect_bgn, sect_end);
+		Lst_pfunc_lst_.Sect_include(bfr, itm, sect_bgn, sect_end);
 	}
 
 	public static final    Lst_pfunc_lst Prime = new Lst_pfunc_lst(); Lst_pfunc_lst() {}

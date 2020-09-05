@@ -30,7 +30,7 @@ public class Wbase_claim_globecoordinate extends Wbase_claim_base {
 	public void Glb_ttl_(byte[] v) {glb_ttl = v;} 
 	public Decimal_adp Prc_as_num() {
 		if (prc_as_num == null)
-			prc_as_num = Bry_.Eq(prc, Object_.Bry__null) ? Decimal_adp_.One : Decimal_adp_.parse(String_.new_a7(prc));
+			prc_as_num = Bry_.Eq(prc, Object_.Bry__null) ? Decimal_adp_.Zero : Decimal_adp_.parse(String_.new_a7(prc));
 		return prc_as_num;
 	}	private Decimal_adp prc_as_num;
 

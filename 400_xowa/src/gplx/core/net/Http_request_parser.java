@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.core.net; import gplx.*; import gplx.core.*;
 import gplx.core.primitives.*; import gplx.core.btries.*;
+import gplx.xowa.Db_btrie_http;
 public class Http_request_parser {
 	private boolean dnt;
 	private int type, content_length;
@@ -24,7 +25,18 @@ public class Http_request_parser {
 	private Http_post_data_hash post_data_hash;
 	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(255); private final    Btrie_rv trv = new Btrie_rv();
 	private final    Http_server_wtr server_wtr; private final    boolean log;
-	public Http_request_parser(Http_server_wtr server_wtr, boolean log) {this.server_wtr = server_wtr; this.log = log;}
+	public Http_request_parser(Http_server_wtr server_wtr, boolean log) {
+		this.server_wtr = server_wtr;
+		this.log = log;
+		byte[] md5 = trie.Md5();
+		if (Bry_.Eq(md5, Db_btrie_http.Hash()))
+			trie_http = new Db_btrie_http(trie.Objs());
+		else {
+			// need to rebuild the list
+			int a = 1/0; // eeeeek
+		}
+			
+	}
 	public void Clear() {
 		this.dnt = false;
 		this.type = this.content_length = 0;
@@ -62,7 +74,8 @@ public class Http_request_parser {
 					}
 					break;	// assume form_data sends POST request
 				}
-				Object o = trie.Match_at(trv, line, 0, line_len);
+				//Object o = trie.Match_at(trv, line, 0, line_len);
+				Object o = trie_http.Match_expand(trv, line, 0, line_len);
 				if (o == null) {
 					server_wtr.Write_str_w_nl(String_.Format("http.request.parser; unknown line; line={0} request={1}", line_str, To_str()));
 					continue;
@@ -193,6 +206,7 @@ public class Http_request_parser {
 	.Add_str_int("Sec-Fetch-Dest:"                        , Tid_sec_fetch_dest)
 	.Add_str_int("Sec-Fetch-User:"                        , Tid_sec_fetch_user)
 	;
+	private static Db_btrie_http trie_http;
 	private static final    byte[] Tkn_boundary = Bry_.new_a7("boundary="), Tkn_content_type_boundary_end = Bry_.new_a7("--")
 	, Tkn_content_disposition = Bry_.new_a7("Content-Disposition:"), Tkn_form_data = Bry_.new_a7("form-data;")
 	, Tkn_name = Bry_.new_a7("name=")

@@ -16,6 +16,13 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.lst; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import gplx.xowa.parsers.*; 
 class Lst_pfunc_lstx_ {
+	public static void Sect_exclude(Bry_bfr bfr, Lst_pfunc_itm itm, byte[] sect_exclude, byte[] sect_replace) {
+                Db_Section_list sect = itm.Sect();
+                byte[] txt = sect.Exclude(sect_exclude, sect_replace);
+                //System.out.println(String_.new_a7(txt));
+                bfr.Add(txt);
+              }
+/*
 	public static void Sect_exclude(Bry_bfr bfr, Lst_section_nde_mgr sec_mgr, byte[] src, byte[] sect_exclude, byte[] sect_replace) {
 		if		(Bry_.Len_eq_0(sect_exclude)) {	// no exclude arg; EX: {{#lstx:page}} or {{#lstx:page}}
 			bfr.Add(src);							// write all and exit
@@ -39,4 +46,5 @@ class Lst_pfunc_lstx_ {
 		bfr.Add_mid(src, bgn_pos, src.length);
 	}
 	public static final    byte[] Null_arg = null;
+*/
 }

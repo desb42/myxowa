@@ -45,13 +45,13 @@ class Pp_index_page {
 				    && raw[ttl_len-2] == '/'
 				    && raw[ttl_len-1] == '1'
 				    )
-                                    add = Bool_.Y;
-                                else if (ttl_len > 5 && raw[ttl_len-4] == '.'
+					add = Bool_.Y;
+				else if (ttl_len > 5 && raw[ttl_len-4] == '.'
 				    && (raw[ttl_len-3] | 32) == 'j'
 				    && (raw[ttl_len-2] | 32) == 'p'
 				    && (raw[ttl_len-1] | 32) == 'g'
 				    )
-                                    add = Bool_.Y;
+					add = Bool_.Y;
 			}
 			if (ttl.Eq_page_db(bgn_page_ttl)) {
 				add = Bool_.Y;

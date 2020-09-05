@@ -17,6 +17,18 @@ package gplx.xowa.xtns.lst; import gplx.*; import gplx.xowa.*; import gplx.xowa.
 import gplx.xowa.wikis.pages.wtxts.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.hdrs.*;
 class Lst_pfunc_lsth_ {
+	public static void Hdr_include(Bry_bfr bfr, Lst_pfunc_itm itm, byte[] lhs_hdr, byte[] rhs_hdr) {
+                Db_Section_list sect = itm.Sect();
+                // CHEAT
+                if (sect == null) {
+                    Hdr_include(bfr, itm.Itm_src(), itm.Toc_mgr(), lhs_hdr, rhs_hdr);
+                }
+                else {
+                byte[] txt = sect.Header(lhs_hdr, rhs_hdr);
+                //System.out.println(String_.new_a7(txt));
+                bfr.Add(txt);
+                }
+              }
 	public static void Hdr_include(Bry_bfr bfr, byte[] src, Xopg_toc_mgr toc_mgr, byte[] lhs_hdr, byte[] rhs_hdr) {// REF.MW:LabeledSectionTransclusion.class.php|pfuncIncludeHeading; MW does regex on text; XO uses section_itms
 		// get <hdr> idxs
 		int len = toc_mgr.Len();

@@ -295,9 +295,12 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 
 				Bry_bfr rslt_bfr = wiki.Utl__bfr_mkr().Get_k004();
 				try {
-					Xot_invk_tkn_.Bld_key(invk_tmpl, name_ary, rslt_bfr);
-					byte[] rslt_key = rslt_bfr.To_bry_and_clear();
-					Object o = wiki.Cache_mgr().Tmpl_result_cache().Get_by(rslt_key);
+					//Xot_invk_tkn_.Bld_key(invk_tmpl, name_ary, rslt_bfr);
+					//byte[] rslt_key = rslt_bfr.To_bry_and_clear();
+					//Object o = wiki.Cache_mgr().Tmpl_result_cache().Get_by(rslt_key);
+					Object o = null;
+					byte[] rslt_key = null;
+                                        
 					Xopg_tmpl_prepend_mgr prepend_mgr = ctx.Page().Tmpl_prepend_mgr().Bgn(bfr);
 					if (o != null) {
 						byte[] rslt = (byte[])o;
@@ -310,8 +313,8 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 						prepend_mgr.End(ctx, bfr, rslt_bfr.Bfr(), rslt_bfr.Len(), Bool_.Y);
 						if (name_had_subst) {	// current invk had "subst:"; parse incoming invk again to remove effects of subst; PAGE:pt.w:Argentina DATE:2014-09-24
 							byte[] tmp_src = rslt_bfr.To_bry_and_clear();
-                                                        if (tmp_src.length != 0)
-                                                            rslt_bfr.Add(wiki.Parser_mgr().Main().Expand_tmpl(tmp_src));	// this could be cleaner / more optimized
+							if (tmp_src.length != 0)
+								rslt_bfr.Add(wiki.Parser_mgr().Main().Expand_tmpl(tmp_src));	// this could be cleaner / more optimized
 						}
 						if (Cache_enabled) {
 							byte[] rslt_val = rslt_bfr.To_bry_and_clear();

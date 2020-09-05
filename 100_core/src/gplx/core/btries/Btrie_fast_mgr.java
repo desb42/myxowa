@@ -15,6 +15,9 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.core.btries; import gplx.*; import gplx.core.*;
 import gplx.core.primitives.*;
+import gplx.core.security.algos.Hash_algo;
+import gplx.core.security.algos.Hash_algo_;
+import gplx.xowa.apps.utls.Xoa_Urlencoders;
 public class Btrie_fast_mgr {
 	private ByteTrieItm_fast root;
 	public boolean CaseAny() {return root.CaseAny();} public Btrie_fast_mgr CaseAny_(boolean v) {root.CaseAny_(v); return this;}
@@ -96,6 +99,7 @@ public class Btrie_fast_mgr {
 				nxt.Val_set(val);
 			cur = nxt;
 		}
+                Add_val(key, val);
 		return this;
 	}
 	public Btrie_fast_mgr Add_stub(byte tid, String s) {
@@ -151,6 +155,66 @@ public class Btrie_fast_mgr {
 	public static Btrie_fast_mgr new_(boolean case_any) {return new Btrie_fast_mgr(case_any);}
 	Btrie_fast_mgr(boolean case_any) {
 		root = new ByteTrieItm_fast(Byte_.Zero, null, case_any);
+	}
+
+/*	public void Dumplevel(int level, Btrie_slim_itm cur) {
+		Btrie_slim_itm[] ary = cur.Ary();
+		int len = cur.ary_len;
+		for (int i = 0; i < len; i++) {
+			Btrie_slim_itm itm = ary[i];
+			for (int j = 0; j < level; j++)
+				System.out.print(" ");
+			if (itm.Key_byte() > 127 || itm.Key_byte() < 20)
+				System.out.println(itm.Key_byte() + " " + itm.Case_any());
+			else
+				System.out.println("'" + String.valueOf((char)itm.Key_byte()) + "' " + itm.Case_any());
+			Dumplevel(level + 1, itm);
+		}
+	}*/
+	private boolean once = true;
+	public void Dumpit(String triename) {
+		if (once) {
+			once = false;
+			System.out.println(triename);
+			for (int i = 0; i < subs_len; i++) {
+				System.out.println(String_.new_u8(Xoa_Urlencoders.Raw_url_encode(subs[i])));
+			}
+			System.out.println();
+			//Btrie_slim_itm cur = root;
+			//Dumplevel(0, cur);
+		}
+	}
+	private byte[][] subs = new byte[1][];
+	protected Object[] objs = new Object[1];
+	public Object[] Objs() { return objs; }
+	private Hash_algo md5_algo = Hash_algo_.New__md5();
+        public byte[] Md5() { if (md5 == null) md5 = md5_algo.To_hash_bry(); return md5; }
+        private byte[] md5 = null;
+	private int subs_len = 0;
+	private int subs_max = 0;
+	private void Add_val(byte[] itm, Object val) {
+		// overwrite value
+		for (int i = 0; i < subs_len; i++) {
+			if (Bry_.Eq(itm, subs[i])) {
+				//System.out.println("fast overwrite " + String_.new_u8(itm));
+				objs[i] = val;
+				return;
+			}
+		}
+		md5_algo.Update_digest(itm, 0, itm.length);
+		int new_len = subs_len + 1;
+		if (new_len > subs_max) {	// ary too small >>> expand
+			subs_max = new_len * 2;
+			byte[][] new_subs = new byte[subs_max][];
+			Array_.Copy_to(subs, 0, new_subs, 0, subs_len);
+			subs = new_subs;
+			Object[] new_objs = new Object[subs_max];
+			Array_.Copy_to(objs, 0, new_objs, 0, subs_len);
+			objs = new_objs;
+		}
+		subs[subs_len] = itm;
+		objs[subs_len] = val;
+		subs_len = new_len;
 	}
 }
 class ByteTrieItm_fast {

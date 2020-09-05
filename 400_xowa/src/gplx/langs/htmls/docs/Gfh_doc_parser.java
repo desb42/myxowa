@@ -24,6 +24,7 @@ public class Gfh_doc_parser {
 			trie.Add_obj(wkr.Hook(), wkr);
 	}
 	public void Parse(byte[] page_url, byte[] src, int src_bgn, int src_end) {
+            trie.Dumpit("Gfh_doc_parser");
 		int txt_bgn = -1;
 		int pos = src_bgn;
 		Btrie_rv trv = new Btrie_rv();

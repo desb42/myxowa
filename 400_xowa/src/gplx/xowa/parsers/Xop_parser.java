@@ -139,21 +139,55 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 		byte b = pos == -1 ? Byte_ascii.Nl : src[pos];	// simulate newLine at bgn of src; needed for lxrs which rely on \n (EX: "=a=")
 		int txt_bgn = pos == -1 ? 0 : pos; Xop_tkn_itm txt_tkn = null;
 		Btrie_rv trv = new Btrie_rv();
-		while (true) {
-			Object o = trie.Match_at_w_b0(trv, b, src, pos, len);
-			Xop_lxr lxr = null;
-			if (o == null)				// no lxr found; char is txt; increment pos
-				pos++;
-			else {						// lxr found
-				lxr = (Xop_lxr)o;
-				if (txt_bgn != pos)		// chars exist between pos and txt_bgn; make txt_tkn; see NOTE_1
-					txt_tkn = Txt_add(ctx, tkn_mkr, root, txt_tkn, txt_bgn, pos);
-				ctx.Lxr_make_(true);
-				pos = lxr.Make_tkn(ctx, tkn_mkr, root, src, len, pos, trv.Pos());
-				if (ctx.Lxr_make()) {txt_bgn = pos; txt_tkn = null;}	// reset txt_tkn
+		Db_btrie db_btrie;
+		if (trie == tmpl_trie)
+			db_btrie = db_tmpl_trie;
+		else
+		if (trie == wtxt_trie)
+			db_btrie = db_wtxt_trie;
+		else
+			db_btrie = null;
+		if (db_btrie == null) {
+			while (true) {
+				Object o = trie.Match_at_w_b0(trv, b, src, pos, len);
+				Xop_lxr lxr = null;
+				if (o == null)				// no lxr found; char is txt; increment pos
+					pos++;
+				else {						// lxr found
+					lxr = (Xop_lxr)o;
+					if (txt_bgn != pos)		// chars exist between pos and txt_bgn; make txt_tkn; see NOTE_1
+						txt_tkn = Txt_add(ctx, tkn_mkr, root, txt_tkn, txt_bgn, pos);
+					ctx.Lxr_make_(true);
+					pos = lxr.Make_tkn(ctx, tkn_mkr, root, src, len, pos, trv.Pos());
+					if (ctx.Lxr_make()) {txt_bgn = pos; txt_tkn = null;}	// reset txt_tkn
+				}
+				if (pos == len) break;
+				b = src[pos];
 			}
-			if (pos == len) break;
-			b = src[pos];
+		}
+		else {
+//                int ln = src.length;
+//                if (ln > 100)
+//                    System.out.println(String_.new_u8(src, 0, 100) + "...");
+//                else
+//                    System.out.println(String_.new_u8(src));
+			while (true) {
+				Object o = db_btrie.Match_at_w_b0(trv, b, src, pos, len);
+				Xop_lxr lxr = null;
+				if (o == null)				// no lxr found; char is txt; increment pos
+					pos++;
+				else {						// lxr found
+					lxr = (Xop_lxr)o;
+//                                System.out.println(lxr.toString());
+					if (txt_bgn != pos)		// chars exist between pos and txt_bgn; make txt_tkn; see NOTE_1
+						txt_tkn = Txt_add(ctx, tkn_mkr, root, txt_tkn, txt_bgn, pos);
+					ctx.Lxr_make_(true);
+					pos = lxr.Make_tkn(ctx, tkn_mkr, root, src, len, pos, trv.Pos());
+					if (ctx.Lxr_make()) {txt_bgn = pos; txt_tkn = null;}	// reset txt_tkn
+				}
+				if (pos == len) break;
+				b = src[pos];
+			}
 		}
 		if (txt_bgn != pos) txt_tkn = Txt_add(ctx, tkn_mkr, root, txt_tkn, txt_bgn, pos);
 		return pos;
@@ -163,43 +197,93 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 		int txt_bgn = pos == -1 ? 0 : pos; Xop_tkn_itm txt_tkn = null;
 		Xop_lxr lxr = null;
 		Btrie_rv trv = new Btrie_rv();
-		while (true) {
-			lxr = null;
-
-			Object o = trie.Match_at_w_b0(trv, b, src, pos, src_len);
-			if (o == null)				// no lxr found; char is txt; increment pos
-				pos++;
-			else {						// lxr found
-				lxr = (Xop_lxr)o;
-				if (txt_bgn != pos)		// chars exist between pos and txt_bgn; make txt_tkn; see NOTE_1
-					txt_tkn = Txt_add(ctx, tkn_mkr, root, txt_tkn, txt_bgn, pos);
-				ctx.Lxr_make_(true);
-				pos = lxr.Make_tkn(ctx, tkn_mkr, root, src, src_len, pos, trv.Pos());
-				if (ctx.Lxr_make()) {txt_bgn = pos; txt_tkn = null;}	// reset txt_tkn
-			}
-			if (	pos >= end 
-				&&	ctx.Stack_len() == 0	// check stack is 0 to avoid dangling templates
-				) {
-				if		(o == null) {}		// last sequence is not text; avoids splitting words across blocks; EX: 4 block and word of "abcde" will split to "abcd" and "e"
-				else {
-					if (lxr != null) { 
-						boolean stop = true;
-						switch (lxr.Lxr_tid()) {
-							case Xop_lxr_.Tid_eq:
-							case Xop_lxr_.Tid_nl:
-								stop = false;
+		Db_btrie db_btrie;
+		if (trie == tmpl_trie)
+			db_btrie = db_tmpl_trie;
+		else
+		if (trie == wtxt_trie)
+			db_btrie = db_wtxt_trie;
+		else
+			db_btrie = null;
+		if (db_btrie == null) {
+			while (true) {
+				lxr = null;
+	
+				Object o = trie.Match_at_w_b0(trv, b, src, pos, src_len);
+				if (o == null)				// no lxr found; char is txt; increment pos
+					pos++;
+				else {						// lxr found
+					lxr = (Xop_lxr)o;
+					if (txt_bgn != pos)		// chars exist between pos and txt_bgn; make txt_tkn; see NOTE_1
+						txt_tkn = Txt_add(ctx, tkn_mkr, root, txt_tkn, txt_bgn, pos);
+					ctx.Lxr_make_(true);
+					pos = lxr.Make_tkn(ctx, tkn_mkr, root, src, src_len, pos, trv.Pos());
+					if (ctx.Lxr_make()) {txt_bgn = pos; txt_tkn = null;}	// reset txt_tkn
+				}
+				if (	pos >= end 
+					&&	ctx.Stack_len() == 0	// check stack is 0 to avoid dangling templates
+					) {
+					if		(o == null) {}		// last sequence is not text; avoids splitting words across blocks; EX: 4 block and word of "abcde" will split to "abcd" and "e"
+					else {
+						if (lxr != null) { 
+							boolean stop = true;
+							switch (lxr.Lxr_tid()) {
+								case Xop_lxr_.Tid_eq:
+								case Xop_lxr_.Tid_nl:
+									stop = false;
+									break;
+							}
+							if (stop)
 								break;
 						}
-						if (stop)
+						else {
 							break;
-					}
-					else {
-						break;
+						}
 					}
 				}
+				if (pos >= src_len) break;
+				b = src[pos];
 			}
-			if (pos >= src_len) break;
-			b = src[pos];
+		}
+		else {
+			while (true) {
+				lxr = null;
+	
+				Object o = db_btrie.Match_at_w_b0(trv, b, src, pos, src_len);
+				if (o == null)				// no lxr found; char is txt; increment pos
+					pos++;
+				else {						// lxr found
+					lxr = (Xop_lxr)o;
+					if (txt_bgn != pos)		// chars exist between pos and txt_bgn; make txt_tkn; see NOTE_1
+						txt_tkn = Txt_add(ctx, tkn_mkr, root, txt_tkn, txt_bgn, pos);
+					ctx.Lxr_make_(true);
+					pos = lxr.Make_tkn(ctx, tkn_mkr, root, src, src_len, pos, trv.Pos());
+					if (ctx.Lxr_make()) {txt_bgn = pos; txt_tkn = null;}	// reset txt_tkn
+				}
+				if (	pos >= end 
+					&&	ctx.Stack_len() == 0	// check stack is 0 to avoid dangling templates
+					) {
+					if		(o == null) {}		// last sequence is not text; avoids splitting words across blocks; EX: 4 block and word of "abcde" will split to "abcd" and "e"
+					else {
+						if (lxr != null) { 
+							boolean stop = true;
+							switch (lxr.Lxr_tid()) {
+								case Xop_lxr_.Tid_eq:
+								case Xop_lxr_.Tid_nl:
+									stop = false;
+									break;
+							}
+							if (stop)
+								break;
+						}
+						else {
+							break;
+						}
+					}
+				}
+				if (pos >= src_len) break;
+				b = src[pos];
+			}
 		}
 		if (txt_bgn != pos) txt_tkn = Txt_add(ctx, tkn_mkr, root, txt_tkn, txt_bgn, pos);
 		return pos;
@@ -219,7 +303,28 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 		Xop_parser rv = new Xop_parser(wiki, Xop_lxr_mgr.new_tmpl_(), Xop_lxr_mgr.new_wiki_());
 		rv.Init_by_wiki(wiki);
 		rv.Init_by_lang(wiki.Lang());
+		rv.Set_expand();
 		return rv;
+	}
+	private Db_btrie db_wtxt_trie;
+	private Db_btrie db_tmpl_trie;
+	public void Set_expand() {
+		byte[] md5 = wtxt_trie.Md5();
+		if (Bry_.Eq(md5, Db_btrie_wtxt_1.Hash()))
+			db_wtxt_trie = new Db_btrie_wtxt_1(wtxt_trie.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_wtxt_2.Hash()))
+			db_wtxt_trie = new Db_btrie_wtxt_2(wtxt_trie.Objs());
+		else
+			wtxt_trie.Dumpit("parser anchor wtxt");
+//            else if (Bry_.Eq(md5, Db_btrie_src_end_c.Hash()))
+//		db_wtxt_trie = new Db_btrie_src_end_c(wtxt_trie.Objs());
+
+		md5 = tmpl_trie.Md5();
+		if (Bry_.Eq(md5, Db_btrie_src_end_b.Hash()))
+			db_tmpl_trie = new Db_btrie_src_end_b(tmpl_trie.Objs());
+		else
+			tmpl_trie.Dumpit("parser anchor tmpl");
+
 	}
 }
 /*

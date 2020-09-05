@@ -105,8 +105,10 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			Hash_adp_bry lst_page_regy = ctx.Lst_page_regy(); if (lst_page_regy == null) lst_page_regy = Hash_adp_bry.cs();	// SEE:NOTE:page_regy; DATE:2014-01-01
 			page.Html_data().Indicators().Enabled_(Bool_.N);				// disable <indicator> b/c <page> should not add to current page; PAGE:en.s:The_Parochial_System_(Wilberforce,_1838); DATE:2015-04-29
 			byte[] page_bry = Bld_wikitext(full_bfr, wiki.Parser_mgr().Pp_num_parser(), lst_page_regy, page);
-			if (page_bry != null)
+			if (page_bry != null) {
+                        System.out.println(String_.new_u8(page_bry));
 				xtn_root = Bld_root_nde(full_bfr, lst_page_regy, page_bry);	// NOTE: this effectively reparses page twice; needed b/c of "if {| : ; # *, auto add new_line" which can build different tokens
+                        }
 		} finally {
 			wiki.Parser_mgr().Lst__recursing_(false);
 			full_bfr.Mkr_rls();
@@ -483,7 +485,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				}
 				Xopg_tmpl_prepend_mgr prepend_mgr = ctx.Page().Tmpl_prepend_mgr().Bgn(full_bfr);
 				Lst_pfunc_itm lst_itm = Lst_pfunc_itm.New_sect_or_null(ctx, ttl.Full_db());
-				if (lst_itm != null) Lst_pfunc_lst_.Sect_include(page_bfr, lst_itm.Sec_mgr(), lst_itm.Itm_src(), cur_sect_bgn, cur_sect_end);
+				if (lst_itm != null) Lst_pfunc_lst_.Sect_include(page_bfr, lst_itm, cur_sect_bgn, cur_sect_end);
 				prepend_mgr.End(ctx, full_bfr, page_bfr.Bfr(), page_bfr.Len(), Bool_.Y);
 				full_bfr.Add_bfr_and_clear(page_bfr);
 				full_bfr.Add(gplx.langs.htmls.entitys.Gfh_entity_.Space_bry);	// $out.= "&#32;"; REF.MW:ProofreadPageRenderer.pn
