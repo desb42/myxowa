@@ -48,9 +48,11 @@ public class Xop_xatr_whitelist_mgr {
 				if (!Scrub_style(xatr, src)) return false;
 				xatr.Val_bry_(gplx.xowa.parsers.amps.Xop_amp_mgr.Instance.Decode_as_bry(xatr.Val_as_bry()));	// NOTE: must decode style values; "&#amp;#000000" -> "#000000"; see MW:checkCss; PAGE:en.w:Boron DATE:2015-07-29
 				break;
-			//case Mwh_atr_itm_.Key_tid__role:
-			//	if (!Bry_.Eq(Val_role_presentation, xatr.Val_as_bry())) return false; // MW: For now we only support role="presentation"; DATE:2014-04-05
-			//	break;
+			case Mwh_atr_itm_.Key_tid__role:
+				// 2020-08-17|ISSUE#:785|TOMBSTONE: originally put in for vertical whitespace issues in en.w:Supreme_Court_of_the_United_States, but could not reproduce
+				//	if (!Bry_.Eq(Val_role_presentation, xatr.Val_as_bry()))
+				//		return false; // MW: For now we only support role="presentation"; DATE:2014-04-05
+				break;
 		}
 		return rv;
 	}

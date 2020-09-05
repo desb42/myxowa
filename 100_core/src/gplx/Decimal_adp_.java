@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -14,6 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -21,6 +22,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
+
 public class Decimal_adp_ {
 	public static final String Cls_val_name = "decimal";
 	public static final    Class<?> Cls_ref_type = Decimal_adp.class;
@@ -67,9 +69,12 @@ public class Decimal_adp_ {
 	public static Decimal_adp db_(Object v) {return new Decimal_adp((BigDecimal)v);}
 	public static Decimal_adp parse(String raw) {
 		try {
-                    raw = raw.replace('e', 'E'); // engineering format must be uppercase 'E'
 	        DecimalFormat nf = (DecimalFormat)NumberFormat.getInstance(Locale.US);	// always parse as US format; EX:".9" should not be ",9" in german; DATE:2016-01-31
 	        nf.setParseBigDecimal(true);
+	        // 2020-08-27|ISSUE#:565|Parse 'e' as 'E'; PAGE:en.w:Huntington_Plaza
+	        if (raw.contains("e")) {
+	        	raw = raw.replace("e", "E");
+	        }
 	        BigDecimal bd = (BigDecimal)nf.parse(raw);
 			return new Decimal_adp(bd);
 		} catch (ParseException e) {

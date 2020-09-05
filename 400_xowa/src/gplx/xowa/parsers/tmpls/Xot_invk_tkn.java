@@ -295,37 +295,16 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 
 				Bry_bfr rslt_bfr = wiki.Utl__bfr_mkr().Get_k004();
 				try {
-					//Xot_invk_tkn_.Bld_key(invk_tmpl, name_ary, rslt_bfr);
-					//byte[] rslt_key = rslt_bfr.To_bry_and_clear();
-					//Object o = wiki.Cache_mgr().Tmpl_result_cache().Get_by(rslt_key);
-					Object o = null;
-					byte[] rslt_key = null;
-                                        
 					Xopg_tmpl_prepend_mgr prepend_mgr = ctx.Page().Tmpl_prepend_mgr().Bgn(bfr);
-					if (o != null) {
-						byte[] rslt = (byte[])o;
-						prepend_mgr.End(ctx, bfr, rslt, rslt.length, Bool_.Y);
-						bfr.Add(rslt);
+					//rv = defn_tmpl.Tmpl_evaluate(Xop_ctx.New__sub(wiki, ctx, ctx.Page()), invk_tmpl, rslt_bfr); // create new ctx so __NOTOC__ only applies to template, not page; PAGE:de.w:13._Jahrhundert DATE:2017-06-17
+					rv = defn_tmpl.Tmpl_evaluate(ctx, invk_tmpl, rslt_bfr);
+					prepend_mgr.End(ctx, bfr, rslt_bfr.Bfr(), rslt_bfr.Len(), Bool_.Y);
+					if (name_had_subst) {	// current invk had "subst:"; parse incoming invk again to remove effects of subst; PAGE:pt.w:Argentina DATE:2014-09-24
+						byte[] tmp_src = rslt_bfr.To_bry_and_clear();
+						if (tmp_src.length != 0)
+							rslt_bfr.Add(wiki.Parser_mgr().Main().Expand_tmpl(tmp_src));	// this could be cleaner / more optimized
 					}
-					else {
-						//rv = defn_tmpl.Tmpl_evaluate(Xop_ctx.New__sub(wiki, ctx, ctx.Page()), invk_tmpl, rslt_bfr); // create new ctx so __NOTOC__ only applies to template, not page; PAGE:de.w:13._Jahrhundert DATE:2017-06-17
-						rv = defn_tmpl.Tmpl_evaluate(ctx, invk_tmpl, rslt_bfr);
-						prepend_mgr.End(ctx, bfr, rslt_bfr.Bfr(), rslt_bfr.Len(), Bool_.Y);
-						if (name_had_subst) {	// current invk had "subst:"; parse incoming invk again to remove effects of subst; PAGE:pt.w:Argentina DATE:2014-09-24
-							byte[] tmp_src = rslt_bfr.To_bry_and_clear();
-							if (tmp_src.length != 0)
-								rslt_bfr.Add(wiki.Parser_mgr().Main().Expand_tmpl(tmp_src));	// this could be cleaner / more optimized
-						}
-						if (Cache_enabled) {
-							byte[] rslt_val = rslt_bfr.To_bry_and_clear();
-							bfr.Add(rslt_val);
-							Hash_adp cache = wiki.Cache_mgr().Tmpl_result_cache();
-							cache.Del(rslt_key);
-							cache.Add(rslt_key, rslt_val);
-						}
-						else
-							bfr.Add_bfr_and_clear(rslt_bfr);
-					}
+					bfr.Add_bfr_and_clear(rslt_bfr);
 					trace.Trace_end(trg_bgn, bfr);
 				} finally {rslt_bfr.Mkr_rls();}
 				break;
@@ -462,7 +441,6 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 		return itms.length == 0 ? Bry_.Empty : itms[0].Val();
 	}
 	private static final    Hash_adp_bry ignore_hash = Hash_adp_bry.ci_a7().Add_str_obj("Citation needed{{subst", "").Add_str_obj("Clarify{{subst", "");	// ignore SafeSubst templates
-	public static boolean Cache_enabled = false;
 }
 /*
 NOTE_1: if (finder.Colon_pos() != -1) colon_pos = finder.Func().Name().length;
