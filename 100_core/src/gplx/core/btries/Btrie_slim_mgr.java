@@ -15,7 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.core.btries; import gplx.*; import gplx.core.*;
 import gplx.core.primitives.*; import gplx.core.threads.poolables.*;
-import gplx.xowa.apps.utls.Xoa_Urlencoders;
+import gplx.core.encoders.Urlencoders;
 import gplx.core.security.algos.*;
 public class Btrie_slim_mgr implements Btrie_mgr {
 	public Btrie_slim_mgr(boolean case_match) {root = new Btrie_slim_itm(Byte_.Zero, null, !case_match);}	private Btrie_slim_itm root;
@@ -54,7 +54,7 @@ public class Btrie_slim_mgr implements Btrie_mgr {
 			for (int i = 0; i < subs_len; i++) {
 				//md5_algo.Update_digest(subs[i], 0, subs[i].length);
 				//System.out.println(String_.new_u8(Xoa_Urlencoders.Raw_url_encode(subs[i])) + " " + String_.new_a7(md5_algo.To_hash_bry()));
-				System.out.println(String_.new_u8(Xoa_Urlencoders.Raw_url_encode(subs[i])));
+				System.out.println(String_.new_u8(Urlencoders.Raw_url_encode(subs[i])));
 			}
 			//System.out.println();
 			//Btrie_slim_itm cur = root;

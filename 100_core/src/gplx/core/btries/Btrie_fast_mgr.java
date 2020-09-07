@@ -17,7 +17,7 @@ package gplx.core.btries; import gplx.*; import gplx.core.*;
 import gplx.core.primitives.*;
 import gplx.core.security.algos.Hash_algo;
 import gplx.core.security.algos.Hash_algo_;
-import gplx.xowa.apps.utls.Xoa_Urlencoders;
+import gplx.core.encoders.Urlencoders;
 public class Btrie_fast_mgr {
 	private ByteTrieItm_fast root;
 	public boolean CaseAny() {return root.CaseAny();} public Btrie_fast_mgr CaseAny_(boolean v) {root.CaseAny_(v); return this;}
@@ -177,7 +177,7 @@ public class Btrie_fast_mgr {
 			once = false;
 			System.out.println(triename);
 			for (int i = 0; i < subs_len; i++) {
-				System.out.println(String_.new_u8(Xoa_Urlencoders.Raw_url_encode(subs[i])));
+				System.out.println(String_.new_u8(Urlencoders.Raw_url_encode(subs[i])));
 			}
 			System.out.println();
 			//Btrie_slim_itm cur = root;
