@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.encoders; import gplx.*; import gplx.xowa.*; import gplx.xowa.apps.*;
+package gplx.core.encoders; import gplx.*;
 public class Urlencoders {	// NOTE: from mediawiki\includes\parser\CoreParserFunctions.php
 	public static byte[] wfUrlencode_with_space(byte[] src) { return encode(src, Byte_ascii.Underline, false, true); }
 	public static byte[] wfUrlencode(byte[] src) { return encode(src, (byte)0, false, true); }
