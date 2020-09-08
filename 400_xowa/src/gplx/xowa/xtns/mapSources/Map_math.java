@@ -88,8 +88,7 @@ class Map_math {// REF.MW:MapSources_math.php
 		double deg = Math_.Floor(angle);
 		double min = (angle - deg) * 60;
 		double sec = prec > 4 // 2020-09-03|ISSUE#:792|precision check should be > 4 not > 0;PAGE:en.w:Huntington_Plaza
-			//? Math_.Round((min - Math_.Floor(min)) * 60, prec - 4)
-			? Math_.Round((min - Math_.Floor(min)) * 60, prec - 3) // DB - seems to work better - dont know why!!!! 20200905
+			? Math_.Round((min - Math_.Floor(min)) * 60, prec - 4)
 			: Math_.Round((min - Math_.Floor(min)) * 60, 0)
 			;
 		min = Math_.Floor(min);

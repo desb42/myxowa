@@ -56,13 +56,9 @@ public class Pf_func_ {
 	public static boolean Eq(Xop_ctx ctx, byte[] lhs, byte[] rhs) {	// PATCH.PHP: php allows "003" == "3.0"; ASSUME: numbers are either int or int-like decimal; long, float, decimal not supported
 		int lhs_len = lhs.length, rhs_len = rhs.length;
 		boolean rv = true;
-                boolean nondigit = false;
 		if (lhs_len == rhs_len) {
 			for (int i = 0; i < lhs_len; i++) {
-                            byte b = rhs[i];
-                            if (b < '0' || b > '9')
-                                nondigit = true;
-				if (lhs[i] != b) {
+				if (lhs[i] != rhs[i]) {
 					rv = false;
 					break;
 				}
@@ -71,8 +67,6 @@ public class Pf_func_ {
 		}
 		else if (lhs_len == 0 || rhs_len == 0)	// one side is empty String and the other side is String; return false;
 			return false;
-                if (nondigit)
-                    return rv;
 		Gfo_number_parser lhs_parser = ctx.Tmp_mgr().Pfunc_num_parser_0();
 		Gfo_number_parser rhs_parser = ctx.Tmp_mgr().Pfunc_num_parser_1();
 		lhs_parser.Parse(lhs, 0, lhs_len);
