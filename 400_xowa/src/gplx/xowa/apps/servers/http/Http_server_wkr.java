@@ -188,6 +188,9 @@ public class Http_server_wkr implements Gfo_invk {
 			} else {
 
 				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()), page.Redlink());
+                                
+                Db_Nav_template nt = new Db_Nav_template();
+                nt.Init(page.Wiki());
 
 				if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // change some more things
 					//page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");

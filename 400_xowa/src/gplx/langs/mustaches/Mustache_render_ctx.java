@@ -33,6 +33,7 @@ public class Mustache_render_ctx {
 		this.subs_idx = subs_len = 0; this.cur_is_bool = Bool_.__byte;
 		return this;
 	}
+        // partial implementation of {{.}}
 	public boolean Render_variable(Mustache_bfr bfr, String key) {
 		boolean rv = false;
 		int stack_pos = stack.Len();
@@ -59,6 +60,11 @@ public class Mustache_render_ctx {
 						int a = 1/0;
 					}
 				}
+                                else if (key.equals(".") && itm instanceof Json_itm_str) {
+                                        Json_itm_str s = (Json_itm_str)itm;
+                                        bfr.Add_bry(s.Data_bry());
+                                        return true;
+                                }
 				--stack_pos;
 				if (stack_pos == -1)	// nothing else in stack
 					break;

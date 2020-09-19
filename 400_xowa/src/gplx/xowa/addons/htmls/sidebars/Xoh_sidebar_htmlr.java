@@ -23,7 +23,13 @@ class Xoh_sidebar_htmlr {
 		for (int i = 0; i < len; ++i) {
 			Xoh_sidebar_itm grp = (Xoh_sidebar_itm)grps.Get_at(i);
 			itms_fmtr.Init_by_grp(popups_enabled, grp);
-			fmt.Bld_many(bfr, grp.Id(), grp.Text(), itms_fmtr);
+
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			itms_fmtr.Bfr_arg__add(tmp_bfr);
+			Db_Nav_template.Build_Sidebar(wiki, bfr, grp.Id(), grp.Text(), tmp_bfr.To_bry());
+
+			//itms_fmtr.Init_by_grp(popups_enabled, grp);
+			//fmt.Bld_many(bfr, grp.Id(), grp.Text(), itms_fmtr);
 		}
 		// dummy toolbox
 		// id="p-tb" used by some js
@@ -32,9 +38,13 @@ class Xoh_sidebar_htmlr {
 	}
 	private static final    Bry_fmt fmt = Bry_fmt.Auto_nl_skip_last
 	( "<div class=\"portal\" id=\"~{grp_id}\">"
-	, "  <h3>~{grp_text}</h3>"
-	, "  <div class=\"body\">"
-	, "    <ul>~{itms}"
+	, "  <h3 id=\"p-navigation-label\">"
+	, "  <span>~{grp_text}</span>"
+	, "  </h3>"
+	, "  <!-- Please do not use the .body class, it is deprecated. -->"
+	, "  <div class=\"body vector-menu-content\">"
+	, "  <!-- Please do not use the .menu class, it is deprecated. -->"
+	, "    <ul class=\"vector-menu-content-list\">~{itms}"
 	, "    </ul>"
 	, "  </div>"
 	, "</div>"

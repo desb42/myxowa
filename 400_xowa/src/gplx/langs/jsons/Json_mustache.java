@@ -17,7 +17,7 @@ package gplx.langs.jsons; import gplx.*; import gplx.langs.*;
 public class Json_mustache {
 
 	public static Json_kv Add_text(String keystr, byte[] bytes) {
-            if (bytes == null) return null;
+		if (bytes == null) return null;
 		Json_itm_str key = new Json_itm_str(Bry_.new_a7(keystr), true);
 		Json_itm_str val = new Json_itm_str(bytes, false);
 		return new Json_kv(key, val);
@@ -50,7 +50,7 @@ public class Json_mustache {
 	}
 
 	public static Json_kv Add_ary(String keystr, Json_ary ary) {
-            if (ary == null) return null;
+		if (ary == null) return null;
 		Json_itm_str key = new Json_itm_str(Bry_.new_a7(keystr), true);
 		return new Json_kv(key, ary);
 	}

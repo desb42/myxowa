@@ -198,6 +198,7 @@ public class Db_Section_list {
 		return Bry_.Empty;
 	}
 	private boolean Matchkey(Section sect, byte[] find) {
+            if (find == Lst_pfunc_itm.Null_arg) return false;
 		int pos = sect.keybgn;
 		int keylen = sect.keyend - pos;
 		int find_end = find.length;

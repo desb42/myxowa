@@ -106,7 +106,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			page.Html_data().Indicators().Enabled_(Bool_.N);				// disable <indicator> b/c <page> should not add to current page; PAGE:en.s:The_Parochial_System_(Wilberforce,_1838); DATE:2015-04-29
 			byte[] page_bry = Bld_wikitext(full_bfr, wiki.Parser_mgr().Pp_num_parser(), lst_page_regy, page);
 			if (page_bry != null) {
-                        System.out.println(String_.new_u8(page_bry));
+                        //System.out.println(String_.new_u8(page_bry));
 				xtn_root = Bld_root_nde(full_bfr, lst_page_regy, page_bry);	// NOTE: this effectively reparses page twice; needed b/c of "if {| : ; # *, auto add new_line" which can build different tokens
                         }
 		} finally {
@@ -128,6 +128,15 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			html_wtr.Write_tkn_to_html(bfr, ctx, hctx, xtn_root.Root_src(), xnde, Xoh_html_wtr.Sub_idx_null, xtn_root);
 		}
 	}
+	// Underscore to space - inplace
+	private void Under_to_space(byte[] txt) {
+            if (txt == null) return;
+		int len = txt.length;
+		for (int i = 0; i < len; i++) {
+			if (txt[i] == '_')
+				txt[i] = ' ';
+		}
+	}
 	private boolean Init_vars(Xowe_wiki wiki, Xop_ctx ctx, byte[] src, Xop_xnde_tkn xnde) {
 		this.wiki = wiki; this.ctx = ctx; app = wiki.Appe(); usr_dlg = app.Usr_dlg();
 		this.src = src; this.xnde_tkn = xnde; cur_page_ttl = ctx.Page().Ttl();
@@ -138,6 +147,12 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		index_ttl_bry = Decode_as_dot_bry(index_ttl_bry);
 		bgn_page_bry = amp_mgr.Decode_as_bry(bgn_page_bry);
 		end_page_bry = amp_mgr.Decode_as_bry(end_page_bry);
+		// quick check on '_' -> ' '
+		Under_to_space(bgn_sect_bry);
+		Under_to_space(end_sect_bry);
+		Under_to_space(include);
+		Under_to_space(exclude);
+		Under_to_space(onlysection);
 		Xowc_xtn_pages cfg_pages = wiki.Cfg_parser().Xtns().Itm_pages();
 		if (cfg_pages.Init_needed()) cfg_pages.Init(wiki.Ns_mgr());
 		ns_index_id = cfg_pages.Ns_index_id(); if (ns_index_id == Int_.Min_value) return Fail_msg("wiki does not have an Index ns");
@@ -482,6 +497,10 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				else if	(i == list_len - 1) {
 					if	(end_sect_bry != null)
 						cur_sect_end = end_sect_bry;
+					else if (onlysection != null) {
+						cur_sect_bgn = onlysection;
+						cur_sect_end = onlysection;
+					}
 				}
 				Xopg_tmpl_prepend_mgr prepend_mgr = ctx.Page().Tmpl_prepend_mgr().Bgn(full_bfr);
 				Lst_pfunc_itm lst_itm = Lst_pfunc_itm.New_sect_or_null(ctx, ttl.Full_db());

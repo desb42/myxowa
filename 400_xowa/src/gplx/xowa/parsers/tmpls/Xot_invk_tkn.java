@@ -275,6 +275,11 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
                                     	int  a=1;
                                     }
 */
+if (Bry_.Eq(caller.Frame_ttl(), Bry_.new_a7("Template:BookCat/core"))) {
+    return true;
+    //int a=1;
+}
+//System.out.println(String_.new_u8(caller.Frame_ttl()));
 					Xot_invk_tkn_.Eval_func(ctx, src, caller, this, bfr, defn, argx_ary);
 					rv = true;
 				}	catch (Exception e) {

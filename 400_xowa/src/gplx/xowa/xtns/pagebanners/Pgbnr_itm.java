@@ -141,8 +141,8 @@ public class Pgbnr_itm /*implements Mustache_doc_itm*/ {
 	, Atr_val__style_dflt = Bry_.new_a7("max-width:-1px")
 	;
 	public Json_nde Mustache__json() {
-            return buildargs();
-        }
+		return buildargs();
+	}
 	private Json_nde buildargs() {
 		Json_ary ary = null;
 		if (json_icon_list != null) {
