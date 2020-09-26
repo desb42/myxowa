@@ -38,27 +38,6 @@ public class Wbase_claim_globecoordinate extends Wbase_claim_base {
 	public byte[] Glb_ttl() {return glb_ttl;} private byte[] glb_ttl;
 
 	public void Glb_ttl_(byte[] v) {glb_ttl = v;} 
-	public Decimal_adp Prc_as_num() {
-		if (prc_as_num == null) {
-			if (Bry_.Eq(prc, Object_.Bry__null)) {
-				// use longitude to determine precision
-				int lng_len = lng.length;
-				int i;
-				for (i = 0; i < lng_len; i++) {
-					byte b = lng[i];
-					if (b == '.')
-						break;
-				}
-				int power = lng_len - i - 1;
-				if (power > 8)
-					power = 8;
-				prc_as_num = Decimal_adp_.float_((float)Math.pow(10, -power));
-			}
-			else
- 				prc_as_num = Decimal_adp_.parse(String_.new_a7(prc));
-		}
-		return prc_as_num;
-	} private Decimal_adp prc_as_num;
 
 	@Override public void Welcome(Wbase_claim_visitor visitor) {visitor.Visit_globecoordinate(this);}
 	@Override public String toString() {// TEST:
