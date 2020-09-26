@@ -632,7 +632,7 @@
 		}() );
 		// this blows apart settings in core.js (why???)
 		util.escapeRegExp = function (str) {
-    return string.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+    return str.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
 //        	return str.replace('$', '\\$');
         };
 	}

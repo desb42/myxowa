@@ -336,6 +336,7 @@ if (Bry_.Eq(caller.Frame_ttl(), Bry_.new_a7("Template:BookCat/core"))) {
 	}
 	private boolean Transclude(Xop_ctx ctx, Xowe_wiki wiki, Bry_bfr bfr, boolean template_prefix_found, byte[] name_ary, Xot_invk caller, byte[] src) {
 		Xoa_ttl page_ttl = Xoa_ttl.Parse(wiki, name_ary); if (page_ttl == null) return false;	// ttl not valid; EX: {{:[[abc]]}}
+                if (Bry_.Eq(page_ttl.Full_txt(), caller.Frame_ttl())) return false; // LOOP? 
 		byte[] transclude_src = null;
 		if (page_ttl.Ns().Id_is_tmpl()) {							// ttl is template; check tmpl_regy first before going to data_mgr
 			Xot_defn_tmpl tmpl = (Xot_defn_tmpl)wiki.Cache_mgr().Defn_cache().Get_by_key(page_ttl.Page_db(), wiki.Ns_mgr().Ns_template().Case_match());

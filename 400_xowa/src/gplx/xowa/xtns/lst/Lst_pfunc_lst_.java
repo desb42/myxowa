@@ -17,8 +17,7 @@ package gplx.xowa.xtns.lst; import gplx.*; import gplx.xowa.*; import gplx.xowa.
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
 public class Lst_pfunc_lst_ {
 	private static final byte Include_between = 0, Include_to_eos = 1, Include_to_bos = 2;
-	public static void Sect_include(Bry_bfr bfr, Lst_pfunc_itm itm, byte[] lst_bgn, byte[] lst_end) {
-                Db_Section_list sect = itm.Sect();
+	public static void Sect_include(Bry_bfr bfr, Db_Section_list sect, byte[] lst_bgn, byte[] lst_end) {
                 byte[] txt = sect.Include(lst_bgn, lst_end);
                 //System.out.println(String_.new_a7(txt));
                 bfr.Add(txt);

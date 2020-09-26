@@ -97,7 +97,7 @@ public class Db_Nav_template {
 		Mustache_bfr mbfr = Mustache_bfr.New_bfr(tmp_bfr);
 		navigation_root.Render(mbfr, mctx);
 		byte[] result = mbfr.To_bry_and_clear();
-		System.out.println(String_.new_u8(result));
+		//System.out.println(String_.new_u8(result));
 	}
 
         /* Vector/SkinVector.php */

@@ -320,17 +320,23 @@ public class Db_wikistrip {
 				return namestart; // ignore the '<'
 		}
 		int tagend = pos;
-		// check for special <br > <hr > <img >
+		// check for special tags to remove <br > <hr > <img >
 		//System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend+40)));
 		int tag_len = nameend - namestart;
-		if (tag_len == 2) {
+		if (tag_len == 2) { // hr, br
 			if ((src[namestart] | 32) == 'b' && (src[namestart+1] | 32) == 'r')
 				return pos;
 			if ((src[namestart] | 32) == 'h' && (src[namestart+1] | 32) == 'r')
 				return pos;
 		}
-		else if (tag_len == 3) {
+		else if (tag_len == 3) { // img
 			if ((src[namestart] | 32) == 'i' && (src[namestart+1] | 32) == 'm' && (src[namestart+2] | 32) == 'g')
+				return pos;
+		}
+		else if (tag_len == 9) { // noinclude
+			if ((src[namestart] | 32) == 'n' && (src[namestart+1] | 32) == 'o' && (src[namestart+2] | 32) == 'i'
+			     && (src[namestart+3] | 32) == 'n' && (src[namestart+4] | 32) == 'c' && (src[namestart+5] | 32) == 'l'
+			     && (src[namestart+6] | 32) == 'u' && (src[namestart+7] | 32) == 'd' && (src[namestart+8] | 32) == 'e')
 				return pos;
 		}
 		else if (tag_len == 11) { // onlyinclude
