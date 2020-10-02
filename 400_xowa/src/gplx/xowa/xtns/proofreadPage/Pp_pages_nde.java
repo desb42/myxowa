@@ -130,7 +130,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	}
 	// Underscore to space - inplace
 	private void Under_to_space(byte[] txt) {
-            if (txt == null) return;
+		if (txt == null) return;
 		int len = txt.length;
 		for (int i = 0; i < len; i++) {
 			if (txt[i] == '_')

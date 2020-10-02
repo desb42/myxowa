@@ -35,7 +35,7 @@ public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
 			return Bry_.Empty; // doesn't match above; return empty;
 
 		// split ttl by slashes; EX: "Help:A/B/C" -> "Help:A", "B", "C"
-		byte[] raw = ttl.Raw();
+		byte[] raw = ttl.Full_txt();
 		this.segs = Bry_split_.Split(raw, Byte_ascii.Slash);
 
 		// build html
@@ -48,9 +48,8 @@ public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
 
 		byte[] delimiter = Delimiter__1st;
 		for (int i = 0; i < segs_len; i++) {
-			// if not first, change delimiter and add "/" to path bfr
+			// if not first, add "/" to path bfr
 			if (i != 0) {
-				delimiter = Delimiter__nth;
 				path_bfr.Add_byte_slash();
 			}
 
@@ -67,7 +66,10 @@ public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
 
 			// add subpage_caption_bfr; needed for cases like "Help:A/B/C/D/E" where "B/C/D" does not exist which should show as "Help:A" | "B/C/D"  not "D" DATE:2019-12-07
 			if (subpage_caption_bfr.Len_gt_0()) subpage_caption_bfr.Add_byte_slash();
-			subpage_caption_bfr.Add(subpage_ttl.Leaf_txt());
+			if (i == 0)
+				subpage_caption_bfr.Add(subpage_ttl_bry);
+			else
+				subpage_caption_bfr.Add(subpage_ttl.Leaf_txt());
 
 			// page is missing; move on to next seg; ISSUE#:626; DATE:2019-12-01
 			if (!wiki.Parser_mgr().Ifexist_mgr().Exists(wiki, subpage_ttl_bry)) continue;
@@ -88,6 +90,8 @@ public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
 				, Bry_.Add(Xoh_href_.Bry__wiki, subpage_ttl.Full_url()) // EX: /wiki/Help:A
 				, Xoa_ttl.Replace_unders(subpage_ttl_escaped)
 				, Xoa_ttl.Replace_unders(subpage_caption));
+
+			delimiter = Delimiter__nth; // now change the delimiter
 		}
 		path_bfr.Clear();
 	}

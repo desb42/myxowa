@@ -54,7 +54,7 @@ public class Lst_section_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 					if (bgn < 0) bgn = 0;
 					int end = xatr.Atr_end() + 10;
 					if (end > src.length) end = src.length;
-					Gfo_usr_dlg_.Instance.Warn_many("", "", "section name invalid: page=~{0} tag=~{1}", ttl.Full_db(), Bry_.Mid(src, bgn, end));
+					Gfo_usr_dlg_.Instance.Warn_many("", "", "section name invalid: page=~{0} tag=~{1}", ttl.Full_db(), Bry_.Replace_nl_w_tab(src, bgn, end));
 					
 					break;
 				}

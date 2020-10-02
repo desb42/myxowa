@@ -43,6 +43,7 @@ import gplx.xowa.xtns.pfuncs.Pf_func_base;
 import gplx.xowa.xtns.scribunto.cfgs.ScribCfg;
 import gplx.xowa.xtns.scribunto.cfgs.ScribCfgResolver;
 
+import gplx.xowa.parsers.tmpls.Arg_nde_tkn;
 public class Scrib_invoke_func extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_invoke;}
 	@Override public Pf_func New(int id, byte[] name) {return new Scrib_invoke_func().Name_(name);}

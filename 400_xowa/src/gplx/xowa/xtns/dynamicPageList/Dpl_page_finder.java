@@ -127,8 +127,9 @@ class Dpl_page_finder {
 				break;
 		}
 
-		// filter by namespace
-		where.append(" and page_namespace=" + Integer.toString(itm.Ns_filter()));
+		if (itm.Show_ns()) // needs more research 20200930
+			// filter by namespace
+			where.append(" and page_namespace=" + Integer.toString(itm.Ns_filter()));
 
 		if ( itm.IgnoreSubpages() ) {
 			where.append(" and page_title NOT like %/%");
@@ -179,7 +180,8 @@ class Dpl_page_finder {
 				sqlSort = "c1.cl_type_id " + sqlOrder + ", c1.cl_sortkey";
 				break;
 			case Dpl_sort.Tid_popularity:
-				sqlSort = "page_counter";
+				sqlSort = "page_score";
+//                                sqlOrder = "DESC";
 				break;
 			default:
 			case Dpl_sort.Tid_categoryadd:

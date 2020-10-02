@@ -119,7 +119,10 @@ public class Scrib_lib_mw implements Scrib_lib {
 			//frame.Args_eval_by_idx(core.Ctx().Src(), idx_int); // NOTE: arg[0] is always MW function name; EX: {{#invoke:Mod_0|Func_0|Arg_1}}; arg_x = "Mod_0"; args[0] = "Func_0"; args[1] = "Arg_1"
 			if (nde == null) return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
 			nde.Val_tkn().Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
-			return rslt.Init_obj(tmp_bfr.To_str_and_clear());
+			if (nde.Eq_tkn() != Xop_tkn_null.Null_tkn)
+				return rslt.Init_obj(tmp_bfr.To_str_and_clear_and_trim());
+			else
+				return rslt.Init_obj(tmp_bfr.To_str_and_clear());
 		}
 		else {
 			Arg_nde_tkn nde = frame.Args_get_by_key(src, Bry_.new_u8(idx_str));

@@ -54,9 +54,13 @@ public class Xow_parser_mgr {
 	public int						Tag__next_idx() {return ++tag_idx;} private int tag_idx; // NOTE:must be wiki-level variable, not page-level, b/c pre-compiled templates can reserve tag #s; PAGE:de.s:Seite:NewtonPrincipien.djvu/465 DATE:2015-02-03
 	public void						Tmpl_stack_del() {--tmpl_stack_ary_len;}
 	public boolean						Tmpl_stack_add(byte[] key) {
+		int count = 0;
 		for (int i = 0; i < tmpl_stack_ary_len; i++) {
-			if (Bry_.Match(key, tmpl_stack_ary[i]))
-                            return false;
+			if (Bry_.Match(key, tmpl_stack_ary[i])) {
+				count++;
+				if (count > 20) // arbitrary!
+					return false;
+			}
 		}
 		int new_len = tmpl_stack_ary_len + 1;
 		if (new_len > tmpl_stack_ary_max) {
