@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.parsers.xndes; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
 import gplx.xowa.xtns.*; import gplx.xowa.parsers.tblws.*; import gplx.xowa.parsers.tmpls.*; import gplx.xowa.parsers.htmls.*;
+import gplx.xowa.xtns.stripstate.StripState_xnde;
 public class Xop_xnde_tkn extends Xop_tkn_itm_base implements Xop_tblw_tkn {
 	@Override public byte Tkn_tid() {return Xop_tkn_itm_.Tid_xnde;}
 	public int Tblw_tid() {return tag.Id();}	// NOTE: tblw tkns actually return xnde as Tblw_tid
@@ -91,10 +92,18 @@ public class Xop_xnde_tkn extends Xop_tkn_itm_base implements Xop_tblw_tkn {
 				}
 				break;
 			case Xop_xnde_tag_.Tid__nowiki:			// evaluate subs; add tags
+			//case Xop_xnde_tag_.Tid__ref:
+				StripState_xnde xnde = (StripState_xnde)this.xnde_xtn;
+                                if (xnde != null)
+                                    bfr.Add(xnde.Xtn_key());
+                                else {
+
 				bfr.Add_byte(Byte_ascii.Lt).Add(Xop_xnde_tag_.Tag__nowiki.Name_bry()).Add_byte(Byte_ascii.Gt);
 				for (int i = 0; i < subs_len; i++)
 					this.Subs_get(i).Tmpl_evaluate(ctx, src, caller, bfr);
 				bfr.Add_byte(Byte_ascii.Lt).Add_byte(Byte_ascii.Slash).Add(Xop_xnde_tag_.Tag__nowiki.Name_bry()).Add_byte(Byte_ascii.Gt);
+
+                                }
 				break;
 			case Xop_xnde_tag_.Tid__onlyinclude:		// evaluate subs but toggle onlyinclude flag on/off
 //					boolean prv_val = ctx.Onlyinclude_enabled;

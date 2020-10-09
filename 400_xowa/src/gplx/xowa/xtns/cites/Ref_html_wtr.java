@@ -146,4 +146,17 @@ public class Ref_html_wtr {
 			bfr.Add(Bry_.new_a7("</div>\n"));
 		}
 	}
+	public void Xnde_ref_x(Bry_bfr bfr, byte[] src, Xop_xnde_tkn xnde) {
+		Bry_bfr tmp_ref = Bry_bfr_.New();
+		Ref_nde itm = (Ref_nde)xnde.Xnde_xtn();
+		if (itm == null) return;
+		if (itm.Follow_y()) return;	// NOTE: "follow" is always appended to preceding ref; will never generate its own ^ a  
+                // cite-ref followed by cite-note
+		cfg.Itm_html().Bld_bfr_many(tmp_ref
+			, Itm_id(itm, true, cfg.Itm_crlp(), cfg.Itm_crls())
+			, Grp_id(itm, cfg.Itm_crslp(), cfg.Itm_crsls())
+			, mgr.getLinkLabel(itm.Idx_major() + 1, itm.Group())
+			);
+		bfr.Add(Db_expand.Extracheck(tmp_ref, cfg.Itm_accessibility_label()));
+	}
 }

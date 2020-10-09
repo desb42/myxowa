@@ -674,10 +674,12 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 				Xox_xnde xnde_xtn = null;
 				switch (tag.Id()) {
 					case Xop_xnde_tag_.Tid__xowa_cmd:				xnde_xtn = tkn_mkr.Xnde__xowa_cmd(); break;
+					case Xop_xnde_tag_.Tid__nowiki:			xnde_xtn = tkn_mkr.Xnde__StripState(); break;
+					//case Xop_xnde_tag_.Tid__ref:					xnde_xtn = gplx.xowa.xtns.cites.References_nde.Enabled ? tkn_mkr.Xnde__ref() : null; break;
 				}
 				if (xnde_xtn != null) { 
-					xnde_xtn.Xtn_parse(ctx.Wiki(), ctx, root, src, xnde);
 					xnde.Xnde_xtn_(xnde_xtn);
+					xnde_xtn.Xtn_parse(ctx.Wiki(), ctx, root, src, xnde);
 				}
 				break;
 			}

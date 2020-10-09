@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.parsers.tmpls; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
 import gplx.core.envs.*;
 import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.miscs.*;
+import gplx.xowa.xtns.cites.Ref_nde;
 public class Xot_tmpl_wtr {
 	public static byte[] Write_all(Xop_ctx ctx, Xot_invk frame, Xop_root_tkn root, byte[] src) {
 		Bry_bfr bfr = ctx.Wiki().Utl__bfr_mkr().Get_m001().Reset_if_gt(Io_mgr.Len_mb);
@@ -76,6 +77,11 @@ public class Xot_tmpl_wtr {
 						}
 						break;
 					}
+					/*case Xop_xnde_tag_.Tid__ref:
+							Ref_nde ref_xnde = (Ref_nde)xnde.Xnde_xtn();
+							if (ref_xnde != null)
+								rslt_bfr.Add(ref_xnde.Xtn_Key(ctx, src, xnde));
+						break;*/
 					case Xop_xnde_tag_.Tid__xowa_cmd:
 						gplx.xowa.xtns.xowa_cmds.Xop_xowa_cmd xowa_cmd = (gplx.xowa.xtns.xowa_cmds.Xop_xowa_cmd)xnde.Xnde_xtn();					
 						rslt_bfr.Add(xowa_cmd.Xtn_html());

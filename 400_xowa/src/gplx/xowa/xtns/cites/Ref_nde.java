@@ -17,6 +17,7 @@ package gplx.xowa.xtns.cites; import gplx.*; import gplx.xowa.*; import gplx.xow
 import gplx.core.primitives.*;
 import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*;
+//import gplx.xowa.htmls.Xow_html_mgr;
 public class Ref_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	public byte[] Name() {return name;} public Ref_nde Name_(byte[] v) {name = v; return this;} private byte[] name = Bry_.Empty;
 	public byte[] Group() {return group;} private byte[] group = Bry_.Empty;
@@ -80,4 +81,10 @@ public class Ref_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	.Add_str_obj("name", Byte_obj_val.new_(Ref_nde.Xatr_id_name))
 	.Add_str_obj("group", Byte_obj_val.new_(Ref_nde.Xatr_id_group))
 	.Add_str_obj("follow", Byte_obj_val.new_(Ref_nde.Xatr_id_follow));
+	public byte[] Xtn_Key(Xop_ctx ctx, byte[] src, Xop_xnde_tkn xnde) {
+		Xoh_html_wtr html_wtr = ctx.Wiki().Html_mgr().Html_wtr();
+		Bry_bfr bfr = Bry_bfr_.New();
+		html_wtr.Ref_wtr().Xnde_ref_x(bfr, src, xnde);
+		return bfr.To_bry();
+	}
 }

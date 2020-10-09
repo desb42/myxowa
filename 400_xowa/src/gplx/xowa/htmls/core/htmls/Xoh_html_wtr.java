@@ -65,6 +65,7 @@ import gplx.xowa.xtns.cites.Ref_html_wtr;
 import gplx.xowa.parsers.lists.Xop_list_tkn_new;
 import gplx.Bry_;
 import gplx.Bry_bfr_;
+import gplx.String_;
 import gplx.xowa.Xoa_app_;
 public class Xoh_html_wtr {
 	private final    Xoae_app app; private final    Xowe_wiki wiki; private final    Xow_html_mgr html_mgr; private final    Xop_xatr_whitelist_mgr whitelist_mgr;
@@ -640,7 +641,7 @@ public class Xoh_html_wtr {
 				Xnde_subs_escape(bfr, ctx, hctx, src, xnde, false, false);
 				break;
 			case Xop_xnde_tag_.Tid__nowiki:
-				Xnde_subs_escape(bfr, ctx, hctx, src, xnde, false, false);
+				Xnde_subs_escape(bfr, ctx, hctx, src, xnde, false, true);
 				break;
 			case Xop_xnde_tag_.Tid__hr:
 			case Xop_xnde_tag_.Tid__b: case Xop_xnde_tag_.Tid__strong:

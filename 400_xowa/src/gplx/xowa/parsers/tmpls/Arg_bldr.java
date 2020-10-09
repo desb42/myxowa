@@ -15,6 +15,8 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.parsers.tmpls; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
 import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.miscs.*;
+import gplx.xowa.xtns.stripstate.StripState_xnde;
+import gplx.xowa.xtns.cites.Ref_nde;
 public class Arg_bldr {	// TS
 	public boolean Bld(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_arg_wkr wkr, int wkr_typ, Xop_root_tkn root, Xop_tkn_itm tkn, int bgn_pos, int cur_pos, int loop_bgn, int loop_end, byte[] src) {
 		boolean ws_bgn_chk = true, colon_chk = false, itm_is_static = true, key_exists = false; int ws_bgn_idx = -1, ws_end_idx = -1, cur_itm_subs_len = 0, cur_nde_idx = -1; Arg_nde_tkn cur_nde = null; Arg_itm_tkn cur_itm = null;
@@ -122,6 +124,16 @@ public class Arg_bldr {	// TS
 						case Xop_xnde_tag_.Tid__noinclude: case Xop_xnde_tag_.Tid__includeonly: case Xop_xnde_tag_.Tid__onlyinclude:
 							itm_is_static = false;
 							break;
+						case Xop_xnde_tag_.Tid__nowiki:
+							StripState_xnde xnde = (StripState_xnde)sub_as_xnde.Xnde_xtn();
+							if (xnde != null)
+								cur_itm.Dat_ary_(xnde.Xtn_key());
+							break;
+						/*case Xop_xnde_tag_.Tid__ref:
+							Ref_nde ref_xnde = (Ref_nde)sub_as_xnde.Xnde_xtn();
+							if (ref_xnde != null)
+								cur_itm.Dat_ary_(ref_xnde.Xtn_Key(ctx, src, sub_as_xnde));
+							break;*/
 					}
 					if (ws_bgn_chk) ws_bgn_chk = false; else ws_end_idx = -1;		// INLINE: AdjustWsForTxtTkn
 					break;

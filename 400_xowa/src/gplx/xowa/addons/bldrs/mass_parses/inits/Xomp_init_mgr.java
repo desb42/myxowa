@@ -37,15 +37,50 @@ class Xomp_init_mgr {
 		int len = ns_ary.length;
 		String sql = String_.Concat_lines_nl_skip_last	// ANSI.Y
 		( "INSERT INTO xomp_page (page_id, page_ns, page_status, html_len, xomp_wkr_id)"
+/*
+		, "select distinct(page_id), {0}, 0,0,0 from"
+		, "(    SELECT ROW_NUMBER() OVER(ORDER BY page_id) AS RowNo, "
+		, "           0 as sorter,"
+		, "           page_id "
+		, "    FROM <page_db>page p"
+		, "    where  p.page_namespace = {0}"
+		, "    AND    p.page_is_redirect = 0"
+		, "    AND    p.page_model_format=17"
+		, "UNION"
+		, "    SELECT ROW_NUMBER() OVER(ORDER BY page_id desc) AS RowNo, "
+		, "           1 as sorter,"
+		, "           page_id "
+		, "    FROM <page_db>page p"
+		, "    where p.page_namespace = {0}"
+		, "    AND    p.page_is_redirect = 0"
+		, "    AND    p.page_model_format=17"
+		, ") i"
+*/
 		, "SELECT p.page_id, p.page_namespace, 0, 0, 0"
 		, "FROM   <page_db>page p"
 		, "WHERE  p.page_namespace = {0}"
 		, "AND    p.page_is_redirect = 0"
+		, "AND    p.page_model_format=17" // extra filter only model=wikitext format=text/x-wiki
 		, "ORDER BY p.page_id"
 		); 
 		for (int i = 0; i < len; ++i) {
 			int ns_id = ns_ary[i];
 			attach_mgr.Exec_sql_w_msg("adding rows for xomp_page: ns=" + ns_id, sql, ns_id);
+		}
+
+		byte[] template_doc_name = cfg.Template_doc();
+		if (template_doc_name != null) {
+			String sql_template = String_.Concat_lines_nl_skip_last	// ANSI.Y
+			( "INSERT INTO xomp_page (page_id, page_ns, page_status, html_len, xomp_wkr_id)"
+			, "SELECT p.page_id, p.page_namespace, 0, 0, 0"
+			, "FROM   <page_db>page p"
+			, "WHERE  p.page_namespace = 10"
+			, "AND    p.page_is_redirect = 0"
+			, "AND    p.page_model_format=17" // extra filter only model=wikitext format=text/x-wiki
+			, "AND    p.page_title like '%/{0}'"
+			, "ORDER BY p.page_id"
+			);
+			attach_mgr.Exec_sql_w_msg("adding rows for template documentation", sql, template_doc_name);
 		}
 	}
 }

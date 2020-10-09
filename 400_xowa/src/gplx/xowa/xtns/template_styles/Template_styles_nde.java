@@ -58,23 +58,23 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		Xox_xnde_.Parse_xatrs(wiki, this, xatrs_hash, src, xnde);
 		// get css_ttl
 		css_ttl = css_ttl_bry == null ? null : wiki.Ttl_parse(css_ttl_bry); // must check for null ttl; EX:"<templatestyle src{{=}}A.css>"; PAGE:en.w:Switzerland; ISSUE#:416; DATE:2019-03-31
-                //System.out.println(String_.new_u8(css_ttl.Full_db()));
+		//System.out.println(String_.new_u8(css_ttl.Full_db()));
 		if (css_ttl == null) {
-                    // check for '{{=}}' 
-                    int pos = xnde.Atrs_bgn();
-                    int top = xnde.Atrs_end();
-                    while (pos < top) {
-                        byte b = src[pos++];
-                        if (b == 's') { // for 'src'
-                            if (pos + 10 < top) {
-                                if (src[pos] == 'r' && src[pos+1] == 'c' && src[pos+2] == '{' && src[pos+3] == '{' && src[pos+4] == '=' && src[pos+5] == '}' && src[pos+6] == '}' && src[pos+7] == '"') {
-                                    css_ttl_bry = Bry_.Mid(src, pos+8, top-2);
-                                    css_ttl = css_ttl_bry == null ? null : wiki.Ttl_parse(css_ttl_bry); // must check for null ttl; EX:"<templatestyle src{{=}}A.css>"; PAGE:en.w:Switzerland; ISSUE#:416; DATE:2019-03-31
-                                }
-                            }
-                        }
-                    }
-                }
+			// HACK check for '{{=}}' 
+			int pos = xnde.Atrs_bgn();
+			int top = xnde.Atrs_end();
+			while (pos < top) {
+				byte b = src[pos++];
+				if (b == 's') { // for 'src'
+					if (pos + 10 < top) {
+						if (src[pos] == 'r' && src[pos+1] == 'c' && src[pos+2] == '{' && src[pos+3] == '{' && src[pos+4] == '=' && src[pos+5] == '}' && src[pos+6] == '}' && src[pos+7] == '"') {
+							css_ttl_bry = Bry_.Mid(src, pos+8, top-2);
+							css_ttl = css_ttl_bry == null ? null : wiki.Ttl_parse(css_ttl_bry); // must check for null ttl; EX:"<templatestyle src{{=}}A.css>"; PAGE:en.w:Switzerland; ISSUE#:416; DATE:2019-03-31
+						}
+					}
+				}
+			}
+		}
 		if (css_ttl == null) {
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "Template_styles_nde.invalid_ttl: wiki=~{0} page=~{1} css_ttl=~{2}", wiki.Domain_bry(), ctx.Page().Url_bry_safe(), css_ttl_bry);
 			return;

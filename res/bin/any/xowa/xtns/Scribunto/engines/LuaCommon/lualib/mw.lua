@@ -818,4 +818,11 @@ function mw.loadData( module )
 	return dataWrapper( data )
 end
 
+-- xowa:bgn
+function mw.notify_page_changed()
+  -- reset cache everytime page changes
+  loadedData = {}
+end
+-- xowa:end
+
 return mw

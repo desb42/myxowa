@@ -31,8 +31,12 @@ public class Scrib_lib_mw implements Scrib_lib {
 		core.RegisterInterface(this, script_dir.GenSubFil("mwInit.lua"));	// DATE:2014-07-12
 		mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.lua")
 			, Keyval_.new_("allowEnvFuncs", allow_env_funcs));
+		notify_page_changed_fnc = mod.Fncs_get_by_key("notify_page_changed");
 		return mod;
 	}
+	private Scrib_lua_proc notify_page_changed_fnc;
+	public void Notify_page_changed() {if (notify_page_changed_fnc != null) core.Interpreter().CallFunction(notify_page_changed_fnc.Id(), Keyval_.Ary_empty);}
+
 	public void Invoke_bgn(Xowe_wiki wiki, Xop_ctx ctx, byte[] new_src) {
 		if (src != null)	// src exists; indicates that Invoke being called recursively; push existing src onto stack
 			src_stack.Add(src);
@@ -119,6 +123,8 @@ public class Scrib_lib_mw implements Scrib_lib {
 			//frame.Args_eval_by_idx(core.Ctx().Src(), idx_int); // NOTE: arg[0] is always MW function name; EX: {{#invoke:Mod_0|Func_0|Arg_1}}; arg_x = "Mod_0"; args[0] = "Func_0"; args[1] = "Arg_1"
 			if (nde == null) return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
 			nde.Val_tkn().Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
+                        //ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(tmp_bfr);
+                        //System.out.println(idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));
 			if (nde.Eq_tkn() != Xop_tkn_null.Null_tkn)
 				return rslt.Init_obj(tmp_bfr.To_str_and_clear_and_trim());
 			else
@@ -128,6 +134,8 @@ public class Scrib_lib_mw implements Scrib_lib {
 			Arg_nde_tkn nde = frame.Args_get_by_key(src, Bry_.new_u8(idx_str));
 			if (nde == null) return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
 			nde.Val_tkn().Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
+                        //ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(tmp_bfr);
+                        //System.out.println(idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));
 			return rslt.Init_obj(tmp_bfr.To_str_and_clear_and_trim());	// NOTE: must trim if key_exists; DUPE:TRIM_IF_KEY
 		}
 	}

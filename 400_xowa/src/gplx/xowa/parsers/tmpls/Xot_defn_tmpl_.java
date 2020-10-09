@@ -19,6 +19,7 @@ import gplx.Bool_;
 import gplx.Bry_;
 import gplx.Bry_bfr;
 import gplx.Bry_bfr_;
+import gplx.String_;
 import gplx.xowa.Xoa_ttl;
 import gplx.xowa.Xowe_wiki;
 import gplx.xowa.langs.cases.Xol_case_cvt;

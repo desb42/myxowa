@@ -209,9 +209,21 @@ public class Xop_ctx {
 	public static final int Stack_not_found = -1;
 	public boolean Stack_has(int typeId) {return Stack_idx_typ(typeId) != Stack_not_found;}
 	public int Stack_idx_typ(int typeId)	{
+            if (typeId == Xop_tkn_itm_.Tid_lnki || typeId == Xop_tkn_itm_.Tid_brack_bgn) {
+		for (int i = stack_len - 1; i > -1; i--) {
+                    int stackTypeId = stack[i].Tkn_tid();
+			if (stackTypeId == typeId)
+				return i;
+                        if (stackTypeId == Xop_tkn_itm_.Tid_list_new ||
+                                stackTypeId == Xop_tkn_itm_.Tid_tblw_td) // and others
+                            break; // barrier tokens
+                }
+            }
+            else {
 		for (int i = stack_len - 1; i > -1; i--)
 			if (stack[i].Tkn_tid() == typeId)
 				return i; 
+            }
 		return Stack_not_found;
 	}
 	public int Stack_idx_find_but_stop_at_tbl(int tid) {

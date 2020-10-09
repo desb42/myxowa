@@ -34,7 +34,8 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 		byte[] key = tmp_bfr	
 			.Add(Bry__uniq__bgn_w_dash)		  // "\u007f'\"`UNIQ-"
 			.Add(type).Add_byte(Byte_ascii.Dash) // "ref-"
-			.Add_int_variable(idx)			   // "1"
+			.Add_int_fixed(idx, 8)
+                        //.Add_int_variable(idx)			   // "1"
 			.Add(Bry__uniq__add__end)			// "-QINU`\"'\u007f"
 			.To_bry_and_clear();
                 //System.out.println(String_.new_u8(key)+":"+String_.new_u8(val));

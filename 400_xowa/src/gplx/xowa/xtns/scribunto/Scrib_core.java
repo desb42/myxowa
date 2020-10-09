@@ -147,6 +147,7 @@ public class Scrib_core {
 			lib_message.Notify_lang_changed();
 			lib_language.Notify_lang_changed();
 		}
+		lib_mw.Notify_page_changed();
 		lib_uri.Notify_page_changed();
 		lib_title.Notify_page_changed();
 		lib_wikibase.Notify_page_changed();
@@ -215,8 +216,6 @@ public class Scrib_core {
 		this.frame_parent = parent_frame; this.frame_current = current_frame;
 		parent_frame.Frame_tid_(Scrib_frame_.Tid_parent); current_frame.Frame_tid_(Scrib_frame_.Tid_current);
 
-                mod_text = Db_lua_comp.Check(mod_text);
-
 		try {
 			Scrib_lua_mod mod = Mods_get_or_new(mod_name, mod_text);
 			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), String_.new_u8(fnc_name));
@@ -249,9 +248,12 @@ public class Scrib_core {
 	private Scrib_lua_mod Mods_get_or_new(byte[] mod_name, byte[] mod_text) {
 		Scrib_lua_mod rv = (Scrib_lua_mod)mods.Get_by(mod_name);
 		if (rv == null) {
+                    System.out.println("mod " + String_.new_u8(mod_name));
 			rv = new Scrib_lua_mod(this, "Module:" + String_.new_u8(mod_name));
-//                        System.out.println("MOD " + String_.new_u8(mod_name));
 			//rv.LoadString(String_.new_u8(mod_text));
+
+			mod_text = Db_lua_comp.Check(mod_text);
+                
 			rv.LoadString(mod_text);
 			mods.Add(mod_name, rv);
 		}

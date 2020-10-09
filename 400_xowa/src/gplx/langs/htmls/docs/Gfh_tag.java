@@ -69,7 +69,9 @@ public class Gfh_tag implements Mwh_atr_wkr {
 		return Bry_.Eq(val, rv.Val());
 	}
 	public byte Atrs__cls_find_or_fail(Hash_adp_bry hash) {
-		byte rv = Atrs__cls_find_or(hash, Byte_.Max_value_127); if (rv == Byte_.Max_value_127) tag_rdr.Err_wkr().Fail("cls missing");
+		byte rv = Atrs__cls_find_or(hash, Byte_.Max_value_127);
+		if (rv == Byte_.Max_value_127)
+			tag_rdr.Err_wkr().Fail("cls missing");
 		return rv;
 	}
 	public byte Atrs__cls_find_or(Hash_adp_bry hash, byte or) {

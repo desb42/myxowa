@@ -56,8 +56,10 @@ public class Scrib_lib_text implements Scrib_lib {
 	public boolean Unstrip(Scrib_proc_args args, Scrib_proc_rslt rslt)			{return rslt.Init_obj(args.Pull_str(0));}	// NOTE: XOWA does not use MediaWiki strip markers; just return original; DATE:2015-01-20
 	public boolean UnstripNoWiki(Scrib_proc_args args, Scrib_proc_rslt rslt)	{
 		// NOTE: XOWA does not use MediaWiki strip markers; just return original; DATE:2015-01-20
-		byte[] src = args.Pull_bry(0);
-		return rslt.Init_obj(nowiki_util.Strip_tag(core.Page().Url_bry_safe(), src, trie));
+		byte[] id = args.Pull_bry(0);
+		return rslt.Init_obj(core.Ctx().Wiki().Parser_mgr().Uniq_mgr().Get(id));
+//		byte[] src = args.Pull_bry(0);
+//		return rslt.Init_obj(nowiki_util.Strip_tag(core.Page().Url_bry_safe(), src, trie));
 	}
 	public boolean KillMarkers(Scrib_proc_args args, Scrib_proc_rslt rslt)		{return rslt.Init_obj(args.Pull_str(0));}	// NOTE: XOWA does not use MediaWiki strip markers; just return original; DATE:2015-01-20
 	public boolean GetEntityTable(Scrib_proc_args args, Scrib_proc_rslt rslt) {
