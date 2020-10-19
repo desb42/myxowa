@@ -44,6 +44,25 @@ public class Xop_eq_lxr implements Xop_lxr {
 				}
 				if (hdr_like)															// ignore hdr tkn;
 					return ctx.Lxr_make_txt_(cur_pos);
+				// could be inside JSON
+				// search backwards for <nl>, if " encountered assume json??
+				boolean nl_found = false;
+				boolean json_like = false;
+				int backcount = cur_pos - 400; //??
+				if (backcount < 0) backcount = 0;
+				int pos = cur_pos;
+				while (pos > backcount) {
+					byte b = src[--pos];
+					if (b == Byte_ascii.Quote) {
+						json_like = true;
+					}
+					else if (b == Byte_ascii.Nl) {
+						nl_found = true;
+						break;
+					}
+				}
+				if (nl_found && json_like)
+					return ctx.Lxr_make_txt_(cur_pos);
 			}
 			ctx.Subs_add(root, tkn_mkr.Eq(bgn_pos, cur_pos));
 			return cur_pos;

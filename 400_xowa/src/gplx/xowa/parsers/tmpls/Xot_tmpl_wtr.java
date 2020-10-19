@@ -23,7 +23,7 @@ public class Xot_tmpl_wtr {
 		try {
 			Write_tkn(bfr, ctx, frame, src, src.length, root);
 			byte[] rv = bfr.To_bry_and_clear();
-			return ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(rv); // NOTE: noops if no UNIQs; // UNIQ; DATE:2017-03-31
+			return ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(false, rv); // NOTE: noops if no UNIQs; // UNIQ; DATE:2017-03-31
 		} finally {bfr.Mkr_rls();}
 	}
 	private static void Write_tkn(Bry_bfr rslt_bfr, Xop_ctx ctx, Xot_invk frame, byte[] src, int src_len, Xop_tkn_itm tkn) {

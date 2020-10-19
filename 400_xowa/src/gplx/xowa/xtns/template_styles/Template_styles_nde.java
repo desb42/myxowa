@@ -58,7 +58,6 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		Xox_xnde_.Parse_xatrs(wiki, this, xatrs_hash, src, xnde);
 		// get css_ttl
 		css_ttl = css_ttl_bry == null ? null : wiki.Ttl_parse(css_ttl_bry); // must check for null ttl; EX:"<templatestyle src{{=}}A.css>"; PAGE:en.w:Switzerland; ISSUE#:416; DATE:2019-03-31
-		//System.out.println(String_.new_u8(css_ttl.Full_db()));
 		if (css_ttl == null) {
 			// HACK check for '{{=}}' 
 			int pos = xnde.Atrs_bgn();
@@ -95,6 +94,7 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			// update css_page_ids
 			Hash_adp__int css_page_ids = (Hash_adp__int)ctx.Page().Kv_data().Get_or_make(Template_styles_kv_itm.Instance);
 			if (css_page_ids.Get_by_or_null(css_page_id) == null) {
+				//System.out.println(String_.new_u8(css_ttl.Full_db()) + " " + Integer.toString(css_page_id));
 				css_page_ids.Add(css_page_id, "");
 			}
 			else {
@@ -117,7 +117,12 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			return;
 		}
 
-		if (!css_ignore) {
+		// ignore css_ignore and use the presence in css_page_ids
+		//if (!css_ignore) {
+		Hash_adp__int css_page_ids = (Hash_adp__int)ctx.Page().Kv_data().Get_or_make(Template_styles_kv_itm.Instance);
+		if (css_page_ids.Get_by_or_null(css_page_id) != null) {
+			css_page_ids.Del(css_page_id);
+
 			Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
 			try {
 				css_src = new XoCssTransformer(String_.new_u8(css_src))

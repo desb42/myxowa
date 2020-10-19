@@ -32,6 +32,7 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 	, img_alt = new Bfr_arg__hatr_bry(Gfh_atr_.Bry__alt)
 	, img_src = new Bfr_arg__hatr_bry(Gfh_atr_.Bry__src)
 	, img_cls = new Bfr_arg__hatr_bry(Gfh_atr_.Bry__class)
+	, img_style = new Bfr_arg__hatr_bry(Gfh_atr_.Bry__style)
 	, img_xowa_title = new Bfr_arg__hatr_bry(Xoh_img_xoimg_data.Bry__data_xowa_title)
 	;
 	private final    Bfr_arg__pgbnr img_pgbnr_atrs = new Bfr_arg__pgbnr();
@@ -41,7 +42,7 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 		arg_ary = new Bfr_arg_clearable[] 
 		{ anch_href, anch_rel, anch_cls, anch_title, anch_xowa_title
 		, img_id, img_xowa_title, img_xowa_image, img_src, img_w, img_h, img_cls, img_alt
-		, img_pgbnr_atrs
+		, img_pgbnr_atrs, img_style
 		};
 	}
 	public Xof_fsdb_itm	Fsdb_itm() {return fsdb_itm;} private Xof_fsdb_itm fsdb_itm;
@@ -103,6 +104,8 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 			this.Init_xoimg(hpg, hctx, lnki_ttl, Xoh_img_xoimg_data.New__pgbnr());
 		}
 		else if (data.Img_xoimg().Val_dat_exists()) {
+                    //if (img_src.Src_bgn() == -1)
+                    //    img_src.Set_by_bry(lnki_ttl);
 			Xoh_img_xoimg_data img_xowa_image = data.Img_xoimg();
 			this.Init_xoimg(hpg, hctx, lnki_ttl, img_xowa_image);
 		}
@@ -139,6 +142,7 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 			img_xowa_title.Set_by_bry(xowa_title);
 		img_alt.Set_by_mid_or_empty(src, data.Img_alt_bgn(), data.Img_alt_end());
 		img_cls.Set_by_arg(data.Img_cls());
+		img_style.Set_by_arg(data.Img_style());
 		if (data.Img_imap_idx() != -1) img_imap_usemap.Set(data.Img_imap_idx());
 		return true;
 	}
@@ -149,7 +153,7 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		if (img_wo_anch)
-			img_wo_anch_fmtr.Bld_bfr_many(bfr, img_id, img_xowa_title, img_xowa_image, img_alt, img_src, img_w, img_h, img_cls, img_imap_usemap);
+			img_wo_anch_fmtr.Bld_bfr_many(bfr, img_id, img_xowa_title, img_xowa_image, img_alt, img_src, img_w, img_h, img_cls, img_imap_usemap, img_style);
 		else {
 			if (img_is_vid) {
 				bfr.Add(Vid__bry__bgn);
@@ -166,11 +170,11 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 	private static final    byte[] Vid__bry__bgn = Bry_.new_a7("<div class=\"mediaContainer xowa_media_div\">\n<div>");
 	private static final    Bry_fmtr 
 	  img_fmtr = Bry_fmtr.new_
-	( "<a~{anch_href}~{anch_rel}~{anch_cls}~{anch_title}~{anch_xowa_title}><img~{img_id}~{img_xowa_title}~{img_xowa_image}~{img_src}~{img_w}~{img_h}~{img_cls}~{img_alt}~{img_pgbnr_atrs}></a>"
-	, "anch_href", "anch_rel", "anch_cls", "anch_title", "anch_xowa_title", "img_id", "img_xowa_title", "img_xowa_image", "img_src", "img_w", "img_h", "img_cls", "img_alt", "img_pgbnr_atrs")
+	( "<a~{anch_href}~{anch_rel}~{anch_cls}~{anch_title}~{anch_xowa_title}><img~{img_id}~{img_xowa_title}~{img_xowa_image}~{img_src}~{img_w}~{img_h}~{img_cls}~{img_alt}~{img_style}~{img_pgbnr_atrs}></a>"
+	, "anch_href", "anch_rel", "anch_cls", "anch_title", "anch_xowa_title", "img_id", "img_xowa_title", "img_xowa_image", "img_src", "img_w", "img_h", "img_cls", "img_alt", "img_pgbnr_atrs", "img_style")
 	, img_wo_anch_fmtr = Bry_fmtr.new_
-	( "<img~{img_id}~{img_xowa_title}~{img_xowa_image}~{img_alt}~{img_src}~{img_w}~{img_h}~{img_cls}~{img_imap_usemap}/>"
-	, "img_id", "img_xowa_title", "img_xowa_image", "img_src", "img_w", "img_h", "img_cls", "img_alt", "img_imap_usemap")
+	( "<img~{img_id}~{img_xowa_title}~{img_xowa_image}~{img_alt}~{img_src}~{img_w}~{img_h}~{img_cls}~{img_style}~{img_imap_usemap}/>"
+	, "img_id", "img_xowa_title", "img_xowa_image", "img_src", "img_w", "img_h", "img_cls", "img_alt", "img_imap_usemap", "img_style")
 	;
 	private final    Bry_fmt
 	  vid_fmt = Bry_fmt.Auto_nl_apos

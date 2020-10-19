@@ -27,6 +27,7 @@ import gplx.Bry_bfr;
 import gplx.Bry_bfr_;
 import gplx.Bool_;
 import gplx.Hash_adp_bry;
+import gplx.String_;
 import gplx.xowa.xtns.lst.Lst_pfunc_itm;
 public class Db_Section_list {
 	private List_adp sects;
@@ -38,8 +39,10 @@ public class Db_Section_list {
 	private Xoa_ttl ttl;
 	private byte[] ttl_bry;
 	private static final byte Include_between = 0, Include_to_eos = 1, Include_to_bos = 2;
+	private Db_parser dbp = new Db_parser();
 	public Db_Section_list(byte[] src, int langid, Xop_ctx ctx, Xop_ctx sub_ctx, Xoa_ttl ttl, byte[] ttl_bry) {
 		byte b;
+		//src = dbp.stripcomments(src);
 		this.src = src;
 		this.ctx = ctx;
 		this.wiki = ctx.Wiki();
@@ -237,6 +240,7 @@ public class Db_Section_list {
 		return wikie.Parser_mgr().Main().Expand_tmpl(sub_root, sub_ctx, tkn_mkr, msg_val);
 	}
 	private byte[] Compile3(byte[] sub_src) {
+            //System.out.println(String_.new_u8(sub_src));
 		// parse page; note adding to stack to prevent circular recursions
 		if (!wiki.Parser_mgr().Tmpl_stack_add(ttl.Full_db())) return null;
 		Xot_defn_tmpl tmpl = wiki.Parser_mgr().Main().Parse_text_to_defn_obj(sub_ctx, sub_ctx.Tkn_mkr(), ttl.Ns(), ttl_bry, sub_src);	// NOTE: parse as tmpl to ignore <noinclude>

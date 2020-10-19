@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa; import gplx.*;
 import gplx.langs.htmls.*;
+import gplx.xowa.apps.servers.http.Http_server_page;
 /*
 remove __TOC__
 remove {{ .... }} matching
@@ -424,7 +425,10 @@ public class Db_wikistrip {
 							bfr.Add_mid(src, startpos, pos-1);
 							int namestart = pos + 1;
 							pos = findclosingsquiggle(src, src_len, pos + 1);
-							if (pos - startpos > 10) {
+							if ((src[namestart] | 32) == 'p' && src[namestart+1] == 'H' && (src[namestart+2] == ' ' || src[namestart+2] == '_') && src[namestart+3] == 'w' && src[namestart+4] == 'i' && src[namestart+5] == 'k' && src[namestart+6] == 'i' && src[namestart+7] == 'd' && src[namestart+8] == 'a' && src[namestart+9] == 't' && src[namestart+10] == 'a') { // PH wikidata
+								//bfr.Add(Compile3(Bry_.Mid(src, namestart-2, pos), page));
+							}
+							else if (pos - startpos > 10) {
 								int npos = 0; 
 								int textstart = -1;
 								if ((src[namestart] | 32) == 'l' && src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && src[namestart+4] == '|') { // lang
@@ -789,5 +793,25 @@ public class Db_wikistrip {
 		}
 		bfr.Add(Gfh_tag_.P_rhs);
 		return bfr.To_bry();
+	}
+	private byte[] Compile3(byte[] sub_src, Http_server_page page) {
+            //System.out.println(String_.new_u8(sub_src));
+		// parse page; note adding to stack to prevent circular recursions
+/*
+		if (!page.Wiki().Parser_mgr().Tmpl_stack_add(ttl.Full_db())) return null;
+		Xot_defn_tmpl tmpl = page.Wiki().Parser_mgr().Main().Parse_text_to_defn_obj(sub_ctx, sub_ctx.Tkn_mkr(), ttl.Ns(), ttl_bry, sub_src);	// NOTE: parse as tmpl to ignore <noinclude>
+		page.Wiki().Parser_mgr().Tmpl_stack_del();	// take template off stack; evaluate will never recurse, but will fail if ttl is still on stack; DATE:2014-03-10
+
+		// eval tmpl
+		Bry_bfr tmp_bfr = page.Wiki().Utl__bfr_mkr().Get_m001();
+		try {
+			tmpl.Tmpl_evaluate(sub_ctx, Xot_invk_temp.New_root(ttl.Page_txt()), tmp_bfr);
+			sub_src = tmp_bfr.To_bry_and_clear();
+		} finally {
+			tmp_bfr.Mkr_rls();
+		}
+		return sub_src;
+*/
+            return Bry_.Empty;
 	}
 }

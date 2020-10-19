@@ -32,34 +32,41 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		// close apos
 		ctx.Apos().End_frame(ctx, root, src, bgn_pos, false);
 
+                // reset para if not already in a list
+                if (ctx.Page().Prev_list_tkn() == null)
 		ctx.Para().Process_nl(ctx, root, src, bgn_pos, cur_pos);
 
 		// Multiple prefixes may abut each other for nested lists.
+		byte b = 0;
 		while (cur_pos < src_len) {
-			byte b = src[cur_pos];
+			b = src[cur_pos];
 			if (b == Byte_ascii.Star || b == Byte_ascii.Hash || b == Byte_ascii.Semic || b == Byte_ascii.Colon)
 				cur_pos++;
 			else
 				break;
 		}
+		// is the rest of the line whitespace?
+		int peek_pos = cur_pos;
+		while (peek_pos < src_len) {
+			b = src[peek_pos];
+			if (b == Byte_ascii.Space || b == Byte_ascii.Tab)
+				peek_pos++;
+			else
+				break;
+		}
+		if (b == Byte_ascii.Nl) // blank line - ignore
+			return peek_pos;
 		//Xop_list_tkn_new itm = tkn_mkr.List_bgn(bgn_pos, cur_pos, curSymAry[curSymLen - 1], curSymLen).List_path_(posBldr.XtoIntAry()).List_uid_(listId);
 		// bgn_pos + 1 skips the nl char
 		Xop_list_tkn_new itm = new Xop_list_tkn_new(bgn_pos + 1, cur_pos, ctx.Page().Prev_list_tkn());
 		ctx.Subs_add_and_stack(root, itm);
 		ctx.Page().Prev_list_tkn_(itm);
 		// peek ahead for a table eg :{|
-		int peek_pos = cur_pos;
-		while (peek_pos < src_len) {
-			byte b = src[peek_pos];
-			if (b == Byte_ascii.Space || b == Byte_ascii.Tab)
-				peek_pos++;
-			else
-				break;
-		}
 		if (peek_pos + 2 < src_len) {
 			if (src[peek_pos] == '{' && src[peek_pos+1] == '|')
 				cur_pos = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, peek_pos+2, false, Xop_tblw_wkr.Tblw_type_tb, Xop_tblw_wkr.Called_from_list, -1, -1);
 		}
-		return cur_pos;
+		//return cur_pos;
+		return peek_pos;
 	}
 }

@@ -101,6 +101,7 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 		root.Reset();
 		byte[] mid_bry = Expand_tmpl(root, ctx, tkn_mkr, src);
 //                Gfo_usr_dlg_.Instance.Log_many("", "", "mid_bry=~{0}", String_.new_u8(mid_bry));
+//System.out.println(String_.new_u8(mid_bry));
 		root.Data_mid_(mid_bry);
 		root.Reset();
 		Parse_wtxt_to_wdom(root, ctx, tkn_mkr, mid_bry, doc_bgn_pos);

@@ -33,12 +33,12 @@ public class Xoh_file_fmtr__hdump extends Xoh_file_fmtr__basic {		private final 
 
 		// bld bfr
 		if (Bry_.Len_eq_0(a_href))
-			Add_anch_n(bfr, data_xowa_title, data_xowa_image, img_src, img_w, img_h, img_cls, img_cls_other, img_alt, Bry_.Empty);
+			Add_anch_n(bfr, data_xowa_title, data_xowa_image, img_src, img_w, img_h, img_cls, img_cls_other, img_alt, img_style);
 		else {
 			if (a_href_is_file) a_href = Bry_.Empty;
 			fmt__anch_y.Bld_many(bfr
 			, a_href, Xoh_lnki_consts.A_cls_to_bry(a_cls), Xoh_lnki_consts.A_rel_to_bry(a_rel), a_title, a_xowa_title
-			, data_xowa_title, data_xowa_image, Gfh_utl.Escape_html_as_bry(img_alt), img_src, img_w, img_h, Xoh_img_cls_.To_html(img_cls, img_cls_other)
+			, data_xowa_title, data_xowa_image, Gfh_utl.Escape_html_as_bry(img_alt), img_src, img_w, img_h, Xoh_img_cls_.To_html(img_cls, img_cls_other), img_style
 			);
 		}
 	}
@@ -61,7 +61,7 @@ public class Xoh_file_fmtr__hdump extends Xoh_file_fmtr__basic {		private final 
 	)
 	, fmt__anch_y = Bry_fmt.Auto
 	( "<a href=\"~{a_href}\"~{a_class}~{a_rel}~{a_title} xowa_title=\"~{a_xowa_title}\">"
-	+ "<img~{data_xowa_title}~{data_xowa_image} alt=\"~{img_alt}\" src=\"~{img_src}\" width=\"~{img_w}\" height=\"~{img_h}\"~{img_cls}/>"
+	+ "<img~{data_xowa_title}~{data_xowa_image} alt=\"~{img_alt}\" src=\"~{img_src}\" width=\"~{img_w}\" height=\"~{img_h}\"~{img_cls}~{img_xtra_atrs}/>"
 	+ "</a>"
 	);
 }

@@ -218,6 +218,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 //				ctx.Scribunto = Bool_.N;
 			String val = key_missing ? tmp_bfr.To_str_and_clear() : tmp_bfr.To_str_and_clear_and_trim(); // NOTE: must trim if key_exists; DUPE:TRIM_IF_KEY
 			Keyval kv = key_is_str ? Keyval_.new_(key_as_str, val) : Keyval_.int_(key_as_int, val);
+                        //System.out.println(key_as_str + " " + key_as_int + " " + val);
 			rv.Add(kv);
 		}
 		tmp_bfr.Mkr_rls();

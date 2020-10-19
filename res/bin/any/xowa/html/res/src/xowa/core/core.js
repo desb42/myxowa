@@ -138,7 +138,8 @@ if (!window.xowa) {
   };
   xowa.js.jquery.init = function(document) {
   	if (jQuery.cookie !== undefined) return;
-    return; jQuery.cookie = xowa.cookie;
+    //return; 
+    jQuery.cookie = xowa.cookie;
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.webfonts.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.preferences.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.webfonts.repository.js');

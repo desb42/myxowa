@@ -53,19 +53,28 @@ public class Scrib_lib_text implements Scrib_lib {
 	public static final String Invk_unstrip = "unstrip", Invk_unstripNoWiki = "unstripNoWiki", Invk_killMarkers = "killMarkers", Invk_getEntityTable = "getEntityTable"
 	, Invk_init_text_for_wiki = "init_text_for_wiki", Invk_jsonEncode = "jsonEncode", Invk_jsonDecode = "jsonDecode";
 	private static final    String[] Proc_names = String_.Ary(Invk_unstrip, Invk_unstripNoWiki, Invk_killMarkers, Invk_getEntityTable, Invk_init_text_for_wiki, Invk_jsonEncode, Invk_jsonDecode);
-	public boolean Unstrip(Scrib_proc_args args, Scrib_proc_rslt rslt)			{return rslt.Init_obj(args.Pull_str(0));}	// NOTE: XOWA does not use MediaWiki strip markers; just return original; DATE:2015-01-20
+	public boolean Unstrip(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		// NOTE: https://www.mediawiki.org/wiki/Extension:Scribunto/Lua_reference_manual#mw.text.unstrip
+		byte[] src = args.Pull_bry(0);
+		return rslt.Init_obj(core.Ctx().Wiki().Parser_mgr().Uniq_mgr().Parse(false, src));
+	}
 	public boolean UnstripNoWiki(Scrib_proc_args args, Scrib_proc_rslt rslt)	{
-		// NOTE: XOWA does not use MediaWiki strip markers; just return original; DATE:2015-01-20
-		byte[] id = args.Pull_bry(0);
-		return rslt.Init_obj(core.Ctx().Wiki().Parser_mgr().Uniq_mgr().Get(id));
+		// NOTE: https://www.mediawiki.org/wiki/Extension:Scribunto/Lua_reference_manual#mw.text.unstripNoWiki
+		byte[] src = args.Pull_bry(0);
+		return rslt.Init_obj(core.Ctx().Wiki().Parser_mgr().Uniq_mgr().Partial_Parse(src, true));
 //		byte[] src = args.Pull_bry(0);
 //		return rslt.Init_obj(nowiki_util.Strip_tag(core.Page().Url_bry_safe(), src, trie));
 	}
-	public boolean KillMarkers(Scrib_proc_args args, Scrib_proc_rslt rslt)		{return rslt.Init_obj(args.Pull_str(0));}	// NOTE: XOWA does not use MediaWiki strip markers; just return original; DATE:2015-01-20
+	public boolean KillMarkers(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		// NOTE: https://www.mediawiki.org/wiki/Extension:Scribunto/Lua_reference_manual#mw.text.KillMarkers
+		byte[] src = args.Pull_bry(0);
+		return rslt.Init_obj(core.Ctx().Wiki().Parser_mgr().Uniq_mgr().Partial_Parse(src, false));
+	}
 	public boolean GetEntityTable(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		if (html_entities == null) html_entities = Scrib_lib_text_html_entities.new_();
 		return rslt.Init_obj(html_entities);
-	}	private static Keyval[] html_entities;
+	}
+	private static Keyval[] html_entities;
 	public boolean JsonEncode(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		Object itm = args.Pull_obj(0);
 

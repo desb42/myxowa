@@ -214,6 +214,7 @@ public class Scrib_core {
 		this.wiki = wiki; this.ctx = ctx; this.cur_src = src;
 		lib_mw.Invoke_bgn(wiki, ctx, src);
 		this.frame_parent = parent_frame; this.frame_current = current_frame;
+                //System.out.println("set p " + String_.new_u8(parent_frame.Frame_ttl()) + " c " + String_.new_u8(current_frame.Frame_ttl()));
 		parent_frame.Frame_tid_(Scrib_frame_.Tid_parent); current_frame.Frame_tid_(Scrib_frame_.Tid_current);
 
 		try {
@@ -238,7 +239,8 @@ public class Scrib_core {
 		}
 		finally {
 			lib_mw.Invoke_end();
-			parent_frame.Frame_tid_(Scrib_frame_.Tid_null); current_frame.Frame_tid_(Scrib_frame_.Tid_null);
+                //System.out.println("unset p " + String_.new_u8(parent_frame.Frame_ttl()) + " c " + String_.new_u8(current_frame.Frame_ttl()));
+			//parent_frame.Frame_tid_(Scrib_frame_.Tid_null); current_frame.Frame_tid_(Scrib_frame_.Tid_null);
 			this.frame_parent = old_frame_parent; this.frame_current = old_frame_current;	// NOTE: reset template frame; PAGE:en.w:Constantine_the_Great {{Christianity}}; DATE:2014-06-26
 			this.cur_src = old_src;
 			frame_created_list.Clear();
@@ -248,7 +250,7 @@ public class Scrib_core {
 	private Scrib_lua_mod Mods_get_or_new(byte[] mod_name, byte[] mod_text) {
 		Scrib_lua_mod rv = (Scrib_lua_mod)mods.Get_by(mod_name);
 		if (rv == null) {
-                    System.out.println("mod " + String_.new_u8(mod_name));
+                    //System.out.println("mod " + String_.new_u8(mod_name));
 			rv = new Scrib_lua_mod(this, "Module:" + String_.new_u8(mod_name));
 			//rv.LoadString(String_.new_u8(mod_text));
 

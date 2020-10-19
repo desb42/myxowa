@@ -116,7 +116,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 
                 if (page.Redirect_trail().Itms__len() > 0) {
 		tmp.Add(Bry_.new_a7("\n \"wgInternalRedirectTargetUrl\" : \""));
-		tmp.Add(page.Ttl().Page_url_w_anch());
+		tmp.Add(page.Ttl().Full_url());
 		tmp.Add(Bry_.new_a7("\","));
                     
                 }

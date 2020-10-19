@@ -61,6 +61,7 @@ public class Xop_lnki_arg_parser {
 	}
 	public byte Identify_tid(byte[] src, int bgn, int end) {
 		int len = end - bgn;
+            key_trie.Dumpit("lang_trie");
 		Byte_obj_val val = (Byte_obj_val)key_trie.Match_at(key_trie_rv, src, bgn, end);
 		if (val != null && len == key_trie_rv.Pos() - bgn)		// check for false matches; EX: alternate= should not match alt=
 			return val.Val();									// match; return val;

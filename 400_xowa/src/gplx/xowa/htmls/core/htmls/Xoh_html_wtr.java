@@ -162,7 +162,7 @@ public class Xoh_html_wtr {
 //                        break;
 			case Xop_tkn_itm_.Tid_colon:
 				if (is_colon_inline) {
-					bfr.Add(nextItem( Byte_ascii.Colon ));
+					nextItem( bfr, Byte_ascii.Colon );
 					Trimspace(grp, sub_idx);
 					break;
 				}
@@ -330,27 +330,48 @@ public class Xoh_html_wtr {
 	 *
 	 * @return string
 	 */
-	private byte[] nextItem( byte chr ) {
-		if ( chr == '*' || chr == '#' ) {
-			return ni_star;
-		} else if ( chr == ':' || chr == ';' ) {
-			Bry_bfr close = Bry_bfr_.New();
-			if ( DTopen ) {
-				close.Add(ni_dt_nl);
+	private void nextItem( Bry_bfr bfr, byte chr ) {
+		// BIG HACK - remove preceeding Nl if there
+		int buf_ofs = bfr.Len() - 1;
+		while (buf_ofs > 0) {
+			byte b = bfr.Bfr()[buf_ofs];
+			if (b == '\n') {
+				bfr.Len_(buf_ofs);
+				buf_ofs--;
 			}
-			else {
-				close.Add(ni_dd_nl);
-			}
-			if ( chr == ';' ) {
-				DTopen = true;
-				close.Add(ni_dt);
-			} else {
-				DTopen = false;
-				close.Add(ni_dd);
-			}
-			return close.To_bry_and_clear();
+			else
+				break;
 		}
-		return ni_error;
+		switch (chr) {
+			case '*': case '#':
+                            // HACK if bfr ends with <li> dont add anything
+                            int bfr_ofs = bfr.Len() - 4;
+                            byte[] bfr_buf = bfr.Bfr();
+                            if (bfr_ofs > 0 && bfr_buf[bfr_ofs] == '<' &&
+                                    bfr_buf[bfr_ofs+1] == 'l' &&
+                                    bfr_buf[bfr_ofs+2] == 'i' &&
+                                    bfr_buf[bfr_ofs+3] == '>')
+                                break;
+				bfr.Add(ni_star);
+				break;
+			case ':': case ';':
+				if ( DTopen ) {
+					bfr.Add(ni_dt_nl);
+				}
+				else {
+					bfr.Add(ni_dd_nl);
+				}
+				if ( chr == ';' ) {
+					DTopen = true;
+					bfr.Add(ni_dt);
+				} else {
+					DTopen = false;
+					bfr.Add(ni_dd);
+				}
+				break;
+			default:
+				bfr.Add(ni_error);
+		}
 	}
 	/**
 	 * Close the current list item identified by the prefix character.
@@ -441,7 +462,7 @@ public class Xoh_html_wtr {
 		if (prefixLength > 0 && compare_prefix(lastPrefix_bgn, lastPrefix_end, linestart, prefixLength) ) {
 			// Same as the last item, so no need to deal with nesting or opening stuff
 			byte lastprefixchar = src[linestart + prefixLength - 1];
-			output.Add(nextItem( lastprefixchar ));
+			nextItem( output, lastprefixchar );
 			pendingPTag = PENDING_NONE;
 			if ( lastprefixchar == ';' ) {
 				// The one nasty exception: definition lists work like this:
@@ -460,16 +481,20 @@ public class Xoh_html_wtr {
 				if (lastPrefix_bgn + lastPrefixLength - 1 > text.length) {
                                 System.out.println("eek");
 				}
+				// BIG HACK - remove preceeding Nl if there
+				byte b = output.Bfr()[output.Len() - 1];
+				if (b == '\n')
+					output.Len_(output.Len() - 1);
 				output.Add(closeList( text[lastPrefix_bgn + lastPrefixLength - 1] ));
 				--lastPrefixLength;
 			}
 			// Continue the current prefix if appropriate.
 			if ( prefixLength <= commonPrefixLength && commonPrefixLength > 0 ) {
-				output.Add(nextItem( text[linestart + commonPrefixLength - 1] ));
+				nextItem( output, text[linestart + commonPrefixLength - 1] );
 			}
 			// Close an open <dt> if we have a <dd> (":") starting on this line
 			if ( DTopen && commonPrefixLength > 0 && text[linestart + commonPrefixLength - 1] == ':' ) {
-				output.Add(nextItem( Byte_ascii.Colon ));
+				nextItem( output, Byte_ascii.Colon );
 			}
 			// Open prefixes where appropriate.
 			if ( lastPrefix_end - lastPrefix_bgn > 0 && prefixLength > commonPrefixLength ) {

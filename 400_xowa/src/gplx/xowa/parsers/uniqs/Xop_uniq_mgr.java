@@ -18,6 +18,8 @@ import gplx.core.btries.*;
 public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 	private final	Btrie_slim_mgr general_trie = Btrie_slim_mgr.cs(); private final	Btrie_rv trv = new Btrie_rv();
 	private final	Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
+        private boolean partial = false;
+        private boolean onlynowiki = false;
 	private int nxt_idx = -1;
 	public void Clear() {
 		nxt_idx = -1;
@@ -54,6 +56,16 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 			return src;
 		return Parse_recurse(template_parsing, tmp_bfr, src);
 	}
+	public byte[] Partial_Parse(byte[] src, boolean onlynowiki) {
+		if (nxt_idx < 0) // nothing to do
+			return src;
+                this.partial = true;
+                this.onlynowiki = onlynowiki;
+		byte[] res = Parse_recurse(false, tmp_bfr, src);
+                this.onlynowiki = false;
+                this.partial = false;
+                return res;
+	}
 	public byte[] Parse(byte[] src) {
 		if (general_trie.Count() == 0) // nothing to do
 			return src;
@@ -87,6 +99,20 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 					pos = itm_end;
 					continue;
 				}
+                                if (partial) {
+                                    byte[] type = itm.Type();
+                                    boolean isnowiki = false;
+                                    if (type[0] == 'n' && type[1] == 'o' /*etc*/)
+                                        isnowiki = true;
+                                    if (onlynowiki) {
+                                        if (!isnowiki)
+                                            continue; // only process nowiki
+                                    }
+                                    else {
+                                        if (isnowiki)
+                                            continue; // everything else except nowiki
+                                    }
+                                }
 
 				// add everything from prv_bgn up to UNIQ
 				bfr.Add_mid(src, prv_bgn, pos);

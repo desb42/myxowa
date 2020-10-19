@@ -84,10 +84,10 @@ public class Xop_under_lxr implements Xop_lxr {
 	public int Make_tkn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos) {
 		if (cur_pos == src_len) return ctx.Lxr_make_txt_(cur_pos);					// eos
 		int rv = cur_pos;
-                ((Btrie_slim_mgr)words_trie_cs).Dumpit("*** Make_tkn cs ***");
+                //((Btrie_slim_mgr)words_trie_cs).Dumpit("*** Make_tkn cs ***");
 		Object word_obj = words_trie_cs.Match_at(trv_cs, src, cur_pos, src_len);	// check cs
 		if (word_obj == null) {
-                ((Btrie_u8_mgr)words_trie_ci).Dumpit("*** Make_tkn ci ***");
+                //((Btrie_u8_mgr)words_trie_ci).Dumpit("*** Make_tkn ci ***");
 			word_obj = words_trie_ci.Match_at(trv_ci, src, cur_pos, src_len);		// check ci
 			if (word_obj == null)
 				return ctx.Lxr_make_txt_(cur_pos);									// kwd not found; EX: "TOCA__"

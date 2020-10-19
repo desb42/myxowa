@@ -43,12 +43,14 @@ public class Xoh_img_data implements Xoh_data_itm {
 	public int						Img_imap_idx() {return img_imap_idx;} private int img_imap_idx;
 	public boolean					Img_is_gallery() {return img_is_gallery;} private boolean img_is_gallery; public void Img_is_gallery_(boolean v) {this.img_is_gallery = v;}
 	public Pgbnr_itm				Img_pgbnr() {return img_pgbnr;} private final    Pgbnr_itm img_pgbnr = new Pgbnr_itm();
+	public Xoh_img_sty_data			Img_style() {return img_style;} private final Xoh_img_sty_data img_style = new Xoh_img_sty_data();
 	public void Clear() {
 		this.img_alt__diff_anch_title = anch_rel_is_nofollow = img_is_vid = img_wo_anch = img_is_gallery = false;
 		this.src_bgn = src_end = anch_title_bgn = anch_title_end = img_w = img_h = img_alt_bgn = img_alt_end = -1;
 		this.img_imap_idx = -1;
 		anch_href.Clear(); anch_cls.Clear();
 		img_src.Clear(); img_cls.Clear(); img_xoimg.Clear(); img_pgbnr.Clear_by_hdump();
+		img_style.Clear();
 	}
 	public boolean Init_by_parse(Xoh_hdoc_wkr hdoc_wkr, Xoh_hdoc_ctx hctx, Gfh_tag_rdr tag_rdr, byte[] src, Gfh_tag anch_head, Gfh_tag unused) {
 		Gfh_tag img_tag = anch_head;
@@ -85,6 +87,7 @@ public class Xoh_img_data implements Xoh_data_itm {
 		Gfh_atr img_alt = img_tag.Atrs__get_by_or_empty(Gfh_atr_.Bry__alt);								// alt='File:A.png'
 		img_alt_bgn = img_alt.Val_bgn(); img_alt_end = img_alt.Val_end();
 		img_cls.Init_by_parse(err_wkr, src, img_tag);													// class='thumbborder'
+		img_style.Init_by_parse(err_wkr, src, img_tag);
 		img_alt__diff_anch_title = !Bry_.Match(src, img_alt_bgn, img_alt_end, src, anch_title_bgn, anch_title_end);
 		if (!img_src.Parse(err_wkr, hctx.Wiki__domain_bry(), img_tag)) return false;				// src='...'
 		if (anch_xo_ttl.Val_is_empty()) {
