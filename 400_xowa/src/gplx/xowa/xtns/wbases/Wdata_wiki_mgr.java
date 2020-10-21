@@ -121,7 +121,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	public Json_parser Jdoc_parser() {return jdoc_parser;} private Json_parser jdoc_parser = new Json_parser();
 	public void Init_by_app() {}
 	public Wdata_doc_parser Wdoc_parser(Json_doc jdoc) {
-		Json_kv itm_0 = Json_kv.cast(jdoc.Root_nde().Get_at(0));										// get 1st node
+		Json_kv itm_0 = Json_kv.Cast(jdoc.Root_nde().Get_at(0));										// get 1st node
 		return Bry_.Eq(itm_0.Key().Data_bry(), Wdata_doc_parser_v2.Bry_type) 
 			|| Bry_.Eq(itm_0.Key().Data_bry(), Wdata_doc_parser_v2.Bry_id) 
 			? wdoc_parser_v2 : wdoc_parser_v1;	// if "type", must be v2

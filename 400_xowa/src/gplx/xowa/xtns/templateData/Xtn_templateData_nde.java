@@ -40,7 +40,7 @@ public class Xtn_templateData_nde implements Xox_xnde {
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		if (jdoc == null) return;
 
-		Json_nde params = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("params")));
+		Json_nde params = Json_nde.Cast(jdoc.Get_grp(Bry_.new_a7("params")));
 		Json_ary paramorder = (Json_ary)jdoc.Get_grp(Bry_.new_a7("paramOrder"));
 				// also 'sets' and 'maps'?
 		Json_itm descgrp = jdoc.Find_nde(Bry_.new_a7("description"));
@@ -159,7 +159,7 @@ public class Xtn_templateData_nde implements Xox_xnde {
 
 		int param_val_len = param_val.Len();
 		for (int j = 0; j < param_val_len; j++) {
-			Json_kv itm = Json_kv.cast(param_val.Get_at(j));
+			Json_kv itm = Json_kv.Cast(param_val.Get_at(j));
 			byte[] key = itm.Key_as_bry();
 			Json_itm val = itm.Val();
 			boolean badkey = false;
@@ -304,10 +304,10 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		// ((Json_itm_str)val).Data_bry();
 		if (itm instanceof Json_itm_str)
 			return ((Json_itm_str)itm).Data_bry();
-		Json_nde langs = Json_nde.cast(itm);
+		Json_nde langs = Json_nde.Cast(itm);
 		int langs_len = langs.Len();
 		for (int j = 0; j < langs_len; j++) {
-			Json_kv kv = Json_kv.cast(langs.Get_at(j));
+			Json_kv kv = Json_kv.Cast(langs.Get_at(j));
 			byte[] key = kv.Key_as_bry();
 			Json_itm val = kv.Val();
 			if (key[0] == 'e' && key[1] == 'n')

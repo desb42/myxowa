@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,12 +13,28 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.pagebanners; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
-import gplx.langs.mustaches.*; import gplx.xowa.parsers.lnkis.*;
-import gplx.xowa.files.*;
-import gplx.langs.htmls.*; import gplx.langs.htmls.docs.*; import gplx.xowa.htmls.core.wkrs.imgs.atrs.*; import gplx.xowa.htmls.core.wkrs.lnkis.htmls.*; import gplx.langs.htmls.encoders.*;
-import gplx.langs.jsons.*;
-public class Pgbnr_itm /*implements Mustache_doc_itm*/ {
+package gplx.xowa.xtns.pagebanners;
+
+import gplx.Bry_;
+import gplx.Bry_bfr;
+import gplx.Bry_bfr_;
+import gplx.Bry_fmt;
+import gplx.List_adp;
+import gplx.List_adp_;
+import gplx.String_;
+import gplx.langs.htmls.Gfh_atr_;
+import gplx.langs.htmls.docs.Gfh_tag;
+import gplx.langs.htmls.encoders.Gfo_url_encoder_;
+import gplx.langs.jsons.Json_ary;
+import gplx.langs.jsons.Json_nde;
+import gplx.langs.mustaches.Mustache_bfr;
+import gplx.langs.mustaches.Mustache_doc_itm;
+import gplx.langs.mustaches.Mustache_doc_itm_;
+import gplx.xowa.Xoa_ttl;
+import gplx.xowa.files.Xof_file_itm;
+import gplx.xowa.htmls.core.wkrs.imgs.atrs.Xoh_img_xoimg_data;
+
+public class Pgbnr_itm implements Mustache_doc_itm {
 	public Xoa_ttl banner_ttl;
 	public byte[] banner_img_src;
 	public byte[] toc;
@@ -74,6 +90,11 @@ public class Pgbnr_itm /*implements Mustache_doc_itm*/ {
 		this.exists = true;
 	}
 	public void Init_from_wtxt(Xoa_ttl banner_ttl, Xof_file_itm banner_file_itm, byte[] banner_anch_title, byte[] banner_hdr_text, boolean bottomtoc
+		, byte[] toc, double data_pos_x, double data_pos_y, byte[] originx, Pgbnr_icon[] icons) {
+		Init_from_wtxt(banner_ttl, banner_file_itm, banner_anch_title, banner_hdr_text, bottomtoc
+		, toc, data_pos_x, data_pos_y, originx, icons, false);
+	}
+	public void Init_from_wtxt(Xoa_ttl banner_ttl, Xof_file_itm banner_file_itm, byte[] banner_anch_title, byte[] banner_hdr_text, boolean bottomtoc
 		, byte[] toc, double data_pos_x, double data_pos_y, byte[] originx, Pgbnr_icon[] icons, boolean enable_toc) {
 		this.banner_ttl = banner_ttl; this.banner_file_itm = banner_file_itm;
 		this.banner_anch_title = banner_anch_title; this.banner_hdr_text = banner_hdr_text; this.bottomtoc = bottomtoc; this.toc = toc; this.icons = icons;
@@ -81,7 +102,7 @@ public class Pgbnr_itm /*implements Mustache_doc_itm*/ {
 		this.banner_img_src = banner_file_itm.Html_view_url().To_http_file_bry();
 		this.file_ttl = Gfo_url_encoder_.Href_quotes.Encode(banner_file_itm.Lnki_ttl());	// NOTE: Encode(Lnki_ttl) not Orig_ttl; else "%27s" instead of "'s" PAGE:en.v:'s-Hertogenbosch; DATE:2016-07-12
 		this.enable_toc = enable_toc;
-                show_toc_in_html = !enable_toc;
+        show_toc_in_html = !enable_toc;
 	}
 	public void Init_from_html(int max_width, byte[] banner_anch_href, byte[] banner_img_src, byte[] srcset, boolean isHeadingOverrideEnabled, byte[] toc, boolean isPanorama) {
 		this.max_width = max_width;
@@ -144,42 +165,50 @@ public class Pgbnr_itm /*implements Mustache_doc_itm*/ {
 		return buildargs();
 	}
 	private Json_nde buildargs() {
+		Json_nde jnde = Json_nde.NewByVal();
+		jnde.AddKvStr("title", banner_hdr_text);
+		jnde.AddKvStr("tooltip", banner_anch_title);
+		jnde.AddKvStr("bannerfile", banner_anch_href);
+		jnde.AddKvStr("banner", banner_img_src);
+		jnde.AddKvStr("srcset", srcset == null ? Bry_.Empty : Bry_.Empty);
+		jnde.AddKvStr("originx", originx);
+		jnde.AddKvStr("toc", toc);
+		jnde.AddKvStr("img_id_atr", img_id_atr);
+		jnde.AddKvStr("img_xottl", img_xottl_atr);
+		jnde.AddKvStr("img_xoimg", img_xoimg_atr);
+		jnde.AddKvStr("file_ttl", file_ttl);
+		jnde.AddKvDouble("data-pos-x", data_pos_x);
+		jnde.AddKvDouble("data-pos-y", data_pos_y);
+		jnde.AddKvInt("maxWidth", max_width);
+		jnde.AddKvBool("hasIcons", icons.length > 0);
+		jnde.AddKvBool("bottomtoc", bottomtoc);
+		jnde.AddKvBool("isHeadingOverrideEnabled", isHeadingOverrideEnabled);
+		jnde.AddKvBool("isPanorama", isPanorama);
+		jnde.AddKvBool("enable-toc", enable_toc);
+		jnde.AddKvBool("hasPosition", hasPosition);
 		Json_ary ary = null;
 		if (json_icon_list != null) {
-			ary = new Json_ary(-1, -1);
+			ary = Json_ary.NewByVal();
 			int iconlen = json_icon_list.Len();
 			for (int i = 0; i < iconlen; i++) {
 				Json_nde inde = (Json_nde)json_icon_list.Get_at(i);
 				ary.Add(inde);
 			}
+			if (iconlen > 0) {
+				jnde.AddKvAry("icons", ary);
+			}
 		}
-		Json_nde jnde = new Json_nde(null, -1);
-		jnde.Add_many(
-			 Json_mustache.Add_text("title", banner_hdr_text)
-			,Json_mustache.Add_text("tooltip", banner_anch_title)
-			,Json_mustache.Add_text("bannerfile", banner_anch_href)
-			,Json_mustache.Add_text("banner", banner_img_src)
-			,Json_mustache.Add_text("srcset", srcset == null ? Bry_.Empty : Bry_.Empty)
-			,Json_mustache.Add_text("originx", originx)
-			,Json_mustache.Add_text("toc", toc)
-			,Json_mustache.Add_text("img_id_atr", img_id_atr)
-			,Json_mustache.Add_text("img_xottl", img_xottl_atr)
-			,Json_mustache.Add_text("img_xoimg", img_xoimg_atr)
-			,Json_mustache.Add_text("file_ttl", file_ttl)
-			,Json_mustache.Add_double("data-pos-x", data_pos_x)
-			,Json_mustache.Add_double("data-pos-y", data_pos_y)
-			,Json_mustache.Add_int("maxWidth", max_width)
-			,Json_mustache.Add_bool("hasIcons", icons.length > 0)
-			,Json_mustache.Add_bool("bottomtoc", bottomtoc)
-			,Json_mustache.Add_bool("isHeadingOverrideEnabled", isHeadingOverrideEnabled)
-			,Json_mustache.Add_bool("isPanorama", isPanorama)
-			,Json_mustache.Add_bool("enable-toc", enable_toc)
-			,Json_mustache.Add_bool("hasPosition", hasPosition)
-			,Json_mustache.Add_ary("icons", ary)
-		);
-                //Bry_bfr bfr = Bry_bfr_.New();
-                //jnde.Print_as_json(bfr, 0);
-                //System.out.println(String_.new_u8(bfr.To_bry()));
+		int iconLen = icons.length;
+		if (iconLen > 0) {
+			ary = Json_ary.NewByVal();
+			Bry_bfr tmpBfr = Bry_bfr_.New();
+			for (int i = 0; i < iconLen; i++) {
+				Pgbnr_icon icon = icons[i];
+				Json_nde iconNde = Pgbnr_iconx(tmpBfr, icon.Name(), icon.Title(), icon.Href());
+				ary.Add(iconNde);
+			}
+			jnde.AddKvAry("icons", ary);
+		}
 		return jnde;
 	}
 
@@ -190,17 +219,13 @@ public class Pgbnr_itm /*implements Mustache_doc_itm*/ {
 	}
 
 	private Json_nde Pgbnr_iconx(Bry_bfr tmp_bfr, byte[] name, byte[] title, byte[] href) {
-
 		fmt.Bld_many(tmp_bfr, name, title);
 		byte[] html = tmp_bfr.To_bry_and_clear();
-
-		Json_nde jnde = new Json_nde(null, -1);
-		jnde.Add_many(
-			 Json_mustache.Add_text("name", name)
-			,Json_mustache.Add_text("title", title)
-			,Json_mustache.Add_text("url", href)
-			,Json_mustache.Add_text("html", html)
-		);
+		Json_nde jnde = Json_nde.NewByVal();
+		jnde.AddKvStr("name", name);
+		jnde.AddKvStr("title", title);
+		jnde.AddKvStr("url", href);
+		jnde.AddKvStr("html", html);
 		return jnde;
 	}
 

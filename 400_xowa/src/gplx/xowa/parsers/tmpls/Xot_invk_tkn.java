@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,11 +13,41 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.parsers.tmpls; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
-import gplx.core.envs.*;
-import gplx.xowa.langs.*; import gplx.xowa.langs.kwds.*; import gplx.xowa.langs.funcs.*;
-import gplx.xowa.xtns.pfuncs.*; import gplx.xowa.xtns.pfuncs.ttls.*;
-import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.caches.*; import gplx.xowa.wikis.data.tbls.*;		
+package gplx.xowa.parsers.tmpls;
+
+import gplx.Array_;
+import gplx.Bool_;
+import gplx.Bry_;
+import gplx.Bry_bfr;
+import gplx.Bry_bfr_;
+import gplx.Bry_find_;
+import gplx.Byte_ascii;
+import gplx.Err_;
+import gplx.Gfo_usr_dlg_;
+import gplx.Hash_adp_bry;
+import gplx.String_;
+import gplx.core.envs.Env_;
+import gplx.xowa.Xoa_ttl;
+import gplx.xowa.Xoae_page;
+import gplx.xowa.Xowe_wiki;
+import gplx.xowa.langs.Xol_lang_itm;
+import gplx.xowa.langs.funcs.Xol_func_itm;
+import gplx.xowa.langs.kwds.Xol_kwd_grp;
+import gplx.xowa.langs.kwds.Xol_kwd_grp_;
+import gplx.xowa.langs.kwds.Xol_kwd_itm;
+import gplx.xowa.langs.kwds.Xol_kwd_mgr;
+import gplx.xowa.parsers.Xop_ctx;
+import gplx.xowa.parsers.Xop_tkn_itm;
+import gplx.xowa.parsers.Xop_tkn_itm_;
+import gplx.xowa.parsers.Xop_tkn_itm_base;
+import gplx.xowa.wikis.caches.Xow_page_cache_itm;
+import gplx.xowa.wikis.data.tbls.Xowd_page_itm;
+import gplx.xowa.wikis.nss.Xow_ns;
+import gplx.xowa.wikis.nss.Xow_ns_;
+import gplx.xowa.wikis.nss.Xow_ns_mgr_name_itm;
+import gplx.xowa.wikis.pages.Xopg_tmpl_prepend_mgr;
+import gplx.xowa.xtns.pfuncs.ttls.Pfunc_rel2abs;
+
 import gplx.xowa.wikis.domains.Xow_domain_tid_;
 public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 	public Xot_invk_tkn(int bgn, int end) {this.Tkn_ini_pos(false, bgn, end);}

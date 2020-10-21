@@ -131,23 +131,23 @@ public class Db_JDecode {
 					nde.Add(decode_nde(indent+1));
 				return nde;
 			case ARY:
-				Json_ary ary = new Json_ary(pos, pos, size_idx);
+				Json_ary ary = Json_ary.NewByDoc(doc, pos, pos, size_idx);
 				for (int i = 0; i < size_idx; i++)
 					ary.Add(decode_nde(indent+1));
 				return ary;
 			case INT:
 				txt = string_table[size_idx];
-				return new Json_itm_int(doc, txt.bgn, txt.end);
+				return Json_itm_int.NewByDoc(doc, txt.bgn, txt.end);
 			case LONG:
 				txt = string_table[size_idx];
-				return new Json_itm_long(doc, txt.bgn, txt.end);
+				return Json_itm_long.NewByDoc(doc, txt.bgn, txt.end);
 			case DECIMAL:
 				txt = string_table[size_idx];
-				return new Json_itm_decimal(doc, txt.bgn, txt.end);
+				return Json_itm_decimal.NewByDoc(doc, txt.bgn, txt.end);
 			case STR:
 			case STR_EXACT:
 				txt = string_table[size_idx];
-				return new Json_itm_str(doc, txt.bgn-1, txt.end+1, res.code == STR_EXACT);
+				return Json_itm_str.NewByDoc(doc, txt.bgn-1, txt.end+1, res.code == STR_EXACT);
 			default:
 				throw Err_.new_("json", "unknown code", "pos", pos);
 		}

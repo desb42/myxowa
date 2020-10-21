@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -14,9 +14,10 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx;
-import java.lang.*;
-import gplx.core.brys.*; import gplx.core.primitives.*; import gplx.core.ios.*;
-import gplx.langs.htmls.entitys.*;
+
+import gplx.core.primitives.Int_obj_ref;
+import gplx.langs.htmls.entitys.Gfh_entity_;
+
 public class Bry_ {
 	public static final String Cls_val_name = "byte[]";
 	public static final    byte[] Empty = new byte[0];
@@ -303,17 +304,6 @@ public class Bry_ {
 		for (int i = src_bgn; i < src_end; i++)
 			trg[i + trg_adj] = src[i];
 	}
-	public static void Copy_to_dq_escape(byte[] src, int src_bgn, int src_end, byte[] trg, int trg_bgn) {
-		int trg_adj = trg_bgn - src_bgn;
-		for (int i = src_bgn; i < src_end; i++) {
-			byte b = src[i];
-			if (b == Byte_ascii.Quote) {
-				trg[i + trg_adj] = Byte_ascii.Backslash;
-				trg_adj++;
-			}
-			trg[i + trg_adj] = b;
-                }
-	}
 	public static void Copy_to_reversed(byte[] src, int src_bgn, int src_end, byte[] trg, int trg_bgn) {
 		// copies src to trg, but in reverse order; EX: trg="1" src="432." -> "1.234"
 		int len = src_end - src_bgn;
@@ -489,6 +479,19 @@ public class Bry_ {
 		}
 		else
 			return Bry_.Mid(src, txt_bgn, txt_end);
+	}
+	public static byte[] Trim_bgn(byte[] v, byte trim, int bgn) {
+		boolean trimmed = false;
+		int len = v.length;
+		int pos = bgn;
+		for (; pos < len; pos++) {
+			if (v[pos] == trim) {
+				trimmed = true;
+			}
+			else
+				break;
+		}
+		return trimmed ? Bry_.Mid(v, pos, len) : v;
 	}
 	public static byte[] Trim_end(byte[] v, byte trim, int end) {
 		boolean trimmed = false;
@@ -1241,6 +1244,17 @@ public class Bry_ {
 				bfr.Add_mid(src, src_bgn, src_end);
 				return null;
 			}
+		}
+	}
+	public static void Copy_to_dq_escape(byte[] src, int src_bgn, int src_end, byte[] trg, int trg_bgn) {
+		int trg_adj = trg_bgn - src_bgn;
+		for (int i = src_bgn; i < src_end; i++) {
+			byte b = src[i];
+			if (b == Byte_ascii.Quote) {
+				trg[i + trg_adj] = Byte_ascii.Backslash;
+				trg_adj++;
+			}
+			trg[i + trg_adj] = b;
 		}
 	}
 	public static byte[] Zerotrim(byte[] val) {

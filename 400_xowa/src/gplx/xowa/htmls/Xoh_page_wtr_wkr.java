@@ -452,23 +452,23 @@ public class Xoh_page_wtr_wkr {
 	private byte[] Get_text(Json_nde titles_nde) {
 		int titles_len = titles_nde.Len();
 		for (int k = 0; k < titles_len; ++k) {
-			Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(k));
+			Json_kv title_itm = Json_kv.Cast(titles_nde.Get_at(k));
 			String langkey = title_itm.Key_as_str();
 			if (langkey.equals("en"))
 				return title_itm.Val_as_bry();
 		}
 		if (titles_len > 0) {
-			Json_kv title_itm = Json_kv.cast(titles_nde.Get_at(0));
+			Json_kv title_itm = Json_kv.Cast(titles_nde.Get_at(0));
 			return title_itm.Val_as_bry();
 		}
 		return Bry_.Empty;
 	}
 // logic from https://github.com/wikimedia/mediawiki-extensions-JsonConfig/includes/JCTabularContentView.php
 	public void Jdoc_data_writer(Bry_bfr bfr, Json_doc jdoc) {
-		Json_nde desc_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("description")));
+		Json_nde desc_nde = Json_nde.Cast(jdoc.Get_grp(Bry_.new_a7("description")));
 		if (desc_nde == null)
 			return;
-		Json_nde list_nde = Json_nde.cast(jdoc.Get_grp(Bry_.new_a7("schema")));
+		Json_nde list_nde = Json_nde.Cast(jdoc.Get_grp(Bry_.new_a7("schema")));
 		if (list_nde == null)
 			return;
 		Json_ary data_ary = Json_ary.cast(jdoc.Get_grp(Bry_.new_a7("data")));
@@ -501,7 +501,7 @@ public class Xoh_page_wtr_wkr {
 
 		int data_rows_len = data_ary.Len();
 		// check enough keys
-		Json_kv fields_nde = Json_kv.cast(list_nde.Get_at(0));
+		Json_kv fields_nde = Json_kv.Cast(list_nde.Get_at(0));
 		// check key is 'fields'
 		//String key = fields_nde.Key_as_str();
 		Json_ary fields_itms_ary = Json_ary.cast_or_null(fields_nde.Val());
@@ -509,10 +509,10 @@ public class Xoh_page_wtr_wkr {
 		data_head[] dh = new data_head[fields_itms_len];
 		for (int i = 0; i < fields_itms_len; ++i) {
 			dh[i] = new data_head();
-			Json_nde field_itm_nde = Json_nde.cast(fields_itms_ary.Get_at(i));
+			Json_nde field_itm_nde = Json_nde.Cast(fields_itms_ary.Get_at(i));
 			int field_itm_len = field_itm_nde.Len();
 			for (int j = 0; j < field_itm_len; ++j) {
-				Json_kv itm_nde = Json_kv.cast(field_itm_nde.Get_at(j));
+				Json_kv itm_nde = Json_kv.Cast(field_itm_nde.Get_at(j));
 				String itmkey = itm_nde.Key_as_str();
 				if (itmkey.equals("name"))
 					dh[i].Name_(itm_nde.Val_as_bry());

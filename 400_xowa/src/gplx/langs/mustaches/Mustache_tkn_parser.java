@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2020 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,11 +13,22 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.mustaches; import gplx.*; import gplx.langs.*;
+package gplx.langs.mustaches;
+
+import gplx.Bry_;
+import gplx.Bry_find_;
+import gplx.Byte_ascii;
+import gplx.Err;
+import gplx.Err_;
+import gplx.Io_mgr;
+import gplx.Io_url;
+import gplx.List_adp;
+import gplx.List_adp_;
+
 public class Mustache_tkn_parser {
 	private byte[] src; private int src_end;
 	private Io_url template_root;
-	private final    Mustache_tkn_def tkn_def = new Mustache_tkn_def();
+	private final Mustache_tkn_def tkn_def = new Mustache_tkn_def();
 	public Mustache_tkn_parser() {
 	}
 	public Mustache_tkn_parser(Io_url template_root) {

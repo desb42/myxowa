@@ -24,7 +24,7 @@ class Wdata_forms_parser {
 		this.doc_src = src;
 		int form_itms_len = form_grp.Len();
 		for (int i = 0; i < form_itms_len; ++i) {
-			Json_nde form_itm_nde = Json_nde.cast(form_grp.Get_at(i));
+			Json_nde form_itm_nde = Json_nde.Cast(form_grp.Get_at(i));
 			Wbase_form_base itm = Parse_form_itm(qid, form_itm_nde);
 			form_itms_list.Add(itm);
 		}
@@ -37,13 +37,13 @@ class Wdata_forms_parser {
 		Ordered_hash reps = null;
 		int[] grams = null;
 		for (int i = 0; i < len; ++i) {
-			Json_kv sub = Json_kv.cast(nde.Get_at(i));
+			Json_kv sub = Json_kv.Cast(nde.Get_at(i));
 			byte tid = Wdata_dict_form.Reg.Get_tid_or_max_and_log(qid, sub.Key().Data_bry()); if (tid == Byte_.Max_value_127) continue;
 			switch (tid) {
 				case Wdata_dict_form.Tid__id:			id = sub.Data_bry(); break;
-				case Wdata_dict_form.Tid__claims:		claims = doc_parser.Parse_local_claims(qid, Json_nde.cast(sub.Val()), doc_src); break;
-				case Wdata_dict_form.Tid__representations:		reps = doc_parser.Parse_local_langval(qid, Json_nde.cast(sub.Val())); break;
-				case Wdata_dict_form.Tid__grammaticalFeatures:		grams = Parse_gramatical(Json_nde.cast(sub.Val())); break;
+				case Wdata_dict_form.Tid__claims:		claims = doc_parser.Parse_local_claims(qid, Json_nde.Cast(sub.Val()), doc_src); break;
+				case Wdata_dict_form.Tid__representations:		reps = doc_parser.Parse_local_langval(qid, Json_nde.Cast(sub.Val())); break;
+				case Wdata_dict_form.Tid__grammaticalFeatures:		grams = Parse_gramatical(Json_nde.Cast(sub.Val())); break;
 			}
 		}
 		return new Wbase_form_base(id, claims, reps, grams);

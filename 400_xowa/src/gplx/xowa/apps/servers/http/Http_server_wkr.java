@@ -189,8 +189,8 @@ public class Http_server_wkr implements Gfo_invk {
 
 				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()), page.Redlink());
                                 
-                Db_Nav_template nt = new Db_Nav_template();
-                nt.Init(page.Wiki());
+                //Db_Nav_template nt = new Db_Nav_template();
+                //nt.Init(page.Wiki());
 
 				if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // change some more things
 					//page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
@@ -465,14 +465,14 @@ public class Http_server_wkr implements Gfo_invk {
             ret = Dbx_scan_support.Parse(Bry_.new_a7("june +2 weeks 1day"));
             int a = 1;
         }
-	private static String test_jdecode() {
+	/*private static String test_jdecode() {
             byte[] jstream = Load_from_file_as_bry(rootdir + "json_test.dat");
             Db_JDecode dc = new Db_JDecode(jstream);
             gplx.langs.jsons.Json_doc jdoc = dc.Decode();
             Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
             jdoc.Root_nde().Print_as_json(tmp_bfr, 0);
             return tmp_bfr.To_str();
-	}
+	}*/
 	private static String test_wikistrip() {
             byte[] wiki = Load_from_file_as_bry(rootdir + "wiki_test.txt");
             Db_wikistrip ws = new Db_wikistrip();

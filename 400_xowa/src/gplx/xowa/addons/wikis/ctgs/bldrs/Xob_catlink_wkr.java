@@ -91,6 +91,7 @@ class Xob_catlink_wkr {
 		cat_link_tbl.Insert_end();
 		cat_link_tbl.Create_idx__catbox();
 		cat_link_tbl.Create_idx__catpage();
+		cat_link_tbl.Create_idx__catdate();
 	}
 	public void Make_catcore_tbl(Xowe_wiki wiki, Db_conn tmp_conn, Db_conn page_conn, Db_conn cat_core_conn) {
 		Db_attach_mgr attach_mgr = new Db_attach_mgr(cat_core_conn, new Db_attach_itm("temp_db", tmp_conn), new Db_attach_itm("page_db", page_conn));

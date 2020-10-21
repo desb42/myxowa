@@ -23,7 +23,7 @@ class Wdata_senses_parser {
 		this.doc_src = src;
 		int sense_itms_len = sense_grp.Len();
 		for (int i = 0; i < sense_itms_len; ++i) {
-			Json_nde sense_itm_nde = Json_nde.cast(sense_grp.Get_at(i));
+			Json_nde sense_itm_nde = Json_nde.Cast(sense_grp.Get_at(i));
 			Wbase_sense_base itm = Parse_sense_itm(qid, sense_itm_nde);
 			sense_itms_list.Add(itm);
 		}
@@ -35,12 +35,12 @@ class Wdata_senses_parser {
 		Ordered_hash claims = null;
 		Ordered_hash glosses = null;
 		for (int i = 0; i < len; ++i) {
-			Json_kv sub = Json_kv.cast(nde.Get_at(i));
+			Json_kv sub = Json_kv.Cast(nde.Get_at(i));
 			byte tid = Wdata_dict_sense.Reg.Get_tid_or_max_and_log(qid, sub.Key().Data_bry()); if (tid == Byte_.Max_value_127) continue;
 			switch (tid) {
 				case Wdata_dict_sense.Tid__id:			id = sub.Data_bry(); break;
-				case Wdata_dict_sense.Tid__claims:		claims = doc_parser.Parse_local_claims(qid, Json_nde.cast(sub.Val()), doc_src); break;
-				case Wdata_dict_sense.Tid__glosses:		glosses = doc_parser.Parse_local_langval(qid, Json_nde.cast(sub.Val())); break;
+				case Wdata_dict_sense.Tid__claims:		claims = doc_parser.Parse_local_claims(qid, Json_nde.Cast(sub.Val()), doc_src); break;
+				case Wdata_dict_sense.Tid__glosses:		glosses = doc_parser.Parse_local_langval(qid, Json_nde.Cast(sub.Val())); break;
 			}
 		}
 		return new Wbase_sense_base(id, claims, glosses);
