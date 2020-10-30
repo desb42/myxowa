@@ -102,7 +102,7 @@ public class Scrib_lib_text__json_util {
 	public Keyval[] Decode_rslt_as_nde() {return decode_rslt_as_nde;} private Keyval[] decode_rslt_as_nde;
 	public Keyval[] Decode_rslt_as_ary() {return decode_rslt_as_ary;} private Keyval[] decode_rslt_as_ary;
 	public byte Decode(Json_parser parser, byte[] src, int flag) {
-		synchronized (wtr) {
+		//synchronized (wtr) {
 			Json_doc jdoc = parser.Parse(src);
 			if (jdoc.Root_grp().Tid() == Json_itm_.Tid__ary) {
 				this.decode_rslt_as_ary = Decode_ary_top(jdoc.Root_ary());
@@ -121,7 +121,7 @@ public class Scrib_lib_text__json_util {
 				}
 				return Bool_.Y_byte;
 			}
-		}
+		//}
 	}
 	private Object Decode_obj(Json_itm itm) {
 		int itm_tid = itm.Tid();

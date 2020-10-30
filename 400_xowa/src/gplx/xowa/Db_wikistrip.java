@@ -547,8 +547,8 @@ public class Db_wikistrip {
 					break;
 			}
 		}
-                if (startpos < src_len)
-		bfr.Add_mid(src, startpos, src_len);
+		if (startpos < src_len)
+			bfr.Add_mid(src, startpos, src_len);
 		return bfr.To_bry();
 	}
 	public byte[] Search_text(byte[] src, Xoa_ttl ttl) {
@@ -572,9 +572,11 @@ public class Db_wikistrip {
 							break;
 					}
 					if (apos_count > 1) {
-						bfr.Add_mid(src, startpos, pos - apos_count - 1);
-						if (apos_count == 4) // equiv ''' '
-							pos--;
+						if (startpos <= pos - apos_count - 1) {
+							bfr.Add_mid(src, startpos, pos - apos_count - 1);
+							if (apos_count == 4) // equiv ''' '
+								pos--;
+						}
 						startpos = pos - 1;
 					}
 					break;
@@ -659,7 +661,7 @@ public class Db_wikistrip {
 						else
 							break;
 					}
-					if (apos_count > 1) {
+					if (apos_count > 1 && startpos <= pos - apos_count - 1) {
 						bfr.Add_mid(src, startpos, pos - apos_count - 1);
 						if (apos_count == 2) {
 							if (initalic) {

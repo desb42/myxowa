@@ -105,12 +105,16 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
                                     if (type[0] == 'n' && type[1] == 'o' /*etc*/)
                                         isnowiki = true;
                                     if (onlynowiki) {
-                                        if (!isnowiki)
+                                        if (!isnowiki) {
+                                            pos++;
                                             continue; // only process nowiki
+                                        }
                                     }
                                     else {
-                                        if (isnowiki)
+                                        if (isnowiki) {
+                                            pos++;
                                             continue; // everything else except nowiki
+                                        }
                                     }
                                 }
 

@@ -336,14 +336,15 @@ function ws_msg(name) {
 function get_optlist() {
 	var optlist = document.getElementById("optlist");
 	if(!optlist) {
-		var displayOptions = document.createElement("div");
-		if (mw.config.get('skin')==='vector') {
-			displayOptions.className = "portal collapsed";
-			cl="body";
-		} else {
-			displayOptions.className = "portlet";
-			cl="pBody";
-		}
+if (mw.config.get('skin')==='vector') {
+	var displayOptions = document.createElement("nav");
+	displayOptions.className = "vector-menu vector-menu-portal portal collapsed";
+	cl="body";
+} else {
+	var displayOptions = document.createElement("div");
+	displayOptions.className = "portlet";
+	cl="pBody";
+}
 		displayOptions.innerHTML = '<h3>' + ws_msg('optlist') + '<\/h3><div class="'+cl+'"><ul id="optlist"></ul><\/div>';
                 var ptb = document.getElementById("p-tb");
                 ptb.parentNode.insertBefore(displayOptions,ptb);
@@ -556,10 +557,10 @@ function refresh_pagenumbers() {
     var offset_h = ss.lastChild.offsetHeight;
 
     var linewidth = cs.offsetWidth; 
-    var ct_o = $(ct).position();
+    var ct_o = $(ct).offset();
     var ct_ox = ct_o.left; 
     var ct_oy = ct_o.top;
-    var oo = $(ss).position(ss);
+    var oo = $(ss).offset();
     var ox = oo.left - ct_ox; var oy = oo.top - ct_oy;
 
     var oh ="";
@@ -588,7 +589,7 @@ function refresh_pagenumbers() {
         else { 
             prev_ox = ox;
             prev_oy = oy;
-            a_o = $(a).position(); 
+            a_o = $(a).offset(); 
             ox = a_o.left - ct_ox;
             oy = a_o.top - ct_oy + offset_h;
 

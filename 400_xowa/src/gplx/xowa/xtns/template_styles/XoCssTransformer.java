@@ -71,9 +71,11 @@ public class XoCssTransformer {
 
 							// prepend the selector
 							// except if it starts with 'body'
-							char b = item.charAt(0);
-							if (b == '.' || b == '#')
+							if (item.length() < 4 || !item.substring(0, 4).equals("body"))
 								sb.append(selector);
+							//char b = item.charAt(0);
+							//if (b == '.' || b == '#')
+							//	sb.append(selector);
 
 							sb.append(' ');
 

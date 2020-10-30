@@ -59,6 +59,15 @@ public class Xop_pre_lxr implements Xop_lxr {
 				if (close_all_lists)
 					Xop_list_wkr_.Close_list_if_present(ctx, root, src, bgn_pos, cur_pos);
 				break;
+			case Xop_tkn_itm_.Tid_list_new:					// close all lists
+				Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+				if (prev != null) {
+					// inject a list close
+					Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, prev);
+					ctx.Subs_add_and_stack(root, itm);
+					ctx.Page().Prev_list_tkn_(null);
+				}
+				break;
 		}
 		switch (b) {									// handle "\n !" which can be tbl
 			case Byte_ascii.Bang:

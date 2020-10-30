@@ -140,7 +140,7 @@ app.wikis.get('~{wiki_key}') {
 app.wikis.get('~{wiki_key}').html.portal {
   div_personal =
 <:["
-<nav id="p-personal" class="vector-menu" aria-labelledby="p-personal-label" role="navigation" 
+<nav id="p-personal" class="mw-portlet mw-portlet-personal vector-menu" aria-labelledby="p-personal-label" role="navigation" 
 	 >
 	<h3 id="p-personal-label">
 		<span>~{<>app.user.msgs.get('personaltools');<>}</span>
@@ -520,7 +520,7 @@ app.wikis.scripts.set
 app.wikis.get('~{wiki_key}').html.portal
 .div_personal_(
 <:["
-<nav id="p-personal" class="vector-menu" aria-labelledby="p-personal-label" role="navigation" 
+<nav id="p-personal" class="mw-portlet mw-portlet-personal vector-menu" aria-labelledby="p-personal-label" role="navigation" 
 	 >
 	<h3 id="p-personal-label">
 		<span>~{<>app.user.msgs.get('personaltools');<>}</span>

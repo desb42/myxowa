@@ -14,6 +14,7 @@ import gplx.langs.mustaches.Mustache_tkn_parser;
 import gplx.xowa.Xowe_wiki;
 import gplx.xowa.langs.msgs.Xol_msg_mgr;
 
+// incorporating 20201001 changes in SkinVector.php
 public class Db_Nav_template {
 	public Mustache_tkn_itm Navigation_root() {return navigation_root;} private Mustache_tkn_itm navigation_root;
 	private Xol_msg_mgr msg_mgr;
@@ -22,21 +23,21 @@ public class Db_Nav_template {
 	private static boolean once = true;
 	private static Mustache_tkn_itm menu_root;
 
-	public static void Build_Sidebar(Xowe_wiki wiki, Bry_bfr bfr, byte[] id, byte[] text, byte[] itms) {
+	public static void Build_Sidebar(Xowe_wiki wiki, Bry_bfr bfr, byte[] id, byte[] text, byte[] itms, int iter_count) {
 		if (once) {
 			once = false;
 			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
 			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
 			menu_root = parser.Parse("Menu");
 		}
-		Json_nde data = s_getMenuData(wiki, text, itms, MENU_TYPE_PORTAL);
+		Json_nde data = s_getMenuData(wiki, id, text, itms, MENU_TYPE_PORTAL, iter_count);
 
-    	// Bry_bfr tmp_bfr = Bry_bfr_.New();
+		// Bry_bfr tmp_bfr = Bry_bfr_.New();
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
 		Mustache_bfr mbfr = Mustache_bfr.New_bfr(bfr);
 		menu_root.Render(mbfr, mctx);
-        // byte[] result = mbfr.To_bry_and_clear();
-        // System.out.println(String_.new_u8(result));
+		// byte[] result = mbfr.To_bry_and_clear();
+		// System.out.println(String_.new_u8(result));
 	}
 	public void Init(Xowe_wiki wiki) {
 		Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
@@ -72,18 +73,18 @@ public class Db_Nav_template {
 			msgdata.AddKvStr("msg-" + msg, msg_mgr.Val_by_str_or_empty(msg));
 		}
 	}
-    private void Test() {
+	private void Test() {
 		Json_nde jnde = Json_nde.NewByVal();
-    	jnde.AddKvStr("class", "CLASS");
-    	jnde.AddKvStr("text", "TEXT");
-    	jnde.AddKvStr("href", "URL_str");
-    	jnde.AddKvBool("exists", true);
-    	jnde.AddKvBool("primary", true);
-    	jnde.AddKvStr("link-class", String_.Empty);
-    	jnde.AddKvStr("context", "subject");
-
-        Json_nde namespaces = Json_nde.NewByVal();
-        namespaces.AddKvNde("subject", jnde);
+		jnde.AddKvStr("class", "CLASS");
+		jnde.AddKvStr("text", "TEXT");
+		jnde.AddKvStr("href", "URL_str");
+		jnde.AddKvBool("exists", true);
+		jnde.AddKvBool("primary", true);
+		jnde.AddKvStr("link-class", String_.Empty);
+		jnde.AddKvStr("context", "subject");
+	
+		Json_nde namespaces = Json_nde.NewByVal();
+		namespaces.AddKvNde("subject", jnde);
 
 		//Json_nde data_namespaces = new Json_nde(null, -1);
 		msgdata.AddKvNde("data-namespace-tabs",
@@ -102,11 +103,11 @@ public class Db_Nav_template {
 		System.out.println(String_.new_u8(result));
 	}
 
-    /* Vector/SkinVector.php */
+	/* Vector/SkinVector.php */
 	private static int MENU_TYPE_DROPDOWN = 0, MENU_TYPE_TABS = 1, MENU_TYPE_PORTAL = 2, MENU_TYPE_DEFAULT = 3;
 	private static byte[][] extraClasses = new byte[][] {
-		Bry_.new_a7("vector-menu vector-menu-dropdown vectorMenu"),
-		Bry_.new_a7("vector-menu vector-menu-tabs vectorTabs"),
+		Bry_.new_a7("vector-menu vector-menu-dropdown"),
+		Bry_.new_a7("vector-menu vector-menu-tabs"),
 		Bry_.new_a7("vector-menu vector-menu-portal portal"),
 		Bry_.new_a7("vector-menu")
 	};
@@ -120,16 +121,10 @@ public class Db_Nav_template {
 //	) : array {
 //		$skin = $this->getSkin();
 //		$extraClasses = [
-//			self::MENU_TYPE_DROPDOWN => 'vector-menu vector-menu-dropdown vectorMenu',
-//			self::MENU_TYPE_TABS => 'vector-menu vector-menu-tabs vectorTabs',
+//			self::MENU_TYPE_DROPDOWN => 'vector-menu vector-menu-dropdown',
+//			self::MENU_TYPE_TABS => 'vector-menu vector-menu-tabs',
 //			self::MENU_TYPE_PORTAL => 'vector-menu vector-menu-portal portal',
 //			self::MENU_TYPE_DEFAULT => 'vector-menu',
-//		];
-//		// A list of classes to apply the list element and override the default behavior.
-//		$listClasses = [
-//			// `.menu` is on the portal for historic reasons.
-//			// It should not be applied elsewhere per T253329.
-//			self::MENU_TYPE_DROPDOWN => 'menu vector-menu-content-list',
 //		];
 //		$isPortal = $type === self::MENU_TYPE_PORTAL;
 
@@ -145,9 +140,6 @@ public class Db_Nav_template {
 		String label = String_.new_u8(label_bry);
 		String msg = label; // for now
 		String linkertooltip = String_.Empty;
-		String listClasses = type == MENU_TYPE_DROPDOWN
-			? "menu vector-menu-content-list"
-			: "vector-menu-content-list";
 		String plabel = "p-" + label;
 
 		Json_nde props = Json_nde.NewByVal();
@@ -159,9 +151,6 @@ public class Db_Nav_template {
 		// If no message exists fallback to plain text (T252727)
 		// 'label' => $msgObj->exists() ? $msgObj->text() : $label,
 		props.AddKvStr("label", msg);
-
-		// 'list-classes' => $listClasses[$type] ?? 'vector-menu-content-list',
-		props.AddKvStr("list-classes", listClasses);
 
 		// 'html-items' => '',
 
@@ -213,23 +202,19 @@ public class Db_Nav_template {
 		return props;
 	}
 
-	private static Json_nde s_getMenuData(Xowe_wiki wiki, byte[] label, byte[] urls, int type) { return s_getMenuData(wiki, label, urls, type, false); }
-	private static Json_nde s_getMenuData(Xowe_wiki wiki, byte[] label_bry, byte[] urls, int type, boolean setLabelToSelected) {
+	private static Json_nde s_getMenuData(Xowe_wiki wiki, byte[] id, byte[] label, byte[] urls, int type, int iter_count) { return s_getMenuData(wiki, id, label, urls, type, false, iter_count); }
+	private static Json_nde s_getMenuData(Xowe_wiki wiki, byte[] id, byte[] label_bry, byte[] urls, int type, boolean setLabelToSelected, int iter_count) {
 		boolean isPortal = type == MENU_TYPE_PORTAL;
 
-		String label = String_.new_u8(label_bry);
-		String msg = label; // for now
+		String plabel = String_.new_u8(id);
+		String label = plabel.substring(2);
+		String msg = String_.new_u8(label_bry); // for now
 		String linkertooltip = String_.Empty;
-		String listClasses = type == MENU_TYPE_DROPDOWN
-			? "menu vector-menu-content-list"
-			: "vector-menu-content-list";
-		String plabel = "p-" + label;
 
 		Json_nde props = Json_nde.NewByVal();
 		props.AddKvStr("id", plabel);
 		props.AddKvStr("label-id", plabel +"-label");
 		props.AddKvStr("label", msg);
-		props.AddKvStr("list-classes", listClasses);
 		props.AddKvBool("is-dropdown", type == MENU_TYPE_DROPDOWN);
 		props.AddKvStr("html-tooltip", wiki.Msg_mgr().Val_html_accesskey_and_title(plabel));
 		props.AddKvStr("html-tooltip", linkertooltip);
@@ -269,7 +254,17 @@ public class Db_Nav_template {
 //			? 'vector-menu-empty emptyPortlet' : '';
 //		$props['class'] = trim( "$class $extraClasses[$type]" );
 //		return $props;
-		props.AddKvStr("class", extraClasses[type]);
+
+// need to add 'mw-portlet mw-portlet-${name}' - cant find where in mediawiki this comes from
+		byte[] classes = Bry_.Add(
+                        Bry_.new_a7("mw-portlet mw-portlet-"
+                                + label
+                                + " "
+                                + (iter_count == 0 ? "portal-first ":"")
+                                + (urls == Bry_.Empty ? "emptyPortlet ":""))
+                        , extraClasses[type]);
+		props.AddKvStr("class", classes);
+		//props.AddKvStr("class", extraClasses[type]);
 		return props;
 	}
 }

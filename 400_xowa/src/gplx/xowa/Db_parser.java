@@ -22,18 +22,31 @@ public class Db_parser {
 	private Bry_bfr m_newsrc = Bry_bfr_.New();
 	private Xop_ctx ctx;
 	private Tag_match translate_tag = new Tag_match("translate");
+	private Tag_match noinclude_tag = new Tag_match("noinclude");
+	private Tag_match section_tag = new Tag_match("section");
 
 	public byte[] stripcomments(byte[] src) {
+            byte[] nsrc;
 		m_src = src;
 		m_src_end = src.length;
 		m_newsrc.Clear();
 		m_pos = 0;
-		byte[] nsrc = removecomments();
+		/*nsrc = removecomments();
+		m_src = nsrc;
+		m_src_end = nsrc.length;
+		m_newsrc.Clear();
+		m_pos = 0;*/
+		nsrc = removetranslate();
 		m_src = nsrc;
 		m_src_end = nsrc.length;
 		m_newsrc.Clear();
 		m_pos = 0;
-		nsrc = removetranslate();
+		nsrc = removenoinclude();
+		m_src = nsrc;
+		m_src_end = nsrc.length;
+		m_newsrc.Clear();
+		m_pos = 0;
+		nsrc = removesection();
 		return nsrc;
 	}
 	private byte[] removecomments() {
@@ -64,13 +77,57 @@ public class Db_parser {
 		while (m_pos < m_src_end) {
 			byte b = m_src[m_pos];
 			if (b == '<') {
-                                int newpos = translate_tag.Match(m_src, m_pos, m_src_end);
+				int newpos = translate_tag.Match(m_src, m_pos, m_src_end);
 				//if (match_translate()) {
 				if (newpos > 0) {
 					addtext(start_text, m_pos);
 					// skip the tag
 					start_text = newpos;
-                                        m_pos = newpos - 1;
+					m_pos = newpos - 1;
+				}
+			}
+			m_pos++;
+		}
+		if (start_text > 0) {
+			addtext(start_text, m_src_end);
+			return m_newsrc.To_bry_and_clear();
+		}
+		return m_src;
+	}
+	private byte[] removenoinclude() {
+		int start_text = m_pos;
+		while (m_pos < m_src_end) {
+			byte b = m_src[m_pos];
+			if (b == '<') {
+				int newpos = noinclude_tag.Match(m_src, m_pos, m_src_end);
+				if (newpos > 0) {
+					addtext(start_text, m_pos);
+					// skip the tag
+					start_text = newpos;
+					m_pos = newpos - 1;
+					if (noinclude_tag.close)
+						m_newsrc.Add_byte_nl();
+				}
+			}
+			m_pos++;
+		}
+		if (start_text > 0) {
+			addtext(start_text, m_src_end);
+			return m_newsrc.To_bry_and_clear();
+		}
+		return m_src;
+	}
+	private byte[] removesection() {
+		int start_text = m_pos;
+		while (m_pos < m_src_end) {
+			byte b = m_src[m_pos];
+			if (b == '<') {
+				int newpos = section_tag.Match_all(m_src, m_pos, m_src_end);
+				if (newpos > 0) {
+					addtext(start_text, m_pos);
+					// skip the tag
+					start_text = newpos;
+					m_pos = newpos - 1;
 				}
 			}
 			m_pos++;
@@ -478,6 +535,7 @@ public class Db_parser {
 	}
 }
 class Tag_match {
+	public boolean close;
 	private byte[] tag;
 	private int tag_len;
 	Tag_match(String tag) {
@@ -487,7 +545,7 @@ class Tag_match {
 	public int Match(byte[]src, int bgn, int src_end) {
 		bgn++; //??? 
 		if (bgn >= src_end) return 0;
-		boolean close = false;
+		close = false;
 		if (src[bgn] == '/') {
 			close = true;
 			bgn++;
@@ -497,7 +555,7 @@ class Tag_match {
 		for (int i = 0; i < tag_len; i++) {
 			byte s = src[bgn++];
 			byte c = tag[i];
-			if (c != s && (c | 32) != (s | 32)) // case insensitive
+			if ((c | 32) != (s | 32)) // case insensitive
 				return 0;
 		}
 		// any whitespace beween tag and '>'
@@ -518,6 +576,33 @@ class Tag_match {
 					break;
 			}
 		}
+		return bgn;
+	}
+	public int Match_all(byte[]src, int bgn, int src_end) {
+		bgn++; //??? 
+		if (bgn >= src_end) return 0;
+		close = false;
+		if (src[bgn] == '/') {
+			close = true;
+			bgn++;
+		}
+		if (bgn + tag_len >= src_end) return 0;
+		for (int i = 0; i < tag_len; i++) {
+			byte s = src[bgn++];
+			byte c = tag[i];
+			if ((c | 32) != (s | 32)) // case insensitive
+				return 0;
+		}
+		// find close '>'
+		while (bgn < src_end) {
+			byte b = src[bgn];
+			if (b != '>')
+				bgn++;
+			else
+				break;
+		}
+		if (bgn < src_end)
+			bgn++;
 		return bgn;
 	}
 }

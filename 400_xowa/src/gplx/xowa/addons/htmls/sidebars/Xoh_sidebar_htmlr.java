@@ -32,7 +32,7 @@ class Xoh_sidebar_htmlr {
 			Xoh_sidebar_itm grp = (Xoh_sidebar_itm)grps.Get_at(i);
 			itms_fmtr.Init_by_grp(popups_enabled, grp);
 			itms_fmtr.Bfr_arg__add(tmp_bfr);
-			Db_Nav_template.Build_Sidebar(wiki, bfr, grp.Id(), grp.Text(), tmp_bfr.To_bry_and_clear());
+			Db_Nav_template.Build_Sidebar(wiki, bfr, grp.Id(), grp.Text(), tmp_bfr.To_bry_and_clear(), i);
 		}
 		// dummy toolbox
 		// id="p-tb" used by some js

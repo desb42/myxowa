@@ -35,12 +35,13 @@ public class Json_parser {
 	public Json_doc Parse(String src) {return Parse(Bry_.new_u8(src));}
 	public Json_doc Parse(byte[] src) {return Parse(src, 0, src.length);}
 	public Json_doc Parse(byte[] src, int pos, int src_len) {
+            synchronized (this) {
 		this.src = src;				if (src == null) return null;
 		this.src_len = src.length;	if (src_len == 0) return null;
 		this.pos = pos;
 		Skip_ws();
 		boolean root_is_nde = true;
-		switch (src[pos]) {
+		switch (src[this.pos]) {
 			case Byte_ascii.Curly_bgn:	root_is_nde = Bool_.Y; break;
 			case Byte_ascii.Brack_bgn:	root_is_nde = Bool_.N; break;
 				case 16:
@@ -59,17 +60,19 @@ public class Json_parser {
 		doc.Ctor(src, root);
 		return doc;
 	}
+        }
 	private Json_nde Make_nde(Json_doc doc) {
 		++pos;	// brack_bgn
 		Json_nde nde = Json_nde.NewByDoc(doc, pos);
 		while (pos < src_len) {
 			Skip_ws();
 			if (src[pos] == Byte_ascii.Curly_end) 	{++pos; return nde;}
-                        else if (src[pos] == Byte_ascii.Comma) { // skip empty elements
-                            pos++;
-                            continue;
-                        }
-			else									nde.Add(Make_kv(doc));
+			else if (src[pos] == Byte_ascii.Comma) { // skip empty elements
+				pos++;
+				continue;
+			}
+			else
+				nde.Add(Make_kv(doc));
 			Skip_ws();
 			switch (src[pos++]) {
 				case Byte_ascii.Comma:			break;
@@ -80,7 +83,7 @@ public class Json_parser {
 		throw Err_.new_wo_type("eos inside nde");
 	}
 	private Json_itm Make_kv(Json_doc doc) {
-		Json_itm key = Make_string(doc);
+		Json_itm key = Make_string(doc, false);
 		Skip_ws();
 		Chk(Byte_ascii.Colon);
 		Skip_ws();
@@ -94,7 +97,14 @@ public class Json_parser {
 				case Byte_ascii.Ltr_n:		return Make_literal(Bry_null_ull	, 3, Json_itm_null.Null);
 				case Byte_ascii.Ltr_f:		return Make_literal(Bry_bool_alse	, 4, Json_itm_bool.Bool_n);
 				case Byte_ascii.Ltr_t:		return Make_literal(Bry_bool_rue	, 3, Json_itm_bool.Bool_y);
-				case Byte_ascii.Quote:		return Make_string(doc);
+				case Byte_ascii.Quote:		return Make_string(doc, false);
+				case (byte)0xe2: // german quoting %e2%80%9e
+					if (src[pos+1] == (byte)0x80 && src[pos+2] == (byte)0x9e) {
+						pos += 2;
+						return Make_string(doc, true);
+					}
+					else
+						throw Err_.new_unhandled(Char_.To_str(b));
 				case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
 				case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
 				case Byte_ascii.Dash:		return Make_num(doc);
@@ -114,7 +124,7 @@ public class Json_parser {
 		}
 		throw Err_.new_("json.parser", "invalid literal", "excerpt", Bry_.Mid_by_len_safe(src, pos - 1, 16));
 	}
-	private Json_itm Make_string(Json_doc doc) {
+	private Json_itm Make_string(Json_doc doc, boolean german_quote) {
 		int bgn = pos++;	// ++: quote_bgn
 		boolean escaped = false;
 		while (pos < src_len) {
@@ -127,8 +137,18 @@ public class Json_parser {
 					}
 					escaped = true;
 					break;
+				case (byte)0xe2: // %e2%80%9c german end quote
+                                    if (german_quote)
+					if (src[pos+1] == (byte)0x80 && src[pos+2] == (byte)0x9c) {
+						pos += 3;
+						return Json_itm_str.NewByDoc(doc, bgn, pos - 2, escaped);	//  german quote quote_end
+					}
+					++pos;
+					break;
 				case Byte_ascii.Quote:
-					return Json_itm_str.NewByDoc(doc, bgn, ++pos, escaped);	// ++: quote_end
+					if (!german_quote)
+						return Json_itm_str.NewByDoc(doc, bgn, ++pos, escaped);	// ++: quote_end
+					// fall thru
 				default:
 					++pos;
 					break;

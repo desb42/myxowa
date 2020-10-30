@@ -18,10 +18,10 @@ import gplx.core.bits.*; import gplx.core.btries.*;
 import gplx.xowa.langs.msgs.*;
 import gplx.xowa.xtns.scribunto.procs.*;
 public class Scrib_lib_text implements Scrib_lib {
-	private final    Scrib_lib_text__json_util json_util = new Scrib_lib_text__json_util();
-	private final    Scrib_lib_text__nowiki_util nowiki_util = new Scrib_lib_text__nowiki_util();
-	private final    Scrib_core core;
-	private final    Btrie_slim_mgr trie;
+	private final	Scrib_lib_text__json_util json_util = new Scrib_lib_text__json_util();
+	private final	Scrib_lib_text__nowiki_util nowiki_util = new Scrib_lib_text__nowiki_util();
+	private final	Scrib_core core;
+	private final	Btrie_slim_mgr trie;
 	public Scrib_lib_text(Scrib_core core) {
 		this.core = core;
 		this.trie = nowiki_util.Make_trie(gplx.xowa.parsers.xndes.Xop_xnde_tag_.Tag__nowiki.Name_bry());
@@ -36,7 +36,7 @@ public class Scrib_lib_text implements Scrib_lib {
 		notify_wiki_changed_fnc = mod.Fncs_get_by_key("notify_wiki_changed");
 		return mod;
 	}	private Scrib_lua_proc notify_wiki_changed_fnc;
-	public Scrib_proc_mgr Procs() {return procs;} private final    Scrib_proc_mgr procs = new Scrib_proc_mgr();
+	public Scrib_proc_mgr Procs() {return procs;} private final	Scrib_proc_mgr procs = new Scrib_proc_mgr();
 	public boolean Procs_exec(int key, Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		switch (key) {
 			case Proc_unstrip:							return Unstrip(args, rslt);
@@ -52,7 +52,7 @@ public class Scrib_lib_text implements Scrib_lib {
 	private static final int Proc_unstrip = 0, Proc_unstripNoWiki = 1, Proc_killMarkers = 2, Proc_getEntityTable = 3, Proc_init_text_for_wiki = 4, Proc_jsonEncode = 5, Proc_jsonDecode = 6;
 	public static final String Invk_unstrip = "unstrip", Invk_unstripNoWiki = "unstripNoWiki", Invk_killMarkers = "killMarkers", Invk_getEntityTable = "getEntityTable"
 	, Invk_init_text_for_wiki = "init_text_for_wiki", Invk_jsonEncode = "jsonEncode", Invk_jsonDecode = "jsonDecode";
-	private static final    String[] Proc_names = String_.Ary(Invk_unstrip, Invk_unstripNoWiki, Invk_killMarkers, Invk_getEntityTable, Invk_init_text_for_wiki, Invk_jsonEncode, Invk_jsonDecode);
+	private static final	String[] Proc_names = String_.Ary(Invk_unstrip, Invk_unstripNoWiki, Invk_killMarkers, Invk_getEntityTable, Invk_init_text_for_wiki, Invk_jsonEncode, Invk_jsonDecode);
 	public boolean Unstrip(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// NOTE: https://www.mediawiki.org/wiki/Extension:Scribunto/Lua_reference_manual#mw.text.unstrip
 		byte[] src = args.Pull_bry(0);
@@ -61,6 +61,52 @@ public class Scrib_lib_text implements Scrib_lib {
 	public boolean UnstripNoWiki(Scrib_proc_args args, Scrib_proc_rslt rslt)	{
 		// NOTE: https://www.mediawiki.org/wiki/Extension:Scribunto/Lua_reference_manual#mw.text.unstripNoWiki
 		byte[] src = args.Pull_bry(0);
+		// BIG HACK 
+		// strip <nowiki> tags
+		int len = src.length;
+		int pos = 0;
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		int start = 0;
+		while (pos < len) {
+			byte b = src[pos++];
+			if (b == '<') {
+				if (pos + 6 < len
+						&& src[pos]   == 'n'
+						&& src[pos+1] == 'o'
+						&& src[pos+2] == 'w'
+						&& src[pos+3] == 'i'
+						&& src[pos+4] == 'k'
+						&& src[pos+5] == 'i' 
+						&& src[pos+6] == '>') {
+					int xpos = pos + 7;
+					while (xpos < len) {
+						b = src[xpos++];
+						if (b == '<') { // </nowiki>
+							if (xpos + 7 < len
+									&& src[xpos]   == '/'
+									&& src[xpos+1] == 'n'
+									&& src[xpos+2] == 'o'
+									&& src[xpos+3] == 'w'
+									&& src[xpos+4] == 'i'
+									&& src[xpos+5] == 'k'
+									&& src[xpos+6] == 'i'
+									&& src[xpos+7] == '>') {
+								tmp_bfr.Add_mid(src, start, pos - 1);
+								tmp_bfr.Add_mid(src, pos + 7, xpos - 1);
+								pos = xpos + 8;
+								start = pos;
+								xpos = len; // break out of inner loop
+							}
+						}
+					}
+				}
+			}
+		}
+		if (start > 0) {
+			tmp_bfr.Add_mid(src, start, len);
+			src = tmp_bfr.To_bry();
+		}
+
 		return rslt.Init_obj(core.Ctx().Wiki().Parser_mgr().Uniq_mgr().Partial_Parse(src, true));
 //		byte[] src = args.Pull_bry(0);
 //		return rslt.Init_obj(nowiki_util.Strip_tag(core.Page().Url_bry_safe(), src, trie));

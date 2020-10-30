@@ -4459,8 +4459,10 @@ size-zetabytes|~{0} ZB
 size-zetapixel|~{0} ZP
 skin-preview|Preview
 skinname-cologneblue|Cologne Blue
+skinname-minerva|MinervaNeue
 skinname-modern|Modern
 skinname-monobook|MonoBook
+skinname-timeless|Timeless
 skinname-vector|Vector
 sorbs_create_account_reason|Your IP address is listed as an open proxy in the DNSBL used by {{SITENAME}}.\nYou cannot create an account.
 sorbsreason|Your IP address is listed as an open proxy in the DNSBL used by {{SITENAME}}.
