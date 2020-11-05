@@ -35,7 +35,6 @@ public class Json_parser {
 	public Json_doc Parse(String src) {return Parse(Bry_.new_u8(src));}
 	public Json_doc Parse(byte[] src) {return Parse(src, 0, src.length);}
 	public Json_doc Parse(byte[] src, int pos, int src_len) {
-            synchronized (this) {
 		this.src = src;				if (src == null) return null;
 		this.src_len = src.length;	if (src_len == 0) return null;
 		this.pos = pos;
@@ -59,7 +58,6 @@ public class Json_parser {
 			root = Make_ary(doc);
 		doc.Ctor(src, root);
 		return doc;
-	}
         }
 	private Json_nde Make_nde(Json_doc doc) {
 		++pos;	// brack_bgn
