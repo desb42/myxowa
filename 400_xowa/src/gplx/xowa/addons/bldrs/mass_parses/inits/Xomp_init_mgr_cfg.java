@@ -18,6 +18,7 @@ import gplx.xowa.wikis.nss.*;
 class Xomp_init_mgr_cfg implements Gfo_invk {
 	public int[] Ns_ids() {return ns_ids;} private int[] ns_ids = new int[] {0, 4, 14, 100};
 	public byte[] Template_doc() {return template_doc;} private byte[] template_doc = null;
+	public byte[] Touched() {return touched;} private byte[] touched = null;
 	public void Init(Xowe_wiki wiki) {
 		if (ns_ids == null)				ns_ids = Ns_ids(wiki.Ns_mgr());
 	}
@@ -31,11 +32,13 @@ class Xomp_init_mgr_cfg implements Gfo_invk {
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk__ns_ids_))         ns_ids = Int_ary_.Parse(m.ReadStr("v"), "|");
 		else if (ctx.Match(k, Invk__template_doc_)) template_doc = m.ReadBry("v");
+		else if (ctx.Match(k, Invk__touched_)) touched = m.ReadBry("v");
 		else	return Gfo_invk_.Rv_unhandled;
 		return this;
 	}
 	private static final String
 	  Invk__ns_ids_ = "ns_ids_"
 	, Invk__template_doc_ = "template_doc_"
+	, Invk__touched_ = "touched_"
 	;
 }

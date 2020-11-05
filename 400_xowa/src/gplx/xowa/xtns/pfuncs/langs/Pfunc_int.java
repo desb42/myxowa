@@ -39,6 +39,7 @@ public class Pfunc_int extends Pf_func_base {
 				}
 			}
 		}
+		msg_key = Xoa_ttl.Replace_spaces(msg_key); // need a conversion
 		Xowe_wiki wiki = ctx.Wiki();
 		Xol_lang_itm page_lang = ctx.Page().Lang();
 		byte[][] args_ary = Bry_.Ary_empty;

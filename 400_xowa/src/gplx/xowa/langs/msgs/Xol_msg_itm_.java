@@ -267,7 +267,7 @@ public static final int
 		synchronized (tmp_fmtr) {	// LOCK:static-objs; DATE:2016-07-07
 			boolean has_fmt_arg = tmp_fmtr.Fmt_(val).Compile().Fmt_args_exist();
 			boolean has_tmpl_txt = Bry_find_.Find_fwd(val, Xop_curly_bgn_lxr.Hook, 0) != -1;
-			val = trie_space.Replace(tmp_bfr, val, 0, val.length);
+			//val = trie_space.Replace(tmp_bfr, val, 0, val.length); // is this neccessary 20201103 D
 			itm.Atrs_set(val, has_fmt_arg, has_tmpl_txt);
 		}
 	}

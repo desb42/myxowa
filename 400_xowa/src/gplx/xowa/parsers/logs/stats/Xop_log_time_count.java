@@ -20,6 +20,10 @@ public class Xop_log_time_count {
 	private int depth;
 	private int depth_max;
 	private long time_bgn;
+	private long page_start;
+        public Xop_log_time_count() {
+            Clear();
+        }
 	public int Count() {return count;}
 	public long Time() {return time;}
 	public int Depth_max() {return depth_max;}
@@ -41,10 +45,14 @@ public class Xop_log_time_count {
 		this.count++;
 	}
 	public void Clear() {
+		page_start = gplx.core.envs.System_.Ticks();
 		count = 0;
 		time = 0;
 		time_bgn = 0;
 		depth = 0;
 		depth_max = 0;
+	}
+	public long PageTime() {
+		return gplx.core.envs.System_.Ticks() - page_start;
 	}
 }

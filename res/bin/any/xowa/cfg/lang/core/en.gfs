@@ -2695,6 +2695,7 @@ historyempty|(empty)
 historysize|({{PLURAL:~{0}\u007C1 byte\u007C~{0} bytes}})
 historywarning|<strong>Warning:</strong> The page you are about to delete has a history with ~{0} {{PLURAL:~{0}\u007Crevision\u007Crevisions}}:
 history|Page history
+history_short|History
 hist|hist
 hookaborted|The modification you tried to make was aborted by an extension.
 hours-abbrev|~{0} h

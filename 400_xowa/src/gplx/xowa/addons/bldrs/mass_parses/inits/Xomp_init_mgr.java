@@ -61,11 +61,12 @@ class Xomp_init_mgr {
 		, "WHERE  p.page_namespace = {0}"
 		, "AND    p.page_is_redirect = 0"
 		, "AND    p.page_model_format=17" // extra filter only model=wikitext format=text/x-wiki
+		, "AND    p.page_touched > '{1}'"
 		, "ORDER BY p.page_id"
 		); 
 		for (int i = 0; i < len; ++i) {
 			int ns_id = ns_ary[i];
-			attach_mgr.Exec_sql_w_msg("adding rows for xomp_page: ns=" + ns_id, sql, ns_id);
+			attach_mgr.Exec_sql_w_msg("adding rows for xomp_page: ns=" + ns_id, sql, ns_id, cfg.Touched());
 		}
 
 		byte[] template_doc_name = cfg.Template_doc();
@@ -78,9 +79,10 @@ class Xomp_init_mgr {
 			, "AND    p.page_is_redirect = 0"
 			, "AND    p.page_model_format=17" // extra filter only model=wikitext format=text/x-wiki
 			, "AND    p.page_title like '%/{0}'"
+			, "AND    p.page_touched > '{1}'"
 			, "ORDER BY p.page_id"
 			);
-			attach_mgr.Exec_sql_w_msg("adding rows for template documentation", sql, template_doc_name);
+			attach_mgr.Exec_sql_w_msg("adding rows for template documentation", sql, template_doc_name, cfg.Touched());
 		}
 	}
 }

@@ -15,7 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.parsers.logs.stats; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*; import gplx.xowa.parsers.logs.*;
 public class Xop_log_stat {
-	public boolean Enabled() {return enabled;} private boolean enabled;
+	//public boolean Enabled() {return enabled;} private boolean enabled;
 	public int Wkr_uid() {return wkr_uid;} private int wkr_uid = -1;
 	public Xop_log_time_count Scrib() {return scrib;} private final    Xop_log_time_count scrib = new Xop_log_time_count();
 	public long Tidy_time;
@@ -31,8 +31,8 @@ public class Xop_log_stat {
 	public int Hiero_count;
 	public int Gallery_count;
 	public int Gallery_packed_count;
-	public void Init(int v) {
-		enabled = true;
-		wkr_uid = v;
-	}
+	//public void Init(int v) {
+	//	enabled = true;
+	//	wkr_uid = v;
+	//}
 }

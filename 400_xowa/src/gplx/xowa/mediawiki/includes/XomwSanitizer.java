@@ -2078,6 +2078,9 @@ public class XomwSanitizer {
 		Html_entities_set(rv, tmp, "zeta"     , 950);
 		Html_entities_set(rv, tmp, "zwj"      , 8205);
 		Html_entities_set(rv, tmp, "zwnj"     , 8204);
+
+		Html_entities_set(rv, tmp, "32"     , 32);
+
 		return rv;
 	}
 	private static void Html_entities_set(Hash_adp_bry rv, Bry_bfr tmp, String name_str, int code) {

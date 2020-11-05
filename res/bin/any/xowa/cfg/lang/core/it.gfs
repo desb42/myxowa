@@ -2573,6 +2573,7 @@ historyempty|(vuota)
 historysize|({{PLURAL:~{0}\u007C1 byte\u007C~{0} byte}})
 historywarning|'''Attenzione:''' La pagina che stai per cancellare ha una cronologia con ~{0} {{PLURAL:~{0}\u007Cversione\u007Cversioni}}:
 history|Cronologia della pagina
+history_short|Cronologia
 hist|cron
 hookaborted|La modifica che si è tentato di fare è stata interrotta da un hook di un'estensione.
 hours-abbrev|~{0}&nbsp;h

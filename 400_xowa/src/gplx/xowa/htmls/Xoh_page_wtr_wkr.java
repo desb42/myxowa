@@ -59,6 +59,8 @@ import gplx.langs.jsons.*;
 import gplx.Bry_fmt;
 import gplx.xowa.Db_lua_comp;
 import gplx.xowa.parsers.utils.Xop_redirect_mgr;
+import gplx.String_;
+import gplx.xowa.parsers.logs.stats.Xop_log_stat;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
@@ -447,6 +449,9 @@ public class Xoh_page_wtr_wkr {
 			//wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, wiki, page);
 			wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, page);
 		}
+
+		Add_stats(tmp_bfr, page);
+
 		return tmp_bfr.To_bry_and_clear();
 	}
 	private byte[] Get_text(Json_nde titles_nde) {
@@ -605,6 +610,53 @@ public class Xoh_page_wtr_wkr {
 		else
 			ispage_in_wikisource = false;
 	}
+	private void Add_stats(Bry_bfr bfr, Xoae_page page) {
+		Xop_log_stat stats = page.Stat_itm();
+		counts_fmtr.Bld_bfr_many(bfr
+			, stats.Tidy_time
+			, stats.Image_count
+			, stats.Audio_count
+			, stats.Video_count
+			, stats.Media_count
+			, stats.Hdr_count
+			, stats.Lnki_count
+			, stats.Lnke_count
+			, stats.Math_count
+			, stats.Imap_count
+			, stats.Hiero_count
+			, stats.Gallery_count
+			, stats.Gallery_packed_count
+			, stats.Scrib().Time()
+			, stats.Scrib().Count()
+			, stats.Scrib().Depth_max()
+			, stats.Scrib().PageTime()
+		);
+	}
+	private static final Bry_fmtr counts_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
+	( ""
+	, "<!--"
+	, "Counts:"
+	, " Tidy_time: ~{t1}"
+	, " Image_count: ~{t2}"
+	, " Audio_count: ~{t3}"
+	, " Video_count: ~{t4}"
+	, " Media_count: ~{t5}"
+	, " Hdr_count: ~{t6}"
+	, " Lnki_count: ~{t7}"
+	, " Lnke_count: ~{t8}"
+	, " Math_count: ~{t9}"
+	, " Imap_count: ~{t10}"
+	, " Hiero_count: ~{t11}"
+	, " Gallery_count: ~{t12}"
+	, " Gallery_packed_count: ~{t13}"
+	, "Scribunto:"
+	, " Time: ~{s1}"
+	, " Count: ~{s2}"
+	, " Max_depth: ~{s3}"
+	, "Total time:"
+	, "  ~{p1}"
+	, "-->"
+	), "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "s1", "s2", "s3", "p1");
 }
 class data_head {
 	public void Name_(byte[] val) {name = val;}; byte[] name;
