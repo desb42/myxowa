@@ -85,7 +85,7 @@ public class Mustache_render_ctx {
 				cur_is_bool = Bool_.__byte;
 		}
 		cur = sub;
-		return true;
+		return !inverted;
 	}
 	public void Section_end() {
 		Mustache_stack_itm itm = (Mustache_stack_itm)List_adp_.Pop(stack);

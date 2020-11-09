@@ -23,6 +23,31 @@ public class Db_Nav_template {
 	private static boolean once = true;
 	private static Mustache_tkn_itm menu_root;
 
+	public static Json_nde Build_Sidebar_json(Xowe_wiki wiki, byte[] id, byte[] text, byte[] itms, int iter_count) {
+		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_PORTAL, iter_count);
+	}
+	public static void Render_Sidebar(Xowe_wiki wiki, Bry_bfr bfr, Json_nde data) {
+		if (once) {
+			once = false;
+			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
+			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
+			menu_root = parser.Parse("top-test");
+		}
+		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
+		Mustache_bfr mbfr = Mustache_bfr.New_bfr(bfr);
+		menu_root.Render(mbfr, mctx);
+	}
+	public static void Render_Content(Xowe_wiki wiki, Bry_bfr bfr, Json_nde data) {
+		if (once) {
+			once = false;
+			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
+			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
+			menu_root = parser.Parse("content-test");
+		}
+		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
+		Mustache_bfr mbfr = Mustache_bfr.New_bfr(bfr);
+		menu_root.Render(mbfr, mctx);
+	}
 	public static void Build_Sidebar(Xowe_wiki wiki, Bry_bfr bfr, byte[] id, byte[] text, byte[] itms, int iter_count) {
 		if (once) {
 			once = false;
@@ -51,7 +76,7 @@ public class Db_Nav_template {
 		Test();
 	}
 
-	private String[] msgs = new String[] {
+	private static String[] msgs = new String[] {
 						"vector-opt-out-tooltip",
 						"vector-opt-out",
 						"navigation-heading",
@@ -257,12 +282,12 @@ public class Db_Nav_template {
 
 // need to add 'mw-portlet mw-portlet-${name}' - cant find where in mediawiki this comes from
 		byte[] classes = Bry_.Add(
-                        Bry_.new_a7("mw-portlet mw-portlet-"
-                                + label
-                                + " "
-                                + (iter_count == 0 ? "portal-first ":"")
-                                + (urls == Bry_.Empty ? "emptyPortlet ":""))
-                        , extraClasses[type]);
+		Bry_.new_a7("mw-portlet mw-portlet-"
+		        + label
+		        + " "
+		        + (iter_count == 0 ? "portal-first ":"")
+		        + (urls == Bry_.Empty ? "emptyPortlet ":""))
+			, extraClasses[type]);
 		props.AddKvStr("class", classes);
 		//props.AddKvStr("class", extraClasses[type]);
 		return props;

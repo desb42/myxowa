@@ -63,6 +63,8 @@ public class JsonMustacheNde implements Mustache_doc_itm {
 					// array node -> render; EX: `{{#repo}} <b>{{name}}</b>{{/repo}}`
 					case Json_itm_.Tid__ary:
 						return ToJsonMustachNdeAry(itm);
+					case Json_itm_.Tid__nde:
+						return new Mustache_doc_itm[] {new JsonMustacheNde(Json_nde.Cast(Json_kv.Cast(itm).Val()))}; //ToJsonMustachNdeNde(itm);
 					// item node -> render only if key matchers
 					default:
 						return new Mustache_doc_itm[] {new JsonMustacheVal(true, key, kv.Val().Data())};

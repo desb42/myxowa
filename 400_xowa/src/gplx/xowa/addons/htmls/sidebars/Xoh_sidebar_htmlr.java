@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.addons.htmls.sidebars;
 
+import gplx.Bry_;
 import gplx.Bry_bfr;
 import gplx.Bry_bfr_;
 import gplx.Bry_fmt;
@@ -22,22 +23,43 @@ import gplx.List_adp;
 import gplx.core.brys.Bfr_arg;
 import gplx.xowa.Xowe_wiki;
 
+import gplx.langs.jsons.Json_nde;
+import gplx.langs.jsons.Json_ary;
 class Xoh_sidebar_htmlr {
-	public static byte[] To_html(Bry_bfr bfr, Xowe_wiki wiki, List_adp grps) {
+	public static Json_nde To_json(Xowe_wiki wiki, List_adp grps) {
 		Xoh_sidebar_itms_fmtr itms_fmtr = new Xoh_sidebar_itms_fmtr();
 		int len = grps.Count();
 		boolean popups_enabled = wiki.Html_mgr().Head_mgr().Popup_mgr().Enabled();
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
+
+		Json_nde top = Json_nde.NewByVal();
+		Json_ary portals_rest = Json_ary.NewByVal();
+		Json_nde jd;
+
 		for (int i = 0; i < len; ++i) {
 			Xoh_sidebar_itm grp = (Xoh_sidebar_itm)grps.Get_at(i);
 			itms_fmtr.Init_by_grp(popups_enabled, grp);
 			itms_fmtr.Bfr_arg__add(tmp_bfr);
-			Db_Nav_template.Build_Sidebar(wiki, bfr, grp.Id(), grp.Text(), tmp_bfr.To_bry_and_clear(), i);
+			jd = Db_Nav_template.Build_Sidebar_json(wiki, grp.Id(), grp.Text(), tmp_bfr.To_bry_and_clear(), i);
+			if (i == 0) {
+				top.AddKvNde("data-portals-first", jd);
+			}
+			else {
+				portals_rest.Add(jd);
+			}
 		}
 		// dummy toolbox
 		// id="p-tb" used by some js
-		bfr.Add_str_a7("<div class=\"portal\" id=\"p-tb\"></div>");
-		return bfr.To_bry_and_clear();
+		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("tb"), Bry_.new_a7("Toolbar"), Bry_.Empty, 1);
+		portals_rest.Add(jd);
+		byte[] buf = Bry_.new_u8(wiki.Appe().Gui_mgr().Html_mgr().Portal_mgr().Wikis().Itms_as_html());
+		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("xowa-wiki"), Bry_.new_a7("Wikis"), buf, 1);
+		portals_rest.Add(jd);
+		top.AddKvAry("array-portals-rest", portals_rest);
+		buf = Bry_.Add(wiki.Msg_mgr().Val_html_accesskey_and_title("p-logo")
+			, Bry_.new_a7(" class=\"mw-wiki-logo xowa-hover-off\" href=\"/wiki/\""));
+		top.AddKvStr("html-logo-attributes", buf);
+		return top;
 	}
 	private static final Bry_fmt fmt = Bry_fmt.Auto_nl_skip_last
 	( "<div class=\"portal\" id=\"~{grp_id}\">"

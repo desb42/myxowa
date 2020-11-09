@@ -256,6 +256,45 @@ app.wikis.get('~{wiki_key}').html.portal {
   </div>
 "]:>
 ;
+  txt_categories =
+<:["
+~{printfooter}
+    <div class="visualClear">
+~{page_langs}
+    </div>
+"]:>
+;
+  txt_pageread =
+<:["
+    <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-content-~{page_lang_ltr}">~{page_data}
+    </div>
+"]:>
+;
+  txt_pageedit =
+<:["
+    <div id="mw-content-text">
+      <div id="xowa_page_edit_preview_id">~{edit_div_preview}</div>
+      <form id="editform" name="editform">
+        <textarea id="xowa_edit_data_box" cols="80" rows="25" accesskey="," class="mw-editfont-monospace" lang="~{edit_lang}" dir="~{edit_lang_ltr}">~{page_data}</textarea>  <!-- NOTE: do not place on different line (EX: \n~{page_text}\n); textarea will interpret new line literally and page saves will include new whitespace -->
+        <div id="xowa_page_edit_save_id">
+          <a href="xowa-cmd:app.gui.main_win.page_edit_save;" class="xowa_anchor_button" style="width:100px;max-width:1024px;">~{<>msgs.get('savearticle');<>}</a>
+          <a href="xowa-cmd:app.gui.main_win.page_edit_preview;" class="xowa_anchor_button" style="width:100px;max-width:1024px;">~{<>msgs.get('showpreview');<>}</a>
+          ~{edit_div_rename}
+          <a href="/wiki/Special:XowaPageDelete?delete=~{page_ttl_full}" onclick="return confirm('Please confirm you wish to delete this page.')" class="xowa_anchor_button" style="width:100px;max-width:1024px;">Delete page</a>
+          <a href="/wiki/~{page_ttl_full}" class="xowa_anchor_button" style="width:100px;max-width:1024px;">~{<>msgs.get('cancel');<>}</a>
+          </a>
+        </div>
+      </form>
+    </div>
+"]:>
+;
+  txt_pagehtml =
+<:["
+    <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-content-~{page_lang_ltr}">
+      <textarea id="xowa_edit_data_box" cols="80" rows="25">~{page_data}</textarea>  <!-- NOTE: do not place on different line (EX: \n~{page_text}\n); textarea will interpret new line literally and page saves will include new whitespace -->
+    </div>
+"]:>
+;
 }
 
 app.wikis.get('~{wiki_key}').html.article {
@@ -283,45 +322,9 @@ app.wikis.get('~{wiki_key}').html.article {
     .new {!important; color:green;}
   </style>
 </head>
-<body class="mediawiki ~{page_lang_ltr} sitedir-~{page_lang_ltr} mw-hide-empty-elt ~{page_body_cls} skin-vector action-view vector-animateLayout"~{html_content_editable} spellcheck="false">
-<div id="mw-page-base" class="noprint"></div>
-<div id="mw-head-base" class="noprint"></div>
-<div id="content" class="mw-body" role="main"><a id="top"></a>~{page_indicators}
-  <div id="xowa_err_div" class="xowa_err" style="display:none; color:red; white-space:pre; display:block; unicode-bidi:embed;"></div>
-~{page_heading}~{page_pgbnr_bread}~{page_pgbnr}
-  <div id="bodyContent" class="mw-body-content">
-    <div id="siteSub" class="noprint">~{tagline}</div>
-    <div id="contentSub">~{page_content_sub}</div>
-    <div id="contentSub2"></div>~{page_jumpto}
-    <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-content-~{page_lang_ltr}">~{page_data}
-    </div>
-~{printfooter}
-    <div class="visualClear">
-~{page_langs}
-    </div>
-  </div>
-</div>
-~{portal_div_after}
+<body class="mediawiki ~{page_lang_ltr} sitedir-~{page_lang_ltr} mw-hide-empty-elt ~{page_body_cls} skin-vector action-view~{vectortags}"~{html_content_editable} spellcheck="false">
 
-<div id="mw-navigation">
-<h2>Navigation menu</h2>
-<div id="mw-head">
-~{portal_div_personal}
-~{portal_div_ns}
-~{portal_div_view}
-</div>
-
-<div id="mw-panel">
-~{portal_div_logo}
-~{portal_div_home}
-~{portal_sidebar}
-~{portal_div_xtn}
-~{portal_div_admin}
-~{portal_div_wikis}
-</div>
-</div>
-
-~{portal_div_footer}
+~{content}
 
 <script type="text/javascript">
 var redlinks = [""~{redlinks}];
@@ -352,156 +355,6 @@ for (var i = 0; i < redlinks.length; i++) {
 <!--XOWA.SCRIPT.TAIL.TOP-->
 </html>
 <!-- page_id=~{page_id} -->
-"]:>
-;
-  page_edit =
-<:["
-<!DOCTYPE html>
-<html dir="~{page_lang_ltr}" class="client-js" lang="~{page_lang}">
-<head>
-  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <meta charset="UTF-8"/>
-  <title>~{page_name} - XOWA ~{wiki_key}</title>
-  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/~{app_icon}" />
-  <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
-  <link rel="stylesheet" href="~{html_css_wiki_path}" type="text/css">
-  ~{html_css_night_tag}<!--XOWA.SCRIPT.HEAD.TOP-->~{xowa_head}<!--XOWA.SCRIPT.HEAD.BOT-->
-  <script src="~{app_root_dir}bin/any/xowa/html/res/src/xowa/edit-toolbar/edit-toolbar.js" type="text/javascript"></script>
-  <style type="text/css">
-    /*div#simpleSearch #searchButton,    
-    div#simpleSearch #mw-searchButton {
-      ~{<>lang.x_axis_end;<>}: 0;
-      direction: ~{<>lang.dir_str;<>};
-    } is this necessary? */
-  </style>
-  <script type="text/javascript">
-~{js_edit_toolbar}
-  </script>
-  <script type="text/javascript">
-    window.onload = function() {
-      document.body.focus();
-      var focus_elem_name = 'xowa_edit_data_box';
-      var preview_elem = document.getElementById('xowa_page_edit_preview_id');
-      if (preview_elem.childNodes.length > 0) {
-        focus_elem_name = 'firstHeading';
-      }
-      var firstElem = document.getElementById(focus_elem_name);
-      window.setTimeout(function(){firstElem.focus();}, 250);
-    }
-  </script>
-</head>
-<body class="mediawiki ~{page_lang_ltr} sitedir-~{page_lang_ltr} ~{page_body_cls} skin-vector action-edit vector-animateLayout"~{html_content_editable} spellcheck="false">
-<div id="mw-page-base" class="noprint"></div>
-<div id="mw-head-base" class="noprint"></div>
-<div id="content" class="mw-body">~{page_indicators}
-  <div id="xowa_err_div" class="xowa_err"></div>~{page_heading}  
-  <div id="bodyContent" class="mw-body-content">
-    <div id="siteSub" class="noprint">~{tagline}</div>
-    <div id="contentSub" class="visible">~{page_content_sub}</div>
-    <div id="mw-content-text">
-      <div id="xowa_page_edit_preview_id">~{edit_div_preview}</div>
-      <form id="editform" name="editform">
-        <textarea id="xowa_edit_data_box" cols="80" rows="25" accesskey="," class="mw-editfont-monospace" lang="~{edit_lang}" dir="~{edit_lang_ltr}">~{page_data}</textarea>  <!-- NOTE: do not place on different line (EX: \n~{page_text}\n); textarea will interpret new line literally and page saves will include new whitespace -->
-        <div id="xowa_page_edit_save_id">
-          <a href="xowa-cmd:app.gui.main_win.page_edit_save;" class="xowa_anchor_button" style="width:100px;max-width:1024px;">~{<>msgs.get('savearticle');<>}</a>
-          <a href="xowa-cmd:app.gui.main_win.page_edit_preview;" class="xowa_anchor_button" style="width:100px;max-width:1024px;">~{<>msgs.get('showpreview');<>}</a>
-          ~{edit_div_rename}
-          <a href="/wiki/Special:XowaPageDelete?delete=~{page_ttl_full}" onclick="return confirm('Please confirm you wish to delete this page.')" class="xowa_anchor_button" style="width:100px;max-width:1024px;">Delete page</a>
-          <a href="/wiki/~{page_ttl_full}" class="xowa_anchor_button" style="width:100px;max-width:1024px;">~{<>msgs.get('cancel');<>}</a>
-          </a>
-        </div>      
-      </form>
-    </div>
-  </div>
-</div>
-
-~{portal_div_footer}
-
-<div id="mw-head" class="noprint">
-~{portal_div_personal}
-~{portal_div_ns}
-~{portal_div_view}
-</div>
-
-<div id="mw-panel" class="noprint">
-~{portal_div_logo}
-~{portal_div_home}
-~{portal_sidebar}
-~{portal_div_xtn}
-~{portal_div_admin}
-~{portal_div_wikis}
-</div>
-<div id="xo-popup-div-id" class="mw-body xo-popup-div" style="border:0px !important"></div>
-<!-- xo-popup-div-id
-* must be placed as peer to <div id="content">, not as sub-child, else will have overlap problems with search bar
-* must use mw-body class to have same text-styling
-* border:0px to suppress blue border b/c of mw-body
--->
-</body>
-<!--XOWA.SCRIPT.TAIL.TOP-->
-</html>
-"]:>
-;
-  page_html =
-<:["
-<!DOCTYPE html>
-<html dir="~{page_lang_ltr}" class="client-js" lang="~{page_lang}">
-<head>
-  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <meta charset="UTF-8"/>
-  <title>~{page_name} - XOWA ~{wiki_key}</title>
-  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/~{app_icon}" />
-  <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
-  <link rel="stylesheet" href="~{html_css_wiki_path}" type="text/css">
-  ~{html_css_night_tag}<!--XOWA.SCRIPT.HEAD.TOP-->~{xowa_head}<!--XOWA.SCRIPT.HEAD.BOT-->
-  <style type="text/css">
-    /*div#simpleSearch #searchButton,    
-    div#simpleSearch #mw-searchButton {
-      ~{<>lang.x_axis_end;<>}: 0;
-      direction: ~{<>lang.dir_str;<>};
-    } is this necessary? */
-  </style>
-  <script>
-    window.onload = function() {
-      document.body.focus();
-      var focus_elem_name = 'xowa_edit_data_box';
-      var firstElem = document.getElementById(focus_elem_name);
-      window.setTimeout(function(){firstElem.focus();}, 250);
-    }
-  </script>
-</head>
-<body class="mediawiki ~{page_lang_ltr} sitedir-~{page_lang_ltr} ~{page_body_cls} skin-vector action-html vector-animateLayout"~{html_content_editable} spellcheck="false">
-<div id="mw-page-base" class="noprint"></div>
-<div id="mw-head-base" class="noprint"></div>
-<div id="content" class="mw-body">~{page_indicators}~{page_heading}
-  <div id="bodyContent" class="mw-body-content">
-    <div id="siteSub">From XOWA: the free, open-source, offline wiki application</div>
-    <div id="contentSub">&nbsp;</div>
-    <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-content-~{page_lang_ltr}">
-      <textarea id="xowa_edit_data_box" cols="80" rows="25">~{page_data}</textarea>  <!-- NOTE: do not place on different line (EX: \n~{page_text}\n); textarea will interpret new line literally and page saves will include new whitespace -->
-    </div>
-  </div>
-</div>
-
-~{portal_div_footer}
-
-<div id="mw-head" class="noprint">
-~{portal_div_personal}
-~{portal_div_ns}
-~{portal_div_view}
-</div>
-
-<div id="mw-panel" class="noprint">
-~{portal_div_logo}
-~{portal_div_home}
-~{portal_sidebar}
-~{portal_div_xtn}
-~{portal_div_admin}
-~{portal_div_wikis}
-</div>
-</body>
-<!--XOWA.SCRIPT.TAIL.TOP-->
-</html>
 "]:>
 ;
 }

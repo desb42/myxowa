@@ -5273,10 +5273,12 @@ vector-action-addsection|Add topic
 vector-action-delete|Delete
 vector-action-move|Move
 vector-action-protect|Protect
+vector-action-toggle-sidebar|Toggle sidebar
 vector-action-undelete|Undelete
 vector-action-unprotect|Change protection
+vector-jumptonavigation|Jump to navigation
+vector-jumptosearch|Jump to search
 vector-more-actions|More
-vector-simplesearch-preference|Enable simplified search bar (Vector skin only)
 vector-skin-desc|Modern version of MonoBook with fresh look and many usability improvements
 vector-view-create|Create
 vector-view-edit|Edit

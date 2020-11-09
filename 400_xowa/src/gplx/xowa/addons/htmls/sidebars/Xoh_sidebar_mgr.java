@@ -16,10 +16,24 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.addons.htmls.sidebars; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.htmls.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*;
 import gplx.xowa.wikis.domains.*; import gplx.xowa.wikis.data.*; import gplx.xowa.wikis.nss.*;
+import gplx.langs.jsons.Json_nde;
 public class Xoh_sidebar_mgr {
 	public Xoh_sidebar_mgr(Xowe_wiki wiki) {this.wiki = wiki;} private final    Xowe_wiki wiki;		
 	public List_adp Grps() {return grps;} private final    List_adp grps = List_adp_.New();	// TEST:
-	public byte[] Html_bry() {return html_bry;} private byte[] html_bry;
+	private Json_nde top;
+	public byte[] Html_bry() {
+		Bry_bfr bfr = Bry_bfr_.New();
+		if (top != null) {
+			Json_nde data = Json_nde.NewByVal();
+			data.AddKvNde("data-sidebar", top);
+			Db_Nav_template.Render_Sidebar(wiki, bfr, data);
+		}
+		return bfr.To_bry_and_clear();
+	}
+	public void Build_json(Json_nde data) {
+            if (top != null)
+		data.AddKvNde("data-sidebar", top);
+	}
 	public void Init_by_wiki() {
 		try {
 			Bry_bfr tmp_bfr = Bry_bfr_.New();
@@ -46,7 +60,7 @@ public class Xoh_sidebar_mgr {
 	}
 	public void Make(Bry_bfr tmp_bfr, byte[] src) {	// TEST:
 		Xoh_sidebar_parser.Parse(tmp_bfr, wiki, grps, src);
-		html_bry = Xoh_sidebar_htmlr.To_html(tmp_bfr, wiki, grps);
+		top = Xoh_sidebar_htmlr.To_json(wiki, grps);
 	}
 	private static final    byte[] Ttl__sidebar = Bry_.new_a7("Sidebar");	// MediaWiki:Sidebar
 }

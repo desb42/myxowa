@@ -94,7 +94,7 @@ public class Http_server_wkr implements Gfo_invk {
 	}
 	private void Process_get(Http_request_itm request, byte[] url) {
 		server_wtr.Write_str_w_nl(String_.new_u8(request.Host()) + "|GET|" + String_.new_u8(request.Url()));	// use request url
-		if		(Bry_.Has_at_bgn(url, Url__fsys))	Serve_file(url);
+		if		(Bry_.Has_at_bgn(url, Url__fsys) || Bry_.Has_at_bgn(url, Url__static))	Serve_file(url);
 		else if (Bry_.Has_at_bgn(url, Url__exec))	Exec_exec(url, Url__exec);
 		else if (Bry_.Has_at_bgn(url, Url__exec_2))	Exec_exec(url, Url__exec_2);
 		else										Write_wiki(url);
@@ -792,6 +792,7 @@ public class Http_server_wkr implements Gfo_invk {
 	;
 	public static final    byte[]
 	  Url__fsys = Bry_.new_a7("/fsys/")
+	, Url__static = Bry_.new_a7("/static/")
 	;
 	private static final    int Url__fsys_len = Url__fsys.length;
 	private static final    Bry_fmtr

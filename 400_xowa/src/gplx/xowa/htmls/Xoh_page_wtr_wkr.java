@@ -60,7 +60,16 @@ import gplx.Bry_fmt;
 import gplx.xowa.Db_lua_comp;
 import gplx.xowa.parsers.utils.Xop_redirect_mgr;
 import gplx.String_;
+import gplx.xowa.addons.htmls.sidebars.Db_Nav_template;
 import gplx.xowa.parsers.logs.stats.Xop_log_stat;
+import gplx.xowa.wikis.pages.Xopg_page_heading;
+import gplx.xowa.langs.msgs.Xol_msg_mgr;
+import gplx.langs.mustaches.JsonMustacheNde;
+import gplx.langs.mustaches.Mustache_bfr;
+import gplx.langs.mustaches.Mustache_render_ctx;
+import gplx.langs.mustaches.Mustache_tkn_itm;
+import gplx.langs.mustaches.Mustache_tkn_parser;
+import gplx.Io_url;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
@@ -71,21 +80,18 @@ public class Xoh_page_wtr_wkr {
 	private Xoae_app app; private Xowe_wiki wiki; private Xoae_page page; private byte[] root_dir_bry;
 	public Xoh_page_wtr_wkr(Xoh_page_wtr_mgr mgr, byte page_mode) {this.mgr = mgr; this.page_mode = page_mode;}		
 	public Xoh_page_wtr_wkr Ctgs_enabled_(boolean v) {ctgs_enabled = v; return this;} private boolean ctgs_enabled = true;
+	private String vectortags = "";
 	public void Write_page(Bry_bfr rv, Xoae_page page, Xop_ctx ctx, Xoh_page_html_source page_html_source) {
 		synchronized (thread_lock_1) {
 			this.page = page; this.wiki = page.Wikie(); this.app = wiki.Appe();
 			ctx.Page_(page); // HACK: must update page for toc_mgr; WHEN: Xoae_page rewrite
-			Bry_fmtr fmtr = null;
+			Bry_fmtr fmtr = mgr.Page_read_fmtr();
 			Set_ispage_in_wikisource(page);
 			if (mgr.Html_capable()) {
 				wdata_lang_wtr.Page_(page);
 				byte view_mode = page_mode;
 				switch (page_mode) {
-					case Xopg_view_mode_.Tid__edit:	fmtr = mgr.Page_edit_fmtr(); break;
-					case Xopg_view_mode_.Tid__html:	fmtr = mgr.Page_read_fmtr(); view_mode = Xopg_view_mode_.Tid__read; break; // set view_mode to read, so that "read" is highlighted in HTML
-					case Xopg_view_mode_.Tid__read:	fmtr = mgr.Page_read_fmtr(); 
-						// ctx.Page().Redlink_list().Clear();	// not sure if this is the best place to put it, but redlinks (a) must only fire once; (b) must fire before html generation; (c) cannot fire during edit (preview will handle separately); NOTE: probably put in to handle reusable redlink lists; redlink lists are now instantiated per page, so clear is not useful
-						break;
+					case Xopg_view_mode_.Tid__html: view_mode = Xopg_view_mode_.Tid__read; break; // set view_mode to read, so that "read" is highlighted in HTML
 				}
 				Bry_bfr page_bfr = wiki.Utl__bfr_mkr().Get_m001();	// NOTE: get separate page rv to output page; do not reuse tmp_bfr b/c it will be used inside Fmt_do
 				try {
@@ -104,7 +110,7 @@ public class Xoh_page_wtr_wkr {
 						Write_page_by_tid(ctx, hctx, view_mode, rv, fmtr, page_bfr.To_bry_and_rls());
 						scripting_mgr.Write(rv, wiki, page);
 						if (page_mode == Xopg_view_mode_.Tid__html)	// if html, write page again, but wrap it in html skin this time
-							Write_page_by_tid(ctx, hctx, page_mode, rv, mgr.Page_html_fmtr(), Gfh_utl.Escape_html_as_bry(rv.To_bry_and_clear()));
+							Write_page_by_tid(ctx, hctx, page_mode, rv, fmtr, Gfh_utl.Escape_html_as_bry(rv.To_bry_and_clear()));
 						wdata_lang_wtr.Page_(null);
 					}
 				} finally {page_bfr.Mkr_rls();}
@@ -142,7 +148,7 @@ public class Xoh_page_wtr_wkr {
 		page.Html_data().Pagebanner().Add(hctx);
 		page.Html_data().GeoCrumb().Set_ctx(ctx);
 		page.Html_data().Pagebanner().Set_ctx(ctx);
-                page.Html_data().Pp_indexpage().Set_ctx(ctx);
+		page.Html_data().Pp_indexpage().Set_ctx(ctx);
 		byte[] page_body_class = Xoh_page_body_cls.Calc(tmp_bfr, page_ttl, page_tid);
 		// byte[] html_content_editable = wiki.Gui_mgr().Cfg_browser().Content_editable() ? Content_editable_bry : Bry_.Empty;
 		byte[] html_content_editable = Bry_.Empty;
@@ -193,38 +199,57 @@ public class Xoh_page_wtr_wkr {
 		boolean nightmode_enabled = app.Gui_mgr().Nightmode_mgr().Enabled();
 		page.Html_data().Related().Set_fmtr(portal_mgr.Div_after_fmtr());
 		fmtr.Bld_bfr_many(bfr
-		, root_dir_bry, Xoa_app_.Version, Xoa_app_.Build_date, app.Tcp_server().Running_str()
-		, page.Db().Page().Id(), page.Ttl().Full_db_href(), page_title
-		, page.Html_data().Page_heading().Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), pagename_for_h1, page.Lang().Key_bry())
-		, modified_on_msg
-		, mgr.Css_common_bry(), mgr.Css_wiki_bry()
+		, Bry_.new_a7("app_icon.png")
+		, root_dir_bry
+		, Content(portal_mgr, page_data, page, wiki, ctx, hctx, html_gen_tid, pagename_for_h1, modified_on_msg)
+		, html_content_editable
+		, mgr.Css_common_bry()
 		, mgr.Css_night_bry(nightmode_enabled)
-		, page.Html_data().Head_mgr().Init(app, wiki, page).Init_dflts(html_gen_tid)
-		, page.Lang().Dir_ltr_bry(), page.Html_data().Indicators(), page_content_sub
-		, wiki.Html_mgr().Portal_mgr().Div_jump_to()
-		, Bry_.Empty /*page.Html_data().Pagebanner()  // Pagebanner(ctx, hctx)*/
-		, page_body_class, html_content_editable
-		, page_data, wdata_lang_wtr
-		, portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date)
-		, page.Html_data().Related()  // portal_mgr.Div_after_bry(page)
-
-		// sidebar divs
-		, portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect)
-		//, portal_mgr.Div_ns_bry(wiki.Utl__bfr_mkr(), page_ttl, wiki.Ns_mgr())
-		, portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page)
-		, portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect)
-		, portal_mgr.Div_logo_bry(nightmode_enabled), portal_mgr.Div_home_bry(), new Xopg_xtn_skin_fmtr_arg(page, Xopg_xtn_skin_itm_tid.Tid_sidebar)
-		, portal_mgr.Div_sync_bry(tmp_bfr, wiki.Page_mgr().Sync_mgr().Manual_enabled(), wiki, page)
-		, portal_mgr.Div_wikis_bry(wiki.Utl__bfr_mkr())
-		, portal_mgr.Sidebar_mgr().Html_bry()
-		, mgr.Edit_rename_div_bry(page_ttl), page.Html_data().Edit_preview_w_dbg(), js_edit_toolbar_bry
+		, mgr.Css_wiki_bry()
+		, page_body_class
+		, page.Db().Page().Id()
+		, page.Lang().Dir_ltr_bry()
 		, page.Lang().Key_bry()
-						, edit_lang, edit_lang_ltr
-						, redlinks
-						, Printfooter(app, wiki, ctx, hctx, page, html_gen_tid)
-						, Bry_.Empty/*page.Html_data().GeoCrumb()*/
-						, Bry_.new_a7("app_icon.png")
-						, wiki.Tagline()
+		, page_title
+		, redlinks
+		, vectortags // instance variable set by Content()
+		, null
+		, page.Html_data().Head_mgr().Init(app, wiki, page).Init_dflts(html_gen_tid)
+
+//		, root_dir_bry, Xoa_app_.Version, Xoa_app_.Build_date, app.Tcp_server().Running_str()
+//		, page.Db().Page().Id(), page.Ttl().Full_db_href(), page_title
+//		, page.Html_data().Page_heading().Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), pagename_for_h1, page.Lang().Key_bry())
+//		, modified_on_msg
+//		, mgr.Css_common_bry(), mgr.Css_wiki_bry()
+//		, mgr.Css_night_bry(nightmode_enabled)
+//		, page.Html_data().Head_mgr().Init(app, wiki, page).Init_dflts(html_gen_tid)
+//		, page.Lang().Dir_ltr_bry(), /*page.Html_data().Indicators()*/null, page_content_sub
+//		, wiki.Html_mgr().Portal_mgr().Div_jump_to()
+//		, Bry_.Empty /*page.Html_data().Pagebanner()  // Pagebanner(ctx, hctx)*/
+//		, page_body_class, html_content_editable
+//		, Content(portal_mgr, page_data, page, wiki, ctx, hctx, html_gen_tid, pagename_for_h1, modified_on_msg) //Pagebody(portal_mgr, page_data, page)
+//		, wdata_lang_wtr
+//		, portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date)
+//		, page.Html_data().Related()  // portal_mgr.Div_after_bry(page)
+//
+//		// sidebar divs
+//		, portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect)
+//		//, portal_mgr.Div_ns_bry(wiki.Utl__bfr_mkr(), page_ttl, wiki.Ns_mgr())
+//		, portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page)
+//		, portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect)
+//		, /*portal_mgr.Div_logo_bry(nightmode_enabled)*/null, portal_mgr.Div_home_bry(), new Xopg_xtn_skin_fmtr_arg(page, Xopg_xtn_skin_itm_tid.Tid_sidebar)
+//		, portal_mgr.Div_sync_bry(tmp_bfr, wiki.Page_mgr().Sync_mgr().Manual_enabled(), wiki, page)
+//		, portal_mgr.Div_wikis_bry(wiki.Utl__bfr_mkr())
+//		, portal_mgr.Sidebar_mgr().Html_bry()
+//		, mgr.Edit_rename_div_bry(page_ttl), page.Html_data().Edit_preview_w_dbg(), js_edit_toolbar_bry
+//		, page.Lang().Key_bry()
+//						, edit_lang, edit_lang_ltr
+//						, redlinks
+//						, Categories(portal_mgr, wiki, ctx, hctx, page, html_gen_tid)
+//						, Bry_.Empty/*page.Html_data().GeoCrumb()*/
+//						, Bry_.new_a7("app_icon.png")
+//						, wiki.Tagline()
+//						, vectortags // instance variable set by Content()
 		);
 		Xoh_page_wtr_wkr_.Bld_head_end(bfr, tmp_bfr, page);	// add after </head>
 		Xoh_page_wtr_wkr_.Bld_html_end(bfr, tmp_bfr, page);	// add after </html>
@@ -423,7 +448,204 @@ public class Xoh_page_wtr_wkr {
 	, Key_retrieved = Bry_.new_a7("retrievedfrom")
 		;
 
-	private byte[] Printfooter(Xoae_app app, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page, byte html_gen_tid) {
+	private Json_nde dl = null;
+	private void Build_json_logos(Json_nde data, String lang) {
+/* to produce
+"data-logos": {
+	"main-page-href":"/wiki/",
+	"icon":"wikipedia.png",
+	"wordmark":{
+		"src":"wikipedia-wordmark-en.svg",
+		"width":"119",
+		"height":"18",
+	},
+	"tagline":{
+		"src":"wikipedia-tagline-en.svg",
+		"width":"113",
+		"height":"13",
+	},
+}
+*/
+		if (dl == null) {
+			dl = Json_nde.NewByVal();
+			Json_nde wm = Json_nde.NewByVal();
+			Json_nde tl = Json_nde.NewByVal();
+	
+			dl.AddKvStr("main-page-href", "/wiki/");
+			dl.AddKvStr("icon", "/xowa/static/images/mobile/copyright/wikipedia.png");
+	
+			wm.AddKvStr("src", "/xowa/static/images/mobile/copyright/wikipedia-wordmark-" + lang +".svg");
+			wm.AddKvStr("width", "119");
+			wm.AddKvStr("height", "18");
+			dl.AddKvNde("wordmark", wm);
+			
+			tl.AddKvStr("src", "/xowa/static/images/mobile/copyright/wikipedia-tagline-" + lang +".svg");
+			tl.AddKvStr("width", "113");
+			tl.AddKvStr("height", "13");
+			dl.AddKvNde("tagline", tl);
+		}
+		data.AddKvNde("data-logos", dl);
+        }
+	private void Build_json_search(Json_nde data, Xowe_wiki wiki) {
+
+		Json_nde ds = Json_nde.NewByVal();
+		ds.AddKvStr("form-action", "/wiki/Special:XowaSearch");
+		ds.AddKvStr("html-input", "<input type=\"search\" name=\"search\" placeholder=\""
+			 + msgvalue("searchsuggest-search", wiki) 
+			 + "\"" + tooltip( "search", wiki ) + " id=\"searchInput\"/>");
+		ds.AddKvStr("page-title", "Special:XowaSearch");
+		ds.AddKvStr("html-button-search-fallback", makeSearchButton("fulltext", wiki));
+		ds.AddKvStr("html-button-search", makeSearchButton("go", wiki));
+		data.AddKvNde("data-search-box", ds);
+	}
+
+	private String makeSearchButton(String mode, Xowe_wiki wiki) {
+            boolean isgo = mode.equals("go");
+		String input_html = "<input name=\""
+			+ mode
+			+ "\" type=\"submit\" id=\"" 
+			+ (isgo ? "searchButton" : "mw-searchButton")
+			+ "\"" + tooltip( "search-" + mode, wiki ) + " class=\""
+			+ (isgo ? "searchButton" : "searchButton mw-fallbackSearchButton")
+			+ "\" value=\""
+			+ msgvalue(isgo ? "searcharticle" : "searchbutton", wiki)
+			+ "\" />";
+
+		return input_html;
+	}
+	private String msgvalue(String msgkey, Xowe_wiki wiki) {
+		return String_.new_u8(wiki.Lang().Msg_mgr().Val_by_str_or_empty(msgkey));
+	}
+	private String tooltip(String tipkey, Xowe_wiki wiki) {
+		return String_.new_u8(wiki.Msg_mgr().Val_html_accesskey_and_title(tipkey));
+	}
+
+	private static String[] msgs = new String[] {
+						"vector-opt-out-tooltip",
+						"vector-opt-out",
+						"navigation-heading",
+						"vector-action-toggle-sidebar",
+						"vector-jumptonavigation",
+						"vector-jumptosearch",
+						"vector-jumptocontent",
+						"sitesubtitle",
+						"sitetitle",
+						"search",
+						"tagline"
+					};
+
+	//all thes messages should be preprocessed (per language) as $data["msg-{$message}"] = $this->msg( $message )->text();
+	private void build_msg(Json_nde data, Xowe_wiki wiki) {
+		Xol_msg_mgr msg_mgr = wiki.Lang().Msg_mgr();
+		int msg_len = msgs.length;
+		for (int i = 0; i < msg_len; i++) {
+			String msg = msgs[i];
+			if (msg.equals("tagline"))
+				data.AddKvStr("msg-" + msg, wiki.Tagline());
+			else
+				data.AddKvStr("msg-" + msg, msg_mgr.Val_by_str_or_empty(msg));
+		}
+	}
+	private boolean once = true;
+	private Mustache_tkn_itm root_legacy;
+	private Mustache_tkn_itm root_new;
+	public void Render_Content(Xowe_wiki wiki, Bry_bfr bfr, Json_nde data) {
+		if (once) {
+			once = false;
+			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
+			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
+			root_legacy = parser.Parse("content-test");
+			//parser = new Mustache_tkn_parser(template_root);
+			root_new = parser.Parse("content-test-new");
+		}
+		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
+		Mustache_bfr mbfr = Mustache_bfr.New_bfr(bfr);
+		if (wiki.Skin_mgr().Get_skin().equals("vector-new")) {
+			root_new.Render(mbfr, mctx);
+			vectortags = " skin-vector-max-width skin-vector-search-header";
+		}
+		else {
+			root_legacy.Render(mbfr, mctx);
+			vectortags = " skin-vector-legacy";
+		}
+	}
+	private byte[] Content(Xow_portal_mgr portal_mgr, byte[] page_data, Xoae_page page, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte html_gen_tid, byte[] pagename_for_h1, byte[] modified_on_msg) {
+		boolean isnoredirect = page.Url().Qargs_mgr().IsNoRedirect();
+		Xoa_ttl page_ttl = page.Ttl();
+
+		Json_nde data = Json_nde.NewByVal();
+
+		data.AddKvStr("page-langcode", "en");
+		data.AddKvBool("page-isarticle", true);
+		data.AddKvBool("sidebar-visible", true); // for skin.mustache
+		data.AddKvStr("html-user-language-attributes", "");
+
+		Xopg_page_heading ph = page.Html_data().Page_heading();
+		ph.Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), pagename_for_h1, page.Lang().Key_bry());
+		ph.Build_json(data);
+
+		data.AddKvStr("html-subtitle", Xoh_page_wtr_wkr_.Bld_page_content_sub(app, wiki, page, tmp_bfr, isnoredirect));
+		data.AddKvStr("html-body-content", Pagebody(portal_mgr, page_data, page));
+		if (page_mode == Xopg_view_mode_.Tid__read) // only generate categories if READ
+			data.AddKvStr("html-categories", Categories(portal_mgr, wiki, ctx, hctx, page, html_gen_tid));
+
+		page.Html_data().Indicators().Build_json(data);
+		portal_mgr.Sidebar_mgr().Build_json(data);
+
+		data.AddKvStr("portal_div_personal", portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect));
+		data.AddKvStr("portal_div_ns", portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page));
+		data.AddKvStr("portal_div_view", portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect));
+		data.AddKvStr("portal_div_footer", portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date));
+
+		build_msg(data, wiki);
+
+		Build_json_logos(data, String_.new_a7(page.Lang().Key_bry()));
+                Build_json_search(data, wiki);
+		data.AddKvBool("is-search-in-header", true);
+
+                //System.out.println(data.Print_as_json());
+
+		Render_Content(wiki, tmp_bfr, data);
+		return tmp_bfr.To_bry_and_clear();
+	}
+	private byte[] Pagebody(Xow_portal_mgr portal_mgr, byte[] page_data, Xoae_page page) {
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		switch (page_mode) {
+			case Xopg_view_mode_.Tid__read:
+				portal_mgr.Txt_pageread_fmtr().Bld_bfr_many(tmp_bfr, page.Lang().Key_bry(), page.Lang().Dir_ltr_bry(), page_data);
+				break;
+			case Xopg_view_mode_.Tid__edit:
+				byte[] edit_lang = page.Lang().Key_bry();
+				byte[] edit_lang_ltr = page.Lang().Dir_ltr_bry();
+				// if editing page and editing a module always english
+				if (page.Ttl().Ns().Id() == 828) {
+					edit_lang = Bry_.new_a7("en");
+					edit_lang_ltr = Bry_.new_a7("ltr");
+				}
+				// "edit_div_preview", "edit_lang", "edit_lang_ltr", "edit_div_rename", "page_data", "page_text", "page_ttl_full"
+				portal_mgr.Txt_pageedit_fmtr().Bld_bfr_many(tmp_bfr
+					, page.Html_data().Edit_preview_w_dbg()
+					, edit_lang
+					, edit_lang_ltr
+					, mgr.Edit_rename_div_bry(page.Ttl())
+					, page_data
+					, Bry_.Empty // ???
+					, page.Ttl().Full_db_href()
+					);
+				break;
+			case Xopg_view_mode_.Tid__html:
+				portal_mgr.Txt_pagehtml_fmtr().Bld_bfr_many(tmp_bfr, page.Lang().Key_bry(), page.Lang().Dir_ltr_bry(), page_data);
+				break;
+		}
+		return tmp_bfr.To_bry_and_clear();
+	}
+	private byte[] Categories(Xow_portal_mgr portal_mgr, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page, byte html_gen_tid) {
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		byte[] printfooter = Printfooter(wiki, ctx, hctx, page, html_gen_tid);
+		portal_mgr.Txt_categoties_fmtr().Bld_bfr_many(tmp_bfr, printfooter, wdata_lang_wtr);
+		return tmp_bfr.To_bry_and_clear();
+	}
+	private byte[] Printfooter(Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page, byte html_gen_tid) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		// Add retrieved from for printing and as a hook for wikisource (and others)
 		tmp_bfr.Add(aref);

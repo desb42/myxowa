@@ -24,6 +24,7 @@ import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.
 import gplx.xowa.wikis.pages.wtxts.*; import gplx.xowa.wikis.pages.dbs.*; import gplx.xowa.wikis.pages.redirects.*; import gplx.xowa.wikis.pages.hdumps.*; import gplx.xowa.wikis.pages.htmls.*;
 import gplx.xowa.parsers.lists.*;
 import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.doubles.*;
+import gplx.xowa.wikis.pages.Xopg_page_heading;
 public class Xoae_page implements Xoa_page {
 	public Xop_list_tkn_new Prev_list_tkn() { return prev_list_tkn; }
 	public void Prev_list_tkn_(Xop_list_tkn_new prev_list_tkn) { this.prev_list_tkn = prev_list_tkn; } private Xop_list_tkn_new prev_list_tkn;

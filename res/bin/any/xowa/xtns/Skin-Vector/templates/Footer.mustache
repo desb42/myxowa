@@ -1,0 +1,26 @@
+{{!
+	@typedef object footerItem
+	@prop string id of list item element
+	@prop string html of list item
+	@prop footerItem[] items
+
+	@typedef object footerRow
+	@prop string className of list element
+	@prop string id of list element
+	@prop footerItem[] array-items
+
+	string|null html-user-language-attributes a string of attribute HTML
+	footerRow[] array-footer-rows iterable list of footer rows
+}}
+{{! `role` is unnecessary but kept to support selectors in any gadgets or user styles and
+	to mitigate a VoiceOver bug. }}
+<footer id="footer" class="mw-footer" role="contentinfo" {{{html-user-language-attributes}}}>
+	{{#array-footer-rows}}
+	<ul id="{{id}}" {{#className}}class="{{.}}"{{/className}}>
+		{{#array-items}}
+		<li id="{{id}}">{{{html}}}</li>
+		{{/array-items}}
+	</ul>
+	{{/array-footer-rows}}
+	<div style="clear: both;"></div>
+</footer>

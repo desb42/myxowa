@@ -69,8 +69,6 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_page_read_))						page_read_fmtr.Fmt_(m.ReadBry("v"));
-		else if	(ctx.Match(k, Invk_page_edit_))						page_edit_fmtr.Fmt_(m.ReadBry("v"));
-		else if	(ctx.Match(k, Invk_page_html_))						page_html_fmtr.Fmt_(m.ReadBry("v"));
 		else if	(ctx.Match(k, Invk_xowa_div_edit_rename_))			div_edit_rename_fmtr.Fmt_(m.ReadBry("v"));
 		else if	(ctx.Match(k, Cfg__scripting_enabled))				scripting_enabled = m.ReadYn("v");
 		else	return Gfo_invk_.Rv_unhandled;
@@ -87,7 +85,24 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	),	"src_full_db");
 	public static final String Invk_page_read_ = "page_read_", Invk_page_edit_ = "page_edit_", Invk_page_html_ = "page_html_", Invk_xowa_div_edit_rename_ = "xowa_div_edit_rename_";
 	private static final    String[] Fmtr_keys = new String[] 
-	{ "app_root_dir", "app_version", "app_build_date", "xowa_mode_is_server"
+	{ 
+		  "app_icon"
+		, "app_root_dir"
+		, "content"
+		, "html_content_editable"
+		, "html_css_common_path"
+		, "html_css_night_tag"
+		, "html_css_wiki_path"
+		, "page_body_cls"
+		, "page_id"
+		, "page_lang_ltr"
+		, "page_lang"
+		, "page_name"
+		, "redlinks"
+		, "vectortags"
+		, "wiki_key"
+		, "xowa_head"
+/*		"app_root_dir", "app_version", "app_build_date", "xowa_mode_is_server"
 	, "page_id", "page_ttl_full", "page_name"
 	, "page_heading"
 	, "page_modified_on_msg"
@@ -97,7 +112,8 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	, "page_lang_ltr", "page_indicators", "page_content_sub"
 	, "page_jumpto", "page_pgbnr"
 	, "page_body_cls", "html_content_editable"
-	, "page_data", "page_langs"
+	, "content" //"pagebody"
+	, "page_langs"
 	, "portal_div_footer"
 	, "portal_div_after"
 	
@@ -112,11 +128,12 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	, "page_lang"
         , "edit_lang", "edit_lang_ltr"
         , "redlinks"
-        , "printfooter"
+        , "categories"
         , "page_pgbnr_bread"
         , "app_icon"
         , "tagline"
-	};
+        , "vectortags"
+*/	};
 	private static final String Cfg__scripting_enabled = "xowa.html.scripting.enabled";
 }
 /*

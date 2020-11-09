@@ -23,6 +23,7 @@ import gplx.core.brys.Bfr_arg;
 import gplx.xowa.Xowe_wiki;
 import gplx.xowa.wikis.pages.htmls.Xopg_html_data;
 
+import gplx.langs.jsons.Json_nde;
 // TODO: move pagename_for_h1 here; also test; WHEN: next major change; NOTE: may go away for XOMW
 public class Xopg_page_heading implements Bfr_arg {
 	private Xowe_wiki wiki;
@@ -55,6 +56,21 @@ public class Xopg_page_heading implements Bfr_arg {
 		}
 
 		fmtr.Bld_many(bfr, lang_code, display_title, edit_lead_section);
+	}
+	public void Build_json(Json_nde data) {
+		data.AddKvStr("page-langcode", lang_code);
+		if (html_data.Pagebanner().IsValid()) {
+			// just an empty firstHeading
+			return;
+		}	// pgbnr exists; don't add title
+		byte[] edit_lead_section = Bry_.Empty;
+		if (	wiki.Parser_mgr().Hdr__section_editable__mgr().Enabled()
+			&&	mode_is_read) {
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			wiki.Parser_mgr().Hdr__section_editable__mgr().Write_html(tmp_bfr, ttl_full_db, Bry_.Empty, Bry__lead_section_hint);
+			edit_lead_section = tmp_bfr.To_bry_and_clear();
+		}
+		data.AddKvStr("html-title", Bry_.Add(display_title, edit_lead_section));
 	}
 	private static final    byte[] Bry__lead_section_hint = Bry_.new_u8("(Lead)");
 	private final    Bry_fmt fmtr = Bry_fmt.Auto_nl_apos("<h1 id=\"firstHeading\" class=\"firstHeading\" lang=\"~{lang}\">~{page_title}~{edit_lead_section}</h1>");	// <span>~{page_title}</span>

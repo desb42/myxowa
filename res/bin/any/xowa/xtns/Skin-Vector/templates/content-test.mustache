@@ -1,0 +1,34 @@
+<div id="mw-page-base" class="noprint"></div>
+<div id="mw-head-base" class="noprint"></div>
+<div id="content" class="mw-body" role="main">
+	<a id="top"></a>
+	<div id="siteNotice" class="mw-body-content">{{{html-site-notice}}}</div>
+	{{>Indicators}}
+	<h1 id="firstHeading" class="firstHeading" lang="{{page-langcode}}">{{{html-title}}}</h1>
+	<div id="bodyContent" class="mw-body-content">
+		{{#page-isarticle}}<div id="siteSub" class="noprint">{{msg-tagline}}</div>{{/page-isarticle}}
+		<div id="contentSub"{{{html-user-language-attributes}}}>{{{html-subtitle}}}</div>
+		<div id="contentSub2">{{{html-undelete-link}}}</div>
+		{{{html-newtalk}}}
+		{{!
+			Keep this empty `div` for compatibility with gadgets and user scripts
+			using this place to insert extra elements before.
+		}}
+		<div id="jump-to-nav"></div>
+		<a class="mw-jump-link" href="#mw-head">{{msg-vector-jumptonavigation}}</a>
+		<a class="mw-jump-link" href="#searchInput">{{msg-vector-jumptosearch}}</a>
+		{{{html-body-content}}}
+		{{{html-categories}}}
+	</div>
+</div>
+{{{html-after-content}}}
+<div id="mw-navigation">
+	<h2>{{msg-navigation-heading}}</h2>
+	<div id="mw-head">
+{{{portal_div_personal}}}
+{{{portal_div_ns}}}
+{{{portal_div_view}}}
+	</div>
+	{{#data-sidebar}}{{>legacy/Sidebar}}{{/data-sidebar}}
+</div>
+{{{portal_div_footer}}}

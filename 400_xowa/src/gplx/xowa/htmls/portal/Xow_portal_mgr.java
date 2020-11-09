@@ -108,6 +108,11 @@ public class Xow_portal_mgr implements Gfo_invk {
 		Init_fmtr(tmp_bfr, eval_mgr, div_view_fmtr);
 		Init_fmtr(tmp_bfr, eval_mgr, div_ns_fmtr);
 
+		Init_fmtr(tmp_bfr, eval_mgr, txt_categories_fmtr);
+		Init_fmtr(tmp_bfr, eval_mgr, txt_pageread_fmtr);
+		Init_fmtr(tmp_bfr, eval_mgr, txt_pageedit_fmtr);
+		Init_fmtr(tmp_bfr, eval_mgr, txt_pagehtml_fmtr);
+
 		// logo
 		byte[] main_page_href_bry = tmp_bfr.Add(Xoh_href_.Bry__site).Add(wiki.Domain_bry()).Add(Xoh_href_.Bry__wiki).To_bry_and_clear();	// NOTE: build /site/en.wikipedia.org/wiki/ href; no Main_Page, as that will be inserted by Xoh_href_parser
 		Io_url wiki_css_dir = wiki.Appe().Usere().Fsys_mgr().Wiki_root_dir().GenSubDir_nest(wiki.Domain_str(), "html");
@@ -331,7 +336,9 @@ public class Xow_portal_mgr implements Gfo_invk {
 		return tmp_bfr.To_bry_and_rls();
 	}
 	public static final    byte[] Cls_selected_y = Bry_.new_a7("selected"), Cls_new = Bry_.new_a7("new"), Cls_display_none = Bry_.new_a7("xowa_display_none");
-	public byte[] Div_logo_bry(boolean nightmode) {return nightmode ? div_logo_night : div_logo_day;} private byte[] div_logo_day = Bry_.Empty, div_logo_night = Bry_.Empty;
+	public byte[] Div_logo_bry(boolean nightmode) {
+            return nightmode ? div_logo_night : div_logo_day;} 
+        private byte[] div_logo_day = Bry_.Empty, div_logo_night = Bry_.Empty;
 	public byte[] Div_home_bry() {return sidebar_enabled ? div_home_bry : Bry_.Empty;} private byte[] div_home_bry = Bry_.Empty;
 	public byte[] Div_sync_bry(Bry_bfr tmp_bfr, boolean manual_enabled, Xow_wiki wiki, Xoa_page page) {
 		// only show update_html if wmf; DATE:2016-08-31
@@ -361,8 +368,16 @@ public class Xow_portal_mgr implements Gfo_invk {
 	, div_sync_fmtr = Bry_fmtr.new_("", "page_url")
 	, div_wikis_fmtr = Bry_fmtr.new_("", "toggle_btn", "toggle_hdr")
 	, div_after_fmtr = Bry_fmtr.new_("", "content")
+	, txt_categories_fmtr = Bry_fmtr.new_("", "printfooter", "page_langs")
+	, txt_pageread_fmtr = Bry_fmtr.new_("", "page_lang", "page_lang_ltr", "page_data")
+	, txt_pageedit_fmtr = Bry_fmtr.new_("", "edit_div_preview", "edit_lang", "edit_lang_ltr", "edit_div_rename", "page_data", "page_text", "page_ttl_full")
+	, txt_pagehtml_fmtr = Bry_fmtr.new_("", "page_lang", "page_lang_ltr", "page_data")
 	;
 	public Bry_fmtr Div_logo_fmtr() {return div_logo_fmtr;} // TEST:
+	public Bry_fmtr Txt_categoties_fmtr() {return txt_categories_fmtr;}
+	public Bry_fmtr Txt_pageread_fmtr() {return txt_pageread_fmtr;}
+	public Bry_fmtr Txt_pageedit_fmtr() {return txt_pageedit_fmtr;}
+	public Bry_fmtr Txt_pagehtml_fmtr() {return txt_pagehtml_fmtr;}
 
 	private boolean Nothex(byte b) {
 		if (b >= Byte_ascii.Num_0 && b <= Byte_ascii.Num_9) return false;
@@ -456,11 +471,28 @@ public class Xow_portal_mgr implements Gfo_invk {
 		else if (ctx.Match(k, Cfg__hdumps_indicators_enabled))      indicators_pagesource_enabled = m.ReadYn("v");
 		else if (ctx.Match(k, Cfg__hdumps_indicators_wtxt))         indicators_pagesource_wtxt = m.ReadBry("v");
 		else if (ctx.Match(k, Cfg__hdumps_indicators_html))         indicators_pagesource_html = m.ReadBry("v");
+
+		else if (ctx.Match(k, Invk_txt_categories))        txt_categories_fmtr.Fmt_(m.ReadBry("v"));
+		else if (ctx.Match(k, Invk_txt_pageread))          txt_pageread_fmtr.Fmt_(m.ReadBry("v"));
+		else if (ctx.Match(k, Invk_txt_pageedit))          txt_pageedit_fmtr.Fmt_(m.ReadBry("v"));
+		else if (ctx.Match(k, Invk_txt_pagehtml))          txt_pagehtml_fmtr.Fmt_(m.ReadBry("v"));
+
 		else	return Gfo_invk_.Rv_unhandled;
 		return this;
 	}
-	private static final String Invk_div_personal_ = "div_personal_", Invk_div_view_ = "div_view_", Invk_div_ns_ = "div_ns_", Invk_div_home_ = "div_home_"
-	, Invk_div_sync_ = "div_sync_", Invk_div_wikis_ = "div_wikis_", Invk_div_after_ = "div_after_";
+	private static final String 
+	  Invk_div_personal_ = "div_personal_"
+	, Invk_div_view_ = "div_view_"
+	, Invk_div_ns_ = "div_ns_"
+	, Invk_div_home_ = "div_home_"
+	, Invk_div_sync_ = "div_sync_"
+	, Invk_div_wikis_ = "div_wikis_"
+	, Invk_div_after_ = "div_after_"
+	, Invk_txt_categories = "txt_categories_"
+	, Invk_txt_pageread = "txt_pageread_"
+	, Invk_txt_pageedit = "txt_pageedit_"
+	, Invk_txt_pagehtml = "txt_pagehtml_"
+	;
 	public static final String Invk_div_logo_ = "div_logo_";
 	private static final    byte[] Missing_ns_cls_hide = Bry_.new_a7("xowa_display_none");
 

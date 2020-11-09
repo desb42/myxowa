@@ -33,6 +33,8 @@ import gplx.xowa.htmls.hxtns.blobs.Hxtn_blob_tbl;
 import gplx.xowa.htmls.hxtns.pages.Hxtn_page_mgr;
 import gplx.xowa.parsers.Xop_parser_;
 
+import gplx.langs.jsons.Json_nde;
+import gplx.langs.jsons.Json_ary;
 public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 	private Indicator_html_bldr_itm bldr_itm = new Indicator_html_bldr_itm();
 	private Ordered_hash list = Ordered_hash_.New();
@@ -92,6 +94,20 @@ public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 			byte[] html = wiki.Html__hdump_mgr().Load_mgr().Make_mgr().Parse(xnde.Html(), wiki, hpg);
 			xnde.Html_(html);
 		}
+	}
+	public void Build_json(Json_nde data) {
+		int list_len = list.Count();
+		if (list_len == 0) return;		// do not build if no items
+		Json_ary indicators = Json_ary.NewByVal();
+		for (int i = 0; i < list_len; i++) {	// same order
+			Indicator_xnde xnde = (Indicator_xnde)list.Get_at(i);
+			Json_nde jd = Json_nde.NewByVal();
+			jd.AddKvStr("id", Bry_.new_a7("mw-indicator-" + xnde.Name()));
+			jd.AddKvStr("class", "mw-indicator");
+			jd.AddKvStr("html", xnde.Html());
+			indicators.Add(jd);
+		}
+		data.AddKvAry("array-indicators", indicators);
 	}
 }
 class Indicator_html_bldr_itm implements gplx.core.brys.Bfr_arg {
