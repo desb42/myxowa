@@ -50,10 +50,10 @@ class Xoh_sidebar_htmlr {
 		}
 		// dummy toolbox
 		// id="p-tb" used by some js
-		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("tb"), Bry_.new_a7("Toolbar"), Bry_.Empty, 1);
+		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("p-tb"), Bry_.new_a7("Toolbar"), Bry_.Empty, 1);
 		portals_rest.Add(jd);
 		byte[] buf = Bry_.new_u8(wiki.Appe().Gui_mgr().Html_mgr().Portal_mgr().Wikis().Itms_as_html());
-		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("xowa-wiki"), Bry_.new_a7("Wikis"), buf, 1);
+		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("p-xowa-wiki"), Bry_.new_a7("Wikis"), buf, 1);
 		portals_rest.Add(jd);
 		top.AddKvAry("array-portals-rest", portals_rest);
 		buf = Bry_.Add(wiki.Msg_mgr().Val_html_accesskey_and_title("p-logo")

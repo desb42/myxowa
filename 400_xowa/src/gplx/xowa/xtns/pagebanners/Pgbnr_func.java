@@ -38,6 +38,7 @@ import gplx.xowa.Xow_wiki;
 import gplx.xowa.Xowe_wiki;
 import gplx.xowa.files.Xof_exec_tid;
 import gplx.xowa.files.Xof_file_itm;
+import gplx.xowa.files.origs.Xof_orig_itm;
 import gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx;
 import gplx.xowa.langs.kwds.Xol_kwd_grp_;
 import gplx.xowa.parsers.Xop_ctx;
@@ -128,6 +129,7 @@ public class Pgbnr_func extends Pf_func_base {
 
 		byte[] banner_name = Eval_argx(ctx, src, caller, self);
 		Xoa_ttl banner_ttl = wiki.Ttl_parse(banner_name); // NOTE: MW also creates title to auto-register page and image in imagelinks
+                //Xof_orig_itm orig = wiki.File__orig_mgr().Find_by_ttl_or_null(banner_name, 0, 0);
 		if (banner_ttl == null)		// if ttl is invalid, get it from wikidata; PAGE:en.v:Diving_the_Cape_Peninsula_and_False_Bay/Whale_Rock; DATE:2016-07-12
 			banner_ttl = Get_wikidata_banner(wiki.Appe(), wiki, wiki.Xtn_mgr().Xtn_pgbnr().Cfg(), page.Ttl());
 		if (banner_ttl == null) {	// if ttl is still invalid, exit now else will fail with nullref below; PAGE:en.v:Peterborough (New Hampshire); DATE:2016-07-12

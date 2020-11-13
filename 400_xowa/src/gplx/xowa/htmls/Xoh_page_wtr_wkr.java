@@ -500,7 +500,7 @@ public class Xoh_page_wtr_wkr {
 	}
 
 	private String makeSearchButton(String mode, Xowe_wiki wiki) {
-            boolean isgo = mode.equals("go");
+		boolean isgo = mode.equals("go");
 		String input_html = "<input name=\""
 			+ mode
 			+ "\" type=\"submit\" id=\"" 
@@ -514,13 +514,15 @@ public class Xoh_page_wtr_wkr {
 		return input_html;
 	}
 	private String msgvalue(String msgkey, Xowe_wiki wiki) {
-		return String_.new_u8(wiki.Lang().Msg_mgr().Val_by_str_or_empty(msgkey));
+		return String_.new_u8(wiki.Lang().Msg_mgr().Val_by_str_or_empty(wiki, msgkey));
 	}
 	private String tooltip(String tipkey, Xowe_wiki wiki) {
 		return String_.new_u8(wiki.Msg_mgr().Val_html_accesskey_and_title(tipkey));
 	}
 
 	private static String[] msgs = new String[] {
+						"tagline",
+						"search",
 						"vector-opt-out-tooltip",
 						"vector-opt-out",
 						"navigation-heading",
@@ -529,9 +531,7 @@ public class Xoh_page_wtr_wkr {
 						"vector-jumptosearch",
 						"vector-jumptocontent",
 						"sitesubtitle",
-						"sitetitle",
-						"search",
-						"tagline"
+						"sitetitle"
 					};
 
 	//all thes messages should be preprocessed (per language) as $data["msg-{$message}"] = $this->msg( $message )->text();
@@ -543,7 +543,7 @@ public class Xoh_page_wtr_wkr {
 			if (msg.equals("tagline"))
 				data.AddKvStr("msg-" + msg, wiki.Tagline());
 			else
-				data.AddKvStr("msg-" + msg, msg_mgr.Val_by_str_or_empty(msg));
+				data.AddKvStr("msg-" + msg, msg_mgr.Val_by_str_or_empty(wiki, msg));
 		}
 	}
 	private boolean once = true;
@@ -592,10 +592,23 @@ public class Xoh_page_wtr_wkr {
 		page.Html_data().Indicators().Build_json(data);
 		portal_mgr.Sidebar_mgr().Build_json(data);
 
-		data.AddKvStr("portal_div_personal", portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect));
-		data.AddKvStr("portal_div_ns", portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page));
-		data.AddKvStr("portal_div_view", portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect));
-		data.AddKvStr("portal_div_footer", portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date));
+		//data.AddKvStr("portal_div_personal", portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect));
+		data.AddKvNde("data-personal-menu",
+			Db_Nav_template.Build_Menu_Default_json(wiki, Bry_.new_a7("p-personal"), Bry_.new_a7("Personal"), portal_mgr.Txt_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect))
+		);
+
+		//data.AddKvStr("portal_div_ns", portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page));
+		data.AddKvNde("data-namespace-tabs",
+			Db_Nav_template.Build_Menu_json(wiki, Bry_.new_a7("p-namespaces"), Bry_.new_a7("Namespaces"), portal_mgr.Txt_ns_bry(wiki, page_ttl, ispage_in_wikisource, page))
+		);
+
+
+		//data.AddKvStr("portal_div_view", portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect));
+		data.AddKvNde("data-page-actions",
+			Db_Nav_template.Build_Menu_json(wiki, Bry_.new_a7("p-views"), Bry_.new_a7("Views"), portal_mgr.Txt_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect))
+		);
+
+                data.AddKvStr("portal_div_footer", portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date));
 
 		build_msg(data, wiki);
 

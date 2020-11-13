@@ -123,7 +123,7 @@ function getAccessKeyLabel( element ) {
  */
 function updateTooltipOnElement( element, titleElement ) {
 	var oldTitle, parts, regexp, newTitle, accessKeyLabel,
-		separatorMsg = mw.msg( 'word-separator' );
+		separatorMsg = mw.msg( 'word-separator' ).replace('&#32;', ' ');
 
 	oldTitle = titleElement.title;
 	if ( !oldTitle ) {

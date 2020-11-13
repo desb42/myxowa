@@ -138,61 +138,23 @@ app.wikis.get('~{wiki_key}') {
 }
 
 app.wikis.get('~{wiki_key}').html.portal {
-  div_personal =
+  txt_personal =
 <:["
-<nav id="p-personal" class="mw-portlet mw-portlet-personal vector-menu" aria-labelledby="p-personal-label" role="navigation" 
-	 >
-	<h3 id="p-personal-label">
-		<span>~{<>app.user.msgs.get('personaltools');<>}</span>
-	</h3>
-	<div class="body vector-menu-content">
-    ~{portal_indicators_pagesource}
-	</div>
-</nav>
+  ~{portal_indicators_pagesource}
 "]:>
 ;
-  div_ns =
+  txt_ns =
 <:["
-  <div id="left-navigation">
-    <!--NOTE: fix vertical tabs; ISSUE#:754 DATE:2020-07-02-->
-    <div id="p-namespaces" class="vector-menu vector-menu-tabs vectorTabs">
-      <h3>~{<>msgs.get('namespaces');<>}</h3>
-      <ul>
-        <li  id="ca-nstab-~{portal_ca}" class="~{portal_ns_subj_cls}"><span><a href="~{portal_ns_subj_href}" id="ca-nstab-main-href" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-nstab-main');<>}>~{portal_main}</a></span></li>
-        <li  id="ca-talk"       class="~{portal_ns_talk_cls}"><span><a href="~{portal_ns_talk_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-talk');<>}>~{<>msgs.get('talk');<>}</a></span></li>
-        ~{portal_extra}
-      </ul>
-    </div>~{portal_div_vnts}
-  </div>
+  <li id="ca-nstab-~{portal_ca}" class="~{portal_ns_subj_cls}"><span><a href="~{portal_ns_subj_href}" id="ca-nstab-main-href" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-nstab-main');<>}>~{portal_main}</a></span></li>
+  <li id="ca-talk" class="~{portal_ns_talk_cls}"><span><a href="~{portal_ns_talk_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-talk');<>}>~{<>msgs.get('talk');<>}</a></span></li>
+  ~{portal_extra}
 "]:>
 ;
-  div_view =
+  txt_view =
 <:["
-  <div id="right-navigation">
-    <!--NOTE: fix vertical tabs; ISSUE#:754 DATE:2020-07-02-->
-    <div id="p-views" class="vector-menu vector-menu-tabs vectorTabs">
-      <h3>~{<>msgs.get('views');<>}</h3>
-      <ul>
-        <li id="ca-view"    class="~{portal_view_read_cls}"><span><a href="~{portal_view_read_href}" class="xowa-hover-off">~{<>msgs.get('vector-view-view');<>}</a></span></li>
-        <li id="ca-edit"    class="~{portal_view_edit_cls}"><span><a href="~{portal_view_edit_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-edit');<>}>~{<>msgs.get('vector-view-edit');<>}</a></span></li>
-        <li id="ca-history" class="~{portal_view_html_cls}"><span><a href="~{portal_view_html_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('xowa-portal-view_html');<>}>~{<>msgs.get('xowa-portal-view_html');<>}</a></span>
-        </li>
-      </ul>
-    </div>
-    <div id="p-search" role="search">
-        <h3>
-            <label for="searchInput">Search</label>
-        </h3>
-        <form id="searchform" action="/wiki/~{<>app.gui.win_opts.search_url;<>}">
-          <div id="simpleSearch">
-            <input type="search" name="search" placeholder="~{<>msgs.get('searchsuggest-search');<>}" id="searchInput"~{<>msgs.get_html_accesskey_and_title('search');<>} value="~{search_text}" autocomplete="off">
-            <input type="hidden" name="fulltext" value="y">
-            <input type="submit"~{<>msgs.get_html_accesskey_and_title('search');<>} id="mw-searchButton" class="searchButton mw-fallbackSearchButton" />
-            <input type="submit" name="go" value="~{<>msgs.get('go');<>}" title="~{<>msgs.get('tooltip-search-go');<>}" id="searchButton" class="searchButton" />	
-          </div>
-        </form>
-    </div>
-  </div>
+  <li id="ca-view"    class="~{portal_view_read_cls}"><span><a href="~{portal_view_read_href}" class="xowa-hover-off">~{<>msgs.get('vector-view-view');<>}</a></span></li>
+  <li id="ca-edit"    class="~{portal_view_edit_cls}"><span><a href="~{portal_view_edit_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-edit');<>}>~{<>msgs.get('vector-view-edit');<>}</a></span></li>
+  <li id="ca-history" class="~{portal_view_html_cls}"><span><a href="~{portal_view_html_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('xowa-portal-view_html');<>}>~{<>msgs.get('xowa-portal-view_html');<>}</a></span>
 "]:>
 ;
   div_logo =
@@ -371,16 +333,9 @@ app.wikis.scripts.set
 ,
 <:['
 app.wikis.get('~{wiki_key}').html.portal
-.div_personal_(
+.txt_personal_(
 <:["
-<nav id="p-personal" class="mw-portlet mw-portlet-personal vector-menu" aria-labelledby="p-personal-label" role="navigation" 
-	 >
-	<h3 id="p-personal-label">
-		<span>~{<>app.user.msgs.get('personaltools');<>}</span>
-	</h3>
-	<div class="body vector-menu-content">
-	</div>
-</nav>
+//blank
 "]:>
 )
 ;

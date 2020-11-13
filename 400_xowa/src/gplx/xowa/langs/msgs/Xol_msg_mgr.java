@@ -71,6 +71,11 @@ public class Xol_msg_mgr implements Gfo_invk {
 		Xol_msg_itm itm = Itm_by_key_or_null(bry);
 		return itm == null ? or : itm.Val();
 	}
+	public byte[] Val_by_str_or_empty(Xowe_wiki wiki, String str) {return Val_by_bry_or(wiki, Bry_.new_u8(str), Bry_.Empty);}
+	public byte[] Val_by_bry_or(Xowe_wiki wiki, byte[] bry, byte[] or) {
+		Xol_msg_itm itm = Itm_by_key_or_null(bry);
+		return itm == null ? or : wiki.Parser_mgr().Main().Expand_tmpl(itm.Val());
+	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_lang))					return owner;
 		else if	(ctx.Match(k, Invk_load_text))				Xol_lang_srl.Load_messages(this, m.ReadBry("v"));

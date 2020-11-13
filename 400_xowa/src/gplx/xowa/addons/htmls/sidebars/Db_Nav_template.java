@@ -26,6 +26,12 @@ public class Db_Nav_template {
 	public static Json_nde Build_Sidebar_json(Xowe_wiki wiki, byte[] id, byte[] text, byte[] itms, int iter_count) {
 		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_PORTAL, iter_count);
 	}
+	public static Json_nde Build_Menu_json(Xowe_wiki wiki, byte[] id, byte[] text, byte[] itms) {
+		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_TABS, 1);
+	}
+	public static Json_nde Build_Menu_Default_json(Xowe_wiki wiki, byte[] id, byte[] text, byte[] itms) {
+		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_DEFAULT, 1);
+	}
 	public static void Render_Sidebar(Xowe_wiki wiki, Bry_bfr bfr, Json_nde data) {
 		if (once) {
 			once = false;
