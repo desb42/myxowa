@@ -167,70 +167,6 @@ $(".CategoryTreeEmptyBullet + a + span")
 		}
 	);
 
-/* ==Category page fixes== */
-// Apply only to category pages
-// works together with [[Template:catfix]]
-if (mw.config.get('wgNamespaceNumber') === 14) {
-	jQuery(function () {
-		var wrapper;
-		// Apply only to pages containing an element with the id "catfix"
-		if (!(wrapper = document.getElementById("catfix")))
-			return;
-		
-		xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki/mediawiki.Title.js', function () {
-		//mw.loader.using(['mediawiki.Title'], function () {
-			// Get the language name and script wrapper
-			var langname = wrapper.className.split("CATFIX-")[1];
-			wrapper = wrapper.getElementsByTagName("*")[0] || document.createElement("span");
-			
-			var anchor = "";
-			if (langname.length > 0)
-				anchor = "#" + langname;
-			
-			// Process each link in the category listing
-			jQuery("#mw-pages>.mw-content-ltr li>a")
-				.add("#newest-and-oldest-pages tr li>a").each(function () {
-				try {
-					var titleobj = new mw.Title(this.textContent || this.innerText);
-					
-					// If the page is not in mainspace, reconstruction or not an appendix page beginning with the language name (i.e. reconstructions), then skip
-					if (!([0, 1, 114, 118].indexOf(titleobj.getNamespaceId()) != -1 || (titleobj.getNamespaceId() == 100 && titleobj.getNameText().substr(0, langname.length + 1) == langname + "/")))
-						return;
-					
-					var textNodeToWrap = this;
-					// Add the anchor only to mainspace pages
-					if (titleobj.getNamespaceId() === 0)
-						this.setAttribute("href", this.getAttribute("href", 2) + anchor);
-					if (titleobj.getNamespaceId() === 1 || titleobj.getNamespaceId() === 114) { //talk, citations
-						textNodeToWrap = document.createTextNode(titleobj.getNameText());
-						$(this).empty()
-							.append(titleobj.getNamespacePrefix())
-							.append($(textNodeToWrap));
-					}
-					
-					// Insert the wrapper around the link
-					var parentOfTextNodeToWrap = textNodeToWrap.parentNode;
-					var clone = wrapper.cloneNode(false);
-					parentOfTextNodeToWrap.removeChild(textNodeToWrap);
-					clone.appendChild(textNodeToWrap);
-					parentOfTextNodeToWrap.appendChild(clone);
-				} catch (e) {
-				}
-			});
-		});
-	});
-}
-
-/* ==[[MediaWiki:Edit.js]]== */
-//$(function () {
-//	if (mw.config.get('wgAction') === 'edit' || mw.config.get('wgAction') === 'submit' 
-//			|| $('#editpage-specialchars').length > 0) {
-//		mw.loader.using(['mediawiki.cookie'], function() {
-//			mw.loader.load('/w/index.php?title=MediaWiki:Edit.js&action=raw&ctype=text/javascript');
-//		});
-//	}
-//});
-
 // [[User:Yair_rand/FindTrans.js]]
 //if (mw.config.get('wgPageName') === 'Special:Search') {
 //	mw.loader.load('/w/index.php?title=User:Yair_rand/FindTrans.js&action=raw&ctype=text/javascript');
@@ -298,447 +234,6 @@ if (mw.config.get('wgNamespaceNumber') === 14) {
 if (mw.config.get('wgPageName') === 'Help:Tips_and_tricks') {
 	importScript('MediaWiki:CustomSearch.js');
 }
-
-/* ==Visibility toggling== */
-var VisibilityToggles = window.VisibilityToggles = {
-	// toggles[category] = [[show, hide],...]; statuses[category] = [true, false,...]; buttons = <li>
-	toggles: {},
-	statuses: {},
-	buttons: null,
-	
-	// Add a new toggle, adds a Show/Hide category button in the toolbar,
-	// and will call show_function and hide_function once on register, and every alternate click.
-	register: function (category, show_function, hide_function) {
-		var id = 0;
-		if (!this.toggles[category]) {
-			this.toggles[category] = [];
-			this.statuses[category] = [];
-		} else {
-			id = this.toggles[category].length;
-		}
-		this.toggles[category].push([show_function, hide_function]);
-		this.statuses[category].push(this.currentStatus(category));
-		this.addGlobalToggle(category);
-		
-		(this.statuses[category][id] ? show_function : hide_function)();
-		
-		return function () {
-			var statuses = VisibilityToggles.statuses[category];
-			statuses[id] = !statuses[id];
-			VisibilityToggles.checkGlobalToggle(category);
-			return (statuses[id] ? show_function : hide_function)();
-		};
-	},
-	
-	// Add a new global toggle to the side bar
-	addGlobalToggle: function (category) {
-		if (document.getElementById('p-visibility-' + category))
-			return;
-		if (this.buttons === null) {
-			this.buttons = $('<ul>');
-			var collapsed = mw.cookie.get("vector-nav-p-visibility") === "false",
-				toolbox = $('<div>', {
-						'class': "portal portlet " + (collapsed ? "collapsed" : "expanded"),
-						'id': 'p-visibility'
-					})
-					.append($('<h3>Visibility</h3>'))
-					.append($('<div>').addClass("pBody body").css("display", "block")
-							.append(this.buttons));
-			var sidebar = document.getElementById('mw-panel') || document.getElementById('column-one');
-			var insert = document.getElementById('p-lang') || document.getElementById('p-feedback');
-			if (insert)
-				$(insert).before(toolbox);
-			else
-				//$(sidebar).appendChild(toolbox);
-				$(sidebar).append(toolbox);
-		}
-		var status = this.currentStatus(category);
-		var newToggle = $('<li>').append($('<a>', {
-				id: 'p-visibility-' + category,
-				style: 'cursor: pointer',
-		href: '#visibility-' + category}).on("click", function (e) {
-					VisibilityToggles.toggleGlobal(category);
-					if (e && e.preventDefault)
-						e.preventDefault();
-					else
-						window.event.returnValue = false;
-					return false;
-				}).text((status ? 'Hide ' : 'Show ') + category));
-		
-		this.buttons.children().filter(function(i, elem) {
-			return elem.id < newToggle.id;
-		}).first().before(newToggle);
-
-		this.buttons.append(newToggle);
-	},
-	
-	// Update the toggle-all buttons when all things are toggled one way
-	checkGlobalToggle: function (category) {
-		var statuses = this.statuses[category];
-		var status = statuses[0];
-		for (var i = 1; i < statuses.length; i++) {
-			if (status != statuses[i])
-				return;
-		}
-		document.getElementById('p-visibility-' + category).innerHTML = (status ? 'Hide ' : 'Show ') + category;
-	},
-	
-	// Toggle all un-toggled elements when the global button is clicked
-	toggleGlobal: function (category) {
-		var status = document.getElementById('p-visibility-' + category).innerHTML.indexOf('Show ') === 0;
-		for (var i = 0; i < this.toggles[category].length; i++) {
-			if (this.statuses[category][i] != status) {
-				this.toggles[category][i][status ? 0 : 1]();
-				this.statuses[category][i] = status;
-			}
-		}
-		document.getElementById('p-visibility-' + category).innerHTML = (status ? 'Hide ' : 'Show ') + category;
-		var current = mw.cookie.get('Visibility');
-		if (!current)
-			current = ";";
-		current = current.replace(';' + category + ';', ';');
-		if (status)
-			current = current + category + ";";
-		mw.cookie.set('Visibility', current);
-	},
-	
-	currentStatus: function (category) {
-		if (location.hash.toLowerCase().split('_')[0] == '#' + category.toLowerCase())
-			return true;
-		if (location.href.search(/[?](.*&)?hidecats=/) > 0) {
-			var hidecats = location.href;
-			hidecats = hidecats.replace(/^[^?]+[?]((?!hidecats=)[^&]*&)*hidecats=/, '');
-			hidecats = hidecats.replace(/&.*/, '');
-			hidecats = hidecats.split(',');
-			for (var i = 0; i < hidecats.length; ++i)
-				if (hidecats[i] == category || hidecats[i] == 'all')
-					return false;
-				else if (hidecats[i] == '!' + category || hidecats[i] == 'none')
-					return true;
-		}
-//		if (mw.cookie.get('WiktionaryPreferencesShowNav') == 'true')
-//			return true;
-//		if ((mw.cookie.get('Visibility') || "").indexOf(';' + category + ';') >= 0)
-//			return true;
-		// TODO check category-specific cookies
-		return false;
-	}
-};
-
-
-/* == NavBars == */
-var NavigationBarHide = 'hide ▲';
-var NavigationBarShow = 'show ▼';
-
-function getToggleCategory(element, defaultCategory) {
-	if ($(element).find('table').first().is(".translations"))
-		return "translations";
-	
-	var heading = element;
-	while ((heading = heading.previousSibling)) {
-		if (/[hH][4-6]/.test(heading.nodeName)) {
-			if (heading.getElementsByTagName('span')[1])
-				heading = heading.getElementsByTagName('span')[0];
-			return jQuery(heading).text().toLowerCase()
-			// jQuery's .text() is inconsistent about whitespace:
-				.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ')
-				// remove numbers added by the "Auto-number headings" pref:
-				.replace(/^[1-9][0-9.]+ ?/, '');
-		} else if (/[hH][1-3]/.test(heading.nodeName))
-			break;
-	}
-	
-	return defaultCategory;
-}
-
-function createNavToggle(navFrame) {
-	var navHead, navContent;
-	for (var j = 0; j < navFrame.childNodes.length; j++) {
-		var div = navFrame.childNodes[j];
-		if (/(^|[^a-zA-Z0-9_\-])NavHead(?![a-zA-Z0-9_\-])/.test(div.className))
-			navHead = div;
-		if (/(^|[^a-zA-Z0-9_\-])NavContent(?![a-zA-Z0-9_\-])/.test(div.className))
-			navContent = div;
-	}
-	if (!navHead || !navContent)
-		return;
-	// Step 1, don't react when a subitem is clicked.
-	$(navHead).find("a").on("click", function (e) {
-		if (e && e.stopPropagation)
-			e.stopPropagation();
-		else
-			window.event.cancelBubble = true;
-	});
-			
-	// Step 2, toggle visibility when bar is clicked.
-	// NOTE This function was chosen due to some funny behaviour in Safari.
-	var $navToggle = $('<a>');
-	
-	$('<span>').addClass('NavToggle')
-		.append($navToggle)
-		.prependTo(navHead);
-	
-	navHead.style.cursor = "pointer";
-	navHead.onclick = VisibilityToggles.register(getToggleCategory(navFrame, "other boxes"),
-		function show() {
-			$navToggle.html(NavigationBarHide);
-			if (navContent)
-				navContent.style.display = "block";
-		},
-		function hide() {
-			$navToggle.html(NavigationBarShow);
-			if (navContent)
-				navContent.style.display = "none";
-		});
-}
-
-
-/* ==Hidden Quotes== */
-function setupHiddenQuotes(li) {
-	var HQToggle, liComp, dl;
-	var HQShow = 'quotations ▼';
-	var HQHide = 'quotations ▲';
-	function show() {
-		HQToggle.html(HQHide);
-		$(li).children("ul").show();
-	}
-	function hide() {
-		HQToggle.html(HQShow);
-		$(li).children("ul").hide();
-	}
-	
-	for (var k = 0; k < li.childNodes.length; k++) {
-		// Look at each component of the definition.
-		liComp = li.childNodes[k];
-		if (liComp.nodeName.toLowerCase() === "dl" && !dl) {
-			dl = liComp;
-		}
-		// If we find a ul or dl, we have quotes or example sentences, and thus need a button.
-		if (/^(ul|UL)$/.test(liComp.nodeName)) {
-			HQToggle = $('<a>');
-			$(dl || liComp).before($('<span>').addClass('HQToggle').append(HQToggle));
-			HQToggle.on("click", VisibilityToggles.register('quotations', show, hide));
-			break;
-		}
-	}
-}
-
-/* == View Switching == */
-function showAll(elems) {
-	for (var i = 0, length = elems.length; i < length; ++i) {
-		var elem = elems[i];
-		var nodeName = elem.nodeName;
-		elem.style.display =
-			  nodeName == 'TABLE'					? 'table'
-			: nodeName == 'TR'						? 'table-row'
-			: nodeName == 'TD' || nodeName == 'TH'	? 'table-cell'
-			: nodeName == 'LI'						? 'list-item'
-			: 'block';
-	}
-}
-
-function viewSwitching($rootElement) {
-	var showButtonText = $rootElement.data("vs-showtext") || 'more ▼';
-	var hideButtonText = $rootElement.data("vs-hidetext") || 'less ▲';
-	
-	var toSkip = $rootElement.find(".vsSwitcher").find("*");
-	var elemsToHide = $rootElement.find(".vsHide").not(toSkip);
-	var elemsToShow = $rootElement.find(".vsShow").not(toSkip);
-	
-	// Find the element to place the toggle button in.
-	var toggleElement = $rootElement.find(".vsToggleElement").not(toSkip).first();
-	
-	// The toggleElement becomes clickable in its entirety, but
-	// we need to prevent this if a contained link is clicked instead.
-	toggleElement.children("a").on("click", function (e) {
-		if (e && e.stopPropagation)
-			e.stopPropagation();
-		else
-			window.event.cancelBubble = true;
-	});
-	
-	// Add the toggle button.
-	var toggleButton = $('<a>');
-	
-	$('<span>').addClass('NavToggle').append(toggleButton).prependTo(toggleElement);
-	
-	// Determine the visibility toggle category (for the links in the bar on the left).
-	var toggleCategory = $rootElement.data("toggle-category");
-	if (!toggleCategory) {
-		var classNames = $rootElement.attr("class").split(/\s+/);
-		
-		for (var i = 0; i < classNames.length; ++i) {
-			var className = classNames[i].split('-');
-			
-			if (className[0] == 'vsToggleCategory') {
-				toggleCategory = className[1];
-			}
-		}
-	}
-	
-	if (!toggleCategory)
-		toggleCategory = "others";
-	
-	// Register the visibility toggle.
-	toggleElement.css("cursor", "pointer");
-	toggleElement.on("click", VisibilityToggles.register(toggleCategory,
-		function show() {
-			toggleButton.html(hideButtonText);
-			elemsToShow.hide();
-			showAll(elemsToHide);
-		},
-		function hide() {
-			toggleButton.html(showButtonText);
-			showAll(elemsToShow);
-			elemsToHide.hide();
-		}));
-}
-
-/* ==List switching== */
-(function listSwitcherIIFE () {
-// Number of rows of list items to show in the hidden state of a "list switcher" list.
-// Customize by adding
-// window.listSwitcherCount = <your preferred number of rows>;
-// to your common.js before loading this script.
-window.listSwitcherRowCount = window.listSwitcherRowCount || 3;
-
-var $listSwitchers = $(".list-switcher");
-
-if ($listSwitchers.length > 0) {	// functions declared with var to circumvent unnecessary lint error
-	var getListItemsToHide = function ($listItems, columnCount, rowsInShowState) {
-		var count = $listItems.length;
-		var itemsPerColumn = Math.ceil(count / columnCount);
-		
-		var $elemsToHide = $();
-		if (itemsPerColumn > rowsInShowState) {
-			for (var i = 0; i < columnCount; ++i) {
-				var columnStart = i * itemsPerColumn;
-				$elemsToHide = $elemsToHide
-					.add($listItems.slice(columnStart + rowsInShowState, columnStart + itemsPerColumn));
-			}
-		}
-		
-		return $elemsToHide;
-	};
-	
-	var enableListSwitch = function ($rootElement, rowsInShowState) {
-		// Number of columns must be set in data-term-list-column-count attribute
-		// of the element with class term-list.
-		var $termList = $rootElement.find(".term-list");
-		
-		// Find the element to place the toggle button in.
-		var $toggleElement = $rootElement.find(".list-switcher-element");
-		
-		var columnCount = parseInt($termList.data("column-count"), 10);
-		if (!(columnCount && columnCount > 0)) {
-			$toggleElement.hide();
-			return;
-		}
-		
-		var $listItems = $rootElement.find("ul").first().find("li");
-		var $toHide = getListItemsToHide($listItems, columnCount, rowsInShowState);
-		
-		// Don't do anything if there aren't any items to hide.
-		if ($toHide.length === 0) {
-			$toggleElement.hide();
-			return;
-		}
-		
-		$toggleElement.css({
-			"width": "50%",
-			"cursor": "pointer"
-		});
-		
-		// Add the toggle button.
-		var $toggleButton = $('<a>');
-		
-		var rootBackgroundColor = $termList.css("background-color"),
-			rootBackground = $termList.css("background");
-		var $navToggle = $('<span>').addClass('NavToggle');
-		if (rootBackgroundColor || rootBackground)
-			$navToggle.css(rootBackgroundColor ? "background-color" : "background",
-				rootBackgroundColor || rootBackground);
-		
-		// The $toggleElement becomes clickable in its entirety, but
-		// we need to prevent this if a contained link is clicked instead.
-		$toggleElement.children("a").on("click", function (e) {
-			if (e && e.stopPropagation)
-				e.stopPropagation();
-			else
-				window.event.cancelBubble = true;
-		});
-		
-		// Determine the visibility toggle category (for the links in the bar on the
-		// left). It will either be the value of the "data-toggle-category"
-		// attribute or will be based on the text of the closest preceding
-		// fourth-to-sixth-level header.
-		var toggleCategory = $rootElement.data("toggle-category")
-			|| getToggleCategory($rootElement[0], "other lists");
-		
-		// Determine the text for the $toggleButton.
-		var showButtonText = $toggleElement.data("showtext") || 'more ▼';
-		var hideButtonText = $toggleElement.data("hidetext") || 'less ▲';
-		
-		// Register the visibility toggle.
-		$toggleElement.on("click", VisibilityToggles.register(toggleCategory,
-			function show() {
-				$toggleButton.html(hideButtonText);
-				$toHide.show();
-			},
-			function hide() {
-				$toggleButton.html(showButtonText);
-				$toHide.hide();
-			}));
-		
-		// Add the toggle button to the DOM tree.
-		$navToggle.append($toggleButton).prependTo($toggleElement);
-		$toggleElement.show();
-	};
-	
-	for (var i = 0; i < $listSwitchers.length; ++i) {
-		enableListSwitch($($listSwitchers[i]), window.listSwitcherRowCount);
-	}
-}
-
-})();
-
-/* == Apply three functions defined above == */
-//$.when($.ready, mw.loader.using('mediawiki.cookie')).done(function(){
-$(document).ready(function(){
-	//NavToggles
-	var divs = jQuery(".NavFrame");
-	for (var i = 0; i < divs.length; i++) {
-		// XXX: some templates use a class of NavFrame for the style, but for legacy reasons, are not NavFrames
-		// if (divs[i].className == "NavFrame") {
-		createNavToggle(divs[i]);
-		// }
-	}
-	
-	//quotes
-	if (mw.config.get('wgNamespaceNumber') === 0) {
-		// First, find all the ordered lists, i.e. all the series of definitions.
-		$('ol > li').each(function(){
-			setupHiddenQuotes(this);
-		});
-	}
-	
-	//view switching
-	$('.vsSwitcher').each(function(){
-		viewSwitching($(this));
-	});
-});
-
-jQuery(mw).on('LivePreviewDone', function (ev, sels) {
-	var ols = jQuery(sels.join(',')).find('ol');
-	for (var i = 0; i < ols.length; i++) {
-		for (var j = 0; j < ols[i].childNodes.length; j++) {
-			var li = ols[i].childNodes[j];
-			if (li.nodeName.toUpperCase() == 'LI') {
-				setupHiddenQuotes(li);
-			}
-		}
-	}
-});
 
 /* == [[WT:FEED]] == */
 // used to be [[User:Conrad.Irwin/feedback.js]]
@@ -864,3 +359,629 @@ $(function () {
 //			}
 //		});
 //});
+
+/******* en.wiktionary.org/wiki/MediaWiki:Gadget-VisibilityToggles.js *******/
+/* eslint-env es5, browser, jquery */
+/* eslint semi: "error" */
+/* jshint esversion: 5, eqeqeq: true */
+/* globals $, mw */
+/* requires mw.cookie, mw.storage */
+(function VisibilityTogglesIIFE () {
+"use strict";
+
+// Toggle object that is constructed so that `toggle.status = !toggle.status`
+// automatically calls either `toggle.show()` or `toggle.hide()` as appropriate.
+// Creating toggle also automatically calls either the show or the hide function.
+function Toggle (showFunction, hideFunction) {
+	this.show = showFunction, this.hide = hideFunction;
+}
+
+Toggle.prototype = {
+	get status () {
+		return this._status;
+	},
+	set status (newStatus) {
+		if (typeof newStatus !== "boolean")
+			throw new TypeError("Value of 'status' must be a boolean.");
+		if (newStatus === this._status)
+			return;
+
+		this._status = newStatus;
+
+		if (this._status !== this.toggleCategory.status)
+			this.toggleCategory.updateToggle(this._status);
+
+		if (this._status)
+			this.show();
+		else
+			this.hide();
+	},
+};
+
+/*
+ * Handles storing a boolean value associated with a `name` stored in
+ * localStorage under `key`.
+ *
+ * The `get` method returns `true`, `false`, or `undefined` (if the storage
+ * hasn't been tampered with).
+ * The `set` method only allows setting `true` or `false`.
+ */
+function BooleanStorage(key, name) {
+	if (typeof key !== "string")
+		throw new TypeError("Expected string");
+
+	if (!(typeof name === "string" && name !== "")) {
+		throw new TypeError("Expected non-empty string");
+	}
+	this.key = key; // key for localStorage
+	this.name = name; // name of toggle category
+
+	function convertOldCookie(cookie) {
+		return cookie.split(';')
+			.filter(function(e) { return e !== ''; })
+			.reduce(function(memo, currentValue) {
+				var match = /(.+?)=(\d)/.exec(currentValue); // only to test for temporary =[01] format
+				if (match) {
+					memo[match[1]] = Boolean(Number(match[2]));
+				} else {
+					memo[currentValue] = true;
+				}
+				return memo;
+			}, {});
+	}
+	// Look for cookie in old format.
+	var cookie = mw.cookie.get(key);
+	if (cookie !== null) {
+		this.obj = $.extend(this.obj, convertOldCookie(cookie));
+		mw.cookie.set(key, null);  // Remove cookie.
+	}
+}
+
+BooleanStorage.prototype = {
+	get: function () {
+		return this.obj[this.name];
+	},
+
+	set: function (value) {
+		if (typeof value !== "boolean")
+			throw new TypeError("Expected boolean");
+
+		var obj = this.obj;
+		if (obj[this.name] !== value) {
+			obj[this.name] = value;
+			this.obj = obj;
+		}
+	},
+
+	// obj allows getting and setting the object version of the stored value.
+	get obj() {
+		if (typeof this.rawValue !== "string")
+			return {};
+		try {
+			return JSON.parse(this.rawValue);
+		} catch (e) {
+			if (e instanceof SyntaxError) {
+				return {};
+			} else {
+				throw e;
+			}
+		}
+	},
+
+	set obj(value) {
+		// throws TypeError ("cyclic object value")
+		this.rawValue = JSON.stringify(value);
+	},
+
+	// rawValue allows simple getting and setting of the stringified object.
+	get rawValue () {
+		return mw.storage.get(this.key);
+	},
+
+	set rawValue (value) {
+		return mw.storage.set(this.key, value);
+	},
+};
+
+
+// This is a version of the actual CSS identifier syntax (described here:
+// https://stackoverflow.com/a/2812097), with only ASCII and that must begin
+// with an alphabetic character.
+var asciiCssIdentifierRegex = /^[a-zA-Z][a-zA-Z0-9_-]+$/;
+
+function ToggleCategory (name, defaultStatus) {
+	this.name = name;
+	this.sidebarToggle = this.newSidebarToggle();
+	this.storage = new BooleanStorage("Visibility", name);
+	this.status = this.getInitialStatus(defaultStatus);
+}
+
+// Have toggle category inherit array methods.
+ToggleCategory.prototype = [];
+
+ToggleCategory.prototype.addToggle = function (showFunction, hideFunction) {
+	var toggle = new Toggle(showFunction, hideFunction);
+	toggle.toggleCategory = this;
+	this.push(toggle);
+	toggle.status = this.status;
+	return toggle;
+};
+
+// Generate an identifier consisting of a lowercase ASCII letter and a random integer.
+function randomAsciiCssIdentifier() {
+	var digits = 9;
+	var lowCodepoint = "a".codePointAt(0), highCodepoint = "z".codePointAt(0);
+	return String.fromCodePoint(
+			lowCodepoint + Math.floor(Math.random() * (highCodepoint - lowCodepoint)) - 1)
+		+ String(Math.floor(Math.random() * Math.pow(10, digits)));
+}
+
+function getCssIdentifier(name) {
+	name = name.replace(/\s+/g, "-");
+	// Generate a valid ASCII CSS identifier.
+	if (!asciiCssIdentifierRegex.test(name)) {
+		// Remove characters that are invalid in an ASCII CSS identifier.
+		name = name.replace(/^[^a-zA-Z]+/, "").replace(/[^a-zA-Z_-]+/g, "");
+		if (!asciiCssIdentifierRegex.test(name))
+			name = randomAsciiCssIdentifier();
+	}
+	return name;
+}
+
+// Add a new global toggle to the sidebar.
+ToggleCategory.prototype.newSidebarToggle = function () {
+	var name = getCssIdentifier(this.name);
+	var id = "p-visibility-" + name;
+	
+	var sidebarToggle = $("#" + id);
+	if (sidebarToggle.length > 0)
+		return sidebarToggle;
+
+	var listEntry = $("<li>");
+	sidebarToggle = $("<a>", {
+			id: id,
+			href: "#visibility-" + this.name,
+		})
+		.click((function () {
+			this.status = !this.status;
+			this.storage.set(this.status);
+			return false;
+		}).bind(this));
+
+	listEntry.append(sidebarToggle).appendTo(this.buttons);
+
+	return sidebarToggle;
+};
+
+// Update the status of the sidebar toggle for the category when all of its
+// toggles on the page are toggled one way.
+ToggleCategory.prototype.updateToggle = function (status) {
+	if (this.length > 0 && this.every(function (toggle) { return toggle.status === status; }))
+		this.status = status;
+};
+
+// getInitialStatus is only called when a category is first created.
+ToggleCategory.prototype.getInitialStatus = function (defaultStatus) {
+	function isFragmentSet(name) {
+		return location.hash.toLowerCase().split("_")[0] === "#" + name.toLowerCase();
+	}
+
+	function isHideCatsSet(name) {
+		var match = /^.+?\?(?:.*?&)*?hidecats=(.+?)(?:&.*)?$/.exec(location.href);
+		if (match !== null) {
+			var hidecats = match[1].split(",");
+			for (var i = 0; i < hidecats.length; ++i) {
+				switch (hidecats[i]) {
+					case name: case "all":
+						return false;
+					case "!" + name: case "none":
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	function isWiktionaryPreferencesCookieSet() {
+		return mw.cookie.get("WiktionaryPreferencesShowNav") === "true";
+	}
+	// TODO check category-specific cookies
+	return isFragmentSet(this.name)
+		|| isHideCatsSet(this.name)
+		|| isWiktionaryPreferencesCookieSet()
+		|| (function(storedValue) {
+            return storedValue !== undefined ? storedValue : Boolean(defaultStatus);
+        }(this.storage.get()));
+};
+
+Object.defineProperties(ToggleCategory.prototype, {
+	status: {
+		get: function () {
+			return this._status;
+		},
+		set: function (status) {
+			if (typeof status !== "boolean")
+				throw new TypeError("Value of 'status' must be a boolean.");
+			if (status === this._status)
+				return;
+
+			this._status = status;
+
+			// Change the state of all Toggles in the ToggleCategory.
+			for (var i = 0; i < this.length; i++)
+				this[i].status = status;
+
+			this.sidebarToggle.html((status ? "Hide " : "Show ") + this.name);
+		},
+	},
+
+	buttons: {
+		get: function () {
+			var buttons = $("#p-visibility ul");
+			if (buttons.length > 0)
+				return buttons;
+			buttons = $("<ul>");
+			var collapsed = mw.cookie.get("vector-nav-p-visibility") === "false";
+			var toolbox = $("<nav>", {
+					"class": "vector-menu vector-menu-portal portal portlet",
+					"id": "p-visibility"
+				})
+				.append($("<h3>Visibility</h3>"))
+				.append($("<div>", { class: "pBody body" }).append(buttons));
+			var insert = document.getElementById("p-lang") || document.getElementById("p-feedback");
+			if (insert) {
+				$(insert).before(toolbox);
+			} else {
+				var sidebar = document.getElementById("mw-panel") || document.getElementById("column-one");
+				$(sidebar).append(toolbox);
+			}
+
+			return buttons;
+		}
+	}
+});
+
+function VisibilityToggles () {
+	// table containing ToggleCategories
+	this.togglesByCategory = {};
+}
+
+// Add a new toggle, adds a Show/Hide category button in the toolbar.
+// Returns a function that when called, calls showFunction and hideFunction
+// alternately and updates the sidebar toggle for the category if necessary.
+VisibilityToggles.prototype.register = function (category, showFunction, hideFunction, defaultStatus) {
+	if (!(typeof category === "string" && category !== ""))
+		return;
+
+	var toggle = this.addToggleCategory(category, defaultStatus)
+					.addToggle(showFunction, hideFunction);
+
+	return function () {
+		toggle.status = !toggle.status;
+	};
+};
+
+VisibilityToggles.prototype.addToggleCategory = function (name, defaultStatus) {
+	return (this.togglesByCategory[name] = this.togglesByCategory[name] || new ToggleCategory(name, defaultStatus));
+};
+
+window.alternativeVisibilityToggles = new VisibilityToggles();
+window.VisibilityToggles = window.alternativeVisibilityToggles;
+
+})();
+/******* en.wiktionary.org/wiki/MediaWiki:Gadget-defaultVisibilityToggles.js *******/
+/* jshint undef: true, esversion: 5 */
+/* globals $, jQuery, mw */
+
+(function defaultVisibilityTogglesIIFE() {
+"use strict";
+
+/* == NavBars == */
+var NavigationBarHide = "hide ▲";
+var NavigationBarShow = "show ▼";
+
+function getToggleCategory(element, defaultCategory) {
+	if ($(element).find("table").first().is(".translations"))
+		return "translations";
+	
+	var heading = element;
+	while ((heading = heading.previousElementSibling)) {
+		// tagName is always uppercase:
+		// https://developer.mozilla.org/en-US/docs/Web/API/Element/tagName
+		var num = heading.tagName.match(/H(\d)/);
+		if (num)
+			num = Number(num[1]);
+		else
+			continue;
+		if (4 <= num && num <= 6) {
+			if (heading.getElementsByTagName("span")[1])
+				heading = heading.getElementsByTagName("span")[0];
+			var text = jQuery(heading).text()
+				.toLowerCase()
+				// jQuery's .text() is inconsistent about whitespace:
+				.replace(/^\s+|\s+$/g, "").replace(/\s+/g, " ")
+				// remove numbers added by the "Auto-number headings" pref:
+				.replace(/^[1-9][0-9.]+ ?/, "");
+			// Toggle category must be convertible to a valid CSS identifier so
+			// that it can be used in an id selector in jQuery in
+			// ToggleCategory.prototype.newSidebarToggle
+			// in [[MediaWiki:Gadget-VisibilityToggles.js]].
+			// Spaces must later be converted to hyphens or underscores.
+			// Reference: https://drafts.csswg.org/selectors-4/#id-selectors
+			if (/^[a-zA-Z0-9\s_-]+$/.test(text))
+				return text;
+			else
+				break;
+		} else if (num)
+			break;
+	}
+	
+	return defaultCategory;
+}
+
+function createNavToggle(navFrame) {
+	var navHead, navContent;
+	for (var i = 0, children = navFrame.childNodes; i < children.length; ++i) {
+		var child = children[i];
+		if (child.nodeName === "DIV") {
+			var classList = child.classList;
+			if (classList.contains("NavHead"))
+				navHead = child;
+			if (classList.contains("NavContent"))
+				navContent = child;
+		}
+	}
+	if (!(navHead && navContent))
+		return;
+	
+	// Step 1, don't react when a subitem is clicked.
+	$(navHead).find("a").on("click", function (e) {
+		e.stopPropagation();
+	});
+			
+	// Step 2, toggle visibility when bar is clicked.
+	// NOTE This function was chosen due to some funny behaviour in Safari.
+	var $navToggle = $("<a>").attr("role", "button").attr("tabindex", "0");
+	
+	$("<span>").addClass("NavToggle")
+		.append($navToggle)
+		.prependTo(navHead);
+	
+	navHead.style.cursor = "pointer";
+	var toggleCategory = $(navFrame).data("toggle-category")
+		|| getToggleCategory(navFrame, "other boxes");
+	navHead.onclick = window.VisibilityToggles.register(toggleCategory,
+		function show() {
+			$navToggle.html(NavigationBarHide);
+			if (navContent)
+				navContent.style.display = "block";
+		},
+		function hide() {
+			$navToggle.html(NavigationBarShow);
+			if (navContent)
+				navContent.style.display = "none";
+		});
+}
+
+
+/* ==Hidden Quotes== */
+function setupHiddenQuotes(li) {
+	var HQToggle, liComp, dl;
+	var HQShow = "quotations ▼";
+	var HQHide = "quotations ▲";
+	function show() {
+		HQToggle.html(HQHide);
+		$(li).children("ul").show();
+	}
+	function hide() {
+		HQToggle.html(HQShow);
+		$(li).children("ul").hide();
+	}
+	
+	for (var k = 0; k < li.childNodes.length; k++) {
+		// Look at each component of the definition.
+		liComp = li.childNodes[k];
+		if (liComp.nodeName.toLowerCase() === "dl" && !dl) {
+			dl = liComp;
+		}
+		// If we find a ul or dl, we have quotes or example sentences, and thus need a button.
+		if (/^(ul|UL)$/.test(liComp.nodeName)) {
+			HQToggle = $("<a>").attr("role", "button").attr("tabindex", "0");
+			$(dl || liComp).before($("<span>").addClass("HQToggle").append(HQToggle));
+			HQToggle.on("click", window.VisibilityToggles.register("quotations", show, hide));
+			break;
+		}
+	}
+}
+
+/* == View Switching == */
+
+function viewSwitching($rootElement) {
+	var showButtonText = $rootElement.data("vs-showtext") || "more ▼";
+	var hideButtonText = $rootElement.data("vs-hidetext") || "less ▲";
+	
+	var toSkip = $rootElement.find(".vsSwitcher").find("*");
+	var elemsToHide = $rootElement.find(".vsHide").not(toSkip);
+	var elemsToShow = $rootElement.find(".vsShow").not(toSkip);
+	
+	// Find the element to place the toggle button in.
+	var toggleElement = $rootElement.find(".vsToggleElement").not(toSkip).first();
+	
+	// The toggleElement becomes clickable in its entirety, but
+	// we need to prevent this if a contained link is clicked instead.
+	toggleElement.children("a").on("click", function (e) {
+		e.stopPropagation();
+	});
+	
+	// Add the toggle button.
+	var toggleButton = $("<a>").attr("role", "button").attr("tabindex", "0");
+	
+	$("<span>").addClass("NavToggle").append(toggleButton).prependTo(toggleElement);
+	
+	// Determine the visibility toggle category (for the links in the bar on the left).
+	var toggleCategory = $rootElement.data("toggle-category");
+	if (!toggleCategory) {
+		var classNames = $rootElement.attr("class").split(/\s+/);
+		
+		for (var i = 0; i < classNames.length; ++i) {
+			var className = classNames[i].split("-");
+			
+			if (className[0] == "vsToggleCategory") {
+				toggleCategory = className[1];
+			}
+		}
+	}
+	
+	if (!toggleCategory)
+		toggleCategory = "others";
+	
+	// Register the visibility toggle.
+	toggleElement.css("cursor", "pointer");
+	toggleElement.on("click", window.VisibilityToggles.register(toggleCategory,
+		function show() {
+			toggleButton.html(hideButtonText);
+			elemsToShow.hide();
+			elemsToHide.show();
+		},
+		function hide() {
+			toggleButton.html(showButtonText);
+			elemsToShow.show();
+			elemsToHide.hide();
+		}));
+}
+
+/* ==List switching== */
+// Number of rows of list items to show in the hidden state of a "list switcher" list.
+// Customize by adding
+// window.listSwitcherCount = <your preferred number of rows>;
+// to your common.js before loading this script.
+window.listSwitcherRowCount = window.listSwitcherRowCount || 3;
+
+function getListItemsToHide($listItems, columnCount, rowsInShowState) {
+	var count = $listItems.length;
+	var itemsPerColumn = Math.ceil(count / columnCount);
+	
+	var $elemsToHide = $();
+	if (itemsPerColumn > rowsInShowState) {
+		for (var i = 0; i < columnCount; ++i) {
+			var columnStart = i * itemsPerColumn;
+			$elemsToHide = $elemsToHide
+				.add($listItems.slice(columnStart + rowsInShowState, columnStart + itemsPerColumn));
+		}
+	}
+	
+	return $elemsToHide;
+}
+
+function enableListSwitch ($rootElement, rowsInShowState) {
+	// Number of columns must be set in data-term-list-column-count attribute
+	// of the element with class term-list.
+	var $termList = $rootElement.find(".term-list");
+	
+	// Find the element to place the toggle button in.
+	var $toggleElement = $rootElement.find(".list-switcher-element");
+	
+	var columnCount = parseInt($termList.data("column-count"), 10);
+	if (!(columnCount && columnCount > 0)) {
+		$toggleElement.hide();
+		return;
+	}
+	
+	var $listItems = $rootElement.find("ul").first().find("li");
+	var $toHide = getListItemsToHide($listItems, columnCount, rowsInShowState);
+	
+	// Don't do anything if there aren't any items to hide.
+	if ($toHide.length === 0) {
+		$toggleElement.hide();
+		return;
+	}
+	
+	$toggleElement.css("cursor", "pointer");
+	
+	// Add the toggle button.
+	var $toggleButton = $("<a>").attr("role", "button").attr("tabindex", "0");
+	
+	var rootBackgroundColor = $termList.css("background-color"),
+		rootBackground = $termList.css("background");
+	var $navToggle = $("<span>").addClass("NavToggle");
+	if (rootBackgroundColor || rootBackground)
+		$navToggle.css(rootBackgroundColor ? "background-color" : "background",
+			rootBackgroundColor || rootBackground);
+	
+	// The $toggleElement becomes clickable in its entirety, but
+	// we need to prevent this if a contained link is clicked instead.
+	$toggleElement.children("a").on("click", function (e) {
+		e.stopPropagation();
+	});
+	
+	// Determine the visibility toggle category (for the links in the bar on the
+	// left). It will either be the value of the "data-toggle-category"
+	// attribute or will be based on the text of the closest preceding
+	// fourth-to-sixth-level header.
+	var toggleCategory = $rootElement.data("toggle-category")
+		|| getToggleCategory($rootElement[0], "other lists");
+	
+	// Determine the text for the $toggleButton.
+	var showButtonText = $toggleElement.data("showtext") || "more ▼";
+	var hideButtonText = $toggleElement.data("hidetext") || "less ▲";
+	
+	// Register the visibility toggle.
+	$toggleElement.on("click", window.VisibilityToggles.register(toggleCategory,
+		function show() {
+			$toggleButton.html(hideButtonText);
+			$toHide.show();
+		},
+		function hide() {
+			$toggleButton.html(showButtonText);
+			$toHide.hide();
+		}));
+	
+	// Add the toggle button to the DOM tree.
+	$navToggle.append($toggleButton).prependTo($toggleElement);
+	$toggleElement.show();
+}
+
+window.createNavToggle = createNavToggle;
+window.setupHiddenQuotes = setupHiddenQuotes;
+window.viewSwitching = viewSwitching;
+window.getToggleCategory = getToggleCategory;
+
+/* == Apply four functions defined above == */
+mw.hook('wikipage.content').add(function($content) {
+	// NavToggles
+	$('.NavFrame', $content).each(function(){
+		createNavToggle(this);
+	});
+
+	//quotes
+	if (mw.config.get('wgNamespaceNumber') === 0) {
+		// First, find all the ordered lists, i.e. all the series of definitions.
+		$('ol > li', $content).each(function(){
+			setupHiddenQuotes(this);
+		});
+	}
+
+	//view switching
+	$('.vsSwitcher', $content).each(function(){
+		viewSwitching($(this));
+	});
+
+	// list switching
+	$(".list-switcher", $content).each(function () {
+		enableListSwitch($(this), window.listSwitcherRowCount);
+	});
+});
+
+jQuery(mw).on("LivePreviewDone", function (ev, sels) {
+	var ols = jQuery(sels.join(",")).find("ol");
+	for (var i = 0; i < ols.length; i++) {
+		for (var j = 0; j < ols[i].childNodes.length; j++) {
+			var li = ols[i].childNodes[j];
+			if (li.nodeName.toUpperCase() == "LI") {
+				setupHiddenQuotes(li);
+			}
+		}
+	}
+});
+
+})();

@@ -74,7 +74,6 @@ public class Xow_portal_mgr implements Gfo_invk {
 	}
 	public byte[] Missing_ns_cls() {return missing_ns_cls;} public Xow_portal_mgr Missing_ns_cls_(byte[] v) {missing_ns_cls = v; return this;} private byte[] missing_ns_cls;	// NOTE: must be null due to Init check above
 	public Xoh_sidebar_mgr Sidebar_mgr() {return sidebar_mgr;} private Xoh_sidebar_mgr sidebar_mgr;
-	public Bry_fmtr Div_home_fmtr() {return div_home_fmtr;} private Bry_fmtr div_home_fmtr = Bry_fmtr.new_("");
 	public Xow_portal_mgr Init_assert() {if (init_needed) Init(); return this;}
 	public byte[] Div_jump_to() {return div_jump_to;} private byte[] div_jump_to = Bry_.Empty;
 	public void Init_by_lang(Xol_lang_itm lang) {
@@ -122,7 +121,6 @@ public class Xow_portal_mgr implements Gfo_invk {
 		Io_url night_logo = wiki.App().Fsys_mgr().Url_finder().Find_by_css_or(wiki.Domain_str(), "logo_night.png", String_.Ary("bin", "any", "xowa", "html", "css", "nightmode"), true);
 		div_logo_night = Init_fmtr(tmp_bfr, eval_mgr, div_logo_fmtr, main_page_href_bry, fsys_lnx_encoder.Encode_to_file_protocol(night_logo));
 
-		div_home_bry = Init_fmtr(tmp_bfr, eval_mgr, div_home_fmtr);
 		div_wikis_fmtr.Eval_mgr_(eval_mgr);
 		div_after_fmtr.Eval_mgr_(eval_mgr);
 		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
@@ -456,7 +454,6 @@ public class Xow_portal_mgr implements Gfo_invk {
 	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if      (ctx.Match(k, Invk_div_logo_))						div_logo_fmtr.Fmt_(m.ReadBry("v"));
-		else if (ctx.Match(k, Invk_div_home_))						div_home_fmtr.Fmt_(m.ReadBry("v"));
 		else if (ctx.Match(k, Invk_div_sync_))						div_sync_fmtr.Fmt_(m.ReadBry("v"));
 		else if (ctx.Match(k, Invk_div_wikis_))                                         div_wikis_fmtr.Fmt_(m.ReadBry("v"));
 		else if (ctx.Match(k, Invk_div_after_))                                         div_after_fmtr.Fmt_(m.ReadBry("v"));
@@ -481,8 +478,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 		return this;
 	}
 	private static final String 
-	  Invk_div_home_ = "div_home_"
-	, Invk_div_sync_ = "div_sync_"
+	  Invk_div_sync_ = "div_sync_"
 	, Invk_div_wikis_ = "div_wikis_"
 	, Invk_div_after_ = "div_after_"
 	, Invk_txt_categories = "txt_categories_"

@@ -18,11 +18,13 @@ import gplx.core.btries.Btrie_rv;
 import gplx.Bry_;
 public class Db_btrie_wtxt_1 implements Db_btrie {
 	private final Object[] objs;
+	private int found;
+	private int offset;
 	public Db_btrie_wtxt_1(Object[] objs) {this.objs = objs; }
 	public static byte[] Hash() { return Bry_.new_a7("1542566023a0d8d5ce27f3d323d63457"); }
-	private Db_btrie_result Match_with_b(byte b, byte[] src, int ofs, int src_len) {
-		int found = -1;
-		int offset = -1;
+	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
+		found = -1;
+		offset = -1;
 
 		switch (b) {
 			case 9:
@@ -618,7 +620,6 @@ public class Db_btrie_wtxt_1 implements Db_btrie {
 				}
 				break;
 		}
-		return new Db_btrie_result(found, offset);
 	}
 
 	@Override public Object Match_expand(Btrie_rv rv, byte[] src, int ofs, int src_len) {
@@ -627,14 +628,14 @@ public class Db_btrie_wtxt_1 implements Db_btrie {
 		//	rv.Init(ofs, null);
 		//	return null;
 		//}
-		Db_btrie_result res = Match_with_b(src[ofs], src, ofs, src_len);
-		if (res.found == -1) {
+		Match_with_b(src[ofs], src, ofs, src_len);
+		if (found == -1) {
 			rv.Init(ofs, null);
 			return null;
 		}
 		else {
-			Object rv_obj = objs[res.offset];
-			rv.Init(res.found, rv_obj);
+			Object rv_obj = objs[offset];
+			rv.Init(found, rv_obj);
 			return rv_obj;
 		}
 	}
@@ -642,12 +643,12 @@ public class Db_btrie_wtxt_1 implements Db_btrie {
 		// this check should have been made by parent call
 		//if (bgn_pos >= end_pos)
 		//	return null;
-		Db_btrie_result res = Match_with_b(src[bgn_pos], src, bgn_pos, end_pos);
-		if (res.found == -1) {
+		Match_with_b(src[bgn_pos], src, bgn_pos, end_pos);
+		if (found == -1) {
 			return null;
 		}
 		else {
-			Object rv_obj = objs[res.offset];
+			Object rv_obj = objs[offset];
 			return rv_obj;
 		}
 	}
@@ -657,14 +658,14 @@ public class Db_btrie_wtxt_1 implements Db_btrie {
 		//	rv.Init(ofs, null);
 		//	return null;
 		//}
-		Db_btrie_result res = Match_with_b(b, src, bgn_pos, end_pos);
-		if (res.found == -1) {
+		Match_with_b(b, src, bgn_pos, end_pos);
+		if (found == -1) {
 			rv.Init(bgn_pos, null);
 			return null;
 		}
 		else {
-			Object rv_obj = objs[res.offset];
-			rv.Init(res.found, rv_obj);
+			Object rv_obj = objs[offset];
+			rv.Init(found, rv_obj);
 			return rv_obj;
 		}
 	}

@@ -18,11 +18,13 @@ import gplx.core.btries.Btrie_rv;
 import gplx.Bry_;
 public class Db_btrie_http implements Db_btrie {
 	private final Object[] objs;
+	private int found;
+	private int offset;
 	public Db_btrie_http(Object[] objs) {this.objs = objs; }
 	public static byte[] Hash() { return Bry_.new_a7("ad4222bf913b59be22374478a4f86e42"); }
-	private Db_btrie_result Match_with_b(byte b, byte[] src, int ofs, int src_len) {
-		int found = -1;
-		int offset = -1;
+	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
+		found = -1;
+		offset = -1;
 
 		switch (b) {
 			case 'a':
@@ -78,7 +80,7 @@ public class Db_btrie_http implements Db_btrie {
 										}
 										break;
 									case 't':
-										if (ofs+7 < src_len && (src[ofs+4] | 32) == 'e' && (src[ofs+5] | 32) == 'n' && (src[ofs+6] | 32) == 't' && (src[ofs+7] | 32) == '-') {
+										if (ofs+7 < src_len && (src[ofs+4] | 32) == 'e' && (src[ofs+5] | 32) == 'n' && (src[ofs+6] | 32) == 't' && src[ofs+7] == '-') {
 											if (ofs+8 < src_len) switch ((src[ofs+8] | 32)) {
 												case 'l':
 													if (ofs+14 < src_len && (src[ofs+9] | 32) == 'e' && (src[ofs+10] | 32) == 'n' && (src[ofs+11] | 32) == 'g' && (src[ofs+12] | 32) == 't' && (src[ofs+13] | 32) == 'h' && src[ofs+14] == ':') {
@@ -161,7 +163,7 @@ public class Db_btrie_http implements Db_btrie {
 				break;
 			case 's':
 			case 'S':
-				if (ofs+9 < src_len && (src[ofs+1] | 32) == 'e' && (src[ofs+2] | 32) == 'c' && (src[ofs+3] | 32) == '-' && (src[ofs+4] | 32) == 'f' && (src[ofs+5] | 32) == 'e' && (src[ofs+6] | 32) == 't' && (src[ofs+7] | 32) == 'c' && (src[ofs+8] | 32) == 'h' && (src[ofs+9] | 32) == '-') {
+				if (ofs+9 < src_len && (src[ofs+1] | 32) == 'e' && (src[ofs+2] | 32) == 'c' && src[ofs+3] == '-' && (src[ofs+4] | 32) == 'f' && (src[ofs+5] | 32) == 'e' && (src[ofs+6] | 32) == 't' && (src[ofs+7] | 32) == 'c' && (src[ofs+8] | 32) == 'h' && src[ofs+9] == '-') {
 					if (ofs+10 < src_len) switch ((src[ofs+10] | 32)) {
 						case 'd':
 							if (ofs+14 < src_len && (src[ofs+11] | 32) == 'e' && (src[ofs+12] | 32) == 's' && (src[ofs+13] | 32) == 't' && src[ofs+14] == ':') {
@@ -239,7 +241,6 @@ public class Db_btrie_http implements Db_btrie {
 				}
 				break;
 		}
-		return new Db_btrie_result(found, offset);
 	}
 
 	@Override public Object Match_expand(Btrie_rv rv, byte[] src, int ofs, int src_len) {
@@ -248,14 +249,14 @@ public class Db_btrie_http implements Db_btrie {
 		//	rv.Init(ofs, null);
 		//	return null;
 		//}
-		Db_btrie_result res = Match_with_b(src[ofs], src, ofs, src_len);
-		if (res.found == -1) {
+		Match_with_b(src[ofs], src, ofs, src_len);
+		if (found == -1) {
 			rv.Init(ofs, null);
 			return null;
 		}
 		else {
-			Object rv_obj = objs[res.offset];
-			rv.Init(res.found, rv_obj);
+			Object rv_obj = objs[offset];
+			rv.Init(found, rv_obj);
 			return rv_obj;
 		}
 	}
@@ -263,12 +264,12 @@ public class Db_btrie_http implements Db_btrie {
 		// this check should have been made by parent call
 		//if (bgn_pos >= end_pos)
 		//	return null;
-		Db_btrie_result res = Match_with_b(src[bgn_pos], src, bgn_pos, end_pos);
-		if (res.found == -1) {
+		Match_with_b(src[bgn_pos], src, bgn_pos, end_pos);
+		if (found == -1) {
 			return null;
 		}
 		else {
-			Object rv_obj = objs[res.offset];
+			Object rv_obj = objs[offset];
 			return rv_obj;
 		}
 	}
@@ -278,14 +279,14 @@ public class Db_btrie_http implements Db_btrie {
 		//	rv.Init(ofs, null);
 		//	return null;
 		//}
-		Db_btrie_result res = Match_with_b(b, src, bgn_pos, end_pos);
-		if (res.found == -1) {
+		Match_with_b(b, src, bgn_pos, end_pos);
+		if (found == -1) {
 			rv.Init(bgn_pos, null);
 			return null;
 		}
 		else {
-			Object rv_obj = objs[res.offset];
-			rv.Init(res.found, rv_obj);
+			Object rv_obj = objs[offset];
+			rv.Init(found, rv_obj);
 			return rv_obj;
 		}
 	}

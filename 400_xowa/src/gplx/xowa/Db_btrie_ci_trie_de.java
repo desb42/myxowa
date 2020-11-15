@@ -18,11 +18,13 @@ import gplx.core.btries.Btrie_rv;
 import gplx.Bry_;
 public class Db_btrie_ci_trie_de implements Db_btrie {
 	private final Object[] objs;
+	private int found;
+	private int offset;
 	public Db_btrie_ci_trie_de(Object[] objs) {this.objs = objs; }
 	public static byte[] Hash() { return Bry_.new_a7("567c1a170f4c552d47b40345c0c64885"); }
-	private Db_btrie_result Match_with_b(byte b, byte[] src, int ofs, int src_len) {
-		int found = -1;
-		int offset = -1;
+	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
+		found = -1;
+		offset = -1;
 
 		switch (b) {
 			case '#':
@@ -31,7 +33,7 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 						if (ofs+2 < src_len) switch ((src[ofs+2] | 32)) {
 							case 'b':
 								if (ofs+9 < src_len && (src[ofs+3] | 32) == 's' && (src[ofs+4] | 32) == 'c' && (src[ofs+5] | 32) == 'h' && (src[ofs+6] | 32) == 'n' && (src[ofs+7] | 32) == 'i' && (src[ofs+8] | 32) == 't' && (src[ofs+9] | 32) == 't') {
-									if (ofs+11 < src_len && (src[ofs+10] | 32) == '-' && (src[ofs+11] | 32) == 'x') {
+									if (ofs+11 < src_len && src[ofs+10] == '-' && (src[ofs+11] | 32) == 'x') {
 										found = ofs + 12;
 										offset = 90; // ('#abschnitt-x', 90)
 									}
@@ -374,7 +376,7 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 						if (ofs+2 < src_len) switch ((src[ofs+2] | 32)) {
 							case 'o':
 								if (ofs+4 < src_len && (src[ofs+3] | 32) == 'w' && (src[ofs+4] | 32) == 'a') {
-									if (ofs+8 < src_len && (src[ofs+5] | 32) == '_' && (src[ofs+6] | 32) == 'd' && (src[ofs+7] | 32) == 'b' && (src[ofs+8] | 32) == 'g') {
+									if (ofs+8 < src_len && src[ofs+5] == '_' && (src[ofs+6] | 32) == 'd' && (src[ofs+7] | 32) == 'b' && (src[ofs+8] | 32) == 'g') {
 										found = ofs + 9;
 										offset = 79; // ('#xowa_dbg', 79)
 									}
@@ -515,7 +517,7 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 						}
 						break;
 					case -61:
-						if (ofs+6 < src_len && (src[ofs+2] | 32) == -68 && (src[ofs+3] | 32) == 'l' && (src[ofs+4] | 32) == 'l' && (src[ofs+5] | 32) == 'e' && (src[ofs+6] | 32) == 'n') {
+						if (ofs+6 < src_len && src[ofs+2] == -68 && (src[ofs+3] | 32) == 'l' && (src[ofs+4] | 32) == 'l' && (src[ofs+5] | 32) == 'e' && (src[ofs+6] | 32) == 'n') {
 							if (ofs+7 < src_len) switch ((src[ofs+7] | 32)) {
 								case 'l':
 									if (ofs+11 < src_len && (src[ofs+8] | 32) == 'i' && (src[ofs+9] | 32) == 'n' && (src[ofs+10] | 32) == 'k' && (src[ofs+11] | 32) == 's') {
@@ -586,7 +588,7 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 				if (ofs+1 < src_len && (src[ofs+1] | 32) == 'n') {
 					if (ofs+2 < src_len) switch ((src[ofs+2] | 32)) {
 						case 'i':
-							if (ofs+7 < src_len && (src[ofs+3] | 32) == 't' && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'a' && (src[ofs+6] | 32) == 'l' && (src[ofs+7] | 32) == '_') {
+							if (ofs+7 < src_len && (src[ofs+3] | 32) == 't' && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'a' && (src[ofs+6] | 32) == 'l' && src[ofs+7] == '_') {
 								if (ofs+8 < src_len) switch ((src[ofs+8] | 32)) {
 									case 'g':
 										if (ofs+12 < src_len && (src[ofs+9] | 32) == 'r' && (src[ofs+10] | 32) == 'o' && (src[ofs+11] | 32) == 's' && (src[ofs+12] | 32) == 's') {
@@ -614,8 +616,8 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 			case 'K':
 				if (ofs+1 < src_len) switch ((src[ofs+1] | 32)) {
 					case 'a':
-						if (ofs+13 < src_len && (src[ofs+2] | 32) == 'n' && (src[ofs+3] | 32) == 'o' && (src[ofs+4] | 32) == 'n' && (src[ofs+5] | 32) == 'i' && (src[ofs+6] | 32) == 's' && (src[ofs+7] | 32) == 'c' && (src[ofs+8] | 32) == 'h' && (src[ofs+9] | 32) == 'e' && (src[ofs+10] | 32) == '_' && (src[ofs+11] | 32) == 'u' && (src[ofs+12] | 32) == 'r' && (src[ofs+13] | 32) == 'l') {
-							if (ofs+15 < src_len && (src[ofs+14] | 32) == '_' && (src[ofs+15] | 32) == 'c') {
+						if (ofs+13 < src_len && (src[ofs+2] | 32) == 'n' && (src[ofs+3] | 32) == 'o' && (src[ofs+4] | 32) == 'n' && (src[ofs+5] | 32) == 'i' && (src[ofs+6] | 32) == 's' && (src[ofs+7] | 32) == 'c' && (src[ofs+8] | 32) == 'h' && (src[ofs+9] | 32) == 'e' && src[ofs+10] == '_' && (src[ofs+11] | 32) == 'u' && (src[ofs+12] | 32) == 'r' && (src[ofs+13] | 32) == 'l') {
+							if (ofs+15 < src_len && src[ofs+14] == '_' && (src[ofs+15] | 32) == 'c') {
 								found = ofs + 16;
 								offset = 83; // ('kanonische_url_c', 83)
 							}
@@ -680,8 +682,8 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 								}
 								break;
 							case 'k':
-								if (ofs+9 < src_len && (src[ofs+3] | 32) == 'a' && (src[ofs+4] | 32) == 'l' && (src[ofs+5] | 32) == 'e' && (src[ofs+6] | 32) == '_' && (src[ofs+7] | 32) == 'u' && (src[ofs+8] | 32) == 'r' && (src[ofs+9] | 32) == 'l') {
-									if (ofs+11 < src_len && (src[ofs+10] | 32) == '_' && (src[ofs+11] | 32) == 'c') {
+								if (ofs+9 < src_len && (src[ofs+3] | 32) == 'a' && (src[ofs+4] | 32) == 'l' && (src[ofs+5] | 32) == 'e' && src[ofs+6] == '_' && (src[ofs+7] | 32) == 'u' && (src[ofs+8] | 32) == 'r' && (src[ofs+9] | 32) == 'l') {
+									if (ofs+11 < src_len && src[ofs+10] == '_' && (src[ofs+11] | 32) == 'c') {
 										found = ofs + 12;
 										offset = 36; // ('lokale_url_c', 36)
 									}
@@ -724,7 +726,7 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 						}
 						break;
 					case 'r':
-						if (ofs+5 < src_len && (src[ofs+2] | 32) == '_' && (src[ofs+3] | 32) == 'u' && (src[ofs+4] | 32) == 'r' && (src[ofs+5] | 32) == 'l') {
+						if (ofs+5 < src_len && src[ofs+2] == '_' && (src[ofs+3] | 32) == 'u' && (src[ofs+4] | 32) == 'r' && (src[ofs+5] | 32) == 'l') {
 							found = ofs + 6;
 							offset = 13; // ('nr_url', 13)
 						}
@@ -966,8 +968,8 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 				break;
 			case 'v':
 			case 'V':
-				if (ofs+16 < src_len && (src[ofs+1] | 32) == 'o' && (src[ofs+2] | 32) == 'l' && (src[ofs+3] | 32) == 'l' && (src[ofs+4] | 32) == 's' && (src[ofs+5] | 32) == 't' && (src[ofs+6] | 32) == -61 && (src[ofs+7] | 32) == -92 && (src[ofs+8] | 32) == 'n' && (src[ofs+9] | 32) == 'd' && (src[ofs+10] | 32) == 'i' && (src[ofs+11] | 32) == 'g' && (src[ofs+12] | 32) == 'e' && (src[ofs+13] | 32) == '_' && (src[ofs+14] | 32) == 'u' && (src[ofs+15] | 32) == 'r' && (src[ofs+16] | 32) == 'l') {
-					if (ofs+18 < src_len && (src[ofs+17] | 32) == '_' && (src[ofs+18] | 32) == 'c') {
+				if (ofs+16 < src_len && (src[ofs+1] | 32) == 'o' && (src[ofs+2] | 32) == 'l' && (src[ofs+3] | 32) == 'l' && (src[ofs+4] | 32) == 's' && (src[ofs+5] | 32) == 't' && src[ofs+6] == -61 && src[ofs+7] == -92 && (src[ofs+8] | 32) == 'n' && (src[ofs+9] | 32) == 'd' && (src[ofs+10] | 32) == 'i' && (src[ofs+11] | 32) == 'g' && (src[ofs+12] | 32) == 'e' && src[ofs+13] == '_' && (src[ofs+14] | 32) == 'u' && (src[ofs+15] | 32) == 'r' && (src[ofs+16] | 32) == 'l') {
+					if (ofs+18 < src_len && src[ofs+17] == '_' && (src[ofs+18] | 32) == 'c') {
 						found = ofs + 19;
 						offset = 40; // ('vollstÃ¤ndige_url_c', 40)
 					}
@@ -992,7 +994,6 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 				}
 				break;
 		}
-		return new Db_btrie_result(found, offset);
 	}
 
 	@Override public Object Match_expand(Btrie_rv rv, byte[] src, int ofs, int src_len) {
@@ -1001,14 +1002,14 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 		//	rv.Init(ofs, null);
 		//	return null;
 		//}
-		Db_btrie_result res = Match_with_b(src[ofs], src, ofs, src_len);
-		if (res.found == -1) {
+		Match_with_b(src[ofs], src, ofs, src_len);
+		if (found == -1) {
 			rv.Init(ofs, null);
 			return null;
 		}
 		else {
-			Object rv_obj = objs[res.offset];
-			rv.Init(res.found, rv_obj);
+			Object rv_obj = objs[offset];
+			rv.Init(found, rv_obj);
 			return rv_obj;
 		}
 	}
@@ -1016,12 +1017,12 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 		// this check should have been made by parent call
 		//if (bgn_pos >= end_pos)
 		//	return null;
-		Db_btrie_result res = Match_with_b(src[bgn_pos], src, bgn_pos, end_pos);
-		if (res.found == -1) {
+		Match_with_b(src[bgn_pos], src, bgn_pos, end_pos);
+		if (found == -1) {
 			return null;
 		}
 		else {
-			Object rv_obj = objs[res.offset];
+			Object rv_obj = objs[offset];
 			return rv_obj;
 		}
 	}
@@ -1031,14 +1032,14 @@ public class Db_btrie_ci_trie_de implements Db_btrie {
 		//	rv.Init(ofs, null);
 		//	return null;
 		//}
-		Db_btrie_result res = Match_with_b(b, src, bgn_pos, end_pos);
-		if (res.found == -1) {
+		Match_with_b(b, src, bgn_pos, end_pos);
+		if (found == -1) {
 			rv.Init(bgn_pos, null);
 			return null;
 		}
 		else {
-			Object rv_obj = objs[res.offset];
-			rv.Init(res.found, rv_obj);
+			Object rv_obj = objs[offset];
+			rv.Init(found, rv_obj);
 			return rv_obj;
 		}
 	}

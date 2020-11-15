@@ -162,27 +162,6 @@ app.wikis.get('~{wiki_key}').html.portal {
   <div id="p-logo" role="banner"><a class="mw-wiki-logo xowa-hover-off" href="/wiki/"~{<>msgs.get_html_accesskey_and_title('p-logo');<>}></a></div>
 "]:>
 ;
-  div_home =
-<:["
-  <div class="portal"><h3></h3></div><!-- empty heading else wikipedia css will hide next <h3> after <div id="p-logo">; DATE:2016-04-12
-  moved DB2018-12-13 -->
-  <div class="portal" id="xowa-portal-home">
-    <h3>XOWA</h3>
-    <div class="body">
-      <ul>
-        <li><a href="/site/home/wiki/Main_Page" class="xowa-hover-off">~{<>app.user.msgs.get('mainpage-description');<>}</a></li>
-        <li><a href="/site/home/wiki/Help/About" class="xowa-hover-off">~{<>app.user.msgs.get('xowa-portal-about');<>}</a></li>
-        <li><a href="/site/home/wiki/Help/Contents" class="xowa-hover-off">~{<>app.user.msgs.get('help');<>}</a></li>
-        <li><a href="/site/home/wiki/Special:XowaPageHistory" class="xowa-hover-off"~{<>app.user.msgs.get_html_accesskey_and_title('xowa-portal-page_history');<>}>~{<>app.user.msgs.get('xowa-portal-page_history');<>}</a></li>
-        <li>~{<>app.user.msgs.get('xowa-portal-bookmarks');<>}</li>
-        <li style="margin-left:5px;"><a href="/site/home/wiki/Special:XowaBookmarks" class="xowa-hover-off"~{<>app.user.msgs.get_html_accesskey_and_title('xowa-portal-bookmarks-show');<>}>~{<>app.user.msgs.get('xowa-portal-bookmarks-show');<>}</a></li>
-        <li style="margin-left:5px;"><a href="javascript:xowa.cmds.send('gfs', 'app.api.usr.bookmarks.add;');" class="xowa-hover-off"~{<>app.user.msgs.get_html_accesskey_and_title('xowa-portal-bookmarks-add');<>}>~{<>app.user.msgs.get('xowa-portal-bookmarks-add');<>}</a></li>
-        <li><a href="/site/home/wiki/Options" class="xowa-hover-off"~{<>app.user.msgs.get_html_accesskey_and_title('xowa-portal-options');<>}>~{<>app.user.msgs.get('xowa-portal-options');<>}</a></li>
-      </ul>
-    </div>
-  </div>
-"]:>
-;
   div_sync =
 <:["
   <div id="xowa-portal-sync" class="portal">    

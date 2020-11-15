@@ -31,8 +31,8 @@ public class Xoh_sidebar_mgr {
 		return bfr.To_bry_and_clear();
 	}
 	public void Build_json(Json_nde data) {
-            if (top != null)
-		data.AddKvNde("data-sidebar", top);
+		if (top != null)
+			data.AddKvNde("data-sidebar", top);
 	}
 	public void Init_by_wiki() {
 		try {
@@ -45,7 +45,7 @@ public class Xoh_sidebar_mgr {
 	}
 	private byte[] Get_sidebar_or_null(Bry_bfr tmp_bfr, Xowe_wiki wiki) {
 		// if home, always return null
-		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__home) return null;
+		//if (wiki.Domain_tid() == Xow_domain_tid_.Tid__home) return null;
 
 		// check msg_mgr; note that this checks (a) en.wikipedia.org/wiki/MediaWiki:Sidebar; (b) "sidebar" in en.gfs
 		Xol_msg_itm rv_msg = Xol_msg_mgr_.Get_msg_itm(tmp_bfr, wiki, wiki.Lang(), Ttl__sidebar);

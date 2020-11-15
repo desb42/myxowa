@@ -20,16 +20,7 @@ var XoEvtMgr = (function(){
   return XoEvtMgr;
 }());
 
-/*
-window.mwNow = ( function () {
-	var perf = window.performance,
-		navStart = perf && perf.timing && perf.timing.navigationStart;
-	return navStart && typeof perf.now === 'function' ?
-		function () { return navStart + perf.now(); } :
-		function () { return Date.now(); };
-}() );
-*/
-window.mwNow = function () { return Date.now(); };
+window.mwNow = Date.now();
 
 if (!window.xowa) {
   window.xowa = {
@@ -122,30 +113,18 @@ if (!window.xowa) {
     document.getElementsByTagName('head')[0].appendChild(script);
   };
 
-  xowa.js.importStylesheetURI = function( url, media ) {
-    var l = document.createElement( 'link' );
-    l.rel = 'stylesheet';
-    l.href = url;
-    if ( media ) {
-      l.media = media;
-    }
-    document.head.appendChild( l );
-    return l;
-  }
   xowa.js.jquery.init_callback = function() {
     jQuery.cookie = xowa.cookie;
     jQuery.ready(); //fire the ready event
   };
   xowa.js.jquery.init = function(document) {
-  	if (jQuery.cookie !== undefined) return;
-    //return; 
     jQuery.cookie = xowa.cookie;
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery.webfonts.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.preferences.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.webfonts.repository.js');
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext/ext.uls.webfonts.js');
-    // loaded elsewhere
-    return;
+  	// loaded elsewhere
+  	return;
 /*    if (xowa.js.jquery.init_done) return;
     //xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery-1.11.3.min.js', xowa.js.jquery.init_callback);
     xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/jquery/jquery-3.2.1.js', xowa.js.jquery.init_callback);
@@ -153,50 +132,6 @@ if (!window.xowa) {
 */
   };
     
-	/**
-	 * Private helper function used by util.escapeId*()
-	 * @ignore
-	 *
-	 * @param {string} str String to be encoded
-	 * @param {string} mode Encoding mode, see documentation for $wgFragmentMode
-	 *     in DefaultSettings.php
-	 * @return {string} Encoded string
-	 */
-	function escapeIdInternal( str, mode ) {
-		str = String( str );
-
-		switch ( mode ) {
-			case 'html5':
-				return str.replace( / /g, '_' );
-			case 'html5-legacy':
-				str = str.replace( /[ \t\n\r\f_'"&#%]+/g, '_' )
-					.replace( /^_+|_+$/, '' );
-				if ( str === '' ) {
-					str = '_';
-				}
-				return str;
-			case 'legacy':
-				return rawurlencode( str.replace( / /g, '_' ) )
-					.replace( /%3A/g, ':' )
-					.replace( /%/g, '.' );
-			default:
-				throw new Error( 'Unrecognized ID escaping mode ' + mode );
-		}
-	}
-	/**
-	 * Encode the string like PHP's rawurlencode
-	 * @ignore
-	 *
-	 * @param {string} str String to be encoded.
-	 * @return {string} Encoded string
-	 */
-	function rawurlencode( str ) {
-		str = String( str );
-		return encodeURIComponent( str )
-			.replace( /!/g, '%21' ).replace( /'/g, '%27' ).replace( /\(/g, '%28' )
-			.replace( /\)/g, '%29' ).replace( /\*/g, '%2A' ).replace( /~/g, '%7E' );
-	}
-
   xowa.js.mediaWiki.init = function(){
     if (xowa.js.mediaWiki.init_done) return;
   	window.mw = 
@@ -315,8 +250,7 @@ if (!window.xowa) {
       	},
         util: {
         escapeRegExp: function (str) {
-    return str.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-//        	return str.replace('$', '\\$');
+        	return str.replace('$', '\\$');
         },
         	$content: window.jQuery ? jQuery('#mw-content-text') : null,
         	//$content: window.jQuery ? jQuery('#content') : null,
@@ -458,83 +392,7 @@ if (!window.xowa) {
 			//$link.updateTooltipAccessKeys();
 
 			return $item[ 0 ];
-		},
-		/**
-		 * Encode page titles for use in a URL
-		 *
-		 * We want / and : to be included as literal characters in our title URLs
-		 * as they otherwise fatally break the title.
-		 *
-		 * The others are decoded because we can, it's prettier and matches behaviour
-		 * of `wfUrlencode` in PHP.
-		 *
-		 * @param {string} str String to be encoded.
-		 * @return {string} Encoded string
-		 */
-		wikiUrlencode: function ( str ) {
-			//return util.rawurlencode( str )
-			return rawurlencode( str )
-				.replace( /%20/g, '_' )
-				// wfUrlencode replacements
-				.replace( /%3B/g, ';' )
-				.replace( /%40/g, '@' )
-				.replace( /%24/g, '$' )
-				.replace( /%21/g, '!' )
-				.replace( /%2A/g, '*' )
-				.replace( /%28/g, '(' )
-				.replace( /%29/g, ')' )
-				.replace( /%2C/g, ',' )
-				.replace( /%2F/g, '/' )
-				.replace( /%7E/g, '~' )
-				.replace( /%3A/g, ':' );
-		},
-
-		/**
-		 * Get the link to a page name (relative to `wgServer`),
-		 *
-		 * @param {string|null} [pageName=wgPageName] Page name
-		 * @param {Object} [params] A mapping of query parameter names to values,
-		 *  e.g. `{ action: 'edit' }`
-		 * @return {string} Url of the page with name of `pageName`
-		 */
-		getUrl: function ( pageName, params ) {
-			var titleFragmentStart, url, query,
-				fragment = '',
-				title = typeof pageName === 'string' ? pageName : mw.config.get( 'wgPageName' );
-
-			// Find any fragment
-			titleFragmentStart = title.indexOf( '#' );
-			if ( titleFragmentStart !== -1 ) {
-				fragment = title.slice( titleFragmentStart + 1 );
-				// Exclude the fragment from the page name
-				title = title.slice( 0, titleFragmentStart );
-			}
-
-			// Produce query string
-			if ( params ) {
-				query = $.param( params );
-			}
-			if ( query ) {
-				url = title ?
-					util.wikiScript() + '?title=' + mw.util.wikiUrlencode( title ) + '&' + query :
-					util.wikiScript() + '?' + query;
-			} else {
-				url = mw.config.get( 'wgArticlePath' )
-					.replace( '$1', mw.util.wikiUrlencode( title ).replace( /\$/g, '$$$$' ) );
-			}
-
-			// Append the encoded fragment
-			if ( fragment.length ) {
-				url += '#' + mw.util.escapeIdForLink( fragment );
-			}
-
-			return url;
-		},
-		escapeIdForLink: function ( str ) {
-			var mode = 'html5';
-
-			return escapeIdInternal( str, mode );
-		},
+		}
 
         },
         //simulate mediaWiki.hook: Execute functions queued for 'wikipage.content' directly, and ignore anything else
@@ -545,18 +403,6 @@ if (!window.xowa) {
               },
               remove: function () {},
               fire: function () {}
-            } : name === 'wikipage.collapsibleContent' ? {
-              add: function (f) {
-              	//fc = f;
-              	f(mw.collapsibleContent);
-//                     f(window.jQuery ? $collapsible.find( '> .mw-collapsible-content' ) : null);
-              },
-              remove: function () {},
-              fire: function (t) {
-              	// different order!!!! wrong order HACK
-              	mw.collapsibleContent = t;
-              	//fc(t);
-              	}
             } : {
               add: function () {},
               remove: function () {},
@@ -569,7 +415,6 @@ if (!window.xowa) {
         	set: function (key, val) { xowa.cfg.set(key, val); }
         }
     };
-    //xowa.js.jquery.init_callback() // possibly
     xowa.js.mediaWiki.init_done = true;
   }
 
@@ -919,9 +764,6 @@ if (!window.xowa) {
     xowa.js.doc.process_new_elem(elem.parentNode);  // NOTE: elem is placeholder item; html is inserted after it; need to call process_new_elem on parentNode; DATE:2015-08-03
     return true;
   };
-/*
-  xowa.js.doc.ElemAdd.publish()
-*/
   // PURPOSE: process new element such as adding bindings; DATE:2015-07-09
   xowa.js.doc.process_new_elem = function(elem) {
      xowa.js.doc.evtElemAdd.pub(elem);
@@ -1096,6 +938,7 @@ window.xowa_global_values['wgFormattedNamespaces'] = {
 window.xowa_global_values['skin'] = "vector";
 
 }
+
 
 
 /* ------------------------------------ */
@@ -1285,110 +1128,11 @@ window.xowa.cmds.add('xowa.notify', new Xonotify());
       xowa.js.mediaWiki.init();
 
 
-/* **** add storage ****************************** */
-( function ( mw ) {
-	'use strict';
-
-	// Catch exceptions to avoid fatal in Chrome's "Block data storage" mode
-	// which throws when accessing the localStorage property itself, as opposed
-	// to the standard behaviour of throwing on getItem/setItem. (T148998)
-	var
-		localStorage = ( function () {
-			try {
-				return window.localStorage;
-			} catch ( e ) {}
-		}() ),
-		sessionStorage = ( function () {
-			try {
-				return window.sessionStorage;
-			} catch ( e ) {}
-		}() );
-
-	/**
-	 * A wrapper for an HTML5 Storage interface (`localStorage` or `sessionStorage`)
-	 * that is safe to call on all browsers.
-	 *
-	 * @class mw.SafeStorage
-	 * @private
-	 * @param {Object|undefined} store The Storage instance to wrap around
-	 */
-	function SafeStorage( store ) {
-		this.store = store;
-	}
-
-	/**
-	 * Retrieve value from device storage.
-	 *
-	 * @param {string} key Key of item to retrieve
-	 * @return {string|null|boolean} String value, null if no value exists, or false
-	 *  if localStorage is not available.
-	 */
-	SafeStorage.prototype.get = function ( key ) {
-		try {
-			return this.store.getItem( key );
-		} catch ( e ) {}
-		return false;
-	};
-
-	/**
-	 * Set a value in device storage.
-	 *
-	 * @param {string} key Key name to store under
-	 * @param {string} value Value to be stored
-	 * @return {boolean} Whether the save succeeded or not
-	 */
-	SafeStorage.prototype.set = function ( key, value ) {
-		try {
-			this.store.setItem( key, value );
-			return true;
-		} catch ( e ) {}
-		return false;
-	};
-
-	/**
-	 * Remove a value from device storage.
-	 *
-	 * @param {string} key Key of item to remove
-	 * @return {boolean} Whether the save succeeded or not
-	 */
-	SafeStorage.prototype.remove = function ( key ) {
-		try {
-			this.store.removeItem( key );
-			return true;
-		} catch ( e ) {}
-		return false;
-	};
-
-	/**
-	 * A wrapper for the HTML5 `localStorage` interface
-	 * that is safe to call on all browsers.
-	 *
-	 * @class
-	 * @singleton
-	 * @extends mw.SafeStorage
-	 */
-	mw.storage = new SafeStorage( localStorage );
-
-	/**
-	 * A wrapper for the HTML5 `sessionStorage` interface
-	 * that is safe to call on all browsers.
-	 *
-	 * @class
-	 * @singleton
-	 * @extends mw.SafeStorage
-	 */
-	mw.storage.session = new SafeStorage( sessionStorage );
-
-}( window.mediaWiki ) );
-/** end of storage **/
-
 jQuery( document ).ready( function ( $ ) {
 	  var locjs = '/';
     if (window.location.pathname.substring(0,5) == '/xowa')
       locjs = '/xowa/';
-    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '/extra.js');
-    xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '/extra.css')
-//    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '.js');
+    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '.js');
     var pageurl = locjs + x_p.wiki + '/wiki/' + xowa_global_values.wgPageName;
     //if (pageurl != location.pathname)
     //  window.history.pushState('page2', xowa_global_values.wgTitle, pageurl);
