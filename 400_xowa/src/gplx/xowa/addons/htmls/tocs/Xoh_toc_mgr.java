@@ -22,29 +22,29 @@ public class Xoh_toc_mgr {
 	private final    Xoh_toc_htmlr htmlr = new Xoh_toc_htmlr();
 	public boolean Exists() {return exists && Enabled;} private boolean exists;
 	public void Exists_y_() {exists = true;}
-        private int default_pos;
-        public void Toc_default_(int pos) { default_pos = pos;}
-        private boolean notocseen;
-        public void Hdr_notoc_y_() {notocseen = true;}
-        private boolean forcetoc;
-        public void Hdr_forcetoc_y_() {forcetoc = true;}
+	private int default_pos;
+	public void Toc_default_(int pos) { default_pos = pos;}
+	private boolean notocseen;
+	public void Hdr_notoc_y_() {notocseen = true;}
+	private boolean forcetoc;
+	public void Hdr_forcetoc_y_() {forcetoc = true;}
 	public int Toc_bgn() {
-            if (forcetoc) return default_pos;
-            //if (exists) return toc_bgn;
-            if (exists) return default_pos;
-            if (notocseen) return -1;
-            return default_pos;
-        }
-        private int toc_bgn;
+		if (forcetoc) return default_pos;
+		//if (exists) return toc_bgn;
+		if (exists) return default_pos;
+		if (notocseen) return -1;
+		return default_pos;
+	}
+	private int toc_bgn;
 	public void Toc_bgn_(int v) {
-            this.toc_bgn = v;
-            if (default_pos < 0)
-                default_pos = v;
-        }
+		this.toc_bgn = v;
+		if (default_pos < 0)
+			default_pos = v;
+	}
 	public void Clear() {
 		this.exists = false;
-                this.notocseen = false;
-                this.default_pos = -1;
+		this.notocseen = false;
+		this.default_pos = -1;
 		itms.Clear();
 		lvl_wkr.Clear();
 		txt_wkr.Clear();
@@ -63,14 +63,14 @@ public class Xoh_toc_mgr {
 		itms.Add(itm.Anch(), itm);
 		return itm;
 	}
-	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, boolean toc_mode_is_pgbnr) {
-            if (toc_mode_is_pgbnr && itms.Len() <= 3)
-                return;
-            To_html(rv, hctx, toc_mode_is_pgbnr, 0);
-        }
-	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, boolean toc_mode_is_pgbnr, int minimum) {
-            htmlr.To_html(rv, hctx, itms, toc_mode_is_pgbnr, minimum);
-        }
+	public void To_html(Bry_bfr rv, Xoa_page pg, Xoh_wtr_ctx hctx, boolean toc_mode_is_pgbnr) {
+		if (toc_mode_is_pgbnr && itms.Len() <= 3)
+			return;
+		To_html(rv, pg, hctx, toc_mode_is_pgbnr, 0);
+	}
+	public void To_html(Bry_bfr rv, Xoa_page pg, Xoh_wtr_ctx hctx, boolean toc_mode_is_pgbnr, int minimum) {
+		htmlr.To_html(rv, pg, hctx, itms, toc_mode_is_pgbnr, minimum);
+	}
 	public byte[] Test__to_html() {
 		Bry_bfr bfr = Bry_bfr_.New();
 		htmlr.Test__to_html(bfr, itms);

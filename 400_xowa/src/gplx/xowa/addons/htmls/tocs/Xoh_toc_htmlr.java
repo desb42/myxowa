@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.addons.htmls.tocs; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.htmls.*;
 import gplx.langs.htmls.*; import gplx.xowa.htmls.core.htmls.*;
+import gplx.xowa.langs.Xol_lang_itm;
 class Xoh_toc_htmlr implements gplx.core.brys.Bfr_arg {
 	private final    Bry_bfr numbering_bfr = Bry_bfr_.New();
 	private byte[] toc_label;
@@ -26,13 +27,14 @@ class Xoh_toc_htmlr implements gplx.core.brys.Bfr_arg {
 	public void Init(byte[] toc_label) {
 		this.toc_label = toc_label;
 	}
-	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, Ordered_hash toc_itms, boolean toc_mode_is_pgbnr) {
-            To_html(rv, hctx, toc_itms, toc_mode_is_pgbnr, 0);
-        }
-	public void To_html(Bry_bfr rv, Xoh_wtr_ctx hctx, Ordered_hash toc_itms, boolean toc_mode_is_pgbnr, int minimum) {
+	public void To_html(Bry_bfr rv, Xoa_page pg, Xoh_wtr_ctx hctx, Ordered_hash toc_itms, boolean toc_mode_is_pgbnr) {
+		To_html(rv, pg, hctx, toc_itms, toc_mode_is_pgbnr, 0);
+	}
+	public void To_html(Bry_bfr rv, Xoa_page pg, Xoh_wtr_ctx hctx, Ordered_hash toc_itms, boolean toc_mode_is_pgbnr, int minimum) {
 		this.toc_itms = toc_itms;
-                if (toc_itms.Len() <= minimum) return;
-		fmtr_div.Bld_many(rv, toc_mode_is_pgbnr ? Bry_.Empty : Bry_toc_cls, toc_label, this);
+		if (toc_itms.Len() <= minimum) return;
+		Xol_lang_itm lang = pg.Lang();
+		fmtr_div.Bld_many(rv, toc_mode_is_pgbnr ? Bry_.Empty : Bry_toc_cls, lang.Key_bry(), lang.Dir_ltr_bry(), toc_label, this);
 	}
 	public void Test__to_html(Bry_bfr rv, Ordered_hash toc_itms) {
 		this.toc_itms = toc_itms;
@@ -78,16 +80,14 @@ class Xoh_toc_htmlr implements gplx.core.brys.Bfr_arg {
 		fmtr_itm.Bld_many(bfr, itm.Lvl(), itm.Uid(), itm.Anch(), itm.Path_to_bry(numbering_bfr), itm.Text());
 		prv_lvl = cur_lvl;
 	}
-	private static final    byte[] Bry_toc_cls = Bry_.new_a7(" id=\"toc\" class=\"toc\"");
+	private static final    byte[] Bry_toc_cls = Bry_.new_a7(" id=\"toc\" class=\"toc\" role=\"navigation\" aria-labelledby=\"mw-toc-heading\"");
 	private final    Bry_fmt 
 	  fmtr_div = Bry_fmt.Auto(String_.Concat_lines_nl_skip_last
 	( "<div~{toc}>"
 	, "<input type=\"checkbox\" role=\"button\" id=\"toctogglecheckbox\" class=\"toctogglecheckbox\" style=\"display:none\" />"
-	, "<div class=\"toctitle\">"
-	, "<h2>~{contents_title}</h2><span class=\"toctogglespan\"><label class=\"toctogglelabel\" for=\"toctogglecheckbox\"></label></span>"
-//	, "  <div id=\"toctitle\" class=\"toctitle\">"
-//	, "    <h2>~{contents_title}</h2>"
-	, "  </div>"
+	, "<div class=\"toctitle\" lang=\"~{lang}\" dir=\"~{dir}\">"
+	, "<h2 id=\"mw-toc-heading\">~{contents_title}</h2><span class=\"toctogglespan\"><label class=\"toctogglelabel\" for=\"toctogglecheckbox\"></label></span>"
+	, "</div>"
 	, "~{itms}</div>"
 	, ""
 	))

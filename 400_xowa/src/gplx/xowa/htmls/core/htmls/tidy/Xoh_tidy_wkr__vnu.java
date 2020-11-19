@@ -28,6 +28,15 @@ import gplx.core.envs.*;
 class Xoh_tidy_wkr__vnu implements Xoh_tidy_wkr {
 		private byte[] depurate(Bry_bfr tidy_bfr, boolean compat) throws SAXException, IOException {
 		byte[] input = tidy_bfr.To_bry_and_clear();
+		int pos = 0;
+		int len = input.length;
+		while (pos < len) {
+			byte b = input[pos++];
+			if (b == '&') {
+				if (input[pos] == '#' && input[pos+1] == '3' && input[pos+2] == '2' && input[pos+3] == ';') 
+					input[pos-1] = '@'; // replace &#32; with @#32;
+			}
+		}
 		InputStream stream = new ByteArrayInputStream(input);
 		InputSource source = new InputSource(stream);
 		ByteArrayOutputStream sink = new ByteArrayOutputStream();
@@ -38,18 +47,28 @@ class Xoh_tidy_wkr__vnu implements Xoh_tidy_wkr {
 		source.setEncoding("UTF-8");
 		parser.setProperty("http://xml.org/sax/properties/lexical-handler", serializer);
 		parser.parse(source);
-		return sink.toByteArray();
+		byte[] output = sink.toByteArray();
+		pos = 0;
+		len = output.length;
+		while (pos < len) {
+			byte b = output[pos++];
+			if (b == '@') {
+				if (output[pos] == '#' && output[pos+1] == '3' && output[pos+2] == '2' && output[pos+3] == ';') 
+					output[pos-1] = '&'; // replace @#32; with &#32;
+			}
+		}
+		return output;
 	}
-		public byte Tid() {return Xoh_tidy_wkr_.Tid_vnu;}
+	public byte Tid() {return Xoh_tidy_wkr_.Tid_vnu;}
 	public void Init_by_app(Xoae_app app) {
 	}
 	public void Indent_(boolean v) {
-					}
+	}
 	public void Exec_tidy(Bry_bfr bfr, byte[] page_url) {
-				try {
+		try {
 			bfr.Add(depurate(bfr, true));
 		} 
 		catch (SAXException e) { }
 		catch (IOException e) {}
-			}
+	}
 }

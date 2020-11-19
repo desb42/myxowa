@@ -41,7 +41,7 @@ public class Xoh_page_bfr {
 
 		// build bfr by add bfr_0, toc, body_bfr
 		if (toc_mode_enabled) {
-			pg.Html_data().Toc_mgr().To_html(head_bfr, gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx.Basic, toc_mode_is_pgbnr);
+			pg.Html_data().Toc_mgr().To_html(head_bfr, pg, gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx.Basic, toc_mode_is_pgbnr);
 			head_bfr.Add_bfr_and_clear(body_bfr);
 		}
 	}

@@ -169,7 +169,7 @@ class Xoh_toc_htmlr__basic__fxt {
 		Gftest.Eq__ary(expd_ary, String_.Ary(Bry_split_.Split_lines(wtr.Test__to_html())));
 	}
 	public void Test__html_div(String... expd_ary) {
-		wtr.To_html(bfr, gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx.Basic, false);
+		wtr.To_html(bfr, null/*dummy page*/, gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx.Basic, false);
 		Gftest.Eq__ary(expd_ary, String_.Ary(Bry_split_.Split_lines(bfr.To_bry_and_clear())));
 	}
 }

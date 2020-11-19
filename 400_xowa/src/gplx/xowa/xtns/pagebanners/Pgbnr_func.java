@@ -200,7 +200,7 @@ public class Pgbnr_func extends Pf_func_base {
 				, Gfo_url_encoder_.Href.Encode(banner_ttl.Full_db()));	// NOTE: must encode so "'" becomes "%27", not "&#39;"; PAGE:en.v:'s-Hertogenbosch; DATE:2016-07-12
 		}
 		else {
-			ctx.Page().Html_data().Toc_mgr().To_html(tmp_bfr, Xoh_wtr_ctx.Basic, true, 3);
+			ctx.Page().Html_data().Toc_mgr().To_html(tmp_bfr, ctx.Page(), Xoh_wtr_ctx.Basic, true, 3);
 			toc_html = tmp_bfr.To_bry_and_clear();
 		}
 		itm.Init_from_html(max_width, banner_file, banner_url, srcset, cfg.enable_heading_override, toc_html, isPanorama);

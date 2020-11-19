@@ -151,7 +151,7 @@ public class Scrib_lib_title implements Scrib_lib {
 		if (cache_itm != null) {
 			ttl_exists = cache_itm.Page_exists();
 			ttl_id = cache_itm.Page_id();
-			ttl_redirect = cache_itm.Redirect_exists();
+			ttl_redirect = cache_itm.Wtxt__redirect() != null;
 		}
 //		Xowd_page_itm db_page = Xowd_page_itm.new_tmp();
 //		ttl_exists = core.Wiki().Db_mgr().Load_mgr().Load_by_ttl(db_page, ttl.Ns(), ttl.Page_db());
