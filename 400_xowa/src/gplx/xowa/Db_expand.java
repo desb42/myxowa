@@ -94,7 +94,8 @@ public class Db_expand {
 				}
 			}
 			if (ofs > 0)
-				bfr.Len_(ofs);
+				//bfr.Len_(ofs);
+				bfr.Del_by(len - ofs);
 	
 			// now go thru looking for [[ .. ]]
 			len = bfr.Len();

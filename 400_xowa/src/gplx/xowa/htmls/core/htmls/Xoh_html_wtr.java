@@ -336,7 +336,8 @@ public class Xoh_html_wtr {
 		while (buf_ofs > 0) {
 			byte b = bfr.Bfr()[buf_ofs];
 			if (b == '\n') {
-				bfr.Len_(buf_ofs);
+				//bfr.Len_(buf_ofs);
+				bfr.Del_by_1();
 				buf_ofs--;
 			}
 			else
@@ -484,7 +485,8 @@ public class Xoh_html_wtr {
 				// BIG HACK - remove preceeding Nl if there
 				byte b = output.Bfr()[output.Len() - 1];
 				if (b == '\n')
-					output.Len_(output.Len() - 1);
+					//output.Len_(output.Len() - 1);
+					output.Del_by_1();
 				output.Add(closeList( text[lastPrefix_bgn + lastPrefixLength - 1] ));
 				--lastPrefixLength;
 			}

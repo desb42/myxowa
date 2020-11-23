@@ -56,15 +56,18 @@ public class Xow_tidy_mgr implements Gfo_invk, Xow_tidy_mgr_interface {
 	}
 	public static boolean Tidy_unwrap(Bry_bfr bfr) {
 		byte[] bfr_bry = bfr.Bfr();
-		int find = Bry_find_.Find_fwd(bfr_bry, Gfh_tag_.Body_lhs); if (find == Bry_find_.Not_found) return false;
-		bfr.Delete_rng_to_bgn(find + Gfh_tag_.Body_lhs.length);
-		find = Bry_find_.Find_bwd(bfr_bry, Gfh_tag_.Body_rhs, bfr.Len()); if (find == Bry_find_.Not_found) return false;
-		bfr.Delete_rng_to_end(find);
+		//int find = Bry_find_.Find_fwd(bfr_bry, Gfh_tag_.Body_lhs); if (find == Bry_find_.Not_found) return false;
+		//bfr.Delete_rng_to_bgn(find + Gfh_tag_.Body_lhs.length);
+		bfr.Delete_rng_to_bgn(head_len);
+		//find = Bry_find_.Find_bwd(bfr_bry, Gfh_tag_.Body_rhs, bfr.Len()); if (find == Bry_find_.Not_found) return false;
+		bfr.Delete_rng_to_end(bfr.Len() - tail_len);
 		return true;
-	}		
+	}
+        private static String
+          Wrap_start = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
 	private static final    byte[]	// MW:includes/parser/Tidy.php|getWrapped
 	  Wrap_bgn = Bry_.new_a7
-	( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+	( Wrap_start
 	+ "<html>"
 	+   "<head>"
 	+     "<title>test</title>"
@@ -80,4 +83,8 @@ public class Xow_tidy_mgr implements Gfo_invk, Xow_tidy_mgr_interface {
 	, Cfg__engine			= "xowa.html.tidy.engine"
 	, Cfg__cmd				= "xowa.html.tidy.cmd"
 	;
+        private static int
+          head_len = Wrap_bgn.length - Wrap_start.length()
+        , tail_len = Wrap_end.length
+        ;
 }

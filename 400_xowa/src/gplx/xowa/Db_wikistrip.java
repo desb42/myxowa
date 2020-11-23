@@ -746,7 +746,8 @@ public class Db_wikistrip {
 					bfr.Add_mid(src, startpos, pos-1);
 					int blen = bfr.Len();
 					if (blen > 0 && bfr.Bfr()[blen-1] == ' ')
-						bfr.Len_(blen - 1);
+						//bfr.Len_(blen - 1);
+						bfr.Del_by_1();
 					startpos = pos - 1;
 					break;
 				}

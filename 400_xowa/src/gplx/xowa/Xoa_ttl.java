@@ -276,7 +276,8 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 			else
 				break;
 		}
-		bfr.Len_(txt_bb_len);
+		//bfr.Len_(txt_bb_len);
+		bfr.Del_by(bfr.Len() - txt_bb_len);
 		return txt_bb_len;
 	}
 	private boolean Parse(Bry_bfr bfr, Xop_amp_mgr amp_mgr, Xol_case_mgr case_mgr, Xow_xwiki_mgr xwiki_mgr, Xow_ns_mgr ns_mgr, byte[] src, int bgn, int end) {
@@ -356,7 +357,8 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 									int ns_diff = tmp_bfr_end - ltr_bgn - ns_name_len;
 									if (ns_diff >= 0) { // only if 'real' namespace name length is less than or equal to 'original'
 										Bry_.Set(bfr.Bfr(), ltr_bgn, tmp_bfr_end, ns_name);
-										bfr.Len_(bfr.Len() - ns_diff);
+										//bfr.Len_(bfr.Len() - ns_diff);
+										bfr.Del_by(ns_diff);
 										txt_bb_len -= ns_diff;
 									}
 								}

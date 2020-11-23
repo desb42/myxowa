@@ -19,13 +19,15 @@ import gplx.langs.htmls.entitys.*;
 public class Bry_bfr {
 	private Bry_bfr_mkr_mgr mkr_mgr; private int reset;
 	public byte[] Bfr() {return bfr;} private byte[] bfr;
-	public int Len() {return bfr_len;} public void Len_(int len) {bfr_len = len;} private int bfr_len;
-	public boolean Len_eq_0() {return bfr_len == 0;}
-	public boolean Len_gt_0() {return bfr_len > 0;}
+	public int Len() {return bfr_len - bfr_bgn;} private int bfr_len;
+        public int Start() {return bfr_bgn;} private int bfr_bgn;
+	public boolean Len_eq_0() {return bfr_len - bfr_bgn == 0;}
+	public boolean Len_gt_0() {return bfr_len - bfr_bgn > 0;}
 	public void Bfr_init(byte[] bfr, int bfr_len) {
 		synchronized (this) {
 			this.bfr = bfr;
 			this.bfr_len = bfr_len;
+			this.bfr_bgn = 0;
 			this.bfr_max = bfr.length;	// NOTE: must sync bfr_max, else will fail later during add; bfr will think bfr has .length of bfr_max, when it actually has .length of bfr_len; DATE:2014-03-09
 		}
 	}
@@ -65,16 +67,23 @@ public class Bry_bfr {
 			this.bfr = new byte[limit];
 		}
 		bfr_len = 0;
+		bfr_bgn = 0;
 		return this;
 	}
 	public Bry_bfr Clear() {
 		synchronized (this) {
 			this.bfr_len = 0;
+			this.bfr_bgn = 0;
 		}
 		return this;
 	}
-	public Bry_bfr ClearAndReset() {bfr_len = 0; if (reset > 0) Reset_if_gt(reset); return this;}
-	public byte Get_at_last_or_nil_if_empty() {return bfr_len == 0 ? Byte_ascii.Null : bfr[bfr_len - 1];}
+	public Bry_bfr ClearAndReset() {
+            bfr_len = 0;
+            bfr_bgn = 0;
+            if (reset > 0) Reset_if_gt(reset);
+            return this;
+        }
+	public byte Get_at_last_or_nil_if_empty() {return bfr_len - bfr_bgn == 0 ? Byte_ascii.Null : bfr[bfr_len - 1];}
 	public Bry_bfr Add_safe(byte[] val) {return val == null ? this : Add(val);}
 	public Bry_bfr Add(byte[] val) {
 		int val_len = val.length;
@@ -123,9 +132,9 @@ public class Bry_bfr {
 	}
 	public Bry_bfr Add_bry_ref_obj(Bry_obj_ref v) {v.Bfr_arg__add(this); return this;}
 	public Bry_bfr Add_bfr_and_preserve(Bry_bfr src) {
-		int len = src.bfr_len;
+		int len = src.Len();
 		if (bfr_len + len > bfr_max) Resize((bfr_max + len) * 2);
-		Bry_.Copy_to(src.bfr, 0, len, bfr, bfr_len);
+		Bry_.Copy_to(src.bfr, src.bfr_bgn, src.bfr_len, bfr, bfr_len);
 		// Array_.Copy_to(src.bfr, 0, bfr, bfr_len, len);
 		bfr_len += len;
 		return this;
@@ -142,13 +151,13 @@ public class Bry_bfr {
 	}
 	public Bry_bfr Add_bfr_trim_and_clear(Bry_bfr src, boolean trim_bgn, boolean trim_end) {return Add_bfr_trim_and_clear(src, trim_bgn, trim_end, Bry_.Trim_ary_ws);}
 	public Bry_bfr Add_bfr_trim_and_clear(Bry_bfr src, boolean trim_bgn, boolean trim_end, byte[] trim_ary) {
-		int src_len = src.bfr_len;
+		int src_len = src.Len();
 		if (bfr_len + src_len > bfr_max) Resize((bfr_max + src_len) * 2);
 		byte[] src_bry = src.Bfr();
 		int src_bgn = 0, src_end = src_len;
 		boolean all_ws = true;
 		if (trim_bgn) {
-			for (int i = 0; i < src_len; i++) {
+			for (int i = bfr_bgn; i < src_len; i++) {
 				byte b = src_bry[i];
 				if (trim_ary[b & 0xFF] == Byte_ascii.Null) {
 					src_bgn = i;
@@ -504,8 +513,8 @@ public class Bry_bfr {
 		bfr_len = new_len;
 		return this;
 	}
-	public boolean Match_end_byt(byte b)		{return bfr_len == 0 ? false : bfr[bfr_len - 1] == b;}
-	public boolean Match_end_byt_nl_or_bos()	{return bfr_len == 0 ? true : bfr[bfr_len - 1] == Byte_ascii.Nl;}
+	public boolean Match_end_byt(byte b)		{return Len() == 0 ? false : bfr[bfr_len - 1] == b;}
+	public boolean Match_end_byt_nl_or_bos()	{return Len() == 0 ? true : bfr[bfr_len - 1] == Byte_ascii.Nl;}
 	public boolean Match_end_ary(byte[] val)   {return Bry_.Match(bfr, bfr_len - val.length, bfr_len, val);}
 	public Bry_bfr Insert_at(int add_pos, byte[] add_bry) {return Insert_at(add_pos, add_bry, 0, add_bry.length);}
 	public Bry_bfr Insert_at(int add_pos, byte[] add_bry, int add_bgn, int add_end) {
@@ -513,19 +522,29 @@ public class Bry_bfr {
 		int new_max = bfr_max + add_len;
 		byte[] new_bfr = new byte[new_max];
 		if (add_pos > 0)
-			Bry_.Copy_to	(bfr	,		0, add_pos, new_bfr, 0);
+			Bry_.Copy_to	(bfr	,		bfr_bgn, add_pos + bfr_bgn, new_bfr, 0);
 		Bry_.Copy_to		(add_bry, add_bgn, add_end, new_bfr, add_pos);
-		Bry_.Copy_to		(bfr	, add_pos, bfr_len, new_bfr, add_pos + add_len);
+		Bry_.Copy_to		(bfr	, add_pos + bfr_bgn, bfr_len, new_bfr, add_pos + add_len);
 		bfr = new_bfr;
 		bfr_len += add_len;
+		bfr_bgn = 0;
 		bfr_max = new_max;
 		return this;
 	}
-	public Bry_bfr Delete_rng_to_bgn(int pos) {return Delete_rng(0, pos);}
-	public Bry_bfr Delete_rng_to_end(int pos) {return Delete_rng(pos, bfr_len);}
+	public Bry_bfr Delete_rng_to_bgn(int pos) {
+		bfr_bgn += pos;
+                return this;
+	}
+	public Bry_bfr Delete_rng_to_end(int pos) {
+		bfr_len = pos + bfr_bgn;
+                return this;
+	}
 	public Bry_bfr Delete_rng(int rng_bgn, int rng_end) {
 		int rng_len = rng_end - rng_bgn;
-		Bry_.Copy_to(bfr, rng_end, bfr_len, bfr, rng_bgn);
+		if (rng_bgn == 0)
+			bfr_bgn = rng_end;
+		else if (rng_end != bfr_len - bfr_bgn)
+			Bry_.Copy_to(bfr, rng_end, bfr_len, bfr, rng_bgn);
 		bfr_len -= rng_len;
 		return this;
 	}
@@ -538,9 +557,9 @@ public class Bry_bfr {
 		return this;
 	}
 	public Bry_bfr Trim_end(byte trim_byte) {
-		if (bfr_len == 0) return this;
+		if (Len() == 0) return this;
 		int count = 0;
-		for (int i = bfr_len - 1; i > -1; --i) {
+		for (int i = bfr_len - 1; i > bfr_bgn - 1; --i) {
 			byte b = bfr[i];
 			if (b == trim_byte)
 				++count;
@@ -552,7 +571,7 @@ public class Bry_bfr {
 		return this;
 	}
 	public Bry_bfr Trim_end_ws() {
-		if (bfr_len == 0) return this;
+		if (Len() == 0) return this;
 		int count = 0;
 		for (int i = bfr_len - 1; i > -1; --i) {
 			byte b = bfr[i];
@@ -582,7 +601,7 @@ public class Bry_bfr {
 			boolean itm_has_bytes = Bry_.Len_gt_0(itm);
 			if (	i != 0
 				&&	itm_has_bytes
-				&&	bfr_len > 0
+				&&	Len() > 0
 				)
 				this.Add(dlm);
 			if (itm_has_bytes)
@@ -590,12 +609,12 @@ public class Bry_bfr {
 		}
 		return this;
 	}
-	public boolean Eq(byte b) {return bfr_len == 1 && bfr[0] == b;}
-	public byte[] To_bry(int bgn, int end) {return bfr_len == 0 ? Bry_.Empty : Bry_.Mid(bfr, bgn, end);}
-	public byte[] To_bry() {return bfr_len == 0 ? Bry_.Empty : Bry_.Mid(bfr, 0, bfr_len);}
+	public boolean Eq(byte b) {return Len() == 1 && bfr[bfr_bgn] == b;}
+	public byte[] To_bry(int bgn, int end) {return bfr_len - bfr_bgn == 0 ? Bry_.Empty : Bry_.Mid(bfr, bfr_bgn + bgn, end);}
+	public byte[] To_bry() {return bfr_len - bfr_bgn == 0 ? Bry_.Empty : Bry_.Mid(bfr, bfr_bgn, bfr_len);}
 	public byte[] To_bry_and_clear_and_trim() {return To_bry_and_clear_and_trim(true, true, Bry_.Trim_ary_ws);}
 	public byte[] To_bry_and_clear_and_trim(boolean trim_bgn, boolean trim_end, byte[] trim_bry) {
-		byte[] rv = Bry_.Trim(bfr, 0, bfr_len, trim_bgn, trim_end, trim_bry, false); // NOTE: must not reuse bry; ISSUE#:562; DATE:2019-09-02
+		byte[] rv = Bry_.Trim(bfr, bfr_bgn, bfr_len, trim_bgn, trim_end, trim_bry, false); // NOTE: must not reuse bry; ISSUE#:562; DATE:2019-09-02
 		this.Clear();
 		return rv;
 	}
@@ -613,7 +632,7 @@ public class Bry_bfr {
 	public byte[] To_reversed_bry_and_clear() {
 		int len = this.Len();
 		byte[] rv = new byte[len];
-		for (int i = 0; i < len; i++) {
+		for (int i = bfr_bgn; i < bfr_len; i++) {
 			rv[len - i - 1] = bfr[i];
 		}
 		this.Clear();
@@ -626,15 +645,15 @@ public class Bry_bfr {
 	public String To_str_and_clear_and_trim()			{return String_.new_u8(To_bry_and_clear_and_trim());}
 	public int To_int_and_clear(int or) {int rv = To_int(or); this.Clear(); return rv;}
 	public int To_int(int or) {
-		switch (bfr_len) {
+		switch (Len()) {
 			case 0: return or;
 			case 1: {
-				byte b = bfr[0];
+				byte b = bfr[bfr_bgn];
 				return Byte_ascii.Is_num(b) ? b - Byte_ascii.Num_0 : or;
 			}
 			default:
 				long rv = 0, mult = 1;
-				for (int i = bfr_len - 1; i > -1; i--) {
+				for (int i = bfr_len - 1; i > bfr_bgn - 1; i--) {
 					byte b = bfr[i];
 					if (!Byte_ascii.Is_num(b)) return or;
 					long dif = (b - Byte_ascii.Num_0 ) * mult;
@@ -651,7 +670,7 @@ public class Bry_bfr {
 		this.Mkr_rls();
 	}
 	public byte[][] To_bry_ary_and_clear() {
-		if (bfr_len == 0) return Bry_.Ary_empty;
+		if (Len() == 0) return Bry_.Ary_empty;
 		Int_list line_ends = Find_all(Byte_ascii.Nl);
 
 		// create lines
@@ -667,7 +686,7 @@ public class Bry_bfr {
 		return rv;
 	}
 	public String[] To_str_ary_and_clear() {
-		if (bfr_len == 0) return String_.Ary_empty;
+		if (Len() == 0) return String_.Ary_empty;
 		Int_list line_ends = Find_all(Byte_ascii.Nl);
 
 		// create lines
@@ -685,7 +704,7 @@ public class Bry_bfr {
 	private Int_list Find_all(byte find) {
 		Int_list rv = new Int_list();
 		// scan bfr for nl
-		int line_bgn = 0, line_end = 0;
+		int line_bgn = bfr_bgn, line_end = 0;
 		while (line_bgn < bfr_len) {
 			line_end = Bry_find_.Find_fwd(bfr, find, line_bgn, bfr_len);
 			if (line_end == Bry_find_.Not_found) {	// no more \n; add bfr_end 
@@ -699,11 +718,11 @@ public class Bry_bfr {
 		}
 		return rv;
 	}
-	@Override public int hashCode() {return Bry_obj_ref.CalcHashCode(bfr, 0, bfr_len);}
+	@Override public int hashCode() {return Bry_obj_ref.CalcHashCode(bfr, bfr_bgn, bfr_len);}
 	@Override public boolean equals(Object obj) {
 		if (obj == null) return false;	// NOTE: strange, but null check needed; throws null error; EX.WP: File:Eug�ne Delacroix - La libert� guidant le peuple.jpg
 		Bry_obj_ref comp = (Bry_obj_ref)obj;
-		return Bry_.Match(bfr, 0, bfr_len, comp.Val(), comp.Val_bgn(), comp.Val_end());
+		return Bry_.Match(bfr, bfr_bgn, bfr_len, comp.Val(), comp.Val_bgn(), comp.Val_end());
 	}
 	public void Resize(int v) {
 		bfr_max = v;
@@ -718,34 +737,34 @@ public class Bry_bfr {
 		}
 		return this;
 	} 
-        public void Add_close_tag_or_empty(byte[] open_term, byte[] close_term) {
-            int i = bfr_len - 1;
-            while (i >= 0) {
-                byte c = bfr[i];
-                if (c == 32 || c == 10)
-                    i--;
-                else
-                    break;
-            }
-            if (i < open_term.length)
-                return;
-            boolean found = true;
-            for (int j = open_term.length - 1; j >= 0; j--) {
-                if (bfr[i] != open_term[j]) {
-                    found = false;
-                    break;
-                }
-                i--;
-            }
-            if (found) {
-                // either remove the tag or add class="mw-empty-elt"
-                bfr_len = i + 1;
-            }
-            else {
-                Add(close_term).Add_byte_nl();
-            }
-        }
- 	protected Bry_bfr() {}
+	public void Add_close_tag_or_empty(byte[] open_term, byte[] close_term) {
+		int i = bfr_len - 1;
+		while (i >= bfr_bgn) {
+			byte c = bfr[i];
+			if (c == 32 || c == 10)
+				i--;
+			else
+				break;
+		}
+		if (i < open_term.length)
+			return;
+		boolean found = true;
+		for (int j = open_term.length - 1; j >= 0; j--) {
+			if (bfr[i] != open_term[j]) {
+				found = false;
+				break;
+			}
+			i--;
+		}
+		if (found) {
+			// either remove the tag or add class="mw-empty-elt"
+			bfr_len = i + 1;
+		}
+		else {
+			Add(close_term).Add_byte_nl();
+		}
+	}
+	protected Bry_bfr() {}
 	public Bry_bfr(int bfr_max) {
 		Init(bfr_max);
 	}
