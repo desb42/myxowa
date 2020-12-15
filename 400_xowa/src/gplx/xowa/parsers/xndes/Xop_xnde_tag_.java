@@ -21,7 +21,7 @@ import gplx.xowa.langs.Xol_lang_stub_;
 public class Xop_xnde_tag_ {
 	public static final int Bgn_mode__normal = 0, Bgn_mode__inline = 1;
 	public static final int End_mode__normal = 0, End_mode__inline = 1, End_mode__escape = 2; // escape is for hr which does not support </hr>
-	public static final    byte[] Bry__onlyinclude = Bry_.new_a7("onlyinclude");
+	public static final    byte[] Bry__onlyinclude = Bry_.new_a7("<onlyinclude");
 	public static final    byte[] Bry__end_tag_bgn = Bry_.new_a7("</");
 	public static final int
   Tid__null = -1

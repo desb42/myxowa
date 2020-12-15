@@ -17,6 +17,8 @@ package gplx.xowa.xtns.kartographers; import gplx.*; import gplx.xowa.*; import 
 import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.logs.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*;
 import gplx.xowa.xtns.proofreadPage.*;
+import gplx.core.security.algos.Hash_algo;
+import gplx.core.security.algos.Hash_algo_;
 public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	private byte[] lat, lon, zoom, show, group, mapstyle, width, height, align, lang, text, frameless;
 	private int json_bgn, json_end;
@@ -223,10 +225,21 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		Fmt__params.Bld_many(tmp_bfr, this.lang, ctx.Wiki().Domain_bry(), cvt(ctx.Page().Ttl().Full_txt()), groups);
 		byte[] params = tmp_bfr.To_bry_and_clear();
 
-		Fmt__img.Bld_many(tmp_bfr, server, this.mapstyle, staticZoom, staticLat, staticLon, staticWidth, this.height, params, staticWidth, this.height);
+		Fmt__args.Bld_many(tmp_bfr, staticZoom, staticLat, staticLon, staticWidth, this.height, params);
+		byte[] args = tmp_bfr.To_bry_and_clear();
+
+		byte[] md5hash = null;
+		if (groups == Bry_.Empty) {
+			Hash_algo md5_algo = Hash_algo_.New__md5();
+			md5_algo.Update_digest(args, 0, args.length);
+			md5hash = md5_algo.To_hash_bry();
+			args = Bry_.Add(args, md5hash);
+		}
+
+		Fmt__img.Bld_many(tmp_bfr, server, this.mapstyle, args, staticWidth, this.height);
 		img = tmp_bfr.To_bry_and_clear();
 		//Gfo_usr_dlg_.Instance.Warn_many("", "", "mapping: page=~{0} mapimg=~{1}", ctx.Page().Ttl().Full_db(), Bry_.Mid(img, 66, img.length-44));
-		Xoa_app_.Usr_dlg().Log_many("", "", "mapping: page=~{0} mapimg=~{1}", ctx.Page().Ttl().Full_db(), Bry_.Mid(img, 66, img.length-44));
+		Xoa_app_.Usr_dlg().Log_many("", "", "mapping: page=~{0} mapimg=~{1} md5=~{2}", ctx.Page().Ttl().Full_db(), Bry_.Mid(img, 66, img.length-44), md5hash);
 
 		if ( !framed ) {
 			//$attrs['class'] .= " {$containerClass} {$alignClasses[$this->align]}";
@@ -280,9 +293,14 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	( "lang=~{lang}&amp;domain=~{domain}&amp;title=~{title}&amp;groups=~{groups}"
 	);
 	private static final	Bry_fmt
+	  Fmt__args = Bry_fmt.Auto_nl_skip_last
+	( 
+	  "~{zoom},~{lat},~{lon},~{width}x~{height}.png?~{params}"
+	);
+	private static final	Bry_fmt
 	  Fmt__img = Bry_fmt.Auto_nl_skip_last
 	( ""
-	, "<img src=\"~{mapserver}/img/~{mapstyle},~{zoom},~{lat},~{lon},~{width}x~{height}.png?~{params}\" alt=\"\" width=\"~{width}\" height=\"~{height}\" decoding=\"async\" />"
+	, "<img src=\"~{mapserver}/img/~{mapstyle},~{args}\" alt=\"\" width=\"~{width}\" height=\"~{height}\" decoding=\"async\" />"
 	);
 	private byte[] cvt(byte[] src) {
 		int pos = 0;

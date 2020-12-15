@@ -165,9 +165,9 @@ function init () {
     }
 
 // interactive maps?
-    if (document.querySelectorAll('#coordinates').length && xowa_global_values.mode_is_http) {
-      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/miniatlas/miniatlas.js');
-    }
+    //if (document.querySelectorAll('#coordinates').length && xowa_global_values.mode_is_http) {
+    //  xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/miniatlas/miniatlas.js');
+    //}
 
 // PageBanner stuff?
     if (document.querySelectorAll('.wpb-topbanner').length) {

@@ -6405,6 +6405,7 @@ wm-license-gpl-2-full-link|http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 wm-license-gpl-3-full-link|http://www.gnu.org/copyleft/gpl-3.0.html
 wm-license-gpl-text|This work is [[{{int:wm-license-free-software-wiki-link}}\u007Cfree software]]; you can redistribute it and/or modify it under the terms of the '''[[{{int:wm-license-gpl-wiki-link}}\u007CGNU General Public License]]''' as published by the [[{{int:wm-license-fsf-wiki-link}}\u007CFree Software Foundation]]; either version 2 of the License, or any later version. This work is distributed in the hope that it will be useful, but '''without any warranty'''; without even the implied warranty of '''merchantability''' or '''fitness for a particular purpose'''. See [{{int:wm-license-gpl-2-full-link}} version 2] and [{{int:wm-license-gpl-3-full-link}} version 3 of the GNU General Public License] for more details.
 wm-license-gpl-wiki-link|w:en:GNU General Public License
+wm-license-information-author-missing-request| 
 wm-license-information-author-missing|This file is lacking '''author''' information.
 wm-license-information-author|Author
 wm-license-information-date|Date

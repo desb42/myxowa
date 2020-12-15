@@ -27,10 +27,11 @@ public class Pfunc_plural extends Pf_func_base {
 		XophpArray forms = Pf_func_.Convert_xo_tmpl_to_mw_ary(ctx, caller, self, src);
 
 		// get number from argx (EX: 1)
-		String number_str = String_.new_u8(Eval_argx(ctx, src, caller, self));
+		Xol_lang_itm lang = ctx.Lang();
+		String number_str = String_.new_u8(lang.Num_mgr().Raw(Eval_argx(ctx, src, caller, self)));
 
 		// if number matches explicit key, use it; EX: {{plural:3|2=two|3=three|one|many}} -> three
-		Object result = ctx.Lang().Mw_lang().handleExplicitPluralForms(number_str, forms);
+		Object result = lang.Mw_lang().handleExplicitPluralForms(number_str, forms);
 		if (Type_.Eq_by_obj(result, String.class)) {
 			bfr.Add_str_u8((String)result);
 			return;

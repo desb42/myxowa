@@ -116,9 +116,10 @@ if ( mw.config.get( 'wgArticleId' ) === 0 && mw.config.get( 'wgNamespaceNumber' 
 		if ( $( 'div.kmldata' ).length ) {
 			require_wikiminiatlas = true;
 		}
-//		if ( require_wikiminiatlas ) {
+		if ( require_wikiminiatlas ) {
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/miniatlas/miniatlas.js');
 //			mw.loader.load( '//meta.wikimedia.org/w/index.php?title=MediaWiki:Wikiminiatlas.js&action=raw&ctype=text/javascript' );
-//		}
+		}
 // hopefully loaded elsewhere
 	} );
 } )();

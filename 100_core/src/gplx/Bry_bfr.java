@@ -533,11 +533,16 @@ public class Bry_bfr {
 	}
 	public Bry_bfr Delete_rng_to_bgn(int pos) {
 		bfr_bgn += pos;
-                return this;
+		return this;
 	}
 	public Bry_bfr Delete_rng_to_end(int pos) {
-		bfr_len = pos + bfr_bgn;
-                return this;
+		// -ve relative to end
+		// +ve absolute position (ignoring bfr_bgn)
+		if (pos < 0)
+			bfr_len += pos;
+		else
+			bfr_len = pos + bfr_bgn;
+		return this;
 	}
 	public Bry_bfr Delete_rng(int rng_bgn, int rng_end) {
 		int rng_len = rng_end - rng_bgn;

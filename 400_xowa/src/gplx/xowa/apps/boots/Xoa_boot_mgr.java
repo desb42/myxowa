@@ -115,13 +115,15 @@ public class Xoa_boot_mgr {
 			// run gfs; prefs.gfs and app.gfs
 			Gfo_usr_dlg_.Instance.Log_wkr().Log_to_session_fmt("app.boot:gfs.run");
 			Io_url cmd_file = arg_mgr.Cmd__file();
-			try {app.Gfs_mgr().Run_url(cmd_file, true);}
+			try { app.Gfs_mgr().Run_url(cmd_file, true); }
 			catch (Exception e) {
 				usr_dlg.Warn_many("", "", "script file failed: ~{0} ~{1}", cmd_file.Raw(), Err_.Message_gplx_full(e));
 				if (app_type_is_gui)
 					GfuiEnv_.ShowMsg(Err_.Message_gplx_full(e));
 			}
 
+                        app.Prog_mgr().Init_progs_by_bind(); ////////////////
+                        
 			// launch
 			Gfo_usr_dlg_.Instance.Log_wkr().Log_to_session_fmt("app.boot:app.launch");
 			app.Launch();

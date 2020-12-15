@@ -14,20 +14,26 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       thetasym:     '03B8',  // theta
       koppa:        '03DF',
       stigma:       '03DB',
+      varstigma:    '03DB',
       coppa:        '03D9',  // archaic koppa
+      varcoppa:     '03D9',
+      sampi:        '03E1',
 
       // Ord symbols
       C:            ['0043',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
       cnums:        ['0043',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
       Complex:      ['0043',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
+      H:            ['210D',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
       N:            ['004E',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
       natnums:      ['004E',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
+      Q:            ['0051',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
       R:            ['0052',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
       reals:        ['0052',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
       Reals:        ['0052',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
       Z:            ['005A',{mathvariant: MML.VARIANT.DOUBLESTRUCK}],
       sect:         '00A7',  // S
       P:            '00B6',
+      AA:           ['00C5',{mathvariant: MML.VARIANT.NORMAL}],  // Å, used for Angstrom
       alef:         ['2135',{mathvariant: MML.VARIANT.NORMAL}],  // aleph
       alefsym:      ['2135',{mathvariant: MML.VARIANT.NORMAL}],  // aleph
       weierp:       ['2118',{mathvariant: MML.VARIANT.NORMAL}],  // wp
@@ -42,7 +48,9 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       diamonds:     ['2662',{mathvariant: MML.VARIANT.NORMAL}],  // diamondsuit
       hearts:       ['2661',{mathvariant: MML.VARIANT.NORMAL}],  // heartsuit
       spades:       ['2660',{mathvariant: MML.VARIANT.NORMAL}],  // spadesuit
-      textvisiblespace: '2423'
+      textvisiblespace: '2423',
+      geneuro:      '20AC',
+      euro:         '20AC'  // incorrect, since not supported by Unicode (not implemented as well: \geneuronarrow \geneurowide \officialeuro)
     },
 
     mathchar0mo: {
@@ -52,6 +60,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       bull:         '2219',  // bullet
       plusmn:       '00B1',  // pm
       sdot:         '22C5',  // cdot
+      Dagger:       '2021',  // ddagger
 
       // Binary relations
       sup:          '2283',  // supset
@@ -98,7 +107,9 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 
       Koppa:        '03DE',
       Stigma:       '03DA',
-      Coppa:        '03D8'  // archaic Koppa
+      Digamma:      '03DC',
+      Coppa:        '03D8',  // archaic Koppa
+      Sampi:        '03E0'
     },
 
     delimiter: {
@@ -117,10 +128,14 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       arccot:             'NamedFn',
       arcsec:             'NamedFn',
       arccsc:             'NamedFn',
-      bold:               ['Macro','\\boldsymbol'],  // boldsymbol
-      href:               'NamedFn', // disable dangerous command
-      style:              'NamedFn', // disable dangerous command
-      pagecolor:          ['Macro','',1]  // ignore \pagecolor{}
+      sen:                'NamedFn',                // Spanish version of \sin (bug 18912)
+      image:              ['Macro','\\Im'],          // a texvc alias
+      bold:               ['Macro','\\mathbf{#1}',1],  // boldsymbol
+      pagecolor:          ['Macro','',1],  // ignore \pagecolor{}
+      emph:               ['Macro','\\textit{#1}',1],  // doesn't switch to \textrm within italic text as it should
+      textsf:             ['Macro','\\mathord{\\sf{\\text{#1}}}',1],
+      texttt:             ['Macro','\\mathord{\\tt{\\text{#1}}}',1],
+      vline:              ['Macro','\\smash{\\large\\lvert}',0]
     }
 
   });

@@ -108,7 +108,7 @@ public class Score_xnde implements Xox_xnde, Mwh_atr_itm_owner1, Xoh_cmd_itm {
 	}
 	public void Hcmd_exec(Xoae_app app, Gfo_usr_dlg usr_dlg, Xoae_page page) {
 		fail_msg = "unknown failure";
-		usr_dlg.Prog_many(GRP_KEY, "exec.msg", "generating lilypond: ~{0}", String_.new_u8(code));
+		//usr_dlg.Prog_many(GRP_KEY, "exec.msg", "generating lilypond: ~{0}", String_.new_u8(code));
 		usr_dlg.Prog_many(GRP_KEY, "exec.msg", "generating lilypond: ~{0}", String_.new_u8(code));
 		Xowe_wiki wiki = page.Wikie();
 		Score_xtn_mgr score_xtn = (Score_xtn_mgr)wiki.Xtn_mgr().Get_or_fail(Score_xtn_mgr.XTN_KEY);
@@ -153,13 +153,14 @@ public class Score_xnde implements Xox_xnde, Mwh_atr_itm_owner1, Xoh_cmd_itm {
 			else
 				html_a_href = ogg_file.To_http_file_str();
 		}
-		Io_mgr.Instance.DeleteFil(ly_file);
+		//Io_mgr.Instance.DeleteFil(ly_file);
 		Io_url png_file_untrimmed = png_file.GenNewNameOnly("untrimmed");
 		Io_mgr.Instance.MoveFil(png_file, png_file_untrimmed);
 		app.Prog_mgr().App_trim_img().Run(png_file_untrimmed, png_file);
 		Io_mgr.Instance.DeleteFil(png_file_untrimmed);
 		fail_msg = null;		
-	}	private String fail_msg = null;
+	}
+	private String fail_msg = null;
 	public void Hcmd_write(Xoae_app app, Gfo_usr_dlg usr_dlg, Xoae_page page) {
 		Xog_html_itm html_itm = page.Tab_data().Tab().Html_itm();
 		if (fail_msg == null) {	// fill in png/midi;			

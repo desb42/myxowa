@@ -17,6 +17,7 @@ package gplx.xowa.wikis.caches;
 
 import gplx.Bry_bfr;
 import gplx.Bry_bfr_;
+import gplx.String_;
 import gplx.core.caches.Gfo_cache_mgr;
 import gplx.xowa.langs.Xol_lang_itm;
 import gplx.xowa.parsers.tmpls.Xot_defn;
@@ -38,6 +39,7 @@ public class Xow_defn_cache {				// stores compiled Xot_defn
 		byte[] name = defn.Name();
 		if (case_match == Xow_ns_case_.Tid__1st) 
 			name = lang.Case_mgr().Case_build_1st_upper(upper_1st_bfr, name, 0, name.length);
+                //System.out.println(String_.new_u8(name));
 		cache.Add_replace(name, defn, defn.Cache_size());
 	}
 }

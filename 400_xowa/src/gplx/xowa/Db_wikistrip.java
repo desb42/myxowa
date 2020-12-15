@@ -441,9 +441,16 @@ public class Db_wikistrip {
 										}
 									}
 								}
-								else if ((src[namestart] | 32) == 'n' && src[namestart+1] == 'i' && src[namestart+2] == 'h' && src[namestart+3] == 'o' && src[namestart+4] == 'n' && src[namestart+5] == 'g' && src[namestart+6] == 'o' && src[namestart+7] == '|') { // nihongo
-									npos = namestart + 8;
-									textstart = npos;
+								else if ((src[namestart] | 32) == 'n' && src[namestart+1] == 'i' && src[namestart+2] == 'h' && src[namestart+3] == 'o' && src[namestart+4] == 'n' && src[namestart+5] == 'g' && src[namestart+6] == 'o') {
+									if (src[namestart+7] == '|') { // nihongo|
+										npos = namestart + 8;
+										textstart = npos;
+									}
+									else if (pos - startpos > 20 && (src[namestart+7] == ' ' || src[namestart+7] == '_') && src[namestart+8] == 'f' && src[namestart+9] == 'o'  && src[namestart+10] == 'o'  && src[namestart+11] == 't'  && src[namestart+12] == '|' ) {
+										// nihongo foot
+										npos = namestart + 13;
+										textstart = npos;
+									}
 								}
 								else if ((src[namestart] | 32) == 'd' && src[namestart+1] == 'a' && src[namestart+2] == 't' && src[namestart+3] == 'e') { // fr:template:date
 									npos = namestart + 5;
@@ -456,7 +463,8 @@ public class Db_wikistrip {
 											break;
 										}
 									}
-									bfr.Add_mid(src, textstart, npos-1);
+									byte[] txt = Bry_.Mid(src, textstart, npos-1);
+									bfr.Add(Strip_wiki(txt, false));
 								}
 							}
 							startpos = pos;

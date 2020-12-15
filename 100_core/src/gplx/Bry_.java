@@ -1280,7 +1280,8 @@ public class Bry_ {
 		if (epos > 0 && val[epos] == '.')
 			epos--;
                 // add back a zero if 'starting' with dp
-                if (dp && spos > 0)
+                // or if only a zero
+                if ((dp && spos > 0) || (spos == 1 && len == 1))
                     spos--;
 		if (spos > 0 || epos < len - 1) {
 			int sz = epos + 1 - spos; // len - spos - (len - 1 - epos);

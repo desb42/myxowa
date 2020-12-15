@@ -82,6 +82,15 @@ public class Db_parser {
 				if (newpos > 0) {
 					addtext(start_text, m_pos);
 					// skip the tag
+					// if immediately followed by a comment consume it and any space(s) afterwards
+					if (m_src[newpos] == '<' && m_src[newpos+1] == '!') {
+						while (newpos < m_src_end) {
+							if (m_src[newpos++] == '>')
+								break;
+						}
+						while (newpos < m_src_end && m_src[newpos] == ' ')
+							newpos++; 
+					}
 					start_text = newpos;
 					m_pos = newpos - 1;
 				}

@@ -768,6 +768,7 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__rss:
 			case Xop_xnde_tag_.Tid__quiz:
 			case Xop_xnde_tag_.Tid__math:
+			case Xop_xnde_tag_.Tid__chem:
 			case Xop_xnde_tag_.Tid__indicator:
 			case Xop_xnde_tag_.Tid__xowa_html:
 			case Xop_xnde_tag_.Tid__xowa_wiki_setup:

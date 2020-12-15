@@ -145,6 +145,8 @@ class Xob_xml_parse_model_format {
 //7      <model>flow-board</model> // species, wikidata
 //8      <model>proofread-page</model> // wikisource
 //9      <model>EntitySchema</model> // wikidata
+//10     <model>Campaign</model> // commons
+//11     <model>Tabular.JsonConfig</model> // commons
 //
 //1      <format>text/x-wiki</format>
 //2      <format>text/plain</format>
@@ -153,25 +155,33 @@ class Xob_xml_parse_model_format {
 
 	public int Parse_model(byte[] src, int bgn, int end, byte[] ttl) {
 		byte b = src[bgn];
-		if (b == 'w') return 1;
-		if (b == 'S') return 2;
-		if (b == 'c') return 3;
-		if (b == 'j') return 4;
-		if (b == 's') return 5;
-		if (b == 'M') return 6;
-		if (b == 'f') return 7;
-		if (b == 'p') return 8;
-		if (b == 'E') return 9;
+		switch (b) {
+			case 'w': return 1;
+			case 'S': return 2;
+			case 'c': return 3;
+			case 'j': return 4;
+			case 's': return 5;
+			case 'M': return 6;
+			case 'f': return 7;
+			case 'p': return 8;
+			case 'E': return 9;
+			case 'C': return 10; // Campaign
+			case 'T': return 11; // Tabular.JsonConfig
+			default:
 				Gfo_usr_dlg_.Instance.Log_many("", "", "Model unknown: model=~{0} ttl=~{1}", Bry_.Mid(src, bgn, end), ttl);
-                return 10;
+				return 12;
+		}
 	}
 	public int Parse_format(byte[] src, int bgn, int end, byte[] ttl) {
 		byte b = src[bgn + 5];
-		if (b == 'x') return 1;
-		if (b == 'p') return 2;
-		if (b == 'c') return 3;
-		if (b == 'j') return 4;
+		switch (b) {
+			case 'x': return 1;
+			case 'p': return 2;
+			case 'c': return 3;
+			case 'j': return 4;
+			default:
 				Gfo_usr_dlg_.Instance.Log_many("", "", "Format unknown: format=~{0} ttl=~{1}", Bry_.Mid(src, bgn, end), ttl);
-                return 5;
+				return 5;
+		}
 	}
 }

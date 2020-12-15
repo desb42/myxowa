@@ -44,6 +44,8 @@ public class Xoa_prog_mgr implements Gfo_invk {
 			apps_by_ext[i] = Process_adp.New(usr_dlg, cmd_eval, Process_adp.Run_mode_async, 0, "cmd", "/c start \"\" \"~{file}\"", "file");
 		}
 		app_web = Process_adp.New(usr_dlg, cmd_eval, Process_adp.Run_mode_async, 0, "cmd", "/c start \"\" \"~{url}\"", "url");
+        }
+	public void Init_progs_by_bind() {
 		app.Cfg().Bind_many_app(this
 		, Cfg__web, Cfg__media, Cfg__image, Cfg__svg, Cfg__pdf, Cfg__djvu
 		, Cfg__gz, Cfg__bz2, Cfg__bz2__stdout_cmd
@@ -99,10 +101,12 @@ public class Xoa_prog_mgr implements Gfo_invk {
 		return this;
 	}
 	public static void Init_cmd(String exe_and_args, Process_adp proc) {
+            if (exe_and_args.length() == 0) return;
 		String[] lines = gplx.xowa.addons.apps.cfgs.Xocfg_mgr.Parse_io_cmd(exe_and_args);
 		proc.Exe_and_args_(lines[0], lines[1]);
 	}
 	private void Init_cmd(String exe_and_args, int... exts) {
+            if (exe_and_args.length() == 0) return;
 		String[] lines = gplx.xowa.addons.apps.cfgs.Xocfg_mgr.Parse_io_cmd(exe_and_args);
 		for (int ext_id : exts) {
 			apps_by_ext[ext_id].Exe_and_args_(lines[0], lines[1]);
