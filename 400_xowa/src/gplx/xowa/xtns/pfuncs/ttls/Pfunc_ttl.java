@@ -22,7 +22,7 @@ public class Pfunc_ttl extends Pf_func_base {
 		if (val_dat_ary == Bry_.Empty) return; // if argx is empty, return EX: {{PAGENAME:}}; DATE:2013-02-20
 		Xoa_ttl ttl = val_dat_ary == null ? ctx.Page().Ttl() : Xoa_ttl.Parse(ctx.Wiki(), val_dat_ary);
 		if (ttl == null) return;
-	    switch (id) {
+		switch (id) {
 			case Xol_kwd_grp_.Id_ttl_page_txt: bfr.Add(ttl.Page_txt()); break;
 			case Xol_kwd_grp_.Id_ttl_page_url: bfr.Add(ttl.Page_url()); break;
 			case Xol_kwd_grp_.Id_ttl_full_txt: bfr.Add(ttl.Full_txt()); break;

@@ -861,6 +861,10 @@ public class Xoh_page_wtr_wkr {
 			, stats.Hiero_count
 			, stats.Gallery_count
 			, stats.Gallery_packed_count
+			, stats.Tmpl_count
+			, stats.Tmpl1_count
+			, stats.Tmpl2_count
+			, stats.Tmpl3_count
 			, stats.Scrib().Time()
 			, stats.Scrib().Count()
 			, stats.Scrib().Depth_max()
@@ -884,6 +888,10 @@ public class Xoh_page_wtr_wkr {
 	, " Hiero_count: ~{t11}"
 	, " Gallery_count: ~{t12}"
 	, " Gallery_packed_count: ~{t13}"
+	, " Tmpl_count: ~{t14}"
+	, " Tmpl1_count: ~{t15}"
+	, " Tmpl2_count: ~{t16}"
+	, " Tmpl3_count: ~{t17}"
 	, "Scribunto:"
 	, " Time: ~{s1}"
 	, " Count: ~{s2}"
@@ -891,7 +899,8 @@ public class Xoh_page_wtr_wkr {
 	, "Total time:"
 	, "  ~{p1}"
 	, "-->"
-	), "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "s1", "s2", "s3", "p1");
+	), "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "t14", "t15", "t16", "t17", 
+	   "s1", "s2", "s3", "p1");
 }
 class data_head {
 	public void Name_(byte[] val) {name = val;}; byte[] name;

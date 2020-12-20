@@ -31,6 +31,10 @@ public class Xop_log_stat {
 	public int Hiero_count;
 	public int Gallery_count;
 	public int Gallery_packed_count;
+	public int Tmpl_count;
+	public int Tmpl1_count;
+	public int Tmpl2_count;
+	public int Tmpl3_count;
 	//public void Init(int v) {
 	//	enabled = true;
 	//	wkr_uid = v;

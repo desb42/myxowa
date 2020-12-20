@@ -23,6 +23,7 @@ import gplx.Bry_bfr_;
 public class Xol_case_cvt {
 	public static byte[] Upper_1st(byte[] src, int pos, int src_len, boolean reuse) {return Up_low_1st(src, pos, src_len, Bool_.Y, reuse);}
 	public static byte[] Upper_1st(byte[] src, int pos, int src_len) {return Up_low_1st(src, pos, src_len, Bool_.Y);}
+	public static byte[] Lower_1st(byte[] src, int pos, int src_len, boolean reuse) {return Up_low_1st(src, pos, src_len, Bool_.N, reuse);}
 	public static byte[] Lower_1st(byte[] src, int pos, int src_len) {return Up_low_1st(src, pos, src_len, Bool_.N);}
 	public static byte[] Up_low_1st(byte[] src, int pos, int src_len, boolean upper) {
 		return Up_low_1st(src, pos, src_len, upper, Bool_.Y);

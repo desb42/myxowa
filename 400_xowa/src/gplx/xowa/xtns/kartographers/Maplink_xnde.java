@@ -141,14 +141,14 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			//else
 			this.text = this.firstMarker;
 		}
-		if (text != null) {
+		if (text != null && text.length > 2) {
                     Xop_root_tkn root = ctx.Tkn_mkr().Root(text);
                     Xop_parser parser = ctx.Wiki().Parser_mgr().Main();
                     parser.Parse_wtxt_to_wdom(root, ctx, ctx.App().Parser_mgr().Tkn_mkr(), text, Xop_parser_.Doc_bgn_bos);
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		ctx.Wiki().Html_mgr().Html_wtr().Write_doc(tmp_bfr, ctx, Xoh_wtr_ctx.Basic, text, root);
                 tmp_bfr.Delete_rng_to_bgn(3); // remove <p>
-                tmp_bfr.Delete_rng_to_end(-5); // remove </p>\n
+                tmp_bfr.Delete_rng_to_end(-6); // remove \n</p>\n
                 text = tmp_bfr.To_bry_and_clear_and_rls();
 			//text = Bry_.Replace(text, Byte_ascii.Underline, Byte_ascii.Space);
                 }

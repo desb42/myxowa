@@ -19,6 +19,7 @@ import gplx.xowa.wikis.nss.*;
 import gplx.xowa.wikis.caches.*; import gplx.xowa.xtns.pfuncs.ttls.*; import gplx.xowa.wikis.xwikis.*; import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.files.commons.*; import gplx.xowa.files.origs.*;
 import gplx.xowa.apps.wms.apis.*;
+import gplx.xowa.files.Xof_ext_;
 import gplx.xowa.xtns.scribunto.procs.*;
 import gplx.xowa.wikis.pages.redirects.*;
 public class Scrib_lib_title implements Scrib_lib {
@@ -186,9 +187,12 @@ public class Scrib_lib_title implements Scrib_lib {
 			, Keyval_.new_("width"		, itm.W())
 			, Keyval_.new_("height"		, itm.H())
 			, Keyval_.new_("pages"		, null)	// TODO_OLD: get pages info
+			, Keyval_.new_("size"		, 0)	// TODO_OLD: get file size somehow
+			, Keyval_.new_("mimeType"	, Xof_ext_.Mime_type__ary[itm.Ext_id()])
 			);
 		return rslt.Init_obj(rv);
-	}	private static final    Keyval[] GetFileInfo_absent = Keyval_.Ary(Keyval_.new_("exists", false), Keyval_.new_("width", 0), Keyval_.new_("height", 0));	// NOTE: must supply non-null values for w / h, else Modules will fail with nil errors; PAGE:pl.w:Andrespol DATE:2016-08-01
+	}
+	private static final    Keyval[] GetFileInfo_absent = Keyval_.Ary(Keyval_.new_("exists", false), Keyval_.new_("width", 0), Keyval_.new_("height", 0));	// NOTE: must supply non-null values for w / h, else Modules will fail with nil errors; PAGE:pl.w:Andrespol DATE:2016-08-01
 	public boolean GetContent(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		byte[] ttl_bry = args.Pull_bry(0);
 		byte[] rv = GetContentInternal(core, core.Wiki(), ttl_bry);

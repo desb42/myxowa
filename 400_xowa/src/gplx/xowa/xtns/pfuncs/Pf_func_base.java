@@ -51,6 +51,7 @@ public abstract class Pf_func_base implements Pf_func {
 				if (colon_pos == Bry_find_.Not_found)		// no colon; EX: {{#func}}
 					return Eval_arg_or_null_is_null;
 				else {									// colon found; EX: {{#func:}}
+                                    //System.out.println(String_.new_u8(func_name) + "\n" + String_.new_u8(src));
 					if (Bry_.Match_bwd_any(src, colon_pos - 1, src_bgn - 1, func_name))  // #func == func_name; EX: {{NAMESPACE:}}
 						return Eval_arg_or_null_is_empty;
 					else								// #func != func_name; assume subst: or safesubst:; EX: {{safesubst:NAMESPACE}}; NOTE: can check subst / safesubs trie, but will be expensive; also, only Pfunc_ttl calls this function

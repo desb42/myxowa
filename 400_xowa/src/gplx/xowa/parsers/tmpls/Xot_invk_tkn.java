@@ -99,6 +99,8 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 		boolean template_prefix_found = false;
 		byte tmpl_case_match = wiki.Ns_mgr().Ns_template().Case_match();
 
+		ctx.Page().Stat_itm().Tmpl_count++;
+
 		// tmpl_name does not exist in db; may be dynamic, subst, transclusion, etc..
 		if (defn == Xot_defn_.Null) {
 			// dynamic tmpl; EX:{{{{{1}}}|a}}
@@ -124,28 +126,46 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 				//Gfo_usr_dlg_.Instance.Log_many("", "", "parser.tmpl:dynamic is blank; page=~{0}", ctx.Page().Url_bry_safe()); // downgraded from warning to note; PAGE:de.d:país DATE:2016-09-07
 				//return false;
 			}
-			if 		(name_ary[name_bgn] == Byte_ascii.Colon) {							// check 1st letter for transclusion
+			else {
+				name_ary = Bry_.Mid(name_ary, name_bgn, name_ary_len);
+				name_ary_len = name_ary.length;
+			}
+			if (name_ary[0] == Byte_ascii.Colon) {							// check 1st letter for transclusion
 				return Transclude(ctx, wiki, bfr, Bool_.N, name_ary, caller, src);		// transclusion; EX: {{:Name of page}}
 			}
 
-			// ignore "{{Template:"; EX: {{Template:a}} is the same thing as {{a}}
-			int tmpl_ns_len = wiki.Ns_mgr().Tmpls_get_w_colon(name_ary, name_bgn, name_ary_len);
-			if (tmpl_ns_len != Bry_find_.Not_found) {
-				name_ary = Bry_.Mid(name_ary, name_bgn + tmpl_ns_len, name_ary_len);
-				name_ary_len = name_ary.length;
-				name_bgn = 0;
-				template_prefix_found = true;
-			}
-			byte[] ns_template_prefix = wiki.Ns_mgr().Ns_template().Name_db_w_colon(); int ns_template_prefix_len = ns_template_prefix.length;
-			if (name_ary_len > ns_template_prefix_len && Bry_.Match(name_ary, name_bgn, name_bgn + ns_template_prefix_len, ns_template_prefix)) {
-				name_ary = Bry_.Mid(name_ary, name_bgn + ns_template_prefix_len, name_ary_len);
-				name_ary_len = name_ary.length;
-				name_bgn = 0;
-			}
+			int colon_pos = Bry_find_.Find_fwd(name_ary, Byte_ascii.Colon, 0, name_ary_len);
+			// only if we have found a colon
+			if (colon_pos != Bry_find_.Not_found && name_ary[0] != '#') {
 
-			Xow_ns_mgr_name_itm ns_eval = wiki.Ns_mgr().Names_get_w_colon_or_null(name_ary, 0, name_ary_len);	// match {{:Portal or {{:Wikipedia
-			if (ns_eval != null && !template_prefix_found)									// do not transclude ns if Template prefix seen earlier; EX: {{Template:Wikipedia:A}} should not transclude "Wikipedia:A"; DATE:2013-04-03
-				return SubEval(ctx, wiki, bfr, name_ary, caller, src);
+				// ignore "{{Template:"; EX: {{Template:a}} is the same thing as {{a}}
+				//int tmpl_ns_len = wiki.Ns_mgr().Tmpls_get_w_colon_found(name_ary, colon_pos);
+				int tmpl_ns_len = wiki.Ns_mgr().Tmpls_get_w_colon_found_nst(name_ary, colon_pos);
+				if (tmpl_ns_len != Bry_find_.Not_found) {
+					name_ary = Bry_.Mid(name_ary, tmpl_ns_len, name_ary_len);
+					name_ary_len = name_ary.length;
+					template_prefix_found = true;
+					colon_pos = Bry_find_.Find_fwd(name_ary, Byte_ascii.Colon, 0, name_ary_len);
+					ctx.Page().Stat_itm().Tmpl2_count++;
+				}
+//??				byte[] ns_template_prefix = wiki.Ns_mgr().Ns_template().Name_db_w_colon(); int ns_template_prefix_len = ns_template_prefix.length;
+//??				if (name_ary_len > ns_template_prefix_len && Bry_.Match(name_ary, 0, ns_template_prefix_len, ns_template_prefix)) {
+//??					name_ary = Bry_.Mid(name_ary, ns_template_prefix_len, name_ary_len);
+//??					name_ary_len = name_ary.length;
+//??				}
+
+				else {
+//				if (colon_pos != Bry_find_.Not_found && !template_prefix_found) {
+					//Xow_ns_mgr_name_itm ns_eval = wiki.Ns_mgr().Names_get_w_colon_or_null_found(name_ary, colon_pos);	// match {{:Portal or {{:Wikipedia
+					int ns_pos = wiki.Ns_mgr().Names_get_w_colon_or_null_found_nst(name_ary, colon_pos);	// match {{:Portal or {{:Wikipedia
+					ctx.Page().Stat_itm().Tmpl3_count++;
+					if (ns_pos != Bry_find_.Not_found)									// do not transclude ns if Template prefix seen earlier; EX: {{Template:Wikipedia:A}} should not transclude "Wikipedia:A"; DATE:2013-04-03
+						return SubEval(ctx, wiki, bfr, name_ary, caller, src);
+				}
+			}
+			else
+				ctx.Page().Stat_itm().Tmpl1_count++;
+
 
 			Xol_func_itm finder = new Xol_func_itm();	// TS.MEM: DATE:2016-07-12
 			lang.Func_regy().Find_defn(finder, name_ary, name_bgn, name_ary_len);
@@ -154,7 +174,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 			int finder_colon_pos = finder.Colon_pos();
 			int finder_subst_end = finder.Subst_end();
 
-			int colon_pos = -1;
+			colon_pos = -1;
 			switch (finder_tid) {
 				case Xot_defn_.Tid_subst:	// subst is added verbatim; EX: {{subst:!}} -> {{subst:!}}; logic below is to handle printing of arg which could be standardized if src[] was available for tmpl
 					bfr.Add(Xop_curly_bgn_lxr.Hook).Add(name_ary);
@@ -207,12 +227,21 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 					break;
 			}
 			if (subst_found) {// subst found; remove Template: if it exists; EX: {{safesubst:Template:A}} -> {{A}} not {{Template:A}}; EX:en.d:Kazakhstan; DATE:2014-03-25
-				ns_template_prefix = wiki.Ns_mgr().Ns_template().Name_db_w_colon(); ns_template_prefix_len = ns_template_prefix.length;
-				if (name_ary_len > ns_template_prefix_len && Bry_.Match(name_ary, name_bgn, name_bgn + ns_template_prefix_len, ns_template_prefix)) {
-					name_ary = Bry_.Mid(name_ary, name_bgn + ns_template_prefix_len, name_ary_len);
+				colon_pos = Bry_find_.Find_fwd(name_ary, Byte_ascii.Colon, 0, name_ary_len);
+				int tmpl_ns_len = wiki.Ns_mgr().Tmpls_get_w_colon_found_nst(name_ary, colon_pos);
+				if (tmpl_ns_len != Bry_find_.Not_found) {
+					name_ary = Bry_.Mid(name_ary, tmpl_ns_len, name_ary_len);
 					name_ary_len = name_ary.length;
-					name_bgn = 0;
 					template_prefix_found = true;
+					colon_pos = Bry_find_.Find_fwd(name_ary, Byte_ascii.Colon, 0, name_ary_len);
+
+//??				byte[] ns_template_prefix = wiki.Ns_mgr().Ns_template().Name_db_w_colon();
+//??				int ns_template_prefix_len = ns_template_prefix.length;
+//??				if (name_ary_len > ns_template_prefix_len && Bry_.Match(name_ary, name_bgn, name_bgn + ns_template_prefix_len, ns_template_prefix)) {
+//??					name_ary = Bry_.Mid(name_ary, name_bgn + ns_template_prefix_len, name_ary_len);
+//??					name_ary_len = name_ary.length;
+//??					name_bgn = 0;
+//??					template_prefix_found = true;
 				}
 			}
 			if (colon_pos != -1) {	// func; separate name_ary into name_ary and arg_x

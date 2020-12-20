@@ -21,16 +21,22 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 	private Ordered_hash id_hash = Ordered_hash_.New();		// hash for retrieval by id
 	private Hash_adp_bry name_hash;							// hash for retrieval by name; note that ns names are case-insensitive "File:" == "fILe:"
 	private Hash_adp_bry tmpl_hash;							// hash for retrieval by name; PERF for templates
+	private NameSpaceTable name_nst;
+	private NameSpaceTable tmpl_nst;
 	private Ordered_hash aliases = Ordered_hash_.New();		// hash to store aliases; used to populate name_hash;
 	private final    Int_obj_ref id_hash_ref = Int_obj_ref.New_zero();
 	public Xow_ns_mgr(Xol_case_mgr case_mgr) {
 		name_hash = Hash_adp_bry.ci_u8(case_mgr);
 		tmpl_hash = Hash_adp_bry.ci_u8(case_mgr);
+		name_nst = new NameSpaceTable();
+		tmpl_nst = new NameSpaceTable();
 	}
 	public Xow_ns_mgr Clear() {
 		name_hash.Clear();
 		id_hash.Clear();
 		tmpl_hash.Clear();
+		name_nst.Clear();
+		tmpl_nst.Clear();
 		for (int i = 0; i < ords_len; i++)
 			ords[i] = null;
 		ords_len = 0;
@@ -76,10 +82,17 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 			: (Xow_ns_mgr_name_itm)name_hash.Get_by_mid(src, bgn, colon_pos) // NOTE: can return NULL
 			;
 	}
+	public Xow_ns_mgr_name_itm Names_get_w_colon_or_null_found(byte[] src, int colon_pos) {
+		return (Xow_ns_mgr_name_itm)name_hash.Get_by_mid(src, 0, colon_pos);
+	}
 	public int			Tmpls_get_w_colon(byte[] src, int bgn, int end)  {	// NOTE: get length of template name with a ":"; EX: "Template:A" returns 10; PERF
 		int colon_pos = Bry_find_.Find_fwd(src, Byte_ascii.Colon, bgn, end); 
 		if (colon_pos == Bry_find_.Not_found) return Bry_find_.Not_found;
 		Object o = tmpl_hash.Get_by_mid(src, bgn, colon_pos + 1);	// +1 to include colon_pos
+		return o == null ? Bry_find_.Not_found : ((byte[])o).length;
+	}
+	public int			Tmpls_get_w_colon_found(byte[] src, int colon_pos)  {
+		Object o = tmpl_hash.Get_by_mid(src, 0, colon_pos + 1);	// +1 to include colon_pos
 		return o == null ? Bry_find_.Not_found : ((byte[])o).length;
 	}
 	public void			Aliases_clear() {aliases.Clear();}		
@@ -100,12 +113,16 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 	}
 	private void Rebuild_hashes() {
 		name_hash.Clear(); tmpl_hash.Clear();
+		name_nst.Clear(); tmpl_nst.Clear();
 		for (int i = 0; i < ords_len; i++) {
 			Xow_ns ns = ords[i];
 			if (ns == null) continue;	// TEST: allow gaps in ns numbers; see Talk_skip test and related
 			if (ns.Id() == Xow_ns_.Tid__project_talk) Fix_project_talk(ns);	// NOTE: handle $1 talk as per Language.php!fixVariableInNamespace; placement is important as it must go before key registration but after ord sort
 			Rebuild_hashes__add(name_hash, ns, ns.Name_db());
-			if (ns.Id_is_tmpl()) tmpl_hash.Add(ns.Name_db_w_colon(), ns.Name_db_w_colon());
+			if (ns.Id_is_tmpl()) {
+				tmpl_hash.Add(ns.Name_db_w_colon(), ns.Name_db_w_colon());
+				tmpl_nst.Add_Namespace(ns.Name_db_w_colon());
+			}
 		}
 		int aliases_len = aliases.Count();
 		for (int i = 0; i < aliases_len; i++) {
@@ -119,6 +136,7 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 				byte[] alias_name = Bry_.new_u8(kv.Key());
 				alias_name = Bry_.Add(alias_name, Byte_ascii.Colon);
 				tmpl_hash.Add_if_dupe_use_nth(alias_name, alias_name);
+				tmpl_nst.Add_if_dupe_use_nth(alias_name);
 			}
 		}
 	}
@@ -132,8 +150,11 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 	private void Rebuild_hashes__add(Hash_adp_bry hash, Xow_ns ns, byte[] key) {
 		Xow_ns_mgr_name_itm ns_itm = new Xow_ns_mgr_name_itm(ns, key);
 		hash.Add_if_dupe_use_nth(key, ns_itm);
-		if (Bry_find_.Find_fwd(key, Byte_ascii.Underline) != Bry_find_.Not_found)	// ns has _; add another entry for space; EX: Help_talk -> Help talk
+		name_nst.Add_if_dupe_use_nth(ns.Name_db_w_colon());
+		if (Bry_find_.Find_fwd(key, Byte_ascii.Underline) != Bry_find_.Not_found) {	// ns has _; add another entry for space; EX: Help_talk -> Help talk
 			hash.Add_if_dupe_use_nth(Bry_.Replace(key, Byte_ascii.Underline, Byte_ascii.Space), ns_itm);
+			name_nst.Add_if_dupe_use_nth(Bry_.Replace(ns.Name_db_w_colon(), Byte_ascii.Underline, Byte_ascii.Space));
+		}
 	}
 	public Xow_ns_mgr Add_defaults() { // NOTE: needs to happen after File ns is added; i.e.: cannot be put in Xow_ns_mgr() {} ctor
 		Aliases_add(Xow_ns_.Tid__file		, "Image");			// REF.MW: Setup.php; add "Image", "Image talk" for backward compatibility; note that MW hardcodes Image ns as well
@@ -167,6 +188,7 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 			id_hash.Add(Int_obj_ref.New(ns.Id()), ns);
 		}
 		name_hash.Add_if_dupe_use_nth(ns.Name_db(), new Xow_ns_mgr_name_itm(ns, ns.Name_db()));
+		name_nst.Add_if_dupe_use_nth(ns.Name_db_w_colon());
 		return this;
 	}
 	public int compare(Object lhsObj, Object rhsObj) {
@@ -258,4 +280,84 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 		}
 		Ords_sort();
 	}
+
+	public int Tmpls_get_w_colon_found_nst(byte[] src, int colon_pos)  {
+		return tmpl_nst.Find_template(src, colon_pos);
+	}
+	public int Names_get_w_colon_or_null_found_nst(byte[] src, int colon_pos) {
+		return name_nst.Find_template(src, colon_pos);
+	}
+}
+class NameSpaceTable {
+	private byte[] first_byte = new byte[255];
+	private Namespace[] namespace_names = new Namespace[10];
+	private int namespace_size = 10;
+	private int namespace_used = 0;
+	public void Add_Namespace(byte[] src) {
+		// add upper and lowercase version (according to case_mgr)
+		Add_Namespace_with_case(src);
+		byte[] lower = Xol_case_cvt.Lower_1st(src, 0, src.length, Bool_.N);
+		Add_Namespace_with_case(lower);
+	}
+	private void Add_Namespace_with_case(byte[] src) {
+		int first = src[0] & 0xFF;
+		byte nptr = first_byte[first];
+		Namespace ns = new Namespace();
+		ns.name = src;
+		ns.size = src.length;
+		if (nptr > 0) {
+			ns.next = nptr;
+		}
+		// allocate another slot
+		namespace_used++;
+		if (namespace_used >= namespace_size) {
+			// expand
+			namespace_size += 10;
+			Namespace[] newns = new Namespace[namespace_size];
+			// copy
+			for (int i = 1; i < namespace_used; i++)
+				newns[i] = namespace_names[i];
+			namespace_names = newns;
+		}
+		namespace_names[namespace_used] = ns;
+		first_byte[first] = (byte)namespace_used;
+	}
+	public int Find_template(byte[] src, int colon_pos) {
+		int first = src[0] & 0xFF;
+		byte nptr = first_byte[first];
+		int size = colon_pos + 1;
+		while (nptr > 0) {
+			Namespace ns = namespace_names[nptr];
+			if (ns.size == size && Bry_.Match(src, 0, size, ns.name)) {
+				return size;
+			}
+			nptr = ns.next;
+		}
+		return -1;
+	}
+	public void Clear() {
+		namespace_used = 0;
+		first_byte = new byte[255];
+		namespace_names = new Namespace[10];
+                namespace_size = 10;
+	}
+	public void Add_if_dupe_use_nth(byte[] src) {
+		int size = src.length;
+                if (size == 0) return;
+		int first = src[0] & 0xFF;
+		byte nptr = first_byte[first];
+		while (nptr > 0) {
+			Namespace ns = namespace_names[nptr];
+			if (ns.size == size && Bry_.Match(src, 0, size, ns.name)) {
+				return;
+			}
+			nptr = ns.next;
+		}
+		Add_Namespace_with_case(src);
+	}
+}
+class Namespace {
+	public byte[] name;
+	public int size;
+	public byte next;
 }
