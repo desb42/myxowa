@@ -28,6 +28,7 @@ import gplx.xowa.Xowe_wiki;
 import gplx.xowa.htmls.Xow_html_mgr;
 import gplx.xowa.htmls.core.wkrs.hdrs.Xoh_hdr_html;
 import gplx.xowa.htmls.core.wkrs.lnkes.Xoh_lnke_html;
+import gplx.xowa.htmls.core.wkrs.magics.Xoh_magic_html;
 import gplx.xowa.htmls.core.wkrs.lnkis.htmls.Xoh_lnki_wtr;
 import gplx.xowa.langs.kwds.Xol_kwd_grp_;
 import gplx.xowa.parsers.Xop_ctx;
@@ -45,6 +46,7 @@ import gplx.xowa.parsers.htmls.Mwh_atr_itm_;
 import gplx.xowa.parsers.lists.Xop_list_tkn;
 import gplx.xowa.parsers.lists.Xop_list_tkn_;
 import gplx.xowa.parsers.lnkes.Xop_lnke_tkn;
+import gplx.xowa.parsers.magics.Xop_magic_tkn;
 import gplx.xowa.parsers.lnkis.Xop_lnki_tkn;
 import gplx.xowa.parsers.miscs.Xop_bry_tkn;
 import gplx.xowa.parsers.miscs.Xop_hr_tkn;
@@ -83,6 +85,7 @@ public class Xoh_html_wtr {
 	public Xoh_hdr_html			Wkr__hdr()	{return wkr__hdr;}	private final    Xoh_hdr_html wkr__hdr = new Xoh_hdr_html();
 	public Xoh_lnki_wtr			Lnki_wtr() {return lnki_wtr;} private final    Xoh_lnki_wtr lnki_wtr;
 	public Ref_html_wtr			Ref_wtr() {return ref_wtr;} private final    Ref_html_wtr ref_wtr;
+	public Xoh_magic_html		Wkr__magic() {return wkr__magic;} private final    Xoh_magic_html wkr__magic = new Xoh_magic_html();
 
 	public void Init_by_wiki(Xowe_wiki wiki) {
 		cfg.Toc__show_(Bool_.Y).Lnki__title_(true).Lnki__visited_y_().Lnki__id_(Bool_.Y);	// NOTE: set during Init_by_wiki, b/c all tests assume these are false
@@ -150,6 +153,7 @@ public class Xoh_html_wtr {
 			case Xop_tkn_itm_.Tid_uniq:				Uniq        (bfr, ctx, hctx, src, (Xop_uniq_tkn)tkn); break;
 			case Xop_tkn_itm_.Tid_lnki:				lnki_wtr.Write_lnki(bfr, hctx, src, (Xop_lnki_tkn)tkn); break;
 			case Xop_tkn_itm_.Tid_lnke:				wkr__lnke.Write_html(bfr, html_mgr, this, hctx, ctx, src, (Xop_lnke_tkn)tkn); break;
+			case Xop_tkn_itm_.Tid_magic:			wkr__magic.Write_html(bfr, html_mgr, this, hctx, ctx, src, (Xop_magic_tkn)tkn); break;
 			case Xop_tkn_itm_.Tid_hdr:				wkr__hdr.Write_html(bfr, this, wiki, page, ctx, hctx, cfg, grp, sub_idx, src, (Xop_hdr_tkn)tkn); break;
 			case Xop_tkn_itm_.Tid_para:
 			case Xop_tkn_itm_.Tid_pre:

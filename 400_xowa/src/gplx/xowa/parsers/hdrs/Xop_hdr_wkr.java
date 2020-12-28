@@ -29,12 +29,29 @@ public class Xop_hdr_wkr implements Xop_ctx_wkr {
 		if (bgn_hdr_len > 1 && ctx.Parse_tid() == Xop_parser_tid_.Tid__wtxt)	// NOTE: \n= is not uncommon for templates; ignore them;
 			ctx.Msg_log().Add_itm_none(Xop_hdr_log.Dangling_hdr, src, bgn.Src_bgn(), bgn_pos);	
 	}
+	private boolean realheader(byte[] src, int src_len, int pos) {
+		while (pos < src_len) {
+			byte b = src[pos];
+			if (b == '=' && src[pos+1] == '\n')
+				return true; // a terminating header
+			else if (b == '\n')
+				break; // not header????
+			pos++;
+		}
+		return false; // not a header
+	}
 	public int Make_tkn_bgn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos) {
 		if (bgn_pos == Xop_parser_.Doc_bgn_bos) bgn_pos = 0;	// do not allow -1 pos
+		int new_pos = Bry_find_.Find_fwd_while(src, cur_pos, src_len, Xop_hdr_lxr.Hook);				// count all =
+                if (!realheader(src, src_len, new_pos)) {
+                    // not a 'real' header traet as text?
+                        Xop_tkn_itm tkn = tkn_mkr.Txt(bgn_pos, new_pos);
+			ctx.Subs_add(root, tkn);
+                        return new_pos;
+                }
 		ctx.Apos().End_frame(ctx, root, src, bgn_pos, false);
 		Close_open_itms(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos);
 		ctx.Para().Process_block__bgn__nl_w_symbol(ctx, root, src, bgn_pos, cur_pos, Xop_xnde_tag_.Tag__h2);	// pass h2; should pass h# where # is correct #, but for purpose of Para_wkr, <h2> tag does not matter
-		int new_pos = Bry_find_.Find_fwd_while(src, cur_pos, src_len, Xop_hdr_lxr.Hook);				// count all =
 		int hdr_len = new_pos - cur_pos + 1;														// +1 b/c Hook has 1 eq: "\n="
 		switch (hdr_len) {
 			case 1: ctx.Msg_log().Add_itm_none(Xop_hdr_log.Len_1, src, bgn_pos, new_pos); break;			// <h1>; flag

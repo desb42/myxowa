@@ -73,6 +73,7 @@ public class Xop_tkn_itm_ {
 , Tid_fakeNewLine = 53
 , Tid_nowiki = 54
 , Tid_list_new = 55
+, Tid_magic = 56
 ;
 public static final    String[] Tid__names
 = new String[]
@@ -132,5 +133,6 @@ public static final    String[] Tid__names
 , "fakenl"
 , "nowiki"
 , "list_new"
+, "magic"
 };
 }

@@ -54,32 +54,38 @@ public class Xop_xnde_tag_regy {
 		Init_trie(trie_wtxt_main , xtn_hash, Bool_.N);
 
 		byte[] md5 = trie_tmpl.Md5();
-		if (Bry_.Eq(md5, Db_btrie_xnde_tag_defn.Hash()))
-			db_trie_defn = new Db_btrie_xnde_tag_defn(trie_tmpl.Objs());
-		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_defn_en.Hash()))
-			db_trie_defn = new Db_btrie_xnde_tag_defn_en(trie_tmpl.Objs());
-		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_defn_de.Hash()))
-			db_trie_defn = new Db_btrie_xnde_tag_defn_de(trie_tmpl.Objs());
+		if (Bry_.Eq(md5, Db_btrie_xnde_tag_defn_ew.Hash()))
+			db_trie_defn = new Db_btrie_xnde_tag_defn_ew(trie_tmpl.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_defn_ewb.Hash()))
+			db_trie_defn = new Db_btrie_xnde_tag_defn_ewb(trie_tmpl.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_defn_ewv.Hash()))
+			db_trie_defn = new Db_btrie_xnde_tag_defn_ewv(trie_tmpl.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_defn_dw.Hash()))
+			db_trie_defn = new Db_btrie_xnde_tag_defn_dw(trie_tmpl.Objs());
 		else
 			trie_tmpl.Dumpit("*** defn ***");
             
 		md5 = trie_wtxt_tmpl.Md5();
-		if (Bry_.Eq(md5, Db_btrie_xnde_tag_tmpl.Hash()))
-			db_trie_tmpl = new Db_btrie_xnde_tag_tmpl(trie_wtxt_tmpl.Objs());
-		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_tmpl_en.Hash()))
-			db_trie_tmpl = new Db_btrie_xnde_tag_tmpl_en(trie_wtxt_tmpl.Objs());
-		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_tmpl_de.Hash()))
-			db_trie_tmpl = new Db_btrie_xnde_tag_tmpl_de(trie_wtxt_tmpl.Objs());
+		if (Bry_.Eq(md5, Db_btrie_xnde_tag_tmpl_ew.Hash()))
+			db_trie_tmpl = new Db_btrie_xnde_tag_tmpl_ew(trie_wtxt_tmpl.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_tmpl_ewb.Hash()))
+			db_trie_tmpl = new Db_btrie_xnde_tag_tmpl_ewb(trie_wtxt_tmpl.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_tmpl_ewv.Hash()))
+			db_trie_tmpl = new Db_btrie_xnde_tag_tmpl_ewv(trie_wtxt_tmpl.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_tmpl_dw.Hash()))
+			db_trie_tmpl = new Db_btrie_xnde_tag_tmpl_dw(trie_wtxt_tmpl.Objs());
 		else
 			trie_wtxt_tmpl.Dumpit("*** tmpl ***");
 
 		md5 = trie_wtxt_main.Md5();
-		if (Bry_.Eq(md5, Db_btrie_xnde_tag_wtxt.Hash()))
-			db_trie_wtxt = new Db_btrie_xnde_tag_wtxt(trie_wtxt_main.Objs());
-		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_wtxt_en.Hash()))
-			db_trie_wtxt = new Db_btrie_xnde_tag_wtxt_en(trie_wtxt_main.Objs());
-		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_wtxt_de.Hash()))
-			db_trie_wtxt = new Db_btrie_xnde_tag_wtxt_de(trie_wtxt_main.Objs());
+		if (Bry_.Eq(md5, Db_btrie_xnde_tag_wtxt_ew.Hash()))
+			db_trie_wtxt = new Db_btrie_xnde_tag_wtxt_ew(trie_wtxt_main.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_wtxt_ewb.Hash()))
+			db_trie_wtxt = new Db_btrie_xnde_tag_wtxt_ewb(trie_wtxt_main.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_wtxt_ewv.Hash()))
+			db_trie_wtxt = new Db_btrie_xnde_tag_wtxt_ewv(trie_wtxt_main.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_xnde_tag_wtxt_dw.Hash()))
+			db_trie_wtxt = new Db_btrie_xnde_tag_wtxt_dw(trie_wtxt_main.Objs());
 		else
 			trie_wtxt_main.Dumpit("*** wtxt ***");
 	}

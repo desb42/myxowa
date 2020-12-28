@@ -452,7 +452,7 @@ public class Xoh_page_wtr_wkr {
 	private void Build_json_logos(Json_nde data, String lang) {
 /* to produce
 "data-logos": {
-	"main-page-href":"/wiki/",
+	"link-mainpage":"/wiki/",
 	"icon":"wikipedia.png",
 	"wordmark":{
 		"src":"wikipedia-wordmark-en.svg",
@@ -471,7 +471,7 @@ public class Xoh_page_wtr_wkr {
 			Json_nde wm = Json_nde.NewByVal();
 			Json_nde tl = Json_nde.NewByVal();
 	
-			dl.AddKvStr("main-page-href", "/wiki/");
+			dl.AddKvStr("link-mainpage", "/wiki/");
 			dl.AddKvStr("icon", "/xowa/static/images/mobile/copyright/wikipedia.png");
 	
 			wm.AddKvStr("src", "/xowa/static/images/mobile/copyright/wikipedia-wordmark-" + lang +".svg");
@@ -549,24 +549,24 @@ public class Xoh_page_wtr_wkr {
 	private boolean once = true;
 	private Mustache_tkn_itm root_legacy;
 	private Mustache_tkn_itm root_new;
-	public void Render_Content(Xowe_wiki wiki, Bry_bfr bfr, Json_nde data) {
+	public void Render_Content(Xowe_wiki wiki, Bry_bfr bfr, Json_nde data, boolean is_legacy) {
 		if (once) {
 			once = false;
 			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
 			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
-			root_legacy = parser.Parse("content-test");
+			root_legacy = parser.Parse("xowa-legacy"); // aka skin-legacy
 			//parser = new Mustache_tkn_parser(template_root);
-			root_new = parser.Parse("content-test-new");
+			root_new = parser.Parse("xowa"); // aka skin
 		}
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
 		Mustache_bfr mbfr = Mustache_bfr.New_bfr(bfr);
-		if (wiki.Skin_mgr().Get_skin().equals("vector-new")) {
-			root_new.Render(mbfr, mctx);
-			vectortags = " skin-vector-max-width skin-vector-search-header";
-		}
-		else {
+		if (is_legacy) {
 			root_legacy.Render(mbfr, mctx);
 			vectortags = " skin-vector-legacy";
+		}
+		else {
+			root_new.Render(mbfr, mctx);
+			vectortags = " skin-vector-max-width skin-vector-search-header";
 		}
 	}
 	private byte[] Content(Xow_portal_mgr portal_mgr, byte[] page_data, Xoae_page page, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte html_gen_tid, byte[] pagename_for_h1, byte[] modified_on_msg) {
@@ -575,10 +575,14 @@ public class Xoh_page_wtr_wkr {
 
 		Json_nde data = Json_nde.NewByVal();
 
-		data.AddKvStr("page-langcode", "en");
+		boolean is_legacy = !wiki.Skin_mgr().Get_skin().equals("vector-new");
+
+		//data.AddKvStr("page-langcode", "en"); // set in Page_heading
 		data.AddKvBool("page-isarticle", true);
 		data.AddKvBool("sidebar-visible", true); // for skin.mustache
 		data.AddKvStr("html-user-language-attributes", "");
+		
+		data.AddKvStr("input-location", is_legacy ? "header-navigation" : "header-moved");
 
 		Xopg_page_heading ph = page.Html_data().Page_heading();
 		ph.Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), pagename_for_h1, page.Lang().Key_bry());
@@ -608,17 +612,16 @@ public class Xoh_page_wtr_wkr {
 			Db_Nav_template.Build_Menu_json(wiki, Bry_.new_a7("p-views"), Bry_.new_a7("Views"), portal_mgr.Txt_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect))
 		);
 
-                data.AddKvStr("portal_div_footer", portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date));
+		data.AddKvStr("portal_div_footer", portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date));
 
 		build_msg(data, wiki);
 
 		Build_json_logos(data, String_.new_a7(page.Lang().Key_bry()));
-                Build_json_search(data, wiki);
-		data.AddKvBool("is-search-in-header", true);
+		Build_json_search(data, wiki);
 
-                //System.out.println(data.Print_as_json());
+ 		//System.out.println(data.Print_as_json());
 
-		Render_Content(wiki, tmp_bfr, data);
+		Render_Content(wiki, tmp_bfr, data, is_legacy);
 		return tmp_bfr.To_bry_and_clear();
 	}
 	private byte[] Pagebody(Xow_portal_mgr portal_mgr, byte[] page_data, Xoae_page page) {

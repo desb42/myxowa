@@ -126,7 +126,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 				//Gfo_usr_dlg_.Instance.Log_many("", "", "parser.tmpl:dynamic is blank; page=~{0}", ctx.Page().Url_bry_safe()); // downgraded from warning to note; PAGE:de.d:país DATE:2016-09-07
 				//return false;
 			}
-			else {
+			else if (name_bgn > 0) {
 				name_ary = Bry_.Mid(name_ary, name_bgn, name_ary_len);
 				name_ary_len = name_ary.length;
 			}
@@ -168,7 +168,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 
 
 			Xol_func_itm finder = new Xol_func_itm();	// TS.MEM: DATE:2016-07-12
-			lang.Func_regy().Find_defn(finder, name_ary, name_bgn, name_ary_len);
+			lang.Func_regy().Find_defn(finder, name_ary, 0, name_ary_len);
 			defn = finder.Func();
 			int finder_tid = finder.Tid();
 			int finder_colon_pos = finder.Colon_pos();
@@ -305,9 +305,9 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 		switch (defn.Defn_tid()) {
 			case Xot_defn_.Tid_null:	// defn is unknown
 				if (ignore_hash.Get_by_bry(name_ary) == null) {
-					if (Pfunc_rel2abs.Rel2abs_ttl(name_ary, name_bgn, name_ary_len)) {// rel_path; EX: {{/../Peer page}}; DATE:2013-03-27
+					if (Pfunc_rel2abs.Rel2abs_ttl(name_ary, 0, name_ary_len)) {// rel_path; EX: {{/../Peer page}}; DATE:2013-03-27
 						Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
-						name_ary = Pfunc_rel2abs.Rel2abs(tmp_bfr, wiki.Parser_mgr().Rel2abs_ary(), Bry_.Mid(name_ary, name_bgn, name_ary_len), ctx.Page().Ttl().Raw());
+						name_ary = Pfunc_rel2abs.Rel2abs(tmp_bfr, wiki.Parser_mgr().Rel2abs_ary(), Bry_.Mid(name_ary, 0, name_ary_len), ctx.Page().Ttl().Raw());
 						tmp_bfr.Mkr_rls();
 						return SubEval(ctx, wiki, bfr, name_ary, caller, src);				
 					}
@@ -337,10 +337,10 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
                                     	int  a=1;
                                     }
 */
-if (Bry_.Eq(caller.Frame_ttl(), Bry_.new_a7("Template:BookCat/core"))) {
-    return true;
-    //int a=1;
-}
+//if (Bry_.Eq(caller.Frame_ttl(), Bry_.new_a7("Template:BookCat/core"))) {
+    //return true;
+//    int a=1;
+//}
 //System.out.println(String_.new_u8(caller.Frame_ttl()));
 					Xot_invk_tkn_.Eval_func(ctx, src, caller, this, bfr, defn, argx_ary);
 					rv = true;

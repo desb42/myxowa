@@ -6,3 +6,6 @@
 
 /* mediawiki.toc.styles.css */
 .toctogglecheckbox:checked ~ ul{display:none}@media screen{:not(:checked) > .toctogglecheckbox{display:inline !important;position:absolute;opacity:0;z-index:-1}.toctogglespan{font-size:94%}:not(:checked) > .toctogglespan:before{content:' ['}:not(:checked) > .toctogglespan:after{content:']'}.toctogglelabel{cursor:pointer;color:#0645ad}.toctogglelabel:hover{text-decoration:underline}.toctogglecheckbox:focus + .toctitle .toctogglelabel{text-decoration:underline;outline:dotted 1px;outline:auto -webkit-focus-ring-color}.toctogglecheckbox:checked + .toctitle .toctogglelabel:after{content:'show'}.toctogglecheckbox:not(:checked) + .toctitle .toctogglelabel:after{content:'hide'}}@media print{.toctogglecheckbox:checked + .toctitle{display:none}}
+
+/* Gadget-PageNumbers-core.css */
+#pageContainer{ margin-top:14px}#ct-pagenumbers{position:absolute;top:0;left:0} span.pagenumber{color:#666666;font-size:inherit;line-height:inherit;font-family:monospace;font-weight:600;text-shadow:0em 0em 0.25em #A8A;vertical-align:top} div.pagenumber{position:absolute;font-size:calc(1rem - 5px);line-height:calc(1rem * 1);font-weight:normal;font-style:normal;text-indent:0em} .pagenumber.pagenumber-invisible{display:none}

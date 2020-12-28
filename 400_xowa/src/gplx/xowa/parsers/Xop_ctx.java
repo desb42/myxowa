@@ -20,6 +20,7 @@ import gplx.xowa.guis.*;
 import gplx.xowa.xtns.scribunto.*; import gplx.xowa.xtns.wbases.*; import gplx.xowa.xtns.lst.*;
 import gplx.xowa.parsers.apos.*; import gplx.xowa.parsers.amps.*; import gplx.xowa.parsers.lnkes.*; import gplx.xowa.parsers.hdrs.*; import gplx.xowa.parsers.lists.*; import gplx.xowa.parsers.tblws.*; import gplx.xowa.parsers.paras.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.parsers.logs.*; import gplx.xowa.htmls.modules.popups.keeplists.*;
+import gplx.xowa.parsers.magics.*;
 public class Xop_ctx {
 	private final    Xop_ctx_wkr[] wkrs;
 	Xop_ctx(Xowe_wiki wiki, Xoae_page page) {
@@ -71,7 +72,9 @@ public class Xop_ctx {
 	public boolean				Ref_ignore() {return ref_ignore;} public Xop_ctx Ref_ignore_(boolean v) {ref_ignore = v; return this;} private boolean ref_ignore;	// NOTE: only applies to sub_ctx's created by <pages> and {{#lst}}; if true, does not add <ref> to page.Ref_mgr; DATE:2014-04-24
 	public byte[]				References_group() {return references_group;} public Xop_ctx References_group_(byte[] v) {references_group = v; return this;} private byte[] references_group;
 
-	public Xop_log_property_wkr Xtn__wikidata__property_wkr() {return app.Wiki_mgr().Wdata_mgr().Property_wkr();}
+	public Xop_magic_wkr			Magic()				{return magic;}	private final    Xop_magic_wkr magic = new Xop_magic_wkr();
+
+        public Xop_log_property_wkr Xtn__wikidata__property_wkr() {return app.Wiki_mgr().Wdata_mgr().Property_wkr();}
 	public Xop_log_invoke_wkr	Xtn__scribunto__invoke_wkr() {
 		if (scrib_invoke_wkr == null)
 			scrib_invoke_wkr = ((Scrib_xtn_mgr)(wiki.Xtn_mgr().Get_or_fail(Scrib_xtn_mgr.XTN_KEY))).Invoke_wkr();

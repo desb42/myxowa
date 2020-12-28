@@ -17,6 +17,7 @@ package gplx.xowa.parsers; import gplx.*; import gplx.xowa.*;
 import gplx.core.btries.*;
 import gplx.xowa.langs.*;
 import gplx.xowa.parsers.apos.*; import gplx.xowa.parsers.amps.*; import gplx.xowa.parsers.lnkes.*; import gplx.xowa.parsers.hdrs.*; import gplx.xowa.parsers.lists.*; import gplx.xowa.parsers.tblws.*; import gplx.xowa.parsers.paras.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.tmpls.*; import gplx.xowa.parsers.miscs.*; import gplx.xowa.parsers.uniqs.*;
+import gplx.xowa.parsers.magics.*;
 public class Xop_lxr_mgr {
 	private final    Xop_lxr[] ary;
 	private final    List_adp page_lxr_list = List_adp_.New();
@@ -80,6 +81,7 @@ public class Xop_lxr_mgr {
 		, Xop_under_lxr.Instance
 //		, Xop_uniq_lxr.Instance
 		// , Xop_uniq_lxr.Instance // NOWIKI;DATE:2018-01-16
+		, Xop_magic_lxr.Instance
 		});
 	}
 	public static Xop_lxr_mgr new_anchor_encoder() {
@@ -91,6 +93,7 @@ public class Xop_lxr_mgr {
 		, Xop_lnki_lxr_bgn.Instance, Xop_lnki_lxr_end.Instance
 		, Xop_lnke_lxr.Instance, Xop_lnke_end_lxr.Instance
 		, Xop_xnde_lxr.Instance
+		, Xop_magic_lxr.Instance
 		});
 	}
 	public static final    Xop_lxr_mgr Popup_lxr_mgr	// same as orig_page, except apos_lxr added

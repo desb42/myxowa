@@ -55,10 +55,29 @@ public class Mustache_render_ctx {
 		}
 		return rv;
 	}
+	private Mustache_doc_itm[] Section_keycheck(String key) {
+		Mustache_doc_itm[] subs_itm;
+		int stack_pos = stack.Len();
+		Mustache_doc_itm itm = cur;
+		while (itm != Mustache_doc_itm_.Null_itm) {
+			subs_itm = itm.Mustache__subs(key);
+			if (subs_itm != null)
+				return subs_itm;
+			// current itm does not handle key -> go up stack
+			else {
+				--stack_pos;
+				if (stack_pos == -1) // nothing else in stack
+					break;
+				else
+					itm = ((Mustache_stack_itm)stack.Get_at(stack_pos)).cur;
+			}
+		}
+		return null;
+	}
 	public void Section_bgn(String key) {
 		Mustache_stack_itm stack_itm = new Mustache_stack_itm(cur, subs, subs_idx, subs_len, cur_is_bool); // note that cur is "owner" since subs_idx == 0
+		subs = Section_keycheck(key);
 		stack.Add(stack_itm);
-		subs = cur.Mustache__subs(key);
 		if (subs == null) // subs == null if property does not exist; EX: "folder{{#files}}file{{/files}}" and folder = new Folder(File[0]);
 			subs = Mustache_doc_itm_.Ary__empty;
 		subs_len = subs.length;

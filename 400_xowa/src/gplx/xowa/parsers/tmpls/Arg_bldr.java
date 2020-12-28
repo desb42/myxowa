@@ -22,9 +22,11 @@ public class Arg_bldr {	// TS
 		boolean ws_bgn_chk = true, colon_chk = false, itm_is_static = true, key_exists = false; int ws_bgn_idx = -1, ws_end_idx = -1, cur_itm_subs_len = 0, cur_nde_idx = -1; Arg_nde_tkn cur_nde = null; Arg_itm_tkn cur_itm = null;
 		int brack_count = 0;
 		Xop_tkn_itm eq_pending = null;
+		int sub_pos_end = -1;
 		for (int i = loop_bgn; i < loop_end; i++) {	// loop over subs between bookends; if lnki, all tkns between [[ and ]]; if tmpl, {{ and }}
 			Xop_tkn_itm sub = root.Subs_get(i);
 			int sub_pos_bgn = sub.Src_bgn_grp(root, i);
+			sub_pos_end = sub.Src_end_grp(root, i);// remeber the end
 			if (cur_nde == null) {
 				cur_nde = tkn_mkr.ArgNde(++cur_nde_idx, sub_pos_bgn);
 				brack_count = 0; key_exists = false;
@@ -85,7 +87,7 @@ public class Arg_bldr {	// TS
 								if (sub_as_eq_len == 1)									// =.len == 1
 									cur_nde.Eq_tkn_(sub);								// set as eq tkn
 								else													// =.len  > 1
-									eq_pending = sub;									// do not set as eq tkn; note that Eq_tkn exists for bookkeeping and is not printed out, 
+									eq_pending = sub;
 								key_exists = true;
 								Arg_itm_end(ctx, cur_nde, cur_itm, ws_bgn_idx, ws_end_idx, cur_itm_subs_len, sub_pos_bgn, wkr_typ, key_exists, true, itm_is_static, src, cur_nde_idx);
 								cur_nde.Key_tkn_(cur_itm);
@@ -134,6 +136,12 @@ public class Arg_bldr {	// TS
 							if (ref_xnde != null)
 								cur_itm.Dat_ary_(ref_xnde.Xtn_Key(ctx, src, sub_as_xnde));
 							break;*/
+                                                default:
+                                                        if (sub_as_xnde.Tag().Xtn_mw()) {
+//		byte[] unique_bry = ctx.Wiki().Parser_mgr().Uniq_mgr().Add(Bool_.Y, sub_as_xnde.Tag().Name_bry(), sub_as_xnde.Tag()h_bry);
+                                                        int a=1;
+                                                        }
+
 					}
 					if (ws_bgn_chk) ws_bgn_chk = false; else ws_end_idx = -1;		// INLINE: AdjustWsForTxtTkn
 					break;
@@ -147,8 +155,13 @@ public class Arg_bldr {	// TS
 		if (cur_nde == null)	// occurs when | is last tkn; EX: {{name|a|}};
 			cur_nde = tkn_mkr.ArgNde(++cur_nde_idx, bgn_pos);
 		if (cur_itm == null) {	// occurs when = is last tkn; EX: {{name|a=}};
-			cur_itm = tkn_mkr.ArgItm(bgn_pos, -1);
-			itm_is_static = ws_bgn_chk = true; cur_itm_subs_len = 0; ws_bgn_idx = ws_end_idx = -1; key_exists = false;
+			//cur_itm = tkn_mkr.ArgItm(bgn_pos, -1);
+			cur_itm = tkn_mkr.ArgItm(sub_pos_end, -1);
+			if (eq_pending != null) { // there may be more = signs; EX: {{name|a===}}
+				eq_pending.Src_end_(eq_pending.Src_end() -1);					// remove an "=" EX:"A===" -> "A","=","=="
+				cur_itm.Subs_add_grp(eq_pending, root, loop_end); cur_itm_subs_len++;	// add the tkn to cur_itm
+			}
+			itm_is_static = ws_bgn_chk = true; cur_itm_subs_len = 0; ws_bgn_idx = ws_end_idx = -1; //key_exists = false;
 		}
 		Arg_itm_end(ctx, cur_nde, cur_itm, ws_bgn_idx, ws_end_idx, cur_itm_subs_len, bgn_pos, wkr_typ, key_exists, false, itm_is_static, src, cur_nde_idx);
 		cur_nde.Val_tkn_(cur_itm);

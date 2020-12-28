@@ -171,6 +171,9 @@ public class Xop_lnki_wkr implements Xop_ctx_wkr, Xop_arg_wkr {
 							}
 							else	// no equal tkn 
 								lnki.Caption_tkn_pipe_trick_(end - bgn == 0);	// NOTE: pipe_trick check must go here; checks for val_tkn.Bgn == val_tkn.End; if there is an equal token but no val, then Bgn == End which would trigger false pipe trick (EX:"[[A|B=]]")
+								if (lnki.Ttl().Has_fragment()) {  // beware [[A#l|]] does not convert 20201227
+									return false;
+								}
 						}
 						else {	// lnki does have caption; new caption should be concatenated; EX:[[A|B|C]] -> "B|C" x> "B"; NOTE: pipe-trick and eq tkn should not matter to multiple captions; DATE:2014-05-05
 							Xop_tkn_itm val_tkn = arg.Val_tkn();

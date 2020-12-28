@@ -50,7 +50,7 @@ public class JsonMustacheNde implements Mustache_doc_itm {
 	public Mustache_doc_itm[] Mustache__subs(String key) {
 		Json_itm itm = nde.Get_itm(Bry_.new_u8(key));
 		if (itm == null) { // mustacheKey does not exist in current jsonNde
-			return Mustache_doc_itm_.Ary__bool__n;
+			return null;
 		}
 		else { // mustacheKey exists
 			if (itm.Tid() == Json_itm_.Tid__kv) {

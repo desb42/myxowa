@@ -77,7 +77,7 @@ class Synh_xtn_nde_ {
 	, Style_line = Bry_.new_a7("-moz-user-select:none;"), Style_highlight = Bry_.new_a7("background-color: #FFFFCC;")
 	, Bry__style__overflow__auto = Bry_.new_a7("overflow:auto")
 	, Bry__pretty_print = Bry_.new_a7("prettyprint lang-")
-	, Bry__div_bgn = Bry_.new_a7("<div class=\"mw-highlight\"")
-	, Bry__code_bgn = Bry_.new_a7("<code class=\"mw-highlight\"")
+	, Bry__div_bgn = Bry_.new_a7("<div class=\"mw-highlight mw-code\"")
+	, Bry__code_bgn = Bry_.new_a7("<code class=\"mw-highlight mw-code\"")
 	;
 }

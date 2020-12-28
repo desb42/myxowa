@@ -21,7 +21,7 @@ public class Db_btrie_http implements Db_btrie {
 	private int found;
 	private int offset;
 	public Db_btrie_http(Object[] objs) {this.objs = objs; }
-	public static byte[] Hash() { return Bry_.new_a7("ad4222bf913b59be22374478a4f86e42"); }
+	public static byte[] Hash() { return Bry_.new_a7("cfd15cf15a0fa867aa850b7b4af3b1f5"); }
 	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
 		found = -1;
 		offset = -1;
@@ -163,30 +163,52 @@ public class Db_btrie_http implements Db_btrie {
 				break;
 			case 's':
 			case 'S':
-				if (ofs+9 < src_len && (src[ofs+1] | 32) == 'e' && (src[ofs+2] | 32) == 'c' && src[ofs+3] == '-' && (src[ofs+4] | 32) == 'f' && (src[ofs+5] | 32) == 'e' && (src[ofs+6] | 32) == 't' && (src[ofs+7] | 32) == 'c' && (src[ofs+8] | 32) == 'h' && src[ofs+9] == '-') {
-					if (ofs+10 < src_len) switch ((src[ofs+10] | 32)) {
-						case 'd':
-							if (ofs+14 < src_len && (src[ofs+11] | 32) == 'e' && (src[ofs+12] | 32) == 's' && (src[ofs+13] | 32) == 't' && src[ofs+14] == ':') {
-								found = ofs + 15;
-								offset = 23; // ('Sec-Fetch-Dest:', 23)
+				if (ofs+3 < src_len && (src[ofs+1] | 32) == 'e' && (src[ofs+2] | 32) == 'c' && src[ofs+3] == '-') {
+					if (ofs+4 < src_len) switch ((src[ofs+4] | 32)) {
+						case 'c':
+							if (ofs+8 < src_len && (src[ofs+5] | 32) == 'h' && src[ofs+6] == '-' && (src[ofs+7] | 32) == 'u' && (src[ofs+8] | 32) == 'a') {
+								if (ofs+9 < src_len) switch (src[ofs+9]) {
+									case '-':
+										if (ofs+16 < src_len && (src[ofs+10] | 32) == 'm' && (src[ofs+11] | 32) == 'o' && (src[ofs+12] | 32) == 'b' && (src[ofs+13] | 32) == 'i' && (src[ofs+14] | 32) == 'l' && (src[ofs+15] | 32) == 'e' && src[ofs+16] == ':') {
+											found = ofs + 17;
+											offset = 26; // ('Sec-Ch-Ua-Mobile:', 26)
+										}
+										break;
+									case ':':
+										found = ofs + 10;
+										offset = 25; // ('Sec-Ch-Ua:', 25)
+										break;
+								}
 							}
 							break;
-						case 'm':
-							if (ofs+14 < src_len && (src[ofs+11] | 32) == 'o' && (src[ofs+12] | 32) == 'd' && (src[ofs+13] | 32) == 'e' && src[ofs+14] == ':') {
-								found = ofs + 15;
-								offset = 21; // ('Sec-Fetch-Mode:', 21)
-							}
-							break;
-						case 's':
-							if (ofs+14 < src_len && (src[ofs+11] | 32) == 'i' && (src[ofs+12] | 32) == 't' && (src[ofs+13] | 32) == 'e' && src[ofs+14] == ':') {
-								found = ofs + 15;
-								offset = 22; // ('Sec-Fetch-Site:', 22)
-							}
-							break;
-						case 'u':
-							if (ofs+14 < src_len && (src[ofs+11] | 32) == 's' && (src[ofs+12] | 32) == 'e' && (src[ofs+13] | 32) == 'r' && src[ofs+14] == ':') {
-								found = ofs + 15;
-								offset = 24; // ('Sec-Fetch-User:', 24)
+						case 'f':
+							if (ofs+9 < src_len && (src[ofs+5] | 32) == 'e' && (src[ofs+6] | 32) == 't' && (src[ofs+7] | 32) == 'c' && (src[ofs+8] | 32) == 'h' && src[ofs+9] == '-') {
+								if (ofs+10 < src_len) switch ((src[ofs+10] | 32)) {
+									case 'd':
+										if (ofs+14 < src_len && (src[ofs+11] | 32) == 'e' && (src[ofs+12] | 32) == 's' && (src[ofs+13] | 32) == 't' && src[ofs+14] == ':') {
+											found = ofs + 15;
+											offset = 23; // ('Sec-Fetch-Dest:', 23)
+										}
+										break;
+									case 'm':
+										if (ofs+14 < src_len && (src[ofs+11] | 32) == 'o' && (src[ofs+12] | 32) == 'd' && (src[ofs+13] | 32) == 'e' && src[ofs+14] == ':') {
+											found = ofs + 15;
+											offset = 21; // ('Sec-Fetch-Mode:', 21)
+										}
+										break;
+									case 's':
+										if (ofs+14 < src_len && (src[ofs+11] | 32) == 'i' && (src[ofs+12] | 32) == 't' && (src[ofs+13] | 32) == 'e' && src[ofs+14] == ':') {
+											found = ofs + 15;
+											offset = 22; // ('Sec-Fetch-Site:', 22)
+										}
+										break;
+									case 'u':
+										if (ofs+14 < src_len && (src[ofs+11] | 32) == 's' && (src[ofs+12] | 32) == 'e' && (src[ofs+13] | 32) == 'r' && src[ofs+14] == ':') {
+											found = ofs + 15;
+											offset = 24; // ('Sec-Fetch-User:', 24)
+										}
+										break;
+								}
 							}
 							break;
 					}

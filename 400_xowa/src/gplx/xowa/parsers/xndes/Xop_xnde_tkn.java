@@ -93,7 +93,7 @@ public class Xop_xnde_tkn extends Xop_tkn_itm_base implements Xop_tblw_tkn {
 				break;
 			case Xop_xnde_tag_.Tid__nowiki:			// evaluate subs; add tags
 			//case Xop_xnde_tag_.Tid__ref:
-			case Xop_xnde_tag_.Tid__math:
+			//case Xop_xnde_tag_.Tid__math:
 				StripState_xnde xnde = (StripState_xnde)this.xnde_xtn;
                                 if (xnde != null)
                                     bfr.Add(xnde.Xtn_key());

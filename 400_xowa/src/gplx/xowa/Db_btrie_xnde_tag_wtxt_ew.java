@@ -16,12 +16,12 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa;
 import gplx.core.btries.Btrie_rv;
 import gplx.Bry_;
-public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
+public class Db_btrie_xnde_tag_wtxt_ew implements Db_btrie {
 	private final Object[] objs;
 	private int found;
 	private int offset;
-	public Db_btrie_xnde_tag_wtxt(Object[] objs) {this.objs = objs; }
-	public static byte[] Hash() { return Bry_.new_a7("3b3fd52a888ecd54f5217a5c2ab0708a"); }
+	public Db_btrie_xnde_tag_wtxt_ew(Object[] objs) {this.objs = objs; }
+	public static byte[] Hash() { return Bry_.new_a7("2d3503ffbc4502582e2560074310ba28"); }
 	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
 		found = -1;
 		offset = -1;
@@ -41,7 +41,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							case 's':
 								if (ofs+8 < src_len && (src[ofs+3] | 32) == 'c' && (src[ofs+4] | 32) == 'h' && (src[ofs+5] | 32) == 'n' && (src[ofs+6] | 32) == 'i' && (src[ofs+7] | 32) == 't' && (src[ofs+8] | 32) == 't') {
 									found = ofs + 9;
-									offset = 76; // ('Abschnitt', 76)
+									offset = 75; // ('Abschnitt', 75)
 								}
 								break;
 						}
@@ -49,7 +49,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 					case 'u':
 						if (ofs+4 < src_len && (src[ofs+2] | 32) == 'd' && (src[ofs+3] | 32) == 'i' && (src[ofs+4] | 32) == 'o') {
 							found = ofs + 5;
-							offset = 127; // ('audio', 127)
+							offset = 110; // ('audio', 110)
 						}
 						break;
 				}
@@ -65,11 +65,11 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 						if (ofs+2 < src_len) switch ((src[ofs+2] | 32)) {
 							case 'i':
 								found = ofs + 3;
-								offset = 98; // ('bdi', 98)
+								offset = 93; // ('bdi', 93)
 								break;
 							case 'o':
 								found = ofs + 3;
-								offset = 102; // ('bdo', 102)
+								offset = 97; // ('bdo', 97)
 								break;
 						}
 						break;
@@ -90,17 +90,9 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 						offset = 29; // ('br', 29)
 						break;
 					case 'u':
-						if (ofs+2 < src_len) switch ((src[ofs+2] | 32)) {
-							case 't':
-								if (ofs+5 < src_len && (src[ofs+3] | 32) == 't' && (src[ofs+4] | 32) == 'o' && (src[ofs+5] | 32) == 'n') {
-									found = ofs + 6;
-									offset = 88; // ('button', 88)
-								}
-								break;
-							case 'y':
-								found = ofs + 3;
-								offset = 103; // ('buy', 103)
-								break;
+						if (ofs+5 < src_len && (src[ofs+2] | 32) == 't' && (src[ofs+3] | 32) == 't' && (src[ofs+4] | 32) == 'o' && (src[ofs+5] | 32) == 'n') {
+							found = ofs + 6;
+							offset = 83; // ('button', 83)
 						}
 						break;
 				}
@@ -121,21 +113,9 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 								}
 								break;
 							case 't':
-								if (ofs+7 < src_len && (src[ofs+3] | 32) == 'e' && (src[ofs+4] | 32) == 'g' && (src[ofs+5] | 32) == 'o' && (src[ofs+6] | 32) == 'r' && (src[ofs+7] | 32) == 'y') {
-									if (ofs+8 < src_len) switch ((src[ofs+8] | 32)) {
-										case 'l':
-											if (ofs+11 < src_len && (src[ofs+9] | 32) == 'i' && (src[ofs+10] | 32) == 's' && (src[ofs+11] | 32) == 't') {
-												found = ofs + 12;
-												offset = 81; // ('categoryList', 81)
-											}
-											break;
-										case 't':
-											if (ofs+11 < src_len && (src[ofs+9] | 32) == 'r' && (src[ofs+10] | 32) == 'e' && (src[ofs+11] | 32) == 'e') {
-												found = ofs + 12;
-												offset = 82; // ('categoryTree', 82)
-											}
-											break;
-									}
+								if (ofs+11 < src_len && (src[ofs+3] | 32) == 'e' && (src[ofs+4] | 32) == 'g' && (src[ofs+5] | 32) == 'o' && (src[ofs+6] | 32) == 'r' && (src[ofs+7] | 32) == 'y' && (src[ofs+8] | 32) == 't' && (src[ofs+9] | 32) == 'r' && (src[ofs+10] | 32) == 'e' && (src[ofs+11] | 32) == 'e') {
+									found = ofs + 12;
+									offset = 78; // ('categoryTree', 78)
 								}
 								break;
 						}
@@ -147,19 +127,9 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 						}
 						break;
 					case 'h':
-						if (ofs+2 < src_len) switch ((src[ofs+2] | 32)) {
-							case 'e':
-								if (ofs+3 < src_len && (src[ofs+3] | 32) == 'm') {
-									found = ofs + 4;
-									offset = 134; // ('chem', 134)
-								}
-								break;
-							case 'o':
-								if (ofs+5 < src_len && (src[ofs+3] | 32) == 'o' && (src[ofs+4] | 32) == 's' && (src[ofs+5] | 32) == 'e') {
-									found = ofs + 6;
-									offset = 118; // ('choose', 118)
-								}
-								break;
+						if (ofs+3 < src_len && (src[ofs+2] | 32) == 'e' && (src[ofs+3] | 32) == 'm') {
+							found = ofs + 4;
+							offset = 117; // ('chem', 117)
 						}
 						break;
 					case 'i':
@@ -196,7 +166,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 					case 'a':
 						if (ofs+3 < src_len && (src[ofs+2] | 32) == 't' && (src[ofs+3] | 32) == 'a') {
 							found = ofs + 4;
-							offset = 99; // ('data', 99)
+							offset = 94; // ('data', 94)
 						}
 						break;
 					case 'd':
@@ -225,41 +195,17 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 						found = ofs + 2;
 						offset = 41; // ('dl', 41)
 						break;
-					case 'o':
-						found = ofs + 2;
-						offset = 104; // ('do', 104)
-						break;
-					case 'r':
-						if (ofs+4 < src_len && (src[ofs+2] | 32) == 'i' && (src[ofs+3] | 32) == 'n' && (src[ofs+4] | 32) == 'k') {
-							found = ofs + 5;
-							offset = 105; // ('drink', 105)
-						}
-						break;
 					case 't':
 						found = ofs + 2;
 						offset = 37; // ('dt', 37)
-						break;
-					case 'y':
-						if (ofs+14 < src_len && (src[ofs+2] | 32) == 'n' && (src[ofs+3] | 32) == 'a' && (src[ofs+4] | 32) == 'm' && (src[ofs+5] | 32) == 'i' && (src[ofs+6] | 32) == 'c' && (src[ofs+7] | 32) == 'p' && (src[ofs+8] | 32) == 'a' && (src[ofs+9] | 32) == 'g' && (src[ofs+10] | 32) == 'e' && (src[ofs+11] | 32) == 'l' && (src[ofs+12] | 32) == 'i' && (src[ofs+13] | 32) == 's' && (src[ofs+14] | 32) == 't') {
-							found = ofs + 15;
-							offset = 83; // ('dynamicPageList', 83)
-						}
 						break;
 				}
 				break;
 			case 'e':
 			case 'E':
-				if (ofs+1 < src_len) switch ((src[ofs+1] | 32)) {
-					case 'a':
-						if (ofs+2 < src_len && (src[ofs+2] | 32) == 't') {
-							found = ofs + 3;
-							offset = 106; // ('eat', 106)
-						}
-						break;
-					case 'm':
-						found = ofs + 2;
-						offset = 3; // ('em', 3)
-						break;
+				if (ofs+1 < src_len && (src[ofs+1] | 32) == 'm') {
+					found = ofs + 2;
+					offset = 3; // ('em', 3)
 				}
 				break;
 			case 'f':
@@ -271,18 +217,18 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 								case 'c':
 									if (ofs+9 < src_len && (src[ofs+4] | 32) == 'a' && (src[ofs+5] | 32) == 'p' && (src[ofs+6] | 32) == 't' && (src[ofs+7] | 32) == 'i' && (src[ofs+8] | 32) == 'o' && (src[ofs+9] | 32) == 'n') {
 										found = ofs + 10;
-										offset = 133; // ('figcaption', 133)
+										offset = 116; // ('figcaption', 116)
 									}
 									break;
 								case 'u':
 									if (ofs+5 < src_len && (src[ofs+4] | 32) == 'r' && (src[ofs+5] | 32) == 'e') {
 										if (ofs+12 < src_len && src[ofs+6] == '-' && (src[ofs+7] | 32) == 'i' && (src[ofs+8] | 32) == 'n' && (src[ofs+9] | 32) == 'l' && (src[ofs+10] | 32) == 'i' && (src[ofs+11] | 32) == 'n' && (src[ofs+12] | 32) == 'e') {
 											found = ofs + 13;
-											offset = 132; // ('figure-inline', 132)
+											offset = 115; // ('figure-inline', 115)
 										}
 										if (found == -1) {
 											found = ofs + 6;
-											offset = 131; // ('figure', 131)
+											offset = 114; // ('figure', 114)
 										}
 									}
 									break;
@@ -300,7 +246,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							case 'r':
 								if (ofs+3 < src_len && (src[ofs+3] | 32) == 'm') {
 									found = ofs + 4;
-									offset = 94; // ('form', 94)
+									offset = 89; // ('form', 89)
 								}
 								break;
 						}
@@ -319,7 +265,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 					case 'r':
 						if (ofs+4 < src_len && (src[ofs+2] | 32) == 'a' && (src[ofs+3] | 32) == 'p' && (src[ofs+4] | 32) == 'h') {
 							found = ofs + 5;
-							offset = 117; // ('graph', 117)
+							offset = 103; // ('graph', 103)
 						}
 						break;
 				}
@@ -393,7 +339,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							case 'd':
 								if (ofs+8 < src_len && (src[ofs+3] | 32) == 'i' && (src[ofs+4] | 32) == 'c' && (src[ofs+5] | 32) == 'a' && (src[ofs+6] | 32) == 't' && (src[ofs+7] | 32) == 'o' && (src[ofs+8] | 32) == 'r') {
 									found = ofs + 9;
-									offset = 115; // ('indicator', 115)
+									offset = 101; // ('indicator', 101)
 								}
 								break;
 							case 'p':
@@ -404,7 +350,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 									}
 									if (found == -1) {
 										found = ofs + 5;
-										offset = 85; // ('input', 85)
+										offset = 80; // ('input', 80)
 									}
 								}
 								break;
@@ -433,23 +379,13 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 					case 'a':
 						if (ofs+8 < src_len && (src[ofs+2] | 32) == 'n' && (src[ofs+3] | 32) == 'g' && (src[ofs+4] | 32) == 'u' && (src[ofs+5] | 32) == 'a' && (src[ofs+6] | 32) == 'g' && (src[ofs+7] | 32) == 'e' && (src[ofs+8] | 32) == 's') {
 							found = ofs + 9;
-							offset = 96; // ('languages', 96)
+							offset = 91; // ('languages', 91)
 						}
 						break;
 					case 'i':
-						if (ofs+2 < src_len) switch ((src[ofs+2] | 32)) {
-							case 'n':
-								if (ofs+3 < src_len && (src[ofs+3] | 32) == 'k') {
-									found = ofs + 4;
-									offset = 125; // ('link', 125)
-								}
-								break;
-							case 's':
-								if (ofs+6 < src_len && (src[ofs+3] | 32) == 't' && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'n' && (src[ofs+6] | 32) == 'g') {
-									found = ofs + 7;
-									offset = 107; // ('listing', 107)
-								}
-								break;
+						if (ofs+3 < src_len && (src[ofs+2] | 32) == 'n' && (src[ofs+3] | 32) == 'k') {
+							found = ofs + 4;
+							offset = 108; // ('link', 108)
 						}
 						if (found == -1) {
 							found = ofs + 2;
@@ -468,13 +404,13 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 									case 'f':
 										if (ofs+7 < src_len && (src[ofs+4] | 32) == 'r' && (src[ofs+5] | 32) == 'a' && (src[ofs+6] | 32) == 'm' && (src[ofs+7] | 32) == 'e') {
 											found = ofs + 8;
-											offset = 122; // ('mapframe', 122)
+											offset = 105; // ('mapframe', 105)
 										}
 										break;
 									case 'l':
 										if (ofs+6 < src_len && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'n' && (src[ofs+6] | 32) == 'k') {
 											found = ofs + 7;
-											offset = 123; // ('maplink', 123)
+											offset = 106; // ('maplink', 106)
 										}
 										break;
 								}
@@ -482,7 +418,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							case 'r':
 								if (ofs+3 < src_len && (src[ofs+3] | 32) == 'k') {
 									found = ofs + 4;
-									offset = 100; // ('mark', 100)
+									offset = 95; // ('mark', 95)
 								}
 								break;
 							case 't':
@@ -496,7 +432,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 					case 'e':
 						if (ofs+3 < src_len && (src[ofs+2] | 32) == 't' && (src[ofs+3] | 32) == 'a') {
 							found = ofs + 4;
-							offset = 124; // ('meta', 124)
+							offset = 107; // ('meta', 107)
 						}
 						break;
 				}
@@ -539,13 +475,13 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 								case 'g':
 									if (ofs+7 < src_len && (src[ofs+4] | 32) == 'r' && (src[ofs+5] | 32) == 'o' && (src[ofs+6] | 32) == 'u' && (src[ofs+7] | 32) == 'p') {
 										found = ofs + 8;
-										offset = 91; // ('optgroup', 91)
+										offset = 86; // ('optgroup', 86)
 									}
 									break;
 								case 'i':
 									if (ofs+5 < src_len && (src[ofs+4] | 32) == 'o' && (src[ofs+5] | 32) == 'n') {
 										found = ofs + 6;
-										offset = 90; // ('option', 90)
+										offset = 85; // ('option', 85)
 									}
 									break;
 							}
@@ -556,28 +492,6 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 			case 'p':
 			case 'P':
 				if (ofs+1 < src_len) switch ((src[ofs+1] | 32)) {
-					case 'a':
-						if (ofs+3 < src_len && (src[ofs+2] | 32) == 'g' && (src[ofs+3] | 32) == 'e') {
-							if (ofs+4 < src_len) switch ((src[ofs+4] | 32)) {
-								case 'l':
-									if (ofs+7 < src_len && (src[ofs+5] | 32) == 'i' && (src[ofs+6] | 32) == 's' && (src[ofs+7] | 32) == 't') {
-										found = ofs + 8;
-										offset = 80; // ('pagelist', 80)
-									}
-									break;
-								case 'q':
-									if (ofs+10 < src_len && (src[ofs+5] | 32) == 'u' && (src[ofs+6] | 32) == 'a' && (src[ofs+7] | 32) == 'l' && (src[ofs+8] | 32) == 'i' && (src[ofs+9] | 32) == 't' && (src[ofs+10] | 32) == 'y') {
-										found = ofs + 11;
-										offset = 79; // ('pagequality', 79)
-									}
-									break;
-								case 's':
-									found = ofs + 5;
-									offset = 74; // ('pages', 74)
-									break;
-							}
-						}
-						break;
 					case 'o':
 						if (ofs+3 < src_len && (src[ofs+2] | 32) == 'e' && (src[ofs+3] | 32) == 'm') {
 							found = ofs + 4;
@@ -598,14 +512,8 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 				break;
 			case 'q':
 			case 'Q':
-				if (ofs+3 < src_len && (src[ofs+1] | 32) == 'u' && (src[ofs+2] | 32) == 'i' && (src[ofs+3] | 32) == 'z') {
-					found = ofs + 4;
-					offset = 114; // ('quiz', 114)
-				}
-				if (found == -1) {
-					found = ofs + 1;
-					offset = 116; // ('q', 116)
-				}
+				found = ofs + 1;
+				offset = 102; // ('q', 102)
 				break;
 			case 'r':
 			case 'R':
@@ -630,16 +538,10 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 						found = ofs + 2;
 						offset = 57; // ('rp', 57)
 						break;
-					case 's':
-						if (ofs+2 < src_len && (src[ofs+2] | 32) == 's') {
-							found = ofs + 3;
-							offset = 110; // ('rss', 110)
-						}
-						break;
 					case 't':
 						if (ofs+2 < src_len && (src[ofs+2] | 32) == 'c') {
 							found = ofs + 3;
-							offset = 130; // ('rtc', 130)
+							offset = 113; // ('rtc', 113)
 						}
 						if (found == -1) {
 							found = ofs + 2;
@@ -668,13 +570,13 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							case 'o':
 								if (ofs+4 < src_len && (src[ofs+3] | 32) == 'r' && (src[ofs+4] | 32) == 'e') {
 									found = ofs + 5;
-									offset = 87; // ('score', 87)
+									offset = 82; // ('score', 82)
 								}
 								break;
 							case 'r':
 								if (ofs+5 < src_len && (src[ofs+3] | 32) == 'i' && (src[ofs+4] | 32) == 'p' && (src[ofs+5] | 32) == 't') {
 									found = ofs + 6;
-									offset = 92; // ('script', 92)
+									offset = 87; // ('script', 87)
 								}
 								break;
 						}
@@ -684,25 +586,15 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							case 'c':
 								if (ofs+6 < src_len && (src[ofs+3] | 32) == 't' && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'o' && (src[ofs+6] | 32) == 'n') {
 									found = ofs + 7;
-									offset = 75; // ('section', 75)
+									offset = 74; // ('section', 74)
 								}
-								break;
-							case 'e':
-								found = ofs + 3;
-								offset = 108; // ('see', 108)
 								break;
 							case 'l':
 								if (ofs+5 < src_len && (src[ofs+3] | 32) == 'e' && (src[ofs+4] | 32) == 'c' && (src[ofs+5] | 32) == 't') {
 									found = ofs + 6;
-									offset = 89; // ('select', 89)
+									offset = 84; // ('select', 84)
 								}
 								break;
-						}
-						break;
-					case 'l':
-						if (ofs+4 < src_len && (src[ofs+2] | 32) == 'e' && (src[ofs+3] | 32) == 'e' && (src[ofs+4] | 32) == 'p') {
-							found = ofs + 5;
-							offset = 109; // ('sleep', 109)
 						}
 						break;
 					case 'm':
@@ -744,7 +636,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							case 'y':
 								if (ofs+4 < src_len && (src[ofs+3] | 32) == 'l' && (src[ofs+4] | 32) == 'e') {
 									found = ofs + 5;
-									offset = 93; // ('style', 93)
+									offset = 88; // ('style', 88)
 								}
 								break;
 						}
@@ -777,27 +669,9 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 			case 'T':
 				if (ofs+1 < src_len) switch ((src[ofs+1] | 32)) {
 					case 'a':
-						if (ofs+2 < src_len && (src[ofs+2] | 32) == 'b') {
-							if (ofs+3 < src_len) switch ((src[ofs+3] | 32)) {
-								case 'b':
-									if (ofs+5 < src_len && (src[ofs+4] | 32) == 'e' && (src[ofs+5] | 32) == 'r') {
-										found = ofs + 6;
-										offset = 119; // ('tabber', 119)
-									}
-									break;
-								case 'l':
-									if (ofs+4 < src_len && (src[ofs+4] | 32) == 'e') {
-										found = ofs + 5;
-										offset = 42; // ('table', 42)
-									}
-									break;
-								case 'v':
-									if (ofs+6 < src_len && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'e' && (src[ofs+6] | 32) == 'w') {
-										found = ofs + 7;
-										offset = 120; // ('tabview', 120)
-									}
-									break;
-							}
+						if (ofs+4 < src_len && (src[ofs+2] | 32) == 'b' && (src[ofs+3] | 32) == 'l' && (src[ofs+4] | 32) == 'e') {
+							found = ofs + 5;
+							offset = 42; // ('table', 42)
 						}
 						break;
 					case 'b':
@@ -818,13 +692,13 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 										case 'd':
 											if (ofs+11 < src_len && (src[ofs+9] | 32) == 'a' && (src[ofs+10] | 32) == 't' && (src[ofs+11] | 32) == 'a') {
 												found = ofs + 12;
-												offset = 97; // ('templateData', 97)
+												offset = 92; // ('templateData', 92)
 											}
 											break;
 										case 's':
 											if (ofs+13 < src_len && (src[ofs+9] | 32) == 't' && (src[ofs+10] | 32) == 'y' && (src[ofs+11] | 32) == 'l' && (src[ofs+12] | 32) == 'e' && (src[ofs+13] | 32) == 's') {
 												found = ofs + 14;
-												offset = 126; // ('templatestyles', 126)
+												offset = 109; // ('templatestyles', 109)
 											}
 											break;
 									}
@@ -833,7 +707,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							case 'x':
 								if (ofs+7 < src_len && (src[ofs+3] | 32) == 't' && (src[ofs+4] | 32) == 'a' && (src[ofs+5] | 32) == 'r' && (src[ofs+6] | 32) == 'e' && (src[ofs+7] | 32) == 'a') {
 									found = ofs + 8;
-									offset = 86; // ('textarea', 86)
+									offset = 81; // ('textarea', 81)
 								}
 								break;
 						}
@@ -862,7 +736,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							}
 							if (found == -1) {
 								found = ofs + 4;
-								offset = 84; // ('time', 84)
+								offset = 79; // ('time', 79)
 							}
 						}
 						break;
@@ -873,13 +747,13 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 									case 'c':
 										if (ofs+4 < src_len && (src[ofs+4] | 32) == 'k') {
 											found = ofs + 5;
-											offset = 129; // ('track', 129)
+											offset = 112; // ('track', 112)
 										}
 										break;
 									case 'n':
 										if (ofs+8 < src_len && (src[ofs+4] | 32) == 's' && (src[ofs+5] | 32) == 'l' && (src[ofs+6] | 32) == 'a' && (src[ofs+7] | 32) == 't' && (src[ofs+8] | 32) == 'e') {
 											found = ofs + 9;
-											offset = 95; // ('translate', 95)
+											offset = 90; // ('translate', 90)
 										}
 										break;
 								}
@@ -887,7 +761,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 							case 'e':
 								if (ofs+5 < src_len && (src[ofs+3] | 32) == 'c' && (src[ofs+4] | 32) == 'h' && (src[ofs+5] | 32) == 'o') {
 									found = ofs + 6;
-									offset = 78; // ('trecho', 78)
+									offset = 77; // ('trecho', 77)
 								}
 								break;
 						}
@@ -925,7 +799,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 					case 'i':
 						if (ofs+4 < src_len && (src[ofs+2] | 32) == 'd' && (src[ofs+3] | 32) == 'e' && (src[ofs+4] | 32) == 'o') {
 							found = ofs + 5;
-							offset = 128; // ('video', 128)
+							offset = 111; // ('video', 111)
 						}
 						break;
 				}
@@ -934,7 +808,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 			case 'W':
 				if (ofs+2 < src_len && (src[ofs+1] | 32) == 'b' && (src[ofs+2] | 32) == 'r') {
 					found = ofs + 3;
-					offset = 101; // ('wbr', 101)
+					offset = 96; // ('wbr', 96)
 				}
 				break;
 			case 'x':
@@ -952,13 +826,13 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 								case 'h':
 									if (ofs+8 < src_len && (src[ofs+6] | 32) == 't' && (src[ofs+7] | 32) == 'm' && (src[ofs+8] | 32) == 'l') {
 										found = ofs + 9;
-										offset = 111; // ('xowa_html', 111)
+										offset = 98; // ('xowa_html', 98)
 									}
 									break;
 								case 'w':
 									if (ofs+14 < src_len && (src[ofs+6] | 32) == 'i' && (src[ofs+7] | 32) == 'k' && (src[ofs+8] | 32) == 'i' && src[ofs+9] == '_' && (src[ofs+10] | 32) == 's' && (src[ofs+11] | 32) == 'e' && (src[ofs+12] | 32) == 't' && (src[ofs+13] | 32) == 'u' && (src[ofs+14] | 32) == 'p') {
 										found = ofs + 15;
-										offset = 121; // ('xowa_Wiki_setup', 121)
+										offset = 104; // ('xowa_Wiki_setup', 104)
 									}
 									break;
 							}
@@ -970,13 +844,13 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 								case 'b':
 									if (ofs+7 < src_len && (src[ofs+6] | 32) == 'g' && (src[ofs+7] | 32) == 'n') {
 										found = ofs + 8;
-										offset = 112; // ('xtag_bgn', 112)
+										offset = 99; // ('xtag_bgn', 99)
 									}
 									break;
 								case 'e':
 									if (ofs+7 < src_len && (src[ofs+6] | 32) == 'n' && (src[ofs+7] | 32) == 'd') {
 										found = ofs + 8;
-										offset = 113; // ('xtag_end', 113)
+										offset = 100; // ('xtag_end', 100)
 									}
 									break;
 							}
@@ -987,7 +861,7 @@ public class Db_btrie_xnde_tag_wtxt implements Db_btrie {
 			case -41:
 				if (ofs+5 < src_len && src[ofs+1] == -89 && src[ofs+2] == -41 && src[ofs+3] == -104 && src[ofs+4] == -41 && src[ofs+5] == -94) {
 					found = ofs + 6;
-					offset = 77; // ('×§×\x98×¢', 77)
+					offset = 76; // ('×§×\x98×¢', 76)
 				}
 				break;
 		}

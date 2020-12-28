@@ -73,6 +73,7 @@ public class Gfo_protocol_itm {
 	, Tid_file					= 28
 	, Tid_relative_1			= 29		// [//a.org]
 	, Tid_relative_2			= 30		// [[//a.org]]
+	, Tid_redis					= 31
 	;
 	public static final Ordered_hash Regy = Ordered_hash_.New_bry();
 	public static final Gfo_protocol_itm 
@@ -97,10 +98,11 @@ public class Gfo_protocol_itm {
 	, Itm_svn					= new_(Tid_svn			, "svn://")
 	, Itm_git					= new_(Tid_git			, "git://")
 	, Itm_mms					= new_(Tid_mms			, "mms://")
-	, Itm_bitcoin				= new_(Tid_bitcoin		, "bicoin:")
+	, Itm_bitcoin				= new_(Tid_bitcoin		, "bitcoin:")
 	, Itm_magnet				= new_(Tid_magnet		, "magnet:")
 	, Itm_urn					= new_(Tid_urn			, "urn:")
 	, Itm_geo					= new_(Tid_geo			, "geo:")
+	, Itm_redis					= new_(Tid_redis			, "redis://")
 	;
 	public static final String Str_file = "file:", Str_xcmd = "xowa-cmd:";
 	public static final byte[] Bry_file = Bry_.new_a7(Str_file), Bry_xcmd = Bry_.new_a7(Str_xcmd);

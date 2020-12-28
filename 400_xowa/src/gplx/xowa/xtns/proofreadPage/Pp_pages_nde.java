@@ -103,8 +103,9 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		try {
 			wiki.Parser_mgr().Lst__recursing_(true);
 			Hash_adp_bry lst_page_regy = ctx.Lst_page_regy(); if (lst_page_regy == null) lst_page_regy = Hash_adp_bry.cs();	// SEE:NOTE:page_regy; DATE:2014-01-01
-			page.Html_data().Indicators().Enabled_(Bool_.N);				// disable <indicator> b/c <page> should not add to current page; PAGE:en.s:The_Parochial_System_(Wilberforce,_1838); DATE:2015-04-29
-			byte[] page_bry = Bld_wikitext(full_bfr, wiki.Parser_mgr().Pp_num_parser(), lst_page_regy, page);
+			page.Html_data().Indicators().Enabled_(Bool_.N);
+			// disable <indicator> b/c <page> should not add to current page; PAGE:en.s:The_Parochial_System_(Wilberforce,_1838); DATE:2015-04-29
+			byte[] page_bry = Bld_wikitext(full_bfr, wiki.Parser_mgr().Pp_num_parser(), lst_page_regy, page, wiki.Lang().Key_bry());
 			if (page_bry != null) {
                         //System.out.println(String_.new_u8(page_bry));
 				xtn_root = Bld_root_nde(full_bfr, lst_page_regy, page_bry);	// NOTE: this effectively reparses page twice; needed b/c of "if {| : ; # *, auto add new_line" which can build different tokens
@@ -165,7 +166,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			bgn_sect_bry = end_sect_bry = null;
 		return true;
 	}
-	private byte[] Bld_wikitext(Bry_bfr full_bfr, Gfo_number_parser num_parser, Hash_adp_bry lst_page_regy, Xoae_page page) {
+	private byte[] Bld_wikitext(Bry_bfr full_bfr, Gfo_number_parser num_parser, Hash_adp_bry lst_page_regy, Xoae_page page, byte[] lang) {
 		Pp_index_page index_page = Pp_index_parser.Parse(wiki, ctx, index_ttl, ns_page_id);
 		int index_page_xndes_len = index_page.Pagelist_xndes().Count();
 		int index_page_ttls_len = index_page.Page_ttls().Count();
@@ -217,9 +218,14 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			rv = Bld_wikitext_for_header(full_bfr, index_page, pl_nde, rv);
 		}
 		// wrap the output in a div, to prevent the parser from inserting paragraphs
+		// /wikimedia/mediawiki-extensions-ProofreadPage/includes/Parser/PagesTagParser.php
+		// each page could be in a different language
+		// for the moment use site language
 		Bry_bfr page_bfr = wiki.Utl__bfr_mkr().Get_m001();
 		try {
 			page_bfr.Add(Bry_open_div);
+			page_bfr.Add(lang);
+			page_bfr.Add(Bry_close_open_div);
 			page_bfr.Add(rv);
 			page_bfr.Add(Bry_close_div);
 			rv = page_bfr.To_bry_and_clear();
@@ -582,7 +588,8 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	, Bry_toc_nxt		= Bry_.new_a7("|next=")
 	, Bry_page_bgn		= Bry_.new_a7("|from=")
 	, Bry_page_end		= Bry_.new_a7("|to=")
-	, Bry_open_div		= Bry_.new_a7("<div class=\"prp-pages-output\">\n")
+	, Bry_open_div		= Bry_.new_a7("<div class=\"prp-pages-output\" lang=\"")
+                , Bry_close_open_div = Bry_.new_a7(">\n")
 	, Bry_close_div		= Bry_.new_a7("\n</div>")
 	, Bry_tmpl_page		= Bry_.new_a7("<span>{{:MediaWiki:Proofreadpage_pagenum_template|page=")
 	, Bry_page_num	= Bry_.new_a7("|num=")

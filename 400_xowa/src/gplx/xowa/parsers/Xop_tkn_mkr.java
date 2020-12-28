@@ -15,8 +15,13 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.parsers; import gplx.*; import gplx.xowa.*;
 import gplx.langs.htmls.entitys.*;
-import gplx.xowa.parsers.apos.*; import gplx.xowa.parsers.amps.*; import gplx.xowa.parsers.lnkes.*; import gplx.xowa.parsers.hdrs.*; import gplx.xowa.parsers.lists.*; import gplx.xowa.parsers.tblws.*;
-import gplx.xowa.parsers.paras.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.tmpls.*; import gplx.xowa.parsers.miscs.*; import gplx.xowa.parsers.vnts.*; import gplx.xowa.xtns.cites.*; 
+import gplx.xowa.parsers.apos.*; import gplx.xowa.parsers.amps.*;
+import gplx.xowa.parsers.lnkes.*; import gplx.xowa.parsers.hdrs.*;
+import gplx.xowa.parsers.lists.*; import gplx.xowa.parsers.tblws.*;
+import gplx.xowa.parsers.paras.*; import gplx.xowa.parsers.xndes.*; 
+import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.tmpls.*; 
+import gplx.xowa.parsers.miscs.*; import gplx.xowa.parsers.vnts.*; 
+import gplx.xowa.parsers.magics.*; import gplx.xowa.xtns.cites.*; 
 public class Xop_tkn_mkr {
 	public Xop_root_tkn Root(byte[] raw)													{return new Xop_root_tkn().Root_src_(raw);}
 	public Xop_txt_tkn Txt(int bgn, int end)												{return new Xop_txt_tkn(bgn, end);}
@@ -48,6 +53,7 @@ public class Xop_tkn_mkr {
 	public Xop_lnke_tkn Lnke(int bgn, int end, byte[] protocol, byte proto_tid, byte lnke_typ, int lnk_bgn, int lnk_end) {
 		return new Xop_lnke_tkn(bgn, end, protocol, proto_tid, lnke_typ, lnk_bgn, lnk_end);
 	}
+	public Xop_magic_tkn Magic(int bgn, int end, byte type)											{return new Xop_magic_tkn(bgn, end, type);}
 	public Xop_tblw_tb_tkn Tblw_tb(int bgn, int end, boolean tblw_xml, boolean auto_created)		{return new Xop_tblw_tb_tkn(bgn, end, tblw_xml, auto_created);}
 	public Xop_tblw_tr_tkn Tblw_tr(int bgn, int end, boolean tblw_xml, boolean auto_created)		{return new Xop_tblw_tr_tkn(bgn, end, tblw_xml, auto_created);}
 	public Xop_tblw_td_tkn Tblw_td(int bgn, int end, boolean tblw_xml)							{return new Xop_tblw_td_tkn(bgn, end, tblw_xml);}

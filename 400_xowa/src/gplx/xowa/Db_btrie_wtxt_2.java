@@ -21,7 +21,7 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 	private int found;
 	private int offset;
 	public Db_btrie_wtxt_2(Object[] objs) {this.objs = objs; }
-	public static byte[] Hash() { return Bry_.new_a7("c348cea1130bbf2c9878d84a53c57c3a"); }
+	public static byte[] Hash() { return Bry_.new_a7("27cd78abc8d67b38e1c15b444e559abc"); }
 	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
 		found = -1;
 		offset = -1;
@@ -61,7 +61,7 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 				break;
 			case '<':
 				found = ofs + 1;
-				offset = 68; // ('<', 68)
+				offset = 70; // ('<', 70)
 				break;
 			case '=':
 				found = ofs + 1;
@@ -72,13 +72,13 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 					case '/':
 						if (ofs+2 < src_len && src[ofs+2] == '/') {
 							found = ofs + 3;
-							offset = 63; // ('[//', 63)
+							offset = 65; // ('[//', 65)
 						}
 						break;
 					case '[':
 						if (ofs+3 < src_len && src[ofs+2] == '/' && src[ofs+3] == '/') {
 							found = ofs + 4;
-							offset = 64; // ('[[//', 64)
+							offset = 66; // ('[[//', 66)
 						}
 						if (found == -1) {
 							found = ofs + 2;
@@ -87,9 +87,9 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 						break;
 					case 'b':
 					case 'B':
-						if (ofs+7 < src_len && (src[ofs+2] | 32) == 'i' && (src[ofs+3] | 32) == 'c' && (src[ofs+4] | 32) == 'o' && (src[ofs+5] | 32) == 'i' && (src[ofs+6] | 32) == 'n' && src[ofs+7] == ':') {
-							found = ofs + 8;
-							offset = 56; // ('[bicoin:', 56)
+						if (ofs+8 < src_len && (src[ofs+2] | 32) == 'i' && (src[ofs+3] | 32) == 't' && (src[ofs+4] | 32) == 'c' && (src[ofs+5] | 32) == 'o' && (src[ofs+6] | 32) == 'i' && (src[ofs+7] | 32) == 'n' && src[ofs+8] == ':') {
+							found = ofs + 9;
+							offset = 56; // ('[bitcoin:', 56)
 						}
 						break;
 					case 'f':
@@ -203,6 +203,13 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 							offset = 40; // ('[nntp:', 40)
 						}
 						break;
+					case 'r':
+					case 'R':
+						if (ofs+6 < src_len && (src[ofs+2] | 32) == 'e' && (src[ofs+3] | 32) == 'd' && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 's' && src[ofs+6] == ':') {
+							found = ofs + 7;
+							offset = 64; // ('[redis:', 64)
+						}
+						break;
 					case 's':
 					case 'S':
 						if (ofs+2 < src_len) switch ((src[ofs+2] | 32)) {
@@ -293,7 +300,7 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 							case 'o':
 								if (ofs+8 < src_len && (src[ofs+3] | 32) == 'w' && (src[ofs+4] | 32) == 'a' && src[ofs+5] == '-' && (src[ofs+6] | 32) == 'c' && (src[ofs+7] | 32) == 'm' && (src[ofs+8] | 32) == 'd') {
 									found = ofs + 9;
-									offset = 66; // ('[xowa-cmd', 66)
+									offset = 68; // ('[xowa-cmd', 68)
 								}
 								break;
 						}
@@ -307,14 +314,14 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 				}
 				if (found == -1) {
 					found = ofs + 1;
-					offset = 67; // (']', 67)
+					offset = 69; // (']', 69)
 				}
 				break;
 			case 'b':
 			case 'B':
-				if (ofs+6 < src_len && (src[ofs+1] | 32) == 'i' && (src[ofs+2] | 32) == 'c' && (src[ofs+3] | 32) == 'o' && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'n' && src[ofs+6] == ':') {
-					found = ofs + 7;
-					offset = 55; // ('bicoin:', 55)
+				if (ofs+7 < src_len && (src[ofs+1] | 32) == 'i' && (src[ofs+2] | 32) == 't' && (src[ofs+3] | 32) == 'c' && (src[ofs+4] | 32) == 'o' && (src[ofs+5] | 32) == 'i' && (src[ofs+6] | 32) == 'n' && src[ofs+7] == ':') {
+					found = ofs + 8;
+					offset = 55; // ('bitcoin:', 55)
 				}
 				break;
 			case 'f':
@@ -378,20 +385,30 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 				break;
 			case 'i':
 			case 'I':
-				if (ofs+2 < src_len && (src[ofs+1] | 32) == 'r' && (src[ofs+2] | 32) == 'c') {
-					if (ofs+3 < src_len) switch (src[ofs+3]) {
-						case ':':
-							found = ofs + 4;
-							offset = 25; // ('irc:', 25)
-							break;
-						case 's':
-						case 'S':
-							if (ofs+4 < src_len && src[ofs+4] == ':') {
-								found = ofs + 5;
-								offset = 27; // ('ircs:', 27)
+				if (ofs+1 < src_len) switch ((src[ofs+1] | 32)) {
+					case 'r':
+						if (ofs+2 < src_len && (src[ofs+2] | 32) == 'c') {
+							if (ofs+3 < src_len) switch (src[ofs+3]) {
+								case ':':
+									found = ofs + 4;
+									offset = 25; // ('irc:', 25)
+									break;
+								case 's':
+								case 'S':
+									if (ofs+4 < src_len && src[ofs+4] == ':') {
+										found = ofs + 5;
+										offset = 27; // ('ircs:', 27)
+									}
+									break;
 							}
-							break;
-					}
+						}
+						break;
+					case 's':
+						if (ofs+4 < src_len && (src[ofs+2] | 32) == 'b' && (src[ofs+3] | 32) == 'n' && src[ofs+4] == ' ') {
+							found = ofs + 5;
+							offset = 71; // ('ISBN ', 71)
+						}
+						break;
 				}
 				break;
 			case 'm':
@@ -426,6 +443,30 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 				if (ofs+4 < src_len && (src[ofs+1] | 32) == 'n' && (src[ofs+2] | 32) == 't' && (src[ofs+3] | 32) == 'p' && src[ofs+4] == ':') {
 					found = ofs + 5;
 					offset = 39; // ('nntp:', 39)
+				}
+				break;
+			case 'p':
+			case 'P':
+				if (ofs+4 < src_len && (src[ofs+1] | 32) == 'm' && (src[ofs+2] | 32) == 'i' && (src[ofs+3] | 32) == 'd' && src[ofs+4] == ' ') {
+					found = ofs + 5;
+					offset = 72; // ('PMID ', 72)
+				}
+				break;
+			case 'r':
+			case 'R':
+				if (ofs+1 < src_len) switch ((src[ofs+1] | 32)) {
+					case 'e':
+						if (ofs+5 < src_len && (src[ofs+2] | 32) == 'd' && (src[ofs+3] | 32) == 'i' && (src[ofs+4] | 32) == 's' && src[ofs+5] == ':') {
+							found = ofs + 6;
+							offset = 63; // ('redis:', 63)
+						}
+						break;
+					case 'f':
+						if (ofs+3 < src_len && (src[ofs+2] | 32) == 'c' && src[ofs+3] == ' ') {
+							found = ofs + 4;
+							offset = 73; // ('RFC ', 73)
+						}
+						break;
 				}
 				break;
 			case 's':
@@ -518,7 +559,7 @@ public class Db_btrie_wtxt_2 implements Db_btrie {
 					case 'o':
 						if (ofs+7 < src_len && (src[ofs+2] | 32) == 'w' && (src[ofs+3] | 32) == 'a' && src[ofs+4] == '-' && (src[ofs+5] | 32) == 'c' && (src[ofs+6] | 32) == 'm' && (src[ofs+7] | 32) == 'd') {
 							found = ofs + 8;
-							offset = 65; // ('xowa-cmd', 65)
+							offset = 67; // ('xowa-cmd', 67)
 						}
 						break;
 				}

@@ -16,12 +16,12 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa;
 import gplx.core.btries.Btrie_rv;
 import gplx.Bry_;
-public class Db_btrie_xnde_tag_defn_en implements Db_btrie {
+public class Db_btrie_xnde_tag_defn_dw implements Db_btrie {
 	private final Object[] objs;
 	private int found;
 	private int offset;
-	public Db_btrie_xnde_tag_defn_en(Object[] objs) {this.objs = objs; }
-	public static byte[] Hash() { return Bry_.new_a7("8f20bbab9946d96eaf095d7082fe8fc1"); }
+	public Db_btrie_xnde_tag_defn_dw(Object[] objs) {this.objs = objs; }
+	public static byte[] Hash() { return Bry_.new_a7("88cf257b01d755be854829a232223906"); }
 	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
 		found = -1;
 		offset = -1;
@@ -46,7 +46,7 @@ public class Db_btrie_xnde_tag_defn_en implements Db_btrie {
 					case 'h':
 						if (ofs+3 < src_len && (src[ofs+2] | 32) == 'e' && (src[ofs+3] | 32) == 'm') {
 							found = ofs + 4;
-							offset = 31; // ('chem', 31)
+							offset = 30; // ('chem', 30)
 						}
 						break;
 				}
@@ -89,7 +89,7 @@ public class Db_btrie_xnde_tag_defn_en implements Db_btrie {
 							case 'c':
 								if (ofs+10 < src_len && (src[ofs+3] | 32) == 'l' && (src[ofs+4] | 32) == 'u' && (src[ofs+5] | 32) == 'd' && (src[ofs+6] | 32) == 'e' && (src[ofs+7] | 32) == 'o' && (src[ofs+8] | 32) == 'n' && (src[ofs+9] | 32) == 'l' && (src[ofs+10] | 32) == 'y') {
 									found = ofs + 11;
-									offset = 33; // ('includeonly', 33)
+									offset = 32; // ('includeonly', 32)
 								}
 								break;
 							case 'd':
@@ -120,19 +120,9 @@ public class Db_btrie_xnde_tag_defn_en implements Db_btrie {
 				if (ofs+1 < src_len && (src[ofs+1] | 32) == 'a') {
 					if (ofs+2 < src_len) switch ((src[ofs+2] | 32)) {
 						case 'p':
-							if (ofs+3 < src_len) switch ((src[ofs+3] | 32)) {
-								case 'f':
-									if (ofs+7 < src_len && (src[ofs+4] | 32) == 'r' && (src[ofs+5] | 32) == 'a' && (src[ofs+6] | 32) == 'm' && (src[ofs+7] | 32) == 'e') {
-										found = ofs + 8;
-										offset = 28; // ('mapframe', 28)
-									}
-									break;
-								case 'l':
-									if (ofs+6 < src_len && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'n' && (src[ofs+6] | 32) == 'k') {
-										found = ofs + 7;
-										offset = 29; // ('maplink', 29)
-									}
-									break;
+							if (ofs+6 < src_len && (src[ofs+3] | 32) == 'l' && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'n' && (src[ofs+6] | 32) == 'k') {
+								found = ofs + 7;
+								offset = 28; // ('maplink', 28)
 							}
 							break;
 						case 't':
@@ -151,13 +141,13 @@ public class Db_btrie_xnde_tag_defn_en implements Db_btrie {
 						case 'i':
 							if (ofs+8 < src_len && (src[ofs+3] | 32) == 'n' && (src[ofs+4] | 32) == 'c' && (src[ofs+5] | 32) == 'l' && (src[ofs+6] | 32) == 'u' && (src[ofs+7] | 32) == 'd' && (src[ofs+8] | 32) == 'e') {
 								found = ofs + 9;
-								offset = 34; // ('noinclude', 34)
+								offset = 33; // ('noinclude', 33)
 							}
 							break;
 						case 'w':
 							if (ofs+5 < src_len && (src[ofs+3] | 32) == 'i' && (src[ofs+4] | 32) == 'k' && (src[ofs+5] | 32) == 'i') {
 								found = ofs + 6;
-								offset = 32; // ('nowiki', 32)
+								offset = 31; // ('nowiki', 31)
 							}
 							break;
 					}
@@ -167,7 +157,7 @@ public class Db_btrie_xnde_tag_defn_en implements Db_btrie {
 			case 'O':
 				if (ofs+10 < src_len && (src[ofs+1] | 32) == 'n' && (src[ofs+2] | 32) == 'l' && (src[ofs+3] | 32) == 'y' && (src[ofs+4] | 32) == 'i' && (src[ofs+5] | 32) == 'n' && (src[ofs+6] | 32) == 'c' && (src[ofs+7] | 32) == 'l' && (src[ofs+8] | 32) == 'u' && (src[ofs+9] | 32) == 'd' && (src[ofs+10] | 32) == 'e') {
 					found = ofs + 11;
-					offset = 35; // ('onlyinclude', 35)
+					offset = 34; // ('onlyinclude', 34)
 				}
 				break;
 			case 'p':
@@ -244,7 +234,7 @@ public class Db_btrie_xnde_tag_defn_en implements Db_btrie {
 								case 's':
 									if (ofs+13 < src_len && (src[ofs+9] | 32) == 't' && (src[ofs+10] | 32) == 'y' && (src[ofs+11] | 32) == 'l' && (src[ofs+12] | 32) == 'e' && (src[ofs+13] | 32) == 's') {
 										found = ofs + 14;
-										offset = 30; // ('templatestyles', 30)
+										offset = 29; // ('templatestyles', 29)
 									}
 									break;
 							}

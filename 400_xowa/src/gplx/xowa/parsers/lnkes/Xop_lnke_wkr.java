@@ -34,7 +34,7 @@ public class Xop_lnke_wkr implements Xop_ctx_wkr {
 	public int MakeTkn_bgn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, byte[] protocol, byte proto_tid, byte lnke_type) {
 		boolean lnke_type_brack = (lnke_type == Xop_lnke_tkn.Lnke_typ_brack);
 		if (	!lnke_type_brack										// lnke doesn't have "["; EX: "ttl:"
-			&&	!Valid_text_lnke(ctx, src, src_len, bgn_pos, cur_pos)	// tkn is part of work; EX: " ttl:" vs "attl:"
+			&&	!Xop_parser_.Valid_word_break(ctx, src, src_len, bgn_pos, cur_pos)	// tkn is part of work; EX: " ttl:" vs "attl:"
 			)
 			return ctx.Lxr_make_txt_(cur_pos - 1);						// -1 to ignore ":" in making text colon; needed to process ":" for list like "; attl: b" PAGE:de.w:Mord_(Deutschland)#Besonders_verwerfliche_Begehungsweise; DATE:2015-01-09
 		if (ctx.Stack_get_typ(Xop_tkn_itm_.Tid_lnke) != null) return ctx.Lxr_make_txt_(cur_pos); // no nested lnke; return cur lnke as text; EX: "[irc://a irc://b]" -> "<a href='irc:a'>irc:b</a>"
@@ -201,8 +201,8 @@ public class Xop_lnke_wkr implements Xop_ctx_wkr {
 		else {
 			switch (lnke_end_tid) {
 				case End_tid_space:
-					ctx.Subs_add(root, tkn_mkr.Space(root, cur_pos - 1, cur_pos));
-					break;			
+//??					ctx.Subs_add(root, tkn_mkr.Space(root, cur_pos - 1, cur_pos));
+//??					break;			
 				case End_tid_symbol:
 				case End_tid_nl:
 				case End_tid_invalid:	// NOTE that cur_pos is set after <, must subtract 1 else </xnde> will be ignored; EX: <span>irc://a</span>
@@ -259,31 +259,6 @@ public class Xop_lnke_wkr implements Xop_ctx_wkr {
 		bgnTkn.Src_end_(cur_pos);
 		bgnTkn.Subs_move(root);
 		return cur_pos;
-	}
-	private static boolean Valid_text_lnke(Xop_ctx ctx, byte[] src, int src_len, int bgn_pos, int cur_pos) {
-		if (bgn_pos == Xop_parser_.Doc_bgn_char_0) return true;	// lnke starts at 0; always true
-		int prv_pos = bgn_pos - 1; 
-		byte prv_byte = src[prv_pos];
-		switch (prv_byte) {
-			case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
-			case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
-			case Byte_ascii.Ltr_A: case Byte_ascii.Ltr_B: case Byte_ascii.Ltr_C: case Byte_ascii.Ltr_D: case Byte_ascii.Ltr_E:
-			case Byte_ascii.Ltr_F: case Byte_ascii.Ltr_G: case Byte_ascii.Ltr_H: case Byte_ascii.Ltr_I: case Byte_ascii.Ltr_J:
-			case Byte_ascii.Ltr_K: case Byte_ascii.Ltr_L: case Byte_ascii.Ltr_M: case Byte_ascii.Ltr_N: case Byte_ascii.Ltr_O:
-			case Byte_ascii.Ltr_P: case Byte_ascii.Ltr_Q: case Byte_ascii.Ltr_R: case Byte_ascii.Ltr_S: case Byte_ascii.Ltr_T:
-			case Byte_ascii.Ltr_U: case Byte_ascii.Ltr_V: case Byte_ascii.Ltr_W: case Byte_ascii.Ltr_X: case Byte_ascii.Ltr_Y: case Byte_ascii.Ltr_Z:
-			case Byte_ascii.Ltr_a: case Byte_ascii.Ltr_b: case Byte_ascii.Ltr_c: case Byte_ascii.Ltr_d: case Byte_ascii.Ltr_e:
-			case Byte_ascii.Ltr_f: case Byte_ascii.Ltr_g: case Byte_ascii.Ltr_h: case Byte_ascii.Ltr_i: case Byte_ascii.Ltr_j:
-			case Byte_ascii.Ltr_k: case Byte_ascii.Ltr_l: case Byte_ascii.Ltr_m: case Byte_ascii.Ltr_n: case Byte_ascii.Ltr_o:
-			case Byte_ascii.Ltr_p: case Byte_ascii.Ltr_q: case Byte_ascii.Ltr_r: case Byte_ascii.Ltr_s: case Byte_ascii.Ltr_t:
-			case Byte_ascii.Ltr_u: case Byte_ascii.Ltr_v: case Byte_ascii.Ltr_w: case Byte_ascii.Ltr_x: case Byte_ascii.Ltr_y: case Byte_ascii.Ltr_z:
-				return false;	// alpha-numerical is invalid; EX: "titel:" should not generate a lnke for "tel:"
-		}
-		if (prv_byte >= Byte_ascii.Ascii_min && prv_byte <= Byte_ascii.Ascii_max) return true;	// consider all other ASCII chars as true; EX: \t\n !, etc; 
-		prv_pos = gplx.core.intls.Utf8_.Get_prv_char_pos0_old(src, prv_pos);
-		prv_byte = src[prv_pos];
-		boolean prv_char_is_letter = ctx.Lang().Case_mgr().Match_any_exists(prv_byte, src, prv_pos, bgn_pos);
-		return !prv_char_is_letter;
 	}
 	private int Make_tkn_xowa(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, byte[] protocol, byte proto_tid, byte lnke_type) {
 		// NOTE: fmt is [xowa-cmd:^"app.setup_mgr.import_wiki('');"^ ]
