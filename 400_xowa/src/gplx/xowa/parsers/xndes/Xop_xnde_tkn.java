@@ -126,6 +126,10 @@ public class Xop_xnde_tkn extends Xop_tkn_itm_base implements Xop_tblw_tkn {
 					// write tag_bgn; EX: <poem>
 					cur_bfr.Add_mid(src, tag_open_bgn, tag_open_end);
 
+                                        if (is_tmpl_mode && tag_close_bgn != Int_.Min_value) {
+                                            cur_bfr.Add_mid(src, this.Tag_open_end(), this.Tag_close_bgn());
+                                        }
+                                        else
 					// write subs; must always evaluate subs; handle <poem>{{{1}}}</poem>; DATE:2014-03-03
 					for (int i = 0; i < subs_len; i++)
 						this.Subs_get(i).Tmpl_evaluate(ctx, src, caller, cur_bfr);

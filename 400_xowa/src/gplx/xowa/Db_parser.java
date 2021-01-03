@@ -76,7 +76,12 @@ public class Db_parser {
 		int start_text = m_pos;
 		while (m_pos < m_src_end) {
 			byte b = m_src[m_pos];
-			if (b == '<') {
+			/*if (b == 0) {
+				// remove nul bytes
+				addtext(start_text, m_pos);
+				start_text = m_pos + 1;
+			}
+			else*/ if (b == '<') {
 				int newpos = translate_tag.Match(m_src, m_pos, m_src_end);
 				//if (match_translate()) {
 				if (newpos > 0) {

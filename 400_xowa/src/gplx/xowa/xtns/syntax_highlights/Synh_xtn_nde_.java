@@ -78,6 +78,6 @@ class Synh_xtn_nde_ {
 	, Bry__style__overflow__auto = Bry_.new_a7("overflow:auto")
 	, Bry__pretty_print = Bry_.new_a7("prettyprint lang-")
 	, Bry__div_bgn = Bry_.new_a7("<div class=\"mw-highlight mw-code\"")
-	, Bry__code_bgn = Bry_.new_a7("<code class=\"mw-highlight mw-code\"")
+	, Bry__code_bgn = Bry_.new_a7("<code class=\"mw-highlight\"")
 	;
 }

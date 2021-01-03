@@ -32,8 +32,16 @@ public class Xop_hdr_wkr implements Xop_ctx_wkr {
 	private boolean realheader(byte[] src, int src_len, int pos) {
 		while (pos < src_len) {
 			byte b = src[pos];
-			if (b == '=' && src[pos+1] == '\n')
-				return true; // a terminating header
+			if (b == '=') {
+				int cpos = pos;
+				while (++cpos < src_len) {
+					b = src[cpos];
+					if (b == '\n')
+						return true; // a terminating header
+					else if (b != ' ' && b != '\t') // allow for trailing space
+						break;
+				}
+			}
 			else if (b == '\n')
 				break; // not header????
 			pos++;
@@ -43,12 +51,12 @@ public class Xop_hdr_wkr implements Xop_ctx_wkr {
 	public int Make_tkn_bgn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos) {
 		if (bgn_pos == Xop_parser_.Doc_bgn_bos) bgn_pos = 0;	// do not allow -1 pos
 		int new_pos = Bry_find_.Find_fwd_while(src, cur_pos, src_len, Xop_hdr_lxr.Hook);				// count all =
-                if (!realheader(src, src_len, new_pos)) {
-                    // not a 'real' header traet as text?
-                        Xop_tkn_itm tkn = tkn_mkr.Txt(bgn_pos, new_pos);
+		if (!realheader(src, src_len, new_pos)) {
+			// not a 'real' header treat as text?
+			Xop_tkn_itm tkn = tkn_mkr.Txt(bgn_pos, new_pos);
 			ctx.Subs_add(root, tkn);
-                        return new_pos;
-                }
+			return new_pos;
+		}
 		ctx.Apos().End_frame(ctx, root, src, bgn_pos, false);
 		Close_open_itms(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos);
 		ctx.Para().Process_block__bgn__nl_w_symbol(ctx, root, src, bgn_pos, cur_pos, Xop_xnde_tag_.Tag__h2);	// pass h2; should pass h# where # is correct #, but for purpose of Para_wkr, <h2> tag does not matter

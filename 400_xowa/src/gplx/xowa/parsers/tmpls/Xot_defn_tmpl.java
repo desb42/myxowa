@@ -17,6 +17,7 @@ package gplx.xowa.parsers.tmpls; import gplx.*; import gplx.xowa.*; import gplx.
 import gplx.core.brys.*; import gplx.xowa.wikis.nss.*;
 public class Xot_defn_tmpl implements Xot_defn {
 	private boolean onlyinclude_parsed = false;
+        public void IsTransclude() { istransclude = true; } private boolean istransclude = false;
 	public byte Defn_tid() {return Xot_defn_.Tid_tmpl;}
 	public boolean Defn_require_colon_arg() {return false;}
 	public int Cache_size() {return data_raw.length;}

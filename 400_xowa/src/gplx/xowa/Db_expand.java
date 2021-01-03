@@ -21,6 +21,7 @@ public class Db_expand {
 	private static byte[][] uniq = new byte[10][];
 	private static int uniqcount;
 	private static void substitute(Bry_bfr tmp, int uniqofs) {
+            if (uniqofs < uniqcount)
 		tmp.Add(uniq[uniqofs]);
 	}
 	private static void expand(Bry_bfr tmp, byte[] src, int bgn, int end) {

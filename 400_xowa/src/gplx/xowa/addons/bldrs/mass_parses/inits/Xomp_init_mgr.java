@@ -62,6 +62,7 @@ class Xomp_init_mgr {
 		, "AND    p.page_is_redirect = 0"
 		, "AND    p.page_model_format=17" // extra filter only model=wikitext format=text/x-wiki
 		, "AND    p.page_touched > '{1}'"
+		, "AND    p.page_title not like '%sandbox%'" // ignore any 'sandbox' page
 		, "ORDER BY p.page_id"
 		); 
 		for (int i = 0; i < len; ++i) {
