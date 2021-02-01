@@ -27,7 +27,8 @@ public class Scrib_lib_message implements Scrib_lib {
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_message(core);}
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();
-		mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.message.lua"));// NOTE: "lang" not passed in
+		mod = core.RegisterInterface(this, "mw.message.lua", core.Core_mgr().Get_text(script_dir, "mw.message.lua"));
+		//mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.message.lua"));// NOTE: "lang" not passed in
 		notify_lang_changed_fnc = mod.Fncs_get_by_key("notify_lang_changed");
 		return mod;
 	}	private Scrib_lua_proc notify_lang_changed_fnc;

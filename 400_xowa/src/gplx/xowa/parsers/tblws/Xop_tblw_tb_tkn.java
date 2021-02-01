@@ -15,14 +15,17 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.parsers.tblws; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
 import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*;
+import gplx.xowa.parsers.lists.Xop_list_tkn_new;
 public class Xop_tblw_tb_tkn extends Xop_tkn_itm_base implements Xop_tblw_tkn {
-	public Xop_tblw_tb_tkn(int bgn, int end, boolean tblw_xml, boolean auto_created) {
+	public Xop_tblw_tb_tkn(int bgn, int end, boolean tblw_xml, boolean auto_created, Xop_list_tkn_new list_tkn) {
 		this.tblw_xml = tblw_xml; this.Tkn_ini_pos(false, bgn, end);
+                this.list_tkn = list_tkn;
 		if (auto_created)	// auto-created should be marked as having no attributes, else text may get gobbled up incorrectly; EX:Paris#Demographics DATE:2014-03-18
 			atrs_bgn = atrs_end = bgn;
 	}
 	@Override public byte Tkn_tid() {return Xop_tkn_itm_.Tid_tblw_tb;}
 	public int Tblw_tid() {return Xop_xnde_tag_.Tid__table;}
+        public Xop_list_tkn_new List_tkn() { return list_tkn; } private Xop_list_tkn_new list_tkn = null;
 	public int Atrs_bgn() {return atrs_bgn;} private int atrs_bgn = Xop_tblw_wkr.Atrs_null;
 	public int Atrs_end() {return atrs_end;} private int atrs_end = -1;
 	public void Atrs_rng_set(int bgn, int end) {this.atrs_bgn = bgn; this.atrs_end = end;}

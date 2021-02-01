@@ -88,6 +88,7 @@ public class Xop_lnki_wkr implements Xop_ctx_wkr, Xop_arg_wkr {
 			if (arg_idx == 0) {				// 1st arg; assume trg; process ns;
 				if (lnki.Ttl() == null) {	// ttl usually set by 1st pipe, but some lnkis have no pipe; EX: [[A]]
 					Arg_itm_tkn ttl_tkn = arg.Val_tkn();
+                                        if (ttl_tkn.Dat_bgn() < 0) return false; //20210103
 					if (!Xop_lnki_wkr_.Parse_ttl(ctx, src, lnki, ttl_tkn.Dat_bgn(), ttl_tkn.Dat_end()))
 						return false;
 				}

@@ -119,8 +119,11 @@ public class Db_parser {
 					// skip the tag
 					start_text = newpos;
 					m_pos = newpos - 1;
-					if (noinclude_tag.close)
-						m_newsrc.Add_byte_nl();
+					if (noinclude_tag.close) {
+						// add a newline (if there is not one already
+						if (newpos < m_src_end && m_src[newpos] != '\n')
+							m_newsrc.Add_byte_nl();
+					}
 				}
 			}
 			m_pos++;

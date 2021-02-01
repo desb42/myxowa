@@ -981,6 +981,8 @@ public class Xoh_html_wtr {
 			//	bfr.Add_byte_if_not_last(Byte_ascii.Nl);
 			//	if (indent_level > 0) bfr.Add_byte_repeat(Byte_ascii.Space, indent_level * 2);
 			//}
+			if (end == Gfh_tag_.Caption_rhs) // required by en.wikipedia.org/wiki/EXOC3L2
+				bfr.Add_byte_nl();
 			bfr.Add(end);
 			if (!page.Html_data().Writing_hdr_for_toc()) {
 				bfr.Add_byte_if_not_last(Byte_ascii.Nl);

@@ -92,7 +92,8 @@ public class Scrib_lib_wikibase implements Scrib_lib {
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_wikibase(core);}
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();
-		mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.wikibase.lua"));
+		mod = core.RegisterInterface(this, "mw.wikibase.lua", core.Core_mgr().Get_text(script_dir, "mw.wikibase.lua"));
+		//mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.wikibase.lua"));
 		notify_page_changed_fnc = mod.Fncs_get_by_key("notify_page_changed");
 		return mod;
 	}

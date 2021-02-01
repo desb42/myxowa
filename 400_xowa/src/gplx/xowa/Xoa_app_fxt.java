@@ -35,7 +35,7 @@ public class Xoa_app_fxt {
 	public static Xoae_app Make__app__edit(String op_sys, Io_url root_dir) {
 		Io_url user_dir = root_dir.GenSubDir_nest("user", "test_user");
 		Gfo_usr_dlg__log_base.Instance.Log_dir_(user_dir.GenSubDir_nest("tmp", "current"));			
-		Xoae_app app = new Xoae_app(Gfo_usr_dlg_.Test(), Xoa_app_mode.Itm_cmd, root_dir, root_dir.GenSubDir("wiki"), root_dir.GenSubDir("file"), user_dir, root_dir.GenSubDir_nest("user", "anonymous", "wiki"), op_sys);
+		Xoae_app app = new Xoae_app(Gfo_usr_dlg_.Test(), Xoa_app_mode.Itm_cmd, root_dir, null, root_dir.GenSubDir("wiki"), root_dir.GenSubDir("file"), user_dir, root_dir.GenSubDir_nest("user", "anonymous", "wiki"), op_sys);
 		GfsCore.Instance.Clear();							// NOTE: must clear
 		GfsCore.Instance.AddCmd(app, Xoae_app.Invk_app);	// NOTE: must add app to GfsCore; app.Gfs_mgr() always adds current app to GfsCore; note this causes old test to leave behind GfsCore for new test
 		GfsCore.Instance.AddCmd(app, Xoae_app.Invk_xowa);	// add alias for app; DATE:2014-06-09

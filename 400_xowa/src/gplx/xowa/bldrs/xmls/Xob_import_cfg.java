@@ -34,6 +34,9 @@ public class Xob_import_cfg {
 	public Io_stream_rdr Src_rdr() {
 		if (src_fil_xml == null && src_fil_bz2 == null) {	// will usually be null; non-null when user specifies src through command-line
 			Io_url url = Xob_io_utl_.Find_nth_by_wildcard_or_null(wiki.Fsys_mgr().Root_dir(), Xob_io_utl_.Pattern__wilcard, ".xml", ".bz2");
+			// if not found try download dir
+			if (url == null)
+                            url = wiki.Appe().Pages_articles_file();
 			if (url == null) throw Err_.new_wo_type("could not find any .xml or .bz2 file", "dir", wiki.Fsys_mgr().Root_dir().Raw());
 			if (String_.Eq(url.Ext(), ".xml"))	Src_fil_xml_(url);
 			else								Src_fil_bz2_(url);

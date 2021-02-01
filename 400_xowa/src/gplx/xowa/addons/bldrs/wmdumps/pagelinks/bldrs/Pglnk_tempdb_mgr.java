@@ -29,6 +29,7 @@ class Pglnk_tempdb_mgr {
 	private Db_stmt dump_insert;
 
 	private final    String temp_tbl_name = "pagelink_temp";
+	private final    String temp_tbl_name_2 = "pagelink_temp_2";
 
 	public Pglnk_tempdb_mgr(Gfo_usr_dlg usr_dlg, Xow_wiki wiki, int row_max) {
 		// init members
@@ -54,6 +55,13 @@ class Pglnk_tempdb_mgr {
 		conn.Meta_tbl_create(Dbmeta_tbl_itm.New(temp_tbl_name, temp_flds));
 	}
 	private void Dump__insert_bgn() {
+		// create temp_tbl_2
+		Dbmeta_fld_list temp_flds_2 = new Dbmeta_fld_list();
+		temp_flds_2.Add_int("src_id");
+		temp_flds_2.Add_int("trg_ns");
+		temp_flds_2.Add_int("trg_count");
+		temp_flds_2.Add_str("trg_ttl", 255);
+		conn.Meta_tbl_create(Dbmeta_tbl_itm.New(temp_tbl_name_2, temp_flds_2));
 		conn.Meta_tbl_create(Dbmeta_tbl_itm.New(dump_tbl_name, dump_flds));
 		conn.Txn_bgn("pagelink__dump__insert");
 		dump_insert = conn.Stmt_insert(dump_tbl_name, dump_flds);
@@ -76,6 +84,17 @@ class Pglnk_tempdb_mgr {
 		conn.Meta_idx_create(Gfo_usr_dlg_.Instance, Dbmeta_idx_itm.new_normal_by_tbl(dump_tbl_name, "main", dump_src_id, dump_trg_ns, dump_trg_ttl));
 
 		// move rows from dump to temp
+		conn.Exec_sql_concat_w_msg
+			( String_.Format("creating temp2: row={0}", Int_.To_str_fmt(rows, "#,##0"))
+			, "INSERT INTO pagelink_temp_2 (src_id, trg_ttl, trg_ns, trg_count)"
+			, "SELECT  src_id"
+			, ",       trg_ttl"
+			, ",       trg_ns"
+			, ",       Count(*)"
+			, "FROM    pagelink_dump"
+			, "GROUP BY src_id, trg_ns, trg_ttl"
+			);
+
 		new Db_attach_mgr(conn, new Db_attach_itm("page_db", wiki.Data__core_mgr().Db__core().Conn()))
 			.Exec_sql_w_msg
 			( String_.Format("transferring from dump to temp: row={0}", Int_.To_str_fmt(rows, "#,##0"))
@@ -83,15 +102,15 @@ class Pglnk_tempdb_mgr {
 			( "INSERT INTO pagelink_temp (src_id, trg_id, trg_count)"
 			, "SELECT  pl.src_id"
 			, ",       p.page_id"
-			, ",       Count(p.page_id)"
-			, "FROM    pagelink_dump pl"
+			, ",       pl.trg_count"
+			, "FROM    pagelink_temp_2 pl"
 			, "        JOIN <page_db>page p ON pl.trg_ns = p.page_namespace AND pl.trg_ttl = p.page_title"
-			, "GROUP BY pl.src_id, p.page_id"
 			));
 
 		// drop dump_tbl; vaccuum
 		conn.Meta_tbl_delete(dump_tbl_name);
-		conn.Env_vacuum();
+		conn.Meta_tbl_delete(temp_tbl_name_2);
+		//conn.Env_vacuum();
 	}
 	public void Live__create() {
 		// end current batch

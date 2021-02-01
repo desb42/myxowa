@@ -56,7 +56,7 @@ public class Xog_tab_itm_edit_mgr {
 
 		// refresh html
 		wiki.Parser_mgr().Parse(page, true);
-		if (wiki.Html__hdump_enabled()) wiki.Html__hdump_mgr().Save_mgr().Save(page);	// must go after wiki.Parse
+		if (wiki.Html__hdump_enabled()) wiki.Html__hdump_mgr().Save_mgr().Save(page, false, null);	// must go after wiki.Parse
 
 		// NOTE: show message after Parse, b/c Parse will flash "Loading page"; DATE:2014-05-17
 		win_itm.Usr_dlg().Prog_many("", "", "saved ~{0} (~{1})"
@@ -82,7 +82,7 @@ public class Xog_tab_itm_edit_mgr {
 			page.Db().Page().Html_db_id_(rv.Html_db_id());
 
 			// save html
-			wiki.Html__hdump_mgr().Save_mgr().Save(page, true);
+			wiki.Html__hdump_mgr().Save_mgr().Save(page, false, null);
 
 			// parse page and show it
 			page.Html_data().Edit_preview_(Bry_.Empty);

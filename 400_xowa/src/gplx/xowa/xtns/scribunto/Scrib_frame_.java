@@ -36,9 +36,9 @@ public class Scrib_frame_ {
 		else								return 0;		// arg_0 is at idx_0; EX: {{template|arg_0}}
 	}
 	public static Xot_invk Get_parent(Scrib_core core, byte frame_tid) {
-                if (frame_tid == Tid_null) {
-                    System.out.println("?");
-                }
+                //if (frame_tid == Tid_null) {
+                //    System.out.println("?");
+                //}
 		if		(frame_tid == Tid_current)	return core.Frame_parent();			// current frame has an owner frame
 		else								return Xot_invk_mock.Null;			// all other frames do not
 	}

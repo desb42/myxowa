@@ -75,15 +75,20 @@ public class Xoh_ns_file_page_mgr implements gplx.core.brys.Bfr_arg {
 		Xof_ext orig_ext = xfer_itm.Orig_ext();
 		byte[] alt_bry = gplx.langs.htmls.encoders.Gfo_url_encoder_.Http_url.Encode(ttl.Full_txt());
 		byte[] xowa_title = gplx.langs.htmls.encoders.Gfo_url_encoder_.Http_url.Encode(ttl.Page_url());
+                byte[] file_bry;
+                if (true)
+                    file_bry = xfer_itm.Html_orig_url().To_http_file_bry();
+                else
+                    file_bry = xfer_itm.Html_orig_url().RawBry();
 		if (orig_ext.Id_is_thumbable_img())
-			html_wtr.Html_main_img().Bld_bfr_many(bfr, xfer_itm.Orig_w(), xfer_itm.Orig_h(), xfer_itm.Html_orig_url().To_http_file_bry(), file_size_bry, orig_ext.Mime_type()
+			html_wtr.Html_main_img().Bld_bfr_many(bfr, xfer_itm.Orig_w(), xfer_itm.Orig_h(), file_bry, file_size_bry, orig_ext.Mime_type()
 				, xfer_itm.Html_uid(), xfer_itm.Html_w(), xfer_itm.Html_h(), xfer_itm.Html_view_url().To_http_file_bry()
 				, alt_bry, xowa_title, alt_wtr);
 		else if (orig_ext.Id_is_video())	// NOTE: video must precede audio else File:***.ogg will not show thumbs
-			html_wtr.Html_main_vid().Bld_bfr_many(bfr, xfer_itm.Html_uid(), xfer_itm.Html_view_url().To_http_file_bry(), Atr_class_image, xowa_title
+			html_wtr.Html_main_vid().Bld_bfr_many(bfr, xfer_itm.Html_uid(), file_bry, Atr_class_image, xowa_title
 				, xfer_itm.Html_view_url().To_http_file_bry(), xfer_itm.Html_w(), xfer_itm.Html_h(), Bry_.Empty, xfer_itm.Html_orig_url().To_http_file_bry(), xfer_itm.Html_w(), xfer_itm.Html_w());
 		else if (orig_ext.Id_is_audio())
-			html_wtr.Html_main_aud().Bld_bfr_many(bfr, xfer_itm.Html_orig_url().To_http_file_bry(), xowa_title, xfer_itm.Html_w(), xfer_itm.Html_w());
+			html_wtr.Html_main_aud().Bld_bfr_many(bfr, file_bry, xowa_title, xfer_itm.Html_w(), xfer_itm.Html_w());
 	}
 	private static final    byte[] Atr_class_image = Bry_.new_a7("image");
 	private static final    String Str_commons_notice = String_.Concat_lines_nl_skip_last

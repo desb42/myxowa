@@ -121,7 +121,7 @@ public class Xobldr__lnki_temp__create extends Xob_dump_mgr_base implements gplx
 				&&	page.Redirect_trail().Itms__len() == 0)	// don't generate html for redirected pages
 				wiki.Html_mgr().Page_wtr_mgr().Gen(ctx.Page().Root_(root), Xopg_view_mode_.Tid__read);
 			if (gen_hdump)
-				hdump_bldr.Insert(ctx, page.Root_(root), gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx.Hdump); // was hard-coded as Hdump in Xob_hdump_bldr.Insert DATE:2019-09-07
+				hdump_bldr.Insert(ctx, page.Root_(root), gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx.Hdump, null); //?? 20210126 eek // was hard-coded as Hdump in Xob_hdump_bldr.Insert DATE:2019-09-07
 			root.Clear();
 		}
 	}

@@ -86,14 +86,15 @@ class Dpl_page_finder {
 		Xoa_ttl ttl = wiki.Ttl_parse(gplx.xowa.wikis.nss.Xow_ns_.Tid__category, ttl_bry);
 
 		// log if invalid; NOTE: pages in en.n will pass "{{{2}}}" as category title; PAGE:en.b:Category:Egypt DATE:2016-10-18
-		if (ttl == null) {
+                // blank entries do not need to be logged
+		if (ttl == null && ttl_bry.length != 0) {
 			Gfo_usr_dlg_.Instance.Log_many("", "", "category title is invalid; wiki=~{0} page=~{1} ttl=~{2}", wiki.Domain_str(), itm.Page_ttl(), ttl_bry);
 		}
 		if (ttl == null) return -1;
 
 		Xowd_page_itm page_itm = page_tbl.Select_by_ttl_as_itm_or_null(ttl);
 		if (page_itm == null) {
-			Gfo_usr_dlg_.Instance.Log_many("", "", "dpl category does not exist in page table; wiki=~{0} page=~{1} ttl=~{2}", wiki.Domain_str(), "?", ttl.Full_db());	// Log instead of Warn b/c happens many times in en.d, en.b, en.u; DATE:2016-10-22
+			Gfo_usr_dlg_.Instance.Log_many("", "", "dpl category does not exist in page table; wiki=~{0} page=~{1} ttl=~{2}", wiki.Domain_str(), itm.Page_ttl(), ttl.Full_db());	// Log instead of Warn b/c happens many times in en.d, en.b, en.u; DATE:2016-10-22
 			return -1;
 		}
 		return page_itm.Id();

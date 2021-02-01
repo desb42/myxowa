@@ -124,7 +124,8 @@ class Reindex_html_dbs_cmd {
 				// move row
 				trg_html_tbl.Html_tbl().Insert(src_html_row.Page_id(), src_html_row.Head_flag(), src_html_row.Body_flag()
 					, src_html_row.Display_ttl(), src_html_row.Content_sub(), src_html_row.Sidebar_div()
-					, src_html_row.Body());
+					, src_html_row.Body(),
+                                        null); //?? 20210126 eek
 
 				// update page_html_db_id
 				stmt_update.Clear().Val_int(fld_page_html_db_id, trg_db).Crt_int(fld_page_id, page_id).Exec_update();

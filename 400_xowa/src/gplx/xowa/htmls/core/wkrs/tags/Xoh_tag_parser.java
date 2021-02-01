@@ -68,6 +68,7 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 
 			Gfh_tag nxt = null;
 			int cur_name_id = cur.Name_id();
+//                                    System.out.println(String_.new_u8(Bry_.Mid(src, cur.Src_bgn(), cur.Src_end())));
 			switch (cur_name_id) {
 				case Gfh_tag_.Id__h1: case Gfh_tag_.Id__h2: case Gfh_tag_.Id__h3: case Gfh_tag_.Id__h4: case Gfh_tag_.Id__h5: case Gfh_tag_.Id__h6:
 					nxt = tag_rdr.Tag__peek_fwd_head();
@@ -120,6 +121,13 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 				case Gfh_tag_.Id__form:
 					if (wkr__form.Parse1(hdoc_wkr, hctx, tag_rdr, src, cur))
 						return wkr__form.Src_end();
+					break;
+				case Gfh_tag_.Id__script:
+					int scr = Bry_find_.Find_fwd(src, Gfh_tag_.Script_rhs, cur.Src_end());
+					if (scr != Bry_find_.Not_found) {
+						hdoc_wkr.On_txt(pos, scr + 9);
+						return scr + 9;
+					}
 					break;
 			}
 			if (rv == -1) {

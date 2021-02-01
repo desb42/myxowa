@@ -22,6 +22,7 @@ jQuery( document ).ready( function ( $ ) {
  * 
  * Ver 0.20, 2015-12-31
  */
+/* no longer userd? 20210113?
 jQuery( document ).ready( function ( $ ) {
 	var nsHeaders = [ 0, 114 ];
 	if ( $.inArray( mediaWiki.config.get( 'wgNamespaceNumber' ), nsHeaders ) !== -1 ) {
@@ -30,6 +31,7 @@ jQuery( document ).ready( function ( $ ) {
 		$( 'div#heedertemplate' ).prependTo( $( 'div#mw-content-text' ) );
 	}
 } );
+*/
 
 /**
  * PageNumbers loader

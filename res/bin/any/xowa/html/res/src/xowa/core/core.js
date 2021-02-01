@@ -937,6 +937,8 @@ if (!window.xowa) {
   // PURPOSE: show image on page
   xowa.js.doc.elem_img_update = function(elem_id, elem_src, elem_width, elem_height) {
     if (document == null) return false;
+    elem_src = decodeURIComponent(elem_src);
+    //alert("esrc:" + elem_src);
     var elem = document.getElementById(elem_id);
     if (elem == null) return false;
     elem.src = elem_src;
@@ -1382,7 +1384,38 @@ window.xowa.cmds.add('xowa.notify', new Xonotify());
 }( window.mediaWiki ) );
 /** end of storage **/
 
-jQuery( document ).ready( function ( $ ) {
+function amend_imgs() {
+	
+function ascii_to_hexa(str)
+{
+	var arr1 = [];
+	for (var n = 0, l = str.length; n < l; n ++) 
+     {
+		var hex = Number(str.charCodeAt(n)).toString(16);
+		arr1.push('%' + hex);
+	 }
+	return arr1.join('');
+}
+
+	if (xowa_global_values.mode_is_gui) {
+    // go thru all images
+    var i;
+    var imgs = document.images;
+    var ilen = imgs.length;
+    var srcs = '';
+    for (i = 0; i < ilen; i++) {
+    	var img = imgs[i];
+    	var isrc = img.src;
+    	//var nsrc = decodeURIComponent(isrc);
+    	var nsrc = decodeURIComponent(ascii_to_hexa(isrc));
+    	if (isrc != nsrc) {
+    		img.src = nsrc;
+    		//alert(nsrc);
+    	}
+    }
+  }
+}
+ jQuery( document ).ready( function ( $ ) {
 	  var locjs = '/';
     if (window.location.pathname.substring(0,5) == '/xowa')
       locjs = '/xowa/';
@@ -1392,4 +1425,7 @@ jQuery( document ).ready( function ( $ ) {
     var pageurl = locjs + x_p.wiki + '/wiki/' + xowa_global_values.wgPageName;
     //if (pageurl != location.pathname)
     //  window.history.pushState('page2', xowa_global_values.wgTitle, pageurl);
+    
+    amend_imgs()
+   
 } );

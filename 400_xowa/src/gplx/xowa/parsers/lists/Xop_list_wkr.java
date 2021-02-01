@@ -63,8 +63,11 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		ctx.Page().Prev_list_tkn_(itm);
 		// peek ahead for a table eg :{|
 		if (peek_pos + 2 < src_len) {
-			if (src[peek_pos] == '{' && src[peek_pos+1] == '|')
-				cur_pos = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, peek_pos+2, false, Xop_tblw_wkr.Tblw_type_tb, Xop_tblw_wkr.Called_from_list, -1, -1);
+			if (src[peek_pos] == '{' && src[peek_pos+1] == '|') {
+                Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
+                        ctx.Page().Prev_list_tkn_(null);
+				cur_pos = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, peek_pos+2, false, Xop_tblw_wkr.Tblw_type_tb, Xop_tblw_wkr.Called_from_list, -1, -1, list_tkn);
+                        }
 		}
 		//return cur_pos;
 		return peek_pos;

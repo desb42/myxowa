@@ -257,7 +257,7 @@ public class Xog_tab_itm implements Gfo_invk {
 //					async_wkr = new Xof_file_wkr(wiki.File__orig_mgr(), fsdb_mgr.Bin_mgr(), fsdb_mgr.Mnt_mgr(), app.Usere().User_db_mgr().Cache_mgr(), wiki.File__repo_mgr(), html_itm, page, page.Hdump_mgr().Imgs());
 				async_wkr = new Load_files_wkr(this);
 				if (wiki.Html__hdump_enabled() && page.Db().Page().Html_db_id() == Xopg_db_page.HTML_DB_ID_NULL) {
-					wiki.Html__hdump_mgr().Save_mgr().Save(page);
+					wiki.Html__hdump_mgr().Save_mgr().Save(page, false, null);
 				}
 			}
 			else

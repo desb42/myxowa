@@ -306,12 +306,24 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 		}
 
 		Xoctg_catpage_ctg ctg = Get_by_db_or_null(ttl.Page_db(), catpage_url, ttl, grp_max);
+		byte[] data_ct_mode = Bry_.Empty;
+		if (params.Isjson() == false) {
+			Fmt__data_ct.Bld_many(local_tmp_bfr, params.Mode(), params.Hideprefix(), params.Showcount(), params.Namespaces());
+			data_ct_mode = local_tmp_bfr.To_bry_and_clear();
+			if (ctg == null) {
+				byte[] not_found_bry = Db_expand.Extracheck( wiki.Msg_mgr().Val_by_key_args(Bry_.new_a7("categorytree-not-found"), ttl.Page_txt()),"" );
+				Fmt__not_found.Bld_many(bfr, data_ct_mode, not_found_bry);
+				return;
+			}
+		}
+		if (ctg == null) return;
+/*		Xoctg_catpage_ctg ctg = Get_by_db_or_null(ttl.Page_db(), catpage_url, ttl, grp_max);
 		if (ctg == null) return;
 
 		if (params.Isjson() == false)
 			Fmt__data_ct.Bld_many(local_tmp_bfr, params.Mode(), params.Hideprefix(), params.Showcount(), params.Namespaces());
 		byte[] data_ct_mode = local_tmp_bfr.To_bry_and_clear();
-
+*/
 		// write html
 		if (params.Depth() != 0 || (params.Isjson() && params.Mode() == Categorytree_itm_.Mode__PAGES))
 			Build_cattree(local_tmp_bfr, wiki, ctg, params, data_ct_mode);
@@ -365,6 +377,11 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	  Fmt__data_ct = Bry_fmt.Auto_nl_skip_last
 	( ""
 	, "<div class=\"CategoryTreeTag\" data-ct-mode=\"~{mode}\" data-ct-options=\"{&quot;mode&quot;:~{mode},&quot;hideprefix&quot;:~{hide},&quot;showcount&quot;:~{showcount},&quot;namespaces&quot;:~{namespaces}}\">"
+	);
+	private static final	Bry_fmt
+	  Fmt__not_found = Bry_fmt.Auto_nl_skip_last
+	( ""
+	, "~{0}<span class=\"CategoryTreeNotice\">~{1}</span></div>"
 	);
 	public static byte[] Atr__class__categorytreetag = Bry_.new_a7("CategoryTreeTag");
 

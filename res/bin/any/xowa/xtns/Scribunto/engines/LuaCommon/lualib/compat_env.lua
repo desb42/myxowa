@@ -16,7 +16,7 @@ local function check_chunk_type(s, mode)
   return true
 end
 
-local IS_52_LOAD = pcall(load, '')
+local IS_52_LOAD = true -- pcall(load, '')
 if IS_52_LOAD then
   M.load     = _G.load
   M.loadfile = _G.loadfile
@@ -73,9 +73,11 @@ else
 end
 
 if _G.setfenv then -- Lua 5.1
+-- print 'Lua 5.1'
   M.setfenv = _G.setfenv
   M.getfenv = _G.getfenv
 else -- >= Lua 5.2
+-- print 'Lua 5.2'
   -- helper function for `getfenv`/`setfenv`
   local function envlookup(f)
     local name, val

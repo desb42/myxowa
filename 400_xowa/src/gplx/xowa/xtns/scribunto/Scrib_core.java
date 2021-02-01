@@ -62,6 +62,7 @@ public class Scrib_core {
 		this.wiki = ctx.Wiki(); this.page = ctx.Page();	// NOTE: wiki / page needed for title reg; DATE:2014-02-05
 		this.page_url = page.Url_bry_safe();
 		this.lang = wiki.Lang();
+		this.core_mgr = wiki.Parser_mgr().Scrib();
 		this.Engine_(Scrib_engine_type.Type_lua, false);	// TEST: default to lua
 		fsys_mgr.Root_dir_(app.Fsys_mgr().Bin_xtns_dir().GenSubDir_nest("Scribunto"));
 		lib_mw = new Scrib_lib_mw(this);
@@ -77,6 +78,7 @@ public class Scrib_core {
 		lib_wikibase = new Scrib_lib_wikibase(this);
 		lib_wikibase_entity = new Scrib_lib_wikibase_entity(this);
 	}
+	public Scrib_core_mgr Core_mgr() {return core_mgr;} private Scrib_core_mgr core_mgr;
 	public Xoae_app App() {return app;} private Xoae_app app;
 	public Xowe_wiki Wiki() {return wiki;} private Xowe_wiki wiki;
 	public Xol_lang_itm Lang() {return lang;} private Xol_lang_itm lang;
@@ -159,9 +161,15 @@ public class Scrib_core {
 		++expensive_function_count;
 		if (expensive_function_count > 255) {}
 	}
+	public Scrib_lua_mod RegisterInterface(Scrib_lib lib, String name, String text, Keyval... args) {
+		return RegisterInterface_text(lib, name, text, args);
+	}
 	public Scrib_lua_mod RegisterInterface(Scrib_lib lib, Io_url url, Keyval... args) {
+		return RegisterInterface_text(lib, url.NameAndExt(), Io_mgr.Instance.LoadFilStr(url), args);
+	}
+	private Scrib_lua_mod RegisterInterface_text(Scrib_lib lib, String name, String text, Keyval... args) {
 		this.RegisterLibrary(lib.Procs());
-		Scrib_lua_mod rv = this.LoadLibraryFromFile(url.NameAndExt(), Io_mgr.Instance.LoadFilStr(url));
+		Scrib_lua_mod rv = this.LoadLibraryFromFile(name, text);
 		Scrib_lua_proc setupInterface_func = rv.Fncs_get_by_key("setupInterface");
 		if (setupInterface_func != null)
 			engine.CallFunction(setupInterface_func.Id(), Scrib_kv_utl_.base1_obj_(args));
@@ -219,7 +227,8 @@ public class Scrib_core {
 
 		try {
 			Scrib_lua_mod mod = Mods_get_or_new(mod_name, mod_text);
-			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), String_.new_u8(fnc_name));
+			String fnc_name_str = String_.new_u8(fnc_name);
+			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), fnc_name_str);
 			Keyval[] func_rslt = engine.CallFunction(luaid_ExecuteModule, func_args);			// call init_chunk to get proc dynamically; DATE:2014-07-12
 			if (func_rslt == null || func_rslt.length < 2) {
 				String errmsg = String_.new_u8(ctx.Wiki().Msg_mgr().Val_by_key_args(Bry_.new_a7("scribunto-common-nosuchfunction"), fnc_name, Scrib_kv_utl_.Val_to_str(func_args, 1)));
@@ -249,8 +258,8 @@ public class Scrib_core {
 	public Scrib_lua_mod Mods_get(byte[] mod_name) {return (Scrib_lua_mod)mods.Get_by(mod_name);}
 	private Scrib_lua_mod Mods_get_or_new(byte[] mod_name, byte[] mod_text) {
 		Scrib_lua_mod rv = (Scrib_lua_mod)mods.Get_by(mod_name);
+//                    System.out.println("mod " + String_.new_u8(mod_name));
 		if (rv == null) {
-                    //System.out.println("mod " + String_.new_u8(mod_name));
 			rv = new Scrib_lua_mod(this, "Module:" + String_.new_u8(mod_name));
 			//rv.LoadString(String_.new_u8(mod_text));
 

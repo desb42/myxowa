@@ -677,6 +677,9 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		}
 		return buf.To_bry_and_clear();
 	}
+	public String toString() {
+            return String_.new_u8(raw);
+        }
 }
 class Xoa_ttl_trie {
 	public static Btrie_fast_mgr new_() {

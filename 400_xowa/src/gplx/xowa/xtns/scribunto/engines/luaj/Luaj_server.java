@@ -17,6 +17,8 @@ package gplx.xowa.xtns.scribunto.engines.luaj; import gplx.*; import gplx.xowa.*
 import gplx.core.envs.*;
 import org.luaj.vm2.*; import org.luaj.vm2.lib.*; import org.luaj.vm2.lib.jse.*;
 import gplx.xowa.xtns.scribunto.engines.process.*;
+import org.luaj.vm2.compiler.LuaC;
+import org.luaj.vm2.luajc.LuaJC;
 public class Luaj_server implements Scrib_server {
 	private final Luaj_server_func_recv func_recv;
 	private final Luaj_server_func_dbg func_dbg;
@@ -35,6 +37,7 @@ public class Luaj_server implements Scrib_server {
 		luaj_globals = JsePlatform.standardGlobals();
 		luaj_globals.load(luaj_dbg);
 		luaj_globals.load(new MWClient(luaj_globals, func_recv));
+		//LuaJC.install(luaj_globals);
 		luaj_globals.set("dbg", func_dbg);
 		String root_str = init_args[2];
 		if (Op_sys.Cur().Tid_is_wnt())
@@ -43,6 +46,7 @@ public class Luaj_server implements Scrib_server {
 		LuaValue package_val = luaj_globals.get("package");
 		package_val.rawset("path", LuaValue.valueOf(root_str + "engines/Luaj/?.lua;" + root_str + "engines/LuaCommon/lualib/?.lua"));
 		server = (LuaTable)luaj_globals.get("dofile").call(main_fil_val);
+		LuaC.install(luaj_globals);
 	}
 	public LuaTable Dispatch(LuaTable msg) {
 		return (LuaTable)server.method(Val_server_recv, msg);

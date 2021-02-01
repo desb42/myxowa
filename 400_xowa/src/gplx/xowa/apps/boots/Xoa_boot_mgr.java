@@ -68,6 +68,7 @@ public class Xoa_boot_mgr {
 			// ctor app
 			app = new Xoae_app(usr_dlg, app_type
 			, root_dir
+			, arg_mgr.Fsys__pages_articles_file()
 			, arg_mgr.Fsys__wiki_dir()
 			, root_dir.GenSubDir("file")
 			, arg_mgr.Fsys__user_dir()

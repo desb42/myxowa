@@ -35,9 +35,12 @@ public class Xop_nl_tab_lxr implements Xop_lxr {
 					case Xop_tblw_ws_itm.Type_xnde:		// ignore xnde
 						break;
 					default: {							// handle tblw
-						int tblw_rv = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, non_ws_pos + tblw_itm.Hook_len(), false, itm_type, Xop_tblw_wkr.Called_from_pre, -1, -1);
-						if (tblw_rv != -1)	// \n\s| is valid tblw tkn and processed; otherwise fall through; 
+                Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
+						int tblw_rv = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, non_ws_pos + tblw_itm.Hook_len(), false, itm_type, Xop_tblw_wkr.Called_from_pre, -1, -1, list_tkn);
+						if (tblw_rv != -1) {	// \n\s| is valid tblw tkn and processed; otherwise fall through; 
+                        ctx.Page().Prev_list_tkn_(null);
 							return tblw_rv;
+                                                }
 						break;
 					}
 				}

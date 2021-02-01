@@ -22,7 +22,8 @@ public class Blacklist_scrib_lib implements Scrib_lib {
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Blacklist_scrib_lib();}
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();			
-		mod = core.RegisterInterface(this, core.App().Fsys_mgr().Bin_xtns_dir().GenSubFil_nest("TitleBlacklist", "mw.ext.TitleBlacklist.lua"));
+		mod = core.RegisterInterface(this, "mw.ext.TitleBlacklist.lua", core.Core_mgr().Get_text(core.App().Fsys_mgr().Bin_xtns_dir().GenSubDir_nest("TitleBlacklist"), "mw.ext.TitleBlacklist.lua"));
+		//mod = core.RegisterInterface(this, core.App().Fsys_mgr().Bin_xtns_dir().GenSubFil_nest("TitleBlacklist", "mw.ext.TitleBlacklist.lua"));
 		return mod;
 	}
 	public Scrib_proc_mgr Procs() {return procs;} private Scrib_proc_mgr procs = new Scrib_proc_mgr();

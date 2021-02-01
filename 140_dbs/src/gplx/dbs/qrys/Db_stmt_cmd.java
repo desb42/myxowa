@@ -123,6 +123,8 @@ public class Db_stmt_cmd implements Db_stmt {
 		return this;
 	}
 	public boolean Exec_insert() {
+//                Thread currentThread = Thread.currentThread();
+//                System.out.println(currentThread.getName()+"-IN-"+sql);
 		try		{boolean rv = stmt.execute(); return rv;}
 		catch (Exception e) {
 			this.Rls();
@@ -131,6 +133,8 @@ public class Db_stmt_cmd implements Db_stmt {
 		}
 	}
 	public int Exec_update() {
+//                Thread currentThread = Thread.currentThread();
+//                System.out.println(currentThread.getName()+"-UP-"+sql);
 		try		{int rv = stmt.executeUpdate(); return rv;}
 		catch (Exception e) {
 			this.Rls();
@@ -139,6 +143,8 @@ public class Db_stmt_cmd implements Db_stmt {
 		}
 	}
 	public int Exec_delete() {
+//                Thread currentThread = Thread.currentThread();
+//                System.out.println(currentThread.getName()+"-DE-"+sql);
 		try		{int rv = stmt.executeUpdate(); return rv;}
 		catch (Exception e) {
 			this.Rls();

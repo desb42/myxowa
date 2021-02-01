@@ -79,12 +79,13 @@ public class Xop_para_wkr implements Xop_ctx_wkr {
 		if (!para_enabled) return;
 		Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);
 		Process_block__bgn_y__end_n(tag);
-		Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+/* 20210115		Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
 		if (prev != null) {
 			Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
 			ctx.Subs_add_and_stack(root, itm);
 			ctx.Page().Prev_list_tkn_(null);
 		}
+*/
 	}
 	public void Process_nl(Xop_ctx ctx, Xop_root_tkn root, byte[] src, int bgn_pos, int cur_pos) {// REF.MW:Parser.php|doBlockLevels
 		Dd_clear(ctx);
@@ -191,9 +192,12 @@ public class Xop_para_wkr implements Xop_ctx_wkr {
 					}
 					break;
 				default: {
-					int tblw_rv = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, txt_pos + ws_itm.Hook_len(), false, tblw_type, Xop_tblw_wkr.Called_from_pre, -1, -1);
-					if (tblw_rv != -1)	// \n\s| is valid tblw tkn and processed; otherwise process pre-code below; EX:w:Wikipedia:WikiProject_History/CategoryExample; DATE:2014-04-14
+                Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
+					int tblw_rv = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, txt_pos + ws_itm.Hook_len(), false, tblw_type, Xop_tblw_wkr.Called_from_pre, -1, -1, list_tkn);
+					if (tblw_rv != -1) {	// \n\s| is valid tblw tkn and processed; otherwise process pre-code below; EX:w:Wikipedia:WikiProject_History/CategoryExample; DATE:2014-04-14
+                        ctx.Page().Prev_list_tkn_(null);
 						return tblw_rv;
+                                        }
 					break;
 				}
 			}

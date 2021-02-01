@@ -200,9 +200,11 @@ function MWServer:handleRegisterLibrary( message )
 	if not self.baseEnv[message.name] then
 		self.baseEnv[message.name] = {}
 	end
+--  print(message.name .. '|' .. #message.functions);
 	local t = self.baseEnv[message.name]
 
 	for name, id in pairs( message.functions ) do
+--  print(name .. '|' .. id);
 		t[name] = function( ... )
 			return self:call( id, self:listToCountAndTable( ... ) )
 		end

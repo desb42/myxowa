@@ -431,7 +431,7 @@ public class Db_wikistrip {
 							else if (pos - startpos > 10) {
 								int npos = 0; 
 								int textstart = -1;
-								if ((src[namestart] | 32) == 'l' && src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && src[namestart+4] == '|') { // lang
+								if ((src[namestart] | 32) == 'l' && src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && (src[namestart+4] == '|' || src[namestart+4] == '-')) { // lang
 									npos = namestart + 5;
 									while (npos < pos) {
 										b = src[npos++];

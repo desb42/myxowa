@@ -65,7 +65,7 @@ class Xop_statistics_stats_page_grp implements gplx.core.brys.Bfr_arg {
 	,	"    <td class=\"mw-statistics-numbers\" style='text-align:right'>~{page_count_main}</td>"
 	,	"  </tr>"
 	,	"  <tr class=\"mw-statistics-pages\">"
-	,	"    <td>~{lbl_pages}<br /><small class=\"mw-statistic-desc\"> ~{lbl_pages_desc}</small></td>"
+	,	"    <td>~{lbl_pages}<br /><small class=\"mw-statistic-desc\"> (~{lbl_pages_desc})</small></td>"
 	,	"    <td class=\"mw-statistics-numbers\" style='text-align:right'>~{page_count_all}</td>"
 	,	"  </tr>"
 	), "lbl_header_pages", "lbl_articles", "lbl_pages", "lbl_pages_desc", "page_count_main", "page_count_all");

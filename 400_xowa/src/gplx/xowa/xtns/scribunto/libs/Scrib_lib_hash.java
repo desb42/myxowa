@@ -27,7 +27,8 @@ public class Scrib_lib_hash implements Scrib_lib {
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_hash(core);}
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();
-		mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.hash.lua"));
+		mod = core.RegisterInterface(this, "mw.hash.lua", core.Core_mgr().Get_text(script_dir, "mw.hash.lua"));
+		//mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.hash.lua"));
 		return mod;
 	}
 	public Scrib_proc_mgr Procs() {return procs;} private final    Scrib_proc_mgr procs = new Scrib_proc_mgr();

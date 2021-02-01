@@ -64,6 +64,6 @@ class Xomp_make_html {
 
 		// get trg_tbl and write
 		Xowd_html_tbl trg_tbl = html_db_wtr.Tbls__get_or_new(ns_id, html_len);
-		trg_tbl.Insert(src_row.Page_id(), src_row.Head_flag(), src_body_flag_bldr.Get_as_int(0), src_body_flag_bldr.Get_as_int(1), src_row.Display_ttl(), src_row.Content_sub(), src_row.Sidebar_div(), src_row.Body());
+		trg_tbl.Insert(src_row.Page_id(), src_row.Head_flag(), src_body_flag_bldr.Get_as_int(0), src_body_flag_bldr.Get_as_int(1), src_row.Display_ttl(), src_row.Content_sub(), src_row.Sidebar_div(), src_row.Body(), null);
 	}
 }

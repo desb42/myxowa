@@ -17,6 +17,7 @@ package gplx.xowa.parsers.hdrs; import gplx.*; import gplx.xowa.*; import gplx.x
 import gplx.xowa.parsers.xndes.*;
 import gplx.xowa.parsers.hdrs.sections.*;
 import gplx.xowa.parsers.htmls.Mwh_atr_itm;
+import gplx.xowa.parsers.lists.Xop_list_tkn_new;
 public class Xop_hdr_wkr implements Xop_ctx_wkr {
 	public void Ctor_ctx(Xop_ctx ctx) {}
 	public void Page_bgn(Xop_ctx ctx, Xop_root_tkn root) {}
@@ -67,9 +68,16 @@ public class Xop_hdr_wkr implements Xop_ctx_wkr {
 			default: ctx.Msg_log().Add_itm_none(Xop_hdr_log.Len_7_or_more, src, bgn_pos, new_pos); break;	// <h7>+; limit to 6; flag; NOTE: only 14 pages in 2011-07-27
 		}
 
+		Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+		if (prev != null) {
+			Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
+			ctx.Subs_add_and_stack(root, itm);
+			ctx.Page().Prev_list_tkn_(null);
+		}
+
 		Xop_hdr_tkn tkn = tkn_mkr.Hdr(bgn_pos, new_pos, hdr_len);	// make tkn
 		ctx.StackTkn_add(root, tkn);
-                new_pos = Bry_find_.Find_fwd_while(src, new_pos, src_len, Byte_ascii.Space); // skip leading space
+		new_pos = Bry_find_.Find_fwd_while(src, new_pos, src_len, Byte_ascii.Space); // skip leading space
 		return new_pos;
 	}
 	public int Make_tkn_bgn_from_h(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, int hdr_len, int atrs_bgn, int atrs_end, Mwh_atr_itm[] atrs) {

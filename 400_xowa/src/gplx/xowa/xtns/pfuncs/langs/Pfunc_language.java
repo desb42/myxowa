@@ -20,6 +20,7 @@ public class Pfunc_language extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_i18n_language;}
 	@Override public Pf_func New(int id, byte[] name) {return new Pfunc_language().Name_(name);}
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
+		int self_args_len = self.Args_len();
 		byte[] argx = Eval_argx(ctx, src, caller, self);
 		Hash_adp_bry regy = Xol_lang_stub_.Regy();
 		if (argx.length == 0) return;	// {{#language:}} should return ""; note that byte[0] will fail in Match_exact
@@ -28,6 +29,10 @@ public class Pfunc_language extends Pf_func_base {
 			bfr.Add(argx);
 		else {
 			Xol_lang_stub lang_itm = (Xol_lang_stub)o;
+                        if (self_args_len > 0)
+                            // always return the English version (should be langauge specific)
+			bfr.Add(lang_itm.Local_name());
+                        else
 			bfr.Add(lang_itm.Canonical_name());
 		}
 	}

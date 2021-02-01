@@ -30,7 +30,7 @@ import gplx.xowa.wikis.tdbs.*; import gplx.xowa.wikis.tdbs.hives.*; import gplx.
 import gplx.xowa.addons.*; import gplx.xowa.specials.mgrs.*;
 import gplx.xowa.addons.apps.cfgs.*; import gplx.xowa.apps.miscs.*;
 public class Xoae_app implements Xoa_app, Gfo_invk {
-	public Xoae_app(Gfo_usr_dlg usr_dlg, Xoa_app_mode mode, Io_url root_dir, Io_url wiki_dir, Io_url file_dir, Io_url user_dir, Io_url css_dir, String bin_dir_name) {
+	public Xoae_app(Gfo_usr_dlg usr_dlg, Xoa_app_mode mode, Io_url root_dir, Io_url pages_articles_file, Io_url wiki_dir, Io_url file_dir, Io_url user_dir, Io_url css_dir, String bin_dir_name) {
 		Xoa_app_.Usr_dlg_(usr_dlg);
 		usr_dlg.Log_wkr().Log_to_session_fmt("app.ctor.bgn");
 
@@ -45,6 +45,7 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 		user = new Xoue_user(this, user_dir);
 		this.fsys_mgr.Url_finder().Init_by_user(user.Fsys_mgr());
 
+		this.pages_articles_file = pages_articles_file;
 		this.meta_mgr = new Xoa_meta_mgr(this);
 		url_cmd_eval = new Xoa_fsys_eval(fsys_mgr, user.Fsys_mgr());			
 		fsys_mgr.Init_by_app(prog_mgr);
@@ -75,6 +76,7 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 
 		usr_dlg.Log_wkr().Log_to_session_fmt("app.ctor.end");
 	}
+	public Io_url   Pages_articles_file()  { return pages_articles_file; } Io_url pages_articles_file;
 	public boolean						Tid_is_edit()				{return Bool_.Y;}
 	public Xoa_app_mode				Mode()						{return mode;} private final    Xoa_app_mode mode;
 	public Xoa_fsys_mgr				Fsys_mgr()					{return fsys_mgr;} private final    Xoa_fsys_mgr fsys_mgr;

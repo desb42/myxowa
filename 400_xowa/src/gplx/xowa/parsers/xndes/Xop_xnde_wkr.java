@@ -18,6 +18,7 @@ import gplx.core.btries.*; import gplx.core.envs.*; import gplx.xowa.apps.progs.
 import gplx.xowa.wikis.domains.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.pfuncs.strings.*;
 import gplx.langs.htmls.entitys.*; import gplx.xowa.parsers.paras.*;
 import gplx.xowa.parsers.logs.*; import gplx.xowa.parsers.tblws.*; import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.miscs.*; import gplx.xowa.parsers.htmls.*;
+import gplx.xowa.parsers.lists.Xop_list_tkn_new;
 public class Xop_xnde_wkr implements Xop_ctx_wkr {
 	public void Ctor_ctx(Xop_ctx ctx) {}
 	public boolean Pre_at_bos() {return pre_at_bos;} public void Pre_at_bos_(boolean v) {pre_at_bos = v;} private boolean pre_at_bos;
@@ -126,6 +127,16 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 			}
 		}
 		Xop_xnde_tag tag = (Xop_xnde_tag)tag_obj;
+                if (ctx.Cur_tkn_tid() == Xop_tkn_itm_.Tid_list_new)
+                    if (tag.Id() == Xop_xnde_tag_.Tid__div && tag_is_closing) {
+				Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
+				if (prev != null) {
+					// inject a list close
+					Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, prev);
+					ctx.Subs_add_and_stack(root, itm);
+					ctx.Page().Prev_list_tkn_(null);
+				}
+                    }
 		if (pre_at_bos) {
 			pre_at_bos = false;
 			if (tag.Block_close() == Xop_xnde_tag.Block_end
@@ -425,7 +436,9 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 			case Xop_xnde_tag_.Tid__th:		wlxr_type = Xop_tblw_wkr.Tblw_type_th; break;
 			case Xop_xnde_tag_.Tid__caption:	wlxr_type = Xop_tblw_wkr.Tblw_type_tc; break;
 		}
-		ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, true, wlxr_type, Xop_tblw_wkr.Called_from_general, atrs_bgn, atrs_end);
+                Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
+                        ctx.Page().Prev_list_tkn_(null);
+		ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, true, wlxr_type, Xop_tblw_wkr.Called_from_general, atrs_bgn, atrs_end, list_tkn);
 	}
 	private void Tblw_end(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, int tagId) {
 		int typeId = 0;

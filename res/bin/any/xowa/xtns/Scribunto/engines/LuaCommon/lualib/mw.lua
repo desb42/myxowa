@@ -1,5 +1,7 @@
 mw = mw or {}
 
+mw_interface = mw_interface or {}
+
 local packageCache
 local packageModuleFunc
 local php
@@ -482,7 +484,6 @@ local function newFrame( frameId, ... )
 
 	return frame
 end
-
 --- Set up a cloned environment for execution of a module chunk, then execute
 -- the module in that environment. This is called by the host to implement
 -- {{#invoke}}.

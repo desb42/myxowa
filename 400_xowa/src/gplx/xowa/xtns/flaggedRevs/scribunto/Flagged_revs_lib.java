@@ -27,7 +27,8 @@ public class Flagged_revs_lib implements Scrib_lib {
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		this.core = core;
 		Init();
-		mod = core.RegisterInterface(this, core.App().Fsys_mgr().Bin_xtns_dir().GenSubFil_nest("FlaggedRevs", "scribunto", "mw.ext.FlaggedRevs.lua"));
+		mod = core.RegisterInterface(this, "mw.ext.FlaggedRevs.lua", core.Core_mgr().Get_text(core.App().Fsys_mgr().Bin_xtns_dir().GenSubDir_nest("FlaggedRevs", "scribunto"), "mw.ext.FlaggedRevs.lua"));
+		//mod = core.RegisterInterface(this, core.App().Fsys_mgr().Bin_xtns_dir().GenSubFil_nest("FlaggedRevs", "scribunto", "mw.ext.FlaggedRevs.lua"));
 		return mod;
 	}
 	public Scrib_proc_mgr Procs() {return procs;} private final    Scrib_proc_mgr procs = new Scrib_proc_mgr();

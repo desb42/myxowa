@@ -19,6 +19,7 @@ import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.cmds.*; import gplx.xowa.apps.a
 import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.htmls.core.hzips.*; import gplx.xowa.htmls.core.dbs.*;
 import gplx.xowa.wikis.*; import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.data.*;
 import gplx.xowa.parsers.*;
+import gplx.xowa.wikis.caches.Db_html_body;
 public class Xob_hdump_bldr implements Gfo_invk {
 	private boolean enabled, hzip_enabled, hzip_diff, hzip_b256; private byte zip_tid = Byte_.Max_value_127;
 	private Xowe_wiki wiki; private Xob_hdump_tbl_retriever html_tbl_retriever;
@@ -42,7 +43,7 @@ public class Xob_hdump_bldr implements Gfo_invk {
 		hdump_mgr.Init_by_db(zip_tid, hzip_enabled, hzip_b256);
 		return true;
 	}
-	public void Insert(Xop_ctx ctx, Xoae_page wpg, Xoh_wtr_ctx hctx) {
+	public void Insert(Xop_ctx ctx, Xoae_page wpg, Xoh_wtr_ctx hctx, Db_html_body html_body) {
 		// clear
 		tmp_hpg.Clear();			// NOTE: must clear tmp_hpg or else will leak memory during mass build; DATE:2016-01-09
 		wpg.File_queue().Clear();	// need to reset uid to 0, else xowa_file_# will resume from last
@@ -62,7 +63,7 @@ public class Xob_hdump_bldr implements Gfo_invk {
 
 		// save to db
 		Xowd_html_tbl html_tbl = html_tbl_retriever.Get_html_tbl(wpg.Ttl().Ns(), prv_row_len);	// get html_tbl
-		this.prv_row_len = hdump_mgr.Save_mgr().Save(wpg, tmp_hpg.Ctor_by_hdiff(tmp_bfr, wpg, toc_label), html_tbl, true, is_wikitext);	// save to db
+		this.prv_row_len = hdump_mgr.Save_mgr().Save(wpg, tmp_hpg.Ctor_by_hdiff(tmp_bfr, wpg, toc_label), html_tbl, true, is_wikitext, html_body);	// save to db
 		tmp_hpg.Db().Html().Zip_len_(prv_row_len);
 
 		// run hzip diff if enabled

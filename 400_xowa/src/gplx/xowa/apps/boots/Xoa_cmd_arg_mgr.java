@@ -24,6 +24,7 @@ public class Xoa_cmd_arg_mgr {
 	public String Fsys__bin_dir() {return fsys__bin_dir;} private String fsys__bin_dir;
 	public Io_url Fsys__user_dir() {return fsys__user_dir;} private Io_url fsys__user_dir;
 	public Io_url Fsys__wiki_dir() {return fsys__wiki_dir;} private Io_url fsys__wiki_dir;
+	public Io_url Fsys__pages_articles_file() {return fsys__pages_articles_file;} private Io_url fsys__pages_articles_file;
 	public Io_url Cmd__file() {return cmd__file;} private Io_url cmd__file;
 	public String Cmd__text() {return cmd__text;} private String cmd__text;
 	public int Tcp__port_recv() {return tcp__port_recv;} private int tcp__port_recv;
@@ -41,6 +42,7 @@ public class Xoa_cmd_arg_mgr {
 		this.fsys__root_dir = arg_mgr.Get_by("root_dir").Val_as_url__rel_dir_or(jar_dir, jar_dir);
 		this.fsys__user_dir = arg_mgr.Get_by("user_dir").Val_as_url__rel_dir_or(fsys__root_dir.GenSubDir("user"), fsys__root_dir.GenSubDir_nest("user", User_name_default));
 		this.fsys__wiki_dir = arg_mgr.Get_by("wiki_dir").Val_as_url__rel_dir_or(fsys__root_dir.GenSubDir("wiki"), fsys__root_dir.GenSubDir("wiki"));
+		this.fsys__pages_articles_file = arg_mgr.Get_by("pages_articles_file").Val_as_url__rel_fil_or(jar_dir, null);
 		this.cmd__file = arg_mgr.Get_by("cmd_file").Val_as_url__rel_fil_or(jar_dir, fsys__root_dir.GenSubFil_nest("bin", "any", "xowa", "cfg" ,"app", "xowa.gfs"));
 		this.cmd__text = arg_mgr.Get_by("cmd_text").Val_as_str_or(null);
 		this.tcp__port_recv = arg_mgr.Get_by("server_port_recv").Val_as_int_or(55000);
@@ -67,6 +69,7 @@ public class Xoa_cmd_arg_mgr {
 	public static Xoa_cmd_arg_mgr new_() {
 		Gfo_cmd_arg_mgr arg_mgr = new Gfo_cmd_arg_mgr().Reg_many
 		( Gfo_cmd_arg_itm_.opt_("root_dir").Example_url_("C:\\xowa").Note_("root directory for xowa; defaults to current directory of xowa.jar")
+		, Gfo_cmd_arg_itm_.opt_("pages_articles_file").Example_url_("C:\\Users\\xowa\\Downloads\\dewiki-20210101-pages-articles.xml.bz2").Note_("specified pages-articles file")
 		, Gfo_cmd_arg_itm_.opt_("user_dir").Example_url_("C:\\xowa\\user\\" + User_name_default).Note_("directory for user_data; defaults to '/xowa/user/" + User_name_default + "'")
 		, Gfo_cmd_arg_itm_.opt_("wiki_dir").Example_url_("C:\\xowa\\wiki\\").Note_("directory for wikis; defaults to '/xowa/wiki/'")
 		, Gfo_cmd_arg_itm_.opt_("bin_dir_name").Example_("windows").Note_("platform-dependent directory name inside /xowa/bin/; valid values are 'linux', 'macosx', 'windows', 'linux_64', 'macosx_64', 'windows_64'; defaults to detected version")

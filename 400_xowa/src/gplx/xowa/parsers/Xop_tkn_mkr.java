@@ -54,7 +54,7 @@ public class Xop_tkn_mkr {
 		return new Xop_lnke_tkn(bgn, end, protocol, proto_tid, lnke_typ, lnk_bgn, lnk_end);
 	}
 	public Xop_magic_tkn Magic(int bgn, int end, byte type)											{return new Xop_magic_tkn(bgn, end, type);}
-	public Xop_tblw_tb_tkn Tblw_tb(int bgn, int end, boolean tblw_xml, boolean auto_created)		{return new Xop_tblw_tb_tkn(bgn, end, tblw_xml, auto_created);}
+	public Xop_tblw_tb_tkn Tblw_tb(int bgn, int end, boolean tblw_xml, boolean auto_created, Xop_list_tkn_new list_tkn)		{return new Xop_tblw_tb_tkn(bgn, end, tblw_xml, auto_created, list_tkn);}
 	public Xop_tblw_tr_tkn Tblw_tr(int bgn, int end, boolean tblw_xml, boolean auto_created)		{return new Xop_tblw_tr_tkn(bgn, end, tblw_xml, auto_created);}
 	public Xop_tblw_td_tkn Tblw_td(int bgn, int end, boolean tblw_xml)							{return new Xop_tblw_td_tkn(bgn, end, tblw_xml);}
 	public Xop_tblw_th_tkn Tblw_th(int bgn, int end, boolean tblw_xml)							{return new Xop_tblw_th_tkn(bgn, end, tblw_xml);}

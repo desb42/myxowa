@@ -30,6 +30,7 @@ import gplx.xowa.wikis.data.Xow_db_file_;
 import gplx.xowa.wikis.data.Xow_db_mgr;
 import gplx.xowa.wikis.pages.Xopg_view_mode_;
 import gplx.xowa.wikis.pages.dbs.Xopg_db_page;
+import gplx.xowa.wikis.caches.Db_html_body;
 
 public class Xow_hdump_mgr__save {
 	private final    Xow_wiki wiki; private final    Xoh_hzip_mgr hzip_mgr; private final    Io_stream_zip_mgr zip_mgr;
@@ -42,20 +43,20 @@ public class Xow_hdump_mgr__save {
 		this.dflt_zip_tid = dflt_zip_tid; this.dflt_hzip_tid = dflt_hzip_tid; tmp_bfr.Mode_is_b256_(mode_is_b256);
 	}
 	public byte[] Src_as_hzip() {return src_as_hzip;} private byte[] src_as_hzip;
-	public int Save(Xoae_page page) {return Save(page, false);}
-	public int Save(Xoae_page page, boolean isEdit) {
+	public int Save(Xoae_page page, Db_html_body html_body) {return Save(page, false, html_body);}
+	public int Save(Xoae_page page, boolean isEdit, Db_html_body html_body) {
 		synchronized (tmp_hpg) {
 			Bld_hdump(page);
 			tmp_hpg.Ctor_by_hdiff(tmp_bfr, page, page.Wikie().Msg_mgr().Val_by_id(gplx.xowa.langs.msgs.Xol_msg_itm_.Id_toc));
 			Xow_db_file html_db = Get_html_db(wiki, page, html_db_is_new.Val_n_(), isEdit);
-			return Save(page, tmp_hpg, html_db.Tbl__html(), html_db_is_new.Val(), true);
+			return Save(page, tmp_hpg, html_db.Tbl__html(), html_db_is_new.Val(), true, html_body);
 		}
 	}
-	public int Save(Xoae_page page, Xoh_page hpg, Xowd_html_tbl html_tbl, boolean insert, boolean use_hzip_dflt) {
+	public int Save(Xoae_page page, Xoh_page hpg, Xowd_html_tbl html_tbl, boolean insert, boolean use_hzip_dflt, Db_html_body html_body) {
 		int hzip_tid = use_hzip_dflt ? dflt_hzip_tid : Xoh_hzip_dict_.Hdb__htxt;
 		byte[] db_body = Write(tmp_bfr, wiki, page, hpg, hzip_mgr, zip_mgr, dflt_zip_tid, hzip_tid, hpg.Db().Html().Html_bry());
-		if (insert)		html_tbl.Insert(hpg, dflt_zip_tid, dflt_hzip_tid, db_body);
-		else			html_tbl.Update(hpg, dflt_zip_tid, dflt_hzip_tid, db_body);
+		if (insert)		html_tbl.Insert(hpg, dflt_zip_tid, dflt_hzip_tid, db_body, html_body);
+		else			html_tbl.Update(hpg, dflt_zip_tid, dflt_hzip_tid, db_body, html_body);
 		return db_body.length;
 	}
 	public void Bld_hdump(Xoae_page page) {

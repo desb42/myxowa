@@ -21,9 +21,9 @@ public class Xop_log_time_count {
 	private int depth_max;
 	private long time_bgn;
 	private long page_start;
-        public Xop_log_time_count() {
-            Clear();
-        }
+	public Xop_log_time_count() {
+		Clear();
+	}
 	public int Count() {return count;}
 	public long Time() {return time;}
 	public int Depth_max() {return depth_max;}

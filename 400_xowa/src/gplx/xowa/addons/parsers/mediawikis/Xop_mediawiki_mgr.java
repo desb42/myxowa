@@ -29,6 +29,7 @@ public class Xop_mediawiki_mgr {
 		}
 		this.app = new Xoae_app(usr_dlg, gplx.xowa.apps.Xoa_app_mode.Itm_cmd
 		, root_dir
+		, null
 		, root_dir.GenSubDir("wiki")
 		, root_dir.GenSubDir("file")
 		, root_dir.GenSubDir("user")

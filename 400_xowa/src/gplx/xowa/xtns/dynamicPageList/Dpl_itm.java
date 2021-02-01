@@ -44,6 +44,7 @@ public class Dpl_itm {
 	public byte Quality_pages() {return quality_pages;} private byte quality_pages;
 	public byte Stable_pages() {return stable_pages;} private byte stable_pages;
 	public boolean IgnoreSubpages() {return ignoresubpages;} private boolean ignoresubpages;
+	public boolean Showcurid() {return showcurid;} private boolean showcurid; // ignored
 	private Xop_ctx sub_ctx; private Xop_tkn_mkr sub_tkn_mkr; private Xop_root_tkn sub_root;
 	private void Parse_src(Xowe_wiki wiki, Xop_ctx ctx, byte[] page_ttl, byte[] src, Xop_xnde_tkn xnde) {	// parse kvps in xnde; EX:<dpl>category=abc\nredirects=y\n</dpl>
 		this.page_ttl = page_ttl;
@@ -145,6 +146,8 @@ public class Dpl_itm {
 			case Dpl_itm_keys.Key_ordermethod:			sort_tid = Dpl_sort.Parse_ordermethod(val); break;
 			case Dpl_itm_keys.Key_mode:			mode_tid = Parse_mode(val, usr_dlg, page_ttl); break;
 			case Dpl_itm_keys.Key_ignoresubpages:		ignoresubpages = Dpl_itm_keys.Parse_as_bool(val, false); break;
+			case Dpl_itm_keys.Key_googlehack:
+			case Dpl_itm_keys.Key_showcurid:		showcurid = Dpl_itm_keys.Parse_as_bool(val, false); break;
 			default:
 				String err_msg = String_.Format("dynamic_page_list:unknown_keyword: page={0} keyword={1}", String_.new_u8(page_ttl), key_id);
 				usr_dlg.Log_many("", "", err_msg);
@@ -192,11 +195,16 @@ public class Dpl_itm {
 			(	Known_invalid_keys.Get_by_mid(src, fld_bgn, fld_end) != null	// known invalid key; just log it; handles common items like orcer and showcurid
 			||	Bry_.Has_at_bgn(key_bry, Gfh_tag_.Comm_bgn)					// ignore comment-like keys; EX: <!--category=Ctg_0--> will have key of "<!--category="
 			);
-		String err_msg = String_.Format("dynamic_page_list:unknown_key: page={0} key={1}", String_.new_u8(page_ttl), String_.new_u8(key_bry));
-		if (log)
-			usr_dlg.Log_many("", "", err_msg);
-		else
+		String err_msg;
+		if (log) {
+			// known - so do not log 20210114
+//			err_msg = String_.Format("dynamic_page_list:known_invalid_key: page={0} key={1}", String_.new_u8(page_ttl), String_.new_u8(key_bry));
+//			usr_dlg.Log_many("", "", err_msg);
+		}
+		else {
+			err_msg = String_.Format("dynamic_page_list:unknown_key: page={0} key={1}", String_.new_u8(page_ttl), String_.new_u8(key_bry));
 			usr_dlg.Warn_many("", "", err_msg);
+		}
 	}
 	private static final    Hash_adp_bry Known_invalid_keys = Hash_adp_bry.ci_a7()
 	.Add_str_obj("orcer"						, Bool_obj_val.True)	// ignore as per http://en.wikinews.org/wiki/Template_talk:United_States; (Note it doesn't make a difference, as categoryadd is the default order method.)

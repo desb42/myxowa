@@ -53,4 +53,13 @@ public class Scrib_core_mgr {
 			wiki.Parser_mgr().Scrib().Core_term();
 		}
 	}
+	private Hash_adp hash = Hash_adp_.New();
+	public String Get_text(Io_url script_dir, String name) {
+		String text = (String)hash.Get_by(name);
+		if (text == null) {
+			text = Io_mgr.Instance.LoadFilStr(script_dir.GenSubFil(name));
+			hash.Add(name, text);
+		}
+		return text;
+	}
 }

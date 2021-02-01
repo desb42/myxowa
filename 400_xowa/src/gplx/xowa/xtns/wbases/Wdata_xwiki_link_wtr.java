@@ -34,7 +34,11 @@ public class Wdata_xwiki_link_wtr implements gplx.core.brys.Bfr_arg {
 					return Qid_null;
 			}
 			Wdata_wiki_mgr wdata_mgr = wiki.Appe().Wiki_mgr().Wdata_mgr();
-			Wdata_doc doc = wdata_mgr.Doc_mgr.Get_by_ttl_or_null(wiki, ttl); if (doc == null) return Qid_null;	// no links
+			Wdata_doc doc = wdata_mgr.Doc_mgr.Get_by_ttl_or_null(wiki, ttl);
+			if (doc == null) {
+				wiki.Appe().Usr_dlg().Warn_many("", "", "no qid: ttl=~{0}", ttl.Page_db_as_str());
+				return Qid_null;	// no links
+			}
 			boolean external_links_mgr_enabled = external_links_mgr.Enabled();
                         external_links_mgr_enabled = false;
 			Ordered_hash links = doc.Slink_list();

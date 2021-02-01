@@ -247,6 +247,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 			if (colon_pos != -1) {	// func; separate name_ary into name_ary and arg_x
 				argx_ary = Bry_.Trim(name_ary, colon_pos + 1, name_ary_len);	// trim bgn ws; needed for "{{formatnum:\n{{#expr:2}}\n}}"
 				name_ary = Bry_.Mid(name_ary, 0, colon_pos);
+				name_ary_len = name_ary.length;
 			}
 			if (defn == Xot_defn_.Null) {
 				if (ctx.Tid_is_popup()) {	// popup && cur_tmpl > tmpl_max
@@ -337,10 +338,10 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
                                     	int  a=1;
                                     }
 */
-//if (Bry_.Eq(caller.Frame_ttl(), Bry_.new_a7("Template:BookCat/core"))) {
-    //return true;
+if (Bry_.Eq(caller.Frame_ttl(), Bry_.new_a7("Template:BookCat/core"))) {
+    return true;
 //    int a=1;
-//}
+}
 //System.out.println(String_.new_u8(caller.Frame_ttl()));
 					Xot_invk_tkn_.Eval_func(ctx, src, caller, this, bfr, defn, argx_ary);
 					rv = true;

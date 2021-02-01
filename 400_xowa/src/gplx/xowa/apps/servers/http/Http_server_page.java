@@ -35,6 +35,7 @@ import gplx.xowa.specials.xowa.errors.Xoerror_special;
 import gplx.xowa.wikis.nss.Xow_ns_;
 import gplx.xowa.Db_special_api;
 import gplx.xowa.wikis.pages.Xopg_view_mode_;
+import gplx.xowa.wikis.pages.dbs.Xopg_db_page;
 import gplx.xowa.wikis.pages.lnkis.Xopg_redlink_mgr;
 public class Http_server_page {
 	private final    Xoae_app app;
@@ -166,6 +167,7 @@ public class Http_server_page {
 					gplx.xowa.guis.views.Xog_async_wkr.Async(page, tab.Html_itm());
 					break;
 			}
+//                        if (page.Db().Page().Html_db_id() == Xopg_db_page.HTML_DB_ID_NULL) // already done if HTML page
 			// NOTE: substitutes xoimg tags for actual file; ISSUE#:686; DATE:2020-06-27
 			page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);
 		byte[] redlinks = null;

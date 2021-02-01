@@ -49,6 +49,7 @@ import gplx.xowa.parsers.Xop_ctx;
 import gplx.xowa.parsers.Xow_parser_mgr;
 import gplx.xowa.parsers.logs.Xop_log_wkr_factory;
 import gplx.xowa.wikis.pages.Xopg_view_mode_;
+import gplx.xowa.wikis.caches.Db_html_body;
 
 public class Xomp_parse_wkr implements Gfo_invk {
 	// mgr vars
@@ -69,6 +70,7 @@ public class Xomp_parse_wkr implements Gfo_invk {
 	private final Xob_hdump_bldr hdump_bldr = new Xob_hdump_bldr();
 	private final int uid;
 	private Xomp_wkr_db wkr_db;
+	private Db_html_body html_body;
 	private Xomp_stat_tbl stat_tbl;
 	private Hxtn_page_mgr hxtn_mgr;
 
@@ -99,6 +101,7 @@ public class Xomp_parse_wkr implements Gfo_invk {
 		this.stat_tbl = new Xomp_stat_tbl(wkr_db.Conn());
 		this.hxtn_mgr = wiki.Hxtn_mgr();
 		this.hxtn_mgr.Init_by_xomp_wkr(wkr_db.Conn(), cfg.Zip_tid());
+		this.html_body = new Db_html_body(wiki.App(), wiki.Domain_itm().Domain_str(), uid);
 	}
 	public void Exec() {
 		Xow_parser_mgr parser_mgr = wiki.Parser_mgr();
@@ -170,7 +173,7 @@ public class Xomp_parse_wkr implements Gfo_invk {
 				parser_mgr.Parse(wpg, true);
 
 				// gen_html
-				hdump_bldr.Insert(pctx, wpg, hctx);
+				hdump_bldr.Insert(pctx, wpg, hctx, html_body);
 
 				// index
 				long fulltext_time = 0;
@@ -212,6 +215,7 @@ public class Xomp_parse_wkr implements Gfo_invk {
 			wkr_db.Conn().Rls_conn();
 			stat_tbl.Stmt_rls();
 			hxtn_mgr.Insert_end(false);
+			html_body.Close();
 			mgr.Wkrs_done_add_1();		// NOTE: must release latch last else thread errors
 		}
 		catch (Exception e) {

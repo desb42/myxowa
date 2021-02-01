@@ -16,7 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.wikis.caches; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*;
 import gplx.core.caches.*;
 public class Xow_page_cache {
-        private Db_parser dbp = new Db_parser();
+	private Db_parser dbp = new Db_parser();
 	private final    Object thread_lock = new Object(); // NOTE: thread-safety needed for xomp since one page-cache is shared across all wkrs
 	private final    Xowe_wiki wiki;
 	private final    Lru_cache cache;
@@ -44,19 +44,19 @@ public class Xow_page_cache {
 	public Xow_page_cache_itm Get_itm_else_load_or_null(Xoa_ttl ttl) {
 		synchronized (thread_lock) {
 			cache_tries++;
-                }
-			Xow_page_cache_itm rv = (Xow_page_cache_itm)cache.Get_or_null(ttl.Full_db_as_str());
+		}
+		Xow_page_cache_itm rv = (Xow_page_cache_itm)cache.Get_or_null(ttl.Full_db_as_str());
 //System.out.println("ttl " + String_.new_u8(ttl.Full_db()));
-			if (rv == Xow_page_cache_itm.Missing)
-				return null;
-			else if (rv == null) {
-		synchronized (thread_lock) {
+		if (rv == Xow_page_cache_itm.Missing)
+			return null;
+		else if (rv == null) {
+			synchronized (thread_lock) {
 				cache_misses++;
 				return Load_page(ttl);
-                }
 			}
-			else {
-		synchronized (thread_lock) {
+		}
+		else {
+			synchronized (thread_lock) {
 				rv.Access_count_increment();
 				return rv;
 			}

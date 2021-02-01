@@ -64,6 +64,12 @@ public class Xoh_hdoc_wkr__make implements Xoh_hdoc_wkr {
 			bfr.Add(Bry__a__id);
 			bfr.Add_int_variable(html_uid);
 			bfr.Add_byte_quote().Add_byte_space();
+			if (Bry_.Match(src, src_bgn_rhs, src_bgn_rhs + 11, Bry__a__xoid)) {
+				// find  quote
+                                int f = Bry_find_.Find_fwd(src, Byte_ascii.Quote, src_bgn_rhs + 11);
+                                if (f != Bry_find_.Not_found)
+                                    src_bgn_rhs = f + 2;
+			}
 			bfr.Add_mid(src, src_bgn_rhs, data.Src_end());
 		}
 		else {
@@ -133,5 +139,5 @@ public class Xoh_hdoc_wkr__make implements Xoh_hdoc_wkr {
 			return html_uid;
 		}
 	}
-	private static final    byte[] Bry__a__bgn = Bry_.new_a7("<a "), Bry__a__id = Bry_.new_a7("<a id=\"xolnki_");
+	private static final    byte[] Bry__a__bgn = Bry_.new_a7("<a "), Bry__a__id = Bry_.new_a7("<a id=\"xolnki_"), Bry__a__xoid = Bry_.new_a7("id=\"xolnki_");
 }

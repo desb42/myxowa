@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.htmls.core.dbs; import gplx.*; import gplx.xowa.*; import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.*;
 import gplx.dbs.*; import gplx.core.brys.*;
+import gplx.xowa.wikis.caches.Db_html_body;
 public class Xowd_html_tbl implements Db_tbl {
 	private final    String fld_page_id, fld_head_flag, fld_body_flag, fld_display_ttl, fld_content_sub, fld_sidebar_div, fld_body;
 	private Db_stmt stmt_select, stmt_insert, stmt_update;
@@ -37,33 +38,43 @@ public class Xowd_html_tbl implements Db_tbl {
 
 	public void Insert_bgn() {conn.Txn_bgn("html__insert"); stmt_insert = conn.Stmt_insert(tbl_name, flds);}
 	public void Insert_end() {conn.Txn_end(); stmt_insert = Db_stmt_.Rls(stmt_insert);}
-	public void Insert(Xoh_page hpg, int zip_tid, int hzip_tid, byte[] body) {Insert(hpg.Page_id(), hpg.Head_mgr().Flag(), zip_tid, hzip_tid, hpg.Display_ttl(), hpg.Content_sub(), hpg.Sidebar_div(), body);}
-	public void Insert(int page_id, int head_flag, int zip_tid, int hzip_tid, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, byte[] body) {
+	public void Insert(Xoh_page hpg, int zip_tid, int hzip_tid, byte[] body, Db_html_body html_body) {Insert(hpg.Page_id(), hpg.Head_mgr().Flag(), zip_tid, hzip_tid, hpg.Display_ttl(), hpg.Content_sub(), hpg.Sidebar_div(), body, html_body);}
+	public void Insert(int page_id, int head_flag, int zip_tid, int hzip_tid, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, byte[] body, Db_html_body html_body) {
 		int body_flag = body_flag_bldr.Set(0, zip_tid).Set(1, hzip_tid).Encode();
-		Insert(page_id, head_flag, body_flag, display_ttl, content_sub, sidebar_div, body);
+		Insert(page_id, head_flag, body_flag, display_ttl, content_sub, sidebar_div, body, html_body);
 	}
-	public void Insert(int page_id, int head_flag, int body_flag, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, byte[] body) {
+	public void Insert(int page_id, int head_flag, int body_flag, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, byte[] body, Db_html_body html_body) {
 		if (stmt_insert == null) stmt_insert = conn.Stmt_insert(tbl_name, flds);
 		stmt_insert.Clear().Val_int(fld_page_id, page_id);
+		if (html_body != null) {
+			long ofs = html_body.Write(page_id, body);
+			int len = body.length;
+			body = new byte[1+1+4+8+4];
+			body[0] = 0x1e;
+			body[1] = (byte)html_body.Wkr_id();
+			Db_html_body.convertIntToByteArray(body, page_id, 2);
+			Db_html_body.convertLongToByteArray(body, ofs, 6);
+			Db_html_body.convertIntToByteArray(body, len, 14);
+		}
 		Fill_stmt(stmt_insert, head_flag, body_flag, display_ttl, content_sub, sidebar_div, body);
 		stmt_insert.Exec_insert();
 	}
-	public void Update(Xoh_page hpg, int zip_tid, int hzip_tid, byte[] body) {Update(hpg.Page_id(), hpg.Head_mgr().Flag(), zip_tid, hzip_tid, hpg.Display_ttl(), hpg.Content_sub(), hpg.Sidebar_div(), body);}
-	public void Update(int page_id, int head_flag, int zip_tid, int hzip_tid, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, byte[] body) {
+	public void Update(Xoh_page hpg, int zip_tid, int hzip_tid, byte[] body, Db_html_body html_body) {Update(hpg.Page_id(), hpg.Head_mgr().Flag(), zip_tid, hzip_tid, hpg.Display_ttl(), hpg.Content_sub(), hpg.Sidebar_div(), body, html_body);}
+	public void Update(int page_id, int head_flag, int zip_tid, int hzip_tid, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, byte[] body, Db_html_body html_body) {
 		if (stmt_update == null) stmt_update = conn.Stmt_update_exclude(tbl_name, flds, fld_page_id);
 		int body_flag = body_flag_bldr.Set(0, zip_tid).Set(1, hzip_tid).Encode();
 		stmt_update.Clear();
 		Fill_stmt(stmt_update, head_flag, body_flag, display_ttl, content_sub, sidebar_div, body);
 		stmt_update.Crt_int(fld_page_id, page_id).Exec_update();
 	}
-	public void Upsert(int page_id, int head_flag, int zip_tid, int hzip_tid, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, byte[] body) {
+	public void Upsert(int page_id, int head_flag, int zip_tid, int hzip_tid, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, byte[] body, Db_html_body html_body) {
 		Db_rdr rdr = conn.Stmt_select(tbl_name, flds, fld_page_id).Clear().Crt_int(fld_page_id, page_id).Exec_select__rls_auto();
 		boolean exists = rdr.Move_next();
 		rdr.Rls();
 		if (exists)
-			Update(page_id, head_flag, zip_tid, hzip_tid, display_ttl, content_sub, sidebar_div, body);
+			Update(page_id, head_flag, zip_tid, hzip_tid, display_ttl, content_sub, sidebar_div, body, html_body);
 		else
-			Insert(page_id, head_flag, zip_tid, hzip_tid, display_ttl, content_sub, sidebar_div, body);
+			Insert(page_id, head_flag, zip_tid, hzip_tid, display_ttl, content_sub, sidebar_div, body, html_body);
 	}
 	public void Delete(int page_id) {
 		Gfo_usr_dlg_.Instance.Log_many("", "", "db.html: delete started: db=~{0} page_id=~{1}", conn.Conn_info().Raw(), page_id);

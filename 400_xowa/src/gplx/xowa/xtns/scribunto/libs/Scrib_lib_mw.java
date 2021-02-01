@@ -28,8 +28,10 @@ public class Scrib_lib_mw implements Scrib_lib {
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_mw(core);}
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();
-		core.RegisterInterface(this, script_dir.GenSubFil("mwInit.lua"));	// DATE:2014-07-12
-		mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.lua")
+		core.RegisterInterface(this, "mwInit.lua", core.Core_mgr().Get_text(script_dir, "mwInit.lua"));	// DATE:2014-07-12
+		//core.RegisterInterface(this, script_dir.GenSubFil("mwInit.lua"));	// DATE:2014-07-12
+		mod = core.RegisterInterface(this, "mw.lua", core.Core_mgr().Get_text(script_dir, "mw.lua")
+		//mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.lua")
 			, Keyval_.new_("allowEnvFuncs", allow_env_funcs));
 		notify_page_changed_fnc = mod.Fncs_get_by_key("notify_page_changed");
 		return mod;

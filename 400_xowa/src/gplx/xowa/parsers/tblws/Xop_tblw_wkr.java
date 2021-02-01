@@ -26,7 +26,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 		tkn.Src_end_(cur_pos);
 	}
 	public static final byte Called_from_general = 0, Called_from_list = 1, Called_from_pre = 2;
-	public int Make_tkn_bgn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, boolean tbl_is_xml, byte wlxr_type, byte called_from, int atrs_bgn, int atrs_end) {// REF.MW: Parser|doTableStuff
+	public int Make_tkn_bgn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, boolean tbl_is_xml, byte wlxr_type, byte called_from, int atrs_bgn, int atrs_end, Xop_list_tkn_new list_tkn) {// REF.MW: Parser|doTableStuff
 		if (bgn_pos == Xop_parser_.Doc_bgn_bos) {
 			bgn_pos = 0;	// do not allow -1 pos
 		}
@@ -56,7 +56,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 				case Tblw_type_tb: {							// "{|";
 					// close para when table starts; needed for TRAILING_TBLW fix; PAGE:en.w:Template_engine_(web) DATE:2017-04-08
 					ctx.Para().Process_block__bgn__nl_w_symbol(ctx, root, src, bgn_pos, cur_pos - 1, Xop_xnde_tag_.Tag__table);	// -1 b/c cur_pos includes sym_byte; EX: \n{
-					// any outstanding list?
+/* 20210115					// any outstanding list?
 					if (ctx.Page().Prev_list_tkn() != null && called_from != Called_from_list) {
 						// inject a list close
 						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
@@ -66,12 +66,13 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 						ctx.Subs_add_and_stack(root, itm);
 						ctx.Page().Prev_list_tkn_(null);
 					}
+*/
 					break;										//	noop; by definition "{|" does not need to have a previous "{|"
 				}
 				case Tblw_type_td:								// "|"
 				case Tblw_type_td2:								// "||"
 					if (tbl_is_xml) {							// <td> should automatically add <table><tr>
-						ctx.Subs_add_and_stack_tblw(root, prv_tkn, tkn_mkr.Tblw_tb(bgn_pos, bgn_pos, tbl_is_xml, true));
+						ctx.Subs_add_and_stack_tblw(root, prv_tkn, tkn_mkr.Tblw_tb(bgn_pos, bgn_pos, tbl_is_xml, true, list_tkn));
 						prv_tkn = tkn_mkr.Tblw_tr(bgn_pos, bgn_pos, tbl_is_xml, true);
 						ctx.Subs_add_and_stack_tblw(root, prv_tkn, prv_tkn);
 						break;
@@ -104,7 +105,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 				case Tblw_type_tc:								// "|+"
 				case Tblw_type_tr:								// "|-"
 					if (tbl_is_xml) {							// <tr> should automatically add <table>; DATE:2014-02-13
-						prv_tkn = tkn_mkr.Tblw_tb(bgn_pos, bgn_pos, tbl_is_xml, true);
+						prv_tkn = tkn_mkr.Tblw_tb(bgn_pos, bgn_pos, tbl_is_xml, true, list_tkn);
 						ctx.Subs_add_and_stack_tblw(root, prv_tkn, prv_tkn);
 						break;
 					}
@@ -142,9 +143,9 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			return Make_tkn_end(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, Xop_tkn_itm_.Tid_tblw_te, wlxr_type, prv_tkn, prv_tid, tbl_is_xml);
                 }
 		else
-			return Make_tkn_bgn_tblw(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, wlxr_type, tbl_is_xml, atrs_bgn, atrs_end, prv_tkn, prv_tid);
+			return Make_tkn_bgn_tblw(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, wlxr_type, tbl_is_xml, atrs_bgn, atrs_end, prv_tkn, prv_tid, list_tkn);
 	}
-	private int Make_tkn_bgn_tblw(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, byte wlxr_type, boolean tbl_is_xml, int atrs_bgn, int atrs_end, Xop_tblw_tkn prv_tkn, int prv_tid) {
+	private int Make_tkn_bgn_tblw(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, byte wlxr_type, boolean tbl_is_xml, int atrs_bgn, int atrs_end, Xop_tblw_tkn prv_tkn, int prv_tid, Xop_list_tkn_new list_tkn) {
 		if (wlxr_type != Tblw_type_tb)	// NOTE: do not ignore ws if {|; will cause strange behavior with pre; DATE:2013-02-12
 			Ignore_ws(ctx, root);
 		Xop_tblw_tkn new_tkn = null;
@@ -179,7 +180,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 					ctx.Subs_add_and_stack_tblw(root, prv_tkn, tkn_mkr.Tblw_tr(bgn_pos, bgn_pos, tbl_is_xml, true));
 					ctx.Subs_add_and_stack_tblw(root, prv_tkn, tkn_mkr.Tblw_td(bgn_pos, bgn_pos, tbl_is_xml));
 				}
-				Xop_tblw_tb_tkn tb_tkn = tkn_mkr.Tblw_tb(bgn_pos, cur_pos, tbl_is_xml, false);
+				Xop_tblw_tb_tkn tb_tkn = tkn_mkr.Tblw_tb(bgn_pos, cur_pos, tbl_is_xml, false, list_tkn);
 				new_tkn = tb_tkn;
 				break;
 			case Tblw_type_tr:								// <tr>
@@ -381,6 +382,9 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			ctx.Subs_add_and_stack(root, itm);
 			ctx.Page().Prev_list_tkn_(null);
 		}
+                // restore previous list
+                if (prv_tkn != null)
+                ctx.Page().Prev_list_tkn_(prv_tkn.List_tkn());
                 // trim trailing whitespace
                 root.Subs_ignore_whitespace();
 		if (tbl_is_xml && typeId == Xop_tkn_itm_.Tid_tblw_tb	// tblx: </table>
