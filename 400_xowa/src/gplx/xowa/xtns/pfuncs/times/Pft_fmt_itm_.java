@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,10 +13,20 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.pfuncs.times; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.pfuncs.*;
-import gplx.core.btries.*;
-import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*;
-import gplx.xowa.parsers.*;
+package gplx.xowa.xtns.pfuncs.times;
+
+import gplx.Bool_;
+import gplx.Byte_;
+import gplx.Byte_ascii;
+import gplx.DateAdp_;
+import gplx.Int_;
+import gplx.List_adp;
+import gplx.String_;
+import gplx.core.btries.Btrie_fast_mgr;
+import gplx.core.btries.Btrie_rv;
+import gplx.xowa.langs.msgs.Xol_msg_itm_;
+import gplx.xowa.parsers.Xop_ctx;
+
 public class Pft_fmt_itm_ {
 	public static final int
 	  Tid_seg_int						=  1
