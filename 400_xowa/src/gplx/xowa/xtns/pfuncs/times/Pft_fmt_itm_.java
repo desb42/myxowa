@@ -27,6 +27,7 @@ import gplx.core.btries.Btrie_rv;
 import gplx.xowa.langs.msgs.Xol_msg_itm_;
 import gplx.xowa.parsers.Xop_ctx;
 
+import gplx.List_adp_;
 public class Pft_fmt_itm_ {
 	public static final int
 	  Tid_seg_int						=  1

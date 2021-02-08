@@ -20,6 +20,7 @@ import gplx.DateAdp;
 import gplx.xowa.Xowe_wiki;
 import gplx.xowa.langs.Xol_lang_itm;
 
+import gplx.xowa.Pfxtp_roman;
 class Pft_fmt_itm_roman implements Pft_fmt_itm {
 	public int TypeId() {return Pft_fmt_itm_.Tid_roman;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
