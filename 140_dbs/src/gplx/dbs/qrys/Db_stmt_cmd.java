@@ -50,6 +50,9 @@ public class Db_stmt_cmd implements Db_stmt {
 	private Db_stmt Add_int(boolean where, String k, int v) {
 		if (k == Dbmeta_fld_itm.Key_null) return this;	// key is explicitly null; ignore; allows version_2+ type definitions
 		try {stmt.setInt(++val_idx, v);} catch (Exception e) {this.Rls(); throw Err_.new_exc(e, "db", "failed to add value", "type", "int", "val", v, "sql", sql);}
+//                Thread currentThread = Thread.currentThread();
+//                if (currentThread.getName().equals("xomp.000"))
+//                System.out.println(currentThread.getName()+"-intval-"+Integer.toString(v));
 		return this;
 	}
 	public Db_stmt Crt_long(String k, long v)	{return Add_long(Bool_.Y, k, v);}
@@ -102,6 +105,9 @@ public class Db_stmt_cmd implements Db_stmt {
 	@gplx.Virtual protected Db_stmt Add_str(boolean where, String k, String v) {
 		if (k == Dbmeta_fld_itm.Key_null) return this;	// key is explicitly null; ignore; allows version_2+ type definitions
 		try {stmt.setString(++val_idx, v);} catch (Exception e) {this.Rls(); throw Err_.new_exc(e, "db", "failed to add value", "type", "String", "val", v, "sql", sql);}
+//                Thread currentThread = Thread.currentThread();
+//                if (currentThread.getName().equals("xomp.000"))
+//                System.out.println(currentThread.getName()+"-stringval-"+v);
 		return this;
 	}
 	public Db_stmt Crt_date(String k, DateAdp v)	{return Add_date(Bool_.Y, k, v);}
@@ -124,6 +130,7 @@ public class Db_stmt_cmd implements Db_stmt {
 	}
 	public boolean Exec_insert() {
 //                Thread currentThread = Thread.currentThread();
+//                if (currentThread.getName().equals("xomp.000"))
 //                System.out.println(currentThread.getName()+"-IN-"+sql);
 		try		{boolean rv = stmt.execute(); return rv;}
 		catch (Exception e) {
@@ -134,6 +141,7 @@ public class Db_stmt_cmd implements Db_stmt {
 	}
 	public int Exec_update() {
 //                Thread currentThread = Thread.currentThread();
+//                if (currentThread.getName().equals("xomp.000"))
 //                System.out.println(currentThread.getName()+"-UP-"+sql);
 		try		{int rv = stmt.executeUpdate(); return rv;}
 		catch (Exception e) {
@@ -155,24 +163,28 @@ public class Db_stmt_cmd implements Db_stmt {
 	public DataRdr Exec_select() {
 		try {
 //                Thread currentThread = Thread.currentThread();
+//                if (currentThread.getName().equals("xomp.000"))
 //                System.out.println(currentThread.getName()+"-1-"+sql);
                     DataRdr rv = engine.New_rdr(stmt.executeQuery(), sql); return rv;} catch (Exception e) {throw Err_.new_exc(e, "db", "failed to exec prepared statement", "sql", sql);}
 	}
 	public Db_rdr Exec_select__rls_auto() {
 		try {
 //                Thread currentThread = Thread.currentThread();
+//                if (currentThread.getName().equals("xomp.000"))
 //                System.out.println(currentThread.getName()+"-2-"+sql);
                     return engine.Exec_as_rdr__rls_auto(this, stmt.executeQuery(), sql);}	catch (Exception e) {throw Err_.new_exc(e, "db", "select failed", "sql", sql);}
 	}
 	public Db_rdr Exec_select__rls_manual() {
 		try {
 //                Thread currentThread = Thread.currentThread();
+//                if (currentThread.getName().equals("xomp.000"))
 //                System.out.println(currentThread.getName()+"-3-"+sql);
                     return engine.Exec_as_rdr__rls_manual(stmt.executeQuery(), sql);}	catch (Exception e) {throw Err_.new_exc(e, "db", "select failed", "sql", sql);}
 	}
 	public Object Exec_select_val() {
 		try {
 //                Thread currentThread = Thread.currentThread();
+//                if (currentThread.getName().equals("xomp.000"))
 //                System.out.println(currentThread.getName()+"-4-"+sql);
                     Object rv = DataRdr_.Read_1st_row_and_1st_fld(engine.New_rdr(stmt.executeQuery(), sql)); return rv;} catch (Exception e) {throw Err_.new_exc(e, "db", "failed to exec prepared statement", "sql", sql);}
 	}

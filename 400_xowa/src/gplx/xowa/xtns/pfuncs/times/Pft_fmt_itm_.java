@@ -48,10 +48,10 @@ public class Pft_fmt_itm_ {
 	, Tid_iranian_month_idx				= 27
 	, Tid_iranian_day_idx				= 28
 	, Tid_iranian_month_name			= 29
-	, Tid_hijiri_year_idx				= 30
-	, Tid_hijiri_month_idx				= 31
-	, Tid_hijiri_day_idx				= 32
-	, Tid_hijiri_month_name				= 33
+	, Tid_hijri_year_idx				= 30
+	, Tid_hijri_month_idx				= 31
+	, Tid_hijri_day_idx				= 32
+	, Tid_hijri_month_name				= 33
 	, Tid_nengo_year				= 34
 	, Tid_timezone_id_full              = 35
 	, Tid_timezone_id_abrv              = 36
@@ -109,10 +109,10 @@ public class Pft_fmt_itm_ {
 	, Iranian_month_idx			= new Pft_fmt_itm_iranian_month_idx()
 	, Iranian_day_idx			= new Pft_fmt_itm_iranian_day_idx()
 	, Iranian_month_name		= new Pft_fmt_itm_iranian_month_name()
-	, Hijiri_year_idx			= new Pft_fmt_itm_hijiri_year_idx()
-	, Hijiri_month_idx			= new Pft_fmt_itm_hijiri_month_idx()
-	, Hijiri_day_idx			= new Pft_fmt_itm_hijiri_day_idx()
-	, Hijiri_month_name			= new Pft_fmt_itm_hijiri_month_name()
+	, Hijri_year_idx			= new Pft_fmt_itm_hijri_year_idx()
+	, Hijri_month_idx			= new Pft_fmt_itm_hijri_month_idx()
+	, Hijri_day_idx			= new Pft_fmt_itm_hijri_day_idx()
+	, Hijri_month_name			= new Pft_fmt_itm_hijri_month_name()
 	, Thai_year				= new Pft_fmt_itm_thai_year()
 	, Minguo_year			= new Pft_fmt_itm_minguo_year()
 	, Nengo_year			= new Pft_fmt_itm_nengo_year()
@@ -174,10 +174,10 @@ public class Pft_fmt_itm_ {
 	.Add("xiF"					, Pft_fmt_itm_.Iranian_month_name)
 	.Add("xin"					, Pft_fmt_itm_.Iranian_month_idx)
 	.Add("xiY"					, Pft_fmt_itm_.Iranian_year_idx)
-	.Add("xmj"					, Pft_fmt_itm_.Hijiri_day_idx)
-	.Add("xmF"					, Pft_fmt_itm_.Hijiri_month_name)
-	.Add("xmn"					, Pft_fmt_itm_.Hijiri_month_idx)
-	.Add("xmY"					, Pft_fmt_itm_.Hijiri_year_idx)
+	.Add("xmj"					, Pft_fmt_itm_.Hijri_day_idx)
+	.Add("xmF"					, Pft_fmt_itm_.Hijri_month_name)
+	.Add("xmn"					, Pft_fmt_itm_.Hijri_month_idx)
+	.Add("xmY"					, Pft_fmt_itm_.Hijri_year_idx)
 	.Add("xtY"					, Pft_fmt_itm_.Nengo_year) // Japanese
 	// TODO_OLD: space; "
 	;

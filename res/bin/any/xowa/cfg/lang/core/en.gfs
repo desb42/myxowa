@@ -4470,6 +4470,7 @@ sorbsreason|Your IP address is listed as an open proxy in the DNSBL used by {{SI
 sorbs|DNSBL
 sort-ascending|Sort ascending
 sort-descending|Sort descending
+sort-initial|Sort initial
 sourcefilename|Source filename:
 sourceurl|Source URL:
 sp-contributions-blocked-notice-anon|This IP address is currently blocked.\nThe latest block log entry is provided below for reference:

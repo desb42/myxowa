@@ -18,8 +18,10 @@ import gplx.dbs.*; import gplx.xowa.files.*;
 public class Xob_lnki_temp_tbl implements Db_tbl {
 	private static final    Dbmeta_fld_list flds = new Dbmeta_fld_list();
 	private static final    String tbl_name = "lnki_temp";
+	private int increment = 0;
 	public static final    String 
-	  Fld_lnki_id				= flds.Add_int_pkey_autonum("lnki_id");	// NOTE: insertion order index; public b/c not used and want to bypass warning
+//	  Fld_lnki_id				= flds.Add_int_pkey_autonum("lnki_id");	// NOTE: insertion order index; public b/c not used and want to bypass warning
+	  Fld_lnki_id				= flds.Add_int("lnki_id"); // start without an index - 20210204
 	private static final    String 
 	  Fld_lnki_tier_id			= flds.Add_int("lnki_tier_id")
 	, Fld_lnki_page_id			= flds.Add_int("lnki_page_id")
@@ -45,6 +47,7 @@ public class Xob_lnki_temp_tbl implements Db_tbl {
 	public void Insert_end()	{conn.Txn_end(); stmt_insert = Db_stmt_.Rls(stmt_insert);}
 	public void Insert_cmd_by_batch(int tier_id, int page_id, byte[] ttl, byte[] ttl_commons, byte ext_id, byte img_type, byte lnki_src_tid, int w, int h, double upright, double time, int page) {
 		stmt_insert.Clear()
+		.Val_int		(Fld_lnki_id		, ++increment)
 		.Val_int		(Fld_lnki_tier_id		, tier_id)
 		.Val_int		(Fld_lnki_page_id		, page_id)
 		.Val_bry_as_str	(Fld_lnki_ttl			, ttl)

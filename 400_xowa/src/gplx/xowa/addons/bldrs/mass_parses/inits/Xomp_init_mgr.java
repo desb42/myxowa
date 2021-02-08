@@ -64,6 +64,7 @@ class Xomp_init_mgr {
 		, "AND    p.page_touched > '{1}'"
 		, "AND    p.page_title not like '%sandbox%'" // ignore any 'sandbox' page
 		, "ORDER BY p.page_id"
+//		, "limit 1000" //////////////////////////////////////////////////////////testestest
 		); 
 		for (int i = 0; i < len; ++i) {
 			int ns_id = ns_ary[i];

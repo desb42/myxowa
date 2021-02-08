@@ -304,9 +304,18 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 			// report as null
 			return;
 		}
+		byte[] data_ct_mode = Bry_.Empty;
+
+		// special case for depth==0 and showcount==false (assumes category exists and has at least one sub category)
+		if (params.Depth() == 0 && !params.Showcount()) {
+			Fmt__data_ct.Bld_many(local_tmp_bfr, params.Mode(), params.Hideprefix(), params.Showcount(), params.Namespaces());
+			data_ct_mode = local_tmp_bfr.To_bry_and_clear();
+			Bld_cat_itm(local_tmp_bfr, wiki, 1, 0, 0, ttl, params, false, Bry_.Empty, data_ct_mode);
+			bfr.Add_bfr_and_clear(local_tmp_bfr);
+			return;
+		}
 
 		Xoctg_catpage_ctg ctg = Get_by_db_or_null(ttl.Page_db(), catpage_url, ttl, grp_max);
-		byte[] data_ct_mode = Bry_.Empty;
 		if (params.Isjson() == false) {
 			Fmt__data_ct.Bld_many(local_tmp_bfr, params.Mode(), params.Hideprefix(), params.Showcount(), params.Namespaces());
 			data_ct_mode = local_tmp_bfr.To_bry_and_clear();

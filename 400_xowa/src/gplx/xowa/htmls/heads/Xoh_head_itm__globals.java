@@ -67,6 +67,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		wtr.Write_js_global_ini_atr_val(Key_http_port			, app.Http_server().Port());
 		wtr.Write_js_global_ini_atr_msg(wiki, Key_sort_ascending);
 		wtr.Write_js_global_ini_atr_msg(wiki, Key_sort_descending);
+		wtr.Write_js_global_ini_atr_msg(wiki, Key_sort_initial);
 		wtr.Write_js_global_ini_atr_msg(wiki, Key_brackets);
 		wtr.Write_js_global_ini_atr_msg(wiki, Key_word_separator);
 		Xol_lang_itm lang = wiki.Lang(); Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
@@ -144,8 +145,9 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	  Key_mode_is_gui					= Bry_.new_a7("mode_is_gui")
 	, Key_mode_is_http					= Bry_.new_a7("mode_is_http")
 	, Key_http_port						= Bry_.new_a7("http-port")
-	, Key_sort_descending				= Bry_.new_a7("sort-descending")
 	, Key_sort_ascending				= Bry_.new_a7("sort-ascending")
+	, Key_sort_descending				= Bry_.new_a7("sort-descending")
+	, Key_sort_initial				= Bry_.new_a7("sort-initial")
 	, Key_wgContentLanguage				= Bry_.new_a7("wgContentLanguage")
 	, Key_wgSeparatorTransformTable		= Bry_.new_a7("wgSeparatorTransformTable")
 	, Key_wgDigitTransformTable			= Bry_.new_a7("wgDigitTransformTable")

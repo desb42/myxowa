@@ -120,31 +120,31 @@ class Pft_fmt_itm_iranian_month_name implements Pft_fmt_itm {
 		bfr.Add(Pft_fmt_itm_iranian.Get_month_name(wiki, date));
 	}
 }
-class Pft_fmt_itm_hijiri_year_idx implements Pft_fmt_itm {
-	public int TypeId() {return Pft_fmt_itm_.Tid_hijiri_year_idx;}
+class Pft_fmt_itm_hijri_year_idx implements Pft_fmt_itm {
+	public int TypeId() {return Pft_fmt_itm_.Tid_hijri_year_idx;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
-		int[] seg_ary = Pft_fmt_itm_hijiri.Calc_date(date);
-		bfr.Add_int_variable(seg_ary[Pft_fmt_itm_hijiri.Rslt__year]);
+		int[] seg_ary = Pft_fmt_itm_hijri.Calc_date(date);
+		bfr.Add_int_variable(seg_ary[Pft_fmt_itm_hijri.Rslt__year]);
 	}
 }
-class Pft_fmt_itm_hijiri_month_idx implements Pft_fmt_itm {
-	public int TypeId() {return Pft_fmt_itm_.Tid_hijiri_month_idx;}
+class Pft_fmt_itm_hijri_month_idx implements Pft_fmt_itm {
+	public int TypeId() {return Pft_fmt_itm_.Tid_hijri_month_idx;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
-		int[] seg_ary = Pft_fmt_itm_hijiri.Calc_date(date);
-		bfr.Add_int_variable(seg_ary[Pft_fmt_itm_hijiri.Rslt__month]);
+		int[] seg_ary = Pft_fmt_itm_hijri.Calc_date(date);
+		bfr.Add_int_variable(seg_ary[Pft_fmt_itm_hijri.Rslt__month]);
 	}
 }
-class Pft_fmt_itm_hijiri_day_idx implements Pft_fmt_itm {
-	public int TypeId() {return Pft_fmt_itm_.Tid_hijiri_day_idx;}
+class Pft_fmt_itm_hijri_day_idx implements Pft_fmt_itm {
+	public int TypeId() {return Pft_fmt_itm_.Tid_hijri_day_idx;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
-		int[] seg_ary = Pft_fmt_itm_hijiri.Calc_date(date);
-		bfr.Add_int_variable(seg_ary[Pft_fmt_itm_hijiri.Rslt__day]);
+		int[] seg_ary = Pft_fmt_itm_hijri.Calc_date(date);
+		bfr.Add_int_variable(seg_ary[Pft_fmt_itm_hijri.Rslt__day]);
 	}
 }
-class Pft_fmt_itm_hijiri_month_name implements Pft_fmt_itm {
-	public int TypeId() {return Pft_fmt_itm_.Tid_hijiri_month_name;}
+class Pft_fmt_itm_hijri_month_name implements Pft_fmt_itm {
+	public int TypeId() {return Pft_fmt_itm_.Tid_hijri_month_name;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
-		bfr.Add(Pft_fmt_itm_hijiri.Get_month_name(wiki, date));
+		bfr.Add(Pft_fmt_itm_hijri.Get_month_name(wiki, date));
 	}
 }
 class Pft_fmt_itm_thai_year implements Pft_fmt_itm {

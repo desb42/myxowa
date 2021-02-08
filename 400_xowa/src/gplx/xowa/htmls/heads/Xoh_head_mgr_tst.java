@@ -98,6 +98,7 @@ public class Xoh_head_mgr_tst {
 		, "      'http-port' : 8080,"
 		, "      'sort-ascending' : 'Sort ascending',"
 		, "      'sort-descending' : 'Sort descending',"
+		, "      'sort-initial' : 'Sort initial',"
 		, "      'wgContentLanguage' : 'en',"
 		, "      'wgSeparatorTransformTable' : ['.\t.', ' \t,'],"	// note that grp spr (",") is ""
 		, "      'wgDigitTransformTable' : ['', ''],"

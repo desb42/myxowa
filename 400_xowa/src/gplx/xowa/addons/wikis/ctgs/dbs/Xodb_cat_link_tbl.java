@@ -19,7 +19,8 @@ import gplx.xowa.wikis.data.*;
 import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.*;
 public class Xodb_cat_link_tbl implements Db_tbl {
 	private final    Dbmeta_fld_list flds = new Dbmeta_fld_list();
-	private final    String fld__from, fld__to_id, fld__type_id, fld__timestamp_unix, fld__sortkey, fld__sortkey_prefix;
+	private final    String fld__from, fld__to_id, fld__type_id, fld__timestamp_unix, fld__sortkey, fld__sortkey_prefix
+                ,fld__date, fld__len, fld__score;
 	private Db_stmt stmt_insert;
 	public Xodb_cat_link_tbl(Db_conn conn) {
 		this.conn = conn;
@@ -30,6 +31,10 @@ public class Xodb_cat_link_tbl implements Db_tbl {
 		this.fld__timestamp_unix	= flds.Add_long	("cl_timestamp_unix");
 		this.fld__sortkey			= flds.Add_bry	("cl_sortkey");                 // uca key
 		this.fld__sortkey_prefix	= flds.Add_str	(FLD__cl_sortkey_prefix, 255);  // page_title; needed for sorting under letter on catpage
+		// page_touched,page_len,page_score -> cl_date, cl_len, cl_score
+		this.fld__date			= flds.Add_int	("cl_date");                    // page_touched
+		this.fld__len			= flds.Add_int	("cl_len");                     // page_len
+		this.fld__score			= flds.Add_int	("cl_score");                   // page_score
 		conn.Rls_reg(this);
 	}
 	public Db_conn Conn() {return conn;} private final    Db_conn conn; 
@@ -38,16 +43,22 @@ public class Xodb_cat_link_tbl implements Db_tbl {
 	public void Create_idx__catbox()	{conn.Meta_idx_create(Dbmeta_idx_itm.new_normal_by_tbl(tbl_name, "catbox", fld__from));}
 	public void Create_idx__catpage()	{conn.Meta_idx_create(Dbmeta_idx_itm.new_normal_by_tbl(tbl_name, "catpage", fld__to_id, fld__type_id, fld__sortkey));}
 	public void Create_idx__catdate()	{conn.Meta_idx_create(Dbmeta_idx_itm.new_normal_by_tbl(tbl_name, "catdate", fld__to_id, fld__timestamp_unix));}
+	public void Create_idx__cattouched()	{conn.Meta_idx_create(Dbmeta_idx_itm.new_normal_by_tbl(tbl_name, "cattouched", fld__to_id, fld__date));}
+	public void Create_idx__catlen()	{conn.Meta_idx_create(Dbmeta_idx_itm.new_normal_by_tbl(tbl_name, "catlen", fld__to_id, fld__len));}
+	public void Create_idx__catscore()	{conn.Meta_idx_create(Dbmeta_idx_itm.new_normal_by_tbl(tbl_name, "catscore", fld__to_id, fld__score));}
 	public void Insert_bgn() {conn.Txn_bgn("cl__insert"); stmt_insert = conn.Stmt_insert(tbl_name, flds);}
 	public void Insert_end() {conn.Txn_end(); stmt_insert = Db_stmt_.Rls(stmt_insert);}
-	public void Insert_cmd_by_batch(int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix) {
-		this.Insert_cmd_by_batch(stmt_insert, from, to_id, type_id, timestamp_unix, sortkey, sortkey_prefix);
+	public void Insert_cmd_by_batch(int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix, byte[] touched, int page_len, int page_score) {
+		this.Insert_cmd_by_batch(stmt_insert, from, to_id, type_id, timestamp_unix, sortkey, sortkey_prefix, touched, page_len, page_score);
 	}
-	public void Insert_(int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix) {
+	public void Insert_(int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix, byte[] touched, int page_len, int page_score) {
 		Db_stmt stmt = conn.Stmt_insert(tbl_name, flds);
-		this.Insert_cmd_by_batch(stmt, from, to_id, type_id, timestamp_unix, sortkey, sortkey_prefix);
+		this.Insert_cmd_by_batch(stmt, from, to_id, type_id, timestamp_unix, sortkey, sortkey_prefix, touched, page_len, page_score);
 	}
-	private void Insert_cmd_by_batch(Db_stmt stmt, int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix) {
+        private int datecvt(byte[] touched) {
+            return 0;
+        }
+	private void Insert_cmd_by_batch(Db_stmt stmt, int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix, byte[] touched, int page_len, int page_score) {
 		stmt.Clear()
 			.Val_int(fld__from					, from)
 			.Val_int(fld__to_id					, to_id)
@@ -55,6 +66,9 @@ public class Xodb_cat_link_tbl implements Db_tbl {
 			.Val_long(fld__timestamp_unix		, timestamp_unix)
 			.Val_bry(fld__sortkey				, sortkey)
 			.Val_bry_as_str(fld__sortkey_prefix	, sortkey_prefix)
+			.Val_int(fld__date					, datecvt(touched))
+			.Val_int(fld__len					, page_len)
+			.Val_int(fld__score					, page_score)
 			.Exec_insert();
 	}
 	public Xodb_cat_link_row[] Select_by_page_id(int page_id) {

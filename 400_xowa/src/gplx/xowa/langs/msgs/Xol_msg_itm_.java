@@ -253,8 +253,9 @@ public static final int
 , Id_xowa_window_allpages_box_tooltip = 232
 , Id_xowa_window_allpages_btn_tooltip = 233
 , Id_hidden_categories = 234
+, Id_js_tables_sort_initial = 235
 ;
-	public static final int Id__max = 235;
+	public static final int Id__max = 236;
 	public static Xol_msg_itm new_(int id, String key, String val) {return new_(id, Bry_.new_u8(key), Bry_.new_u8(val));}
 	public static Xol_msg_itm new_(int id, byte[] key, byte[] val) {
 		Xol_msg_itm rv = new Xol_msg_itm(id, key);
@@ -363,6 +364,7 @@ public static final int
 			case Xol_msg_itm_.Id_js_tables_collapsible_expand: return new_(Xol_msg_itm_.Id_js_tables_collapsible_expand, "collapsible-expand", "Expand");
 			case Xol_msg_itm_.Id_js_tables_sort_descending: return new_(Xol_msg_itm_.Id_js_tables_sort_descending, "sort-descending", "Sort descending");
 			case Xol_msg_itm_.Id_js_tables_sort_ascending: return new_(Xol_msg_itm_.Id_js_tables_sort_ascending, "sort-ascending", "Sort ascending");
+			case Xol_msg_itm_.Id_js_tables_sort_initial: return new_(Xol_msg_itm_.Id_js_tables_sort_initial, "sort-initial", "Sort initial");
 			case Xol_msg_itm_.Id_ctg_tbl_hdr: return new_(Xol_msg_itm_.Id_ctg_tbl_hdr, "categories", "Categories");
 			case Xol_msg_itm_.Id_portal_lastmodified: return new_(Xol_msg_itm_.Id_portal_lastmodified, "lastmodifiedat", "This page was last modified on ~{0}, at ~{1}.");
 			case Xol_msg_itm_.Id_file_enlarge: return new_(Xol_msg_itm_.Id_file_enlarge, "thumbnail-more", "Enlarge");

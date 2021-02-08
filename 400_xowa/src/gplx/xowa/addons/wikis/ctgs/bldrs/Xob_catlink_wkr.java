@@ -27,6 +27,9 @@ class Xob_catlink_wkr {
 		, ",       tcl.cl_timestamp"
 		, ",       tcl.cl_sortkey"
 		, ",       tcl.cl_sortkey_prefix"
+		, ",       p.page_touched"
+		, ",       p.page_len"
+		, ",       p.page_score"
 		, "FROM    <temp_db>tmp_cat_link tcl"
 		, "        JOIN page p ON tcl.cl_to_ttl = p.page_title AND p.page_namespace = 14"
 		, "ORDER BY 1"	// NOTE: must sort by page_id to keep all cats for page in one db
@@ -53,11 +56,14 @@ class Xob_catlink_wkr {
 					cat_link_tbl = Make_cat_link_tbl(wiki, cat_link_tbl);
 					db_size_new = 0;
 				}
+                                byte[] touched = rdr.Read_bry_by_str("page_touched");
+                                int page_len = rdr.Read_int("page_len");
+                                int page_score = rdr.Read_int("page_score");
 				db_size_cur = db_size_new;
 				page_id_prv = page_id_cur;
 
 				// insert; notify;
-				cat_link_tbl.Insert_cmd_by_batch(page_id_prv, rdr.Read_int("page_id"), rdr.Read_byte("cl_type_id"), rdr.Read_long("cl_timestamp"), sortkey, sortkey_prefix);
+				cat_link_tbl.Insert_cmd_by_batch(page_id_prv, rdr.Read_int("page_id"), rdr.Read_byte("cl_type_id"), rdr.Read_long("cl_timestamp"), sortkey, sortkey_prefix, touched, page_len, page_score);
 				if (++rows % 100000 == 0) {
 					Gfo_usr_dlg_.Instance.Prog_many("", "", "inserting cat_link row: ~{0}", Int_.To_str_fmt(rows, "#,##0"));
 				}
@@ -92,6 +98,9 @@ class Xob_catlink_wkr {
 		cat_link_tbl.Create_idx__catbox();
 		cat_link_tbl.Create_idx__catpage();
 		cat_link_tbl.Create_idx__catdate();
+		cat_link_tbl.Create_idx__cattouched();
+		cat_link_tbl.Create_idx__catlen();
+		cat_link_tbl.Create_idx__catscore();
 	}
 	public void Make_catcore_tbl(Xowe_wiki wiki, Db_conn tmp_conn, Db_conn page_conn, Db_conn cat_core_conn) {
 		Db_attach_mgr attach_mgr = new Db_attach_mgr(cat_core_conn, new Db_attach_itm("temp_db", tmp_conn), new Db_attach_itm("page_db", page_conn));

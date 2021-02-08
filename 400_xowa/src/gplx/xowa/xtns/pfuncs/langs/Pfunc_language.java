@@ -29,10 +29,14 @@ public class Pfunc_language extends Pf_func_base {
 			bfr.Add(argx);
 		else {
 			Xol_lang_stub lang_itm = (Xol_lang_stub)o;
-                        if (self_args_len > 0)
-                            // always return the English version (should be langauge specific)
-			bfr.Add(lang_itm.Local_name());
-                        else
+			if (self_args_len > 0) {
+				// always return the English version (should be langauge specific)
+				if (lang_itm.Local_name() != null) {
+					bfr.Add(lang_itm.Local_name());
+					return;
+				}
+				// else fall thru
+			}
 			bfr.Add(lang_itm.Canonical_name());
 		}
 	}

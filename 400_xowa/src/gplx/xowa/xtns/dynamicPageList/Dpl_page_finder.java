@@ -169,10 +169,12 @@ class Dpl_page_finder {
 		String sqlSort;
 		switch ( itm.Sort_tid() ) {
 			case Dpl_sort.Tid_lastedit:
-				sqlSort = "page_touched";
+				//sqlSort = "page_touched";
+				sqlSort = "cl_touched";
 				break;
 			case Dpl_sort.Tid_length:
-				sqlSort = "page_len";
+				//sqlSort = "page_len";
+				sqlSort = "cl_len";
 				break;
 			case Dpl_sort.Tid_created:
 				sqlSort = "page_id"; // Since they're never reused and increasing
@@ -181,7 +183,8 @@ class Dpl_page_finder {
 				sqlSort = "c1.cl_type_id " + sqlOrder + ", c1.cl_sortkey";
 				break;
 			case Dpl_sort.Tid_popularity:
-				sqlSort = "page_score";
+				//sqlSort = "page_score";
+				sqlSort = "cl_score";
 //                                sqlOrder = "DESC";
 				break;
 			default:

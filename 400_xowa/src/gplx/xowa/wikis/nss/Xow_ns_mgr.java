@@ -97,8 +97,19 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 	}
 	public void			Aliases_clear() {aliases.Clear();}		
 	public Xow_ns_mgr	Aliases_add(int ns_id, String name) {
+//            System.out.println("alias:"+name);
 		Keyval kv = Keyval_.new_(name, new Int_obj_val(ns_id));
 		aliases.Add_if_dupe_use_nth(name, kv);
+		Xow_ns ns = Ids_get_or_null(ns_id);
+		if (ns != null) {
+			byte[] bname = Bry_.Add(Bry_.new_u8(name), Byte_ascii.Colon_bry);
+			if (ns.Id_is_tmpl()) {
+				//tmpl_hash.Add(name, name);
+				tmpl_nst.Add_if_dupe_use_nth(bname);
+			}
+			else
+				name_nst.Add_if_dupe_use_nth(bname);
+		}
 		return this;
 	}
 	public void	Aliases_del(String name) {aliases.Del(name);}
@@ -150,10 +161,11 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 	private void Rebuild_hashes__add(Hash_adp_bry hash, Xow_ns ns, byte[] key) {
 		Xow_ns_mgr_name_itm ns_itm = new Xow_ns_mgr_name_itm(ns, key);
 		hash.Add_if_dupe_use_nth(key, ns_itm);
-		name_nst.Add_if_dupe_use_nth(ns.Name_db_w_colon());
+		byte[] bname = Bry_.Add(key, Byte_ascii.Colon_bry);
+		name_nst.Add_if_dupe_use_nth(bname);
 		if (Bry_find_.Find_fwd(key, Byte_ascii.Underline) != Bry_find_.Not_found) {	// ns has _; add another entry for space; EX: Help_talk -> Help talk
 			hash.Add_if_dupe_use_nth(Bry_.Replace(key, Byte_ascii.Underline, Byte_ascii.Space), ns_itm);
-			name_nst.Add_if_dupe_use_nth(Bry_.Replace(ns.Name_db_w_colon(), Byte_ascii.Underline, Byte_ascii.Space));
+			name_nst.Add_if_dupe_use_nth(Bry_.Replace(bname, Byte_ascii.Underline, Byte_ascii.Space));
 		}
 	}
 	public Xow_ns_mgr Add_defaults() { // NOTE: needs to happen after File ns is added; i.e.: cannot be put in Xow_ns_mgr() {} ctor
@@ -343,7 +355,7 @@ class NameSpaceTable {
 	}
 	public void Add_if_dupe_use_nth(byte[] src) {
 		int size = src.length;
-                if (size == 0) return;
+		if (size == 0) return;
 		int first = src[0] & 0xFF;
 		byte nptr = first_byte[first];
 		while (nptr > 0) {
@@ -360,4 +372,7 @@ class Namespace {
 	public byte[] name;
 	public int size;
 	public byte next;
+        public String toString() {
+            return String_.new_u8(name);
+        }
 }

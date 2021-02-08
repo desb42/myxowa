@@ -56,6 +56,7 @@ public class Xowc_xtn_pages implements Gfo_invk {
 			ns_mgr.Init_w_defaults();
 	}
 	private int Set_canonical(Xow_ns_mgr ns_mgr, int aliases_added, int id, byte[] name) {
+            if (id != Int_.Min_value) {
 		Xow_ns ns =  ns_mgr.Ids_get_or_null(id);
 		if (	ns == null							// ns doesn't exist; should throw error;
 			||	!Bry_.Eq(ns.Name_db(), name)		// ns exists, but name doesn't match canonical
@@ -63,6 +64,7 @@ public class Xowc_xtn_pages implements Gfo_invk {
 			ns_mgr.Aliases_add(id, String_.new_a7(name));					
 			++aliases_added;
 		}
+            }
 		return aliases_added;
 	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

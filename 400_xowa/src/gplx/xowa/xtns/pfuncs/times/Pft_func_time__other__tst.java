@@ -24,10 +24,10 @@ public class Pft_func_time__other__tst {
 	@Test   public void Iranian__month_idx()			{fxt.Test_parse("{{#time:xin|2012-01-02}}"		, "10");}
 	@Test   public void Iranian__day_idx()				{fxt.Test_parse("{{#time:xij|2012-01-02}}"		, "12");}
 	@Test   public void Iranian__month_name()			{fxt.Init_msg("iranian-calendar-m10"	, "Dey"); fxt.Test_parse("{{#time:xiF|2012-01-02}}"		, "Dey");}
-	@Test   public void Hijiri__year_idx()				{fxt.Test_parse("{{#time:xmY|2012-01-02}}"		, "1433");}
-	@Test   public void Hijiri__month_idx()				{fxt.Test_parse("{{#time:xmn|2012-01-02}}"		, "2");}
-	@Test   public void Hijiri__day_idx()				{fxt.Test_parse("{{#time:xmj|2012-01-02}}"		, "7");}
-	@Test   public void Hijiri__month_name()			{fxt.Init_msg("hijiri-calendar-m2"	, "Safar"); fxt.Test_parse("{{#time:xmF|2012-01-02}}"		, "Safar");}
+	@Test   public void Hijri__year_idx()				{fxt.Test_parse("{{#time:xmY|2012-01-02}}"		, "1433");}
+	@Test   public void Hijri__month_idx()				{fxt.Test_parse("{{#time:xmn|2012-01-02}}"		, "2");}
+	@Test   public void Hijri__day_idx()				{fxt.Test_parse("{{#time:xmj|2012-01-02}}"		, "7");}
+	@Test   public void Hijri__month_name()			{fxt.Init_msg("hijiri-calendar-m2"	, "Safar"); fxt.Test_parse("{{#time:xmF|2012-01-02}}"		, "Safar");}
 	@Test   public void Roman__year()					{fxt.Test_parse("{{#time:xrY|2012}}"			, "MMXII");}
 	@Test   public void Roman__various() {
 		fxt.Test_Roman(   1, "I");
