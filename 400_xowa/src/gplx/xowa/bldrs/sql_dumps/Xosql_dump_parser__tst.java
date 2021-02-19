@@ -76,13 +76,13 @@ class Xosql_dump_cbk__test implements Xosql_dump_cbk {
 	private int prv_idx = -1;
 	private final    Bry_bfr bfr = Bry_bfr_.New();
 	public void Clear() {prv_idx = -1; bfr.Clear();}
-	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end) {
+	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end, boolean has_escape, boolean isstring) {
 		if (fld_idx <= prv_idx) {
 			if (prv_idx != -1) bfr.Add_byte_nl();
 		}
 		bfr.Add_mid(src, val_bgn, val_end).Add_byte_pipe();
 		prv_idx = fld_idx;
 	}
-	public void On_row_done() {}
+	public void On_row_done(long currentpos, long maxpos) {}
 	public byte[] To_bry_and_clear() {return bfr.To_bry_and_clear();}
 }

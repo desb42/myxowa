@@ -43,6 +43,9 @@ public class Ref_html_wtr {
 	public void Init_by_wiki(Xowe_wiki wiki) {
 		cfg.Init_by_wiki(wiki);
 	}
+	public void Init_per_page() {
+		mgr.Clear();
+	}
 	private Bfr_arg Itm_id(Ref_nde itm, boolean caller_is_ref, String pre, String suf) {
 		if (itm.Name() == Bry_.Empty)
 			return itm_id_fmtr.Set(cfg.Itm_id_uid(), pre, itm.Uid(), suf);

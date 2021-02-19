@@ -28,13 +28,14 @@ public class Imglnk_bldr_cmd extends Xob_sql_dump_base implements Xosql_dump_cbk
 	@Override public void Cmd_bgn_hook(Xob_bldr bldr, Xosql_dump_parser parser) {
 		mgr = new Imglnk_bldr_mgr(wiki);
 	}
-	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end) {
+	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end, boolean has_escape, boolean isstring) {
 		switch (fld_idx) {
 			case Fld__il_from:			this.tmp_page_id = Bry_.To_int_or(src, val_bgn, val_end, -1); break;
-			case Fld__il_to:			this.tmp_il_to = Bry_.Mid(src, val_bgn, val_end); break;
+			case Fld__il_to:			this.tmp_il_to = Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
 		}
-	}	private static final byte Fld__il_from = 0, Fld__il_to = 1;
-	public void On_row_done() {
+	}
+	private static final byte Fld__il_from = 0, Fld__il_to = 1;
+	public void On_row_done(long currentpos, long maxpos) {
 		mgr.Tmp_tbl().Insert_by_batch(tmp_page_id, tmp_il_to);
 		if (++rows % 100000 == 0) usr_dlg.Prog_many("", "", "reading row ~{0}", Int_.To_str_fmt(rows, "#,##0"));
 	}

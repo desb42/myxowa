@@ -37,13 +37,13 @@ public class Xob_pageprop_cmd extends Xob_sql_dump_base implements Xosql_dump_cb
 		tbl.Insert_end();
 		this.Cmd_cleanup_sql();
 	}
-	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end) {
+	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end, boolean has_escape, boolean isstring) {
 		switch (fld_idx) {
 			case Fld__pp_page:					this.tmp_id					= Bry_.To_int_or(src, val_bgn, val_end, -1); break;
 			case Fld__pp_propname:				this.tmp_key_is_hiddencat	= Bry_.Eq(src, val_bgn, val_end, Key_hiddencat); break;
 		}
 	}
-	public void On_row_done() {
+	public void On_row_done(long currentpos, long maxpos) {
 		if (tmp_key_is_hiddencat)
 			tbl.Insert_cmd_by_batch(tmp_id);
 		if (++rows % 10000 == 0) usr_dlg.Prog_many("", "", "parsing pageprops sql: row=~{0}", Int_.To_str_fmt(rows, "#,##0"));

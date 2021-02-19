@@ -83,7 +83,7 @@ public class Xoctg_edit_mgr {
 			cat_core_tbl.Update(cat_core_itm);
 
 			// add to cat_link tbl
-			last_cat_link_tbl.Insert_(page_id, ctg_id, Xoa_ctg_mgr.To_tid_by_ns(ns_id), timestamp, collation_mgr.Get_sortkey(wpg.Ttl().Page_db()), wpg.Ttl().Page_db(), Bry_.Empty, 0, 0);
+			last_cat_link_tbl.Insert_(page_id, ctg_id, Xoa_ctg_mgr.To_tid_by_ns(ns_id), timestamp, collation_mgr.Get_sortkey(wpg.Ttl().Page_db()), wpg.Ttl().Page_db()/*, Bry_.Empty, 0, 0*/);
 		}
 
 		// update page.cat_db_id

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -14,7 +14,9 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
  */
 package gplx.xowa.xtns.pfuncs.times;
+
 import gplx.*;
+
 public class Dbx_strtotime {
 
 // inside parse.re
@@ -44,7 +46,7 @@ public class Dbx_strtotime {
 //			Dbx_scan_support.add_warning(in, Dbx_scan_support.TIMELIB_WARN_INVALID_DATE, "The parsed date was invalid");
 //		}
 //		if (in.errors.error_count + in.errors.warning_count > 0)
-        if (in.errors.error_count > 0 /*|| (in.time.have_time == 0 && !in.time.have_date && !in.time.have_relative)*/) {
+        if (in.errors.error_count > 0) {
             throw Err_.new_unhandled(0);
         }
         return in.time;
@@ -56,18 +58,17 @@ public class Dbx_strtotime {
         while (true) {
             switch (s.state) {
                 case 0:
-                    s.yyaccept = 0;
-                    if ((s.lim - s.cursor) < 33) {
-                        return EOI; // ((YYLIMIT - YYCURSOR) < 33) YYFILL(33);
-                    }
-                    s.yych = s.src[s.cursor]; //yych = src[YYCURSOR];
-
                     s.tok = s.cursor;
                     s.len = 0;
 //line 1011 "parse_date.re"
 
 //line 892 "<stdout>"
 //{
+                    s.yyaccept = 0;
+                    if ((s.lim - s.cursor) < 33) {
+                        return EOI;
+                    }
+                    s.yych = s.src[s.cursor];
                     switch (s.yych) {
                         case 0x00:
                         case '\n':
@@ -976,7 +977,7 @@ public class Dbx_strtotime {
                         }
                     }
 
-                    if (s.ptr < s.cursor) {
+                    if (s.ptr < s.src_len) {
                         s.time.z = Dbx_scan_support.timelib_parse_zone(s);
                         if (s.tz_not_found != 0) {
                             Dbx_scan_support.add_error(s, Dbx_scan_support.TIMELIB_ERR_TZID_NOT_FOUND, "The timezone could not be found in the database");
@@ -2886,7 +2887,7 @@ public class Dbx_strtotime {
                     s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
                     s.time.s = Dbx_scan_support.timelib_get_nr_ex(s, 2);
 
-                    if (s.ptr < s.cursor) {
+                    if (s.ptr < s.src_len) {
                         s.time.z = Dbx_scan_support.timelib_parse_zone(s);
                         if (s.tz_not_found != 0) {
                             Dbx_scan_support.add_error(s, Dbx_scan_support.TIMELIB_ERR_TZID_NOT_FOUND, "The timezone could not be found in the database");
@@ -3124,7 +3125,7 @@ public class Dbx_strtotime {
                         }
                     }
 
-                    if (s.ptr < s.cursor) {
+                    if (s.ptr < s.src_len) {
                         s.time.z = Dbx_scan_support.timelib_parse_zone(s);
                         if (s.tz_not_found != 0) {
                             Dbx_scan_support.add_error(s, Dbx_scan_support.TIMELIB_ERR_TZID_NOT_FOUND, "The timezone could not be found in the database");
@@ -4158,7 +4159,7 @@ public class Dbx_strtotime {
                         s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2) - 1;
                         s.time.i = 45;
                     }
-                    if (s.ptr < s.cursor) {
+                    if (s.ptr < s.src_len) {
                         Dbx_scan_support.timelib_eat_spaces(s);
                         s.time.h += Dbx_scan_support.timelib_meridian(s, s.time.h);
                     }

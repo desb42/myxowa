@@ -107,6 +107,8 @@ public class Xow_parser_mgr {
 			byte[] data_raw = page.Db().Text().Text_bry();
 			data_raw = dbp.stripcomments(data_raw);
 //		data_raw = Bry_.Add(data_raw, Bry_.new_a7("<references/>\n")); - causes problems in en.wikisource.org/wiki/The_New_Student%27s_Reference_Work/Cumberland,_Md.
+			// reset Cite info
+			wiki.Html_mgr().Html_wtr().Init_per_page();
 			parser.Parse_text_to_wdom(root, ctx, tkn_mkr, data_raw , Xop_parser_.Doc_bgn_bos);
 		}
 		page.Root_(root);

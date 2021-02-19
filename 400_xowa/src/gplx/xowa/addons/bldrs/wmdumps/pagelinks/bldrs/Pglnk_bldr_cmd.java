@@ -27,14 +27,14 @@ public class Pglnk_bldr_cmd extends Xob_sql_dump_base implements Xosql_dump_cbk 
 		wiki.Init_assert();
 		tempdb_mgr = new Pglnk_tempdb_mgr(usr_dlg, wiki, row_max);
 	}
-	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end) {
+	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end, boolean has_escape, boolean isstring) {
 		switch (fld_idx) {
 			case Fld__pl_from:			this.tmp_src_id = Bry_.To_int_or(src, val_bgn, val_end, -1); break;
 			case Fld__pl_namespace:		this.tmp_trg_ns = Bry_.To_int_or(src, val_bgn, val_end, -1); break;
-			case Fld__pl_title:			this.tmp_trg_ttl = Bry_.Mid(src, val_bgn, val_end); break;
+			case Fld__pl_title:			this.tmp_trg_ttl = Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
 		}
 	}
-	public void On_row_done() {
+	public void On_row_done(long currentpos, long maxpos) {
 		tempdb_mgr.Dump__insert_row(tmp_src_id, tmp_trg_ns, tmp_trg_ttl);
 	}
 	@Override public void Cmd_end() {

@@ -31,6 +31,7 @@ class Cite_mgr { // REF.MW:/extensions/Cite/includes/Cite.php
 			message = Bry_.Add(Msg__cite_link_label_group, group);
 			messages_by_group.Add(group, message);
 		}
+//                System.out.println("cite:"+String_.new_u8(message));
 
 		// get linkLabels or gen
 		Cite_link_label_grp linkLabels = link_label_mgr.Get_or_null(group);
@@ -52,9 +53,13 @@ class Cite_mgr { // REF.MW:/extensions/Cite/includes/Cite.php
 	private Cite_link_label_grp genLinkLabels(byte[] group, byte[] message) {
 		// linkLabels are generally "a", "b", "c", etc.
 		Xol_msg_itm msg = wiki.Msg_mgr().Find_or_null(message);
-		byte[][] text = msg == null
-			? Bry_.Ary_empty
-			: Bry_split_.Split_ws(msg.Val());
+		byte[][] text = Bry_.Ary_empty;
+		if (msg != null) {
+			byte[] val = msg.Val();
+			int len = val.length;
+			if (len > 0 && (val[0] != '<' || val[len-1] != '>'))
+				text = Bry_split_.Split_ws(msg.Val());
+		}
 
 		Cite_link_label_grp grp = new Cite_link_label_grp(group, text);
 		link_label_mgr.Add(group, grp);
@@ -83,6 +88,10 @@ class Cite_mgr { // REF.MW:/extensions/Cite/includes/Cite.php
 			, Gfh_atr_itm.New(Gfh_atr_.Bry__dir  , lang.Dir_ltr_bry())
 			);
 		return ret;
+	}
+	public void Clear() {
+		link_label_mgr.Clear();
+		messages_by_group.Clear();
 	}
 	public static final    byte[]
 	  Msg__cite_link_label_group = Bry_.new_a7("cite_link_label_group-")

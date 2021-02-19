@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -42,13 +42,13 @@ public class Decimal_adp_ {
 	}
 	public static Decimal_adp cast(Object obj) {return (Decimal_adp)obj;}
 	static int XtoPow10(int v) {
-		if		(v >		-1 && v <            10) return 10;
-		else if (v >		 9 && v <           100) return 100;
-		else if (v >		99 && v <          1000) return 1000;
-		else if (v >	   999 && v <         10000) return 10000;
-		else if (v >	  9999 && v <        100000) return 100000;
-		else if (v >	 99999 && v <       1000000) return 1000000;
-		else if (v >	999999 && v <      10000000) return 10000000;
+		if      (v >        -1 && v <            10) return 10;
+		else if (v >         9 && v <           100) return 100;
+		else if (v >        99 && v <          1000) return 1000;
+		else if (v >       999 && v <         10000) return 10000;
+		else if (v >      9999 && v <        100000) return 100000;
+		else if (v >     99999 && v <       1000000) return 1000000;
+		else if (v >    999999 && v <      10000000) return 10000000;
 		else if (v >   9999999 && v <     100000000) return 100000000;
 		else if (v >  99999999 && v <    1000000000) return 1000000000;
 		else throw Err_.new_wo_type("value must be between 0 and 1 billion", "v", v);
@@ -69,13 +69,16 @@ public class Decimal_adp_ {
 	public static Decimal_adp db_(Object v) {return new Decimal_adp((BigDecimal)v);}
 	public static Decimal_adp parse(String raw) {
 		try {
-	        DecimalFormat nf = (DecimalFormat)NumberFormat.getInstance(Locale.US);	// always parse as US format; EX:".9" should not be ",9" in german; DATE:2016-01-31
-	        nf.setParseBigDecimal(true);
-	        // 2020-08-27|ISSUE#:565|Parse 'e' as 'E'; PAGE:en.w:Huntington_Plaza
-	        if (raw.contains("e")) {
-	        	raw = raw.replace("e", "E");
-	        }
-	        BigDecimal bd = (BigDecimal)nf.parse(raw);
+			DecimalFormat nf = (DecimalFormat)NumberFormat.getInstance(Locale.US);	// always parse as US format; EX:".9" should not be ",9" in german; DATE:2016-01-31
+			nf.setParseBigDecimal(true);
+			// 2020-08-27|ISSUE#:565|Parse 'e' as 'E'; PAGE:en.w:Huntington_Plaza
+			if (raw.contains("e")) {
+				raw = raw.replace("e", "E");
+			}
+			if (raw.startsWith(".")) {
+				raw = "0" + raw;
+			}
+			BigDecimal bd = (BigDecimal)nf.parse(raw);
 			return new Decimal_adp(bd);
 		} catch (ParseException e) {
 			throw Err_.new_("Decimal_adp_", "parse to decimal failed", "raw", raw);

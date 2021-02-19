@@ -20,11 +20,12 @@ public class Io_stream_rdr__gzip extends Io_stream_rdr__base {
 		synchronized (this) {
 		try {
 			int total_read = 0;
+			int len_to_read = len;
 			while (true) {  // NOTE: the gz stream reads partially; (request 100; only get back 10); keep reading until entire bfr is full or -1
 				int read = stream.read(bry, bgn, len);
 				if (read == Io_stream_rdr_.Read_done) break;
 				total_read += read;
-				if (total_read >= len) break;  // entire bfr full; stop
+				if (total_read >= len_to_read) break;  // entire bfr full; stop
 				bgn += read;  // increase bgn by amount read
 				len -= read;  // decrease len by amount read 
 			}

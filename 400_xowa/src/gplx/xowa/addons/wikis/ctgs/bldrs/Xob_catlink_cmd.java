@@ -33,18 +33,18 @@ public class Xob_catlink_cmd extends Xob_sql_dump_base implements Xosql_dump_cbk
 		mgr.On_cmd_end();
 		this.Cmd_cleanup_sql();
 	}
-	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end) {
+	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end, boolean has_escape, boolean isstring) {
 		switch (fld_idx) {
 			case Fld__cl_from:				this.tmp_page_id			= Bry_.To_int_or(src, val_bgn, val_end, -1); break;
-			case Fld__cl_to:				this.tmp_ctg_ttl			= Bry_.Mid(src, val_bgn, val_end); break;
-			case Fld__cl_sortkey:			this.tmp_sortkey			= Bry_.Mid(src, val_bgn, val_end); break;
-			case Fld__cl_timestamp:			this.tmp_timestamp			= Bry_.Mid(src, val_bgn, val_end); break;
-			case Fld__cl_sortkey_prefix:	this.tmp_sortkey_prefix		= Bry_.Mid(src, val_bgn, val_end); break;
-			case Fld__cl_collation:			this.tmp_collation			= Bry_.Mid(src, val_bgn, val_end); break;
-			case Fld__cl_type:				this.tmp_type				= Bry_.Mid(src, val_bgn, val_end); break;
+			case Fld__cl_to:				this.tmp_ctg_ttl			= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
+			case Fld__cl_sortkey:			this.tmp_sortkey			= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
+			case Fld__cl_timestamp:			this.tmp_timestamp			= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
+			case Fld__cl_sortkey_prefix:	this.tmp_sortkey_prefix		= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
+			case Fld__cl_collation:			this.tmp_collation			= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
+			case Fld__cl_type:				this.tmp_type				= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
 		}
 	}
-	public void On_row_done() {
+	public void On_row_done(long currentpos, long maxpos) {
 		mgr.On_cmd_row(tmp_page_id, tmp_ctg_ttl, tmp_sortkey, tmp_timestamp, tmp_sortkey_prefix, tmp_collation, tmp_type);
 	}
 	private static final byte Fld__cl_from = 0, Fld__cl_to = 1, Fld__cl_sortkey = 2, Fld__cl_timestamp = 3, Fld__cl_sortkey_prefix = 4, Fld__cl_collation = 5, Fld__cl_type = 6;

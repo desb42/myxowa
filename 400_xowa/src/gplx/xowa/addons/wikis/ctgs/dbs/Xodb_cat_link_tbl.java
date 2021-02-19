@@ -48,17 +48,17 @@ public class Xodb_cat_link_tbl implements Db_tbl {
 	public void Create_idx__catscore()	{conn.Meta_idx_create(Dbmeta_idx_itm.new_normal_by_tbl(tbl_name, "catscore", fld__to_id, fld__score));}
 	public void Insert_bgn() {conn.Txn_bgn("cl__insert"); stmt_insert = conn.Stmt_insert(tbl_name, flds);}
 	public void Insert_end() {conn.Txn_end(); stmt_insert = Db_stmt_.Rls(stmt_insert);}
-	public void Insert_cmd_by_batch(int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix, byte[] touched, int page_len, int page_score) {
-		this.Insert_cmd_by_batch(stmt_insert, from, to_id, type_id, timestamp_unix, sortkey, sortkey_prefix, touched, page_len, page_score);
+	public void Insert_cmd_by_batch(int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix/*, byte[] touched, int page_len, int page_score*/) {
+		this.Insert_cmd_by_batch(stmt_insert, from, to_id, type_id, timestamp_unix, sortkey, sortkey_prefix/*, touched, page_len, page_score*/);
 	}
-	public void Insert_(int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix, byte[] touched, int page_len, int page_score) {
+	public void Insert_(int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix/*, byte[] touched, int page_len, int page_score*/) {
 		Db_stmt stmt = conn.Stmt_insert(tbl_name, flds);
-		this.Insert_cmd_by_batch(stmt, from, to_id, type_id, timestamp_unix, sortkey, sortkey_prefix, touched, page_len, page_score);
+		this.Insert_cmd_by_batch(stmt, from, to_id, type_id, timestamp_unix, sortkey, sortkey_prefix/*, touched, page_len, page_score*/);
 	}
         private int datecvt(byte[] touched) {
             return 0;
         }
-	private void Insert_cmd_by_batch(Db_stmt stmt, int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix, byte[] touched, int page_len, int page_score) {
+	private void Insert_cmd_by_batch(Db_stmt stmt, int from, int to_id, byte type_id, long timestamp_unix, byte[] sortkey, byte[] sortkey_prefix/*, byte[] touched, int page_len, int page_score*/) {
 		stmt.Clear()
 			.Val_int(fld__from					, from)
 			.Val_int(fld__to_id					, to_id)
@@ -66,9 +66,9 @@ public class Xodb_cat_link_tbl implements Db_tbl {
 			.Val_long(fld__timestamp_unix		, timestamp_unix)
 			.Val_bry(fld__sortkey				, sortkey)
 			.Val_bry_as_str(fld__sortkey_prefix	, sortkey_prefix)
-			.Val_int(fld__date					, datecvt(touched))
-			.Val_int(fld__len					, page_len)
-			.Val_int(fld__score					, page_score)
+			.Val_int(fld__date					, 0)
+			.Val_int(fld__len					, 0)
+			.Val_int(fld__score					, 0)
 			.Exec_insert();
 	}
 	public Xodb_cat_link_row[] Select_by_page_id(int page_id) {

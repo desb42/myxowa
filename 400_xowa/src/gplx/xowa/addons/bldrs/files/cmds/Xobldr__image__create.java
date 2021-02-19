@@ -35,7 +35,11 @@ public class Xobldr__image__create extends Xob_itm_dump_base implements Xob_cmd,
 		Init_dump(BLDR_CMD_KEY);
 		if (src_fil == null) {
 			src_fil = Xob_page_wkr_cmd.Find_fil_by(wiki.Fsys_mgr().Root_dir(), "*-image.sql");
-			if (src_fil == null) throw Err_.new_wo_type(".sql file not found in dir", "dir", wiki.Fsys_mgr().Root_dir());
+			if (src_fil == null) {
+                            src_fil = Xob_page_wkr_cmd.Find_fil_by(wiki.Fsys_mgr().Root_dir(), "*-image.sql.gz");
+                            if (src_fil == null)
+                                throw Err_.new_wo_type(".sql(.gz) file not found in dir", "dir", wiki.Fsys_mgr().Root_dir());
+                        }
 		}
 		parser.Src_fil_(src_fil);
 		this.conn = Xob_db_file.New__wiki_image(wiki.Fsys_mgr().Root_dir()).Conn();
@@ -49,19 +53,19 @@ public class Xobldr__image__create extends Xob_itm_dump_base implements Xob_cmd,
 		tbl_image.Create_index(conn);
 		conn.Txn_end();
 	}
-	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end) {
+	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end, boolean has_escape, boolean isstring) {
 		switch (fld_idx) {
-			case Fld_img_name: 			cur_ttl			= Bry_.Mid(src, val_bgn, val_end); break;
+			case Fld_img_name: 			cur_ttl			= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
 			case Fld_img_size: 			cur_size		= Bry_.To_int_or(src, val_bgn, val_end, -1); break;
 			case Fld_img_width:			cur_width		= Bry_.To_int_or(src, val_bgn, val_end, -1); break;
 			case Fld_img_height:		cur_height		= Bry_.To_int_or(src, val_bgn, val_end, -1); break;
 			case Fld_img_bits: 			cur_bits		= Bry_.To_int_or(src, val_bgn, val_end, -1); break;
-			case Fld_img_media_type:	cur_media_type	= Bry_.Mid(src, val_bgn, val_end); break;
-			case Fld_img_minor_mime:	cur_minor_mime	= Bry_.Mid(src, val_bgn, val_end); break;
-			case Fld_img_timestamp:		cur_timestamp	= Bry_.Mid(src, val_bgn, val_end); break;
+			case Fld_img_media_type:	cur_media_type	= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
+			case Fld_img_minor_mime:	cur_minor_mime	= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
+			case Fld_img_timestamp:		cur_timestamp	= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
 		}
 	}
-	public void On_row_done() {
+	public void On_row_done(long currentpos, long maxpos) {
 		cur_ext_id = Calc_ext_id(show_issues ? app.Usr_dlg() : Gfo_usr_dlg_.Noop, cur_ttl, cur_media_type, cur_minor_mime, cur_width, cur_height);
 		tbl_image.Insert(stmt, cur_ttl, cur_media_type, cur_minor_mime, cur_size, cur_width, cur_height, cur_bits, cur_ext_id, cur_timestamp);
 		++commit_count;

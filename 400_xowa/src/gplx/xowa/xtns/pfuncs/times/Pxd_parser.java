@@ -42,7 +42,7 @@ class Pxd_parser {
 	public byte[] Src() {return src;}
 	public Pxd_parser(Xop_ctx ctx) {
 		this.trie = Pxd_parser_.Trie(ctx);
-                Dbx_scan_support.Init(trie);
+		Dbx_scan_support.Init(trie);
 	}
 	public boolean Seg_idxs_chk(int... ary) {
 		int len = ary.length;
@@ -62,7 +62,7 @@ class Pxd_parser {
 		fmtr.Bld_bfr(error_bfr, args);
 	}	private Bry_bfr error_bfr = Bry_bfr_.New_w_size(32);
 	public DateAdp Parse(byte[] src, Bry_bfr error_bfr, Xoa_ttl ttl) {
-            return Dbx_scan_support.Parse(src);
+		return Dbx_scan_support.Parse(src);
 /*		hasdate = false;
 		hastime = false;
 		dataidxadj = 0;
@@ -149,7 +149,7 @@ class Pxd_parser {
 				break;
 		}
 		cur_pos = 0;
-                // trim start
+		// trim start
 		while (cur_pos < src_len) {
 			byte b = src[cur_pos];
 			if (b == ' ' || b == '\t' || b == ')')

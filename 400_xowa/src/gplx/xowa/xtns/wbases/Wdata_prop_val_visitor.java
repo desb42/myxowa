@@ -117,7 +117,8 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 		Decimal_adp hi = Decimal__parse_or(hi_bry, val);
 
 		// fmt val
-		if (lo.Eq(hi) && hi.Eq(val))// lo, hi, val are same; print val only;
+		//if (lo.Eq(hi) && hi.Eq(val) && lo_bry == null && hi_bry == null)// lo, hi, val are same; print val only;
+		if (lo_bry == null && hi_bry == null)// lo, hi, val are same; print val only;
 			bfr.Add(lang.Num_mgr().Format_num_by_decimal(val));			// amount; EX: 1,234
 		else {
 			Wdata_hwtr_msgs msgs = wdata_mgr.Hwtr_mgr().Msgs();

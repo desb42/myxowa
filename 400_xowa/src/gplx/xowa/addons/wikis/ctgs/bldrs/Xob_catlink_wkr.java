@@ -56,14 +56,15 @@ class Xob_catlink_wkr {
 					cat_link_tbl = Make_cat_link_tbl(wiki, cat_link_tbl);
 					db_size_new = 0;
 				}
-                                byte[] touched = rdr.Read_bry_by_str("page_touched");
-                                int page_len = rdr.Read_int("page_len");
-                                int page_score = rdr.Read_int("page_score");
+//                                byte[] touched = rdr.Read_bry_by_str("page_touched");
+//                                int page_len = rdr.Read_int("page_len");
+//                                int page_score = rdr.Read_int("page_score");
 				db_size_cur = db_size_new;
 				page_id_prv = page_id_cur;
 
 				// insert; notify;
-				cat_link_tbl.Insert_cmd_by_batch(page_id_prv, rdr.Read_int("page_id"), rdr.Read_byte("cl_type_id"), rdr.Read_long("cl_timestamp"), sortkey, sortkey_prefix, touched, page_len, page_score);
+				//cat_link_tbl.Insert_cmd_by_batch(page_id_prv, rdr.Read_int("page_id"), rdr.Read_byte("cl_type_id"), rdr.Read_long("cl_timestamp"), sortkey, sortkey_prefix, touched, page_len, page_score);
+				cat_link_tbl.Insert_cmd_by_batch(page_id_prv, rdr.Read_int("page_id"), rdr.Read_byte("cl_type_id"), rdr.Read_long("cl_timestamp"), sortkey, sortkey_prefix);
 				if (++rows % 100000 == 0) {
 					Gfo_usr_dlg_.Instance.Prog_many("", "", "inserting cat_link row: ~{0}", Int_.To_str_fmt(rows, "#,##0"));
 				}

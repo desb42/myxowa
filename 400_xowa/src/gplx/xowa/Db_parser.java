@@ -26,7 +26,7 @@ public class Db_parser {
 	private Tag_match section_tag = new Tag_match("section");
 
 	public byte[] stripcomments(byte[] src) {
-            byte[] nsrc;
+		byte[] nsrc;
 		m_src = src;
 		m_src_end = src.length;
 		m_newsrc.Clear();
@@ -82,19 +82,32 @@ public class Db_parser {
 				start_text = m_pos + 1;
 			}
 			else*/ if (b == '<') {
-				int newpos = translate_tag.Match(m_src, m_pos, m_src_end);
+				// <translate> OR <translate nowrap> - ignoring nowrap for the moment
+				int newpos = translate_tag.Match_all(m_src, m_pos, m_src_end);
 				//if (match_translate()) {
 				if (newpos > 0) {
 					addtext(start_text, m_pos);
 					// skip the tag
-					// if immediately followed by a comment consume it and any space(s) afterwards
-					if (m_src[newpos] == '<' && m_src[newpos+1] == '!') {
+					// if immediately followed by a comment (ignoring whitespace) consume it and any whitespace afterwards
+					int checkpos = newpos;
+					while (checkpos < m_src_end) {
+						b = m_src[checkpos];
+						if (b != ' ' && b != '\n')
+							break;
+						checkpos++;
+					}
+					if (m_src[checkpos] == '<' && m_src[checkpos+1] == '!') {
+						newpos = checkpos + 2;
 						while (newpos < m_src_end) {
 							if (m_src[newpos++] == '>')
 								break;
 						}
-						while (newpos < m_src_end && m_src[newpos] == ' ')
-							newpos++; 
+						while (newpos < m_src_end) {
+							b = m_src[newpos];
+							if (b != ' ' && b != '\n')
+								break;
+							newpos++;
+						}
 					}
 					start_text = newpos;
 					m_pos = newpos - 1;

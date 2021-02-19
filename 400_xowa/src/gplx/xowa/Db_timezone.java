@@ -24,11 +24,11 @@ import java.io.*;
 public class Db_timezone {
 	private static Db_conn conn;
 	private static Xowe_wiki wiki = null;
-        private static Xoae_app app;
+	private static Xoae_app app;
 	private static boolean initialised = false;
 	public static void Set_wiki(Xowe_wiki w, Xoae_app xapp) {
 		wiki = w;
-                app = xapp;
+		app = xapp;
 	}
 	private static final String create_sql = String_.Concat_lines_nl
 	( "CREATE TABLE if not exists timezone ("

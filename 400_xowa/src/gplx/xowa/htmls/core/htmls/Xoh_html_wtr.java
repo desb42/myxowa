@@ -96,6 +96,9 @@ public class Xoh_html_wtr {
 		this.page = page;
 		lnki_wtr.Init_by_page(ctx, hctx, src, page);
 	}
+	public void Init_per_page() {
+		ref_wtr.Init_per_page();
+	}
 
 	public void Write_doc(Bry_bfr rv, Xop_ctx ctx, byte[] src, Xop_root_tkn root) {Write_doc(rv, ctx, Xoh_wtr_ctx.Basic, src, root);}
 	public void Write_doc(Bry_bfr rv, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_root_tkn root) {			
