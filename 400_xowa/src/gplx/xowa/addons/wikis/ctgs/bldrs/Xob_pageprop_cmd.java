@@ -27,7 +27,7 @@ public class Xob_pageprop_cmd extends Xob_sql_dump_base implements Xosql_dump_cb
 	@Override protected Xosql_dump_parser New_parser() {return new Xosql_dump_parser(this, "pp_page", "pp_propname", "pp_value");}	// NOTE: 4 b/c MW added fld_3:pp_sortkey; DATE:2014-04-28
 
 	@Override public void Cmd_bgn_hook(Xob_bldr bldr, Xosql_dump_parser parser) {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		Xodb_tmp_cat_db tmp_db = new Xodb_tmp_cat_db(wiki);
 		tbl = new Xodb_tmp_cat_hidden_tbl(tmp_db.Conn());
 		tbl.Insert_bgn();

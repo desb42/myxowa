@@ -99,7 +99,9 @@ public class Xol_func_regy {
 		byte[] md5 = cs_trie.Md5();
 		if (Bry_.Eq(md5, Db_btrie_cs_trie_en.Hash()))
 			db_cs_trie = new Db_btrie_cs_trie_en(cs_trie.Objs());
-                else if (Bry_.Eq(md5, Db_btrie_cs_trie_de.Hash()))
+		else if (Bry_.Eq(md5, Db_btrie_cs_trie_en2.Hash()))
+			db_cs_trie = new Db_btrie_cs_trie_en2(cs_trie.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_cs_trie_de.Hash()))
 			db_cs_trie = new Db_btrie_cs_trie_de(cs_trie.Objs());
 		else
 			cs_trie.Dumpit("cs_trie Xol_func_regy");
@@ -107,7 +109,9 @@ public class Xol_func_regy {
 		md5 = ci_trie.Md5();
 		if (Bry_.Eq(md5, Db_btrie_ci_trie_en.Hash()))
 			db_ci_trie = new Db_btrie_ci_trie_en(ci_trie.Objs());
-                else if (Bry_.Eq(md5, Db_btrie_ci_trie_de.Hash()))
+		else if (Bry_.Eq(md5, Db_btrie_ci_trie_en2.Hash()))
+			db_ci_trie = new Db_btrie_ci_trie_en2(ci_trie.Objs());
+		else if (Bry_.Eq(md5, Db_btrie_ci_trie_de.Hash()))
 			db_ci_trie = new Db_btrie_ci_trie_de(ci_trie.Objs());
 		else
 			ci_trie.Dumpit("ci_trie Xol_func_regy");

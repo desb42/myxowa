@@ -18,6 +18,7 @@ import gplx.core.caches.*;
 public class Xow_page_cache {
 	private Db_parser dbp = new Db_parser();
 	private final    Object thread_lock = new Object(); // NOTE: thread-safety needed for xomp since one page-cache is shared across all wkrs
+	private final    Object cache_lock = new Object();
 	private final    Xowe_wiki wiki;
 	private final    Lru_cache cache;
 	private long cache_tries = 0;
@@ -42,7 +43,8 @@ public class Xow_page_cache {
 		}
 	}
 	public Xow_page_cache_itm Get_itm_else_load_or_null(Xoa_ttl ttl) {
-		synchronized (thread_lock) {
+		//synchronized (thread_lock) {
+		synchronized (cache_lock) {
 			cache_tries++;
 		}
 		Xow_page_cache_itm rv = (Xow_page_cache_itm)cache.Get_or_null(ttl.Full_db_as_str());
@@ -50,13 +52,14 @@ public class Xow_page_cache {
 		if (rv == Xow_page_cache_itm.Missing)
 			return null;
 		else if (rv == null) {
-			synchronized (thread_lock) {
+			synchronized (cache_lock) {
 				cache_misses++;
+                        }
 				return Load_page(ttl);
-			}
+			//}
 		}
 		else {
-			synchronized (thread_lock) {
+			synchronized (cache_lock) {
 				rv.Access_count_increment();
 				return rv;
 			}
@@ -108,13 +111,17 @@ public class Xow_page_cache {
 
 		// create item
 		if (page_exists) {
+		synchronized (thread_lock) {
 			//page_text = dbp.stripcomments(page_text);
 			rv = new Xow_page_cache_itm(false, page_id, page_ttl, page_text, page_redirect_from);
 			Add_itm(ttl.Full_db_as_str(), rv);
+                }
 		}
 		else {
+		synchronized (thread_lock) {
 			rv = null;
 			Add_itm(ttl.Full_db_as_str(), Xow_page_cache_itm.Missing);
+                }
 		}
 		return rv;
 	}

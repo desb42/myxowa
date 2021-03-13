@@ -24,7 +24,7 @@ class Pack_mgr {
 	public void Exec(Xowe_wiki wiki, long pack_size_max) {
 		// init
 		Io_url wiki_dir = wiki.Fsys_mgr().Root_dir();
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		String wiki_date = wiki.Props().Modified_latest().XtoStr_fmt("yyyyMMdd");
 
 		// build pack list

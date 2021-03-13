@@ -35,7 +35,7 @@ public class Html__dump_to_fsys__cmd extends Xob_cmd__base {
 
 		// load rdr
 		Xoh_wtr_ctx hctx = Xoh_wtr_ctx.File_dump(page_root, Bry_.new_a7(".html"));
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		gplx.xowa.wikis.data.tbls.Xowd_page_tbl page_tbl = wiki.Data__core_mgr().Db__core().Tbl__page();
 		Db_conn conn = page_tbl.Conn();
 		Db_rdr rdr = conn.Exec_rdr("SELECT page_id, page_title, page_touched FROM page WHERE page_namespace = 0;");

@@ -73,7 +73,7 @@ public class Xow_wiki_upgrade_ {
 			// BGN:check for page_ids < 1
 			// select from page_tbl for page_id < 1
 			Xow_db_mgr db_mgr = new Xow_db_mgr(dir_url, String_.new_u8(domain));
-			db_mgr.Init_by_load(core_db_url);
+			db_mgr.Init_by_load(core_db_url, 0);
 			Xowd_page_tbl page_tbl = db_mgr.Db__core().Tbl__page();
 			List_adp page_ids_list = List_adp_.New();
 			Db_rdr page_rdr = page_tbl.Conn().Stmt_sql(Db_sql_.Make_by_fmt(String_.Ary("SELECT page_id FROM page WHERE page_id < 1"))).Exec_select__rls_auto();

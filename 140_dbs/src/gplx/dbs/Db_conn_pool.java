@@ -20,15 +20,18 @@ public class Db_conn_pool {	// PURPOSE: cache one connection per connection_stri
 	private final    Ordered_hash hash = Ordered_hash_.New();
 	public Db_batch_mgr Batch_mgr() {return batch_mgr;} private final    Db_batch_mgr batch_mgr = new Db_batch_mgr();
 	public void Del(Db_conn_info url)				{hash.Del(url.Db_api());}
-	public Db_conn Get_or_new(String s)				{return Get_or_new(Db_conn_info_.parse(s));}
-	public Db_conn Get_or_new(Db_conn_info url) {
-		Db_conn rv = (Db_conn)hash.Get_by(url.Db_api());
+	public Db_conn Get_or_new(String s)				{return Get_or_new(Db_conn_info_.parse(s), 0);}
+	public Db_conn Get_or_new(Db_conn_info url, int wrk_id) {
+		//Thread currentThread = Thread.currentThread();
+		//String key = url.Db_api() + ":" + currentThread.getName();
+		String key = url.Db_api() + ":" + Integer.toString(wrk_id);
+		Db_conn rv = (Db_conn)hash.Get_by(key);
 		if (rv == null) {
 			Db_engine prime = (Db_engine)prime_hash.Get_by(url.Key()); if (prime == null) Err_.new_wo_type("db engine prototype not found", "key", url.Key());
 			Db_engine clone = prime.New_clone(url);
 			rv = new Db_conn(clone);
 			clone.Batch_mgr().Copy(clone.Tid(), batch_mgr);
-			hash.Add(url.Db_api(), rv);
+			hash.Add(key, rv);
 		}
 		return rv;
 	}

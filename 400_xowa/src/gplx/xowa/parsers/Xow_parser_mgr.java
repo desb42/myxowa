@@ -88,7 +88,7 @@ public class Xow_parser_mgr {
 	}
 	public void Parse(Xoae_page page, boolean clear) {	// main parse method; should never be called nested
 		// init
-		if (!Env_.Mode_testing()) wiki.Init_assert();	// needed for html_server?
+		if (!Env_.Mode_testing()) wiki.Init_assert(0);	// needed for html_server?
 		tmpl_stack_ary = Bry_.Ary_empty;
 		tmpl_stack_ary_len = tmpl_stack_ary_max = 0;
 		uniq_mgr.Clear();

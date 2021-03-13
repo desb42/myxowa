@@ -21,7 +21,7 @@ public class Xob_page_delete_cmd extends Xob_cmd_base {
 	public Xob_page_delete_cmd(Xob_bldr bldr, Xow_wiki wiki) {this.wiki = wiki;}
 	@Override public String Cmd_key() {return Xob_cmd_keys.Key_text_delete_page;}
 	@Override public void Cmd_run() {
-		wiki.Init_by_wiki();
+		wiki.Init_by_wiki(0);
 		Xow_db_file core_db = wiki.Data__core_mgr().Db__core();
 		Db_conn core_db_conn = core_db.Conn();
 		Gfo_usr_dlg usr_dlg = Gfo_usr_dlg_.Instance;
@@ -53,7 +53,7 @@ public class Xob_page_delete_cmd extends Xob_cmd_base {
 		
 		String db_file_cur = "";
 		try {
-			Xow_db_file[] db_file_ary = core_db.Tbl__db().Select_all(wiki.Data__core_mgr().Props(), wiki.Fsys_mgr().Root_dir());
+			Xow_db_file[] db_file_ary = core_db.Tbl__db().Select_all(wiki.Data__core_mgr().Props(), wiki.Fsys_mgr().Root_dir(), 0);
 			int len = db_file_ary.length;
 			for (int i = 0; i < len; ++i) {
 				boolean db_file_is_text = Bool_.N, db_file_is_cat = Bool_.N, db_file_is_search = Bool_.N;

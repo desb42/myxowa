@@ -56,9 +56,10 @@ class Cite_mgr { // REF.MW:/extensions/Cite/includes/Cite.php
 		byte[][] text = Bry_.Ary_empty;
 		if (msg != null) {
 			byte[] val = msg.Val();
+//                System.out.println("cite:"+String_.new_u8(message) +"->"+String_.new_u8(val));
 			int len = val.length;
 			if (len > 0 && (val[0] != '<' || val[len-1] != '>'))
-				text = Bry_split_.Split_ws(msg.Val());
+				text = Bry_split_.Split_ws(val);
 		}
 
 		Cite_link_label_grp grp = new Cite_link_label_grp(group, text);

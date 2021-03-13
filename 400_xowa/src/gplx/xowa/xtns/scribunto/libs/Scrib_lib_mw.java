@@ -123,7 +123,8 @@ public class Scrib_lib_mw implements Scrib_lib {
 		if (idx_int != Int_.Min_value) {	// idx is integer
 			Arg_nde_tkn nde = Get_arg(frame, idx_int, frame_arg_adj);
 			//frame.Args_eval_by_idx(core.Ctx().Src(), idx_int); // NOTE: arg[0] is always MW function name; EX: {{#invoke:Mod_0|Func_0|Arg_1}}; arg_x = "Mod_0"; args[0] = "Func_0"; args[1] = "Arg_1"
-			if (nde == null) return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
+			if (nde == null)
+                            return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
 			nde.Val_tkn().Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
                         //ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(tmp_bfr);
                         //System.out.println(idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));
@@ -134,7 +135,8 @@ public class Scrib_lib_mw implements Scrib_lib {
 		}
 		else {
 			Arg_nde_tkn nde = frame.Args_get_by_key(src, Bry_.new_u8(idx_str));
-			if (nde == null) return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
+			if (nde == null)
+                            return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
 			nde.Val_tkn().Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
                         //ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(tmp_bfr);
                         //System.out.println(idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));

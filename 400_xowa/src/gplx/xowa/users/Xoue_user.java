@@ -95,9 +95,11 @@ public class Xoue_user implements Xou_user, Gfo_evt_mgr_owner, Gfo_invk {
 	, Invk_wiki = "wiki", Invk_history = "history", Invk_fsys = "fsys", Invk_lang = "lang", Invk_msgs = "msgs";
 	public static final String Key_xowa_user = "anonymous";
 	public static final String Evt_lang_changed = "lang_changed";
+        private Xowe_wiki usr_wiki;
+        public Xowe_wiki Init_assert()	{return usr_wiki.Init_assert(0);}
 	public void Available_from_fsys() {
 		Io_url[] dirs = Io_mgr.Instance.QueryDir_args(app.Fsys_mgr().Wiki_dir()).Recur_(false).DirOnly_().ExecAsUrlAry();
-		Xowe_wiki usr_wiki = Wiki();
+		usr_wiki = Wiki();
 		int dirs_len = dirs.length;
 		for (int i = 0; i < dirs_len; i++) {
 			Io_url dir = dirs[i];

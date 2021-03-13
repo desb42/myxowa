@@ -22,7 +22,7 @@ public class Xoa_maint_wikis_mgr implements Gfo_invk {
 		if (init) Init();
 		byte[] domain = (byte[])hash.Get_at(i);
 		Xowe_wiki wiki = app.Wiki_mgr().Get_by_or_make(domain);
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		return wiki;
 	}
 	public void Add(byte[] domain) {hash.Add_if_dupe_use_nth(domain, domain);}	// NOTE: must be Add_if_dupe_use_nth to replace existing wikis
@@ -31,7 +31,7 @@ public class Xoa_maint_wikis_mgr implements Gfo_invk {
 		for (int i = 0; i < len; i++) {
 			byte[] domain = (byte[])hash.Get_at(i);
 			Xowe_wiki wiki = app.Wiki_mgr().Get_by_or_make(domain);
-			wiki.Init_assert();
+			wiki.Init_assert(0);
 		}
 		init = false;
 	}

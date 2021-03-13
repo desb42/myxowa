@@ -28,7 +28,7 @@ public class Xobldr__link__link_score extends Xob_cmd__base {
 	public Xobldr__link__link_score Page_rank_enabled_(boolean v) {this.page_rank_enabled = v; return this;}
 	public Xobldr__link__link_score Delete_plink_db_(boolean v) {this.delete_plink_db = v; return this;}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		Db_conn plink_conn = Db_conn_bldr.Instance.Get_or_autocreate(false, wiki.Fsys_mgr().Root_dir().GenSubFil(Xob_db_file.Name__page_link));
 		String page_rank_tbl = Xobldr__page__page_score.Pagerank__tbl_name;
 		Gfo_usr_dlg_.Instance.Prog_none("", "", "search.page.score:adding fields to page_rank_temp");

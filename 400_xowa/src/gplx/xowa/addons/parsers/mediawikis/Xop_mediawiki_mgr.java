@@ -46,7 +46,7 @@ public class Xop_mediawiki_mgr {
 		Xowe_wiki wiki = (Xowe_wiki)app.Wiki_mgr().Make(Bry_.new_u8(domain_str), app.Fsys_mgr().Wiki_dir().GenSubDir(domain_str));
 		if (mode_is_prod) {
 			wiki.Embeddable_enabled_(true); // must mark wiki as embeddable, else orig_mgr will load wkrs which will download images DATE:2017-10-23
-			wiki.Init_by_wiki();
+			wiki.Init_by_wiki(0);
 
 			// init setup data; xowa_cfg|interwikimap and ns_msg; DATE:2017-10-23
 			if (gplx.xowa.wikis.data.Xow_db_file__core_.Find_core_fil_or_null(wiki) == null) { // only run if file does not exist

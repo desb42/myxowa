@@ -42,7 +42,7 @@ public class Fsdb_db_mgr__v2 implements Fsdb_db_mgr {
 		if (mnt_id == Fsm_mnt_mgr.Mnt_idx_user)		return file_user_core;
 		if (layout.Tid_is_all_or_few())				return file_main_core;
 		Io_url url = wiki_dir.GenSubFil(file_name);
-		Db_conn conn = Db_conn_bldr.Instance.Get(url);
+		Db_conn conn = Db_conn_bldr.Instance.Get(url, 0);
 		if (conn == null) {	// bin file deleted or not downloaded; use Noop Db_conn and continue; do not fail; DATE:2015-04-16
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "fsdb.bin:file does not exist; url=~{0}", url);
 			conn = Db_conn_.Noop; 

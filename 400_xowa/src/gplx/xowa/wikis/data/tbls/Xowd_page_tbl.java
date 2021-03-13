@@ -133,12 +133,12 @@ public class Xowd_page_tbl implements Db_tbl {
 		.Val_int			(fld_model_format		, itm.Model_format())
 		.Exec_insert();
 	}
-	public Xowd_page_itm Select_by_ttl_as_itm_or_null(Xoa_ttl ttl) {
+	public Xowd_page_itm Select_by_ttl_as_itm_or_null(Xoa_ttl ttl, int wrk_id) {
 		Xowd_page_itm rv = new Xowd_page_itm();
-		return Select_by_ttl(rv, ttl) ? rv : null;
+		return Select_by_ttl(rv, ttl, wrk_id) ? rv : null;
 	}
-	public boolean Select_by_ttl(Xowd_page_itm rv, Xoa_ttl ttl) {return Select_by_ttl(rv, ttl.Ns(), ttl.Page_db());}
-	public boolean Select_by_ttl(Xowd_page_itm rv, Xow_ns ns, byte[] ttl) {
+	public boolean Select_by_ttl(Xowd_page_itm rv, Xoa_ttl ttl, int wrk_id) {return Select_by_ttl(rv, ttl.Ns(), ttl.Page_db(), wrk_id);}
+	public boolean Select_by_ttl(Xowd_page_itm rv, Xow_ns ns, byte[] ttl, int wrk_id) {
 //            System.out.println(Integer.toString(ns.Id()) + " " + String_.new_u8(ttl));
             if (ns.Id() == 112) {
             int a = 1; 
@@ -147,6 +147,7 @@ public class Xowd_page_tbl implements Db_tbl {
 		if (stmt_select_all_by_ttl == null) stmt_select_all_by_ttl = conn.Stmt_select(tbl_name, flds, String_.Ary(fld_ns, fld_title));
 //		synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
 		try {
+                    if (wrk_id == 0)
 			Xoctg_catpage_mgr.rwl.writeLock().lock();
                         //System.out.println(Integer.toString(ns.Id())+":"+String_.new_u8(ttl));
 			Db_rdr rdr = stmt_select_all_by_ttl.Clear().Crt_int(fld_ns, ns.Id()).Crt_bry_as_str(fld_title, ttl).Exec_select__rls_manual();
@@ -159,6 +160,7 @@ public class Xowd_page_tbl implements Db_tbl {
 			finally {rdr.Rls();}
                 }
 		finally {
+                    if (wrk_id == 0)
 			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 		}
 			return false;
@@ -196,14 +198,14 @@ public class Xowd_page_tbl implements Db_tbl {
 		if (stmt_select_id_by_ttl == null) stmt_select_id_by_ttl = conn.Stmt_select(tbl_name, flds_select_all, fld_ns, fld_title);
 //		synchronized (thread_lock) {
 		try {
-			Xoctg_catpage_mgr.rwl.writeLock().lock();
+//			Xoctg_catpage_mgr.rwl.writeLock().lock();
 		Db_rdr rdr = stmt_select_id_by_ttl.Clear().Crt_int(fld_ns, ns_id).Crt_bry_as_str(fld_title, ttl).Exec_select__rls_manual(); 
 		try {
 			return rdr.Move_next() ? rdr.Read_int(fld_id) : Xowd_page_itm.Id_null;
 		}	finally {rdr.Rls();}
                 }
 		finally {
-			Xoctg_catpage_mgr.rwl.writeLock().unlock();
+//			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 		}
 	}
 	public void Select_in__id(Select_in_cbk cbk) {

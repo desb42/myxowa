@@ -29,7 +29,7 @@ public class Srch_special_searcher {
 		for (int i = 0; i < domains_len; ++i) {
 			Xow_domain_itm domain = domains_ary[i];
 			try {
-				Xowe_wiki wiki = wiki_mgr.Get_by_or_make(domain.Domain_bry()); wiki.Init_assert();
+				Xowe_wiki wiki = wiki_mgr.Get_by_or_make(domain.Domain_bry()); wiki.Init_assert(0);
 				byte[] key = gplx.langs.htmls.Gfh_utl.Encode_id_as_bry(Bry_.Add(qry.Phrase.Orig, Byte_ascii.Pipe_bry, qry.Ns_mgr.To_hash_key(), Byte_ascii.Pipe_bry, wiki.Domain_bry()));
 				Srch_rslt_list rslt_list;
 				if (wiki.App().Mode().Tid_is_http()) {

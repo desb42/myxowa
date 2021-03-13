@@ -51,7 +51,7 @@ public class Xodb_load_mgr_sql implements Xodb_load_mgr {
 		db_core.Tbl__ns().Select_all(wiki.Ns_mgr());
 	}
 	public boolean Load_by_ttl(Xowd_page_itm rv, Xow_ns ns, byte[] ttl) {
-		return db_mgr.Core_data_mgr().Tbl__page().Select_by_ttl(rv, ns, ttl);
+		return db_mgr.Core_data_mgr().Tbl__page().Select_by_ttl(rv, ns, ttl, db_mgr.Wrk_id());
 	}
 	public void Load_by_ttls(Xowe_wiki wiki, Cancelable cancelable, Ordered_hash rv, boolean fill_idx_fields_only, int bgn, int end) {
 		db_mgr.Core_data_mgr().Tbl__page().Select_in__ns_ttl(cancelable, rv, wiki.Ns_mgr(), fill_idx_fields_only, bgn, end);

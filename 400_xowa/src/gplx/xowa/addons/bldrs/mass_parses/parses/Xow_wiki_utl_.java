@@ -17,13 +17,13 @@ package gplx.xowa.addons.bldrs.mass_parses.parses; import gplx.*; import gplx.xo
 import gplx.xowa.langs.*; import gplx.xowa.langs.cases.*; import gplx.xowa.langs.names.*;
 import gplx.xowa.files.*;
 public class Xow_wiki_utl_ {
-	public static Xowe_wiki Clone_wiki(Xowe_wiki wiki, Io_url wiki_dir) {
+	public static Xowe_wiki Clone_wiki(Xowe_wiki wiki, Io_url wiki_dir, int wrk_id) {
 		Xoa_app app = wiki.App();
 		byte[] lang_key = wiki.Lang().Key_bry();
 		Xol_lang_itm lang = Xol_lang_itm.New(app.Lang_mgr(), lang_key);
 		Xol_lang_itm_.Lang_init(lang);
 		Xowe_wiki rv = new Xowe_wiki(wiki.Appe(), lang, gplx.xowa.wikis.nss.Xow_ns_mgr_.default_(lang.Case_mgr()), wiki.Domain_itm(), wiki_dir);
-		rv.Init_by_wiki();
+		rv.Init_by_wiki(wrk_id);
 		rv.File_mgr().Repo_mgr().Clone(wiki.File_mgr().Repo_mgr());
 		rv.File__fsdb_mode().Tid__v2__bld__y_();
 

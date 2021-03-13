@@ -173,6 +173,8 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 		special_mgr.Init_by_app(this);
 		sys_cfg.Init_by_app(this);
 		Db_timezone.Set_wiki(wiki_mgr.Get_at_or_null(0), this);
+                
+                user.Init_assert();
 	}
 	public void Launch() {
 		// guard against circular calls; probably no longer needed
@@ -186,7 +188,7 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 		xwiki_mgr__sitelink_mgr.Init_by_app();
 
 		// init user wiki
-		user.Wiki().Init_assert();	// NOTE: must assert wiki and load langs first, else will be asserted during Portal_mgr().Init(), which will cause IndexOutOfBounds; DATE:2014-10-04
+		user.Wiki().Init_assert(0);	// NOTE: must assert wiki and load langs first, else will be asserted during Portal_mgr().Init(), which will cause IndexOutOfBounds; DATE:2014-10-04
 		gplx.xowa.addons.wikis.directorys.Xowdir_addon.Init(this);
 	}
 	public byte Stage() {return stage;} public Xoae_app Stage_(byte v) {stage = v; return this;} private byte stage = Xoa_stage_.Tid_ctor;

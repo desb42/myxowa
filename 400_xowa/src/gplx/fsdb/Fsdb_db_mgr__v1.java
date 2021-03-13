@@ -26,7 +26,7 @@ public class Fsdb_db_mgr__v1 implements Fsdb_db_mgr {
 		this.mnt_file		= get_db(file_dir.GenSubFil(Mnt_name));											// EX: /xowa/enwiki/wiki.mnt.sqlite3
 		this.abc_file__main	= get_db(file_dir.GenSubFil_nest(Fsm_mnt_tbl.Mnt_name_main, Abc_name));			// EX: /xowa/enwiki/fsdb.main/fsdb.abc.sqlite3
 		this.atr_file__main	= get_db(Get_atr_db_url(Bool_.Y, file_dir, Fsm_mnt_tbl.Mnt_name_main));			// EX: /xowa/enwiki/fsdb.main/fsdb.atr.00.sqlite3
-		if (Db_conn_bldr.Instance.Get(file_dir.GenSubFil_nest(Fsm_mnt_tbl.Mnt_name_user, Abc_name)) == null)		// user doesn't exist; create; DATE:2015-04-20
+		if (Db_conn_bldr.Instance.Get(file_dir.GenSubFil_nest(Fsm_mnt_tbl.Mnt_name_user, Abc_name), 0) == null)		// user doesn't exist; create; DATE:2015-04-20
 			Fsdb_db_mgr__v1_bldr.Instance.Make_core_dir(file_dir, Fsm_mnt_mgr.Mnt_idx_user, Fsm_mnt_tbl.Mnt_name_user);
 		this.abc_file__user	= get_db(file_dir.GenSubFil_nest(Fsm_mnt_tbl.Mnt_name_user, Abc_name));			// EX: /xowa/enwiki/fsdb.user/fsdb.abc.sqlite3
 		this.atr_file__user	= get_db(Get_atr_db_url(Bool_.N, file_dir, Fsm_mnt_tbl.Mnt_name_user));			// EX: /xowa/enwiki/fsdb.user/fsdb.atr.00.sqlite3
@@ -44,7 +44,7 @@ public class Fsdb_db_mgr__v1 implements Fsdb_db_mgr {
 		String bin_name = (mnt_is_main ? bin_prefix__main : bin_prefix__user) + Int_.To_str_pad_bgn_zero(bin_id, 4) + ".sqlite3";
 		String mnt_name = mnt_is_main ? Fsm_mnt_tbl.Mnt_name_main : Fsm_mnt_tbl.Mnt_name_user;
 		Io_url url = file_dir.GenSubFil_nest(mnt_name, bin_name);	// EX: /xowa/enwiki/fsdb.main/fsdb.bin.0000.sqlite3
-		Db_conn conn = Db_conn_bldr.Instance.Get(url);
+		Db_conn conn = Db_conn_bldr.Instance.Get(url, 0);
 		if (conn == null) {	// NOTE: handle wikis with missing bin files; EX:sv.w missing bin.0010; DATE:2015-07-04
 			gplx.xowa.Xoa_app_.Usr_dlg().Warn_many("", "", "fsdb.v1: missing db; db=~{0}", url.Raw());
 			return Fsdb_db_mgr__v1_bldr.Instance.new_db__bin(url);
@@ -75,7 +75,7 @@ public class Fsdb_db_mgr__v1 implements Fsdb_db_mgr {
 	public static final String Orig_name = "wiki.orig#00.sqlite3", Mnt_name = "wiki.mnt.sqlite3", Abc_name	= "fsdb.abc.sqlite3"
 	, Atr_name_v1a = "fsdb.atr#00.sqlite3", Atr_name_v1b = "fsdb.atr.00.sqlite3";
 	private static Fsdb_db_file get_db(Io_url file) {
-		Db_conn conn = Db_conn_bldr.Instance.Get(file);
+		Db_conn conn = Db_conn_bldr.Instance.Get(file, 0);
 		if (conn == null) conn = Db_conn_.Noop;
 		return new Fsdb_db_file(file, conn);
 	}

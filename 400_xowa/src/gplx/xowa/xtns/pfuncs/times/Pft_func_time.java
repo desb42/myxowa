@@ -81,8 +81,8 @@ public class Pft_func_time extends Pf_func_base {
 			rv.SetTimeZone(ctx.Wiki().Tz_mgr().Get_timezone());
 		return rv;
 	}
-	public static final    Pft_func_time _Lcl = new Pft_func_time(false), _Utc = new Pft_func_time(true);
 	private static final byte[] zerohours = Bry_.new_a7("00:00 ");
+	public static final    Pft_func_time _Lcl = new Pft_func_time(false), _Utc = new Pft_func_time(true);
 }
 class DateAdpTranslator_xapp {
 	public static void Translate(Xowe_wiki wiki, Xol_lang_itm lang, int type, int val, Bry_bfr bb) {

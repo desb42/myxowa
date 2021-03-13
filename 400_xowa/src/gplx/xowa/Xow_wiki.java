@@ -22,6 +22,7 @@ import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.utls.*; import gplx.
 import gplx.xowa.parsers.*; import gplx.xowa.xtns.proofreadPage.*;
 import gplx.xowa.apps.urls.*;
 public interface Xow_wiki extends Xow_ttl_parser, Gfo_invk {
+    int Wrk_id();
 	boolean						Type_is_edit();
 	Xoa_app						App();
 	Xol_lang_itm				Lang();
@@ -53,7 +54,7 @@ public interface Xow_wiki extends Xow_ttl_parser, Gfo_invk {
 	Xow_xwiki_mgr				Xwiki_mgr();
 	Xow_wiki_props				Props();
 	Xowd_site_stats_mgr			Stats();
-	void						Init_by_wiki();
+	void						Init_by_wiki(int wrk_id);
 	void						Init_by_wiki__force();	// HACK: force init for drd wiki
 	Bry_bfr_mkr					Utl__bfr_mkr();
 	Io_stream_zip_mgr			Utl__zip_mgr();

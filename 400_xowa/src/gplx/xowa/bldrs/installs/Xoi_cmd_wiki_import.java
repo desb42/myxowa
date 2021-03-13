@@ -51,7 +51,7 @@ class Xoi_cmd_wiki_import implements Gfo_thread_cmd {
 		app.Usr_dlg().Prog_one("", "", "preparing import: ~{0}", wiki_key);
 		Xob_bldr bldr = app.Bldr();
 		wiki = app.Wiki_mgr().Get_by_or_make(Bry_.new_a7(wiki_key));
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		bldr.Cmd_mgr().Clear();
 		bldr.Pause_at_end_(false);
 		Io_url src_url = wiki.Import_cfg().Src_rdr().Url();
@@ -61,7 +61,7 @@ class Xoi_cmd_wiki_import implements Gfo_thread_cmd {
 		app.Usere().Available_from_fsys();
 		wiki.Init_needed_(true);
 		wiki.Html_mgr().Page_wtr_mgr().Init_(true);
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		if		(String_.Eq(src_url.Ext(), ".xml")) {
 			if (   app.Cfg().Get_bool_app_or("xowa.bldr.import.delete_xml_file", true)	// CFG: Cfg__
 				&& Io_mgr.Instance.ExistsFil(src_url.GenNewExt(".bz2"))	// only delete the file if there is a corresponding bz2 file; BUG.GH:#124; DATE:2017-02-02

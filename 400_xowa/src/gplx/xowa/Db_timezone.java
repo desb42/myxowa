@@ -110,16 +110,16 @@ public class Db_timezone {
 			}
 		} finally {rdr.Rls();}
 	}
-	private static final String sql = "SELECT offset FROM timezone WHERE id=?;";
-	public static int Get_offset(int id) {
+	private static final String sql_id = "SELECT offset FROM timezone WHERE id=?;";
+	public static int Get_offset_from_id(int id) {
 		Init();
 		int offset = 0;
-		Db_stmt stmt = conn.Stmt_sql(sql);
+		Db_stmt stmt = conn.Stmt_sql(sql_id);
 		stmt.Crt_int("id", id);
 		Db_rdr rdr = stmt.Exec_select__rls_auto();
 		try {
 			while (rdr.Move_next()) {
-				offset = rdr.Read_int("id");
+				offset = rdr.Read_int("offset");
 				break;
 			}
 		} finally {rdr.Rls();}

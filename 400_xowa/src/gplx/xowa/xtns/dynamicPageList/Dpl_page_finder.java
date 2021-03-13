@@ -92,7 +92,7 @@ class Dpl_page_finder {
 		}
 		if (ttl == null) return -1;
 
-		Xowd_page_itm page_itm = page_tbl.Select_by_ttl_as_itm_or_null(ttl);
+		Xowd_page_itm page_itm = page_tbl.Select_by_ttl_as_itm_or_null(ttl, wiki.Wrk_id());
 		if (page_itm == null) {
 			Gfo_usr_dlg_.Instance.Log_many("", "", "dpl category does not exist in page table; wiki=~{0} page=~{1} ttl=~{2}", wiki.Domain_str(), itm.Page_ttl(), ttl.Full_db());	// Log instead of Warn b/c happens many times in en.d, en.b, en.u; DATE:2016-10-22
 			return -1;
@@ -170,11 +170,11 @@ class Dpl_page_finder {
 		switch ( itm.Sort_tid() ) {
 			case Dpl_sort.Tid_lastedit:
 				//sqlSort = "page_touched";
-				sqlSort = "cl_touched";
+				sqlSort = "c1.cl_date";
 				break;
 			case Dpl_sort.Tid_length:
 				//sqlSort = "page_len";
-				sqlSort = "cl_len";
+				sqlSort = "c1.cl_len";
 				break;
 			case Dpl_sort.Tid_created:
 				sqlSort = "page_id"; // Since they're never reused and increasing
@@ -184,7 +184,7 @@ class Dpl_page_finder {
 				break;
 			case Dpl_sort.Tid_popularity:
 				//sqlSort = "page_score";
-				sqlSort = "cl_score";
+				sqlSort = "c1.cl_score";
 //                                sqlOrder = "DESC";
 				break;
 			default:
@@ -207,7 +207,7 @@ class Dpl_page_finder {
 			Db_rdr rdr = Db_rdr_.Empty;
 			int count = 0;
 			try {
-			Xoctg_catpage_mgr.rwl.writeLock().lock();
+			//Xoctg_catpage_mgr.rwl.writeLock().lock();
 				attach_mgr.Attach();
 				rdr = attach_mgr.Conn_main().Stmt_sql(sql).Exec_select__rls_auto();
 				while (rdr.Move_next()) {
@@ -222,7 +222,7 @@ class Dpl_page_finder {
 			finally {
 				rdr.Rls();
 				attach_mgr.Detach();
-			Xoctg_catpage_mgr.rwl.writeLock().unlock();
+			//Xoctg_catpage_mgr.rwl.writeLock().unlock();
 			}
 		}
 	}

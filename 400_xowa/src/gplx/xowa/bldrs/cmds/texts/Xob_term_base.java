@@ -43,7 +43,7 @@ public abstract class Xob_term_base implements Xob_cmd, Gfo_invk {
 		wiki.Init_needed_(true);
 
 		// force load; needed to pick up MediaWiki ns for MediaWiki:mainpage
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 
 		Cmd_end_hook();
 	}

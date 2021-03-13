@@ -38,7 +38,7 @@ class Merge_wkr__core {
 		Db_conn trg_conn = wiki.Data__core_mgr().Db__core().Conn();
 		copy_mgr.Copy_many(src_conn, trg_conn, "site_ns", "css_core", "css_file"); // NOTE: "xowa_db" skipped; NOTE: css_core must go before Init_by_wiki
 		copy_mgr.Copy_one(src_conn, trg_conn, "xowa_cfg__core", "xowa_cfg");
-		wiki.Init_by_wiki();
+		wiki.Init_by_wiki(0);
 
 		// make text_db b/c page entries have Load_page_wkr will try to load from text
 		Xow_db_file text_db = null;

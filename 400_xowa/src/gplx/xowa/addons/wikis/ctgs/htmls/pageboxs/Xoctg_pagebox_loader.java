@@ -51,7 +51,7 @@ class Xoctg_pagebox_loader implements Select_in_cbk {
 		Db_rdr rdr = Db_rdr_.Empty;
 		// select
 		try {
-			Xoctg_catpage_mgr.rwl.writeLock().lock();
+//			Xoctg_catpage_mgr.rwl.writeLock().lock();
 		attach_mgr.Attach();
 			rdr = cat_link_conn.Stmt_sql(sql).Exec_select__rls_auto();
 			while (rdr.Move_next()) {
@@ -69,7 +69,7 @@ class Xoctg_pagebox_loader implements Select_in_cbk {
 		finally {
 			rdr.Rls();
 			attach_mgr.Detach();
-			Xoctg_catpage_mgr.rwl.writeLock().unlock();
+//			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 		}
 
 		// hash items by id

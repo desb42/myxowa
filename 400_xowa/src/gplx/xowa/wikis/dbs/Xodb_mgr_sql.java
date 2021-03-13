@@ -25,6 +25,7 @@ public class Xodb_mgr_sql implements Xodb_mgr, Gfo_invk {
 		this.load_mgr = new Xodb_load_mgr_sql(this);
 		this.save_mgr = new Xodb_save_mgr_sql(this);
 	}
+        public int Wrk_id() {return wiki.Wrk_id();}
 	public byte Tid() {return Tid_sql;} public String Tid_name() {return "sqlite3";} public static final byte Tid_sql = 1;		
 	public Xow_db_mgr Core_data_mgr() {return core_data_mgr;} private final    Xow_db_mgr core_data_mgr;
 	public Xodb_load_mgr Load_mgr() {return load_mgr;} private final    Xodb_load_mgr_sql load_mgr;

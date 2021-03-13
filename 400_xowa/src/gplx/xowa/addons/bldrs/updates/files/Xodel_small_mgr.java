@@ -20,7 +20,7 @@ import gplx.fsdb.*; import gplx.fsdb.meta.*; import gplx.xowa.files.*;
 import gplx.xowa.bldrs.wkrs.*;	
 class Xodel_small_mgr {
 	public void Exec(Xowe_wiki wiki, int[] ext_max_ary) {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		// get atr_conn
 		Fsdb_db_mgr db_core_mgr = Fsdb_db_mgr_.new_detect(wiki, wiki.Fsys_mgr().Root_dir(), wiki.Fsys_mgr().File_dir());
 		Fsdb_db_file atr_db = db_core_mgr.File__atr_file__at(Fsm_mnt_mgr.Mnt_idx_main);

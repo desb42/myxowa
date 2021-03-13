@@ -18,6 +18,7 @@ import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.langs.vnts.*;
 import gplx.xowa.guis.views.*;	import gplx.xowa.parsers.utils.*;
 import gplx.xowa.wikis.pages.dbs.*; import gplx.xowa.wikis.pages.redirects.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.Xoctg_catpage_mgr;
 public class Xow_page_mgr implements Gfo_invk {
 	private final    Xowe_wiki wiki;
 	public Xow_page_mgr(Xowe_wiki wiki) {this.wiki = wiki;}
@@ -135,7 +136,7 @@ public class Xow_page_mgr implements Gfo_invk {
 	}
 	public Xoae_page Load_page_and_parse(Xoa_url url, Xoa_ttl ttl) {return Load_page_and_parse(url, ttl, wiki.Lang(), wiki.Appe().Gui_mgr().Browser_win().Active_tab(), true);}
 	public Xoae_page Load_page_and_parse(Xoa_url url, Xoa_ttl ttl, Xol_lang_itm lang, Xog_tab_itm tab, boolean parse_page) {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		Xoae_page page = Xoae_page.New(wiki, ttl); page.Tab_data().Tab_(tab); 
 		// COMMENT: breaks position-restore when moving back from history; if (tab != null) tab.Page_ref_(page);	// HACK: (1) null check for http server; (2) Page_ref_(page) needed for log in xobc
 		this.Load_by_ns(page, url, ttl, false);
@@ -155,15 +156,21 @@ public class Xow_page_mgr implements Gfo_invk {
 					Xowe_wiki commons_wiki = (Xowe_wiki)wiki.Appe().Wiki_mgr().Get_by_or_null(wiki.Commons_wiki_key());
 					if (commons_wiki != null) {										// commons exists
 						if (!Bry_.Eq(wiki.Domain_bry(), commons_wiki.Domain_bry())) {		// !Bry_.Eq is recursion guard
-							Xoae_page rv = commons_wiki.Data_mgr().Load_page_and_parse(url, ttl, wiki.Lang(), tab, true);
-							if (rv.Db().Page().Exists()) {
-								rv.Commons_mgr().Source_wiki_(wiki);
-								return rv;
+							try {
+								Xoctg_catpage_mgr.rwl.writeLock().lock();
+								Xoae_page rv = commons_wiki.Data_mgr().Load_page_and_parse(url, ttl, wiki.Lang(), tab, true);
+								if (rv.Db().Page().Exists()) {
+									rv.Commons_mgr().Source_wiki_(wiki);
+									return rv;
+								}
+								else {
+									rv.Db().Page().Exists_y_();
+									page.Commons_mgr().Xowa_mockup_(true);
+									return page;
+								}
 							}
-							else {
-								rv.Db().Page().Exists_y_();
-								page.Commons_mgr().Xowa_mockup_(true);
-								return page;
+							finally {
+								Xoctg_catpage_mgr.rwl.writeLock().unlock();
 							}
 						}
 					}

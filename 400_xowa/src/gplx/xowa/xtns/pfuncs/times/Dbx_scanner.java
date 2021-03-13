@@ -20,20 +20,24 @@ class Dbx_scanner {
 	public int lim;
 	public byte[] src;
 	public int src_len;
-	public int ptr;
+	public int mark;
 	public int cur;
 	public int tok;
 	public int pos;
-	public int  line, len;
+	public int line, len;
+
+	public byte[] str;
+	public int str_len;
+	public int str_ptr;
         
-        public int state;
-        public int cursor;
-        public int yyaccept;
-        public int yych;
+	public int state;
+	public int cursor;
+	public int yyaccept;
+	public int yych;
         
 	public timelib_error_container errors;
 
-	public timelib_time        time;
+	public timelib_time time;
 	//const timelib_tzdb  *tzdb;
 
 	int length;
@@ -54,11 +58,18 @@ class Dbx_scanner {
 		
 		//src = Bry_.Add(srcx, Byte_ascii.Null);
 		src_len = slen;
-		ptr = 0;
+//		ptr = 0;
 		cur = 0;
 		tok = 0;
 		pos = 0;
 		line = 0;
+	}
+	public void scanner_string() {
+		str_len = cur - tok;
+		str_ptr = 0;
+		str = new byte[str_len + 1]; // sort of asciz
+		for (int i = 0; i < str_len; i++)
+			str[i] = src[i+tok];
 	}
 }
 

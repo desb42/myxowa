@@ -29,7 +29,7 @@ class Xow_info_html extends Xow_special_wtr__base {
 		String wiki_dir = site_itm.Path();
 		if (String_.Eq(site_itm.Date(), "")) {
 			Xow_wiki wiki = app.Wiki_mgri().Get_by_or_make_init_n(wiki_domain);
-			wiki.Init_by_wiki();	// force init to load Modified_latest
+			wiki.Init_by_wiki(0);	// force init to load Modified_latest
 			site_itm.Date_(wiki.Props().Modified_latest__yyyy_MM_dd());
 			app.User().User_db_mgr().Site_mgr().Update(site_itm);
 		}

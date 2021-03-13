@@ -18,7 +18,7 @@ import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.wkrs.*;
 public class Xomath_check_cmd extends Xob_cmd__base {
 	public Xomath_check_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		new Xomath_check_mgr().Exec(wiki);
 	}
 	@Override public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

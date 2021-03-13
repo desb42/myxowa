@@ -22,7 +22,7 @@ class Imglnk_bldr_mgr {
 	private final    Xowe_wiki wiki;
 	public Imglnk_tmp_tbl Tmp_tbl() {return tmp_tbl;} private Imglnk_tmp_tbl tmp_tbl;
 	public Imglnk_bldr_mgr(Xowe_wiki wiki) {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		this.wiki = wiki;
 		this.conn = Xob_db_file.New__img_link(wiki).Conn();
 		this.tmp_tbl = new Imglnk_tmp_tbl(conn);

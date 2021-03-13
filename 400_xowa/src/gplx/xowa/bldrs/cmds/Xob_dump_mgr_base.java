@@ -77,13 +77,13 @@ public abstract class Xob_dump_mgr_base extends Xob_itm_basic_base implements Xo
 		parser = wiki.Parser_mgr().Main();
 		ctx = wiki.Parser_mgr().Ctx();
 		root = ctx.Tkn_mkr().Root(Bry_.Empty);
-		wiki.Init_assert();	// NOTE: must init wiki for db_mgr_as_sql
+		wiki.Init_assert(0);	// NOTE: must init wiki for db_mgr_as_sql
 
 		// assert by calling Db_mgr_as_sql
 		wiki.Db_mgr_as_sql().Core_data_mgr();
 
 		// load db_mgr
-		Xow_db_mgr.Init_by_load(wiki, gplx.xowa.wikis.data.Xow_db_file__core_.Find_core_fil_or_null(wiki));	// NOTE: must reinit providers as previous steps may have rls'd (and left member variable conn which is closed)
+		Xow_db_mgr.Init_by_load(wiki, gplx.xowa.wikis.data.Xow_db_file__core_.Find_core_fil_or_null(wiki), 0);	// NOTE: must reinit providers as previous steps may have rls'd (and left member variable conn which is closed)
 
 		wiki.File__orig_mgr().Wkrs__del(Xof_orig_wkr_.Tid_wmf_api);
 		db_fsys_mgr = wiki.Db_mgr_as_sql().Core_data_mgr();

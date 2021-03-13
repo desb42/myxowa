@@ -43,11 +43,13 @@ public class Json_parser {
 		switch (src[this.pos]) {
 			case Byte_ascii.Curly_bgn:	root_is_nde = Bool_.Y; break;
 			case Byte_ascii.Brack_bgn:	root_is_nde = Bool_.N; break;
-				case 16:
-					Db_JDecode dc = new Db_JDecode(src);
-					return dc.Decode();
-				default:
-					return null;
+			case (byte)0xd1:
+			case (byte)0xd2:
+			case 16:
+				Db_JDecode dc = new Db_JDecode(src);
+				return dc.Decode();
+			default:
+				return null;
 		}
 		Skip_ws();
 		Json_doc doc = new Json_doc();

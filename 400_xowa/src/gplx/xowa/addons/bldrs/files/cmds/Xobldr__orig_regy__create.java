@@ -23,13 +23,13 @@ public class Xobldr__orig_regy__create extends Xob_cmd__base {
 	@Override public void Cmd_run() {
 		Db_conn conn = Xob_db_file.New__file_make(wiki.Fsys_mgr().Root_dir()).Conn();
 		Xob_orig_regy_tbl.Create_table(conn);
-		Xowe_wiki commons_wiki = bldr.App().Wiki_mgr().Get_by_or_make(Xow_domain_itm_.Bry__commons).Init_assert();
+		Xowe_wiki commons_wiki = bldr.App().Wiki_mgr().Get_by_or_make(Xow_domain_itm_.Bry__commons).Init_assert(0);
 		Xowe_wiki repo_0 = wiki, repo_1 = commons_wiki;
 		if (repo_0_is_remote) {	// NOTE: default is false; local_wiki will be preferred over commons_wiki
 			repo_0 = commons_wiki;
 			repo_1 = wiki;
 		}
-		repo_0.Init_assert(); repo_1.Init_assert();
+		repo_0.Init_assert(0); repo_1.Init_assert(0);
 		Xob_db_file file_registry_db = Xob_db_file.New__page_regy(commons_wiki.Fsys_mgr().Root_dir());
 		Xob_orig_regy_tbl.Create_data(bldr.Usr_dlg(), conn, file_registry_db, repo_0_is_remote, repo_0, repo_1, Xobldr__lnki_temp__create.Ns_file_is_case_match_all(wiki));
 	}

@@ -66,7 +66,7 @@ public class Xopg_db_mgr {
 		Xowd_page_itm tmp = new Xowd_page_itm();
 
 		// get meta
-		core_db.Tbl__page().Select_by_ttl(tmp, page_ttl);
+		core_db.Tbl__page().Select_by_ttl(tmp, page_ttl, wiki.Wrk_id());
 		int page_id = tmp.Id();
 		int ns_id = tmp.Ns_id();
 

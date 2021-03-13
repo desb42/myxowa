@@ -18,7 +18,7 @@ import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.wkrs.*;
 public class Xocheck_cmd extends Xob_cmd__base { // checks fsdb; needed for en.w and multiple monthly updates
 	public Xocheck_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		new Xocheck_mgr().Exec(wiki);
 	}
 

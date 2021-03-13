@@ -32,7 +32,7 @@ public class Xod_app {
 	}
 	public Xow_wiki Wikis__get_by_domain(String wiki_domain) {
 		Xow_wiki rv = app.Wiki_mgri().Get_by_or_make_init_y(Bry_.new_u8(wiki_domain));
-		if (rv != null && rv.Data__core_mgr() == null) rv.Init_by_wiki();
+		if (rv != null && rv.Data__core_mgr() == null) rv.Init_by_wiki(0);
 		return rv;
 	}
 	public Xod_page_itm Wiki__get_by_url(Xow_wiki wiki, Xoa_url page_url) {

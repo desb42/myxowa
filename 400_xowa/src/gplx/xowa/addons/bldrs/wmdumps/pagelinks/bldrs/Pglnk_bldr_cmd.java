@@ -24,7 +24,7 @@ public class Pglnk_bldr_cmd extends Xob_sql_dump_base implements Xosql_dump_cbk 
 	@Override public String Sql_file_name() {return Dump_type_key;} public static final String Dump_type_key = "pagelinks";
 	@Override protected Xosql_dump_parser New_parser() {return new Xosql_dump_parser(this, "pl_from", "pl_namespace", "pl_title");}
 	@Override public void Cmd_bgn_hook(Xob_bldr bldr, Xosql_dump_parser parser) {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		tempdb_mgr = new Pglnk_tempdb_mgr(usr_dlg, wiki, row_max);
 	}
 	public void On_fld_done(int fld_idx, byte[] src, int val_bgn, int val_end, boolean has_escape, boolean isstring) {

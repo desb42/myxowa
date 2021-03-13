@@ -90,13 +90,16 @@ public class Wbase_doc_mgr {
 		Wdata_doc rv = null;
 		synchronized (thread_lock) {
 			rv = doc_cache.Get_or_null(ttl_bry);
+                }
 			if (rv == null) {
 				// load from db
 				rv = Load_wdoc_or_null(ttl_bry); 
 				if (rv == null) return null;	// page not found
+		synchronized (thread_lock) {
 				Add(ttl_bry, rv);// NOTE: use ttl_bry, not rv.Qid; allows subsequent lookups to skip this redirect cycle
+                }
 			}
-		}
+		//}
 		return rv;
 	}
 	private Wdata_doc Load_wdoc_or_null(byte[] ttl_bry) { // EX:"Q2" or "Property:P1"
@@ -111,7 +114,7 @@ public class Wbase_doc_mgr {
 		long time_bgn = gplx.core.envs.System_.Ticks();
 
 		Wdata_doc rv = null;
-		synchronized (thread_lock) {	// LOCK:app-level; jdoc_parser; moved synchronized higher up; DATE:2016-09-03
+		//synchronized (thread_lock) {	// LOCK:app-level; jdoc_parser; moved synchronized higher up; DATE:2016-09-03
 			byte[] cur_ttl_bry = ttl_bry;
 			int load_count = -1;
 			while (load_count < 2) {	// limit to 2 tries (i.e.: 1 redirect)
@@ -148,7 +151,7 @@ public class Wbase_doc_mgr {
 			}
 			if (rv == null && load_count >= 2)
 				Gfo_usr_dlg_.Instance.Warn_many("", "", "too many redirects for ttl: orig=~{0} cur=~{1}", ttl_bry, cur_ttl_bry);
-		}
+		//}
 
 		wbase_db_itm.Update(gplx.core.envs.System_.Ticks__elapsed_in_frac(time_bgn));
 		return rv;
@@ -157,8 +160,8 @@ public class Wbase_doc_mgr {
 
 	public void Add(byte[] full_db, Wdata_doc page) {	// TEST:
 		synchronized (thread_lock) {	// LOCK:app-level
-			if (doc_cache.Get_or_null(full_db) == null)
-				doc_cache.Add(full_db, page);
+			//if (doc_cache.Get_or_null(full_db) == null)
+			//	doc_cache.Add(full_db, page);
 		}
 	}	
 }

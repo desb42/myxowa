@@ -26,6 +26,9 @@ class Xob_wbase_ns_parser {
 	}
 	public void Find(Xob_wbase_ns_parser_rslt rv, byte[] wiki_abrv, byte[] ttl, byte[] qid) {	// enwiki, Category:Abc
 		Xow_ns_mgr ns_mgr = (Xow_ns_mgr)ns_mgr_hash.Get_by_bry(wiki_abrv);
+                if (Bry_.Eq(qid, Bry_.new_a7("q1281"))) {
+                    int a=1;
+                }
 		rv.Init(Xow_ns_.Tid__main, 0);	// default to Main ns
 		int ttl_len = ttl.length;
 		int colon_pos = Bry_find_.Find_fwd(ttl, Byte_ascii.Colon, 0, ttl_len); if (colon_pos == Bry_find_.Not_found) return;
@@ -34,9 +37,9 @@ class Xob_wbase_ns_parser {
 			byte[] wiki_domain = Xow_abrv_wm_.Parse_to_domain_bry(wiki_abrv);
 			ns_mgr = core_db.Load_namespace(wiki_domain);
 			if (ns_mgr.Count() == 0) {
-                            Xoa_app_.Usr_dlg().Warn_many("", "", "wbase.ns_parser:no ns found; abrv=~{0} ttl=~{1}", wiki_abrv, qid);
-                            return;
-                        }
+				Xoa_app_.Usr_dlg().Warn_many("", "", "wbase.ns_parser:no ns found; abrv=~{0} ttl=~{1}", wiki_abrv, qid);
+				return;
+			}
 			ns_mgr_hash.Add_bry_obj(wiki_abrv, ns_mgr);
 		}
 		Xow_ns ns = ns_mgr.Names_get_or_null(ttl, 0, colon_pos); if (ns == null) return; // not a ns; EX: "No_namespace:Page_title"

@@ -47,7 +47,7 @@ import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr;
 public class Scrib_lib_wikibase_srl {
     private static Object lock = new Object();
 	public static Keyval[] Srl(Wbase_prop_mgr prop_mgr, Wdata_doc wdoc, boolean header_enabled, boolean legacy_style, byte[] page_url) {// REF.MW:/Wikibase/lib/includes/serializers/EntitySerializer.php!getSerialized; http://www.mediawiki.org/wiki/Extension:Wikibase_Client/Lua
-            synchronized (lock) {
+            //synchronized (lock) {
 		int base_adj = legacy_style ? 0 : 1;
 		List_adp rv = List_adp_.New();
 		if (header_enabled) {
@@ -69,7 +69,7 @@ public class Scrib_lib_wikibase_srl {
 		Srl_root(rv, Wdata_doc_parser_v2.Str_aliases		, Srl_aliases	(base_adj, wdoc.Alias_list()));
 		Srl_root(rv, Wdata_doc_parser_v2.Str_claims			, Srl_claims	(base_adj, legacy_style, prop_mgr, wdoc.Claim_list(), page_url));
 		return (Keyval[])rv.To_ary(Keyval.class);
-            }
+            //}
 	}
 	private static void Srl_root(List_adp rv, String label, Keyval[] ary) {
 		if (ary == null) return;	// don't add node if empty; EX: labels:{} should not add "labels" kv

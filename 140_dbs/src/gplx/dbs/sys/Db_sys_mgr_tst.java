@@ -25,7 +25,7 @@ public class Db_sys_mgr_tst {
 class Db_sys_mgr_fxt {
 	private final Db_sys_mgr sys_mgr;
 	public Db_sys_mgr_fxt() {
-		Db_conn conn = Db_conn_pool.Instance.Get_or_new(Db_conn_info_.mem_("test"));
+		Db_conn conn = Db_conn_pool.Instance.Get_or_new(Db_conn_info_.mem_("test"), 0);
 		sys_mgr = new Db_sys_mgr(conn);
 	}
 	public void Test__autonum_next(String key, int expd) {Tfds.Eq_int(expd, sys_mgr.Autonum_next(key));}

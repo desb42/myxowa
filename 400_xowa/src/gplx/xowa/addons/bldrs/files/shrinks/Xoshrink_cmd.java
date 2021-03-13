@@ -18,7 +18,7 @@ import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.wkrs.*;
 public class Xoshrink_cmd extends Xob_cmd__base {
 	public Xoshrink_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		new Xoshrink_mgr().Exec(wiki);
 	}
 

@@ -190,6 +190,7 @@ public class Scrib_lib_title implements Scrib_lib {
 			, Keyval_.new_("pages"		, null)	// TODO_OLD: get pages info
 			, Keyval_.new_("size"		, 0)	// TODO_OLD: get file size somehow
 			, Keyval_.new_("mimeType"	, Xof_ext_.Mime_type__ary[itm.Ext_id()])
+			, Keyval_.new_("length"		, 0)	// TODO_OLD: get file duration somehow
 			);
 		return rslt.Init_obj(rv);
 	}

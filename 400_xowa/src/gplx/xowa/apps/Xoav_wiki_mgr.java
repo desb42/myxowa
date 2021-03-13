@@ -25,7 +25,7 @@ public class Xoav_wiki_mgr implements Xoa_wiki_mgr {
 	public Xow_wiki		Get_by_or_null(byte[] key)			{return (Xow_wiki)hash.Get_by(key);}
 	public Xow_wiki		Get_by_or_make_init_y(byte[] key) {
 		Xow_wiki rv = this.Get_by_or_null(key);
-		rv.Init_by_wiki();
+		rv.Init_by_wiki(0);
 		return rv;
 	}
 	public Xow_wiki		Get_by_or_make_init_n(byte[] key) {return Get_by_or_make_init_y(key);}

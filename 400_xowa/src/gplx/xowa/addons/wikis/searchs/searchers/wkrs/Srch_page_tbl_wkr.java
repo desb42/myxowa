@@ -27,7 +27,7 @@ public class Srch_page_tbl_wkr {
 		Xoa_ttl ttl = ctx.Wiki.Ttl_parse(search_raw); if (ttl == null) return;
 		Xowd_page_tbl page_tbl = ctx.Tbl__page;
 		if (ctx.Cxl.Canceled()) return;
-		if (page_tbl.Select_by_ttl(tmp_page_row, ttl.Ns(), ttl.Page_db())) {
+		if (page_tbl.Select_by_ttl(tmp_page_row, ttl.Ns(), ttl.Page_db(), ctx.Wiki.Wrk_id())) {
 			if (ctx.Cxl.Canceled()) return;
 			Srch_rslt_row row = Srch_rslt_row.New(ctx.Wiki_domain, ttl, tmp_page_row.Id(), tmp_page_row.Text_len(), ctx.Addon.Db_mgr().Cfg().Link_score_max() * 3, tmp_page_row.Redirect_id());
 			if (Srch_rslt_list_.Add_if_new(ctx, ctx.Rslts_list, row)) {

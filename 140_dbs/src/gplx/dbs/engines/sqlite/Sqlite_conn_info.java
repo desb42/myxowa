@@ -26,7 +26,7 @@ public class Sqlite_conn_info extends Db_conn_info__base {
 	}
 
 	public static final Sqlite_conn_info Instance = new Sqlite_conn_info("", "", "", Io_url_.Empty);
-	public static Db_conn_info load_(Io_url url) {
+	public static Db_conn_info load_(Io_url url, int wrk_id) {
 		return Db_conn_info_.parse(Bld_raw
 		( "gplx_key"		, Key_const
 		, Cs__data_source	, url.Xto_api()

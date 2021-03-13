@@ -25,7 +25,7 @@ class Xows_cmd__sql_dump {
 		byte[] wiki_bry = arg_hash.Get_val_bry_or(Arg_wiki, null);
 		if (wiki_bry == null) {
 			byte[] db_file_bry = arg_hash.Get_val_bry_or(Arg_db_file, null); if (db_file_bry == null) {Xoa_app_.Usr_dlg().Warn_many("", "", "special.cmd; no db_type: url=~{0}", url.Raw()); return;}
-			conn = Db_conn_bldr.Instance.Get(Io_url_.new_fil_(String_.new_u8(db_file_bry)));
+			conn = Db_conn_bldr.Instance.Get(Io_url_.new_fil_(String_.new_u8(db_file_bry)), 0);
 		}
 		else {
 			byte[] db_type_bry = arg_hash.Get_val_bry_or(Arg_db_type, null); if (db_type_bry == null) {Xoa_app_.Usr_dlg().Warn_many("", "", "special.cmd; no db_type: url=~{0}", url.Raw()); return;}

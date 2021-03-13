@@ -26,7 +26,7 @@ class Reindex_html_dbs_cmd {
 	private final    String Idx_name = "page__repack";
 	public void Exec(Xowe_wiki wiki, long trg_db_size_max) {
 		// init
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		Xow_db_mgr db_mgr = wiki.Data__core_mgr();
 		this.page_tbl = db_mgr.Tbl__page();
 		this.core_conn = page_tbl.Conn();

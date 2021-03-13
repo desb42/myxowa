@@ -20,7 +20,7 @@ public class Db_conn_info_ {
 	public static final    Db_conn_info Null			= Noop_conn_info.Instance;
 	public static final    Db_conn_info Test			= Mysql_conn_info.new_("127.0.0.1", "unit_tests", "root", "mysql7760");
 	public static Db_conn_info parse(String raw)		{return Db_conn_info_pool.Instance.Parse(raw);}
-	public static Db_conn_info sqlite_(Io_url url)		{return Sqlite_conn_info.load_(url);}
+	public static Db_conn_info sqlite_(Io_url url, int wrk_id)		{return Sqlite_conn_info.load_(url, wrk_id);}
 	public static Db_conn_info tdb_(Io_url url)			{return Tdb_conn_info.new_(url);}
 	public static Db_conn_info mem_(String db)			{return Mem_conn_info.new_(db);}
 	public static final    String Key_tdb = Tdb_conn_info.Tid_const;

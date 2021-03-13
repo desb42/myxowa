@@ -18,7 +18,7 @@ import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.wkrs.*;
 public class Xocksum_calc_cmd extends Xob_cmd__base {
 	public Xocksum_calc_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		new Xocksum_calc_mgr().Exec(wiki);
 	}
 

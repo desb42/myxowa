@@ -19,6 +19,7 @@ import gplx.langs.jsons.*;
 public class Db_JDecode {
 	private byte[] src;
 	private int src_len;
+	private int ver;
 	private int pos;
 	private int maxindent;
 	private Result r;
@@ -29,6 +30,11 @@ public class Db_JDecode {
 		this.src = src;
 		this.src_len = src.length;
 		this.pos = 0;
+		ver = 0;
+		byte b = src[0];
+		if (b == (byte)0xd2) ver = 2;
+		else if (b == (byte)0xd2) ver = 1;
+                if (ver > 0) pos = 1;
 		this.maxindent = 0;
 		this.r = new Result();
 		//this.t = new Txt();
@@ -105,9 +111,11 @@ public class Db_JDecode {
 		switch(res.code) {
 			case KV:
 				Json_itm key = decode_nde(indent+1);
-				res = getcode();
-				if (res.code != VAL)
-					throw Err_.new_("json", "not VAL");
+				if (ver < 2) {
+					res = getcode();
+					if (res.code != VAL)
+						throw Err_.new_("json", "not VAL");
+				}
 				Json_itm val = decode_nde(indent+1);
 				return new Json_kv(key, val);
 			case NULL:

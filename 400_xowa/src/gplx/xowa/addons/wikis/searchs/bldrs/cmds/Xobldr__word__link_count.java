@@ -21,7 +21,7 @@ public class Xobldr__word__link_count extends Xob_cmd__base implements Xob_cmd {
 	private int score_multiplier = Srch_search_addon.Score_max;
 	public Xobldr__word__link_count(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 
 		Srch_db_mgr search_db_mgr = Srch_search_addon.Get(wiki).Db_mgr();
 		Srch_word_tbl word_tbl = search_db_mgr.Tbl__word();

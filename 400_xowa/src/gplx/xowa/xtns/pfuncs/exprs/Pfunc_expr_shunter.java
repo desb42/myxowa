@@ -18,7 +18,7 @@ import gplx.core.btries.*; import gplx.core.brys.fmtrs.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*;
 import gplx.xowa.parsers.*;
 public class Pfunc_expr_shunter {
-	private final    Btrie_fast_mgr trie = expression_(); private final    Btrie_rv trv = new Btrie_rv();
+	private static final    Btrie_fast_mgr trie = expression_(); private final    Btrie_rv trv = new Btrie_rv();
 	private final    Val_stack val_stack = new Val_stack();
 	private final    Func_tkn_stack prc_stack = new Func_tkn_stack();
 	private final    Bry_fmtr tmp_fmtr = Bry_fmtr.New__tmp();

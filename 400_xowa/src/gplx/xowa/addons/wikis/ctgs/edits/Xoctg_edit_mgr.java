@@ -58,7 +58,7 @@ public class Xoctg_edit_mgr {
 		// loop over each category listed on page
 		for (Xoa_ttl ctg_ttl : ctg_ttls) {
 			// get page_tbl data for sub_cat
-			boolean exists = page_tbl.Select_by_ttl(tmp_page, ctg_ttl);
+			boolean exists = page_tbl.Select_by_ttl(tmp_page, ctg_ttl, 0);
 			int ctg_id = tmp_page.Id();
 
 			// create category if it doesn't exist

@@ -120,7 +120,7 @@ class Xofc_fil_mgr {
 		byte mode_id = itm.Is_orig() ? Xof_img_mode_.Tid__orig : Xof_img_mode_.Tid__thumb;
 		byte[] wiki_domain = dir_mgr.Get_by_id(itm.Dir_id()).Name();
 		Xowe_wiki wiki = wiki_mgr.Get_by_or_make(wiki_domain);
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		Xof_repo_itm trg_repo = repo_mgr.Get_by_primary(wiki_domain);
 		byte[] ttl = itm.Name();			
 		byte[] md5 = Xof_file_wkr_.Md5(ttl);

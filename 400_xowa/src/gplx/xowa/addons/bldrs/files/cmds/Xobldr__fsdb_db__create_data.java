@@ -41,7 +41,7 @@ public class Xobldr__fsdb_db__create_data extends Xob_cmd__base implements Xob_c
 		}
 	}
 	@Override public void Cmd_bgn(Xob_bldr bldr) {			
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		this.poll_interval = poll_mgr.Poll_interval();
 		this.bin_db_mgr = new Xob_bin_db_mgr(ns_ids);
 		// src_bin_mgr

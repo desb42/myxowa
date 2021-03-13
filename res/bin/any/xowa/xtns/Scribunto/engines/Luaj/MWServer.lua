@@ -78,7 +78,7 @@ function MWServer:handleCall( message )
 			value = 'function id ' .. message.id .. ' does not exist'
 		}
 	end
---  print(message.id .. '|' .. message.nargs);
+-- print(message.id .. '|' .. message.nargs);
 --  print(self.chunks[message.id]);
 --  print(message.args[1]);
 	local n, result = self:listToCountAndTable( xpcall(

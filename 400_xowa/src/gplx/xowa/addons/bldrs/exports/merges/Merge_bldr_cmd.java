@@ -21,7 +21,7 @@ public class Merge_bldr_cmd extends Xob_cmd__base {
 	public Merge_bldr_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
 		Io_mgr.Instance.DeleteDirDeep(wiki.Fsys_mgr().Root_dir());
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 	
 		Merge2_mgr merge_mgr = new Merge2_mgr();
 		Io_url[] urls = Io_mgr.Instance.QueryDir_fils(Io_url_.new_fil_("C:\\xowa\\wiki\\simple.wikipedia.org\\tmp\\split\\"));

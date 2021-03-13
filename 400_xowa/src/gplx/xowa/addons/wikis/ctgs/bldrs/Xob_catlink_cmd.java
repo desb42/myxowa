@@ -25,7 +25,7 @@ public class Xob_catlink_cmd extends Xob_sql_dump_base implements Xosql_dump_cbk
 	@Override protected Xosql_dump_parser New_parser() {return new Xosql_dump_parser(this, "cl_from", "cl_to", "cl_sortkey", "cl_timestamp", "cl_sortkey_prefix", "cl_collation", "cl_type");}
 
 	@Override public void Cmd_bgn_hook(Xob_bldr bldr, Xosql_dump_parser parser) {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		mgr.On_cmd_bgn(wiki);
 	}
 	@Override public void Cmd_end() {

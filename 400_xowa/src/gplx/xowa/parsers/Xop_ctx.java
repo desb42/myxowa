@@ -31,6 +31,7 @@ public class Xop_ctx {
 		for (Xop_ctx_wkr wkr : wkrs)
 			wkr.Ctor_ctx(this);
 		this.xnde_tag_regy = wiki.Mw_parser_mgr().Xnde_tag_regy();
+                this.tmp_mgr = new Xop_tmp_mgr(wiki);
 	}
 	// public boolean Scribunto; // CHART
 	public Xowe_wiki			Wiki()				{return wiki;} private final    Xowe_wiki wiki;
@@ -51,7 +52,7 @@ public class Xop_ctx {
 	public Xot_invk_wkr			Invk()				{return invk;}	private final    Xot_invk_wkr invk = new Xot_invk_wkr();
 	public Xop_curly_wkr		Curly() 			{return curly;} private final    Xop_curly_wkr curly = new Xop_curly_wkr();
 	public Xop_xnde_tag_regy	Xnde_tag_regy()		{return xnde_tag_regy;} private final    Xop_xnde_tag_regy xnde_tag_regy;	// PERF:demeter
-	public Xop_tmp_mgr			Tmp_mgr()			{return tmp_mgr;} private final    Xop_tmp_mgr tmp_mgr = new Xop_tmp_mgr();
+	public Xop_tmp_mgr			Tmp_mgr()			{return tmp_mgr;} private final    Xop_tmp_mgr tmp_mgr;
 	public Xop_ctx_page_data    Page_data()         {return page_data;} private final    Xop_ctx_page_data page_data = new Xop_ctx_page_data();
 
 	public byte					Xnde_names_tid()	{return xnde_names_tid;} public Xop_ctx Xnde_names_tid_(byte v) {xnde_names_tid = v; return this;} private byte xnde_names_tid = Xop_parser_tid_.Tid__null;

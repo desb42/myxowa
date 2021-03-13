@@ -70,7 +70,7 @@ class Dumpdiff_mgr {
 				throw Err_.new_("", "prv_dir not specified");
 		}
 		if (rv == null)
-			rv = gplx.xowa.addons.bldrs.mass_parses.parses.Xow_wiki_utl_.Clone_wiki(dflt_wiki, wiki_dir);
+			rv = gplx.xowa.addons.bldrs.mass_parses.parses.Xow_wiki_utl_.Clone_wiki(dflt_wiki, wiki_dir, 0);
 		return rv;
 	}
 }

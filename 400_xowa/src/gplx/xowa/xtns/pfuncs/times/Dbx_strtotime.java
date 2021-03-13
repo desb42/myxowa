@@ -312,7 +312,7 @@ public class Dbx_strtotime {
 //		int tz_not_found;
 //		DEBUG_OUTPUT("tzcorrection | tz");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     if (Dbx_scan_support.TIMELIB_HAVE_TZ(s)) {
                         return Dbx_scan_support.TIMELIB_ERROR;
                     }
@@ -513,9 +513,9 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("datenoyearrev");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
                     Dbx_scan_support.timelib_skip_day_suffix(s);
                     s.time.m = Dbx_scan_support.timelib_get_month(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
@@ -610,7 +610,7 @@ public class Dbx_strtotime {
                     break;
                 case 106:
                     s.yyaccept = 4;
-                    s.ptr = ++s.cursor;
+                    s.mark = ++s.cursor;
                     if ((s.lim - s.cursor) < 7) {
                         return EOI;
                     }
@@ -621,7 +621,7 @@ public class Dbx_strtotime {
                     int i;
 
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
                     Dbx_scan_support.TIMELIB_UNHAVE_DATE(s);
                     Dbx_scan_support.TIMELIB_UNHAVE_TIME(s);
@@ -965,19 +965,19 @@ public class Dbx_strtotime {
 //		int tz_not_found;
 //		DEBUG_OUTPUT("timeshort24 | timelong24 | iso8601long");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_TIME(s);
-                    s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    if (s.src[s.ptr] == ':' || s.src[s.ptr] == '.') {
-                        s.time.s = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.i = Dbx_scan_support.timelib_get_nr(s, 2);
+                    if (s.str[s.str_ptr] == ':' || s.str[s.str_ptr] == '.') {
+                        s.time.s = Dbx_scan_support.timelib_get_nr(s, 2);
 
-                        if (s.src[s.ptr] == '.') {
+                        if (s.str[s.str_ptr] == '.') {
                             s.time.us = Dbx_scan_support.timelib_get_frac_nr(s, 8);
                         }
                     }
 
-                    if (s.ptr < s.src_len) {
+                    if (s.str_ptr < s.str_len) {
                         s.time.z = Dbx_scan_support.timelib_parse_zone(s);
                         if (s.tz_not_found != 0) {
                             Dbx_scan_support.add_error(s, Dbx_scan_support.TIMELIB_ERR_TZID_NOT_FOUND, "The timezone could not be found in the database");
@@ -1005,11 +1005,11 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("americanshort | american");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
-                    s.time.m = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    if (s.src[s.ptr] == '/') {
+                    s.time.m = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
+                    if (s.str[s.str_ptr] == '/') {
                         s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
                         Dbx_scan_support.TIMELIB_PROCESS_YEAR(s);
                     }
@@ -1102,9 +1102,9 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("datefull");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
                     Dbx_scan_support.timelib_skip_day_suffix(s);
                     s.time.m = Dbx_scan_support.timelib_get_month(s);
                     s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
@@ -1143,10 +1143,10 @@ public class Dbx_strtotime {
                     int i;
 //		DEBUG_OUTPUT("relative");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
 
-                    while (s.ptr < s.cursor) {
+                    while (s.str_ptr < s.str_len) {
                         i = Dbx_scan_support.timelib_get_unsigned_nr(s, 24);
                         Dbx_scan_support.timelib_eat_spaces(s);
                         Dbx_scan_support.timelib_set_relative(s, i, 1);
@@ -1241,7 +1241,7 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("ago");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     s.time.relative.y = 0 - s.time.relative.y;
                     s.time.relative.m = 0 - s.time.relative.m;
                     s.time.relative.d = 0 - s.time.relative.d;
@@ -1267,7 +1267,7 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("monthtext");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.m = Dbx_scan_support.timelib_lookup_month(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
@@ -1341,7 +1341,7 @@ public class Dbx_strtotime {
 //		const Dbx_scan_support.timelib_relunit* relunit;
 //		DEBUG_OUTPUT("daytext");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
                     Dbx_scan_support.TIMELIB_HAVE_WEEKDAY_RELATIVE(s);
                     Dbx_scan_support.TIMELIB_UNHAVE_TIME(s);
@@ -1388,10 +1388,10 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("datetextual | datenoyear");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.m = Dbx_scan_support.timelib_get_month(s);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
                     s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
                     Dbx_scan_support.TIMELIB_PROCESS_YEAR(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
@@ -1401,7 +1401,7 @@ public class Dbx_strtotime {
 
                 case 311:
                     s.yyaccept = 11;
-                    s.ptr = ++s.cursor;
+                    s.mark = ++s.cursor;
                     if ((s.lim - s.cursor) < 18) {
                         return EOI;
                     }
@@ -1483,7 +1483,7 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("now");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
 
 //		Dbx_scan_support.TIMELIB_DEINIT;
                     return Dbx_scan_support.TIMELIB_RELATIVE;
@@ -1686,15 +1686,15 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("gnunocolon");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     switch (s.time.have_time) {
                         case 0:
-                            s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                            s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                            s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
+                            s.time.i = Dbx_scan_support.timelib_get_nr(s, 2);
                             s.time.s = 0;
                             break;
                         case 1:
-                            s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
+                            s.time.y = Dbx_scan_support.timelib_get_nr(s, 4);
                             break;
                         default:
 //				Dbx_scan_support.TIMELIB_DEINIT;
@@ -1714,8 +1714,8 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("year4");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
-                    s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
+                    s.scanner_string();
+                    s.time.y = Dbx_scan_support.timelib_get_nr(s, 4);
 //		Dbx_scan_support.TIMELIB_DEINIT;
                     return Dbx_scan_support.TIMELIB_CLF;
                 }
@@ -1823,13 +1823,13 @@ public class Dbx_strtotime {
                      {
 //		DEBUG_OUTPUT("timetiny12 | timeshort12 | timelong12");
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_TIME(s);
-                        s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                        if (s.src[s.ptr] == ':' || s.src[s.ptr] == '.') {
-                            s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                            if (s.src[s.ptr] == ':' || s.src[s.ptr] == '.') {
-                                s.time.s = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                        s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
+                        if (s.str[s.str_ptr] == ':' || s.str[s.str_ptr] == '.') {
+                            s.time.i = Dbx_scan_support.timelib_get_nr(s, 2);
+                            if (s.str[s.str_ptr] == ':' || s.str[s.str_ptr] == '.') {
+                                s.time.s = Dbx_scan_support.timelib_get_nr(s, 2);
                             }
                         }
                         s.time.h += Dbx_scan_support.timelib_meridian(s, s.time.h);
@@ -1891,7 +1891,7 @@ public class Dbx_strtotime {
                     break;
                 case 455:
                     s.yyaccept = 2;
-                    s.ptr = ++s.cursor;
+                    s.mark = ++s.cursor;
                     if (s.lim <= s.cursor) {
                         return EOI;
                     }
@@ -2004,7 +2004,7 @@ public class Dbx_strtotime {
                     break;
                 case 492:
                     s.yyaccept = 11;
-                    s.ptr = ++s.cursor;
+                    s.mark = ++s.cursor;
                     s.yych = s.src[s.cursor];
                     if (s.yych <= 0x00) {
                         if (s.yych <= 0x00) {
@@ -2055,7 +2055,7 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("noon");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_UNHAVE_TIME(s);
                     Dbx_scan_support.TIMELIB_HAVE_TIME(s);
                     s.time.h = 12;
@@ -2187,11 +2187,11 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("gnudateshort");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
-                    s.time.m = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.m = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
                     Dbx_scan_support.TIMELIB_PROCESS_YEAR(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
                     return Dbx_scan_support.TIMELIB_ISO_DATE;
@@ -2300,7 +2300,7 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("datenodayrev");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
                     s.time.m = Dbx_scan_support.timelib_get_month(s);
@@ -2603,7 +2603,7 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("datenoday");
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                         s.time.m = Dbx_scan_support.timelib_get_month(s);
                         s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
@@ -2688,7 +2688,7 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("midnight | today");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_UNHAVE_TIME(s);
 
 //		Dbx_scan_support.TIMELIB_DEINIT;
@@ -2743,10 +2743,10 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("pointed date YY");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.m = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.m = Dbx_scan_support.timelib_get_nr(s, 2);
                     s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 2);
                     Dbx_scan_support.TIMELIB_PROCESS_YEAR(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
@@ -2799,10 +2799,10 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("gnudateshorter");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
-                    s.time.m = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.m = Dbx_scan_support.timelib_get_nr(s, 2);
                     s.time.d = 1;
                     Dbx_scan_support.TIMELIB_PROCESS_YEAR(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
@@ -2881,13 +2881,13 @@ public class Dbx_strtotime {
 //		int tz_not_found;
 //		DEBUG_OUTPUT("iso8601nocolon");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_TIME(s);
-                    s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.s = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.i = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.s = Dbx_scan_support.timelib_get_nr(s, 2);
 
-                    if (s.ptr < s.src_len) {
+                    if (s.str_ptr < s.str_len) {
                         s.time.z = Dbx_scan_support.timelib_parse_zone(s);
                         if (s.tz_not_found != 0) {
                             Dbx_scan_support.add_error(s, Dbx_scan_support.TIMELIB_ERR_TZID_NOT_FOUND, "The timezone could not be found in the database");
@@ -3109,23 +3109,23 @@ public class Dbx_strtotime {
 //		int tz_not_found;
 //		DEBUG_OUTPUT("dateshortwithtimeshort | dateshortwithtimelong | dateshortwithtimelongtz");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.m = Dbx_scan_support.timelib_get_month(s);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
 
                     Dbx_scan_support.TIMELIB_HAVE_TIME(s);
-                    s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    if (s.src[s.ptr] == ':') {
-                        s.time.s = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.i = Dbx_scan_support.timelib_get_nr(s, 2);
+                    if (s.str[s.str_ptr] == ':') {
+                        s.time.s = Dbx_scan_support.timelib_get_nr(s, 2);
 
-                        if (s.src[s.ptr] == '.') {
+                        if (s.str[s.str_ptr] == '.') {
                             s.time.us = Dbx_scan_support.timelib_get_frac_nr(s, 8);
                         }
                     }
 
-                    if (s.ptr < s.src_len) {
+                    if (s.str_ptr < s.str_len) {
                         s.time.z = Dbx_scan_support.timelib_parse_zone(s);
                         if (s.tz_not_found != 0) {
                             Dbx_scan_support.add_error(s, Dbx_scan_support.TIMELIB_ERR_TZID_NOT_FOUND, "The timezone could not be found in the database");
@@ -3357,10 +3357,10 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("pgydotd");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 3);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 3);
                     s.time.m = 1;
                     Dbx_scan_support.TIMELIB_PROCESS_YEAR(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
@@ -3415,12 +3415,12 @@ public class Dbx_strtotime {
                     int w, d;
 //		DEBUG_OUTPUT("isoweek");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
 
-                    s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
-                    w = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.y = Dbx_scan_support.timelib_get_nr(s, 4);
+                    w = Dbx_scan_support.timelib_get_nr(s, 2);
                     d = 1;
                     s.time.m = 1;
                     s.time.d = 1;
@@ -3542,10 +3542,10 @@ public class Dbx_strtotime {
 //		int         behavior = 0;
 //		DEBUG_OUTPUT("relativetext");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
 
-                    while (s.ptr < s.cursor) {
+                    while (s.str_ptr < s.str_len) {
                         i = Dbx_scan_support.timelib_get_relative_text(s);
                         Dbx_scan_support.timelib_eat_spaces(s);
                         Dbx_scan_support.timelib_set_relative(s, i, s.behavior);
@@ -3661,11 +3661,11 @@ public class Dbx_strtotime {
                      {
 //		DEBUG_OUTPUT("pointed date YYYY");
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_DATE(s);
-                        s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                        s.time.m = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                        s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
+                        s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
+                        s.time.m = Dbx_scan_support.timelib_get_nr(s, 2);
+                        s.time.y = Dbx_scan_support.timelib_get_nr(s, 4);
 //		Dbx_scan_support.TIMELIB_DEINIT;
                         return Dbx_scan_support.TIMELIB_DATE_FULL_POINTED;
                     }
@@ -3687,11 +3687,11 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("iso8601date2");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
-                    s.time.m = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.m = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
                     Dbx_scan_support.TIMELIB_PROCESS_YEAR(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
                     return Dbx_scan_support.TIMELIB_ISO_DATE;
@@ -3755,11 +3755,11 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("iso8601date4 | iso8601date2 | iso8601dateslash | dateslash");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.y = Dbx_scan_support.timelib_get_unsigned_nr(s, 4);
-                    s.time.m = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.m = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
 //		Dbx_scan_support.TIMELIB_DEINIT;
                     return Dbx_scan_support.TIMELIB_ISO_DATE;
                 }
@@ -3781,11 +3781,11 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("datenocolon");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
-                    s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
-                    s.time.m = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.y = Dbx_scan_support.timelib_get_nr(s, 4);
+                    s.time.m = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
 //		Dbx_scan_support.TIMELIB_DEINIT;
                     return Dbx_scan_support.TIMELIB_DATE_NOCOLON;
                 }
@@ -3825,13 +3825,13 @@ public class Dbx_strtotime {
                         int w, d;
 //		DEBUG_OUTPUT("isoweekday");
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                         Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
 
-                        s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
-                        w = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                        d = Dbx_scan_support.timelib_get_nr_ex(s, 1);
+                        s.time.y = Dbx_scan_support.timelib_get_nr(s, 4);
+                        w = Dbx_scan_support.timelib_get_nr(s, 2);
+                        d = Dbx_scan_support.timelib_get_nr(s, 1);
                         s.time.m = 1;
                         s.time.d = 1;
                         s.time.relative.d = Dbx_scan_support.timelib_daynr_from_weeknr(s.time.y, w, d);
@@ -3873,10 +3873,10 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("pgtextshort");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                     s.time.m = Dbx_scan_support.timelib_get_month(s);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
                     s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
                     Dbx_scan_support.TIMELIB_PROCESS_YEAR(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
@@ -3986,7 +3986,7 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("tomorrow");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
                     Dbx_scan_support.TIMELIB_UNHAVE_TIME(s);
 
@@ -4073,7 +4073,7 @@ public class Dbx_strtotime {
                     break;
                 case 1075:
                     s.yyaccept = 5;
-                    s.ptr = ++s.cursor;
+                    s.mark = ++s.cursor;
                     if ((s.lim - s.cursor) < 5) {
                         return EOI;
                     }
@@ -4093,11 +4093,11 @@ public class Dbx_strtotime {
 //		int length = 0;
 //		DEBUG_OUTPUT("pgtextreverse");
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                         s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
                         s.time.m = Dbx_scan_support.timelib_get_month(s);
-                        s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                        s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
                         Dbx_scan_support.TIMELIB_PROCESS_YEAR(s);
 //		Dbx_scan_support.TIMELIB_DEINIT;
                         return Dbx_scan_support.TIMELIB_PG_TEXT;
@@ -4111,7 +4111,7 @@ public class Dbx_strtotime {
                         int i, us;
 
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
                         Dbx_scan_support.TIMELIB_UNHAVE_DATE(s);
                         Dbx_scan_support.TIMELIB_UNHAVE_TIME(s);
@@ -4148,18 +4148,18 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("backof | frontof");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_UNHAVE_TIME(s);
                     Dbx_scan_support.TIMELIB_HAVE_TIME(s);
 
-                    if (s.src[s.ptr] == 'b') {
-                        s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    if (s.str[s.str_ptr] == 'b') {
+                        s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
                         s.time.i = 15;
                     } else {
-                        s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2) - 1;
+                        s.time.h = Dbx_scan_support.timelib_get_nr(s, 2) - 1;
                         s.time.i = 45;
                     }
-                    if (s.ptr < s.src_len) {
+                    if (s.str_ptr < s.str_len) {
                         Dbx_scan_support.timelib_eat_spaces(s);
                         s.time.h += Dbx_scan_support.timelib_meridian(s, s.time.h);
                     }
@@ -4244,10 +4244,10 @@ public class Dbx_strtotime {
 //		int         behavior = 0;
 //		DEBUG_OUTPUT("relativetextweek");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
 
-                    while (s.ptr < s.cursor) {
+                    while (s.str_ptr < s.str_len) {
                         i = Dbx_scan_support.timelib_get_relative_text(s);
                         Dbx_scan_support.timelib_eat_spaces(s);
                         Dbx_scan_support.timelib_set_relative(s, i, s.behavior);
@@ -4273,7 +4273,7 @@ public class Dbx_strtotime {
                 {
 //		DEBUG_OUTPUT("yesterday");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
                     Dbx_scan_support.TIMELIB_UNHAVE_TIME(s);
 
@@ -4411,18 +4411,18 @@ public class Dbx_strtotime {
                      {
 //		DEBUG_OUTPUT("dateshortwithtimeshort12 | dateshortwithtimelong12");
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_DATE(s);
                         s.time.m = Dbx_scan_support.timelib_get_month(s);
-                        s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                        s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
 
                         Dbx_scan_support.TIMELIB_HAVE_TIME(s);
-                        s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                        s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                        if (s.src[s.ptr] == ':' || s.src[s.ptr] == '.') {
-                            s.time.s = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                        s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
+                        s.time.i = Dbx_scan_support.timelib_get_nr(s, 2);
+                        if (s.str[s.str_ptr] == ':' || s.str[s.str_ptr] == '.') {
+                            s.time.s = Dbx_scan_support.timelib_get_nr(s, 2);
 
-                            if (s.src[s.ptr] == '.') {
+                            if (s.str[s.str_ptr] == '.') {
                                 s.time.us = Dbx_scan_support.timelib_get_frac_nr(s, 8);
                             }
                         }
@@ -4536,7 +4536,7 @@ public class Dbx_strtotime {
 //		int         behavior = 0;
 //		DEBUG_OUTPUT("weekdayof");
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
                         Dbx_scan_support.TIMELIB_HAVE_SPECIAL_RELATIVE(s);
 
@@ -4566,10 +4566,10 @@ public class Dbx_strtotime {
                      {
 //		DEBUG_OUTPUT("firstdayof | lastdayof");
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_RELATIVE(s);
 
-                        if (s.src[s.ptr] == 'l' || s.src[s.ptr] == 'L') {
+                        if (s.str[s.str_ptr] == 'l' || s.str[s.str_ptr] == 'L') {
                             s.time.relative.first_last_day_of = Dbx_scan_support.TIMELIB_SPECIAL_LAST_DAY_OF_MONTH;
                         } else {
                             s.time.relative.first_last_day_of = Dbx_scan_support.TIMELIB_SPECIAL_FIRST_DAY_OF_MONTH;
@@ -4619,14 +4619,14 @@ public class Dbx_strtotime {
                      {
 //		DEBUG_OUTPUT("mssqltime");
                         s.cur = s.cursor;
-                        s.ptr = s.tok;
+                        s.scanner_string();
                         Dbx_scan_support.TIMELIB_HAVE_TIME(s);
-                        s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                        s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                        if (s.src[s.ptr] == ':' || s.src[s.ptr] == '.') {
-                            s.time.s = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                        s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
+                        s.time.i = Dbx_scan_support.timelib_get_nr(s, 2);
+                        if (s.str[s.str_ptr] == ':' || s.str[s.str_ptr] == '.') {
+                            s.time.s = Dbx_scan_support.timelib_get_nr(s, 2);
 
-                            if (s.src[s.ptr] == ':' || s.src[s.ptr] == '.') {
+                            if (s.str[s.str_ptr] == ':' || s.str[s.str_ptr] == '.') {
                                 s.time.us = Dbx_scan_support.timelib_get_frac_nr(s, 8);
                             }
                         }
@@ -4705,7 +4705,7 @@ public class Dbx_strtotime {
                     break;
                 case 1221:
                     s.yyaccept = 21;
-                    s.ptr = ++s.cursor;
+                    s.mark = ++s.cursor;
                     if (s.lim <= s.cursor) {
                         return EOI;
                     }
@@ -4731,18 +4731,18 @@ public class Dbx_strtotime {
 //		int tz_not_found;
 //		DEBUG_OUTPUT("xmlrpc | xmlrpcnocolon | soap | wddx | exif");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_TIME(s);
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
-                    s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
-                    s.time.m = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.s = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    if (s.src[s.ptr] == '.') {
+                    s.time.y = Dbx_scan_support.timelib_get_nr(s, 4);
+                    s.time.m = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.i = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.s = Dbx_scan_support.timelib_get_nr(s, 2);
+                    if (s.str[s.str_ptr] == '.') {
                         s.time.us = Dbx_scan_support.timelib_get_frac_nr(s, 9);
-                        if (s.ptr < s.cursor) {
+                        if (s.str_ptr < s.str_len) {
                             s.time.z = Dbx_scan_support.timelib_parse_zone(s);
                             if (s.tz_not_found != 0) {
                                 Dbx_scan_support.add_error(s, Dbx_scan_support.TIMELIB_ERR_TZID_NOT_FOUND, "The timezone could not be found in the database");
@@ -4838,7 +4838,7 @@ public class Dbx_strtotime {
                     break;
                 case 1255:
                     s.yyaccept = 33;
-                    s.ptr = ++s.cursor;
+                    s.mark = ++s.cursor;
                     if ((s.lim - s.cursor) < 9) {
                         return EOI;
                     }
@@ -4852,15 +4852,15 @@ public class Dbx_strtotime {
 //		int tz_not_found;
 //		DEBUG_OUTPUT("clf");
                     s.cur = s.cursor;
-                    s.ptr = s.tok;
+                    s.scanner_string();
                     Dbx_scan_support.TIMELIB_HAVE_TIME(s);
                     Dbx_scan_support.TIMELIB_HAVE_DATE(s);
-                    s.time.d = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.d = Dbx_scan_support.timelib_get_nr(s, 2);
                     s.time.m = Dbx_scan_support.timelib_get_month(s);
-                    s.time.y = Dbx_scan_support.timelib_get_nr_ex(s, 4);
-                    s.time.h = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.i = Dbx_scan_support.timelib_get_nr_ex(s, 2);
-                    s.time.s = Dbx_scan_support.timelib_get_nr_ex(s, 2);
+                    s.time.y = Dbx_scan_support.timelib_get_nr(s, 4);
+                    s.time.h = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.i = Dbx_scan_support.timelib_get_nr(s, 2);
+                    s.time.s = Dbx_scan_support.timelib_get_nr(s, 2);
                     s.time.z = Dbx_scan_support.timelib_parse_zone(s);
                     if (s.tz_not_found != 0) {
                         Dbx_scan_support.add_error(s, Dbx_scan_support.TIMELIB_ERR_TZID_NOT_FOUND, "The timezone could not be found in the database");
@@ -4935,7 +4935,7 @@ public class Dbx_strtotime {
 
     private static void case6(Dbx_scanner s) {
         s.yyaccept = 0;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -5025,7 +5025,7 @@ public class Dbx_strtotime {
 
     private static void case9(Dbx_scanner s) {
         s.yyaccept = 1;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -5060,7 +5060,7 @@ public class Dbx_strtotime {
 
     private static void case11(Dbx_scanner s) {
         s.yyaccept = 1;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -5142,7 +5142,7 @@ public class Dbx_strtotime {
 
     private static void case12(Dbx_scanner s) {
         s.yyaccept = 1;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -5226,7 +5226,7 @@ public class Dbx_strtotime {
 
     private static void case13(Dbx_scanner s) {
         s.yyaccept = 1;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -5310,7 +5310,7 @@ public class Dbx_strtotime {
 
     private static void case14(Dbx_scanner s) {
         s.yyaccept = 1;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -5394,7 +5394,7 @@ public class Dbx_strtotime {
 
     private static void case15(Dbx_scanner s) {
         s.yyaccept = 1;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -5476,7 +5476,7 @@ public class Dbx_strtotime {
 
     private static void case16(Dbx_scanner s) {
         s.yyaccept = 1;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -6031,7 +6031,7 @@ public class Dbx_strtotime {
 
     private static void case25(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -6665,7 +6665,7 @@ public class Dbx_strtotime {
 
     private static void case33(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -6772,7 +6772,7 @@ public class Dbx_strtotime {
 
     private static void case34(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -6934,7 +6934,7 @@ public class Dbx_strtotime {
 
     private static void case36(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -8019,7 +8019,7 @@ public class Dbx_strtotime {
 
     private static void case51(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -8276,7 +8276,7 @@ public class Dbx_strtotime {
     }
 
     private static void case56(Dbx_scanner s) {
-        s.cursor = s.ptr;
+        s.cursor = s.mark;
         switch (s.yyaccept) {
             case 0:
                 s.state = 7;
@@ -8478,7 +8478,7 @@ public class Dbx_strtotime {
 
     private static void case61(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -8527,7 +8527,7 @@ public class Dbx_strtotime {
 
     private static void case62(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -8580,7 +8580,7 @@ public class Dbx_strtotime {
 
     private static void case63(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -9036,7 +9036,7 @@ public class Dbx_strtotime {
 
     private static void case77(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -9191,7 +9191,7 @@ public class Dbx_strtotime {
 
     private static void case86(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -9236,7 +9236,7 @@ public class Dbx_strtotime {
 
     private static void case88(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -10001,7 +10001,7 @@ public class Dbx_strtotime {
 
     private static void case114(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -10077,7 +10077,7 @@ public class Dbx_strtotime {
 
     private static void case115(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -10157,7 +10157,7 @@ public class Dbx_strtotime {
 
     private static void case116(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -10237,7 +10237,7 @@ public class Dbx_strtotime {
 
     private static void case117(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -10386,7 +10386,7 @@ public class Dbx_strtotime {
 
     private static void case119(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -10535,7 +10535,7 @@ public class Dbx_strtotime {
 
     private static void case121(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -10753,7 +10753,7 @@ public class Dbx_strtotime {
 
     private static void case124(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -10833,7 +10833,7 @@ public class Dbx_strtotime {
 
     private static void case125(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -11193,7 +11193,7 @@ public class Dbx_strtotime {
 
     private static void case130(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -11273,7 +11273,7 @@ public class Dbx_strtotime {
 
     private static void case131(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -11357,7 +11357,7 @@ public class Dbx_strtotime {
 
     private static void case132(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -11437,7 +11437,7 @@ public class Dbx_strtotime {
 
     private static void case133(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -11748,7 +11748,7 @@ public class Dbx_strtotime {
 
     private static void case140(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -11835,7 +11835,7 @@ public class Dbx_strtotime {
 
     private static void case141(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -12060,7 +12060,7 @@ public class Dbx_strtotime {
 
     private static void case144(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -12140,7 +12140,7 @@ public class Dbx_strtotime {
 
     private static void case145(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -12293,7 +12293,7 @@ public class Dbx_strtotime {
 
     private static void case147(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -12582,7 +12582,7 @@ public class Dbx_strtotime {
 
     private static void case151(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -12666,7 +12666,7 @@ public class Dbx_strtotime {
 
     private static void case152(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -12746,7 +12746,7 @@ public class Dbx_strtotime {
 
     private static void case153(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -13037,7 +13037,7 @@ public class Dbx_strtotime {
 
     private static void case157(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -13117,7 +13117,7 @@ public class Dbx_strtotime {
 
     private static void case158(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -13197,7 +13197,7 @@ public class Dbx_strtotime {
 
     private static void case159(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -13354,7 +13354,7 @@ public class Dbx_strtotime {
 
     private static void case161(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -13503,7 +13503,7 @@ public class Dbx_strtotime {
 
     private static void case163(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -13794,7 +13794,7 @@ public class Dbx_strtotime {
 
     private static void case167(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -13874,7 +13874,7 @@ public class Dbx_strtotime {
 
     private static void case168(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -13962,7 +13962,7 @@ public class Dbx_strtotime {
 
     private static void case169(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -14380,7 +14380,7 @@ public class Dbx_strtotime {
 
     private static void case177(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -14464,7 +14464,7 @@ public class Dbx_strtotime {
 
     private static void case178(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -14548,7 +14548,7 @@ public class Dbx_strtotime {
 
     private static void case179(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -14628,7 +14628,7 @@ public class Dbx_strtotime {
 
     private static void case180(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -14708,7 +14708,7 @@ public class Dbx_strtotime {
 
     private static void case181(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -14866,7 +14866,7 @@ public class Dbx_strtotime {
 
     private static void case183(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -15019,7 +15019,7 @@ public class Dbx_strtotime {
 
     private static void case185(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -15222,7 +15222,7 @@ public class Dbx_strtotime {
 
     private static void case192(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -15297,7 +15297,7 @@ public class Dbx_strtotime {
 
     private static void case194(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -15343,7 +15343,7 @@ public class Dbx_strtotime {
 
     private static void case195(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -15620,7 +15620,7 @@ public class Dbx_strtotime {
 
     private static void case208(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -15652,7 +15652,7 @@ public class Dbx_strtotime {
 
     private static void case210(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -15686,7 +15686,7 @@ public class Dbx_strtotime {
 
     private static void case211(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -15718,7 +15718,7 @@ public class Dbx_strtotime {
 
     private static void case212(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -15738,7 +15738,7 @@ public class Dbx_strtotime {
 
     private static void case213(Dbx_scanner s) {
         s.yyaccept = 6;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '/':
@@ -15774,7 +15774,7 @@ public class Dbx_strtotime {
 
     private static void case215(Dbx_scanner s) {
         s.yyaccept = 6;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '/':
@@ -15802,7 +15802,7 @@ public class Dbx_strtotime {
 
     private static void case216(Dbx_scanner s) {
         s.yyaccept = 6;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '/':
@@ -16011,7 +16011,7 @@ public class Dbx_strtotime {
 
     private static void case228(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -16038,7 +16038,7 @@ public class Dbx_strtotime {
 
     private static void case229(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -16205,7 +16205,7 @@ public class Dbx_strtotime {
 
     private static void case242(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -16237,7 +16237,7 @@ public class Dbx_strtotime {
 
     private static void case243(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -16347,7 +16347,7 @@ public class Dbx_strtotime {
 
     private static void case249(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'E':
@@ -16555,7 +16555,7 @@ public class Dbx_strtotime {
 
     private static void case264(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -16587,7 +16587,7 @@ public class Dbx_strtotime {
 
     private static void case265(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -16621,7 +16621,7 @@ public class Dbx_strtotime {
 
     private static void case266(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -16653,7 +16653,7 @@ public class Dbx_strtotime {
 
     private static void case267(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -16714,7 +16714,7 @@ public class Dbx_strtotime {
 
     private static void case269(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -16741,7 +16741,7 @@ public class Dbx_strtotime {
 
     private static void case270(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -17023,7 +17023,7 @@ public class Dbx_strtotime {
 
     private static void case279(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -17112,7 +17112,7 @@ public class Dbx_strtotime {
 
     private static void case281(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -17264,7 +17264,7 @@ public class Dbx_strtotime {
 
     private static void case283(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -17340,7 +17340,7 @@ public class Dbx_strtotime {
 
     private static void case284(Dbx_scanner s) {
         s.yyaccept = 9;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -17416,7 +17416,7 @@ public class Dbx_strtotime {
 
     private static void case285(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -17513,7 +17513,7 @@ public class Dbx_strtotime {
 
     private static void case286(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -17679,7 +17679,7 @@ public class Dbx_strtotime {
 
     private static void case288(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -17759,7 +17759,7 @@ public class Dbx_strtotime {
 
     private static void case289(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -17848,7 +17848,7 @@ public class Dbx_strtotime {
 
     private static void case290(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -18083,7 +18083,7 @@ public class Dbx_strtotime {
 
     private static void case293(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -18163,7 +18163,7 @@ public class Dbx_strtotime {
 
     private static void case294(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -18243,7 +18243,7 @@ public class Dbx_strtotime {
 
     private static void case295(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -18677,7 +18677,7 @@ public class Dbx_strtotime {
 
     private static void case302(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -18774,7 +18774,7 @@ public class Dbx_strtotime {
 
     private static void case303(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -18854,7 +18854,7 @@ public class Dbx_strtotime {
 
     private static void case304(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -18934,7 +18934,7 @@ public class Dbx_strtotime {
 
     private static void case305(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -19014,7 +19014,7 @@ public class Dbx_strtotime {
 
     private static void case306(Dbx_scanner s) {
         s.yyaccept = 10;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -19094,7 +19094,7 @@ public class Dbx_strtotime {
 
     private static void case307(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -19174,7 +19174,7 @@ public class Dbx_strtotime {
 
     private static void case308(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -19247,7 +19247,7 @@ public class Dbx_strtotime {
 
     private static void case309(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -19363,7 +19363,7 @@ public class Dbx_strtotime {
 
     private static void case314(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'd':
@@ -19377,7 +19377,7 @@ public class Dbx_strtotime {
 
     private static void case315(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 't':
@@ -19391,7 +19391,7 @@ public class Dbx_strtotime {
 
     private static void case316(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'h':
@@ -19426,7 +19426,7 @@ public class Dbx_strtotime {
 
     private static void case318(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -19511,7 +19511,7 @@ public class Dbx_strtotime {
 
     private static void case319(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -19600,7 +19600,7 @@ public class Dbx_strtotime {
 
     private static void case320(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -19689,7 +19689,7 @@ public class Dbx_strtotime {
 
     private static void case321(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -19778,7 +19778,7 @@ public class Dbx_strtotime {
 
     private static void case322(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -19875,7 +19875,7 @@ public class Dbx_strtotime {
 
     private static void case323(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -19972,7 +19972,7 @@ public class Dbx_strtotime {
 
     private static void case324(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -20138,7 +20138,7 @@ public class Dbx_strtotime {
 
     private static void case326(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -20218,7 +20218,7 @@ public class Dbx_strtotime {
 
     private static void case327(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -20307,7 +20307,7 @@ public class Dbx_strtotime {
 
     private static void case328(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -20463,7 +20463,7 @@ public class Dbx_strtotime {
 
     private static void case330(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -20560,7 +20560,7 @@ public class Dbx_strtotime {
 
     private static void case331(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -20653,7 +20653,7 @@ public class Dbx_strtotime {
 
     private static void case332(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -20938,7 +20938,7 @@ public class Dbx_strtotime {
 
     private static void case337(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -21018,7 +21018,7 @@ public class Dbx_strtotime {
 
     private static void case338(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -21098,7 +21098,7 @@ public class Dbx_strtotime {
 
     private static void case339(Dbx_scanner s) {
         s.yyaccept = 12;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -21174,7 +21174,7 @@ public class Dbx_strtotime {
 
     private static void case340(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -21263,7 +21263,7 @@ public class Dbx_strtotime {
 
     private static void case341(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -21429,7 +21429,7 @@ public class Dbx_strtotime {
 
     private static void case343(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -21647,7 +21647,7 @@ public class Dbx_strtotime {
 
     private static void case346(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -21805,7 +21805,7 @@ public class Dbx_strtotime {
 
     private static void case348(Dbx_scanner s) {
         s.yyaccept = 10;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -21885,7 +21885,7 @@ public class Dbx_strtotime {
 
     private static void case349(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -21965,7 +21965,7 @@ public class Dbx_strtotime {
 
     private static void case350(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -22062,7 +22062,7 @@ public class Dbx_strtotime {
 
     private static void case351(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -22579,7 +22579,7 @@ public class Dbx_strtotime {
 
     private static void case359(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -22663,7 +22663,7 @@ public class Dbx_strtotime {
 
     private static void case360(Dbx_scanner s) {
         s.yyaccept = 10;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -22743,7 +22743,7 @@ public class Dbx_strtotime {
 
     private static void case361(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -22823,7 +22823,7 @@ public class Dbx_strtotime {
 
     private static void case362(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -22903,7 +22903,7 @@ public class Dbx_strtotime {
 
     private static void case363(Dbx_scanner s) {
         s.yyaccept = 10;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -22983,7 +22983,7 @@ public class Dbx_strtotime {
 
     private static void case364(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -23063,7 +23063,7 @@ public class Dbx_strtotime {
 
     private static void case365(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -23288,7 +23288,7 @@ public class Dbx_strtotime {
 
     private static void case368(Dbx_scanner s) {
         s.yyaccept = 10;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -23368,7 +23368,7 @@ public class Dbx_strtotime {
 
     private static void case369(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -23517,7 +23517,7 @@ public class Dbx_strtotime {
 
     private static void case371(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -23610,7 +23610,7 @@ public class Dbx_strtotime {
 
     private static void case373(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -23656,7 +23656,7 @@ public class Dbx_strtotime {
 
     private static void case374(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24170,7 +24170,7 @@ public class Dbx_strtotime {
 
     private static void case400(Dbx_scanner s) {
         s.yyaccept = 13;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24253,7 +24253,7 @@ public class Dbx_strtotime {
 
     private static void case402(Dbx_scanner s) {
         s.yyaccept = 14;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24332,7 +24332,7 @@ public class Dbx_strtotime {
 
     private static void case404(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24365,7 +24365,7 @@ public class Dbx_strtotime {
 
     private static void case405(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24412,7 +24412,7 @@ public class Dbx_strtotime {
 
     private static void case407(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24445,7 +24445,7 @@ public class Dbx_strtotime {
 
     private static void case408(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24491,7 +24491,7 @@ public class Dbx_strtotime {
 
     private static void case410(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'D':
@@ -24540,7 +24540,7 @@ public class Dbx_strtotime {
 
     private static void case413(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24573,7 +24573,7 @@ public class Dbx_strtotime {
 
     private static void case414(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24606,7 +24606,7 @@ public class Dbx_strtotime {
 
     private static void case415(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24639,7 +24639,7 @@ public class Dbx_strtotime {
 
     private static void case416(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24698,7 +24698,7 @@ public class Dbx_strtotime {
 
     private static void case419(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'S':
@@ -24718,7 +24718,7 @@ public class Dbx_strtotime {
 
     private static void case420(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'D':
@@ -24750,7 +24750,7 @@ public class Dbx_strtotime {
 
     private static void case422(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24783,7 +24783,7 @@ public class Dbx_strtotime {
 
     private static void case423(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'U':
@@ -24798,7 +24798,7 @@ public class Dbx_strtotime {
 
     private static void case424(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'O':
@@ -24818,7 +24818,7 @@ public class Dbx_strtotime {
 
     private static void case425(Dbx_scanner s) {
         s.yyaccept = 3;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -24851,7 +24851,7 @@ public class Dbx_strtotime {
 
     private static void case426(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'R':
@@ -24866,7 +24866,7 @@ public class Dbx_strtotime {
 
     private static void case427(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'S':
@@ -24881,7 +24881,7 @@ public class Dbx_strtotime {
 
     private static void case428(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'N':
@@ -24959,7 +24959,7 @@ public class Dbx_strtotime {
 
     private static void case432(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -25014,7 +25014,7 @@ public class Dbx_strtotime {
 
     private static void case434(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -25039,7 +25039,7 @@ public class Dbx_strtotime {
 
     private static void case435(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -25556,7 +25556,7 @@ public class Dbx_strtotime {
 
     private static void case457(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -25703,7 +25703,7 @@ public class Dbx_strtotime {
 
     private static void case459(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -25783,7 +25783,7 @@ public class Dbx_strtotime {
 
     private static void case460(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -25863,7 +25863,7 @@ public class Dbx_strtotime {
 
     private static void case461(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ' ':
@@ -25935,7 +25935,7 @@ public class Dbx_strtotime {
 
     private static void case462(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ' ':
@@ -26083,7 +26083,7 @@ public class Dbx_strtotime {
 
     private static void case464(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -26301,7 +26301,7 @@ public class Dbx_strtotime {
 
     private static void case467(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -26381,7 +26381,7 @@ public class Dbx_strtotime {
 
     private static void case468(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -26875,7 +26875,7 @@ public class Dbx_strtotime {
 
     private static void case475(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -26955,7 +26955,7 @@ public class Dbx_strtotime {
 
     private static void case476(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -27035,7 +27035,7 @@ public class Dbx_strtotime {
 
     private static void case477(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -27115,7 +27115,7 @@ public class Dbx_strtotime {
 
     private static void case478(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -27195,7 +27195,7 @@ public class Dbx_strtotime {
 
     private static void case479(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -27275,7 +27275,7 @@ public class Dbx_strtotime {
 
     private static void case480(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -27492,7 +27492,7 @@ public class Dbx_strtotime {
 
     private static void case487(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -27521,7 +27521,7 @@ public class Dbx_strtotime {
 
     private static void case488(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -27550,7 +27550,7 @@ public class Dbx_strtotime {
 
     private static void case489(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -27579,7 +27579,7 @@ public class Dbx_strtotime {
 
     private static void case490(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -27696,7 +27696,7 @@ public class Dbx_strtotime {
 
     private static void case494(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -27781,7 +27781,7 @@ public class Dbx_strtotime {
 
     private static void case495(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -27861,7 +27861,7 @@ public class Dbx_strtotime {
 
     private static void case496(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -27954,7 +27954,7 @@ public class Dbx_strtotime {
 
     private static void case497(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -28029,7 +28029,7 @@ public class Dbx_strtotime {
 
     private static void case498(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -28249,7 +28249,7 @@ public class Dbx_strtotime {
 
     private static void case501(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -28329,7 +28329,7 @@ public class Dbx_strtotime {
 
     private static void case502(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -28409,7 +28409,7 @@ public class Dbx_strtotime {
 
     private static void case503(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -28549,7 +28549,7 @@ public class Dbx_strtotime {
 
     private static void case506(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -28629,7 +28629,7 @@ public class Dbx_strtotime {
 
     private static void case507(Dbx_scanner s) {
         s.yyaccept = 15;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -28774,7 +28774,7 @@ public class Dbx_strtotime {
 
     private static void case509(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -28923,7 +28923,7 @@ public class Dbx_strtotime {
 
     private static void case511(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -29141,7 +29141,7 @@ public class Dbx_strtotime {
 
     private static void case514(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -29299,7 +29299,7 @@ public class Dbx_strtotime {
 
     private static void case516(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -29379,7 +29379,7 @@ public class Dbx_strtotime {
 
     private static void case517(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -29459,7 +29459,7 @@ public class Dbx_strtotime {
 
     private static void case518(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -29556,7 +29556,7 @@ public class Dbx_strtotime {
 
     private static void case519(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -30071,7 +30071,7 @@ public class Dbx_strtotime {
 
     private static void case527(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -30151,7 +30151,7 @@ public class Dbx_strtotime {
 
     private static void case528(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -30231,7 +30231,7 @@ public class Dbx_strtotime {
 
     private static void case529(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -30311,7 +30311,7 @@ public class Dbx_strtotime {
 
     private static void case530(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -30391,7 +30391,7 @@ public class Dbx_strtotime {
 
     private static void case531(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -30471,7 +30471,7 @@ public class Dbx_strtotime {
 
     private static void case532(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -30551,7 +30551,7 @@ public class Dbx_strtotime {
 
     private static void case533(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -30774,7 +30774,7 @@ public class Dbx_strtotime {
 
     private static void case536(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -30854,7 +30854,7 @@ public class Dbx_strtotime {
 
     private static void case537(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -31003,7 +31003,7 @@ public class Dbx_strtotime {
 
     private static void case539(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -31083,7 +31083,7 @@ public class Dbx_strtotime {
 
     private static void case540(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -31198,7 +31198,7 @@ public class Dbx_strtotime {
 
     private static void case544(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -31231,7 +31231,7 @@ public class Dbx_strtotime {
 
     private static void case546(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -31266,7 +31266,7 @@ public class Dbx_strtotime {
 
     private static void case547(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -31299,7 +31299,7 @@ public class Dbx_strtotime {
 
     private static void case548(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -31325,7 +31325,7 @@ public class Dbx_strtotime {
 
     private static void case549(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -31353,7 +31353,7 @@ public class Dbx_strtotime {
 
     private static void case550(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -31379,7 +31379,7 @@ public class Dbx_strtotime {
 
     private static void case551(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -31405,7 +31405,7 @@ public class Dbx_strtotime {
 
     private static void case552(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -31422,7 +31422,7 @@ public class Dbx_strtotime {
 
     private static void case553(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -31457,7 +31457,7 @@ public class Dbx_strtotime {
 
     private static void case555(Dbx_scanner s) {
         s.yyaccept = 6;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '/':
@@ -32452,7 +32452,7 @@ public class Dbx_strtotime {
 
     private static void case610(Dbx_scanner s) {
         s.yyaccept = 7;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'D':
@@ -32528,7 +32528,7 @@ public class Dbx_strtotime {
 
     private static void case614(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -32554,7 +32554,7 @@ public class Dbx_strtotime {
 
     private static void case615(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -32601,7 +32601,7 @@ public class Dbx_strtotime {
 
     private static void case618(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -32627,7 +32627,7 @@ public class Dbx_strtotime {
 
     private static void case619(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -33014,7 +33014,7 @@ public class Dbx_strtotime {
 
     private static void case637(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -33168,7 +33168,7 @@ public class Dbx_strtotime {
 
     private static void case639(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -33244,7 +33244,7 @@ public class Dbx_strtotime {
 
     private static void case640(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -33337,7 +33337,7 @@ public class Dbx_strtotime {
 
     private static void case641(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -33499,7 +33499,7 @@ public class Dbx_strtotime {
 
     private static void case644(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -33579,7 +33579,7 @@ public class Dbx_strtotime {
 
     private static void case645(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -33723,7 +33723,7 @@ public class Dbx_strtotime {
 
     private static void case647(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -33807,7 +33807,7 @@ public class Dbx_strtotime {
 
     private static void case648(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -33956,7 +33956,7 @@ public class Dbx_strtotime {
 
     private static void case650(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -34029,7 +34029,7 @@ public class Dbx_strtotime {
 
     private static void case651(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -34242,7 +34242,7 @@ public class Dbx_strtotime {
 
     private static void case654(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ' ':
@@ -34314,7 +34314,7 @@ public class Dbx_strtotime {
 
     private static void case655(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -34394,7 +34394,7 @@ public class Dbx_strtotime {
 
     private static void case656(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -34474,7 +34474,7 @@ public class Dbx_strtotime {
 
     private static void case657(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -34556,7 +34556,7 @@ public class Dbx_strtotime {
 
     private static void case658(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -34636,7 +34636,7 @@ public class Dbx_strtotime {
 
     private static void case659(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -34716,7 +34716,7 @@ public class Dbx_strtotime {
 
     private static void case660(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ' ':
@@ -34979,7 +34979,7 @@ public class Dbx_strtotime {
 
     private static void case669(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -35006,7 +35006,7 @@ public class Dbx_strtotime {
 
     private static void case670(Dbx_scanner s) {
         s.yyaccept = 11;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -35123,7 +35123,7 @@ public class Dbx_strtotime {
 
     private static void case675(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -35399,7 +35399,7 @@ public class Dbx_strtotime {
 
     private static void case681(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -35548,7 +35548,7 @@ public class Dbx_strtotime {
 
     private static void case683(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -35697,7 +35697,7 @@ public class Dbx_strtotime {
 
     private static void case685(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -36053,7 +36053,7 @@ public class Dbx_strtotime {
 
     private static void case690(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -36133,7 +36133,7 @@ public class Dbx_strtotime {
 
     private static void case691(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -36213,7 +36213,7 @@ public class Dbx_strtotime {
 
     private static void case692(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -36293,7 +36293,7 @@ public class Dbx_strtotime {
 
     private static void case693(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -36373,7 +36373,7 @@ public class Dbx_strtotime {
 
     private static void case694(Dbx_scanner s) {
         s.yyaccept = 13;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -36600,7 +36600,7 @@ public class Dbx_strtotime {
 
     private static void case699(Dbx_scanner s) {
         s.yyaccept = 17;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -36676,7 +36676,7 @@ public class Dbx_strtotime {
 
     private static void case700(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -36756,7 +36756,7 @@ public class Dbx_strtotime {
 
     private static void case701(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -36974,7 +36974,7 @@ public class Dbx_strtotime {
 
     private static void case704(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -37054,7 +37054,7 @@ public class Dbx_strtotime {
 
     private static void case705(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -37203,7 +37203,7 @@ public class Dbx_strtotime {
 
     private static void case707(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -37319,7 +37319,7 @@ public class Dbx_strtotime {
 
     private static void case710(Dbx_scanner s) {
         s.yyaccept = 18;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -37342,7 +37342,7 @@ public class Dbx_strtotime {
 
     private static void case712(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -37435,7 +37435,7 @@ public class Dbx_strtotime {
 
     private static void case717(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -37583,7 +37583,7 @@ public class Dbx_strtotime {
 
     private static void case723(Dbx_scanner s) {
         s.yyaccept = 19;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -37609,7 +37609,7 @@ public class Dbx_strtotime {
 
     private static void case725(Dbx_scanner s) {
         s.yyaccept = 19;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -37628,7 +37628,7 @@ public class Dbx_strtotime {
 
     private static void case726(Dbx_scanner s) {
         s.yyaccept = 19;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -37944,7 +37944,7 @@ public class Dbx_strtotime {
 
     private static void case746(Dbx_scanner s) {
         s.yyaccept = 20;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -37996,7 +37996,7 @@ public class Dbx_strtotime {
 
     private static void case748(Dbx_scanner s) {
         s.yyaccept = 20;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -38046,7 +38046,7 @@ public class Dbx_strtotime {
 
     private static void case749(Dbx_scanner s) {
         s.yyaccept = 20;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -38092,7 +38092,7 @@ public class Dbx_strtotime {
 
     private static void case750(Dbx_scanner s) {
         s.yyaccept = 20;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -38140,7 +38140,7 @@ public class Dbx_strtotime {
 
     private static void case751(Dbx_scanner s) {
         s.yyaccept = 20;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -38647,7 +38647,7 @@ public class Dbx_strtotime {
 
     private static void case783(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -38683,7 +38683,7 @@ public class Dbx_strtotime {
 
     private static void case784(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -38707,7 +38707,7 @@ public class Dbx_strtotime {
 
     private static void case785(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -38733,7 +38733,7 @@ public class Dbx_strtotime {
 
     private static void case786(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -38750,7 +38750,7 @@ public class Dbx_strtotime {
 
     private static void case787(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -38783,7 +38783,7 @@ public class Dbx_strtotime {
 
     private static void case788(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -38808,7 +38808,7 @@ public class Dbx_strtotime {
 
     private static void case789(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'n':
@@ -38961,7 +38961,7 @@ public class Dbx_strtotime {
 
     private static void case796(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -38992,7 +38992,7 @@ public class Dbx_strtotime {
 
     private static void case797(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39040,7 +39040,7 @@ public class Dbx_strtotime {
 
     private static void case798(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -39118,7 +39118,7 @@ public class Dbx_strtotime {
 
     private static void case800(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39137,7 +39137,7 @@ public class Dbx_strtotime {
 
     private static void case801(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39241,7 +39241,7 @@ public class Dbx_strtotime {
 
     private static void case804(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -39260,7 +39260,7 @@ public class Dbx_strtotime {
 
     private static void case805(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39279,7 +39279,7 @@ public class Dbx_strtotime {
 
     private static void case806(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -39331,7 +39331,7 @@ public class Dbx_strtotime {
 
     private static void case807(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39384,7 +39384,7 @@ public class Dbx_strtotime {
 
     private static void case808(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39429,7 +39429,7 @@ public class Dbx_strtotime {
 
     private static void case811(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39482,7 +39482,7 @@ public class Dbx_strtotime {
 
     private static void case812(Dbx_scanner s) {
         s.yyaccept = 10;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39530,7 +39530,7 @@ public class Dbx_strtotime {
 
     private static void case813(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -39557,7 +39557,7 @@ public class Dbx_strtotime {
 
     private static void case815(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -39572,7 +39572,7 @@ public class Dbx_strtotime {
 
     private static void case816(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -39599,7 +39599,7 @@ public class Dbx_strtotime {
 
     private static void case817(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':
@@ -39653,7 +39653,7 @@ public class Dbx_strtotime {
 
     private static void case820(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39872,7 +39872,7 @@ public class Dbx_strtotime {
 
     private static void case832(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39891,7 +39891,7 @@ public class Dbx_strtotime {
 
     private static void case833(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -39961,7 +39961,7 @@ public class Dbx_strtotime {
 
     private static void case835(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40014,7 +40014,7 @@ public class Dbx_strtotime {
 
     private static void case836(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40033,7 +40033,7 @@ public class Dbx_strtotime {
 
     private static void case837(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40086,7 +40086,7 @@ public class Dbx_strtotime {
 
     private static void case838(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40105,7 +40105,7 @@ public class Dbx_strtotime {
 
     private static void case839(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40124,7 +40124,7 @@ public class Dbx_strtotime {
 
     private static void case840(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40143,7 +40143,7 @@ public class Dbx_strtotime {
 
     private static void case841(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40196,7 +40196,7 @@ public class Dbx_strtotime {
 
     private static void case842(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40249,7 +40249,7 @@ public class Dbx_strtotime {
 
     private static void case843(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40337,7 +40337,7 @@ public class Dbx_strtotime {
 
     private static void case846(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40374,7 +40374,7 @@ public class Dbx_strtotime {
 
     private static void case848(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40427,7 +40427,7 @@ public class Dbx_strtotime {
 
     private static void case849(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40481,7 +40481,7 @@ public class Dbx_strtotime {
 
     private static void case850(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40517,7 +40517,7 @@ public class Dbx_strtotime {
 
     private static void case852(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40570,7 +40570,7 @@ public class Dbx_strtotime {
 
     private static void case853(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40623,7 +40623,7 @@ public class Dbx_strtotime {
 
     private static void case854(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40642,7 +40642,7 @@ public class Dbx_strtotime {
 
     private static void case855(Dbx_scanner s) {
         s.yyaccept = 2;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -40815,7 +40815,7 @@ public class Dbx_strtotime {
 
     private static void case864(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -40848,7 +40848,7 @@ public class Dbx_strtotime {
 
     private static void case865(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -40908,7 +40908,7 @@ public class Dbx_strtotime {
 
     private static void case867(Dbx_scanner s) {
         s.yyaccept = 19;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -41193,7 +41193,7 @@ public class Dbx_strtotime {
 
     private static void case885(Dbx_scanner s) {
         s.yyaccept = 22;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -41239,7 +41239,7 @@ public class Dbx_strtotime {
 
     private static void case887(Dbx_scanner s) {
         s.yyaccept = 22;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -41287,7 +41287,7 @@ public class Dbx_strtotime {
 
     private static void case888(Dbx_scanner s) {
         s.yyaccept = 22;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -41345,7 +41345,7 @@ public class Dbx_strtotime {
 
     private static void case890(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'I':
@@ -41360,7 +41360,7 @@ public class Dbx_strtotime {
 
     private static void case891(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'U':
@@ -41375,7 +41375,7 @@ public class Dbx_strtotime {
 
     private static void case892(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'E':
@@ -41390,7 +41390,7 @@ public class Dbx_strtotime {
 
     private static void case893(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'R':
@@ -41405,7 +41405,7 @@ public class Dbx_strtotime {
 
     private static void case894(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'U':
@@ -41448,7 +41448,7 @@ public class Dbx_strtotime {
 
     private static void case897(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'C':
@@ -41463,7 +41463,7 @@ public class Dbx_strtotime {
 
     private static void case898(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'O':
@@ -41491,7 +41491,7 @@ public class Dbx_strtotime {
 
     private static void case900(Dbx_scanner s) {
         s.yyaccept = 24;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -41567,7 +41567,7 @@ public class Dbx_strtotime {
 
     private static void case906(Dbx_scanner s) {
         s.yyaccept = 5;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -41594,7 +41594,7 @@ public class Dbx_strtotime {
 
     private static void case907(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -41627,7 +41627,7 @@ public class Dbx_strtotime {
 
     private static void case908(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -41913,7 +41913,7 @@ public class Dbx_strtotime {
 
     private static void case924(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -41938,7 +41938,7 @@ public class Dbx_strtotime {
 
     private static void case926(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -41965,7 +41965,7 @@ public class Dbx_strtotime {
 
     private static void case927(Dbx_scanner s) {
         s.yyaccept = 8;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -42112,7 +42112,7 @@ public class Dbx_strtotime {
 
     private static void case934(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'E':
@@ -42431,7 +42431,7 @@ public class Dbx_strtotime {
 
     private static void case960(Dbx_scanner s) {
         s.yyaccept = 10;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42517,7 +42517,7 @@ public class Dbx_strtotime {
 
     private static void case964(Dbx_scanner s) {
         s.yyaccept = 10;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42628,7 +42628,7 @@ public class Dbx_strtotime {
 
     private static void case972(Dbx_scanner s) {
         s.yyaccept = 26;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -42661,7 +42661,7 @@ public class Dbx_strtotime {
 
     private static void case974(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -42697,7 +42697,7 @@ public class Dbx_strtotime {
 
     private static void case975(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -42725,7 +42725,7 @@ public class Dbx_strtotime {
 
     private static void case976(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'T':
@@ -42774,7 +42774,7 @@ public class Dbx_strtotime {
 
     private static void case978(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42792,7 +42792,7 @@ public class Dbx_strtotime {
 
     private static void case979(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42810,7 +42810,7 @@ public class Dbx_strtotime {
 
     private static void case980(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42828,7 +42828,7 @@ public class Dbx_strtotime {
 
     private static void case981(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42846,7 +42846,7 @@ public class Dbx_strtotime {
 
     private static void case982(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42864,7 +42864,7 @@ public class Dbx_strtotime {
 
     private static void case983(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42883,7 +42883,7 @@ public class Dbx_strtotime {
 
     private static void case984(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42902,7 +42902,7 @@ public class Dbx_strtotime {
 
     private static void case985(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42920,7 +42920,7 @@ public class Dbx_strtotime {
 
     private static void case986(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42934,7 +42934,7 @@ public class Dbx_strtotime {
 
     private static void case987(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42952,7 +42952,7 @@ public class Dbx_strtotime {
 
     private static void case988(Dbx_scanner s) {
         s.yyaccept = 23;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -42970,7 +42970,7 @@ public class Dbx_strtotime {
 
     private static void case990(Dbx_scanner s) {
         s.yyaccept = 27;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -43003,7 +43003,7 @@ public class Dbx_strtotime {
 
     private static void case992(Dbx_scanner s) {
         s.yyaccept = 27;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -43028,7 +43028,7 @@ public class Dbx_strtotime {
 
     private static void case993(Dbx_scanner s) {
         s.yyaccept = 27;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'n':
@@ -43074,7 +43074,7 @@ public class Dbx_strtotime {
 
     private static void case995(Dbx_scanner s) {
         s.yyaccept = 28;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -43339,7 +43339,7 @@ public class Dbx_strtotime {
 
     private static void case1012(Dbx_scanner s) {
         s.yyaccept = 26;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'n':
@@ -43606,7 +43606,7 @@ public class Dbx_strtotime {
 
     private static void case1030(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -43664,7 +43664,7 @@ public class Dbx_strtotime {
 
     private static void case1034(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'S':
@@ -43684,7 +43684,7 @@ public class Dbx_strtotime {
 
     private static void case1035(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -43720,7 +43720,7 @@ public class Dbx_strtotime {
 
     private static void case1037(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -43739,7 +43739,7 @@ public class Dbx_strtotime {
 
     private static void case1038(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'O':
@@ -43759,7 +43759,7 @@ public class Dbx_strtotime {
 
     private static void case1039(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -43778,7 +43778,7 @@ public class Dbx_strtotime {
 
     private static void case1040(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -43797,7 +43797,7 @@ public class Dbx_strtotime {
 
     private static void case1041(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -43829,7 +43829,7 @@ public class Dbx_strtotime {
 
     private static void case1043(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ' ':
@@ -43848,7 +43848,7 @@ public class Dbx_strtotime {
 
     private static void case1045(Dbx_scanner s) {
         s.yyaccept = 17;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -43918,7 +43918,7 @@ public class Dbx_strtotime {
 
     private static void case1050(Dbx_scanner s) {
         s.yyaccept = 29;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -44089,7 +44089,7 @@ public class Dbx_strtotime {
 
     private static void case1059(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -44125,7 +44125,7 @@ public class Dbx_strtotime {
 
     private static void case1060(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -44192,7 +44192,7 @@ public class Dbx_strtotime {
 
     private static void case1064(Dbx_scanner s) {
         s.yyaccept = 27;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -44225,7 +44225,7 @@ public class Dbx_strtotime {
 
     private static void case1065(Dbx_scanner s) {
         s.yyaccept = 27;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '0':
@@ -44491,7 +44491,7 @@ public class Dbx_strtotime {
 
     private static void case1084(Dbx_scanner s) {
         s.yyaccept = 30;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -44524,7 +44524,7 @@ public class Dbx_strtotime {
 
     private static void case1086(Dbx_scanner s) {
         s.yyaccept = 30;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -44552,7 +44552,7 @@ public class Dbx_strtotime {
 
     private static void case1087(Dbx_scanner s) {
         s.yyaccept = 30;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -44586,7 +44586,7 @@ public class Dbx_strtotime {
 
     private static void case1089(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -44656,7 +44656,7 @@ public class Dbx_strtotime {
 
     private static void case1090(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -44920,7 +44920,7 @@ public class Dbx_strtotime {
 
     private static void case1107(Dbx_scanner s) {
         s.yyaccept = 31;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'D':
@@ -44953,7 +44953,7 @@ public class Dbx_strtotime {
 
     private static void case1112(Dbx_scanner s) {
         s.yyaccept = 32;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '-':
@@ -45100,7 +45100,7 @@ public class Dbx_strtotime {
 
     private static void case1119(Dbx_scanner s) {
         s.yyaccept = 16;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'T':
@@ -45114,7 +45114,7 @@ public class Dbx_strtotime {
 
     private static void case1120(Dbx_scanner s) {
         s.yyaccept = 27;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 'T':
@@ -45138,7 +45138,7 @@ public class Dbx_strtotime {
 
     private static void case1122(Dbx_scanner s) {
         s.yyaccept = 27;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '/':
@@ -45874,7 +45874,7 @@ public class Dbx_strtotime {
 
     private static void case1147(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -45952,7 +45952,7 @@ public class Dbx_strtotime {
 
     private static void case1148(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -46519,7 +46519,7 @@ public class Dbx_strtotime {
 
     private static void case1177(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -46664,7 +46664,7 @@ public class Dbx_strtotime {
 
     private static void case1179(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 0x00:
@@ -46741,7 +46741,7 @@ public class Dbx_strtotime {
 
     private static void case1180(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case 0x00:
@@ -46838,7 +46838,7 @@ public class Dbx_strtotime {
 
     private static void case1184(Dbx_scanner s) {
         s.yyaccept = 25;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '\t':
@@ -47290,7 +47290,7 @@ public class Dbx_strtotime {
 
     private static void case1208(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -47366,7 +47366,7 @@ public class Dbx_strtotime {
 
     private static void case1209(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -47731,7 +47731,7 @@ public class Dbx_strtotime {
 
     private static void case1223(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -47975,7 +47975,7 @@ public class Dbx_strtotime {
 
     private static void case1233(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -48109,7 +48109,7 @@ public class Dbx_strtotime {
 
     private static void case1237(Dbx_scanner s) {
         s.yyaccept = 21;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case ')':
@@ -48348,7 +48348,7 @@ public class Dbx_strtotime {
 
     private static void case1249(Dbx_scanner s) {
         s.yyaccept = 33;
-        s.ptr = ++s.cursor;
+        s.mark = ++s.cursor;
         s.yych = s.src[s.cursor];
         switch (s.yych) {
             case '.':

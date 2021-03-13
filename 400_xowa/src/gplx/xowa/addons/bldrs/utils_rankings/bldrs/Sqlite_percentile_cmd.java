@@ -27,7 +27,7 @@ public class Sqlite_percentile_cmd extends Xob_cmd__base implements Xob_cmd {
 	public Sqlite_percentile_cmd Init_by_conn(Db_conn conn, String tbl_name, int score_max, String select_sql) {this.conn = conn; return this.Init_by_rel_url(null, tbl_name, score_max, select_sql);}
 	public int count;
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		if (conn == null) {
 			if (db_rel_url == null) throw Err_.new_("bldr", "db_rel_url can not be empty; EX: 'xowa.page_rank.sqlite3'");
 			conn = Db_conn_bldr.Instance.Get_or_autocreate(false, wiki.Fsys_mgr().Root_dir().GenSubFil(db_rel_url));

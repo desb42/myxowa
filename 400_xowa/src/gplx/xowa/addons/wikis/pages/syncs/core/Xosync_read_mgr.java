@@ -68,7 +68,7 @@ public class Xosync_read_mgr implements Gfo_invk {
 
 			// get page data based on id
 			Xowd_page_itm tmp_dbpg = new Xowd_page_itm();
-			wiki.Data__core_mgr().Db__core().Tbl__page().Select_by_ttl(tmp_dbpg, page_ttl.Ns(), page_ttl.Page_db());
+			wiki.Data__core_mgr().Db__core().Tbl__page().Select_by_ttl(tmp_dbpg, page_ttl.Ns(), page_ttl.Page_db(), wiki.Wrk_id());
 
 			// get sync conn
 			if (sync_conn == null) {

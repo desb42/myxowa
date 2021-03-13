@@ -20,7 +20,7 @@ import gplx.fsdb.meta.*;
 public class Xobldr__xfer_regy__update_downloaded extends Xob_cmd__base implements Xob_cmd {
 	public Xobldr__xfer_regy__update_downloaded(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();	// NOTE: must init wiki to set up db_core; DATE:2015-08-17
+		wiki.Init_assert(0);	// NOTE: must init wiki to set up db_core; DATE:2015-08-17
 		Db_conn make_conn = Xob_db_file.New__file_make(wiki.Fsys_mgr().Root_dir()).Conn();
 		this.Create_fsdb_regy(make_conn);
 		this.Update_xfer_regy(make_conn);

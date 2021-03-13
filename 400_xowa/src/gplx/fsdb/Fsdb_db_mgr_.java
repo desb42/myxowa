@@ -53,7 +53,7 @@ public class Fsdb_db_mgr_ {
 		Io_url main_core_url = wiki_dir.GenSubFil(Fsdb_db_mgr__v2_bldr.Main_core_name(layout, domain_str));
 		if (!Db_conn_bldr.Instance.Exists(main_core_url)) return null;
 		usr_dlg.Log_many("", "", "fsdb.db_core.v2: type=~{0} url=~{1}", layout.Key(), main_core_url.Raw());
-		Db_conn main_core_conn = Db_conn_bldr.Instance.Get(main_core_url);
+		Db_conn main_core_conn = Db_conn_bldr.Instance.Get(main_core_url, 0);
 		if (wiki.Data__core_mgr().Props().Layout_file().Tid_is_all()) {
 			return new Fsdb_db_mgr__v2(Fsdb_db_mgr__v2.Cfg__layout_file__get(main_core_conn), wiki_dir, new Fsdb_db_file(main_core_url, main_core_conn), new Fsdb_db_file(main_core_url, main_core_conn));
 		}
@@ -71,7 +71,7 @@ public class Fsdb_db_mgr_ {
 			user_core_conn = main_core_conn;
 		}
 		else {
-			user_core_conn = Db_conn_bldr.Instance.Get(user_core_url);
+			user_core_conn = Db_conn_bldr.Instance.Get(user_core_url, 0);
 		}
 		return new Fsdb_db_mgr__v2(Fsdb_db_mgr__v2.Cfg__layout_file__get(main_core_conn), wiki_dir, new Fsdb_db_file(main_core_url, main_core_conn), new Fsdb_db_file(user_core_url, user_core_conn));
 	}

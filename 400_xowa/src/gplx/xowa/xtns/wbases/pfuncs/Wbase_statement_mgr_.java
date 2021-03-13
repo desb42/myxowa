@@ -50,20 +50,20 @@ public class Wbase_statement_mgr_ {
 		Wdata_pf_property_data doc_data = Wdata_pf_property_data.Parse(ctx, src, caller, self);
 		Wdata_doc doc = Wbase_statement_mgr_.Get_doc(wdata_mgr, wiki, ttl, doc_data);
 		if (doc == null) {
-                if (pid_int == 625) {
-                Thread currentThread = Thread.currentThread();
-//                System.out.println(currentThread.getName()+"-no doc-"+ttl.Full_db_as_str());
-                }
+                //if (pid_int == 625) {
+                //Thread currentThread = Thread.currentThread();
+                //System.out.println(currentThread.getName()+"-no doc-"+ttl.Full_db_as_str());
+                //}
 			 return; // NOTE: some pages will not have a qid; EX: "Some_unknown_page" will not have a qid in wikidata; if no qid, then all {{#property:p###}} will have no prop_val
 		}
 
 		// get val based on pid and doc; EX: {{#property:p123|of=Earth}} -> doc=Q2; pid=123 -> "value of p123 in Q2"
 		Wbase_claim_grp claim_grp = doc.Get_claim_grp_or_null(pid_int);
 		if (claim_grp == null) {
-//                if (pid_int == 625) {
-//                Thread currentThread = Thread.currentThread();
-//                System.out.println(currentThread.getName()+"-no claim-"+ttl.Full_db_as_str());
-//                }
+                //if (pid_int == 625) {
+                //Thread currentThread = Thread.currentThread();
+                //System.out.println(currentThread.getName()+"-no claim-"+ttl.Full_db_as_str());
+                //}
 			return;// NOTE: some props may not exist; EX: "Some_known_page" has a qid of 123 but does not have pid 345 required by {{#property:P345|q=123}}
 		}
 		wdata_mgr.Resolve_to_bfr(bfr, ctx.Wiki(), claim_grp, wiki.Wdata_wiki_lang(), mode_is_statements); // NOTE: was ctx.Page().Lang().Key_bry(), but fails in simplewiki; DATE:2013-12-02

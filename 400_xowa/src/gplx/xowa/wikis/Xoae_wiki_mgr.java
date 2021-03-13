@@ -57,7 +57,7 @@ public class Xoae_wiki_mgr implements Xoa_wiki_mgr, Gfo_invk {
 	public Xowe_wiki Wiki_commons() {
 		synchronized (this) {	// LOCK:app-level; DATE:2016-07-06
 			Xowe_wiki rv = (Xowe_wiki)this.Get_by_or_null(Xow_domain_itm_.Bry__commons);
-			if (rv != null) rv.Init_assert();
+			if (rv != null) rv.Init_assert(0);
 			return rv;
 		}
 	}
@@ -73,13 +73,15 @@ public class Xoae_wiki_mgr implements Xoa_wiki_mgr, Gfo_invk {
 	public Xow_wiki		Get_by_or_make_init_y(byte[] key) {
 		synchronized (this) {	// LOCK:app-level; DATE:2016-07-06
 			Xowe_wiki rv = (Xowe_wiki)this.Get_by_or_null(key); if (rv == null) rv = Make_and_add(key);
-			rv.Init_assert();
+			rv.Init_assert(0);
 			return rv;
 		}
 	}
 	public Xow_wiki		Get_by_or_make_init_n(byte[] key) {return Get_by_or_make(key);}
 	public Xowe_wiki	Get_by_or_make(byte[] key) {
 		Xowe_wiki rv = (Xowe_wiki)this.Get_by_or_null(key); if (rv == null) rv = Make_and_add(key);
+                if (rv != null)
+                    rv.Init_assert(0);
 		return rv;
 	}
 	public void Add(Xow_wiki wiki) {

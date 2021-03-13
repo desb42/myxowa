@@ -24,7 +24,7 @@ class Xob_diff_build_wkr {
 	private final    Xowd_tbl_mapr tbl_mapr;
 	public Xob_diff_build_wkr(Xob_bldr bldr, Xowe_wiki wiki, String old_url, String new_url, String dif_url, int commit_interval, Xowd_tbl_mapr tbl_mapr) {
 		this.wiki = wiki;
-		wiki.Init_by_wiki();
+		wiki.Init_by_wiki(0);
 		Bry_fmt url_fmt = Bry_fmt.New("").Args_(New_url_args(wiki, tbl_mapr.Name));
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		old_conn = New_conn(tmp_bfr, wiki, url_fmt, Bool_.N, old_url);
@@ -43,7 +43,7 @@ class Xob_diff_build_wkr {
 		dif_wkr.Init_conn(dif_db, 1000);
 		dif_bldr.Init(dif_wkr);
 		// wiki.Data__core_mgr().Db__core().Conn().Conn_info();
-		Xow_db_file[] db_file_ary = wiki.Data__core_mgr().Db__core().Tbl__db().Select_all(wiki.Data__core_mgr().Props(), Io_url_.Empty);
+		Xow_db_file[] db_file_ary = wiki.Data__core_mgr().Db__core().Tbl__db().Select_all(wiki.Data__core_mgr().Props(), Io_url_.Empty, 0);
 		int db_files_len = db_file_ary.length;
 		for (int i = 0; i < db_files_len; ++i) {
 			Xow_db_file db_file = db_file_ary[i];

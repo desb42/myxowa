@@ -84,7 +84,7 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "jsonConfigs requires commons wiki: ~{0}", ttl_bry);
 			return rslt.Init_many_empty();
 		}
-		commons_wiki.Init_assert();
+		commons_wiki.Init_assert(0);
 
 		// get page
 		byte[] ttl_in_data_ns = Bry_.Add(gplx.xowa.wikis.nss.Xow_ns_.Bry__data, Byte_ascii.Colon_bry, ttl_bry);

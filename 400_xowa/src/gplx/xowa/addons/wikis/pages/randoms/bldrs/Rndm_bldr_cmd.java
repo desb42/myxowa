@@ -19,7 +19,7 @@ public class Rndm_bldr_cmd extends Xob_cmd__base {
 	private int rndm_interval = 1000;
 	public Rndm_bldr_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		new Rndm_ns_rebuilder().Exec(wiki, rndm_interval);
 	}
 	@Override public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

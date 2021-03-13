@@ -25,7 +25,7 @@ public class Xomp_lnki_temp_wkr implements Xop_file_logger {
 	public Xomp_lnki_temp_wkr(Xowe_wiki wiki, Db_conn wkr_conn) {
 		this.tbl = new Xob_lnki_temp_tbl(wkr_conn); wkr_conn.Meta_tbl_assert(tbl);
 		this.commons_wiki = wiki.Appe().Wiki_mgr().Get_by_or_make(Xow_domain_itm_.Bry__commons);
-		this.ns_file_is_case_match_all = wiki.Init_assert().Ns_mgr().Ns_file().Case_match() == Xow_ns_case_.Tid__all;	// NOTE: wiki must be init'd;
+		this.ns_file_is_case_match_all = wiki.Init_assert(0).Ns_mgr().Ns_file().Case_match() == Xow_ns_case_.Tid__all;	// NOTE: wiki must be init'd;
 	}
 	public void Bgn() {
 		tbl.Insert_stmt_make();

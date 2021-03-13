@@ -134,7 +134,7 @@ public class Db_special_api {
 	private void Build_one_page(Xowe_wiki wiki, Bry_bfr bfr, byte[] titles, int bgn, int end) {
 		Xoa_ttl ttl = Xoa_ttl.Parse(wiki, titles, bgn, end);
 		// need
-		Xowd_page_itm tmp_page = wiki.Data__core_mgr().Db__core().Tbl__page().Select_by_ttl_as_itm_or_null(ttl);
+		Xowd_page_itm tmp_page = wiki.Data__core_mgr().Db__core().Tbl__page().Select_by_ttl_as_itm_or_null(ttl, wiki.Wrk_id());
 		bfr.Add_str_a7("{\"pageid\":");
 		//  page_id
 		bfr.Add_int_variable(tmp_page.Id());

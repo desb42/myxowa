@@ -144,7 +144,7 @@ enwikisource
 			Db_rdr rdr = Db_rdr_.Empty;
 			int count = 0;
 			try {
-			Xoctg_catpage_mgr.rwl.writeLock().lock();
+//			Xoctg_catpage_mgr.rwl.writeLock().lock();
 				attach_mgr.Attach();
 				rdr = attach_mgr.Conn_main().Stmt_sql(sql).Exec_select__rls_auto();
 				while (rdr.Move_next()) {
@@ -159,7 +159,7 @@ enwikisource
 			finally {
 				rdr.Rls();
 				attach_mgr.Detach();
-			Xoctg_catpage_mgr.rwl.writeLock().unlock();
+//			Xoctg_catpage_mgr.rwl.writeLock().unlock();
 			}
 			return count;
 //		}

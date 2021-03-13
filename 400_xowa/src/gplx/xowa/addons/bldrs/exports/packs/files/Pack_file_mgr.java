@@ -20,7 +20,7 @@ import gplx.xowa.addons.bldrs.centrals.dbs.*; import gplx.xowa.addons.bldrs.cent
 public class Pack_file_mgr {
 	public void Exec(Xowe_wiki wiki, Pack_file_cfg cfg) {
 		// init
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		Io_url wiki_dir = wiki.Fsys_mgr().Root_dir();
 		Io_url pack_dir = wiki_dir.GenSubDir_nest("tmp", "pack");
 		Io_mgr.Instance.DeleteDirDeep(pack_dir); Io_mgr.Instance.CreateDirIfAbsent(pack_dir);

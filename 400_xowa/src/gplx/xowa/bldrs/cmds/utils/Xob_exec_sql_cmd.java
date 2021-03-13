@@ -23,7 +23,7 @@ public class Xob_exec_sql_cmd implements Xob_cmd {
 	public String Cmd_key() {return Xob_cmd_keys.Key_exec_sql;}
 	public void Cmd_run() {
 		Xoae_app app = wiki.Appe();
-		wiki.Init_assert();	// force load; needed to pick up MediaWiki ns for MediaWiki:mainpage
+		wiki.Init_assert(0);	// force load; needed to pick up MediaWiki ns for MediaWiki:mainpage
 		Xodb_mgr_sql db_mgr = wiki.Db_mgr_as_sql();
 		Xow_db_mgr fsys_mgr = db_mgr.Core_data_mgr();
 		Xow_db_file file = fsys_mgr.Dbs__get_by_id_or_fail(file_idx);

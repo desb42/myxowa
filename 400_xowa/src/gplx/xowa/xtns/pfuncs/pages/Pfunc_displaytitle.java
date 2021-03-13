@@ -37,15 +37,68 @@ public class Pfunc_displaytitle extends Pf_func_base {
 			Xol_case_mgr case_mgr = wiki.Lang().Case_mgr();
 			val_html_lc = Standardize_displaytitle_text(case_mgr, val_html_lc);
 			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_db()); // NOTE: must be .Full_db() to handle non-main ns; PAGE:en.w:Template:Infobox_opera; ISSUE#:277 DATE:2018-11-14;
-			if (!Bry_.Eq(val_html_lc, page_ttl_lc))
+			if (!Bry_.Eq(val_html_lc, page_ttl_lc)) {
+				Xoa_app_.Usr_dlg().Warn_many("", "", "DISPLAYTITLE fail:~{0} not ~{1}", val_html_lc, page_ttl_lc);
 				val_html = null;
+			}
 		}
 		ctx.Page().Html_data().Display_ttl_(val_html);
 		tmp_bfr.Mkr_rls();
 	}
 	private static byte[] Standardize_displaytitle_text(Xol_case_mgr case_mgr, byte[] val) {
 		byte[] rv = case_mgr.Case_build_lower(val);							// lower-case
+		rv = Replaceamp(rv);
 		return Bry_.Replace(rv, Byte_ascii.Space, Byte_ascii.Underline);	// force underline; PAGE:de.w:Mod_qos DATE:2014-11-06
+	}
+	// replace &quot; and &amp;
+	private static byte[] Replaceamp(byte[] src) {
+		int len = src.length;
+		int pos = 0;
+		int sofar = 0;
+		Bry_bfr bfr = null;
+		while (pos < len) {
+			byte b = src[pos++];
+			if (b == '&') {
+				int size = -1;
+				byte rb = 0;
+				if (pos + 4 < len && src[pos] == 'q' && src[pos+1] == 'u' && src[pos+2] == 'o' && src[pos+3] == 't' && src[pos+4] == ';') {
+					size = 5;
+					rb = Byte_ascii.Quote;
+				}
+				else if (pos + 3 < len && src[pos] == 'a' && src[pos+1] == 'm' && src[pos+2] == 'p' && src[pos+3] == ';') {
+					size = 4;
+					rb = Byte_ascii.Amp;
+				}
+				else if (pos + 2 < len && src[pos] == 'l' && src[pos+1] == 't' && src[pos+2] == ';') {
+					int close = pos;
+					while (close < len) {
+						byte c = src[close++];
+						if (c == '&' && close + 2 < len && src[close] == 'g' && src[close+1] == 't' && src[close+2] == ';') {
+							break;
+						}
+					}
+					if (close < len) {
+						size = close - pos + 3; //???
+						rb = 0;
+					}
+				}
+				if (size > 0) {
+					if (bfr == null)
+						bfr = Bry_bfr_.New();
+					bfr.Add_mid(src, sofar, pos - 1);
+					if (rb != 0)
+						bfr.Add_byte(rb);
+					pos += size;
+					sofar = pos;
+				}
+			}
+		}
+		if (sofar != 0) {
+			bfr.Add_mid(src, sofar, len);
+			return bfr.To_bry();
+		}
+		else
+			return src;
 	}
 	public static final    Pfunc_displaytitle Instance = new Pfunc_displaytitle(); Pfunc_displaytitle() {}
 }	

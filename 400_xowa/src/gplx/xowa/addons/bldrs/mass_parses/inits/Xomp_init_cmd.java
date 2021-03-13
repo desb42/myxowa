@@ -19,7 +19,7 @@ public class Xomp_init_cmd extends Xob_cmd__base {
 	private final    Xomp_init_mgr mgr = new Xomp_init_mgr();
 	public Xomp_init_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		mgr.Exec(wiki);
 	}
 	@Override public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

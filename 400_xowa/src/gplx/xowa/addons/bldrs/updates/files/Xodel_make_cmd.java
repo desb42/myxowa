@@ -18,7 +18,7 @@ import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.wkrs.*;
 public class Xodel_make_cmd extends Xob_cmd__base implements Xob_cmd {
 	public Xodel_make_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		new Xodel_make_mgr().Exec(wiki);
 	}
 

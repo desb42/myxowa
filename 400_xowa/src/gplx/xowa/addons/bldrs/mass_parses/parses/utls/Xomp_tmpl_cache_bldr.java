@@ -32,6 +32,7 @@ public class Xomp_tmpl_cache_bldr {
 		, ",       pp.page_redirect_id"
 		, "FROM    page pp"
 		, "WHERE   pp.page_namespace IN (8, 10, 828)"
+//		, "WHERE   pp.page_namespace IN (8, 10, 828, 16)" // enwiki has over 2million categories!!!
 		);
 
 		Xomp_text_db_loader text_db_loader = new Xomp_text_db_loader(wiki);

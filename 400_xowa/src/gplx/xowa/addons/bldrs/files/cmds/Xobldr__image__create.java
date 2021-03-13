@@ -31,7 +31,7 @@ public class Xobldr__image__create extends Xob_itm_dump_base implements Xob_cmd,
 	public Xosql_dump_parser Parser() {return parser;}
 	public void Cmd_init(Xob_bldr bldr) {}
 	public void Cmd_bgn(Xob_bldr bldr) {
-		wiki.Init_assert();	// NOTE: must init wiki for db_mgr_as_sql
+		wiki.Init_assert(0);	// NOTE: must init wiki for db_mgr_as_sql
 		Init_dump(BLDR_CMD_KEY);
 		if (src_fil == null) {
 			src_fil = Xob_page_wkr_cmd.Find_fil_by(wiki.Fsys_mgr().Root_dir(), "*-image.sql");

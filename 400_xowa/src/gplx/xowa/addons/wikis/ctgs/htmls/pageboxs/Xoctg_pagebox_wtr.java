@@ -72,7 +72,7 @@ public class Xoctg_pagebox_wtr implements Gfo_invk {
 
 		// get cat_db_id from page
 		Xowd_page_itm pageRow = new Xowd_page_itm();
-		boolean exists = wiki.Data__core_mgr().Tbl__page().Select_by_ttl(pageRow, page.Ttl().Ns(), page.Ttl().Page_db());
+		boolean exists = wiki.Data__core_mgr().Tbl__page().Select_by_ttl(pageRow, page.Ttl().Ns(), page.Ttl().Page_db(), wiki.Wrk_id());
 		int cat_db_id = pageRow.Cat_db_id();
 		if (exists && cat_db_id != -1) {// note that wtxt_dbs can have 0 ctgs but will have cat_db_id == -1
 			Xow_db_file cat_link_db = wiki.Data__core_mgr().Dbs__get_by_id_or_null(cat_db_id);

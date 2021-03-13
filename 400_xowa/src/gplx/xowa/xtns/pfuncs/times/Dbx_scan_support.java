@@ -15,6 +15,12 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.pfuncs.times; import gplx.*;
 import gplx.core.btries.*;
+import gplx.xowa.Db_timezone;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.zone.ZoneRules;
 public class Dbx_scan_support {
 	public static int TIMELIB_UNSET  =-99999;
 
@@ -219,65 +225,73 @@ public class Dbx_scan_support {
 
 	public static void timelib_skip_day_suffix(Dbx_scanner s)
 	{
-		byte b = s.src[s.ptr];
+		byte b = s.str[s.str_ptr];
 		if (b == ' ' || b == '\t') {
 			return;
 		}
-		byte b2 = s.src[s.ptr + 1];
+		byte b2 = s.str[s.str_ptr + 1];
 		if (b == 'n' && b2 == 'd' || b == 'r' && b2 == 'd' || b == 's' && b2 == 't' || b == 't' && b2 == 'h') {
-			s.ptr += 2;
+			s.str_ptr += 2;
 		}
 	}
 	public static void timelib_eat_spaces(Dbx_scanner s)
 	{
 		while (true) {
-			byte b = s.src[s.ptr];
+			byte b = s.str[s.str_ptr];
 			if (b == ' ' || b == '\t') {
-				s.ptr++;
+				s.str_ptr++;
 			}
 			else
 				break;
 		}
 	}
 	//public static int timelib_get_nr(Dbx_scanner s, int size) { return 0; }
-	public static int timelib_get_nr_ex(Dbx_scanner s, int max_length) // sets s.length
+	public static int timelib_get_nr(Dbx_scanner s, int max_length) { // sets s.length
+		return timelib_get_nr_extend(s, max_length, false);
+	}
+	public static int timelib_get_nr_ex(Dbx_scanner s, int max_length) { // sets s.length
+		return timelib_get_nr_extend(s, max_length, true);
+	}
+	public static int timelib_get_nr_extend(Dbx_scanner s, int max_length, boolean setlength) // sets s.length
 	{
 		int begin, end;
 		int len = 0;
-	
+
 		while (true) {
-			byte b = s.src[s.ptr];
+			byte b = s.str[s.str_ptr];
 			if (b < '0' || (b > '9')) {
-				if (b == '\0')
+				if (b == 0)
 					return TIMELIB_UNSET;
-				s.ptr++;
+				s.str_ptr++;
 			}
 			else
 				break;
 		}
-		begin = s.ptr;
+
+		begin = s.str_ptr;
 		while (true) {
-			byte b = s.src[s.ptr];
+			byte b = s.str[s.str_ptr];
 			if (b >= '0' && (b <= '9') && len < max_length) {
-				++s.ptr;
+				++s.str_ptr;
 				++len;
 			}
 			else
 				break;
 		}
-		end = s.ptr;
-		s.length = end - begin;
-	
+		end = s.str_ptr;
+		if (setlength)
+			s.length = end - begin;
+
 		int tmp_nr = TIMELIB_UNSET;
-		tmp_nr = Bry_.To_int_or(s.src, begin, end, Int_.Min_value);
+		tmp_nr = Bry_.To_int_or(s.str, begin, end, Int_.Min_value);
 		return tmp_nr;
 	}
 	public static int timelib_get_month(Dbx_scanner s)
 	{
 		while (true) {
-			byte b = s.src[s.ptr];
+			byte b = s.str[s.str_ptr];
 			if (b == ' ' || b == '\t' || b == '-' || b == '.' || b == '/')
-				++s.ptr;
+				++s.str_ptr;
 			else
 				break;
 		}
@@ -285,10 +299,10 @@ public class Dbx_scan_support {
 	}
 	public static int timelib_lookup_month(Dbx_scanner s)
 	{
-		byte b = s.src[s.ptr];
-		Object o = trie.Match_at_w_b0(trv, b, s.src, s.ptr, s.src_len);	// now match String against tkn
+		byte b = s.str[s.str_ptr];
+		Object o = trie.Match_at_w_b0(trv, b, s.str, s.str_ptr, s.str_len);	// now match String against tkn
 		if (o == null) return TIMELIB_UNSET;
-		s.ptr = trv.Pos();
+		s.str_ptr = trv.Pos();
 		if (o instanceof Pxd_itm_month_name)
 			return ((Pxd_itm_month_name)o).Seg_val();
 		else
@@ -297,12 +311,12 @@ public class Dbx_scan_support {
 	public static int timelib_meridian(Dbx_scanner s, int h)
 	{
 		int retval = 0;
-		byte b;
+		byte b = 0;
 	
 		while (true) {
-			b = s.src[s.ptr];
+			b = s.str[s.str_ptr];
 			if (b != 'A' && b != 'a' && b != 'P' && b != 'p') //!strchr("AaPp", **ptr))
-				++s.ptr;
+				++s.str_ptr;
 			else
 				break;
 		}
@@ -313,25 +327,25 @@ public class Dbx_scan_support {
 		} else if (h != 12) {
 			retval = 12;
 		}
-		b = s.src[++s.ptr];
+		b = s.str[++s.str_ptr];
 		if (b == '.') {
-			b = s.src[++s.ptr];
+			b = s.str[++s.str_ptr];
 		}
 		if (b == 'M' || b == 'm') {
-			b = s.src[++s.ptr];
+			b = s.str[++s.str_ptr];
 		}
 		if (b == '.') {
-			++s.ptr;
+			++s.str_ptr;
 		}
 		return retval;
 	}
 	public static timelib_relunit timelib_lookup_relunit(Dbx_scanner s)
 //static const timelib_relunit* timelib_lookup_relunit(char **ptr)
 	{
-		byte b = s.src[s.ptr];
-		Object o = trie.Match_at_w_b0(trv, b, s.src, s.ptr, s.src_len);	// now match String against tkn
+		byte b = s.str[s.str_ptr];
+		Object o = trie.Match_at_w_b0(trv, b, s.str, s.str_ptr, s.str_len);	// now match String against tkn
 		if (o == null) return null;
-		s.ptr = trv.Pos();
+		s.str_ptr = trv.Pos();
 		if (o instanceof Pxd_itm_unit) {
 			timelib_relunit rv = new timelib_relunit();
 			Pxd_itm_unit itm = (Pxd_itm_unit)o;
@@ -396,35 +410,35 @@ public class Dbx_scan_support {
 
 		byte b;
 		while (true) {
-			b = s.src[s.ptr];
+			b = s.str[s.str_ptr];
 			if ((b < '0' || b > '9') && b != '+' && b != '-') {
-				if (b == '\0')
+				if (b == 0)
 					return TIMELIB_UNSET;
-				s.ptr++;
+				s.str_ptr++;
 			}
 			else
 				break;
 		}
 
 		while (true) {
-			b = s.src[s.ptr];
+			b = s.str[s.str_ptr];
 			if (b == '+' || b == '-') {
 				if (b == '-')
 					dir *= -1;
-				++s.ptr;
+				++s.str_ptr;
 			}
 			else
 				break;
 		}
-		return dir * timelib_get_nr_ex(s, max_length);
+		return dir * timelib_get_nr(s, max_length);
 	}
 	public static int timelib_get_relative_text(Dbx_scanner s)  // sets s.behavior
 //static timelib_sll timelib_get_relative_text(char **ptr, int *behavior)
 	{
 		while (true) {
-			byte b = s.src[s.ptr];
+			byte b = s.str[s.str_ptr];
 			if (b == ' ' || b == '\t' || b == '-' || b == '/')
-				++s.ptr;
+				++s.str_ptr;
 			else
 				break;
 		}
@@ -433,10 +447,10 @@ public class Dbx_scan_support {
 	public static int timelib_lookup_relative_text(Dbx_scanner s)  // sets s.behavior
 //static timelib_sll timelib_lookup_relative_text(char **ptr, int *behavior)
 	{
-		byte b = s.src[s.ptr];
-		Object o = trie.Match_at_w_b0(trv, b, s.src, s.ptr, s.src_len);	// now match String against tkn
+		byte b = s.str[s.str_ptr];
+		Object o = trie.Match_at_w_b0(trv, b, s.str, s.str_ptr, s.str_len);	// now match String against tkn
 		if (o == null) return TIMELIB_UNSET;
-		s.ptr = trv.Pos();
+		s.str_ptr = trv.Pos();
 		s.behavior = 0;
 		if (o instanceof Pxd_itm_unit) //"second" is a unit!!!!
 			return 2;
@@ -472,33 +486,34 @@ public class Dbx_scan_support {
 	{
 		int begin, end;
 		double tmp_nr = TIMELIB_UNSET;
-		int len = 0;
+		s.length = 0;
 
 		while (true) {
-			byte b = s.src[s.ptr];
+			byte b = s.str[s.str_ptr];
 			if ((b != '.') && (b != ':') && ((b < '0') || (b > '9'))) {
-				if (b == '\0')
+				if (b == 0)
 					return TIMELIB_UNSET;
-				s.ptr++;
+				s.str_ptr++;
 			}
 			else
 				break;
 		}
 
-		begin = s.ptr;
+		int len = 0;
+		begin = s.str_ptr;
 		while (true) {
-			byte b = s.src[s.ptr];
+			byte b = s.str[s.str_ptr];
 			if (((b == '.') || (b == ':') || ((b >= '0') && (b <= '9'))) && len < max_length) {
-				++s.ptr;
+				++s.str_ptr;
 				++len;
 			}
 			else
 				break;
 		}
-		end = s.ptr;
-		s.length = end - begin;
+		end = s.str_ptr;
+		s.length = len;
 
-		tmp_nr = Bry_.To_double_or(s.src, begin, end, Int_.Min_value) * Math.pow(10, 7 - (end - begin));
+		tmp_nr = Bry_.To_double_or(s.str, begin, end, Int_.Min_value) * Math.pow(10, 7 - (end - begin));
                 
 		return (int)tmp_nr;
 	}
@@ -513,22 +528,22 @@ public class Dbx_scan_support {
 		s.tz_not_found = 0;
 		byte b;
 		while (true) {
-			b = s.src[s.ptr];
+			b = s.str[s.str_ptr];
 			if (b == ' ' || b == '\t' || b == '(') {
-				s.ptr++;
+				s.str_ptr++;
 			}
 			else
 				break;
 		}
 		s.tz_not_found = 1;
-		byte[] lsrc = s.src;
-		int pos = s.ptr;
+		byte[] lsrc = s.str;
+		int pos = s.str_ptr;
 		if (lsrc[pos + 0] == 'G' && lsrc[pos + 1] == 'M' && lsrc[pos + 2] == 'T' && (lsrc[pos + 3] == '+' || lsrc[pos + 3] == '-')) {
-			s.ptr += 3;
+			s.str_ptr += 3;
 		}
-		b = s.src[s.ptr];
+		b = s.str[s.str_ptr];
 		if (b == '+') {
-			++s.ptr;
+			++s.str_ptr;
 			t.is_localtime = true;
 			t.zone_type = TIMELIB_ZONETYPE_OFFSET;
 			s.tz_not_found = 0;
@@ -536,7 +551,7 @@ public class Dbx_scan_support {
 	
 			retval = timelib_parse_tz_cor(s);
 		} else if (b == '-') {
-			++s.ptr;
+			++s.str_ptr;
 			t.is_localtime = true;
 			t.zone_type = TIMELIB_ZONETYPE_OFFSET;
 			s.tz_not_found = 0;
@@ -551,18 +566,37 @@ public class Dbx_scan_support {
 			t.is_localtime = true;
 	
 			/* First, we lookup by abbreviation only */
-			b = s.src[s.ptr];
-			Object o = trie.Match_at_w_b0(trv, b, s.src, s.ptr, s.src_len);	// now match String against tkn
+			b = s.str[s.str_ptr];
+			Object o = trie.Match_at_w_b0(trv, b, s.str, s.str_ptr, s.str_len);	// now match String against tkn
 			if (o != null && o instanceof Pxd_itm_tz_abbr) {
-                            Pxd_itm_tz_abbr tza = (Pxd_itm_tz_abbr)o;
-                            if (tza.Tz_abbr().length == s.cur - s.ptr) {
-				s.ptr = trv.Pos();
-				t.zone_type = TIMELIB_ZONETYPE_ABBR;
-				retval = tza.Tz_offset();
-				t.tz_abbr = tza.Tz_abbr();
-				s.tz_not_found = 0;
-                            }
+				Pxd_itm_tz_abbr tza = (Pxd_itm_tz_abbr)o;
+				if (tza.Tz_abbr().length == s.str_len) {
+					s.str_ptr = trv.Pos();
+					t.zone_type = TIMELIB_ZONETYPE_ABBR;
+					retval = tza.Tz_offset();
+					t.tz_abbr = tza.Tz_abbr();
+					found++;
+				}
 			}
+			if (found == 0) { // || strcmp("UTC", tz_abbr) == 0) {
+				//offset = Db_timezone.Get_offset_from_name(String_.new_a7(s.str, s.str_ptr, s.str_len));
+				// (offset != -1) {
+					t.zone_type = TIMELIB_ZONETYPE_ID;
+					//retval = offset;
+					t.tz_abbr = Bry_.Mid(s.str, s.str_ptr, s.str_len);
+					found++;
+				//}
+			}
+			s.tz_not_found = (found == 0) ? 1 : 0;
+//				int dummy_error_code;
+//	
+//				if ((res = tz_wrapper(tz_abbr, tzdb, &dummy_error_code)) != NULL) {
+//					t.tz_info = res;
+//					t.zone_type = TIMELIB_ZONETYPE_ID;
+//					found++;
+//				}
+//			}
+
 //			offset = timelib_lookup_abbr(ptr, dst, &tz_abbr, &found);
 //			if (found) {
 //				t.zone_type = TIMELIB_ZONETYPE_ABBR;
@@ -584,9 +618,9 @@ public class Dbx_scan_support {
 //			retval = offset;
 		}
 		while (true) {
-			b = s.src[s.ptr];
+			b = s.str[s.str_ptr];
 			if (b == ')') {
-				s.ptr++;
+				s.str_ptr++;
 			}
 			else
 				break;
@@ -818,39 +852,39 @@ public class Dbx_scan_support {
 		int begin, end;
 		int tmp = 0;
 	
-		begin = s.ptr;
+		begin = s.str_ptr;
 		while (true) {
-			byte b = s.src[s.ptr];
+			byte b = s.str[s.str_ptr];
 			if ((b >= '0' && b <= '9') || b == ':') {
-				++s.ptr;
+				++s.str_ptr;
 			}
 			else
 				break;
 		}
-		end = s.ptr;
+		end = s.str_ptr;
 	
 		switch (end - begin) {
 			case 1: /* H */
 			case 2: /* HH */
-				tmp = Bry_.To_int_or(s.src, begin, end, Int_.Min_value);
+				tmp = Bry_.To_int_or(s.str, begin, end, Int_.Min_value);
 				return tmp * 3600;
 			case 3: /* H:M */
 			case 4: /* H:MM, HH:M, HHMM */
-				if (s.src[begin + 1] == ':') {
-					tmp = Bry_.To_int_or(s.src, begin, begin+1, Int_.Min_value) * 3600 +
-						Bry_.To_int_or(s.src, begin+2, end, Int_.Min_value) * 60;
+				if (s.str[begin + 1] == ':') {
+					tmp = Bry_.To_int_or(s.str, begin, begin+1, Int_.Min_value) * 3600 +
+						Bry_.To_int_or(s.str, begin+2, end, Int_.Min_value) * 60;
 					return tmp;
-				} else if (s.src[begin + 2] == ':') {
-					tmp = Bry_.To_int_or(s.src, begin, begin+2, Int_.Min_value) * 3600 +
-						Bry_.To_int_or(s.src, begin+3, end, Int_.Min_value) * 60;
+				} else if (s.str[begin + 2] == ':') {
+					tmp = Bry_.To_int_or(s.str, begin, begin+2, Int_.Min_value) * 3600 +
+						Bry_.To_int_or(s.str, begin+3, end, Int_.Min_value) * 60;
 					return tmp;
 				} else {
-					tmp = Bry_.To_int_or(s.src, begin, end, Int_.Min_value);
+					tmp = Bry_.To_int_or(s.str, begin, end, Int_.Min_value);
 					return tmp / 100 * 3600 + (tmp % 100) * 60;
 				}
 			case 5: /* HH:MM */
-				tmp = Bry_.To_int_or(s.src, begin, begin+2, Int_.Min_value) * 3600 +
-					Bry_.To_int_or(s.src, begin+3, end, Int_.Min_value) * 60;
+				tmp = Bry_.To_int_or(s.str, begin, begin+2, Int_.Min_value) * 3600 +
+					Bry_.To_int_or(s.str, begin+3, end, Int_.Min_value) * 60;
 				return tmp;
 		}
 		return 0;
@@ -861,6 +895,16 @@ public class Dbx_scan_support {
 		do_adjust_special_early(time);
 		do_adjust_relative(time);
 		do_adjust_special(time);
+		if (time.zone_type == TIMELIB_ZONETYPE_ID) {
+			// adjust offset
+			ZoneId zone = ZoneId.of(String_.new_a7(time.tz_abbr));
+			if (zone != null) {
+				ZoneRules rules = zone.getRules();
+				LocalDateTime loc = LocalDateTime.of(time.y, time.m, time.d, time.h, time.i);
+				ZoneOffset ofs = rules.getOffset(loc);
+				time.z = ofs.getTotalSeconds();
+			}
+		}
 	}
 
 	public static DateAdp Parse(byte[] src) {

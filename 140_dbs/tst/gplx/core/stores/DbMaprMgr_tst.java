@@ -37,7 +37,7 @@ public class DbMaprMgr_tst {
 			)));				
 		wtr = DbMaprWtr.new_by_url_(Db_conn_info_.Test);
 		wtr.EnvVars().Add(DbMaprWtr.Key_Mgr, mgr);
-		conn = Db_conn_pool.Instance.Get_or_new(Db_conn_info_.Test);
+		conn = Db_conn_pool.Instance.Get_or_new(Db_conn_info_.Test, 0);
 		Db_qry_fxt.DeleteAll(conn, "mock_discs", "mock_titles", "mock_chapters", "mock_streams");
 	}	DbMaprMgr mgr; DbMaprWtr wtr; Db_conn conn; MockDisc disc; MockTitle title; MockChapter chapter; MockStream audio, subtitle; SrlMgr rdr;
 	@Test  public void PurgeObjTree() {

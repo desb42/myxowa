@@ -39,7 +39,7 @@ public class Xowd_xowa_db_tbl implements Db_tbl {
 	}
 	public String Tbl_name() {return tbl_name;} private final    String tbl_name; public static final String TBL_NAME = "xowa_db";
 	public void Create_tbl() {conn.Meta_tbl_create(Dbmeta_tbl_itm.New(tbl_name, flds));}
-	public Xow_db_file[] Select_all(Xowd_core_db_props props, Io_url wiki_root_dir) {
+	public Xow_db_file[] Select_all(Xowd_core_db_props props, Io_url wiki_root_dir, int wrk_id) {
 		List_adp list = List_adp_.New();
 		Db_rdr rdr = conn.Stmt_select(tbl_name, flds).Exec_select__rls_auto();
 		try {
@@ -51,7 +51,7 @@ public class Xowd_xowa_db_tbl implements Db_tbl {
 					guid = Guid_adp_.Parse(rdr.Read_str(fld_guid));
 				}
 				int db_id = rdr.Read_int(fld_id);
-				Xow_db_file db_file = Xow_db_file.Load(props, db_id, rdr.Read_byte(fld_type), wiki_root_dir.GenSubFil(rdr.Read_str(fld_url)), ns_ids, part_id, guid);
+				Xow_db_file db_file = Xow_db_file.Load(props, db_id, rdr.Read_byte(fld_type), wiki_root_dir.GenSubFil(rdr.Read_str(fld_url)), ns_ids, part_id, guid, wrk_id);
 				list.Add(db_file);
 			}
 		}	finally {rdr.Rls();}

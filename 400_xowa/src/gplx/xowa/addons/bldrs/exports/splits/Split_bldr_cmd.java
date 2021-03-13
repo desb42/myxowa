@@ -20,7 +20,7 @@ public class Split_bldr_cmd extends Xob_cmd__base {
 	private final    Split_cfg cfg = new Split_cfg();
 	public Split_bldr_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		new Split_mgr().Exec(wiki, cfg);
 	}
 	@Override public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

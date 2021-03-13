@@ -21,9 +21,9 @@ public class Xobldr__page_regy__create extends Xob_cmd__base {
 	private boolean build_commons = false;
 	public Xobldr__page_regy__create(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		Xowe_wiki commons_wiki = bldr.App().Wiki_mgr().Get_by_or_make(Xow_domain_itm_.Bry__commons).Init_assert();
+		Xowe_wiki commons_wiki = bldr.App().Wiki_mgr().Get_by_or_make(Xow_domain_itm_.Bry__commons).Init_assert(0);
 		Db_conn page_regy_provider = Xob_db_file.New__page_regy(commons_wiki.Fsys_mgr().Root_dir()).Conn();
-		commons_wiki.Init_assert();
+		commons_wiki.Init_assert(0);
 		if (build_commons) {
 			Xob_page_regy_tbl.Reset_table(page_regy_provider);
 			Xob_page_regy_tbl.Create_data(bldr.Usr_dlg(), page_regy_provider, Xof_repo_tid_.Tid__remote, commons_wiki);
@@ -31,7 +31,7 @@ public class Xobldr__page_regy__create extends Xob_cmd__base {
 		}
 		else {
 			if (!Bry_.Eq(commons_wiki.Domain_bry(), wiki.Domain_bry())) {	// skip local wiki if cur wiki is commons
-				wiki.Init_assert();
+				wiki.Init_assert(0);
 				Xob_page_regy_tbl.Delete_local(page_regy_provider);
 				Xob_page_regy_tbl.Create_data(bldr.Usr_dlg(), page_regy_provider, Xof_repo_tid_.Tid__local, wiki);
 			}

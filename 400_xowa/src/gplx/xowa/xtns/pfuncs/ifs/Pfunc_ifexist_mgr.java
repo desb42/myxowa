@@ -36,7 +36,7 @@ public class Pfunc_ifexist_mgr {
 		}
 	}
 	private boolean Find_by_ns__other(Xowe_wiki wiki, Xoa_ttl ttl) {
-		boolean rv = wiki.Cache_mgr().Ifexist_cache().Get_by_load(ttl);
+		boolean rv = wiki.Cache_mgr().Ifexist_cache().Get_by_load(ttl, wiki);
 
 		// handle variants
 		if (	!rv
@@ -67,7 +67,7 @@ public class Pfunc_ifexist_mgr {
 		boolean env_is_testing = Env_.Mode_testing();
 		boolean rv = false;
 		if (	commons_wiki != null														// null check
-			&&	(	commons_wiki.Init_assert().Db_mgr().Tid() == gplx.xowa.wikis.dbs.Xodb_mgr_sql.Tid_sql	// make sure tid=sql; tid=txt automatically created for online images; DATE:2014-09-21
+			&&	(	commons_wiki.Init_assert(0).Db_mgr().Tid() == gplx.xowa.wikis.dbs.Xodb_mgr_sql.Tid_sql	// make sure tid=sql; tid=txt automatically created for online images; DATE:2014-09-21
 				||	env_is_testing
 				)
 			) {

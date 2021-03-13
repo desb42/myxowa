@@ -17,12 +17,12 @@ package gplx.xowa.wikis.caches; import gplx.*; import gplx.xowa.*; import gplx.x
 import gplx.core.caches.*;
 import gplx.xowa.wikis.data.tbls.*;
 public class Xow_ifexist_cache {
-	private final    Xowe_wiki wiki;
+	//private final    Xowe_wiki wiki;
 	private final    Xow_page_cache page_cache;
 	private final    Gfo_cache_mgr cache_mgr = new Gfo_cache_mgr().Max_size_(64 * Io_mgr.Len_mb).Reduce_by_(32 * Io_mgr.Len_mb);
 	private final    Hash_adp ns_loaded_hash = Hash_adp_.New();		
 	public Xow_ifexist_cache(Xowe_wiki wiki, Xow_page_cache page_cache) {
-		this.wiki = wiki;
+		//this.wiki = wiki;
 		this.page_cache = page_cache;
 	}
 	public Xow_ifexist_cache Cache_sizes_(int max, int reduce) {
@@ -61,7 +61,7 @@ public class Xow_ifexist_cache {
 
 		return Bool_.__byte;
 	}
-	public boolean Get_by_load(Xoa_ttl ttl) {
+	public boolean Get_by_load(Xoa_ttl ttl, Xowe_wiki wiki) {
 		byte[] key = ttl.Full_db();
 		Xow_ifexist_itm itm = null;
 		// gplx.core.consoles.Console_adp__sys.Instance.Write_str("ifexist_cache:" + String_.new_u8(key));

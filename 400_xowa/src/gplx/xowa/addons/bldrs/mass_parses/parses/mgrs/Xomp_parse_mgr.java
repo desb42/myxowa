@@ -70,7 +70,7 @@ public class Xomp_parse_mgr {
 		// init parse_wkrs
 		for (int i = 0; i < wkr_len; ++i) {
 			// make wiki
-			Xowe_wiki wkr_wiki = Xow_wiki_utl_.Clone_wiki(wiki, wiki.Fsys_mgr().Root_dir());
+			Xowe_wiki wkr_wiki = Xow_wiki_utl_.Clone_wiki(wiki, wiki.Fsys_mgr().Root_dir(), i+1);
 			Lru_cache_root.Instance.Del(wkr_wiki.Cache_mgr().Page_cache().Cache_key());
 			wkr_wiki.Cache_mgr().Page_cache_(page_cache).Commons_cache_(commons_cache).Ifexist_cache_(ifexist_cache);				
 

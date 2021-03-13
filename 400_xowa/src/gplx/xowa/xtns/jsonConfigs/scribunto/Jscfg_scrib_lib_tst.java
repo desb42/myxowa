@@ -171,7 +171,7 @@ class Jscfg_scrib_lib_fxt {
 		lib = new Jscfg_scrib_lib();
 		lib.Init();
 		lib.Core_(fxt.Core());
-		this.commons_wiki = fxt.Parser_fxt().Wiki().Appe().Wiki_mgr().Get_by_or_make(gplx.xowa.wikis.domains.Xow_domain_itm_.Bry__commons).Init_assert();
+		this.commons_wiki = fxt.Parser_fxt().Wiki().Appe().Wiki_mgr().Get_by_or_make(gplx.xowa.wikis.domains.Xow_domain_itm_.Bry__commons).Init_assert(0);
 	}
 	public void Init__page(String page, String text) {
 		fxt.Parser_fxt().Init_page_create(commons_wiki, page, text);

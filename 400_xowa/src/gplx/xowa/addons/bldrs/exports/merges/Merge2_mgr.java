@@ -42,7 +42,7 @@ public class Merge2_mgr {
 	}
 	public void Merge_data(Xow_wiki wiki, Io_url src_url, int idx_cur) {
 		long all_time_bgn = gplx.core.envs.System_.Ticks();
-		wiki.Init_by_wiki();
+		wiki.Init_by_wiki(0);
 		Db_conn src_conn = Db_conn_bldr.Instance.Get_or_autocreate(false, src_url);
 		ctx.Init(wiki, src_conn);
 

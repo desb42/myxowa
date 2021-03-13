@@ -24,7 +24,7 @@ public class Xoa_wiki_mgr_ {
 		Io_url wiki_root_dir = url.OwnerDir();
 		Xow_wiki rv = wiki_mgr.Make(wiki_domain, wiki_root_dir);
 		wiki_mgr.Add(rv);
-		rv.Init_by_wiki();		// must init for Modified_latest
+		rv.Init_by_wiki(0);		// must init for Modified_latest
 		String wiki_date = rv.Props().Modified_latest__yyyy_MM_dd();
 		app.User().User_db_mgr().Site_mgr().Import(rv.Domain_str(), rv.Domain_str(), wiki_root_dir.Raw(), wiki_date, "");
 		if (app.Tid_is_edit()) {

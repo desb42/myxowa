@@ -228,6 +228,9 @@ public class Scrib_core {
 		try {
 			Scrib_lua_mod mod = Mods_get_or_new(mod_name, mod_text);
 			String fnc_name_str = String_.new_u8(fnc_name);
+                        if (fnc_name_str.equals("coord2text")) {
+                            int a=1;
+                        }
 			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), fnc_name_str);
 			Keyval[] func_rslt = engine.CallFunction(luaid_ExecuteModule, func_args);			// call init_chunk to get proc dynamically; DATE:2014-07-12
 			if (func_rslt == null || func_rslt.length < 2) {

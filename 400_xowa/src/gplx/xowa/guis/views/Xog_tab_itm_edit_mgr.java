@@ -78,7 +78,7 @@ public class Xog_tab_itm_edit_mgr {
 
 			// reload html_db_id b/c it gets cleared in Xopg_db_page; ISSUE#:699; DATE:2020-08-06
 			Xowd_page_itm rv = new Xowd_page_itm();
-			wiki.Data__core_mgr().Tbl__page().Select_by_ttl(rv, page.Ttl().Ns(), page.Ttl().Page_db());
+			wiki.Data__core_mgr().Tbl__page().Select_by_ttl(rv, page.Ttl().Ns(), page.Ttl().Page_db(), wiki.Wrk_id());
 			page.Db().Page().Html_db_id_(rv.Html_db_id());
 
 			// save html

@@ -28,9 +28,14 @@ import gplx.xowa.guis.cbks.*; import gplx.xowa.guis.views.*;
 import gplx.xowa.xtns.gallery.*; import gplx.xowa.xtns.pfuncs.*; 
 import gplx.xowa.wikis.tdbs.*; import gplx.xowa.wikis.tdbs.hives.*; import gplx.xowa.xtns.proofreadPage.*;
 import gplx.xowa.addons.*; import gplx.xowa.addons.wikis.htmls.css.mgrs.*; import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*;
+import gplx.xowa.xtns.pfuncs.exprs.Pfunc_expr_shunter;
 public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	private boolean init_in_process = false;
 	public Xowe_wiki(Xoae_app app, Xol_lang_itm lang, Xow_ns_mgr ns_mgr, Xow_domain_itm domain_itm, Io_url wiki_dir) {
+		System.out.println("wiki:" + wiki_dir);
+                if (wiki_dir.toString().endsWith("\\www.wikidata.org\\")) {
+                    int a = 1;
+                }
 		this.ev_mgr = new Gfo_evt_mgr(this);
 		this.app = app; this.lang = lang; this.ns_mgr = ns_mgr;
 
@@ -50,24 +55,11 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		this.sanitizer = new Xop_sanitizer(app.Parser_amp_mgr(), app.Msg_log());
 
 		tdb_fsys_mgr = new Xotdb_fsys_mgr(wiki_dir, ns_mgr);
-		redirect_mgr = new Xop_redirect_mgr(this);
-		data_mgr = new Xow_page_mgr(this);
-		file_mgr = new Xow_file_mgr(this);
-		parser_mgr = new Xow_parser_mgr(this);
-		cfg_parser = new Xowc_parser(this);
 		props.Init_by_ctor(domain_tid, domain_bry);
 		props.ContentLanguage_(lang.Key_bry());
-		stats = new Xowd_site_stats_mgr(this);
 		Pf_func_.Reg(domain_itm, lang.Func_regy(), lang);
 		special_mgr = new Xow_special_mgr(this, lang);
-		sys_cfg = new Xow_sys_cfg(this);
-		hive_mgr = new Xob_hive_mgr(this);
-		util = new Xow_html_util(this);
-		import_cfg = new Xob_import_cfg(this);
 		msg_mgr = new Xow_msg_mgr(this, lang);
-		eval_mgr = new Bfmtr_eval_wiki(this);
-		fragment_mgr = new Xow_fragment_mgr(this);
-		xtn_mgr = new Xow_xtn_mgr().Ctor_by_wiki(this);
 		if (domain_tid == Xow_domain_tid_.Tid__home) {
 			wdata_wiki_tid	= Xow_domain_tid_.Tid__wikipedia;
 			wdata_wiki_lang = Xol_lang_itm_.Key_en;
@@ -78,19 +70,12 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		}
 		Wdata_wiki_abrv_();
 		db_mgr = new gplx.xowa.wikis.dbs.Xodb_mgr_txt(this, data_mgr);
-		maint_mgr = new Xow_maint_mgr(this);
-		cache_mgr = new Xow_cache_mgr(this);
-		/*if (Bry_.Eq(domain_bry, Xow_domain_itm_.Bry__home))*/ xwiki_mgr.Add_by_atrs(domain_bry, domain_bry);	// add full name to xwiki_mgr; needed for lookup in home ns; EX: [[home:Help/Contents]]
-		this.lnki_bldr = new Xoh_lnki_bldr(app, href_wtr);
-		this.ctg_catpage_mgr = new Xoctg_catpage_mgr(this);
-		this.quality = new Pp_quality(domain_itm.Domain_type_id() == Xow_domain_tid_.Tid__wikisource);
-		this.bread = new Db_breadcrumb(this);
-		this.maxpage = new Db_maxpage(this);
-		this.index_page = new Db_index_page(this);
-		this.tz_mgr = new Db_tz_mgr(this);
-		this.page_image = new Db_page_image(this);
-		this.skin_mgr = new Db_skin_mgr(this);
+		sys_cfg = new Xow_sys_cfg(this);
+		fragment_mgr = new Xow_fragment_mgr(this);
+		cfg_parser = new Xowc_parser(this);
 	}
+        public int Wrk_id() {return wrk_id;} private int wrk_id = 0; // non zero for main database
+	public Pfunc_expr_shunter		Expr_shunter()			{return expr_shunter;}	private final    Pfunc_expr_shunter expr_shunter = new Pfunc_expr_shunter();
 	public Gfo_evt_mgr				Evt_mgr() {return ev_mgr;} private final    Gfo_evt_mgr ev_mgr;
 	public Xow_ns_mgr				Ns_mgr() {return ns_mgr;} private final    Xow_ns_mgr ns_mgr;
 	public Xoa_ttl					Ttl_parse(byte[] ttl)								{return Xoa_ttl.Parse(this, ttl);}
@@ -115,17 +100,17 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public Fsm_mnt_mgr				File__mnt_mgr() {return file_mgr.Fsdb_mgr().Mnt_mgr();}
 	public boolean						Html__hdump_enabled() {return html_mgr__hdump_enabled;}	private boolean html_mgr__hdump_enabled = Bool_.N;
 	public Xoh_page_wtr_mgr			Html__wtr_mgr() {return html_mgr.Page_wtr_mgr();}
-	public Xoh_lnki_bldr			Html__lnki_bldr() {return lnki_bldr;}  private final    Xoh_lnki_bldr lnki_bldr;
+	public Xoh_lnki_bldr			Html__lnki_bldr() {return lnki_bldr;}  private Xoh_lnki_bldr lnki_bldr;
 	public Xoh_href_wtr				Html__href_wtr() {return href_wtr;} private final    Xoh_href_wtr href_wtr = new Xoh_href_wtr();
 	public Xoctg_pagebox_wtr		Ctg__pagebox_wtr() {return ctg_pagebox_wtr;} private final    Xoctg_pagebox_wtr ctg_pagebox_wtr = new Xoctg_pagebox_wtr();
-	public Xoctg_catpage_mgr		Ctg__catpage_mgr() {return ctg_catpage_mgr;} private final    Xoctg_catpage_mgr ctg_catpage_mgr;
+	public Xoctg_catpage_mgr		Ctg__catpage_mgr() {return ctg_catpage_mgr;} private Xoctg_catpage_mgr ctg_catpage_mgr;
 	public boolean						Html__css_installing() {return html__css_installing;} public void Html__css_installing_(boolean v) {html__css_installing = v;} private boolean html__css_installing;
 	public Xow_url_parser			Utl__url_parser() {return url__parser;} private final    Xow_url_parser url__parser;
 	public Xow_mw_parser_mgr		Mw_parser_mgr() {return mw_parser_mgr;} private final    Xow_mw_parser_mgr mw_parser_mgr = new Xow_mw_parser_mgr();
 	public Xow_xwiki_mgr			Xwiki_mgr() {return xwiki_mgr;} private final    Xow_xwiki_mgr xwiki_mgr;
 	public Xow_wiki_props			Props() {return props;} private final    Xow_wiki_props props = new Xow_wiki_props();
-	public Xowd_site_stats_mgr		Stats() {return stats;} private final    Xowd_site_stats_mgr stats;
-	public Xow_parser_mgr			Parser_mgr() {return parser_mgr;} private final    Xow_parser_mgr parser_mgr;
+	public Xowd_site_stats_mgr		Stats() {return stats;} private Xowd_site_stats_mgr stats;
+	public Xow_parser_mgr			Parser_mgr() {return parser_mgr;} private Xow_parser_mgr parser_mgr;
 	public Xoax_addon_mgr			Addon_mgr() {return addon_mgr;} private final    Xoax_addon_mgr addon_mgr = new Xoax_addon_mgr();
 	public Xog_cbk_mgr				Gui__cbk_mgr() {return gui__cbk_mgr;} private final    Xog_cbk_mgr gui__cbk_mgr = new Xog_cbk_mgr();
 	public Xowe_page_mgr			Page_mgr() {return page_mgr;} private final    Xowe_page_mgr page_mgr;
@@ -194,23 +179,23 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		file_mgr.Dbmeta_mgr().Clear();
 		db_mgr.Load_mgr().Clear();
 	}
-	public Xodb_mgr_sql				Db_mgr_create_as_sql() {Xodb_mgr_sql rv = new Xodb_mgr_sql(this); db_mgr = rv; return rv;}
-	public void	Init_by_wiki__force() {init_needed = true; Init_by_wiki();}
+	public Xodb_mgr_sql Db_mgr_create_as_sql() {Xodb_mgr_sql rv = new Xodb_mgr_sql(this); db_mgr = rv; return rv;}
+	public void	Init_by_wiki__force() {init_needed = true; Init_by_wiki(0);}
 	public void	Init_by_wiki__force_and_mark_inited() {
 		init_needed = true;
-		Init_by_wiki();
+		Init_by_wiki(0);
 		init_needed = false;
 	}
-	public void Init_by_wiki()		{Init_assert();}
-	public Xowe_wiki Init_assert()	{if (init_needed) Init_wiki(app.Usere()); return this;}
+	public void Init_by_wiki(int wrk_id)		{Init_assert(wrk_id);}
+	public Xowe_wiki Init_assert(int wrk_id)	{if (init_needed) Init_wiki(app.Usere(), wrk_id); return this;}
 	public void Init_db_mgr() {
 		Io_url core_db_url = Xow_db_file__core_.Find_core_fil_or_null(this);
 		if (core_db_url == null) {
 			tdb_fsys_mgr.Scan_dirs();
 		}
 		else {
-			Xodb_mgr_sql db_mgr_sql = this.Db_mgr_create_as_sql();
-			Xow_db_mgr.Init_by_load(this, core_db_url);
+			Xodb_mgr_sql db_mgr_sql = Db_mgr_create_as_sql();
+			Xow_db_mgr.Init_by_load(this, core_db_url, wrk_id);
 			file_mgr.Init_file_mgr_by_load(this);
 			db_mgr_sql.Core_data_mgr().Tbl__page().Flds__assert();	// NOTE: must go above html_mgr.Init_by_wiki b/c Page_load will be done via messages
 
@@ -241,16 +226,45 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		init_once_done = true;
 		app.Addon_mgr().Load_by_wiki(this);
 	}
-	private void Init_wiki(Xoue_user user) {	// NOTE: (a) one-time initialization for all wikis; (b) not called by tests
+        private boolean once = false;
+	private void Init_wiki(Xoue_user user, int wrk_id) {	// NOTE: (a) one-time initialization for all wikis; (b) not called by tests
 		if (init_in_process) {
 			app.Usr_dlg().Log_many("", "", "wiki.init: circular call canceled: ~{0}", domain_str);
 			return;	// NOTE: may be called multiple times due to "if (app.Stage() == Xoa_stage_.Tid_launch) init_needed = false;"; TODO_OLD: call this only once; DATE:2014-06-07
 		}
 		init_in_process = true;
-		if (app.Stage() == Xoa_stage_.Tid_launch) init_needed = false;	// NOTE: only mark inited if app fully launched; otherwise statements in xowa.gfs can fire and prematurely set home to inited; DATE:2013-03-24
+
+                if (!once) {
+		redirect_mgr = new Xop_redirect_mgr(this);
+		data_mgr = new Xow_page_mgr(this);
+		file_mgr = new Xow_file_mgr(this);
+		parser_mgr = new Xow_parser_mgr(this);
+                maint_mgr = new Xow_maint_mgr(this);
+		cache_mgr = new Xow_cache_mgr(this);
+		/*if (Bry_.Eq(domain_bry, Xow_domain_itm_.Bry__home))*/ xwiki_mgr.Add_by_atrs(domain_bry, domain_bry);	// add full name to xwiki_mgr; needed for lookup in home ns; EX: [[home:Help/Contents]]
+		this.lnki_bldr = new Xoh_lnki_bldr(app, href_wtr);
+		this.ctg_catpage_mgr = new Xoctg_catpage_mgr(this);
+		this.quality = new Pp_quality(domain_itm.Domain_type_id() == Xow_domain_tid_.Tid__wikisource);
+		this.bread = new Db_breadcrumb(this);
+		this.maxpage = new Db_maxpage(this);
+		this.index_page = new Db_index_page(this);
+		this.tz_mgr = new Db_tz_mgr(this);
+		this.page_image = new Db_page_image(this);
+		this.skin_mgr = new Db_skin_mgr(this);
+		stats = new Xowd_site_stats_mgr(this);
+		hive_mgr = new Xob_hive_mgr(this);
+		util = new Xow_html_util(this);
+		import_cfg = new Xob_import_cfg(this);
+		eval_mgr = new Bfmtr_eval_wiki(this);
+		xtn_mgr = new Xow_xtn_mgr().Ctor_by_wiki(this);
+                once = true;
+                }
+
+                if (app.Stage() == Xoa_stage_.Tid_launch) init_needed = false;	// NOTE: only mark inited if app fully launched; otherwise statements in xowa.gfs can fire and prematurely set home to inited; DATE:2013-03-24
 		Gfo_log_bfr log_bfr = app.Log_bfr(); log_bfr.Add("wiki.init.bgn: " + domain_str);
 		
 		app.Gfs_mgr().Run_url_for(this, tdb_fsys_mgr.Cfg_wiki_stats_fil());
+                this.wrk_id = wrk_id;
 		Init_db_mgr();
 		if (!app.Bldr().Import_marker().Chk(this)) {app.Wiki_mgr().Del(domain_bry); init_needed = false; return;}	// NOTE: must call after Db_mgr_create_as_sql(); also, must delete wiki from mgr; DATE:2014-08-24
 		db_mgr.Load_mgr().Init_by_wiki(this);

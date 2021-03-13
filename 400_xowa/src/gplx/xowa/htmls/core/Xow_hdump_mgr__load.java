@@ -233,7 +233,7 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 
 	private static boolean Load__fail(Xoh_page hpg) {hpg.Db().Page().Exists_n_(); return false;}
 	private static boolean Load__dbpg(Xow_wiki wiki, Xowd_page_itm dbpg, Xoh_page hpg, Xoa_ttl ttl) {
-		wiki.Data__core_mgr().Tbl__page().Select_by_ttl(dbpg, ttl.Ns(), ttl.Page_db());
+		wiki.Data__core_mgr().Tbl__page().Select_by_ttl(dbpg, ttl.Ns(), ttl.Page_db(), wiki.Wrk_id());
 		if (dbpg.Redirect_id() != -1) Load__dbpg__redirects(wiki, dbpg);
 		return dbpg.Html_db_id() != -1;
 	}

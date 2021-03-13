@@ -99,8 +99,8 @@ public class Xow_db_file {
 		cfg_tbl.Create_tbl();	// always create cfg in each db
 		return rv;
 	}
-	public static Xow_db_file Load(Xowd_core_db_props props, int id, byte tid, Io_url url, String ns_ids, int part_id, Guid_adp guid) {
-		Db_conn conn = Db_conn_bldr.Instance.Get(url);
+	public static Xow_db_file Load(Xowd_core_db_props props, int id, byte tid, Io_url url, String ns_ids, int part_id, Guid_adp guid, int wrk_id) {
+		Db_conn conn = Db_conn_bldr.Instance.Get(url, wrk_id);
 		if (conn == null) {
 			Xoa_app_.Usr_dlg().Warn_many("", "", "wiki.db:missing db; tid=~{0} url=~{1}", Xow_db_file_.To_key(tid), url.Raw());
 			conn = Db_conn_.Noop;

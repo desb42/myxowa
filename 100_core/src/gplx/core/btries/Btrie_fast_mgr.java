@@ -252,5 +252,7 @@ class ByteTrieItm_fast {
 		--ary_len;
 		ary_is_empty = ary_len == 0;
 	}	int ary_len = 0;
-	public ByteTrieItm_fast(byte key_byte, Object val, boolean case_any) {this.key_byte = key_byte; this.val = val; this.case_any = case_any;}
+	public ByteTrieItm_fast(byte key_byte, Object val, boolean case_any) {
+            this.key_byte = key_byte; this.val = val; this.case_any = case_any;
+        }
 }

@@ -144,7 +144,7 @@ public class Xoh_js_cbk implements Gfo_invk {
 		try {
 			Thread_adp_.Sleep(10);	// slow down calls to prevent random crashing in XulRunner; DATE:2014-04-23
 			gplx.xowa.xtns.wbases.Wdata_wiki_mgr wdata_mgr = app.Wiki_mgr().Wdata_mgr();
-			wdata_mgr.Wdata_wiki().Init_assert();	// NOTE: must assert else ns_mgr won't load Property
+			wdata_mgr.Wdata_wiki().Init_assert(0);	// NOTE: must assert else ns_mgr won't load Property
 			int len = m.Args_count();
 			if (len < 1) return null;
 			byte[][] langs = Bry_split_.Split(m.Args_getAt(0).Val_to_bry(), Byte_ascii.Semic);

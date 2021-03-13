@@ -56,18 +56,19 @@ public class Xow_db_mgr {
 	public Xow_db_file				Db__html()		{return db__html;}		private Xow_db_file db__html;
 	public Xow_db_file				Db__cat_core()	{return db__cat_core;}	private Xow_db_file db__cat_core;
 	public Xow_db_file				Db__wbase()		{return db__wbase;}		private Xow_db_file db__wbase;  public void Db__wbase_(Xow_db_file v) {db__wbase = v;}
-	public void Init_by_load(Io_url core_url) {
+	public void Init_by_load(Io_url core_url, int wrk_id) {
 		// clear lists
 		hash_by_id.Clear();
 		hash_by_tids.Clear();
 
 		// create core_conn / core_db
-		Db_conn core_conn = Db_conn_bldr.Instance.Get(core_url);
+		Db_conn core_conn = Db_conn_bldr.Instance.Get(core_url, wrk_id);
+                System.out.println(core_url + " " + core_conn);
 		props = Xowd_core_db_props.Cfg_load(core_conn);	// load props to get layout_text
-		Dbs__set_by_tid(Xow_db_file.Load(props, Xow_db_file_.Uid__core, Xow_db_file__core_.Core_db_tid(props.Layout_text()), core_url, Xob_info_file.Ns_ids_empty, Xob_info_file.Part_id_1st, Guid_adp_.Empty));
+		Dbs__set_by_tid(Xow_db_file.Load(props, Xow_db_file_.Uid__core, Xow_db_file__core_.Core_db_tid(props.Layout_text()), core_url, Xob_info_file.Ns_ids_empty, Xob_info_file.Part_id_1st, Guid_adp_.Empty, wrk_id));
 
 		// load dbs from "xowa_db" tbl
-		Xow_db_file[] ary = db__core.Tbl__db().Select_all(props, core_url.OwnerDir());
+		Xow_db_file[] ary = db__core.Tbl__db().Select_all(props, core_url.OwnerDir(), wrk_id);
 		int len = ary.length;
 		for (int i = 0; i < len; i++) {
 			Xow_db_file db = ary[i];
@@ -148,7 +149,7 @@ public class Xow_db_mgr {
 		db__core.Tbl__db().Commit_all(this);
 
 		// call init again to regen list of dbs
-		this.Init_by_load(db__core.Url());
+		this.Init_by_load(db__core.Url(), 0);
 	}
 	public Xow_db_file Dbs__get_for_create(byte tid, int ns_id) {
 		Xow_db_file[] ary = Dbs__get_ary(tid, ns_id);
@@ -245,8 +246,8 @@ public class Xow_db_mgr {
 	}
 
 	// helper method for wikis to (a) init db_mgr; (b) load wiki.props; should probably be moved to more generic "wiki.Init_by_db()"
-	public static void Init_by_load(Xow_wiki wiki, Io_url core_url) {
-		wiki.Data__core_mgr().Init_by_load(core_url);
+	public static void Init_by_load(Xow_wiki wiki, Io_url core_url, int wrk_id) {
+		wiki.Data__core_mgr().Init_by_load(core_url, wrk_id);
 		wiki.Props().Init_by_load(wiki.App(), wiki.Data__core_mgr().Tbl__cfg());	// load Main_page
 	}
 }

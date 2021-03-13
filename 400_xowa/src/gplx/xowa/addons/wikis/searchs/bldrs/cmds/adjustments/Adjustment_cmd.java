@@ -28,7 +28,7 @@ public class Adjustment_cmd implements Gfo_invk {
 	public void Exec() {
 		// init
 		if (!enabled) return;
-		wiki.Init_by_wiki();
+		wiki.Init_by_wiki(0);
 		Xob_db_file pl_db = Xob_db_file.New__page_link(wiki);
 		Db_conn pl_conn =  pl_db.Conn();
 

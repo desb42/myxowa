@@ -19,6 +19,7 @@ import gplx.xowa.langs.*; import gplx.xowa.langs.kwds.*;
 import gplx.xowa.wikis.nss.*;
 import gplx.xowa.files.*; import gplx.xowa.files.repos.*; import gplx.xowa.files.origs.*; import gplx.xowa.files.imgs.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.Xoctg_catpage_mgr;
 public class Pfunc_filepath extends Pf_func_base {
 	@Override public boolean Func_require_colon_arg() {return true;}
 	@Override public int Id() {return Xol_kwd_grp_.Id_url_filepath;}
@@ -54,10 +55,16 @@ public class Pfunc_filepath extends Pf_func_base {
 			if (commons_wiki != null) {		// commons_wiki not installed; exit; DATE:2013-06-08
 				if (!Env_.Mode_testing()) {
 					synchronized (commons_wiki) {	// LOCK:app-level; wiki.commons; DATE:2016-07-06
-						commons_wiki.Init_assert();// must assert load else page_zip never detected; DATE:2013-03-10
+						commons_wiki.Init_assert(0);// must assert load else page_zip never detected; DATE:2013-03-10
 					}
 				}
-				page = commons_wiki.Data_mgr().Load_page_by_ttl(ttl);
+				try {
+					Xoctg_catpage_mgr.rwl.writeLock().lock();
+					page = commons_wiki.Data_mgr().Load_page_by_ttl(ttl);
+				}
+				finally {
+					Xoctg_catpage_mgr.rwl.writeLock().unlock();
+				}
 			}
 		}
 

@@ -20,7 +20,7 @@ import gplx.xowa.addons.bldrs.files.dbs.*;
 public class Xobldr__text_db__make_page extends Xob_cmd__base {
 	public Xobldr__text_db__make_page(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		Xow_db_mgr db_mgr = wiki.Data__core_mgr();
 		Io_url page_db_url = db_mgr.Db__core().Url();
 		int len = db_mgr.Dbs__len();

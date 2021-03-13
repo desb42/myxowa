@@ -20,7 +20,7 @@ public class Dumpdiff_cmd extends Xob_cmd__base {
 	private final    Dumpdiff_mgr mgr = new Dumpdiff_mgr();
 	public Dumpdiff_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		mgr.Exec(bldr.App(), wiki, cfg);
 	}
 	@Override public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

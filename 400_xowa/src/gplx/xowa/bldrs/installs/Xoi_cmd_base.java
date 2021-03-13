@@ -40,7 +40,7 @@ abstract class Xoi_cmd_base implements Gfo_thread_cmd {
 		Xoae_app app = install_mgr.App();
 		Xob_bldr bldr = app.Bldr();
 		Xowe_wiki wiki = app.Wiki_mgr().Get_by_or_make(Bry_.new_a7(wiki_key));
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		bldr.Cmd_mgr().Clear();
 		Process_async_init(app, wiki, bldr);
 		bldr.Pause_at_end_(false);

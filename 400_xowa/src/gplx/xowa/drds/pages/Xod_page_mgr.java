@@ -26,7 +26,7 @@ public class Xod_page_mgr {
 		Xoa_ttl ttl = wiki.Ttl_parse(page_url.Page_bry());
 		if (ttl.Ns().Id_is_special()) return Load_special(rv, wiki, page_url, ttl);
 		Xowd_page_itm dbpg = new Xowd_page_itm();
-		try {wiki.Data__core_mgr().Tbl__page().Select_by_ttl(dbpg, ttl.Ns(), ttl.Page_db());}
+		try {wiki.Data__core_mgr().Tbl__page().Select_by_ttl(dbpg, ttl.Ns(), ttl.Page_db(), wiki.Wrk_id());}
 		catch (Exception e) {// throw detailed exception to track down page_score exception
 			throw Err_.new_("", "failed to retrieve page", "wiki", wiki.Domain_str(), "page_url", page_url.Page_bry(), "err", Err_.Message_lang(e));
 		} 

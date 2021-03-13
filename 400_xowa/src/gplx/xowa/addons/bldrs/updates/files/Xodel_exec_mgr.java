@@ -27,7 +27,7 @@ public class Xodel_exec_mgr {
 
 		// get wiki; init it; do delete
 		Xowe_wiki wiki = bldr.App().Wiki_mgr().Get_by_or_make(domain_bry);
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		Delete_by_url(prog_ui, wiki, deletion_conn, cfg_tbl);
 
 		// cleanup

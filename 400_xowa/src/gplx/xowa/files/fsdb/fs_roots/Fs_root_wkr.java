@@ -122,7 +122,7 @@ class Fs_root_wkr {
 	private Db_conn Init_orig_db() {
 		Io_url orig_db = orig_dir.GenSubFil("^orig_regy.sqlite3");
 		boolean created = false; boolean schema_is_1 = Bool_.Y;
-		Db_conn conn = Db_conn_bldr.Instance.Get(orig_db);
+		Db_conn conn = Db_conn_bldr.Instance.Get(orig_db, 0);
 		if (conn == null) {
 			conn = Db_conn_bldr.Instance.New(orig_db);
 			created = true;

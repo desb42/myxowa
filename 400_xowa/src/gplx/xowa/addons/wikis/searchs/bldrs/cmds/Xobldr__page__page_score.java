@@ -30,7 +30,7 @@ public class Xobldr__page__page_score extends Xob_cmd__base implements Xob_cmd {
 		Calc__main();
 	}
 	private void Init__tbl() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		this.page_conn = wiki.Data__core_mgr().Db__core().Conn();
 		page_count = page_conn.Exec_select_as_int("SELECT Count(page_id) FROM page", -1);
 		

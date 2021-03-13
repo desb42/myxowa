@@ -19,7 +19,7 @@ public class Xomp_make_cmd extends Xob_cmd__base {
 	private final    Xomp_make_cmd_cfg cfg = new Xomp_make_cmd_cfg();
 	public Xomp_make_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
 	@Override public void Cmd_run() {
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		if (cfg.Mode().Has("html"))
 			new Xomp_make_html().Exec(wiki, cfg);
 		if (cfg.Mode().Has("lnki"))

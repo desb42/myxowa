@@ -47,7 +47,7 @@ class Xofulltext_indexer_svc implements Gfo_invk {
 			}
 
 			// check if dir exists
-			wiki.Init_by_wiki();
+			wiki.Init_by_wiki(0);
 			Io_url search_dir = Xosearch_fulltext_addon.Get_index_dir(wiki);
 			if (Io_mgr.Instance.ExistsDir(search_dir)) {
 				app.Gui__cbk_mgr().Send_json(cbk_trg, "xo.fulltext_indexer.status__note__recv", gplx.core.gfobjs.Gfobj_nde.New()

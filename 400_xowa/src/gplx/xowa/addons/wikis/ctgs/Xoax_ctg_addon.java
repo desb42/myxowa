@@ -23,7 +23,7 @@ public class Xoax_ctg_addon implements Xoax_addon_itm {	// TODO_OLD:mem_mgr
 	public Xoctg_ctg_itm Itms__get_or_null(byte[] key) {return (Xoctg_ctg_itm)hash.Get_by_bry(key);}
 	public Xoctg_ctg_itm Itms__load(byte[] key) {
 		Xowd_page_itm tmp_page = new Xowd_page_itm();
-		wiki.Data__core_mgr().Tbl__page().Select_by_ttl(tmp_page, wiki.Ns_mgr().Ns_category(), key);
+		wiki.Data__core_mgr().Tbl__page().Select_by_ttl(tmp_page, wiki.Ns_mgr().Ns_category(), key, wiki.Wrk_id());
 		gplx.xowa.wikis.data.tbls.Xowd_category_itm itm = Xodb_cat_db_.Get_cat_core_or_fail(wiki.Data__core_mgr()).Select(tmp_page.Id());
 		return Itms__add(key, itm.Count_pages(), itm.Count_subcs(), itm.Count_files());
 	}

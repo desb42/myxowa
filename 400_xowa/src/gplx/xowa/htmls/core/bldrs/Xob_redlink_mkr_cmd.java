@@ -25,7 +25,7 @@ public class Xob_redlink_mkr_cmd extends Xob_itm_basic_base implements Xob_cmd {
 	public void Cmd_run() {Read_data();}
 	private void Read_data() {
 		Bry_bfr bfr = Bry_bfr_.Reset(255);
-		wiki.Init_assert();
+		wiki.Init_assert(0);
 		Xow_db_file core_db = wiki.Data__core_mgr().Db__core();
 		Xob_db_file link_dump_db = Xob_db_file.New__redlink(wiki.Fsys_mgr().Root_dir());
 		Db_attach_mgr attach_mgr = new Db_attach_mgr(link_dump_db.Conn(), new Db_attach_itm("page_db", wiki.Data__core_mgr().Db__core().Conn()));

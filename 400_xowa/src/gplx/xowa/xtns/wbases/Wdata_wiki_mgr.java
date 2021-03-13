@@ -111,7 +111,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	public Xowe_wiki Wdata_wiki() {
 		if (wdata_wiki == null) {
 			synchronized (thread_lock) {	// LOCK:must synchronized b/c multiple threads may init wdata_mgr at same time;
-				Xowe_wiki tmp_wdata_wiki = app.Wiki_mgr().Get_by_or_make(domain).Init_assert();
+				Xowe_wiki tmp_wdata_wiki = app.Wiki_mgr().Get_by_or_make(domain).Init_assert(0);
 				if (wdata_wiki == null)	// synchronized is not around "if (wdata_wiki == null)", so multiple threads may try to set; only set if null; DATE:2016-09-12
 					wdata_wiki = tmp_wdata_wiki;
 			}
