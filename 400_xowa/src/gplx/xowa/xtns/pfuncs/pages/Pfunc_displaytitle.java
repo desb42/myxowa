@@ -51,23 +51,55 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		return Bry_.Replace(rv, Byte_ascii.Space, Byte_ascii.Underline);	// force underline; PAGE:de.w:Mod_qos DATE:2014-11-06
 	}
 	// replace &quot; and &amp;
+	// cope with
+	//  {{DISPLAYTITLE:''Rolling Stone Argentina''{{'}}s The 100 Greatest Albums of National Rock}} ie &#39;
+	//  {{DISPLAYTITLE:List of ''Red vs. Blue'' episodes  (''The Chorus Trilogy'')}} ie double space
+	//  {{Infobox ship begin| display title = SS ''De Klerk ''}} ie trailing space
+	//  {{DISPLAYTITLE:&thinsp;''Gonimara''}} ie treat as space [[%C3%97_Gonimara]] - but still does not work
+	// how to cope with {{DISPLAYTITLE:''Sleepless in __________''}} this will elimiminate trailing space
+	// how to cope with {{DISPLAYTITLE:''N''-Isopropyl-''N'''-phenyl-1,4-phenylenediamine}} wxtra apost
 	private static byte[] Replaceamp(byte[] src) {
 		int len = src.length;
 		int pos = 0;
 		int sofar = 0;
 		Bry_bfr bfr = null;
+		// trim trailing space
+		while (len > 0) {
+			byte b = src[len-1];
+			if (b == ' ' || b == '\t')
+				len--;
+			else
+				break;
+		}
+		if (len < src.length)
+			bfr = Bry_bfr_.New();
+
 		while (pos < len) {
 			byte b = src[pos++];
 			if (b == '&') {
 				int size = -1;
 				byte rb = 0;
-				if (pos + 4 < len && src[pos] == 'q' && src[pos+1] == 'u' && src[pos+2] == 'o' && src[pos+3] == 't' && src[pos+4] == ';') {
+				if (pos + 7 < len && src[pos] == 't' && src[pos+1] == 'h' && src[pos+2] == 'i' && src[pos+3] == 'n' && src[pos+4] == 's' && src[pos+5] == 'p' && src[pos+6] == ';') {
+					size = 8;
+					rb = Byte_ascii.Space;
+				}
+				else if (pos + 4 < len && src[pos] == 'q' && src[pos+1] == 'u' && src[pos+2] == 'o' && src[pos+3] == 't' && src[pos+4] == ';') {
 					size = 5;
 					rb = Byte_ascii.Quote;
 				}
-				else if (pos + 3 < len && src[pos] == 'a' && src[pos+1] == 'm' && src[pos+2] == 'p' && src[pos+3] == ';') {
-					size = 4;
-					rb = Byte_ascii.Amp;
+				else if (pos + 3 < len) {
+					if (src[pos] == 'a' && src[pos+1] == 'm' && src[pos+2] == 'p' && src[pos+3] == ';') {
+						size = 4;
+						rb = Byte_ascii.Amp;
+					}
+					else if (src[pos] == '#' && src[pos+1] == '3' && src[pos+2] == '9' && src[pos+3] == ';') {
+						size = 4;
+						rb = Byte_ascii.Apos;
+					}
+					else if (src[pos] == '#' && src[pos+1] == '3' && src[pos+2] == '2' && src[pos+3] == ';') {
+						size = 4;
+						rb = Byte_ascii.Space;
+					}
 				}
 				else if (pos + 2 < len && src[pos] == 'l' && src[pos+1] == 't' && src[pos+2] == ';') {
 					int close = pos;
@@ -92,8 +124,27 @@ public class Pfunc_displaytitle extends Pf_func_base {
 					sofar = pos;
 				}
 			}
+			else if (b == ' ' || b == '\t') {
+				// also any number of spaces to a single space
+				int spacepos = pos;
+				while (spacepos < len) {
+					b = src[spacepos];
+					if (b != ' ' && b != '\t')
+						break;
+					else
+						spacepos++;
+				}
+				if (spacepos > pos) {
+					if (bfr == null)
+						bfr = Bry_bfr_.New();
+					bfr.Add_mid(src, sofar, pos - 1);
+					bfr.Add_byte(Byte_ascii.Space);
+					pos = spacepos;
+					sofar = pos;
+				}
+			}
 		}
-		if (sofar != 0) {
+		if (bfr != null) {
 			bfr.Add_mid(src, sofar, len);
 			return bfr.To_bry();
 		}

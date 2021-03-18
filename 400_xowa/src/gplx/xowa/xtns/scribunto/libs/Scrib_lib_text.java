@@ -241,7 +241,7 @@ public class Scrib_lib_text implements Scrib_lib {
 		( Scrib_proc_args args, Scrib_core core, Scrib_lib_text__json_util json_util
 		, byte[] json, int opts, int flags) {
 		// decode json to Object; note that Bool_.Y means ary and Bool_.N means ary
-		byte rv_tid = json_util.Decode(core.App().Utl__json_parser(), json, opts);
+		byte rv_tid = json_util.Decode(json, opts);
 		if (rv_tid == Bool_.__byte) throw Err_.new_("scribunto",  "mw.text.jsonEncode: Unable to decode String " + String_.new_u8(json));
 		if (rv_tid == Bool_.Y_byte) {
 			Keyval[] rv_as_kvy = (Keyval[])json_util.Decode_rslt_as_nde();

@@ -52,6 +52,7 @@ public class Wbase_doc_mgr {
 	public void Cache__init(String cache_type, long cache_max, long compress_size, long used_weight) {
 		if		(String_.Eq(cache_type, "null")) doc_cache = new Wbase_doc_cache__null();
 		else if (String_.Eq(cache_type, "hash")) doc_cache = new Wbase_doc_cache__hash();
+		else if (String_.Eq(cache_type, "sliding")) doc_cache = new Wbase_doc_cache__sliding();
 		else if (String_.Eq(cache_type, "mru" )) doc_cache = new Wbase_doc_cache__mru(cache_max, compress_size, used_weight);
 		else throw Err_.new_unhandled_default(cache_type);
 	}
@@ -106,10 +107,13 @@ public class Wbase_doc_mgr {
 		if (!enabled) return null;
 
 		// loggging
-		Wbase_db_log_itm wbase_db_itm = (Wbase_db_log_itm)wbase_db_hash.Get_by(ttl_bry);
-		if (wbase_db_itm == null) {
-			wbase_db_itm = new Wbase_db_log_itm(ttl_bry);
-			wbase_db_hash.Add(ttl_bry, wbase_db_itm);
+		Wbase_db_log_itm wbase_db_itm;
+		synchronized (thread_lock) {
+			wbase_db_itm = (Wbase_db_log_itm)wbase_db_hash.Get_by(ttl_bry);
+			if (wbase_db_itm == null) {
+				wbase_db_itm = new Wbase_db_log_itm(ttl_bry);
+				wbase_db_hash.Add(ttl_bry, wbase_db_itm);
+			}
 		}
 		long time_bgn = gplx.core.envs.System_.Ticks();
 
@@ -160,8 +164,8 @@ public class Wbase_doc_mgr {
 
 	public void Add(byte[] full_db, Wdata_doc page) {	// TEST:
 		synchronized (thread_lock) {	// LOCK:app-level
-			//if (doc_cache.Get_or_null(full_db) == null)
-			//	doc_cache.Add(full_db, page);
+			if (doc_cache.Get_or_null(full_db) == null)
+				doc_cache.Add(full_db, page);
 		}
 	}	
 }

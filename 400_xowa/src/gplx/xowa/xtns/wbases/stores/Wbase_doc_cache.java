@@ -48,3 +48,45 @@ class Wbase_doc_cache__mru implements Wbase_doc_cache {
 		cache.Print();
 	}
 }
+class Slider {
+	public byte[] key;
+	public int len;
+	public Wdata_doc doc;
+	public Slider(byte[] key, Wdata_doc doc) {
+		this.key = key;
+		this.doc = doc;
+		this.len = key.length;
+	}
+}
+class Wbase_doc_cache__sliding implements Wbase_doc_cache {
+	private final Slider[] obs = new Slider[20];
+	private int position = 0;
+	public void Add(byte[] qid, Wdata_doc doc) {
+		if (position >= 20)
+			position = 0;
+		obs[position++] = new Slider(qid, doc);
+	}
+	public Wdata_doc Get_or_null(byte[] qid) {
+		int qid_len = qid.length;
+		for (int i = 0; i < 20; i++) {
+			Slider sl = obs[i];
+			if (sl != null && qid_len == sl.len) {
+				byte[] key = sl.key;
+				int j;
+				for (j = 0; j < qid_len; j++) {
+					if (key[j] != qid[j])
+						break;
+				}
+				if (j == qid_len)
+					return sl.doc;
+			}
+		}
+		return null;
+	}
+	public void Clear() {
+		for (int i = 0; i < 20; i++) {
+			obs[i] = null;
+		}
+	}
+	public void Term() {Clear();}
+}

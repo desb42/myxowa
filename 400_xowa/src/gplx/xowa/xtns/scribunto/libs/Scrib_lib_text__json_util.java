@@ -40,6 +40,7 @@ import gplx.langs.jsons.Json_wtr;
 
 public class Scrib_lib_text__json_util {
 	private final Json_wtr wtr = new Json_wtr();
+	Json_parser json_parser = new Json_parser();
 	public void Reindex_arrays(Scrib_lib_text__reindex_data rv, Keyval[] kv_ary, boolean is_encoding) {
 		int next = 0;
 		if (is_encoding) {
@@ -101,9 +102,9 @@ public class Scrib_lib_text__json_util {
 	}
 	public Keyval[] Decode_rslt_as_nde() {return decode_rslt_as_nde;} private Keyval[] decode_rslt_as_nde;
 	public Keyval[] Decode_rslt_as_ary() {return decode_rslt_as_ary;} private Keyval[] decode_rslt_as_ary;
-	public byte Decode(Json_parser parser, byte[] src, int flag) {
+	public byte Decode(byte[] src, int flag) {
 		//synchronized (wtr) {
-			Json_doc jdoc = parser.Parse(src);
+			Json_doc jdoc = json_parser.Parse(src);
 			if (jdoc.Root_grp().Tid() == Json_itm_.Tid__ary) {
 				this.decode_rslt_as_ary = Decode_ary_top(jdoc.Root_ary());
 				return Bool_.N_byte;

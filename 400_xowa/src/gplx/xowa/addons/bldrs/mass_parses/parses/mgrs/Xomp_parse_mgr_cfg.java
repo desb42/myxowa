@@ -50,7 +50,7 @@ public class Xomp_parse_mgr_cfg implements Gfo_invk {
 	public boolean Show_msg__fetched_pool() {return show_msg__fetched_pool;} private boolean show_msg__fetched_pool;
 	public boolean Indexer_enabled() {return indexer_enabled;} private boolean indexer_enabled;
 	public String Indexer_opt() {return indexer_opt;} private String indexer_opt = gplx.gflucene.indexers.Gflucene_idx_opt.Docs_and_freqs.Key();
-	public String Wbase_cache_mru_type() {return wbase_cache_mru_type;} private String wbase_cache_mru_type = "mru";
+	public String Wbase_cache_mru_type() {return wbase_cache_mru_type;} private String wbase_cache_mru_type = "sliding"; //"mru";
 	public long Wbase_cache_mru_size() {return wbase_cache_mru_size;} private long wbase_cache_mru_size = 100;
 	public long Wbase_cache_mru_weight() {return wbase_cache_mru_weight;} private long wbase_cache_mru_weight = 10;
 	public long Wbase_cache_mru_compress_size() {return wbase_cache_mru_compress_size;} private long wbase_cache_mru_compress_size = 70;

@@ -31,7 +31,7 @@ public class Ref_html_wtr {
 		Ref_nde itm = (Ref_nde)xnde.Xnde_xtn();
 		if (itm == null) return;
 		if (itm.Follow_y()) return;	// NOTE: "follow" is always appended to preceding ref; will never generate its own ^ a  
-                // cite-ref followed by cite-note
+		// cite-ref followed by cite-note
 		cfg.Itm_html().Bld_bfr_many(tmp_ref
 			, Itm_id(itm, true, cfg.Itm_crlp(), cfg.Itm_crls())
 			, Grp_id(itm, cfg.Itm_crslp(), cfg.Itm_crsls())
@@ -76,7 +76,8 @@ public class Ref_html_wtr {
 		if (lst == null) return;	// NOTE: possible to have a grouped references without references; EX: Infobox planet; <references group=note> in sidebar, but no refs 
 		if (lst.Itms_len() == 0) return;
 		boolean response_wrap; // default case (depends on wiki!!)
-		if (ctx.Wiki().Lang().Lang_id() == Xol_lang_stub_.Id_de)
+		int langid = ctx.Wiki().Lang().Lang_id();
+		if (langid == Xol_lang_stub_.Id_de || langid == Xol_lang_stub_.Id_it)
 			response_wrap = false;
 		else
 			response_wrap = true;
@@ -104,8 +105,8 @@ public class Ref_html_wtr {
 			grp_list_fmtr.Init(ctx.Wiki(), cfg, head_itm);
 			Ref_nde text_itm = grp_list_fmtr.Identify_main_ref();// find the item that has the text (there should only be 0 or 1)
 			if (text_itm.Body() != null) {
-                            // extra span
-                            tmp.Add_str_a7("<span class=\"reference-text\">");
+				// extra span
+				tmp.Add_str_a7("<span class=\"reference-text\">");
 				wtr.Write_tkn_to_html(tmp, ctx, opts, text_itm.Body().Root_src(), null, Xoh_html_wtr.Sub_idx_null, text_itm.Body());
                                 tmp.Add(Gfh_tag_.Span_rhs);
 			}
@@ -119,14 +120,16 @@ public class Ref_html_wtr {
 					if (tmp.Len_gt_0() // tmp has text; (ignores 0th)
 						&& related_itm.Body() != null && related_itm.Body().Subs_len() > 0) // this item has text (ignore blank items)
 						tmp.Add_byte_space();// add space; REF.MW:Cite_body.php;$this->mRefs[$group][$follow]['text'] = $this->mRefs[$group][$follow]['text'] . ' ' . $str;
-                                        // not sure about the extra span
-                            tmp.Add_str_a7("<span class=\"reference-text\">");
-					wtr.Write_tkn_to_html(tmp, ctx, opts, related_itm.Body().Root_src(), null, Xoh_html_wtr.Sub_idx_null, related_itm.Body());
-                                tmp.Add(Gfh_tag_.Span_rhs);
+					// not sure about the extra span
+					if (related_itm.Body() != null) { // only seen in de.wikisource.org/wiki/RE:Ilici
+						tmp.Add_str_a7("<span class=\"reference-text\">");
+						wtr.Write_tkn_to_html(tmp, ctx, opts, related_itm.Body().Root_src(), null, Xoh_html_wtr.Sub_idx_null, related_itm.Body());
+						tmp.Add(Gfh_tag_.Span_rhs);
+					}
 				}
 			}
 
-                        // cite-note followed by cite-ref
+			// cite-note followed by cite-ref
 			if (list_len == 0) {		// ref has 0 list_itms or 1 list_itm but nested; EX: "123 ^ text"
 				cfg.Grp_html_one().Bld_bfr_many(tmp_ref
 					, Grp_id(head_itm, cfg.Itm_crslp(), cfg.Itm_crsls())	// NOTE: use head_itm for back ref to work (^ must link to same id)
@@ -135,7 +138,7 @@ public class Ref_html_wtr {
 					, null // 20200409 (fourth arg) strictly this should be $extraAttributes = Html::expandAttributes( [ 'class' => 'mw-cite-dir-' . $dir ] );
 					);
 			}
-			else {							// ref has 1+ itms; EX: "123 ^ a b c text"
+			else {  // ref has 1+ itms; EX: "123 ^ a b c text"
 				cfg.Grp_html_many().Bld_bfr_many(tmp_ref
 					, Itm_id(text_itm, false, cfg.Itm_crslp(), cfg.Itm_crsls())
 					, grp_list_fmtr
@@ -154,7 +157,7 @@ public class Ref_html_wtr {
 		Ref_nde itm = (Ref_nde)xnde.Xnde_xtn();
 		if (itm == null) return;
 		if (itm.Follow_y()) return;	// NOTE: "follow" is always appended to preceding ref; will never generate its own ^ a  
-                // cite-ref followed by cite-note
+		// cite-ref followed by cite-note
 		cfg.Itm_html().Bld_bfr_many(tmp_ref
 			, Itm_id(itm, true, cfg.Itm_crlp(), cfg.Itm_crls())
 			, Grp_id(itm, cfg.Itm_crslp(), cfg.Itm_crsls())

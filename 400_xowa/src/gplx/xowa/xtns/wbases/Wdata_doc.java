@@ -33,15 +33,77 @@ public class Wdata_doc {
 	public byte[] Datatype() {if (datatype == null) datatype = mgr.Wdoc_parser(jdoc).Parse_datatype(qid, jdoc); return datatype;} private byte[] datatype;
 
 	// NOTE: lazy instantiation b/c we don't want to parse entire json unless called; particulary necessary for {{#property}} calls;
-	public Ordered_hash Slink_list() {if (slink_list == null) slink_list = mgr.Wdoc_parser(jdoc).Parse_sitelinks(qid, jdoc);			return slink_list;} private Ordered_hash slink_list;
-	public Ordered_hash Label_list() {if (label_list == null) label_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_labels); return label_list;} private Ordered_hash label_list;
-	public Ordered_hash Descr_list() {if (descr_list == null) descr_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_descriptions); return descr_list;} private Ordered_hash descr_list;
-	public Ordered_hash Alias_list() {if (alias_list == null) alias_list = mgr.Wdoc_parser(jdoc).Parse_aliases(qid, jdoc);			return alias_list;} private Ordered_hash alias_list;
-	public Ordered_hash Claim_list() {if (claim_list == null) claim_list = mgr.Wdoc_parser(jdoc).Parse_claims(qid, jdoc);			return claim_list;} private Ordered_hash claim_list;
+	private Ordered_hash slink_list;
+	public Ordered_hash Slink_list() {
+		if (slink_list == null)
+			synchronized (this) {
+				slink_list = mgr.Wdoc_parser(jdoc).Parse_sitelinks(qid, jdoc);
+			}
+		return slink_list;
+	}
 
-	public Ordered_hash Lemma_list() {if (lemma_list == null) lemma_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_lemmas); return lemma_list;} private Ordered_hash lemma_list;
-	public Ordered_hash Sense_list() {if (sense_list == null) sense_list = mgr.Wdoc_parser(jdoc).Parse_sense(qid, jdoc); return sense_list;} private Ordered_hash sense_list;
-	public Ordered_hash Form_list() {if (form_list == null) form_list = mgr.Wdoc_parser(jdoc).Parse_form(qid, jdoc); return form_list;} private Ordered_hash form_list;
+	private Ordered_hash label_list;
+	public Ordered_hash Label_list() {
+		if (label_list == null)
+			synchronized (this) {
+				label_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_labels);
+			}
+		return label_list;
+	}
+
+	private Ordered_hash descr_list;
+	public Ordered_hash Descr_list() {
+		if (descr_list == null)
+			synchronized (this) {
+				descr_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_descriptions);
+			}
+		return descr_list;
+	}
+
+	private Ordered_hash alias_list;
+	public Ordered_hash Alias_list() {
+		if (alias_list == null)
+			synchronized (this) {
+				alias_list = mgr.Wdoc_parser(jdoc).Parse_aliases(qid, jdoc);
+			}
+		return alias_list;
+	}
+
+	private Ordered_hash claim_list;
+	public Ordered_hash Claim_list() {
+		if (claim_list == null)
+			synchronized (this) {
+				claim_list = mgr.Wdoc_parser(jdoc).Parse_claims(qid, jdoc);
+			}
+		return claim_list;
+	}
+
+	private Ordered_hash lemma_list;
+	public Ordered_hash Lemma_list() {
+		if (lemma_list == null)
+			synchronized (this) {
+				lemma_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_lemmas);
+			}
+		return lemma_list;
+	}
+
+	private Ordered_hash sense_list;
+	public Ordered_hash Sense_list() {
+		if (sense_list == null)
+			synchronized (this) {
+				sense_list = mgr.Wdoc_parser(jdoc).Parse_sense(qid, jdoc);
+			}
+		return sense_list;
+	}
+
+	private Ordered_hash form_list;
+	public Ordered_hash Form_list() {
+		if (form_list == null)
+			synchronized (this) {
+				form_list = mgr.Wdoc_parser(jdoc).Parse_form(qid, jdoc);
+			}
+		return form_list;
+	}
 
 	// various getters
 	public Wbase_claim_grp Get_claim_grp_or_null(int pid) {
