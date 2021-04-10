@@ -24,7 +24,7 @@ public class Xob_xfer_temp_itm_tst {
 	@Before public void init() {fxt.Reset();}
 	@Test   public void Pass()				{fxt.Test_pass().Test_itm_chk_fail_id_none();}
 	@Test   public void Missing_orig()		{fxt.Test_fail(Xob_xfer_temp_itm.Chk_tid_orig_page_id_is_null		, Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_page_id, null));}
-	@Test   public void File_is_audio()		{fxt.Test_fail(Xob_xfer_temp_itm.Chk_tid_orig_media_type_is_audio	, Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_media_type, Xof_media_type.Name_audio));}
+	@Test   public void File_is_audio()		{fxt.Test_fail(Xob_xfer_temp_itm.Chk_tid_orig_media_type_is_audio	, Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_media_type, Xof_media_type.Tid_audio));}
 	@Test   public void File_is_mid()		{
 		fxt.Test_fail(Xob_xfer_temp_itm.Chk_tid_orig_media_type_is_audio	, Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_file_ext, Xof_ext_.Id_mid));
 	}
@@ -57,7 +57,7 @@ public class Xob_xfer_temp_itm_tst {
 		);
 		fxt.Test_lnki_thumbtime(Xof_lnki_time.Null);
 		fxt.Reset().Test_bgn
-		(	Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_media_type	, Xof_media_type.Name_video)
+		(	Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_media_type	, Xof_media_type.Tid_video)
 		,	Keyval_.new_(Xob_lnki_regy_tbl.Fld_lnki_time		, (double)3)
 		);
 		fxt.Test_lnki_thumbtime(3);
@@ -89,7 +89,7 @@ public class Xob_xfer_temp_itm_tst {
 	@Test   public void Orig_width_is_0() {// PURPOSE: ignore files with an orig width of 0; note that ogg files that are sometimes flagged as VIDEO; EX:2009_10_08_Marc_Randazza_interview.ogg; DATE:2014-08-20
 		fxt.Test_bgn
 		(	Keyval_.new_(Xob_orig_regy_tbl.Fld_lnki_ttl			, "A.ogg")
-		,	Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_media_type	, Xof_media_type.Name_video)	// VIDEO
+		,	Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_media_type	, Xof_media_type.Tid_video)	// VIDEO
 		,	Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_w			, 0)							// no width defined in image table
 		,	Keyval_.new_(Xob_orig_regy_tbl.Fld_orig_h			, 0)
 		);
@@ -136,7 +136,7 @@ class Xob_xfer_temp_itm_fxt {
 		, "A.png", Xof_ext_.Id_png, "A.png", Xop_lnki_type.Id_thumb, Xop_file_logger_.Tid__file
 		, 220, 200, 1, 2, 440, 400, 3
 		, Xop_lnki_tkn.Upright_null, Xof_lnki_time.Null, Xof_lnki_page.Null
-		, Xof_media_type.Name_bitmap, "png"
+		, Xof_media_type.Tid_bitmap, "png"
 		));
 		GfoNdeList subs = GfoNdeList_.new_();
 		subs.Add(nde);

@@ -60,7 +60,7 @@ public class Xop_lnki_tkn extends Xop_tkn_itm_base implements gplx.xowa.wikis.pa
 	}   private List_adp args_list;
 	public byte[] Target;
 	public byte[] Ttl_ary() {
-		return ttl.ForceLiteralLink() || ns_id != Xow_ns_.Tid__main		// if [[:]] or non-main (Category, Template)
+		return ttl.ForceLiteralLink() //202100410 || ns_id != Xow_ns_.Tid__main		// if [[:]] or non-main (Category, Template)
 			? ttl.Full_txt()									// use full_txt (no initial colon; capitalize first)
 			: ttl.Raw();												// use raw (preserve case, white-spaces)
 	}

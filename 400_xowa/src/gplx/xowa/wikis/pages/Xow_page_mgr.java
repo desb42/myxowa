@@ -88,7 +88,7 @@ public class Xow_page_mgr implements Gfo_invk {
 
 			// load page_info
 			rv.Db().Page().Id_(page_row.Id()).Modified_on_(page_row.Modified_on()).Html_db_id_(page_row.Html_db_id());
-                        rv.Db().Page().Model_format_(page_row.Model_format());
+			rv.Db().Page().Model_format_(page_row.Model_format());
 
 			// load from text table
 			wiki.Db_mgr().Load_mgr().Load_page(page_row, ns);

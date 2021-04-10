@@ -21,7 +21,7 @@ public class Xowd_data_tstr {
 	public void Page__insert(int page_id, String ttl_str, String modified_on) {Page__insert(page_id, ttl_str, modified_on, Bool_.N, 0, page_id, 0, 0);}
 	public void Page__insert(int page_id, String ttl_str, String modified_on, boolean page_is_redirect, int page_len, int random_int, int text_db_id, int html_db_id) {
 		Xoa_ttl ttl = wiki.Ttl_parse(Bry_.new_u8(ttl_str));
-		wiki.Data__core_mgr().Tbl__page().Insert(page_id, ttl.Ns().Id(), ttl.Page_db(), page_is_redirect, DateAdp_.parse_iso8561(modified_on), page_len, page_id, text_db_id, html_db_id, 0);
+		wiki.Data__core_mgr().Tbl__page().Insert(page_id, ttl.Ns().Id(), ttl.Page_db(), page_is_redirect, DateAdp_.parse_iso8561(modified_on), page_len, page_id, text_db_id, html_db_id, 0, 0, 0, 0);
 	}
 	public void Html__insert(int page_id, String html) {
 		Xow_db_file html_db = wiki.Data__core_mgr().Db__html();

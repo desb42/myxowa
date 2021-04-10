@@ -29,6 +29,7 @@ public class Xobldr__text_db__drop_page extends Xob_cmd__base {
 				case Xow_db_file_.Tid__wiki_solo:
 				case Xow_db_file_.Tid__text_solo:
 				case Xow_db_file_.Tid__text:
+                                    if (db_file.Conn() != null)
 					db_file.Conn().Meta_tbl_delete(Xob_page_dump_tbl.Tbl_name);
 					break;
 			}

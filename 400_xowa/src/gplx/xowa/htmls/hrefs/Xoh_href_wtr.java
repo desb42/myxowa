@@ -58,15 +58,18 @@ public class Xoh_href_wtr {	// TS:do not move to app-level
 	}
 	public void Build_to_bfr(Bry_bfr bfr, Xoa_app app, byte[] domain_bry, Xoa_ttl ttl) {Build_to_bfr(bfr, app, Xoh_wtr_ctx.Basic, domain_bry, ttl);}
 	public void Build_to_bfr(Bry_bfr bfr, Xoa_app app, Xoh_wtr_ctx hctx, byte[] domain_bry, Xoa_ttl ttl) { // given ttl, write href; EX: A -> '/wiki/A' 
-		byte[] page = ttl.Full_txt_raw();
 		Xow_xwiki_itm xwiki = ttl.Wik_itm();
+		/*byte[] page = ttl.Full_txt_raw(); 20210409
 		if (xwiki == null)																		// not an xwiki; EX: [[wikt:Word]]
 			Build_to_bfr_page(ttl, hctx, page, 0);												// write page only; NOTE: changed to remove leaf logic DATE:2014-09-07
 		else {																					// xwiki; skip wiki and encode page only;
 			byte[] wik_txt = ttl.Wik_txt();
 			Build_to_bfr_page(ttl, hctx, page, wik_txt.length + 1);
-		}
-		if (xwiki == null) {																	// not an xwiki
+		} */
+		byte[] page = ttl.Full_txt(); // was ttl.Full_txt_raw(); 20210409
+		Build_to_bfr_page(ttl, hctx, page, 0);												// write page only; NOTE: changed to remove leaf logic DATE:2014-09-07
+
+                if (xwiki == null) {																	// not an xwiki
 			if (ttl.Anch_bgn() != 1) {															// not an anchor-only;	EX: "#A"
 				if (hctx.Mode_is_popup()) {                                                     // popup parser always writes as "/site/"
 					bfr.Add(Xoh_href_.Bry__site);                                               // add "/site/";    EX: /site/

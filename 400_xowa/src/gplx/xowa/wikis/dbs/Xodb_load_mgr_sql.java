@@ -60,8 +60,15 @@ public class Xodb_load_mgr_sql implements Xodb_load_mgr {
 		if (rv.Text_db_id() == -1) return; // NOTE: page_sync will create pages with -1 text_db_id; DATE:2017-05-06
 
 		// get text
-		Xowd_text_tbl text_tbl = db_mgr.Core_data_mgr().Dbs__get_by_id_or_fail(rv.Text_db_id()).Tbl__text();
-		byte[] text_bry = text_tbl.Select(rv.Id());
+		Xow_db_file db_file = db_mgr.Core_data_mgr().Dbs__get_by_id_or_fail(rv.Text_db_id());
+		byte[] text_bry;
+		if (db_file.Tbl__text() != null) {
+			Xowd_text_tbl text_tbl = db_file.Tbl__text();
+			text_bry = text_tbl.Select(rv.Id());
+		}
+		else {
+			text_bry = db_file.Read_file(rv);
+		}
 		rv.Text_(text_bry);
 	}
 	public boolean Load_by_id	(Xowd_page_itm rv, int id) {return db_mgr.Core_data_mgr().Tbl__page().Select_by_id(rv, id);}

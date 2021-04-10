@@ -87,6 +87,7 @@ public class Lst_pfunc_itm {
 			// get sub_ctx: note new ctx is needed b/c sub_page objects must not get added to owner_page; for example, references / hdrs / lnki.files
 			Xop_ctx sub_ctx = Xop_ctx.New__top(wiki).Ref_ignore_(true);
 			sub_ctx.Page().Ttl_(ctx.Page().Ttl());	// NOTE: must set ttl on page, else test fails;
+                        sub_ctx.Page().Html_data().Display_ttl_(ctx.Page().Html_data().Display_ttl());
 			byte[] sub_src = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl);
 			if (sub_src == null) return null; // {{#lst:missing}} -> ""
 

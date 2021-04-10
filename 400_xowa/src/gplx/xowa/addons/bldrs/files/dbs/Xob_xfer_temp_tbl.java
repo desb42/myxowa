@@ -19,7 +19,7 @@ public class Xob_xfer_temp_tbl {
 	public static void Create_table(Db_conn p)		{Sqlite_engine_.Tbl_create_and_delete(p, Tbl_name, Tbl_sql);}
 	public static Db_stmt Insert_stmt(Db_conn p) {return Db_stmt_.new_insert_(p, Tbl_name, Fld_lnki_id, Fld_lnki_tier_id, Fld_lnki_page_id, Fld_orig_repo, Fld_orig_page_id, Fld_lnki_ttl, Fld_orig_redirect_src, Fld_lnki_ext, Fld_lnki_type, Fld_orig_media_type, Fld_file_is_orig, Fld_orig_w, Fld_orig_h, Fld_file_w, Fld_file_h, Fld_html_w, Fld_html_h, Fld_lnki_w, Fld_lnki_h, Fld_lnki_upright, Fld_lnki_time, Fld_lnki_page, Fld_lnki_count);}
 	public static void Insert(Db_stmt stmt, int lnki_id, int lnki_tier_id, int lnki_page_id, byte repo_id
-		, int page_id, String ttl, String redirect_src, int ext_id, byte lnki_type, String orig_media_type
+		, int page_id, String ttl, String redirect_src, int ext_id, byte lnki_type, int orig_media_type
 		, boolean file_is_orig, int orig_w, int orig_h, int file_w, int file_h, int html_w, int html_h
 		, int lnki_w, int lnki_h, double lnki_upright, double thumbtime, int page, int count) {
 		stmt.Clear()
@@ -32,7 +32,7 @@ public class Xob_xfer_temp_tbl {
 		.Val_str(redirect_src)
 		.Val_int(ext_id)
 		.Val_byte(lnki_type)
-		.Val_str(orig_media_type)
+		.Val_int(orig_media_type)
 		.Val_bool_as_byte(file_is_orig)
 		.Val_int(orig_w)
 		.Val_int(orig_h)
@@ -73,7 +73,7 @@ public class Xob_xfer_temp_tbl {
 	,	", orig_repo           integer             NOT NULL"
 	,	", orig_page_id        integer             NOT NULL"
 	,	", orig_redirect_src   varchar(255)        NOT NULL"
-	,	", orig_media_type     varchar(64)         NOT NULL"
+	,	", orig_media_type     integer             NOT NULL"
 	,	", orig_w              integer             NOT NULL"
 	,	", orig_h              integer             NOT NULL"
 	,	", file_is_orig        tinyint             NOT NULL"

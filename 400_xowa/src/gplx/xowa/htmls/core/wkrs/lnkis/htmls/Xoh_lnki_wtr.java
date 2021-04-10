@@ -129,8 +129,12 @@ public class Xoh_lnki_wtr {
 			}
 			bfr.Add(Bry__href); // '" href="'
 			wiki.Html__href_wtr().Build_to_bfr(bfr, app, hctx, wiki.Domain_bry(), lnki_ttl);	// '/wiki/A'
+			if (lnki.Ttl().Wik_itm() != null) {
+				bfr.Add(Gfh_bldr_.Bry__cls__nth).Add_str_a7("extiw");			// add class when interwiki 20210406
+			}
 			if (cfg.Lnki__title()) {
-				byte[] title_bry = lnki_ttl.Full_txt();	// NOTE: use Full_txt to (a) replace underscores with spaces; (b) get title casing; EX:[[roman_empire]] -> Roman empire; (c) include ns_name; EX: Help:A -> "title='Help:A'" not "title='A'"; DATE:2015-11-16
+				//byte[] title_bry = lnki_ttl.Full_txt();	// NOTE: use Full_txt to (a) replace underscores with spaces; (b) get title casing; EX:[[roman_empire]] -> Roman empire; (c) include ns_name; EX: Help:A -> "title='Help:A'" not "title='A'"; DATE:2015-11-16
+				byte[] title_bry = lnki_ttl.Full_txt_for_title(); // 20210409
 				int title_len = title_bry.length;
 				if (title_len > 0) {
 					bfr	.Add(Gfh_bldr_.Bry__title__nth);			// '" title=\"'

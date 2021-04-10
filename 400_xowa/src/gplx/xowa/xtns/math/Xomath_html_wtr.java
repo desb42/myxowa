@@ -22,9 +22,9 @@ class Xomath_html_wtr {
 	private final    Xomath_subst_mgr subst_mgr = new Xomath_subst_mgr();
 	private final    Hash_algo md5_wkr = Hash_algo_.New__md5();
 	private final    Bry_fmt 
-	  fmt__latex	= Bry_fmt.Auto( "<img id='xowa_math_img_~{math_idx}' src='' width='' height=''/><span id='xowa_math_txt_~{math_idx}'>~{math_text}</span>")
-	, fmt__mathjax	= Bry_fmt.Auto("<span id='xowa_math_txt_~{math_idx}'>~{math_text}</span>")
-	, fmt__chemjax	= Bry_fmt.Auto("<span id='xowa_math_txt_~{math_idx}'>\\ce{~{math_text}}</span>")
+	  fmt__latex	= Bry_fmt.Auto( "<img id=\"xowa_math_img_~{math_idx}\" src=\"\" width=\"\" height=\"\"/><span id=\"xowa_math_txt_~{math_idx}\">~{math_text}</span>")
+	, fmt__mathjax	= Bry_fmt.Auto("<span id=\"xowa_math_txt_~{math_idx}\">~{math_text}</span>")
+	, fmt__chemjax	= Bry_fmt.Auto("<span id=\"xowa_math_txt_~{math_idx}\">\\ce{~{math_text}}</span>")
         ;
 	private static final    byte[] Bry__math = Bry_.new_a7("math");
 

@@ -19,11 +19,11 @@ public class Xob_image_tbl {
 	public Xob_image_tbl Create_table(Db_conn p) {Sqlite_engine_.Tbl_create_and_delete(p, Tbl_name, Tbl_sql); return this;}
 	public Xob_image_tbl Create_index(Db_conn p) {Sqlite_engine_.Idx_create(p, Idx_img_name); return this;}
 	public Db_stmt Insert_stmt(Db_conn p) {return Db_stmt_.new_insert_(p, Tbl_name, Fld_img_name, Fld_img_media_type, Fld_img_minor_mime, Fld_img_size, Fld_img_width, Fld_img_height, Fld_img_bits, Fld_img_ext_id, Fld_img_timestamp);}
-	public void Insert(Db_stmt stmt, byte[] ttl, byte[] media_type, byte[] minor_mime, int size, int w, int h, int bits, int ext_id, byte[] img_timestamp) {
+	public void Insert(Db_stmt stmt, byte[] ttl, int media_type, int minor_mime, int size, int w, int h, int bits, int ext_id, byte[] img_timestamp) {
 		stmt.Clear()
 		.Val_bry_as_str(ttl)
-		.Val_bry_as_str(media_type)
-		.Val_bry_as_str(minor_mime)
+		.Val_int(media_type)
+		.Val_int(minor_mime)
 		.Val_int(size)
 		.Val_int(w)
 		.Val_int(h)
@@ -40,8 +40,8 @@ public class Xob_image_tbl {
 	private static final    String Tbl_sql = String_.Concat_lines_nl
 	(	"CREATE TABLE IF NOT EXISTS image"
 	,	"( img_name        varchar(255)    NOT NULL -- varbinary(255)"
-	,	", img_media_type  varchar(64)     NOT NULL -- enum('UNKNOWN','BITMAP','DRAWING','AUDIO','VIDEO','MULTIMEDIA','OFFICE','TEXT','EXECUTABLE','ARCHIVE')"
-	,	", img_minor_mime  varchar(32)     NOT NULL -- DEFAULT 'unknown'"
+	,	", img_media_type  integer         NOT NULL -- enum('UNKNOWN','BITMAP','DRAWING','AUDIO','VIDEO','MULTIMEDIA','OFFICE','TEXT','EXECUTABLE','ARCHIVE')"
+	,	", img_minor_mime  integer         NOT NULL -- DEFAULT 'unknown'"
 	,	", img_size        integer         NOT NULL -- int(8) unsigned"
 	,	", img_width       integer         NOT NULL -- int(5)"
 	,	", img_height      integer         NOT NULL -- int(5)"

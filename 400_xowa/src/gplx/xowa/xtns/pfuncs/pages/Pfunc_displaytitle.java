@@ -21,6 +21,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_page_displaytitle;}
 	@Override public Pf_func New(int id, byte[] name) {return new Pfunc_displaytitle().Name_(name);}
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
+		if (ctx.Page().Html_data().Display_ttl() != null) return; // only once
 		byte[] val_dat_ary = Eval_argx(ctx, src, caller, self);
 		Xowe_wiki wiki = ctx.Wiki(); Xop_parser parser = wiki.Parser_mgr().Main();
 		Xop_ctx display_ttl_ctx = Xop_ctx.New__sub__reuse_page(ctx);
@@ -42,6 +43,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 				val_html = null;
 			}
 		}
+                if (val_html != null)
 		ctx.Page().Html_data().Display_ttl_(val_html);
 		tmp_bfr.Mkr_rls();
 	}
@@ -56,6 +58,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 	//  {{DISPLAYTITLE:List of ''Red vs. Blue'' episodes  (''The Chorus Trilogy'')}} ie double space
 	//  {{Infobox ship begin| display title = SS ''De Klerk ''}} ie trailing space
 	//  {{DISPLAYTITLE:&thinsp;''Gonimara''}} ie treat as space [[%C3%97_Gonimara]] - but still does not work
+	//  {{DISPLAYTITLE:''iTunes Originals&nbsp;? R.E.M.''}} &nsbp; goes to &#160; and then should be space
 	// how to cope with {{DISPLAYTITLE:''Sleepless in __________''}} this will elimiminate trailing space
 	// how to cope with {{DISPLAYTITLE:''N''-Isopropyl-''N'''-phenyl-1,4-phenylenediamine}} wxtra apost
 	private static byte[] Replaceamp(byte[] src) {
@@ -66,7 +69,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		// trim trailing space
 		while (len > 0) {
 			byte b = src[len-1];
-			if (b == ' ' || b == '\t')
+			if (b == ' ' || b == '\t' || b == '\n')
 				len--;
 			else
 				break;
@@ -76,72 +79,154 @@ public class Pfunc_displaytitle extends Pf_func_base {
 
 		while (pos < len) {
 			byte b = src[pos++];
-			if (b == '&') {
-				int size = -1;
-				byte rb = 0;
-				if (pos + 7 < len && src[pos] == 't' && src[pos+1] == 'h' && src[pos+2] == 'i' && src[pos+3] == 'n' && src[pos+4] == 's' && src[pos+5] == 'p' && src[pos+6] == ';') {
-					size = 8;
-					rb = Byte_ascii.Space;
-				}
-				else if (pos + 4 < len && src[pos] == 'q' && src[pos+1] == 'u' && src[pos+2] == 'o' && src[pos+3] == 't' && src[pos+4] == ';') {
-					size = 5;
-					rb = Byte_ascii.Quote;
-				}
-				else if (pos + 3 < len) {
-					if (src[pos] == 'a' && src[pos+1] == 'm' && src[pos+2] == 'p' && src[pos+3] == ';') {
-						size = 4;
-						rb = Byte_ascii.Amp;
+			switch (b) {
+				case '&':
+					// &#160;
+					// &#32;
+					// &#39;
+					// &#8211;
+					// &amp;
+					// &lt;
+					// &quot;
+					// &tinysp;
+					int size = -1;
+					byte rb = 0;
+					int cpos = pos;
+					if (cpos < len) {
+						b = src[cpos++];
+						switch(b) {
+							case '#':
+								if (cpos < len) {
+									b = src[cpos++];
+									switch(b) {
+										case '1':
+											if (cpos + 2 < len && src[cpos] == '6' && src[cpos+1] == '0' && src[cpos+2] == ';') {
+												size = 5;
+												rb = Byte_ascii.Space;
+											}
+											break;
+										case '3':
+											if (cpos < len) {
+												b = src[cpos++];
+												switch(b) {
+												case '2':
+													if (cpos < len && src[cpos] == ';') {
+														size = 4;
+														rb = Byte_ascii.Space;
+													}
+													break;
+												case '9':
+													if (cpos < len && src[cpos] == ';') {
+														size = 4;
+														// remove apos //rb = Byte_ascii.Apos;
+													}
+													break;
+												}
+											}
+											break;
+										case '8':
+											if (cpos + 3 < len && src[cpos] == '2' && src[cpos+1] == '1' && src[cpos+2] == '1' && src[cpos+3] == ';') {
+												size = 6;
+												rb = Byte_ascii.Dash;
+											}
+											break;
+									}
+								}
+								break;
+							case 'a':
+								if (cpos + 2 < len && src[cpos] == 'm' && src[cpos+1] == 'p' && src[cpos+2] == ';') {
+									size = 4;
+									rb = Byte_ascii.Amp;
+								}
+								break;
+							case 'l':
+								if (cpos + 1 < len && src[cpos] == 't' && src[cpos+1] == ';') {
+									int close = cpos + 2;
+									while (close < len) {
+										byte c = src[close++];
+										if (c == '&' && close + 2 < len && src[close] == 'g' && src[close+1] == 't' && src[close+2] == ';') {
+											break;
+										}
+									}
+									if (close < len) {
+										size = close - pos + 3; //???
+										rb = 0;
+									}
+								}
+								break;
+							case 'q':
+								if (cpos + 3 < len && src[cpos] == 'u' && src[cpos+1] == 'o' && src[cpos+2] == 't' && src[cpos+3] == ';') {
+									size = 5;
+									rb = Byte_ascii.Quote;
+								}
+								break;
+							case 't':
+								if (pos + 5 < len && src[cpos] == 'h' && src[cpos+1] == 'i' && src[cpos+2] == 'n' && src[cpos+3] == 's' && src[cpos+4] == 'p' && src[cpos+5] == ';') {
+									size = 7;
+									rb = Byte_ascii.Space;
+								}
+								break;
+						}
 					}
-					else if (src[pos] == '#' && src[pos+1] == '3' && src[pos+2] == '9' && src[pos+3] == ';') {
-						size = 4;
-						rb = Byte_ascii.Apos;
+					if (size > 0) {
+						if (bfr == null)
+							bfr = Bry_bfr_.New();
+						bfr.Add_mid(src, sofar, pos - 1);
+						if (rb != 0)
+							bfr.Add_byte(rb);
+						pos += size;
+						sofar = pos;
 					}
-					else if (src[pos] == '#' && src[pos+1] == '3' && src[pos+2] == '2' && src[pos+3] == ';') {
-						size = 4;
-						rb = Byte_ascii.Space;
+					break;
+				case ' ':
+				case '\t':
+					// also any number of spaces to a single space
+					int spacepos = pos;
+					while (spacepos < len) {
+						b = src[spacepos];
+						if (b != ' ' && b != '\t')
+							break;
+						else
+							spacepos++;
 					}
-				}
-				else if (pos + 2 < len && src[pos] == 'l' && src[pos+1] == 't' && src[pos+2] == ';') {
-					int close = pos;
+					if (pos == 1) { // ignore leading space(s)
+						if (bfr == null)
+							bfr = Bry_bfr_.New();
+						pos = spacepos;
+						sofar = pos;
+					}
+					else if (spacepos > pos) {
+						if (bfr == null)
+							bfr = Bry_bfr_.New();
+						bfr.Add_mid(src, sofar, pos - 1);
+						bfr.Add_byte(Byte_ascii.Space);
+						pos = spacepos;
+						sofar = pos;
+					}
+					break;
+				case '\'': // remove excess single quotes
+				case ':': // remove excess colons?
+					if (bfr == null)
+						bfr = Bry_bfr_.New();
+					bfr.Add_mid(src, sofar, pos - 1);
+					sofar = pos;
+					break;
+				case '<': // tags
+ 					int close = pos;
 					while (close < len) {
 						byte c = src[close++];
-						if (c == '&' && close + 2 < len && src[close] == 'g' && src[close+1] == 't' && src[close+2] == ';') {
+						if (c == '>') {
 							break;
 						}
 					}
 					if (close < len) {
-						size = close - pos + 3; //???
-						rb = 0;
+						if (bfr == null)
+							bfr = Bry_bfr_.New();
+						bfr.Add_mid(src, sofar, pos - 1);
+						pos = close;
+						sofar = pos;
 					}
-				}
-				if (size > 0) {
-					if (bfr == null)
-						bfr = Bry_bfr_.New();
-					bfr.Add_mid(src, sofar, pos - 1);
-					if (rb != 0)
-						bfr.Add_byte(rb);
-					pos += size;
-					sofar = pos;
-				}
-			}
-			else if (b == ' ' || b == '\t') {
-				// also any number of spaces to a single space
-				int spacepos = pos;
-				while (spacepos < len) {
-					b = src[spacepos];
-					if (b != ' ' && b != '\t')
-						break;
-					else
-						spacepos++;
-				}
-				if (spacepos > pos) {
-					if (bfr == null)
-						bfr = Bry_bfr_.New();
-					bfr.Add_mid(src, sofar, pos - 1);
-					bfr.Add_byte(Byte_ascii.Space);
-					pos = spacepos;
-					sofar = pos;
-				}
+					break;
 			}
 		}
 		if (bfr != null) {

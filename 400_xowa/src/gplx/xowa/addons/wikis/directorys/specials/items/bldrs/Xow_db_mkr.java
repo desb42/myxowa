@@ -76,7 +76,7 @@ public class Xow_db_mkr {
 		props.Cfg_save(cfg_tbl);
 
 		Xowd_cfg_tbl_.Upsert__create(cfg_tbl, data.Domain(), wiki_name, mainpage_name);
-
+/* when? 20210329
 		// insert data: page
 		Xopg_db_mgr.Create
 			( Xowd_page_tbl.Get_by_key(core_db)
@@ -85,7 +85,7 @@ public class Xow_db_mkr {
 			, Db_cfg_tbl.Get_by_key(core_db, Xowd_cfg_tbl_.Tbl_name)
 			, Xow_ns_.Tid__main, mainpage_name, mainpage_text
 			, -1);
-
+*/
 		// create tbls: fsdb
 		core_db.Tbls__add(Bool_.Y
 		, new Fsm_mnt_tbl(core_conn, Bool_.N)

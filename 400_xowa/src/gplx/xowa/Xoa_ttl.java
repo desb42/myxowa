@@ -309,7 +309,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		}*/
 		if (end - bgn == 0) return false;
 		src = firstpass(src, bgn, end, bfr, amp_mgr);
-                bgn = 0;
+		bgn = 0;
 		end = src.length; // hope this is ok
 		this.raw = src;
 		ns = ns_mgr.Ns_main();
@@ -344,6 +344,13 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 								if (wik_itm != null) {
 									wik_bgn = 0;			// wik_bgn can only start at 0
 									part_found = true;
+									// make sure the interwiki abbr is the correct case
+									//byte[] wik_key = wik_itm.Key_bry();
+									//byte[] bfr_buf = bfr.Bfr();
+									//for (int i = 0; i < wik_key.length; i++) {
+									//	bfr_buf[i] = wik_key[i];
+									//	this.raw[i] = wik_key[i];
+									//}
 									anch_bgn = -1;			// NOTE: do not allow anchors to begin before wiki_itm; breaks Full_txt for [[:#batch:Main Page]]; DATE:20130102
 								}
 							}
@@ -677,9 +684,18 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		}
 		return buf.To_bry_and_clear();
 	}
+	public byte[] Full_txt_for_title()	{ // full text with namespace interpreted
+		byte[] rv;
+		if (wik_itm != null)
+			rv = Bry_.Add(wik_itm.Key_bry(), Byte_ascii.Colon_bry, Full_db());
+		else
+			rv = Full_db(); //ns.Gen_ttl(this.Page_db());
+		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);
+		return rv;
+	}
 	public String toString() {
-            return String_.new_u8(raw);
-        }
+		return String_.new_u8(raw);
+	}
 }
 class Xoa_ttl_trie {
 	public static Btrie_fast_mgr new_() {

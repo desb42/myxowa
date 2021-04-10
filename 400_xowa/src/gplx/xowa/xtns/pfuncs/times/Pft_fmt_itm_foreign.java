@@ -120,6 +120,27 @@ class Pft_fmt_itm_iranian_day_idx implements Pft_fmt_itm {
 		bfr.Add_int_variable(seg_ary[Pft_fmt_itm_iranian.Rslt__day]);
 	}
 }
+class Pft_fmt_itm_iranian_days_in_month implements Pft_fmt_itm { // xit
+	public int TypeId() {return Pft_fmt_itm_.Tid_iranian_day_idx;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		int[] seg_ary = Pft_fmt_itm_iranian.Calc_date(date);
+		bfr.Add_int_variable(seg_ary[Pft_fmt_itm_iranian.Rslt__xit]);
+	}
+}
+class Pft_fmt_itm_iranian_year2 implements Pft_fmt_itm {  // xiy
+	public int TypeId() {return Pft_fmt_itm_.Tid_iranian_day_idx;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		int[] seg_ary = Pft_fmt_itm_iranian.Calc_date(date);
+		bfr.Add_int_fixed(seg_ary[Pft_fmt_itm_iranian.Rslt__year] % 100, 2);
+	}
+}
+class Pft_fmt_itm_iranian_day_of_year implements Pft_fmt_itm { // xiz
+	public int TypeId() {return Pft_fmt_itm_.Tid_iranian_day_idx;}
+	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {
+		int[] seg_ary = Pft_fmt_itm_iranian.Calc_date(date);
+		bfr.Add_int_variable(seg_ary[Pft_fmt_itm_iranian.Rslt__day_of_year]);
+	}
+}
 class Pft_fmt_itm_iranian_month_name implements Pft_fmt_itm {
 	public int TypeId() {return Pft_fmt_itm_.Tid_iranian_month_name;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {

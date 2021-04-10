@@ -65,7 +65,7 @@ public class Xob_page_cmd extends Xob_itm_basic_base implements Xob_page_wkr, Gf
 		}
 		byte[] text_zip = text_zip_mgr.Zip(text_zip_tid, text_raw);
 		Xow_db_file text_db = ns_to_db_mgr.Get_by_ns(ns.Bldr_data(), text_zip.length);
-		try {db_mgr.Create_page(page_core_tbl, text_db.Tbl__text(), id, page.Ns_id(), page.Ttl_page_db(), redirect, modified, text_zip, text_raw_len, random_int, text_db.Id(), -1, page.Model_format());}
+		try {db_mgr.Create_page(page_core_tbl, text_db, id, page.Ns_id(), page.Ttl_page_db(), redirect, modified, text_zip, text_raw_len, random_int, page.Model_format());}
 		catch (Exception e) {
 			throw Err_.new_exc(e, "bldr", "create page in db failed; skipping page", "id", id, "ns", page.Ns_id(), "name", page.Ttl_page_db(), "redirect", redirect, "modified", modified, "text_len", text_raw_len, "text_db_id", text_db.Id());
 		}

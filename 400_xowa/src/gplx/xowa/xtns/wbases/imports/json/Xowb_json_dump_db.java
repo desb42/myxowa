@@ -99,7 +99,7 @@ class Xowb_json_dump_db {
 		int random_int = ns.Count() + 1; ns.Count_(random_int);
 		byte[] json_zip = text_zip_mgr.Zip(text_zip_tid, json_bry);
 		Xow_db_file text_db = ns_to_db_mgr.Get_by_ns(ns.Bldr_data(), json_zip.length);
-		db_mgr.Create_page(page_tbl, text_db.Tbl__text(), ++page_id, ns.Id(), id, Bool_.N, page_modified_on, json_zip, json_bry.length, random_int, text_db.Id(), -1, 0);
+		db_mgr.Create_page(page_tbl, text_db, ++page_id, ns.Id(), id, Bool_.N, page_modified_on, json_zip, json_bry.length, random_int, 19);
 
 		// insert text
 		if (jdoc_is_qid) {

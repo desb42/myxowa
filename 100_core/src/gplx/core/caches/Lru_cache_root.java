@@ -34,7 +34,7 @@ public class Lru_cache_root {
 		int len = hash.Len();
 		for (int i = 0; i < len; i++) {
 			Lru_cache grp = (Lru_cache)hash.Get_at(i);
-			grp.Clear_min(0);
+//			grp.Clear_min(0);
 		}
 	}
 	public String Print_contents(boolean grps_only_or_both) {
@@ -42,7 +42,7 @@ public class Lru_cache_root {
 		int len = hash.Len();
 		for (int i = 0; i < len; i++) {
 			Lru_cache grp = (Lru_cache)hash.Get_at(i);
-			grp.To_str(bfr, grps_only_or_both);
+//			grp.To_str(bfr, grps_only_or_both);
 		}
 		return bfr.To_str_and_clear();
 	}

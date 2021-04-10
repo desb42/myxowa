@@ -24,9 +24,9 @@ public class Xob_xfer_temp_itm {
 	public byte Orig_repo() {return orig_repo;} private byte orig_repo;
 	public int Lnki_ext() {return lnki_ext;} private int lnki_ext;
 	public byte[] Orig_file_ttl() {return orig_file_ttl;} private byte[] orig_file_ttl;
-	public String Orig_media_type() {return orig_media_type;} private String orig_media_type;
-	public String Orig_minor_mime() {return orig_minor_mime;} private String orig_minor_mime;
-	public byte Orig_media_type_tid() {return orig_media_type_tid;} private byte orig_media_type_tid;
+	public int Orig_media_type() {return orig_media_type;} private int orig_media_type;
+	public int Orig_minor_mime() {return orig_minor_mime;} private int orig_minor_mime;
+//	public byte Orig_media_type_tid() {return orig_media_type_tid;} private byte orig_media_type_tid;
 	public int Orig_page_id() {return orig_page_id;} private int orig_page_id;
 	public String Join_ttl() {return join_ttl;} private String join_ttl;
 	public String Redirect_src() {return redirect_src;} private String redirect_src;
@@ -45,11 +45,12 @@ public class Xob_xfer_temp_itm {
 	public void Clear() {
 		orig_file_ttl = null;
 		lnki_ext = lnki_type = lnki_src_tid
-				= orig_repo = orig_media_type_tid = Byte_.Max_value_127;
+				= orig_repo = Byte_.Max_value_127;
 		chk_tid = Chk_tid_none;
 		lnki_id = lnki_tier_id = lnki_w = lnki_h = lnki_count =  lnki_page_id
 				= orig_w = orig_h = orig_page_id = Int_.Neg1;
-		join_ttl =  redirect_src = orig_media_type = null;
+		join_ttl =  redirect_src = null;
+		orig_media_type = -1;
 		lnki_upright = Xop_lnki_tkn.Upright_null;
 		lnki_thumbtime = Xof_lnki_time.Null;
 		lnki_page = Xof_lnki_page.Null;
@@ -74,8 +75,8 @@ public class Xob_xfer_temp_itm {
 		redirect_src	= rdr.ReadStr(Xob_orig_regy_tbl.Fld_lnki_ttl);
 		orig_w			= rdr.ReadIntOr(Xob_orig_regy_tbl.Fld_orig_w, -1);
 		orig_h			= rdr.ReadIntOr(Xob_orig_regy_tbl.Fld_orig_h, -1);
-		orig_media_type = rdr.ReadStrOr(Xob_orig_regy_tbl.Fld_orig_media_type, "");	// convert nulls to ""
-		orig_minor_mime = rdr.ReadStrOr(Xob_orig_regy_tbl.Fld_orig_minor_mime, "");	// convert nulls to ""
+		orig_media_type = rdr.ReadIntOr(Xob_orig_regy_tbl.Fld_orig_media_type, -1);
+		orig_minor_mime = rdr.ReadIntOr(Xob_orig_regy_tbl.Fld_orig_minor_mime, -1);
 		orig_ext_id		= rdr.ReadInt(Xob_orig_regy_tbl.Fld_orig_file_ext);
 	}
 	public static final    byte 
@@ -94,9 +95,8 @@ public class Xob_xfer_temp_itm {
 //				lnki_ext = join_ext.Id();
 //			}
 		lnki_ext = orig_ext_id;
-		orig_media_type_tid = Xof_media_type.Xto_byte(orig_media_type);
 		if (	Xof_lnki_time.Null_n(lnki_thumbtime)				// thumbtime defined
-			&&	orig_media_type_tid != Xof_media_type.Tid_video 	// video can have thumbtime
+			&&	orig_media_type != Xof_media_type.Tid_video 	// video can have thumbtime
 			)
 			lnki_thumbtime = Xof_lnki_time.Null;					// set thumbtime to NULL; actually occurs for one file: [[File:Crash.arp.600pix.jpg|thumb|thumbtime=2]]
 		if (	Xof_lnki_page.Null_n(lnki_page)
@@ -106,7 +106,7 @@ public class Xob_xfer_temp_itm {
 			chk_tid = Chk_tid_orig_page_id_is_null;
 			return false;
 		}
-		if (orig_media_type_tid == Xof_media_type.Tid_audio) {		// ignore: audio will never have thumbs
+		if (orig_media_type == Xof_media_type.Tid_audio) {		// ignore: audio will never have thumbs
 			chk_tid = Chk_tid_orig_media_type_is_audio;
 			return false;
 		}

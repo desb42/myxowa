@@ -27,14 +27,23 @@ public class Dbmeta_parser__tbl {
 		Dbmeta_tbl_itm rv = Dbmeta_tbl_itm.New(String_.new_u8(tbl_name));
 		boolean loop = true;
 		while (loop) {
-			Dbmeta_fld_itm fld = fld_parser.Parse_fld(rdr); if (fld == null) rdr.Err_wkr().Fail("unknown field", "src", src);
+			Dbmeta_fld_itm fld = fld_parser.Parse_fld(rdr);
+			if (fld == null)
+				rdr.Err_wkr().Fail("unknown field", "src", src);
 			rv.Flds().Add(fld);
 			int pos = rdr.Pos();
 			byte b = pos == rdr.Src_end() ? Byte_ascii.Null : src[pos];
 			switch (b) {
-				case Byte_ascii.Comma:		rdr.Move_by_one(); break;
-				case Byte_ascii.Paren_end:	rdr.Move_by_one(); loop = false; break;
-				default:					rdr.Err_wkr().Fail("premature end of flds"); break;
+				case Byte_ascii.Comma:
+					rdr.Move_by_one();
+					break;
+				case Byte_ascii.Paren_end:
+					rdr.Move_by_one();
+					loop = false;
+					break;
+				default:
+					rdr.Err_wkr().Fail("premature end of flds");
+					break;
 			}
 		}
 		return rv;

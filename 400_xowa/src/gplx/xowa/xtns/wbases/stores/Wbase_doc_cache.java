@@ -61,6 +61,8 @@ class Slider {
 class Wbase_doc_cache__sliding implements Wbase_doc_cache {
 	private final Slider[] obs = new Slider[20];
 	private int position = 0;
+	private long hit = 0;
+	private long miss = 0;
 	public void Add(byte[] qid, Wdata_doc doc) {
 		if (position >= 20)
 			position = 0;
@@ -77,10 +79,13 @@ class Wbase_doc_cache__sliding implements Wbase_doc_cache {
 					if (key[j] != qid[j])
 						break;
 				}
-				if (j == qid_len)
+				if (j == qid_len) {
+					hit++;
 					return sl.doc;
+				}
 			}
 		}
+		miss++;
 		return null;
 	}
 	public void Clear() {
@@ -88,5 +93,8 @@ class Wbase_doc_cache__sliding implements Wbase_doc_cache {
 			obs[i] = null;
 		}
 	}
-	public void Term() {Clear();}
+	public void Term() {
+		Clear();
+		Gfo_usr_dlg_.Instance.Log_many("", "", "siliding_cache hits:~{0} misses:~{1}", hit, miss);
+	}
 }

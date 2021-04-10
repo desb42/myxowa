@@ -53,7 +53,7 @@ public class Xosync_update_mgr {
 			page_tbl.Insert_bgn();
 			try {
 				page_tbl.Insert_cmd_by_batch(data.Page_id(), ns_id, page_ttl.Page_db(), false, Datetime_now.Get()
-						, html_bry.length, next_random_id, -1, html_db.Id(), -1, page_itm.Model_format());
+						, html_bry.length, next_random_id, -1, html_db.Id(), -1, page_itm.Model_format(), 0, 0, 0); // when is this used? 20210329
 			} finally {
 				page_tbl.Insert_end();
 			}

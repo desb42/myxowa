@@ -203,8 +203,11 @@ public class Xow_db_mgr {
 
 		return (Xow_db_file[])rv.To_ary_and_clear(Xow_db_file.class);
 	}
-	public void Create_page(Xowd_page_tbl core_tbl, Xowd_text_tbl text_tbl, int page_id, int ns_id, byte[] ttl_wo_ns, boolean redirect, DateAdp modified_on, byte[] text_zip_data, int text_raw_len, int random_int, int text_db_id, int html_db_id, int model_format) {
-		core_tbl.Insert_cmd_by_batch(page_id, ns_id, ttl_wo_ns, redirect, modified_on, text_raw_len, random_int, text_db_id, html_db_id, -1, model_format);
+	public void Create_page(Xowd_page_tbl core_tbl, Xow_db_file text_db, int page_id, int ns_id, byte[] ttl_wo_ns, boolean redirect, DateAdp modified_on, byte[] text_zip_data, int text_raw_len, int random_int, int model_format) {
+            Xowd_text_tbl text_tbl = text_db.Tbl__text();
+            int text_db_id = text_db.Id();
+            long text_db_offset = text_db.Offset();
+		core_tbl.Insert_cmd_by_batch(page_id, ns_id, ttl_wo_ns, redirect, modified_on, text_raw_len, random_int, text_db_id, -1, -1, model_format, text_db_offset, 0, 0);
 		text_tbl.Insert_cmd_by_batch(page_id, text_zip_data);
 	}
 	private void Dbs__set_by_tid(Xow_db_file db) {

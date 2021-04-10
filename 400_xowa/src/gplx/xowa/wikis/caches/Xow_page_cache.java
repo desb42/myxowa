@@ -15,8 +15,12 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.wikis.caches; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*;
 import gplx.core.caches.*;
+import gplx.core.logs.Gfo_log_wtr;
 public class Xow_page_cache {
 	private Db_parser dbp = new Db_parser();
+	private final Gfo_log_wtr cache_log;
+	private boolean noadd = false;
+	public void Stop_cache() { noadd = true; }
 	private final    Object thread_lock = new Object(); // NOTE: thread-safety needed for xomp since one page-cache is shared across all wkrs
 	private final    Object cache_lock = new Object();
 	private final    Xowe_wiki wiki;
@@ -27,6 +31,7 @@ public class Xow_page_cache {
 		this.wiki = wiki;
 		this.cache_key = "xowa.app.page_cache.'" + wiki.Domain_str() + "'." + this.hashCode();
 		this.cache = new Lru_cache(Bool_.Y, cache_key, 8 * Io_mgr.Len_mb, 16 * Io_mgr.Len_mb);
+		this.cache_log = Gfo_log_wtr.New_dflt("page", "cache_log_{0}.csv");
 	}
 	public String Cache_key() {return cache_key;} private final    String cache_key;
 	public void Load_wkr_(Xow_page_cache_wkr v) {this.load_wkr = v;} private Xow_page_cache_wkr load_wkr;
@@ -54,9 +59,8 @@ public class Xow_page_cache {
 		else if (rv == null) {
 			synchronized (cache_lock) {
 				cache_misses++;
-                        }
-				return Load_page(ttl);
-			//}
+			}
+			return Load_page(ttl);
 		}
 		else {
 			synchronized (cache_lock) {
@@ -108,22 +112,43 @@ public class Xow_page_cache {
 				page_id = page.Db().Page().Id();
 			}
 		}
+		if (!noadd) {
 
-		// create item
-		if (page_exists) {
 		synchronized (thread_lock) {
-			//page_text = dbp.stripcomments(page_text);
-			rv = new Xow_page_cache_itm(false, page_id, page_ttl, page_text, page_redirect_from);
-			Add_itm(ttl.Full_db_as_str(), rv);
-                }
+			// create item
+			if (page_exists) {
+				//page_text = dbp.stripcomments(page_text);
+				rv = new Xow_page_cache_itm(false, page_id, page_ttl, page_text, page_redirect_from, 0, 0);
+				Add_itm(ttl.Full_db_as_str(), rv);
+			}
+			else {
+				rv = null;
+				Add_itm(ttl.Full_db_as_str(), Xow_page_cache_itm.Missing);
+			}
 		}
-		else {
-		synchronized (thread_lock) {
-			rv = null;
-			Add_itm(ttl.Full_db_as_str(), Xow_page_cache_itm.Missing);
-                }
 		}
 		return rv;
+	}
+	public void Cleanup() {
+		int count = 0;
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		// dump out the cache items
+		java.util.Iterator iterator = cache.iterator();
+		while(iterator.hasNext()) {
+			Xow_page_cache_itm itm = (Xow_page_cache_itm)iterator.next();
+			if (itm.Ttl() == null) {
+				continue; //int a = 1;
+			}
+			tmp_bfr.Add(itm.Ttl().Raw());
+			tmp_bfr.Add_byte_pipe().Add_int_variable((int)itm.Access_count());
+			tmp_bfr.Add_byte_pipe().Add_int_variable((int)itm.Cache_len());
+			tmp_bfr.Add_byte_nl();
+			cache_log.Write(tmp_bfr);
+			//System.out.println( String.format("%8d", itm.Access_count()) + "|" + itm.Ttl() + "|" + itm.Cache_len() );
+			count++;
+		}
+		//System.out.println(count + " " + t);
+		cache_log.Flush();
 	}
 	public String To_str() {
 		return String_.Format("cache_pct:{0} cache_misses:{1} cache_evicts:{2} cache_tries:{3} cache_size:{4}", Decimal_adp_.divide_(cache_misses * 100, cache_tries).To_str("0.00"), cache_misses, cache.Evicts(), cache_tries, cache.Cur());

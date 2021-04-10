@@ -21,7 +21,7 @@ public class Db_btrie_http implements Db_btrie {
 	private int found;
 	private int offset;
 	public Db_btrie_http(Object[] objs) {this.objs = objs; }
-	public static byte[] Hash() { return Bry_.new_a7("cfd15cf15a0fa867aa850b7b4af3b1f5"); }
+	public static byte[] Hash() { return Bry_.new_a7("844b07a639ffea63a60137965f147f0e"); }
 	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
 		found = -1;
 		offset = -1;
@@ -209,6 +209,12 @@ public class Db_btrie_http implements Db_btrie {
 										}
 										break;
 								}
+							}
+							break;
+						case 'g':
+							if (ofs+7 < src_len && (src[ofs+5] | 32) == 'p' && (src[ofs+6] | 32) == 'c' && src[ofs+7] == ':') {
+								found = ofs + 8;
+								offset = 27; // ('Sec-GPC:', 27)
 							}
 							break;
 					}

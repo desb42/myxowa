@@ -21,7 +21,8 @@ public class Xobldr__image__create extends Xob_itm_dump_base implements Xob_cmd,
 	private Xosql_dump_parser parser;
 	private Db_conn conn = null; private Db_stmt stmt = null;
 	private Xob_image_tbl tbl_image = new Xob_image_tbl();
-	private byte[] cur_ttl, cur_media_type, cur_minor_mime, cur_timestamp; private int cur_size, cur_width, cur_height, cur_bits, cur_ext_id;
+	private byte[] cur_ttl, cur_timestamp; private int cur_size, cur_width, cur_height, cur_bits, cur_ext_id, cur_media_type_id;
+	private Xof_ext mime_ext;
 	private int commit_count = 10000;
 	public Xobldr__image__create(Xob_bldr bldr, Xowe_wiki wiki) {
 		this.parser = new Xosql_dump_parser(this, "img_name", "img_size", "img_width", "img_height", "img_bits", "img_media_type", "img_minor_mime", "img_timestamp");
@@ -36,10 +37,10 @@ public class Xobldr__image__create extends Xob_itm_dump_base implements Xob_cmd,
 		if (src_fil == null) {
 			src_fil = Xob_page_wkr_cmd.Find_fil_by(wiki.Fsys_mgr().Root_dir(), "*-image.sql");
 			if (src_fil == null) {
-                            src_fil = Xob_page_wkr_cmd.Find_fil_by(wiki.Fsys_mgr().Root_dir(), "*-image.sql.gz");
-                            if (src_fil == null)
-                                throw Err_.new_wo_type(".sql(.gz) file not found in dir", "dir", wiki.Fsys_mgr().Root_dir());
-                        }
+				src_fil = Xob_page_wkr_cmd.Find_fil_by(wiki.Fsys_mgr().Root_dir(), "*-image.sql.gz");
+				if (src_fil == null)
+					throw Err_.new_wo_type(".sql(.gz) file not found in dir", "dir", wiki.Fsys_mgr().Root_dir());
+			}
 		}
 		parser.Src_fil_(src_fil);
 		this.conn = Xob_db_file.New__wiki_image(wiki.Fsys_mgr().Root_dir()).Conn();
@@ -60,14 +61,15 @@ public class Xobldr__image__create extends Xob_itm_dump_base implements Xob_cmd,
 			case Fld_img_width:			cur_width		= Bry_.To_int_or(src, val_bgn, val_end, -1); break;
 			case Fld_img_height:		cur_height		= Bry_.To_int_or(src, val_bgn, val_end, -1); break;
 			case Fld_img_bits: 			cur_bits		= Bry_.To_int_or(src, val_bgn, val_end, -1); break;
-			case Fld_img_media_type:	cur_media_type	= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
-			case Fld_img_minor_mime:	cur_minor_mime	= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
+			case Fld_img_media_type:	cur_media_type_id	= Xof_media_type.Xto_int(src, val_bgn, val_end); break;
+			case Fld_img_minor_mime:	mime_ext = Xof_mime_minor_.ext_(Bry_.Mid(src, val_bgn, val_end)); break;
 			case Fld_img_timestamp:		cur_timestamp	= Xosql_dump_parser.Mid(src, val_bgn, val_end, has_escape); break;
 		}
 	}
+
 	public void On_row_done(long currentpos, long maxpos) {
-		cur_ext_id = Calc_ext_id(show_issues ? app.Usr_dlg() : Gfo_usr_dlg_.Noop, cur_ttl, cur_media_type, cur_minor_mime, cur_width, cur_height);
-		tbl_image.Insert(stmt, cur_ttl, cur_media_type, cur_minor_mime, cur_size, cur_width, cur_height, cur_bits, cur_ext_id, cur_timestamp);
+		cur_ext_id = Calc_ext_id(show_issues ? app.Usr_dlg() : Gfo_usr_dlg_.Noop, cur_ttl, cur_media_type_id, mime_ext, cur_width, cur_height);
+		tbl_image.Insert(stmt, cur_ttl, cur_media_type_id, mime_ext.Id(), cur_size, cur_width, cur_height, cur_bits, cur_ext_id, cur_timestamp);
 		++commit_count;
 		if ((commit_count % 10000) == 0) {
 			usr_dlg.Prog_many("", "", "committing: count=~{0} last=~{1}", commit_count, String_.new_u8(cur_ttl));
@@ -85,10 +87,9 @@ public class Xobldr__image__create extends Xob_itm_dump_base implements Xob_cmd,
 		else	return super.Invk(ctx, ikey, k, m);
 		return this;
 	}	private static final    String Invk_src_fil_ = "src_fil_", Invk_show_issues_ = "show_issues_";
-	public static int Calc_ext_id(Gfo_usr_dlg usr_dlg, byte[] file, byte[] media_type, byte[] minor_mime, int w, int h) {
+	public static int Calc_ext_id(Gfo_usr_dlg usr_dlg, byte[] file, int media_type_id, Xof_ext mime_ext, int w, int h) {
 		Xof_ext file_ext = Xof_ext_.new_by_ttl_(file);			int file_ext_id = file_ext.Id();
-		Xof_ext mime_ext = Xof_mime_minor_.ext_(minor_mime);	int mime_ext_id = mime_ext.Id();
-		int media_type_id = Xof_media_type.Xto_byte(String_.new_u8(media_type));
+		int mime_ext_id = mime_ext.Id();
 		if (file_ext_id != mime_ext_id) {							// file_ext_id != mime_ext_id; EX: "A.png" actually has a minor_mime of "jpg"
 			boolean update = false, notify = true;
 			switch (file_ext_id) {
@@ -110,7 +111,7 @@ public class Xobldr__image__create extends Xob_itm_dump_base implements Xob_cmd,
 				file_ext_id = mime_ext_id;
 			else {
 				if (notify)
-					usr_dlg.Log_many("", "", "image.ext_calc.mismatch_exts: file=~{0} mime=~{1}", String_.new_u8(file), String_.new_u8(minor_mime));			
+					usr_dlg.Log_many("", "", "image.ext_calc.mismatch_exts: file=~{0} mime=~{1}", String_.new_u8(file), Integer.toString(mime_ext_id));			
 			}
 		}
 		if (    file_ext_id		== Xof_ext_.Id_ogg			// file_ext is ".ogg"
@@ -119,7 +120,7 @@ public class Xobldr__image__create extends Xob_itm_dump_base implements Xob_cmd,
 			if (w > 0 && h > 0)								// some .ogg files are "VIDEO" but have 0 width, 0 height
 				file_ext_id = Xof_ext_.Id_ogv;				// manually specify ogv
 			else
-				usr_dlg.Log_many("", "", "image.ext_calc.ogg_video_with_null_size: media_type=~{0} minor_mime=~{1} w=~{2} h=~{3} file=~{4}", String_.new_u8(media_type), String_.new_u8(minor_mime), w, h, String_.new_u8(file));
+				usr_dlg.Log_many("", "", "image.ext_calc.ogg_video_with_null_size: media_type=~{0} minor_mime=~{1} w=~{2} h=~{3} file=~{4}", Integer.toString(media_type_id), Integer.toString(mime_ext_id), w, h, String_.new_u8(file));
 		}
 		return file_ext_id;
 	}

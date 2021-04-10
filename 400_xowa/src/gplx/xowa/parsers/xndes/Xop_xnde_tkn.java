@@ -115,6 +115,12 @@ public class Xop_xnde_tkn extends Xop_tkn_itm_base implements Xop_tblw_tkn {
 					this.Subs_get(i).Tmpl_evaluate(ctx, src, caller, bfr);
 //					ctx.Onlyinclude_enabled = prv_val;
 				break;
+			case Xop_xnde_tag_.Tid__indicator: // need to expand any arguments
+				bfr.Add_mid(src, tag_open_bgn, tag_open_end);
+				for (int i = 0; i < subs_len; i++)
+					this.Subs_get(i).Tmpl_evaluate(ctx, src, caller, bfr);
+				bfr.Add_mid(src, tag_close_bgn, tag_close_end);
+				break;
 			default:								// ignore tags except for xtn; NOTE: Xtn tags are part of tagRegy_wiki_tmpl stage
 				if (tag.Xtn()) {
 					Bry_bfr cur_bfr = bfr;

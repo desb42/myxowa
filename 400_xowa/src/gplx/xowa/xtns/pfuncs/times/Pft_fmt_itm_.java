@@ -69,6 +69,10 @@ public class Pft_fmt_itm_ {
 	, Tid_timezone_offset_4 = 37
 	, Tid_timezone_offset_4_colon = 38
 	, Tid_timezone_dst = 39
+	, Tid_iranian_days_in_month = 40
+	, Tid_iranian_year2 = 41
+	, Tid_iranian_day_of_year = 42
+	, Tid_xx = 43
 	;
 
 	public static final    Pft_fmt_itm 
@@ -132,7 +136,11 @@ public class Pft_fmt_itm_ {
 	, Timezone_offset_4			= new Pft_fmt_itm_timezone_offset_4(Bool_.N)
 	, Timezone_offset_4_colon			= new Pft_fmt_itm_timezone_offset_4(Bool_.Y)
 	, Timezone_dst			= new Pft_fmt_itm_timezone_dst()
-	;
+	, Iranian_days_in_month = new Pft_fmt_itm_iranian_days_in_month()
+	, Iranian_year2 = new Pft_fmt_itm_iranian_year2()
+	, Iranian_day_of_year = new Pft_fmt_itm_iranian_day_of_year()
+	, Byte_x				= new Pft_fmt_itm_raw_byt(Byte_ascii.Ltr_x)
+    	;
 	public static final    Btrie_fast_mgr Regy = Btrie_fast_mgr.cs()
 	.Add(Byte_ascii.Ltr_Y		, Pft_fmt_itm_.Year_len4)				// 2012
 	.Add(Byte_ascii.Ltr_y		, Pft_fmt_itm_.Year_len2)				// 12
@@ -190,12 +198,16 @@ public class Pft_fmt_itm_ {
 	.Add("xmn"					, Pft_fmt_itm_.Hijri_month_idx)
 	.Add("xmY"					, Pft_fmt_itm_.Hijri_year_idx)
 	.Add("xtY"					, Pft_fmt_itm_.Nengo_year) // Japanese
+	.Add("xit"					, Pft_fmt_itm_.Iranian_days_in_month) // (days in month) in Iranian calendar
+	.Add("xiy"					, Pft_fmt_itm_.Iranian_year2) // (two digit year) in Iranian calendar
+	.Add("xiz"					, Pft_fmt_itm_.Iranian_day_of_year) // (day of the year) in Iranian calendar
+	.Add("xx"					, Pft_fmt_itm_.Byte_x) // generate an 'x'
 	// TODO_OLD: space; "
 	;
 
 	//public static Pft_fmt_itm[] Parse(Xop_ctx ctx, byte[] fmt) {
 	public static Pft_fmt_itm[] Parse(byte[] fmt) {
-            List_adp fmt_itms = List_adp_.New();
+		List_adp fmt_itms = List_adp_.New();
 		//List_adp fmt_itms = ctx.Wiki().Parser_mgr().Time_parser_itms();
 		Btrie_fast_mgr trie = Pft_fmt_itm_.Regy;
 		Btrie_rv trv = new Btrie_rv();

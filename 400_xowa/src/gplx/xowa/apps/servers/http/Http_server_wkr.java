@@ -203,6 +203,8 @@ public class Http_server_wkr implements Gfo_invk {
 			}
 			response.Set_content_type(page.Content_type());
                         response.Set_content_lang(page.Wiki().Lang());
+//testing                        page.Wiki().Cache_mgr().Page_cache().Cleanup();
+//testing		Xowe_wiki_.Rls_mem(page.Wiki(), true);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!test
 		}
 		writeFile(page_html, rootdir + "html.htm");
 		response.Write_response_as_html(client_wtr, Bool_.N, page_html);

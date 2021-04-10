@@ -17,6 +17,7 @@ package gplx.xowa.addons.bldrs.mass_parses.parses.utls; import gplx.*; import gp
 import gplx.dbs.*;
 import gplx.core.ios.*;
 import gplx.xowa.wikis.data.tbls.*;
+import gplx.xowa.wikis.data.Xow_db_file;
 public class Xomp_text_db_loader {
 	private final    Xow_wiki wiki;
 	private final    Ordered_hash text_db_hash = Ordered_hash_.New();
@@ -42,6 +43,13 @@ public class Xomp_text_db_loader {
 	}
 	private void Load_list(int text_db_id, List_adp list) {
 		int list_len = list.Len();
+		if (list_len > 0) {
+			Xowd_text_bry_owner ppg = (Xowd_text_bry_owner)list.Get_at(0); // check the first entry
+			if (ppg.Offset() != 0) {
+				Load_from_text_dat(text_db_id, list);
+				return;
+			}
+		}
 		int batch_idx = 0;
 		Bry_bfr bry = Bry_bfr_.New();
 		Ordered_hash page_hash = Ordered_hash_.New();
@@ -84,6 +92,15 @@ public class Xomp_text_db_loader {
 		finally {
 			rdr.Rls();
 			// text_conn.Rls_conn(); // TOMBSTONE: causes strange errors in tables; DATE:2016-07-06
+		}
+	}
+	private void Load_from_text_dat(int text_db_id, List_adp list) {
+		int list_len = list.Len();
+		Xow_db_file db_file = wiki.Data__core_mgr().Dbs__get_by_id_or_fail(text_db_id);
+		for (int i = 0; i < list_len; ++i) {
+			Xowd_text_bry_owner ppg = (Xowd_text_bry_owner)list.Get_at(i);
+			byte[] text_data = db_file.Read_file_offset_len(ppg.Offset(), ppg.Page_len());
+			ppg.Set_text_bry_by_db(text_data);
 		}
 	}
 }

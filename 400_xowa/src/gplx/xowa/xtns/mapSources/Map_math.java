@@ -139,10 +139,13 @@ class Map_math {// REF.MW:MapSources_math.php
 				tmp_bfr.Add_byte_space();
 			tmp_bfr.Add_double(coord_min).Add(wikibase ? Bry_apos_wb : Bry_apos_mw);
 		}
-		if (prec > 2) {
+		if (prec > 2 && coord_sec != 0.0) {
 			if (!wikibase)	// NOTE: do not add space if wikibase, else will fail in Module:en.w:WikidataCoord; PAGE:en.w:Hulme_Arch_Bridge DATE:2017-04-02
 				tmp_bfr.Add_byte_space();
-			tmp_bfr.Add_double(coord_sec).Add(wikibase ? Bry_quot_wb : Bry_quot_mw);
+			if (coord_sec < 0.1) // avoid scientific notation
+				tmp_bfr.Add_str_a7(String.format("%.5f", coord_sec)).Add(wikibase ? Bry_quot_wb : Bry_quot_mw);
+			else
+				tmp_bfr.Add_double(coord_sec).Add(wikibase ? Bry_quot_wb : Bry_quot_mw);
 		}
 		byte[] letter = null;
 		if (dir_id == Dir_lat_id)

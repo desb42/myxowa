@@ -23,15 +23,18 @@ public class Xow_page_cache_itm implements Xowd_text_bry_owner {
 	private static File tempFile;
 	private static long      maxofs = 0;
 	private static boolean openfile = true;
-	private static long lastfileoffset;
+	private static long lastfileoffset = -1;
 	private static byte[] lastdata;
 	private long access_count;
 	private long cache_len;
 	private long fileoffset;
 	public long Access_count() { return access_count; }
 	public void Access_count_increment() { access_count++; }
+	private byte[] access_data;
+	public int Page_len() {return orig_page_len;} private int orig_page_len;
+	public long Offset() {return orig_page_text_offset;} private long orig_page_text_offset;
 	private byte[] temp_cache;
-	public Xow_page_cache_itm(boolean cache_permanently, int page_id, Xoa_ttl ttl, byte[] wtxt__direct, byte[] wtxt__redirect) {
+	public Xow_page_cache_itm(boolean cache_permanently, int page_id, Xoa_ttl ttl, byte[] wtxt__direct, byte[] wtxt__redirect, int page_len, long page_text_offset) {
 		if (openfile) {
 			try {
 				tempFile = File.createTempFile("prefix-", "-suffix");
@@ -47,10 +50,14 @@ public class Xow_page_cache_itm implements Xowd_text_bry_owner {
 		this.access_count = 1;
 		temp_cache = wtxt__direct;
 		Set_text_bry_by_db(wtxt__direct);
+		this.orig_page_len = page_len;
+		this.orig_page_text_offset = page_text_offset;
 	}
 	public Xoa_ttl Ttl() {return ttl;} private Xoa_ttl ttl;
 	public byte[] Wtxt__direct() {
 		if (cache_len == 0) return Bry_.Empty;
+		if (access_data != null)
+			return access_data;
 		byte[] data;
 		if (temp_cache != null) {
 			data = temp_cache;
@@ -58,25 +65,27 @@ public class Xow_page_cache_itm implements Xowd_text_bry_owner {
 			return data;
 		}
 		data = new byte[(int)cache_len];
-		byte[] bytes = new byte[8];
+		//byte[] bytes = new byte[8];
 		try {
 			rwl.writeLock().lock();
 			if (fileoffset == lastfileoffset) {
 				data = lastdata;
 			}
 			else {
-				raf.seek(fileoffset);
 				lastfileoffset = fileoffset;
-				raf.read(bytes);
-				long page_id = convertByteArrayToInt(bytes, 0);
-				long size = convertByteArrayToInt(bytes, 4);
-				//long page_id = raf.readLong();
-				//long size = raf.readLong();
-				if (page_id != this.page_id || size != cache_len)
-					size = 1;
+				// skip the check!
+				//raf.seek(fileoffset);
+				//raf.read(bytes);
+				//long page_id = convertByteArrayToInt(bytes, 0);
+				//long size = convertByteArrayToInt(bytes, 4);
+				//if (page_id != this.page_id || size != cache_len)
+					//size = 1;
+				raf.seek(fileoffset + 8);
 				raf.read(data);
 				lastdata = data;
 			}
+//			if (access_count > 100)
+//				access_data = data;
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -137,7 +146,7 @@ public class Xow_page_cache_itm implements Xowd_text_bry_owner {
 	}
 
 	public static final    Xow_page_cache_itm Null = null;
-	public static final    Xow_page_cache_itm Missing = new Xow_page_cache_itm(false, -1, null, null, null);
+	public static final    Xow_page_cache_itm Missing = new Xow_page_cache_itm(false, -1, null, null, null, 0, 0);
 
 	public static void convertIntToByteArray(byte[] bytes, int value, int ofs) {
 		bytes[ofs] = (byte)(value >> 24);

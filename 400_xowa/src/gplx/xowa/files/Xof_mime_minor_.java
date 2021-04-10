@@ -18,7 +18,13 @@ import gplx.core.primitives.*;
 public class Xof_mime_minor_ {
 	public static Xof_ext ext_(byte[] minor_mime) {
 		Int_obj_val id_obj = (Int_obj_val)mime_hash.Get_by(minor_mime);
-		int id = id_obj == null ? Xof_ext_.Id_unknown : id_obj.Val();
+		int id;
+		if (id_obj == null) {
+			Gfo_usr_dlg_.Instance.Log_many("", "", "no minor_mime code for ~{0}", minor_mime);
+			id = Xof_ext_.Id_unknown;
+		}
+		else
+			id = id_obj.Val();
 		return Xof_ext_.new_by_id_(id);
 	}
 	private static final    byte[] 
@@ -50,6 +56,8 @@ public class Xof_mime_minor_ {
 		mime_hash_itm_(rv, Xof_ext_.Bry_opus	, Xof_ext_.Id_opus);
 		mime_hash_itm_(rv, Xof_ext_.Bry_stl     , Xof_ext_.Id_stl);
 		mime_hash_itm_(rv, Xof_ext_.Bry_webp    , Xof_ext_.Id_webp);
+		mime_hash_itm_(rv, Xof_ext_.Bry_sla    , Xof_ext_.Id_sla);
+		mime_hash_itm_(rv, Xof_ext_.Bry_mpeg    , Xof_ext_.Id_mpeg);
 		return rv;
 	}
 	private static void mime_hash_itm_(Hash_adp hash, byte[] key, int val) {hash.Add(key, new Int_obj_val(val));}

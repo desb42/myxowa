@@ -18,7 +18,7 @@ class Pft_fmt_itm_iranian {
 	private static final    int[] Md__greg	= new int[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	private static final    int[] Md__iran	= new int[] { 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29 };
 	public static int[] Calc_date(DateAdp date) {
-		int[] rv = new int[3]; // MEM:cache
+		int[] rv = new int[5]; // MEM:cache
 		Calc_date(rv, date.Year(), date.Month(), date.Day());
 		return rv;
 	}
@@ -59,6 +59,8 @@ class Pft_fmt_itm_iranian {
 			iran_doy = (int)((iran_doy - 1) % 365);
 		}
 
+		int iran_jz = iran_doy;
+
 		int j = 0;
 		for (j = 0; j < 11 && iran_doy >= Md__iran[j]; ++j)
 			iran_doy -= Md__iran[j];
@@ -66,9 +68,13 @@ class Pft_fmt_itm_iranian {
 		int iran_m = j + 1;
 		int iran_d = iran_doy + 1;
 
+		int iran_xit = Md__iran[iran_m - 1];
+
 		rv[0] = iran_y;
 		rv[1] = iran_m;
 		rv[2] = iran_d;
+		rv[3] = iran_jz;
+		rv[4] = iran_xit; // different implementation to /wikimedia/mediawiki/languages/Language.php
 		return true;
 	}
 	public static byte[] Get_month_name(Xowe_wiki wiki, DateAdp date) {
@@ -87,5 +93,7 @@ class Pft_fmt_itm_iranian {
 	  Rslt__year			= 0
 	, Rslt__month			= 1
 	, Rslt__day				= 2
+	, Rslt__day_of_year = 3
+	, Rslt__xit = 4
 	;
 }

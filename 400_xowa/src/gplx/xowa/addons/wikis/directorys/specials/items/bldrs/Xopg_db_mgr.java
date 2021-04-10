@@ -22,8 +22,11 @@ import gplx.xowa.addons.wikis.directorys.specials.items.bldrs.*;
 import gplx.xowa.addons.wikis.searchs.*; import gplx.xowa.addons.wikis.searchs.dbs.*;
 public class Xopg_db_mgr {
 	public static int Create
-		( Xowd_page_tbl page_tbl, Xowd_text_tbl text_tbl, int text_db_id, Xowd_site_ns_tbl ns_tbl, Db_cfg_tbl cfg_tbl
+		( Xowd_page_tbl page_tbl, Xow_db_file text_db, Xowd_site_ns_tbl ns_tbl, Db_cfg_tbl cfg_tbl
 		, int ns_id, byte[] ttl_page_db, byte[] text_raw, int cat_db_id) {
+            Xowd_text_tbl text_tbl = text_db.Tbl__text();
+            int text_db_id = text_db.Id();
+            long text_db_offset = text_db.Offset();
 		// get next page_id			
 		int page_id = cfg_tbl.Select_int_or(Xowd_cfg_key_.Grp__db, Xowd_cfg_key_.Key__wiki__page__id_next, 1);
 
@@ -50,7 +53,7 @@ public class Xopg_db_mgr {
 		text_tbl.Insert_bgn();
 		int ns_count = ns_tbl.Select_ns_count(ns_id) + 1;
 		try {
-			page_tbl.Insert_cmd_by_batch(page_id, ns_id, ttl_page_db, redirect, Datetime_now.Get(), text_raw.length, ns_count, text_db_id, -1, cat_db_id, 0);
+			page_tbl.Insert_cmd_by_batch(page_id, ns_id, ttl_page_db, redirect, Datetime_now.Get(), text_raw.length, ns_count, text_db_id, -1, cat_db_id, 0, text_db_offset, 0, 0);
 			text_tbl.Insert_cmd_by_batch(page_id, text_zip);
 			ns_tbl.Update_ns_count(ns_id, ns_count);
 		} finally {

@@ -41,6 +41,9 @@ public class Xowd_page_itm {
 	public void Model_(int v) { model_format |= v << 4; } // used during page build
 	public void Format_(int v) { model_format |= v; }
 	public int Model_format() { return model_format; } private int model_format;
+	public long Text_db_offset() { return text_db_offset; } private long text_db_offset;
+	public int Html_len() { return html_len; } private int html_len;
+	public long Html_db_offset() { return html_db_offset; } private long html_db_offset;
 	public Xowd_page_itm	Init(int id, byte[] ttl_page_db, boolean redirected, int text_len, int text_db_id, int tdb_row_idx) {
 		this.id = id; this.ttl_page_db = ttl_page_db; this.redirected = redirected;
 		this.text_len = text_len; this.text_db_id = text_db_id; this.tdb_row_idx = tdb_row_idx; 
@@ -58,7 +61,9 @@ public class Xowd_page_itm {
 		this.redirected		= redirected;
 		this.model_format = model_format;
 	}
-	public void	Init_by_load__all(int id, int ns_id, byte[] ttl_page_db, DateAdp modified_on, boolean redirected, int text_len, int random_int, int text_db_id, int html_db_id, int redirect_id, int score, int cat_db_id, int model_format) {
+	public void	Init_by_load__all(int id, int ns_id, byte[] ttl_page_db, DateAdp modified_on, boolean redirected,
+                int text_len, int random_int, int text_db_id, int html_db_id, int redirect_id,
+                int score, int cat_db_id, int model_format, long text_db_offset, int html_len, long html_db_offset) {
 		// same as Init_by_load__idx; COMMENT: DATE:2016-08-28
 		this.exists			= true;
 		this.id				= id;
@@ -77,6 +82,9 @@ public class Xowd_page_itm {
 		this.redirect_id	= redirect_id;
 		this.score			= score;
 		this.cat_db_id		= cat_db_id;
+		this.text_db_offset = text_db_offset;
+		this.html_len = html_len;
+		this.html_db_offset = html_db_offset;
 	}
 	public void	Init_by_tdb(int id, int text_db_id, int tdb_row_idx, boolean redirected, int text_len, int ns_id, byte[] ttl_page_db) {
 		// same as Init_by_load__idx; COMMENT: DATE:2016-08-28

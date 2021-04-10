@@ -48,10 +48,10 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	}
 	private final    Bry_fmt fmtr_full_img__anch_y = Bry_fmt.Auto
 	( "<a href=\"~{a_href}\"~{a_class}~{a_rel}~{a_title} xowa_title=\"~{a_xowa_title}\">"
-	+ "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} /></a>"
+	+ "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} decoding=\"async\"/></a>"
 	);
 	private final    Bry_fmt fmtr_full_img__anch_n = Bry_fmt.Auto
-	( "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} />");
+	( "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} decoding=\"async\"/>");
 
 	public byte[] Bld_thumb_part_img(Xoh_wtr_ctx hctx, Xoae_page page, byte[] src, Xof_file_itm xfer_itm, int uid, byte[] lnki_ttl, byte[] a_href, byte[] img_src, byte[] img_alt) {
 		byte[] a_title_atr = Gfh_atr_.Make(tmp_bfr, Gfh_atr_.Bry__title, xfer_itm.Lnki_ttl());
@@ -67,26 +67,24 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	}
 	private final    Bry_fmt fmtr_thumb_core = Bry_fmt.Auto(String_.Concat_lines_nl_skip_last	// REF.MW: Linker.php|makeImageLink2
 	( "<div class=\"thumb t~{div1_halign}\">"
-	, "  <div~{div2_id} class=\"thumbinner\" style=\"width:~{div2_width}px;\">"
+	,   "<div~{div2_id} class=\"thumbinner\" style=\"width:~{div2_width}px;\">"
 	,     "~{div3_content}"
-	, "  </div>"
+	,   "</div>"
 	, "</div>"
-	, ""
 	));
 	public byte[] Bld_thumb_part_caption(byte[] magnify_btn, byte[] caption) {return fmtr_thumb_part_caption.Bld_many_to_bry(tmp_bfr, magnify_btn, caption);}
 	private final    Bry_fmt fmtr_thumb_part_caption = Bry_fmt.Auto(String_.Concat_lines_nl_skip_last
-	( ""
-	, "    <div class=\"thumbcaption\">~{magnify_btn}~{caption}"
-	, "    </div>"
+	( "<div class=\"thumbcaption\">~{magnify_btn}~{caption}"
+	, "</div>"
 	));
 
 	public byte[] Bld_thumb_file_image(byte[] thumb_image, byte[] caption, byte[] alt) {return fmtr_thumb_file_image.Bld_many_to_bry(tmp_bfr, thumb_image, caption, alt);}
 	private final    Bry_fmt fmtr_thumb_file_image = Bry_fmt.Auto("    ~{thumb_image}~{caption}~{alt}");
 
 	@gplx.Virtual public byte[] Bld_thumb_file_audio(int width, byte[] caption, byte[] alt, byte[] play_btn, byte[] info_btn) {return fmtr_thumb_file_audio.Bld_many_to_bry(tmp_bfr, width, play_btn, info_btn, caption, alt);}
-	private Bry_fmt fmtr_thumb_file_audio = Bry_fmt.Auto(String_.Concat_lines_nl_skip_last
-	( "    <div class=\"mediaContainer xowa_media_div\" style=\"width:~{width}px\">~{play_btn}~{info_btn}"
-	, "    </div>~{caption}~{alt}"
+	private Bry_fmt fmtr_thumb_file_audio = Bry_fmt.Auto(String_.Concat
+	( "<div class=\"mediaContainer xowa_media_div\" style=\"width:~{width}px\">~{play_btn}~{info_btn}"
+	, "</div>~{caption}~{alt}"
 	));
 
 	@gplx.Virtual public byte[] Bld_thumb_file_video(byte[] caption, byte[] alt, byte[] play_btn, byte[] vid_img) {return fmtr_thumb_file_video.Bld_many_to_bry(tmp_bfr, vid_img, play_btn, caption, alt);}

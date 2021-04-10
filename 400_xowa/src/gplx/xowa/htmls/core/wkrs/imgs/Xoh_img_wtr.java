@@ -170,10 +170,10 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 	private static final    byte[] Vid__bry__bgn = Bry_.new_a7("<div class=\"mediaContainer xowa_media_div\">\n<div>");
 	private static final    Bry_fmtr 
 	  img_fmtr = Bry_fmtr.new_
-	( "<a~{anch_href}~{anch_rel}~{anch_cls}~{anch_title}~{anch_xowa_title}><img~{img_id}~{img_xowa_title}~{img_xowa_image}~{img_src}~{img_w}~{img_h}~{img_cls}~{img_alt}~{img_style}~{img_pgbnr_atrs}></a>"
+	( "<a~{anch_href}~{anch_rel}~{anch_cls}~{anch_title}~{anch_xowa_title}><img~{img_id}~{img_xowa_title}~{img_xowa_image}~{img_src}~{img_w}~{img_h}~{img_cls}~{img_alt}~{img_style}~{img_pgbnr_atrs} decoding=\"async\" /></a>"
 	, "anch_href", "anch_rel", "anch_cls", "anch_title", "anch_xowa_title", "img_id", "img_xowa_title", "img_xowa_image", "img_src", "img_w", "img_h", "img_cls", "img_alt", "img_pgbnr_atrs", "img_style")
 	, img_wo_anch_fmtr = Bry_fmtr.new_
-	( "<img~{img_id}~{img_xowa_title}~{img_xowa_image}~{img_alt}~{img_src}~{img_w}~{img_h}~{img_cls}~{img_style}~{img_imap_usemap}/>"
+	( "<img~{img_id}~{img_xowa_title}~{img_xowa_image}~{img_alt}~{img_src}~{img_w}~{img_h}~{img_cls}~{img_style}~{img_imap_usemap} decoding=\"async\" />"
 	, "img_id", "img_xowa_title", "img_xowa_image", "img_src", "img_w", "img_h", "img_cls", "img_alt", "img_imap_usemap", "img_style")
 	;
 	private final    Bry_fmt

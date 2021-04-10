@@ -65,7 +65,7 @@ public class Xoctg_edit_mgr {
 			if (!exists) {
 				// create [[Category]] page
 				ctg_id = Xopg_db_mgr.Create
-					( page_tbl, last_text_tbl, last_text_db.Id(), core_db.Tbl__ns(), core_db.Tbl__cfg()
+					( page_tbl, last_text_db, core_db.Tbl__ns(), core_db.Tbl__cfg()
 					, gplx.xowa.wikis.nss.Xow_ns_.Tid__category, ctg_ttl.Page_db(), Bry_.Empty
 					, last_cat_link_db.Id()); // NOTE: new categories go into last cat_link_db
 

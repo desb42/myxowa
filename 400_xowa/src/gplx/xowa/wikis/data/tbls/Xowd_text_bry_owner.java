@@ -17,4 +17,6 @@ package gplx.xowa.wikis.data.tbls; import gplx.*; import gplx.xowa.*; import gpl
 public interface Xowd_text_bry_owner {
 	int Page_id();
 	void Set_text_bry_by_db(byte[] v);
+	long Offset();
+	int Page_len();
 }

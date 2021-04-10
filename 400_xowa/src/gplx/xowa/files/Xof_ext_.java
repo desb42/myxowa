@@ -25,21 +25,25 @@ import gplx.core.primitives.Int_obj_val;
 
 public class Xof_ext_ {
 	public static final int Id_unknown = 0	// SERIALIZED; ids are saved to fsdb;
-	, Id_png = 1, Id_jpg = 2, Id_jpeg = 3, Id_gif = 4, Id_tif = 5, Id_tiff = 6
+	, Id_png = 1, Id_jpg = 2, Id_jpeg = 3
+	, Id_gif = 4, Id_tif = 5, Id_tiff = 6
 	, Id_svg = 7, Id_djvu = 8, Id_pdf = 9
-	, Id_mid = 10, Id_ogg = 11, Id_oga = 12, Id_ogv = 13, Id_webm = 14
-	, Id_flac = 15, Id_bmp = 16, Id_xcf = 17, Id_wav = 18, Id_opus = 19
-	, Id_stl = 20, Id_webp = 21;
+	, Id_mid = 10, Id_ogg = 11, Id_oga = 12
+	, Id_ogv = 13, Id_webm = 14, Id_flac = 15
+	, Id_bmp = 16, Id_xcf = 17, Id_wav = 18
+	, Id_opus = 19, Id_stl = 20, Id_webp = 21
+	, Id_sla = 22, Id_mpeg = 23;
 	;
-	public static final int Id__max = 22;
+	public static final int Id__max = 24;
 	public static final    byte[] 
 	  Bry_png = Bry_.new_a7("png"), Bry_jpg = Bry_.new_a7("jpg"), Bry_jpeg = Bry_.new_a7("jpeg")
 	, Bry_gif = Bry_.new_a7("gif"), Bry_tif = Bry_.new_a7("tif"), Bry_tiff = Bry_.new_a7("tiff")
 	, Bry_svg = Bry_.new_a7("svg"), Bry_djvu = Bry_.new_a7("djvu"), Bry_pdf = Bry_.new_a7("pdf")
 	, Bry_mid = Bry_.new_a7("mid"), Bry_ogg = Bry_.new_a7("ogg"), Bry_oga = Bry_.new_a7("oga")
 	, Bry_ogv = Bry_.new_a7("ogv"), Bry_webm = Bry_.new_a7("webm"), Bry_flac = Bry_.new_a7("flac")
-	, Bry_bmp = Bry_.new_a7("bmp"), Bry_xcf = Bry_.new_a7("xcf"), Bry_wav = Bry_.new_a7("wav"), Bry_opus = Bry_.new_a7("opus")
-	, Bry_stl = Bry_.new_a7("stl"), Bry_webp = Bry_.new_a7("webp")
+	, Bry_bmp = Bry_.new_a7("bmp"), Bry_xcf = Bry_.new_a7("xcf"), Bry_wav = Bry_.new_a7("wav")
+	, Bry_opus = Bry_.new_a7("opus"), Bry_stl = Bry_.new_a7("stl"), Bry_webp = Bry_.new_a7("webp")
+	, Bry_sla = Bry_.new_a7("sla"), Bry_mpeg = Bry_.new_a7("mpeg")
 	;
 	public static final    byte[][] Bry__ary = new byte[][]
 	{ Bry_.Empty, Bry_png, Bry_jpg, Bry_jpeg
@@ -47,8 +51,9 @@ public class Xof_ext_ {
 	, Bry_svg, Bry_djvu, Bry_pdf
 	, Bry_mid, Bry_ogg, Bry_oga
 	, Bry_ogv, Bry_webm, Bry_flac
-	, Bry_bmp, Bry_xcf, Bry_wav, Bry_opus
-	, Bry_stl, Bry_webp
+	, Bry_bmp, Bry_xcf, Bry_wav
+	, Bry_opus, Bry_stl, Bry_webp
+	, Bry_sla, Bry_mpeg
 	};
 	public static final    byte[][] Mime_type__ary = new byte[][] 
 	{ Bry_.new_a7("application/octet-stream"), Bry_.new_a7("image/png"), Bry_.new_a7("image/jpg"), Bry_.new_a7("image/jpeg")
@@ -70,7 +75,8 @@ public class Xof_ext_ {
 		id_hash_new_(rv, Bry_mid, Id_mid);		id_hash_new_(rv, Bry_ogg, Id_ogg);		id_hash_new_(rv, Bry_oga, Id_oga);
 		id_hash_new_(rv, Bry_ogv, Id_ogv);		id_hash_new_(rv, Bry_webm, Id_webm);	id_hash_new_(rv, Bry_flac, Id_flac);
 		id_hash_new_(rv, Bry_bmp, Id_bmp);		id_hash_new_(rv, Bry_xcf, Id_xcf);		id_hash_new_(rv, Bry_wav, Id_wav);
-		id_hash_new_(rv, Bry_opus, Id_opus);    id_hash_new_(rv, Bry_stl, Id_stl);		id_hash_new_(rv, Bry_webp, Id_webp);
+		id_hash_new_(rv, Bry_opus, Id_opus);		id_hash_new_(rv, Bry_stl, Id_stl);		id_hash_new_(rv, Bry_webp, Id_webp);
+		id_hash_new_(rv, Bry_sla, Id_sla);		id_hash_new_(rv, Bry_mpeg, Id_mpeg);
 		return rv;
 	}
 	private static void id_hash_new_(Hash_adp hash, byte[] key, int val) {hash.Add(key, new Int_obj_val(val));}
@@ -83,6 +89,7 @@ public class Xof_ext_ {
 	.Add_bry_bry(Bry_ogv).Add_bry_bry(Bry_webm).Add_bry_bry(Bry_flac)
 	.Add_bry_bry(Bry_bmp).Add_bry_bry(Bry_xcf).Add_bry_bry(Bry_wav)
 	.Add_bry_bry(Bry_opus).Add_bry_bry(Bry_stl).Add_bry_bry(Bry_webp)
+	.Add_bry_bry(Bry_sla).Add_bry_bry(Bry_mpeg)
 	;
 	private static final    Xof_ext[] Ary = new Xof_ext[Id__max];
 
@@ -154,7 +161,7 @@ public class Xof_ext_ {
 			case Xof_ext_.Id_gif: case Xof_ext_.Id_tif: case Xof_ext_.Id_tiff:
 			case Xof_ext_.Id_svg:
 			case Xof_ext_.Id_bmp: case Xof_ext_.Id_xcf:
-			case Xof_ext_.Id_stl: case Xof_ext_.Id_webp:
+			case Xof_ext_.Id_stl: case Xof_ext_.Id_sla: case Xof_ext_.Id_webp:
 				return true;
 			default:
 				return false;
@@ -165,7 +172,7 @@ public class Xof_ext_ {
 			case Xof_ext_.Id_png: case Xof_ext_.Id_jpg: case Xof_ext_.Id_jpeg:
 			case Xof_ext_.Id_gif: case Xof_ext_.Id_tif: case Xof_ext_.Id_tiff:
 			case Xof_ext_.Id_bmp: case Xof_ext_.Id_xcf:
-			case Xof_ext_.Id_stl: case Xof_ext_.Id_webp:
+			case Xof_ext_.Id_stl: case Xof_ext_.Id_sla: case Xof_ext_.Id_webp:
 				return true;
 			default:
 				return false;
@@ -177,7 +184,7 @@ public class Xof_ext_ {
 			case Xof_ext_.Id_gif: case Xof_ext_.Id_tif: case Xof_ext_.Id_tiff:
 			case Xof_ext_.Id_svg: case Xof_ext_.Id_djvu: case Xof_ext_.Id_pdf:
 			case Xof_ext_.Id_bmp: case Xof_ext_.Id_xcf:
-			case Xof_ext_.Id_stl: case Xof_ext_.Id_webp:
+			case Xof_ext_.Id_stl: case Xof_ext_.Id_sla: case Xof_ext_.Id_webp:
 				return true;
 			default:
 				return false;
@@ -224,6 +231,7 @@ public class Xof_ext_ {
 			case Xof_ext_.Id_bmp:
 			case Xof_ext_.Id_xcf:
 			case Xof_ext_.Id_stl: // https://en.wikipedia.org/wiki/STL_(file_format)
+			case Xof_ext_.Id_sla:
 			case Xof_ext_.Id_webp:// https://en.wikipedia.org/wiki/WebP
 				return Xof_ext_.Id_png;
 			case Xof_ext_.Id_tif:

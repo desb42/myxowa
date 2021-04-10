@@ -29,7 +29,7 @@ public class Xobldr__xfer_temp__insert_orig extends Xob_cmd__base {
 		long[] ext_maxs = Calc_ext_max();
 		while (rdr.MoveNextPeer()) {
 			int lnki_ext = rdr.ReadByte(Xob_lnki_regy_tbl.Fld_lnki_ext);
-			String orig_media_type = rdr.ReadStrOr(Xob_orig_regy_tbl.Fld_orig_media_type, "");	// convert nulls to ""
+			int orig_media_type_id = rdr.ReadInt(Xob_orig_regy_tbl.Fld_orig_media_type);
 			lnki_ext = rdr.ReadInt(Xob_orig_regy_tbl.Fld_orig_file_ext);
 			int lnki_id = rdr.ReadInt(Xob_lnki_regy_tbl.Fld_lnki_id);
 			int lnki_tier_id = rdr.ReadInt(Xob_lnki_regy_tbl.Fld_lnki_tier_id);
@@ -45,7 +45,7 @@ public class Xobldr__xfer_temp__insert_orig extends Xob_cmd__base {
 			int orig_size = rdr.ReadIntOr(Xob_orig_regy_tbl.Fld_orig_size, -1);
 			if (orig_size > ext_maxs[lnki_ext]) continue;
 			int lnki_page_id = rdr.ReadInt(Xob_lnki_regy_tbl.Fld_lnki_page_id);
-			Xob_xfer_temp_tbl.Insert(trg_stmt, lnki_id, lnki_tier_id, lnki_page_id, orig_repo, orig_page_id, join_ttl, redirect_src, lnki_ext, Xop_lnki_type.Id_none, orig_media_type
+			Xob_xfer_temp_tbl.Insert(trg_stmt, lnki_id, lnki_tier_id, lnki_page_id, orig_repo, orig_page_id, join_ttl, redirect_src, lnki_ext, Xop_lnki_type.Id_none, orig_media_type_id
 			, Bool_.Y									// orig is y
 			, orig_w, orig_h
 			, orig_w, orig_h							// file_w, file_h is same as orig_w,orig_h; i.e.: make same file_w as orig_w

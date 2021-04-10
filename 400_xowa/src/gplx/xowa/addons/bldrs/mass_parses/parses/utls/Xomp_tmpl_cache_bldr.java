@@ -30,6 +30,8 @@ public class Xomp_tmpl_cache_bldr {
 		, ",       pp.page_title"
 		, ",       pp.page_text_db_id"
 		, ",       pp.page_redirect_id"
+		, ",       pp.page_len"         //**
+		, ",       pp.page_text_db_offset" //**
 		, "FROM    page pp"
 		, "WHERE   pp.page_namespace IN (8, 10, 828)"
 //		, "WHERE   pp.page_namespace IN (8, 10, 828, 16)" // enwiki has over 2million categories!!!
@@ -50,7 +52,9 @@ public class Xomp_tmpl_cache_bldr {
 				// add to text_db_loader
 				int page_id = rdr.Read_int("page_id"); 
 				int page_redirect_id = rdr.Read_int("page_redirect_id");
-				Xow_page_cache_itm itm = new Xow_page_cache_itm(true, page_id, page_ttl, null, null);	// NOTE: "null, null;" b/c GetContent in Scrib_title checks specifically for null, not empty String; DATE:2016-10-19
+				int page_len = rdr.Read_int("page_len");
+				long page_text_offset = rdr.Read_long("page_text_db_offset");
+				Xow_page_cache_itm itm = new Xow_page_cache_itm(true, page_id, page_ttl, null, null, page_len, page_text_offset);	// NOTE: "null, null;" b/c GetContent in Scrib_title checks specifically for null, not empty String; DATE:2016-10-19
 				itm.Redirect_id_(page_redirect_id);
 				text_db_loader.Add(rdr.Read_int("page_text_db_id"), itm);
 				

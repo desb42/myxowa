@@ -29,12 +29,13 @@ public class Xomp_parse_mgr {
 		Xomp_mgr_db mgr_db = Xomp_mgr_db.New__load(cfg.Mgr_url());
 
 		// init page_pool
-		Lru_cache_root.Instance.Del(wiki.Cache_mgr().Page_cache().Cache_key()); // delete defautl page_cache, b/c we will make one below
+		Lru_cache_root.Instance.Del(wiki.Cache_mgr().Page_cache().Cache_key()); // delete default page_cache, b/c we will make one below
 		Xomp_page_pool_loader page_pool_loader = new Xomp_page_pool_loader(wiki, mgr_db.Conn(), cfg.Num_pages_in_pool(), cfg.Show_msg__fetched_pool());
 		Xomp_page_pool page_pool = new Xomp_page_pool(page_pool_loader, cfg.Num_pages_per_wkr());
 
 		// cache: preload tmpls and imglinks
 		Xow_page_cache page_cache = Xomp_tmpl_cache_bldr.New(wiki, cfg.Load_all_templates(), cfg.Page_cache_min(), cfg.Page_cache_max());
+		//page_cache.Stop_cache();
 		wiki.App().User().User_db_mgr().Cache_mgr().Enabled_n_();	// disable db lookups of user cache
 
 		Xomp_prog_mgr prog_mgr = new Xomp_prog_mgr();
@@ -91,6 +92,7 @@ public class Xomp_parse_mgr {
 		page_pool.Rls();
 		if (indexer != null) indexer.Term();
 		wiki.Appe().Wiki_mgr().Wdata_mgr().Doc_mgr.Cleanup();
+		page_cache.Cleanup();
 
 		// print stats
 		Bry_bfr bfr = Bry_bfr_.New();

@@ -20,11 +20,14 @@ import gplx.xowa.wikis.nss.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.
 public class Xowd_page_tbl implements Db_tbl {
 	private final    Object thread_lock = new Object();		
 	public final    boolean schema_is_1;
-	private String fld_id, fld_ns, fld_title, fld_is_redirect, fld_touched, fld_len, fld_random_int, fld_score, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_cat_db_id, fld_model_format;
+	private String fld_id, fld_ns, fld_title, fld_is_redirect, fld_touched, fld_len, fld_random_int, fld_score, fld_text_db_id
+	  , fld_html_db_id, fld_redirect_id, fld_cat_db_id, fld_model_format
+	  , fld_text_db_offset, fld_html_len, fld_html_db_offset;
 	private final    Dbmeta_fld_list flds = new Dbmeta_fld_list();
 	private Db_stmt stmt_select_all_by_ttl, stmt_select_all_by_id, stmt_select_id_by_ttl, stmt_insert;
 	private String[] flds_select_all, flds_select_idx;
 	private boolean fld_model_format_exists = false;
+	private boolean fld_table_offset_exists = false;
 	public Xowd_page_tbl(Db_conn conn, boolean schema_is_1) {
 		this.conn = conn; this.schema_is_1 = schema_is_1;
 		String fld_text_db_id_name = "";
@@ -36,6 +39,8 @@ public class Xowd_page_tbl implements Db_tbl {
 				fld_cat_db_id_name = "page_cat_db_id";
 			if (conn.Meta_fld_exists(tbl_name, "page_model_format"))
 				fld_model_format_exists = true;
+			if (conn.Meta_fld_exists(tbl_name, "page_text_db_offset"))
+				fld_table_offset_exists = true;
 		}
 		fld_id				= flds.Add_int_pkey("page_id");					// int(10); unsigned -- MW:same
 		fld_ns				= flds.Add_int("page_namespace");			// int(11);          -- MW:same
@@ -52,8 +57,15 @@ public class Xowd_page_tbl implements Db_tbl {
 			fld_cat_db_id		= flds.Add_int_dflt(fld_cat_db_id_name, -1);// MW:XOWA
 		if (fld_model_format_exists) {
 			fld_model_format	= flds.Add_int_dflt("page_model_format", -1);
-			flds_select_all = String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id, fld_model_format);
 			flds_select_idx = String_.Ary_wo_null(fld_ns, fld_title, fld_id, fld_len, fld_score, fld_is_redirect, fld_model_format);
+			if (fld_table_offset_exists) {
+				fld_text_db_offset	= flds.Add_int_dflt("page_text_db_offset", -1);
+				fld_html_len	= flds.Add_int_dflt("page_html_len", -1);
+				fld_html_db_offset	= flds.Add_int_dflt("page_html_db_offset", -1);
+				flds_select_all = String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id, fld_model_format, fld_text_db_offset, fld_html_len, fld_html_db_offset);
+			}
+			else
+				flds_select_all = String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id, fld_model_format);
 		}
 		else {
 			flds_select_all = String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id);
@@ -75,7 +87,10 @@ public class Xowd_page_tbl implements Db_tbl {
 	public String Fld_random_int()				{return fld_random_int;}
 	public String Fld_modified_on()				{return fld_touched;}
 	public String Fld_redirect_id()				{return fld_redirect_id;}
-	public String Fld_model_format()				{return fld_model_format;}
+	public String Fld_model_format()			{return fld_model_format;}
+	public String Fld_text_db_offset()		{return fld_text_db_offset;}
+	public String Fld_html_len()					{return fld_html_len;}
+	public String Fld_html_db_offset()		{return fld_html_db_offset;}
 	public String[] Flds_select_idx()			{return flds_select_idx;}
 	public String[] Flds_select_all()			{return flds_select_all;}
 	public void Flds__assert() {
@@ -86,20 +101,32 @@ public class Xowd_page_tbl implements Db_tbl {
 	public void Create_tbl() {
 		if (!fld_model_format_exists) {
 			fld_model_format	= flds.Add_int_dflt("page_model_format", 0);
-			flds_select_all = String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id, fld_model_format);
+			fld_model_format_exists = true;
+			if (!fld_table_offset_exists) {
+				fld_text_db_offset	= flds.Add_int_dflt("page_text_db_offset", 0);
+				fld_html_len	= flds.Add_int_dflt("page_html_len", 0);
+				fld_html_db_offset	= flds.Add_int_dflt("page_html_db_offset", 0);
+				flds_select_all = String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id, fld_model_format, fld_text_db_offset, fld_html_len, fld_html_db_offset);
+				fld_table_offset_exists = true;
+			}
+			else
+				flds_select_all = String_.Ary_wo_null(fld_id, fld_ns, fld_title, fld_touched, fld_is_redirect, fld_len, fld_random_int, fld_text_db_id, fld_html_db_id, fld_redirect_id, fld_score, fld_cat_db_id, fld_model_format);
+
 		}
 		conn.Meta_tbl_create(Dbmeta_tbl_itm.New(tbl_name, flds.To_fld_ary()));
 	}
-	public void Insert(int page_id, int ns_id, byte[] ttl_wo_ns, boolean page_is_redirect, DateAdp modified_on, int page_len, int random_int, int text_db_id, int html_db_id, int model_format) {
+	public void Insert(int page_id, int ns_id, byte[] ttl_wo_ns, boolean page_is_redirect, DateAdp modified_on, int page_len, int random_int, int text_db_id, int html_db_id, int model_format
+        	  , long text_db_offset, int html_len, long html_db_offset) {
 		this.Insert_bgn();
-		this.Insert_cmd_by_batch(page_id, ns_id, ttl_wo_ns, page_is_redirect, modified_on, page_len, random_int, text_db_id, html_db_id, -1, model_format);
+		this.Insert_cmd_by_batch(page_id, ns_id, ttl_wo_ns, page_is_redirect, modified_on, page_len, random_int, text_db_id, html_db_id, -1, model_format, text_db_offset, html_len, html_db_offset);
 		this.Insert_end();
 	}
 	public void Insert_bgn() {conn.Txn_bgn("page__insert_bulk"); stmt_insert = conn.Stmt_insert(tbl_name, flds);}
 	public void Insert_end() {conn.Txn_end(); stmt_insert = Db_stmt_.Rls(stmt_insert);}
 	public void Insert_cmd_by_batch
 		(int page_id, int ns_id, byte[] ttl_wo_ns, boolean page_is_redirect, DateAdp modified_on, int page_len, int random_int
-		, int text_db_id, int html_db_id, int cat_db_id, int model_format) {
+		, int text_db_id, int html_db_id, int cat_db_id, int model_format
+	  , long text_db_offset, int html_len, long html_db_offset) {
 		stmt_insert.Clear()
 		.Val_int(fld_id, page_id)
 		.Val_int(fld_ns, ns_id)
@@ -114,6 +141,9 @@ public class Xowd_page_tbl implements Db_tbl {
 		.Val_int(fld_score, -1)
 		.Val_int(fld_cat_db_id, cat_db_id)
 		.Val_int(fld_model_format, model_format)
+		.Val_long(fld_text_db_offset, text_db_offset)
+		.Val_int(fld_html_len, html_len)
+		.Val_long(fld_html_db_offset, html_db_offset)
 		.Exec_insert();
 	}
 	public void Insert_by_itm(Db_stmt stmt, Xowd_page_itm itm, int html_db_id) {
@@ -416,8 +446,16 @@ public class Xowd_page_tbl implements Db_tbl {
 		int cat_db_id = fld_cat_db_id == Dbmeta_fld_itm.Key_null ? -1 : rdr.Read_int(fld_cat_db_id);
 
 		int model_format = 0;
+		long text_db_offset = 0;
+		int html_len = 0;
+		long html_db_offset = 0;
 		if (fld_model_format_exists) {
 			model_format = rdr.Read_int(fld_model_format);
+			if (fld_table_offset_exists) {
+				text_db_offset = rdr.Read_long(fld_text_db_offset);
+				html_len = rdr.Read_int(fld_html_len);
+				html_db_offset = rdr.Read_long(fld_html_db_offset);
+			}
 		}
 		page.Init_by_load__all
 		( rdr.Read_int(fld_id)
@@ -433,6 +471,9 @@ public class Xowd_page_tbl implements Db_tbl {
 		, page_score
 		, cat_db_id
 		, model_format
+		, text_db_offset
+		, html_len
+		, html_db_offset
 		);
 	}
 	public void Update__html_db_id(int page_id, int html_db_id) {

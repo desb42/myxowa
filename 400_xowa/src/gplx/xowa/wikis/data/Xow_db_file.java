@@ -19,9 +19,44 @@ import gplx.xowa.wikis.data.site_stats.*;
 import gplx.xowa.htmls.core.dbs.*; import gplx.xowa.addons.wikis.searchs.dbs.*;
 import gplx.xowa.addons.wikis.htmls.css.dbs.*;
 import gplx.xowa.xtns.wbases.dbs.*;
+
+import java.io.*;
+import gplx.core.ios.Io_stream_zip_mgr;
 public class Xow_db_file {
+	private RandomAccessFile raf = null;
+	private Io_stream_zip_mgr zip_mgr = null;
 	Xow_db_file(Db_cfg_tbl cfg_tbl, Xowd_core_db_props props, Xob_info_session info_session, Xob_info_file info_file, Xow_db_file_schema_props schema_props, int id, byte tid, Io_url url, String ns_ids, int part_id, Guid_adp guid, Db_conn conn, byte cmd_mode) {
-		this.id = id; this.tid = tid; this.url = url; this.ns_ids = ns_ids; this.part_id = part_id; this.guid = guid; this.db_props = props;
+		this.id = id; this.url = url; this.ns_ids = ns_ids; this.part_id = part_id; this.guid = guid; this.db_props = props;
+		this.tid = tid;
+		if (url.NameAndExt().endsWith(".dat")) {
+			try {
+				File file = new File(url.Raw());
+				raf = new RandomAccessFile(file, "rw");
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+			this.zip_mgr = new Io_stream_zip_mgr();
+			this.conn = null;
+			this.cmd_mode = cmd_mode;
+			this.tbl__cfg = null;
+			this.tbl__db = null;
+			this.tbl__ns = null;
+			this.tbl__site_stats = null;
+			this.tbl__page = null;
+			this.tbl__text = null;
+			this.tbl__html = null;
+			this.tbl__css_core = null;
+			this.tbl__css_file = null;
+			this.tbl__cat_core = null;
+			this.tbl__cat_link = null;
+			this.tbl__wbase_prop = null;
+			this.tbl__maxpage = null;
+			this.tbl__parent = null;
+			this.info_session = info_session;
+			this.info_file = info_file;
+			this.schema_props = schema_props;
+			return;
+		}
 		this.conn = conn; this.cmd_mode = cmd_mode;
 		boolean schema_is_1 = props.Schema_is_1();
 		this.tbl__cfg = cfg_tbl;
@@ -42,6 +77,7 @@ public class Xow_db_file {
 		this.info_file = info_file;
 		this.schema_props = schema_props;
 	}
+	public long							Offset()			{return offset;}			private long offset = 0; // for now 20210329
 	public int							Id()				{return id;}				private final    int id;		// unique id in xowa_db
 	public byte							Tid()				{return tid;}				private final    byte tid;
 	public Db_conn						Conn()				{return conn;}				private final    Db_conn conn;
@@ -107,5 +143,21 @@ public class Xow_db_file {
 		}
 		Db_cfg_tbl cfg_tbl = gplx.xowa.wikis.data.Xowd_cfg_tbl_.New(conn); // NOTE: this loads the cfg tbl for the current db, not the core db
 		return new Xow_db_file(cfg_tbl, props, null, null, null, id, tid, url, ns_ids, part_id, guid, conn, Db_cmd_mode.Tid_ignore);
+	}
+	public byte[] Read_file(Xowd_page_itm rv) {
+		return Read_file_offset_len(rv.Text_db_offset(), rv.Text_len());
+	}
+	public byte[] Read_file_offset_len(long offset, int page_len) {
+		synchronized (this) {
+			byte[] text_bry = new byte[page_len];
+			try {
+				raf.seek(offset);
+	
+				raf.read(text_bry);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+			return zip_mgr.Unzip((byte)3, text_bry);
+		}
 	}
 }
