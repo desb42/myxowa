@@ -325,7 +325,11 @@ public class Bry_find_ {
 			int prv_cur = cur - 1;				// check byte before cur; EX: "a b " will have len of 4, and pass cur=4;
 			if (prv_cur < bgn) return cur;		// checking byte before prv; exit;
 			switch (src[prv_cur]) {
-				case Byte_ascii.Space: case Byte_ascii.Tab:		--cur; break;
+				case Byte_ascii.Space:
+                                case Byte_ascii.Tab:
+                                case Byte_ascii.Cr:
+                                    --cur;
+                                    break;
 				default:										return cur; 
 			}
 		}

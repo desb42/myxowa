@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -116,9 +116,9 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 		Decimal_adp lo = Decimal__parse_or(lo_bry, val);
 		Decimal_adp hi = Decimal__parse_or(hi_bry, val);
 
-		// fmt val
-		//if (lo.Eq(hi) && hi.Eq(val) && lo_bry == null && hi_bry == null)// lo, hi, val are same; print val only;
-		if (lo_bry == null && hi_bry == null)// lo, hi, val are same; print val only;
+		// 2021-02-14|ISSUE#:839|Only print value without ± if lo and hi are null; PAGE:en.w:2019_FIVB_Volleyball_Women%27s_Challenger_Cup#Pool_A;
+		// TOMBSTONE: if (lo.Eq(hi) && hi.Eq(val))
+		if (lo_bry == null && hi_bry == null)
 			bfr.Add(lang.Num_mgr().Format_num_by_decimal(val));			// amount; EX: 1,234
 		else {
 			Wdata_hwtr_msgs msgs = wdata_mgr.Hwtr_mgr().Msgs();
@@ -218,9 +218,10 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 		numDigits += 4; // +4 b/c Map_dd2dms_func.Deg_to_dms needs 4 places to evaluate MS while fracs are evaulated as numDigits
 
 		// write lat / lng
-		Map_dd2dms_func.Deg_to_dms(bfr, Bool_.Y, Bool_.N, Bry_.new_a7(Double_.To_str(latitude)), numDigits);
-		bfr.Add_byte_comma().Add_byte_space();
-		Map_dd2dms_func.Deg_to_dms(bfr, Bool_.Y, Bool_.Y, Bry_.new_a7(Double_.To_str(longitude)), numDigits);
+		Map_dd2dms_func.Deg_to_dms_lat_long(bfr, Bool_.Y, Bry_.new_a7(Double_.To_str(latitude)), Bry_.new_a7(Double_.To_str(longitude)), numDigits);
+		//Map_dd2dms_func.Deg_to_dms(bfr, Bool_.Y, Bool_.N, Bry_.new_a7(Double_.To_str(latitude)), numDigits);
+		//bfr.Add_byte_comma().Add_byte_space();
+		//Map_dd2dms_func.Deg_to_dms(bfr, Bool_.Y, Bool_.Y, Bry_.new_a7(Double_.To_str(longitude)), numDigits);
 
 		// write globe
 		if (wikidata_page) {

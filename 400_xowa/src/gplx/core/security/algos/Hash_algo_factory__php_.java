@@ -40,6 +40,7 @@ public class Hash_algo_factory__php_ {
 		rv.Reg_many(Jacksum_factory.Instance, Jacksum_factory.Key__gost);
 		rv.Reg_many(Jre_checksum_factory.Instance, Jre_checksum_factory.Key__adler32);
 		// "crc" may be BZ2 CRC; https://stackoverflow.com/questions/40741707/php-hashcrc32-and-crc32-return-different-value
+		rv.Reg_one(Jre_checksum_factory.Instance, Jre_checksum_factory.Key__crc32, "crc32"); // fake taht crc32 and crc32b are the same (they are NOT)
 		rv.Reg_one(Jre_checksum_factory.Instance, Jre_checksum_factory.Key__crc32, "crc32b"); // PHP crc32b is the equivalent of Java CRC
 
 		rv.Reg_many(Getopt_factory.Instance

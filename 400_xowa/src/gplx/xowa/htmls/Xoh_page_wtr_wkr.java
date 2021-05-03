@@ -638,8 +638,9 @@ public class Xoh_page_wtr_wkr {
 					edit_lang = Bry_.new_a7("en");
 					edit_lang_ltr = Bry_.new_a7("ltr");
 				}
-				// "edit_div_preview", "edit_lang", "edit_lang_ltr", "edit_div_rename", "page_data", "page_text", "page_ttl_full"
+				// "edit_div_editnotices", "edit_div_preview", "edit_lang", "edit_lang_ltr", "edit_div_rename", "page_data", "page_text", "page_ttl_full"
 				portal_mgr.Txt_pageedit_fmtr().Bld_bfr_many(tmp_bfr
+					, Editnotices(page.Ttl().Ns().Id())
 					, page.Html_data().Edit_preview_w_dbg()
 					, edit_lang
 					, edit_lang_ltr
@@ -652,6 +653,16 @@ public class Xoh_page_wtr_wkr {
 			case Xopg_view_mode_.Tid__html:
 				portal_mgr.Txt_pagehtml_fmtr().Bld_bfr_many(tmp_bfr, page.Lang().Key_bry(), page.Lang().Dir_ltr_bry(), page_data);
 				break;
+		}
+		return tmp_bfr.To_bry_and_clear();
+	}
+	private byte[] Editnotices(int ns) {
+		String en = "editnotice-" + Integer.toString(ns);
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		byte[] editnotices = Db_expand.Extracheck(wiki.Msg_mgr().Val_by_key_obj(en), ""); // this should be the full blown expansion!
+		if (editnotices.length > 0) {
+			Bry_fmt en_fmt = Bry_fmt.Auto("<div class=\"mw-editnotice mw-editnotice-namespace mw-~{0}\">~{1}</div>");
+			en_fmt.Bld_many(tmp_bfr, Bry_.new_a7(en), editnotices);
 		}
 		return tmp_bfr.To_bry_and_clear();
 	}

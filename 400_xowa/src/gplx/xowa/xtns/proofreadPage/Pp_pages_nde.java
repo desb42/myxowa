@@ -486,6 +486,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 					if (pl_nde != null) {
 						page_bfr.Add(Bry_page_num).Add(pl_nde.RawPageNumber(page_no));
 						page_bfr.Add(Bry_page_format).Add(pl_nde.FormattedPageNumber(page_no));
+						page_bfr.Add(Bry_page_quality).Add_int_variable(quality);
 					}
 					else
 						page_bfr.Add(Bry_page_num).Add_int_variable(page_no);
@@ -510,7 +511,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				}
 				Xopg_tmpl_prepend_mgr prepend_mgr = ctx.Page().Tmpl_prepend_mgr().Bgn(full_bfr);
 				Lst_pfunc_itm lst_itm = Lst_pfunc_itm.New_sect_or_null(ctx, ttl.Full_db());
-                                // should check for a null sect?
+				// should check for a null sect?
 				if (lst_itm != null) Lst_pfunc_lst_.Sect_include(page_bfr, lst_itm.Sect(), cur_sect_bgn, cur_sect_end);
 				prepend_mgr.End(ctx, full_bfr, page_bfr.Bfr(), page_bfr.Len(), Bool_.Y);
 				full_bfr.Add_bfr_and_clear(page_bfr);
@@ -589,11 +590,12 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	, Bry_page_bgn		= Bry_.new_a7("|from=")
 	, Bry_page_end		= Bry_.new_a7("|to=")
 	, Bry_open_div		= Bry_.new_a7("<div class=\"prp-pages-output\" lang=\"")
-                , Bry_close_open_div = Bry_.new_a7(">\n")
+	, Bry_close_open_div = Bry_.new_a7(">\n")
 	, Bry_close_div		= Bry_.new_a7("\n</div>")
 	, Bry_tmpl_page		= Bry_.new_a7("<span>{{:MediaWiki:Proofreadpage_pagenum_template|page=")
 	, Bry_page_num	= Bry_.new_a7("|num=")
 	, Bry_page_format	= Bry_.new_a7("|formatted=")
+	, Bry_page_quality	= Bry_.new_a7("|quality=")
 	, Bry_tmpl_page_end	= Bry_.new_a7("}}</span>")
 	;
 	public static final	Xoa_ttl[] Ttls_null = null;

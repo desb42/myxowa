@@ -75,6 +75,7 @@ public class Decimal_adp_ {
 			if (raw.contains("e")) {
 				raw = raw.replace("e", "E");
 			}
+			// 2021-02-13|ISSUE#:838|Parse '.' as '0.'; PAGE:en.w:2019_FIVB_Volleyball_Women%27s_Challenger_Cup#Pool_A
 			if (raw.startsWith(".")) {
 				raw = "0" + raw;
 			}

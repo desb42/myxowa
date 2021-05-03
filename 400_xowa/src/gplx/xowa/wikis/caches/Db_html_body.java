@@ -110,20 +110,30 @@ public class Db_html_body /*implements Xowd_text_bry_owner*/ {
 		bytes[ofs+7] = (byte)value;
 	}
 	public static int convertByteArrayToInt(byte[] bytes, int ofs) {
-		return ((bytes[ofs] & 0xFF) << 24) |
+		/*return ((bytes[ofs] & 0xFF) << 24) |
 		        ((bytes[ofs+1] & 0xFF) << 16) |
 		        ((bytes[ofs+2] & 0xFF) << 8) |
-		        ((bytes[ofs+3] & 0xFF) << 0);
+		        ((bytes[ofs+3] & 0xFF) << 0);*/
+		        int v = 0;
+		        for (int i = ofs; i < ofs + 4; i++) {
+		        	v = (v << 8) + (bytes[i] & 0xFF);
+		        }
+		        return v;
 	}
 	public static long convertByteArrayToLong(byte[] bytes, int ofs) {
-		return  ((bytes[ofs] & 0xFF) << 56) |
+		/*return  ((bytes[ofs] & 0xFF) << 56) |
 		        ((bytes[ofs+1] & 0xFF) << 48) |
 		        ((bytes[ofs+2] & 0xFF) << 40) |
 		        ((bytes[ofs+3] & 0xFF) << 32) |
 		        ((bytes[ofs+4] & 0xFF) << 24) |
 		        ((bytes[ofs+5] & 0xFF) << 16) |
 		        ((bytes[ofs+6] & 0xFF) << 8) |
-		        ((bytes[ofs+7] & 0xFF) << 0);
+		        ((bytes[ofs+7] & 0xFF) << 0);*/
+		        long v = 0;
+		        for (int i = ofs; i < ofs + 8; i++) {
+		        	v = (v << 8) + (bytes[i] & 0xFF);
+		        }
+		        return v;
 	}
         public void Set_text_bry_by_db(byte[] b) {}
         public int Page_id() {return -1;}

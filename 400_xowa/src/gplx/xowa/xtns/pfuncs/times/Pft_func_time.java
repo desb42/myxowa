@@ -20,6 +20,7 @@ public class Pft_func_time extends Pf_func_base {
 	Pft_func_time(boolean utc) {this.utc = utc;} private boolean utc;
 	@Override public int Id() {return Xol_kwd_grp_.Id_xtn_time;}
 	@Override public Pf_func New(int id, byte[] name) {return new Pft_func_time(utc).Name_(name);}
+	//@Override public boolean Func_require_colon_arg() {return true;} // 20210425 enwiki Moalboal
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {// REF.MW:ParserFunctions_body.php
 		int self_args_len = self.Args_len();
 		byte[] arg_fmt = Eval_argx(ctx, src, caller, self);

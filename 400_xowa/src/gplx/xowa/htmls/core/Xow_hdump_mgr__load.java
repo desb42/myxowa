@@ -139,20 +139,20 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		for (int i = 0; i < len; ++i) {
 			trg_list.Add_direct(src_list.Get_at(i));
 		}
-                return html;
+		return html;
 	}
 	public byte[] Parse(Xoh_page hpg, int zip_tid, int hzip_tid, byte[] src) {
 		if (zip_tid > gplx.core.ios.streams.Io_stream_tid_.Tid__raw) {
-                    if (src[0] == 0x1e) {
-                        // get from another file
-                        Db_html_body html_body = new Db_html_body(wiki.App(), wiki.Domain_str(), src[1]);
-                        int page_id = Db_html_body.convertByteArrayToInt(src, 2);
-                        long ofs = Db_html_body.convertByteArrayToLong(src, 6);
-                        int len = Db_html_body.convertByteArrayToInt(src, 14);
-                        src = html_body.Read(page_id, ofs, len);
-                    }
+			if (src[0] == 0x1e) {
+				// get from another file
+				Db_html_body html_body = new Db_html_body(wiki.App(), wiki.Domain_str(), src[1]);
+				int page_id = Db_html_body.convertByteArrayToInt(src, 2);
+				long ofs = Db_html_body.convertByteArrayToLong(src, 6);
+				int len = Db_html_body.convertByteArrayToInt(src, 14);
+				src = html_body.Read(page_id, ofs, len);
+			}
 			src = zip_mgr.Unzip((byte)zip_tid, src);
-                }
+		}
 		switch (hzip_tid) {
 			case Xoh_hzip_dict_.Hdb__htxt:
 				src = make_mgr.Parse(src, hpg.Wiki(), hpg);

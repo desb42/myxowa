@@ -23,20 +23,20 @@ public class Pfunc_ttl extends Pf_func_base {
 		Xoa_ttl ttl = val_dat_ary == null ? ctx.Page().Ttl() : Xoa_ttl.Parse(ctx.Wiki(), val_dat_ary);
 		if (ttl == null) return;
 		switch (id) {
-			case Xol_kwd_grp_.Id_ttl_page_txt: bfr.Add(ttl.Page_txt()); break;
-			case Xol_kwd_grp_.Id_ttl_page_url: bfr.Add(ttl.Page_url()); break;
-			case Xol_kwd_grp_.Id_ttl_full_txt: bfr.Add(ttl.Full_txt()); break;
-			case Xol_kwd_grp_.Id_ttl_full_url: bfr.Add(ttl.Full_url()); break;
-			case Xol_kwd_grp_.Id_ttl_leaf_txt: bfr.Add(ttl.Leaf_txt()); break;
-			case Xol_kwd_grp_.Id_ttl_leaf_url: bfr.Add(ttl.Leaf_url()); break;
-			case Xol_kwd_grp_.Id_ttl_base_txt: bfr.Add(ttl.Base_txt()); break;
-			case Xol_kwd_grp_.Id_ttl_base_url: bfr.Add(ttl.Base_url()); break;
+			case Xol_kwd_grp_.Id_ttl_page_txt: bfr.Add(ttl.Pagename_page_txt()/*.Page_txt()*/); break; // PAGENAME
+			case Xol_kwd_grp_.Id_ttl_page_url: bfr.Add(ttl.Page_url()); break; // PAGENAMEE
+			case Xol_kwd_grp_.Id_ttl_full_txt: bfr.Add(ttl.Pagename_full_txt()/*Full_txt()*/); break; // FULLPAGENAME
+			case Xol_kwd_grp_.Id_ttl_full_url: bfr.Add(ttl.Full_url()); break; // FULLPAGENAMEE
+			case Xol_kwd_grp_.Id_ttl_leaf_txt: bfr.Add(ttl.Pagename_leaf_txt()/*Leaf_txt()*/); break; // SUBPAGENAME
+			case Xol_kwd_grp_.Id_ttl_leaf_url: bfr.Add(ttl.Leaf_url()); break; // SUBPAGENAMEE
+			case Xol_kwd_grp_.Id_ttl_base_txt: bfr.Add(ttl.Pagename_base_txt()/*Base_txt()*/); break; // BASEPAGENAME
+			case Xol_kwd_grp_.Id_ttl_base_url: bfr.Add(ttl.Base_url()); break; // BASEPAGENAMEE
 			case Xol_kwd_grp_.Id_ttl_root_txt: bfr.Add(ttl.Root_txt()); break;
 			case Xol_kwd_grp_.Id_ttl_root_url: bfr.Add(Xoa_ttl.Replace_spaces(ttl.Root_txt())); break;
-			case Xol_kwd_grp_.Id_ttl_subj_txt: bfr.Add(ttl.Subj_txt()); break;
-			case Xol_kwd_grp_.Id_ttl_subj_url: bfr.Add(ttl.Subj_url()); break;
-			case Xol_kwd_grp_.Id_ttl_talk_txt: bfr.Add(ttl.Talk_txt()); break;
-			case Xol_kwd_grp_.Id_ttl_talk_url: bfr.Add(ttl.Talk_url()); break;
+			case Xol_kwd_grp_.Id_ttl_subj_txt: bfr.Add(ttl.Pagename_subj_txt()/*Subj_txt()*/); break; // SUBJECTPAGENAME
+			case Xol_kwd_grp_.Id_ttl_subj_url: bfr.Add(ttl.Subj_url()); break; // SUBJECTPAGENAMEE
+			case Xol_kwd_grp_.Id_ttl_talk_txt: bfr.Add(ttl.Pagename_talk_txt()/*Talk_txt()*/); break; // TALKPAGENAME
+			case Xol_kwd_grp_.Id_ttl_talk_url: bfr.Add(ttl.Talk_url()); break; // TALKPAGENAMEE
 			case Xol_kwd_grp_.Id_ns_num: bfr.Add_int_variable(ttl.Ns().Id()); break;
 			case Xol_kwd_grp_.Id_ns_txt: bfr.Add(ttl.Ns().Name_ui()); break;
 			case Xol_kwd_grp_.Id_ns_url: bfr.Add(ttl.Ns().Name_enc()); break;

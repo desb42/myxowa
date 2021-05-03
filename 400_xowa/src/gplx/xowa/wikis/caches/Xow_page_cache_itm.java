@@ -19,84 +19,33 @@ import java.io.*; import java.util.concurrent.locks.*;
 public class Xow_page_cache_itm implements Xowd_text_bry_owner {
 	private final    Object thread_lock = new Object(); // NOTE: thread-safety needed for xomp since one page-cache is shared across all wkrs
 	private static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-	private static RandomAccessFile raf;
-	private static File tempFile;
-	private static long      maxofs = 0;
-	private static boolean openfile = true;
-	private static long lastfileoffset = -1;
-	private static byte[] lastdata;
 	private long access_count;
 	private long cache_len;
-	private long fileoffset;
 	public long Access_count() { return access_count; }
 	public void Access_count_increment() { access_count++; }
-	private byte[] access_data;
 	public int Page_len() {return orig_page_len;} private int orig_page_len;
 	public long Offset() {return orig_page_text_offset;} private long orig_page_text_offset;
-	private byte[] temp_cache;
 	public Xow_page_cache_itm(boolean cache_permanently, int page_id, Xoa_ttl ttl, byte[] wtxt__direct, byte[] wtxt__redirect, int page_len, long page_text_offset) {
-		if (openfile) {
-			try {
-				tempFile = File.createTempFile("prefix-", "-suffix");
-				tempFile.deleteOnExit();
-				raf = new RandomAccessFile(tempFile, "rw");
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-			openfile = false;
-		}
 		this.cache_permanently = cache_permanently;
 		this.page_id = page_id; this.ttl = ttl; this.wtxt__redirect = wtxt__redirect;
 		this.access_count = 1;
-		temp_cache = wtxt__direct;
 		Set_text_bry_by_db(wtxt__direct);
+		if (page_len > 0)
+			this.cache_len = page_len;
 		this.orig_page_len = page_len;
 		this.orig_page_text_offset = page_text_offset;
 	}
 	public Xoa_ttl Ttl() {return ttl;} private Xoa_ttl ttl;
+	private byte[] wtxt__direct;
 	public byte[] Wtxt__direct() {
-		if (cache_len == 0) return Bry_.Empty;
-		if (access_data != null)
-			return access_data;
-		byte[] data;
-		if (temp_cache != null) {
-			data = temp_cache;
-			temp_cache = null;
-			return data;
-		}
-		data = new byte[(int)cache_len];
-		//byte[] bytes = new byte[8];
-		try {
-			rwl.writeLock().lock();
-			if (fileoffset == lastfileoffset) {
-				data = lastdata;
-			}
-			else {
-				lastfileoffset = fileoffset;
-				// skip the check!
-				//raf.seek(fileoffset);
-				//raf.read(bytes);
-				//long page_id = convertByteArrayToInt(bytes, 0);
-				//long size = convertByteArrayToInt(bytes, 4);
-				//if (page_id != this.page_id || size != cache_len)
-					//size = 1;
-				raf.seek(fileoffset + 8);
-				raf.read(data);
-				lastdata = data;
-			}
-//			if (access_count > 100)
-//				access_data = data;
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		finally {
-			rwl.writeLock().unlock();
-		}
-		return data;
+		return wtxt__direct;
 	}
-	public byte[] Wtxt__redirect()	{return wtxt__redirect;} private byte[] wtxt__redirect;
+	private byte[] wtxt__redirect;
+	public byte[] Wtxt__redirect() {
+		return wtxt__redirect;
+	}
 	public byte[] Wtxt__redirect_or_direct() {
-		return wtxt__redirect == null ? Wtxt__direct() : wtxt__redirect;
+		return wtxt__redirect == null ? wtxt__direct : wtxt__redirect;
 	}
 	public boolean   Cache_permanently() {return cache_permanently;} private final    boolean cache_permanently;
 	public long Cache_len() {return cache_len;}
@@ -110,39 +59,22 @@ public class Xow_page_cache_itm implements Xowd_text_bry_owner {
 		if (v == null)
 			cache_len = 0;
 		else {
-			try {
-				cache_len = v.length;
-				rwl.writeLock().lock();
-				raf.seek(maxofs);
-				byte[] bytes = new byte[8];
-				convertIntToByteArray(bytes, page_id, 0);
-				convertIntToByteArray(bytes, (int)cache_len, 4);
-				raf.write(bytes);
-				//raf.writeLong(page_id);
-				//raf.writeLong(cache_len);
-				raf.write(v);
-				fileoffset = maxofs;
-				maxofs += cache_len + 8 + 8;
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-			finally {
-				rwl.writeLock().unlock();
-			}
+			wtxt__direct = v;
+			cache_len = v.length;
 		}
 	}
 	public void Redirect_id_(int v) {this.redirect_id = v;}
 	public void Set_redirect(Xoa_ttl ttl, byte[] trg_wtxt) {
 		this.ttl = ttl;
 		Set_text_bry_by_db(trg_wtxt);
-		this.wtxt__redirect = Wtxt__direct();
+		this.wtxt__redirect = wtxt__direct;
 	}
 
 	public static void SetRandomAccessFile(RandomAccessFile rafx) {
-		raf = rafx;
+		//raf = rafx;
 	}
 	public static void Reset() {
-		maxofs = 0; // reset the filepointer (as part of a cache clear)
+		//maxofs = 0; // reset the filepointer (as part of a cache clear)
 	}
 
 	public static final    Xow_page_cache_itm Null = null;

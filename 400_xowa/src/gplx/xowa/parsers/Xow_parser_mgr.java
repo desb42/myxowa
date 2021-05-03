@@ -22,7 +22,7 @@ import gplx.xowa.xtns.math.*; import gplx.xowa.parsers.uniqs.*; import gplx.xowa
 public class Xow_parser_mgr {
 	private final    Object thread_lock = new Object();
 	private final    Xowe_wiki wiki; private final    Xop_tkn_mkr tkn_mkr;
-        private        Db_parser dbp = new Db_parser();
+	private Db_parser dbp = new Db_parser();
 	public Xow_parser_mgr(Xowe_wiki wiki) {
 		this.wiki = wiki; this.tkn_mkr = wiki.Appe().Parser_mgr().Tkn_mkr();
 		this.ctx = Xop_ctx.New__top(wiki);
@@ -54,12 +54,14 @@ public class Xow_parser_mgr {
 	public int						Tag__next_idx() {return ++tag_idx;} private int tag_idx; // NOTE:must be wiki-level variable, not page-level, b/c pre-compiled templates can reserve tag #s; PAGE:de.s:Seite:NewtonPrincipien.djvu/465 DATE:2015-02-03
 	public void						Tmpl_stack_del() {--tmpl_stack_ary_len;}
 	public boolean						Tmpl_stack_add(byte[] key) {
-		int count = 0;
-		for (int i = 0; i < tmpl_stack_ary_len; i++) {
-			if (Bry_.Match(key, tmpl_stack_ary[i])) {
-				count++;
-				if (count > 20) // arbitrary!
-					return false;
+		if (key != null) { // #section compilation does not have a name
+			int count = 0;
+			for (int i = 0; i < tmpl_stack_ary_len; i++) {
+				if (Bry_.Match(key, tmpl_stack_ary[i])) {
+					count++;
+					if (count > 20) // arbitrary!
+						return false;
+				}
 			}
 		}
 		int new_len = tmpl_stack_ary_len + 1;

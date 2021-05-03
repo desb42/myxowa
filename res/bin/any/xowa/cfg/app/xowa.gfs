@@ -214,6 +214,7 @@ app.wikis.get('~{wiki_key}').html.portal {
   txt_pageedit =
 <:["
     <div id="mw-content-text">
+    ~{edit_div_editnotices}
       <div id="xowa_page_edit_preview_id">~{edit_div_preview}</div>
       <form id="editform" name="editform">
         <textarea id="xowa_edit_data_box" cols="80" rows="25" accesskey="," class="mw-editfont-monospace" lang="~{edit_lang}" dir="~{edit_lang_ltr}">~{page_data}</textarea>  <!-- NOTE: do not place on different line (EX: \n~{page_text}\n); textarea will interpret new line literally and page saves will include new whitespace -->

@@ -15,3 +15,87 @@
 	color: red;
 	font-weight: bold;
 }
+
+/* ext.cite.styles */
+.mw-cite-backlink,.cite-accessibility-label {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.mw-references-columns {
+    -webkit-column-width: 30em;
+    -moz-column-width: 30em;
+    column-width: 30em;
+    margin-top: 0.3em
+}
+
+.mw-parser-output .mw-references-columns .references {
+    margin-top: 0
+}
+
+.mw-references-columns li {
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid-column
+}
+
+ol.references {
+    counter-reset: mw-ref-extends-parent list-item
+}
+
+ol.references > li {
+    counter-increment: mw-ref-extends-parent;
+    counter-reset: mw-ref-extends-child
+}
+
+ol.references .mw-extended-references {
+    list-style: none;
+    margin-left: 2em
+}
+
+.mw-extended-references > li:before {
+    counter-increment: mw-ref-extends-child;
+    content: counter(mw-ref-extends-parent,decimal) '.' counter(mw-ref-extends-child,decimal) '. '
+}
+
+sup.reference {
+    unicode-bidi: -moz-isolate;
+    unicode-bidi: -webkit-isolate;
+    unicode-bidi: isolate;
+    white-space: nowrap;
+    font-weight: normal;
+    font-style: normal
+}
+
+ol.references li:target,sup.reference:target {
+    background-color: #eaf3ff
+}
+
+.mw-ext-cite-error {
+    font-weight: bold;
+    unicode-bidi: embed
+}
+
+.mw-ext-cite-error code {
+    background-color: transparent;
+    color: inherit;
+    padding: 1px 2px
+}
+
+.mw-cite-dir-ltr .reference-text {
+    direction: ltr;
+    unicode-bidi: embed
+}
+
+.mw-cite-dir-rtl .reference-text {
+    direction: rtl;
+    unicode-bidi: embed
+}
+
+@media print {
+    .mw-cite-backlink {
+        display: none
+    }
+}

@@ -365,7 +365,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 	, div_after_fmtr = Bry_fmtr.new_("", "content")
 	, txt_categories_fmtr = Bry_fmtr.new_("", "printfooter", "page_langs")
 	, txt_pageread_fmtr = Bry_fmtr.new_("", "page_lang", "page_lang_ltr", "page_data")
-	, txt_pageedit_fmtr = Bry_fmtr.new_("", "edit_div_preview", "edit_lang", "edit_lang_ltr", "edit_div_rename", "page_data", "page_text", "page_ttl_full")
+	, txt_pageedit_fmtr = Bry_fmtr.new_("", "edit_div_editnotices", "edit_div_preview", "edit_lang", "edit_lang_ltr", "edit_div_rename", "page_data", "page_text", "page_ttl_full")
 	, txt_pagehtml_fmtr = Bry_fmtr.new_("", "page_lang", "page_lang_ltr", "page_data")
 	, txt_ns_fmtr = Bry_fmtr.new_("~{portal_ns_subj_href};~{portal_ns_subj_cls};~{portal_ns_talk_href};~{portal_ns_talk_cls};~{portal_div_vnts};~{portal_main};~{portal_ca};~{portal_extra}", "portal_ns_subj_href", "portal_ns_subj_cls", "portal_ns_talk_href", "portal_ns_talk_cls", "portal_div_vnts", "portal_main", "portal_ca", "portal_extra")
 	, txt_view_fmtr = Bry_fmtr.new_("", "portal_view_read_cls", "portal_view_edit_cls", "portal_view_html_cls", "search_text", "portal_view_read_href", "portal_view_edit_href", "portal_view_html_href", "sitename")

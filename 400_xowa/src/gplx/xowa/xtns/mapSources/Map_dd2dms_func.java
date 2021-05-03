@@ -59,6 +59,53 @@ public class Map_dd2dms_func extends Pf_func_base {
 			bfr.Add(dir);
 		}
 	}
+	public static void Deg_to_dms_lat_long(Bry_bfr bfr, boolean wikibase, byte[] coord_lat, byte[] coord_lon, int prec) { // NOTE: called by wikibase
+		byte[] lat = null;
+		byte[] lat_dir = null;
+		byte[] lon = null;
+		byte[] lon_dir = null;
+		Map_math map_math = Map_math.Instance;
+		if (map_math.Ctor(coord_lat, prec, Bry_.Empty, 2)) {
+			lat = map_math.Get_dms(wikibase, Bry_.Empty, Bry_.Empty);
+			lat_dir = map_math.Coord_dir_ns();
+		}
+		if (map_math.Ctor(coord_lon, prec, Bry_.Empty, 2)) {
+			lon = map_math.Get_dms(wikibase, Bry_.Empty, Bry_.Empty);
+			lon_dir = map_math.Coord_dir_ew();
+		}
+		// make sure they are the same 'length' ie DMS or DM
+		byte lat_dms = lat[lat.length - 2];
+		byte lon_dms = lon[lon.length - 2];
+		if (lat_dms != lon_dms) {
+			if (lat_dms == '4') {
+                            lat = reduce(lat);
+			}
+			else {
+                            lon = reduce(lon);
+			}
+		}
+		bfr.Add(lat);
+		if (!wikibase)	// NOTE: do not add space if wikibase, else will fail in Module:en.w:WikidataCoord; PAGE:en.w:Hulme_Arch_Bridge DATE:2017-04-02
+			bfr.Add_byte_space();
+		bfr.Add(lat_dir);
+		bfr.Add_byte_comma().Add_byte_space();
+		bfr.Add(lon);
+		if (!wikibase)	// NOTE: do not add space if wikibase, else will fail in Module:en.w:WikidataCoord; PAGE:en.w:Hulme_Arch_Bridge DATE:2017-04-02
+			bfr.Add_byte_space();
+		bfr.Add(lon_dir);
+	}
+        private static byte[] reduce(byte[] coord) {
+            int len = coord.length;
+            for (int i = len - 2; i > 0; i--) {
+                if (coord[i] == ';') {
+                    byte[] newcoord = new byte[i + 1];
+                    for (int j = 0; j <= i; j++)
+                        newcoord[j] = coord[j];
+                    return newcoord;
+                }
+            }
+            return coord;
+        }
 	public static final    Map_dd2dms_func Instance = new Map_dd2dms_func(); Map_dd2dms_func() {}
 	private static final byte Key_tid_plus = 1, Key_tid_minus = 2, Key_tid_precision = 3;
 	private static final    Hash_adp_bry Key_hash = Hash_adp_bry.cs()

@@ -22,7 +22,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 	@Override public Pf_func New(int id, byte[] name) {return new Pfunc_displaytitle().Name_(name);}
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
 		if (ctx.Page().Html_data().Display_ttl() != null) return; // only once
-		byte[] val_dat_ary = Eval_argx(ctx, src, caller, self);
+		byte[] val_dat_ary = remove_slash(Eval_argx(ctx, src, caller, self));
 		Xowe_wiki wiki = ctx.Wiki(); Xop_parser parser = wiki.Parser_mgr().Main();
 		Xop_ctx display_ttl_ctx = Xop_ctx.New__sub__reuse_page(ctx);
 		Xop_root_tkn display_ttl_root = parser.Parse_text_to_wdom(display_ttl_ctx, val_dat_ary, false);
@@ -36,20 +36,19 @@ public class Pfunc_displaytitle extends Pf_func_base {
 			wiki.Html_mgr().Html_wtr().Write_tkn_to_html(tmp_bfr, display_ttl_ctx, Xoh_wtr_ctx.Alt, display_ttl_root.Data_mid(), display_ttl_root, 0, display_ttl_root);
 			byte[] val_html_lc = tmp_bfr.To_bry_and_clear();
 			Xol_case_mgr case_mgr = wiki.Lang().Case_mgr();
-			val_html_lc = Standardize_displaytitle_text(case_mgr, val_html_lc);
-			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_db()); // NOTE: must be .Full_db() to handle non-main ns; PAGE:en.w:Template:Infobox_opera; ISSUE#:277 DATE:2018-11-14;
+			val_html_lc = Standardize_displaytitle_text(case_mgr, val_html_lc, Bool_.Y);
+			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_db(), Bool_.N); // NOTE: must be .Full_db() to handle non-main ns; PAGE:en.w:Template:Infobox_opera; ISSUE#:277 DATE:2018-11-14;
 			if (!Bry_.Eq(val_html_lc, page_ttl_lc)) {
 				Xoa_app_.Usr_dlg().Warn_many("", "", "DISPLAYTITLE fail:~{0} not ~{1}", val_html_lc, page_ttl_lc);
 				val_html = null;
 			}
 		}
-                if (val_html != null)
 		ctx.Page().Html_data().Display_ttl_(val_html);
 		tmp_bfr.Mkr_rls();
 	}
-	private static byte[] Standardize_displaytitle_text(Xol_case_mgr case_mgr, byte[] val) {
+	private static byte[] Standardize_displaytitle_text(Xol_case_mgr case_mgr, byte[] val, boolean change_underscore) {
 		byte[] rv = case_mgr.Case_build_lower(val);							// lower-case
-		rv = Replaceamp(rv);
+		rv = Replaceamp(rv, change_underscore);
 		return Bry_.Replace(rv, Byte_ascii.Space, Byte_ascii.Underline);	// force underline; PAGE:de.w:Mod_qos DATE:2014-11-06
 	}
 	// replace &quot; and &amp;
@@ -61,7 +60,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 	//  {{DISPLAYTITLE:''iTunes Originals&nbsp;? R.E.M.''}} &nsbp; goes to &#160; and then should be space
 	// how to cope with {{DISPLAYTITLE:''Sleepless in __________''}} this will elimiminate trailing space
 	// how to cope with {{DISPLAYTITLE:''N''-Isopropyl-''N'''-phenyl-1,4-phenylenediamine}} wxtra apost
-	private static byte[] Replaceamp(byte[] src) {
+	private static byte[] Replaceamp(byte[] src, boolean change_underscore) {
 		int len = src.length;
 		int pos = 0;
 		int sofar = 0;
@@ -79,18 +78,25 @@ public class Pfunc_displaytitle extends Pf_func_base {
 
 		while (pos < len) {
 			byte b = src[pos++];
+			int size = -1;
+			byte rb = 0;
 			switch (b) {
 				case '&':
 					// &#160;
 					// &#32;
+					// &#38; -> '&'
 					// &#39;
-					// &#8211;
+					// &#8201; (&thinsp) -> ' '
+					// &#8202; (Hair Space) -> ' '
+					// &#8211; (&ndash;) -> '-'
+					// &#8214; (&mdash;) -> '-'
+					// &#8722; (&minus;) -> '-'
+					// &#928; - Capital PI -> '-'
+					// &#x266d;, 0xE2 0x99 0xAD, &#9837;(music flat) -> '-'
 					// &amp;
 					// &lt;
 					// &quot;
 					// &tinysp;
-					int size = -1;
-					byte rb = 0;
 					int cpos = pos;
 					if (cpos < len) {
 						b = src[cpos++];
@@ -106,27 +112,58 @@ public class Pfunc_displaytitle extends Pf_func_base {
 											}
 											break;
 										case '3':
-											if (cpos < len) {
+											if (cpos + 1 < len && src[cpos+1] == ';') {
 												b = src[cpos++];
 												switch(b) {
 												case '2':
-													if (cpos < len && src[cpos] == ';') {
-														size = 4;
-														rb = Byte_ascii.Space;
-													}
+													size = 4;
+													rb = Byte_ascii.Space;
+													break;
+												case '8': // &
+													size = 4;
+													rb = Byte_ascii.Amp;
 													break;
 												case '9':
-													if (cpos < len && src[cpos] == ';') {
-														size = 4;
-														// remove apos //rb = Byte_ascii.Apos;
-													}
+													size = 4;
+													// remove apos //rb = Byte_ascii.Apos;
 													break;
 												}
 											}
 											break;
 										case '8':
-											if (cpos + 3 < len && src[cpos] == '2' && src[cpos+1] == '1' && src[cpos+2] == '1' && src[cpos+3] == ';') {
-												size = 6;
+											if (cpos + 3 < len && src[cpos+3] == ';') {
+												b = src[cpos++];
+												switch(b) {
+													case '2':
+														if ((src[cpos] == '0' && src[cpos+1] == '1') || // &#8201; (&thinsp) -> ' '
+														    (src[cpos] == '0' && src[cpos+1] == '2')) { // &#8202; (Hair Space) -> ' '
+															size = 6;
+															rb = Byte_ascii.Space;
+														}
+														else if ((src[cpos] == '1' && src[cpos+1] == '1') || // &#8211; (&ndash;) -> '-'
+														         (src[cpos] == '1' && src[cpos+1] == '4')) { // &#8214; (&mdash;) -> '-'
+															size = 6;
+															rb = Byte_ascii.Dash;
+														}
+														break;
+													case '7':
+														if (src[cpos] == '2' && src[cpos+1] == '2') { // &#8722; (&minus;) -> '-'
+															size = 6;
+															rb = Byte_ascii.Dash;
+														}
+														break;
+												}
+											}
+											break;
+										case '9':
+											if (cpos + 2 < len && src[cpos] == '2' && src[cpos+1] == '8' && src[cpos+2] == ';') { // &#928; - Capital PI -> '-'
+												size = 5;
+												rb = Byte_ascii.Dash;
+											}
+											break;
+										case 'x': // x266d
+											if (cpos + 4 < len && src[cpos] == '2' && src[cpos+1] == '6' && src[cpos+2] == '6' && src[cpos+3] == 'd' && src[cpos+4] == ';') { // &#x266d (music flat) -> '-'
+												size = 7;
 												rb = Byte_ascii.Dash;
 											}
 											break;
@@ -168,48 +205,38 @@ public class Pfunc_displaytitle extends Pf_func_base {
 								break;
 						}
 					}
-					if (size > 0) {
-						if (bfr == null)
-							bfr = Bry_bfr_.New();
-						bfr.Add_mid(src, sofar, pos - 1);
-						if (rb != 0)
-							bfr.Add_byte(rb);
-						pos += size;
-						sofar = pos;
-					}
 					break;
 				case ' ':
 				case '\t':
-					// also any number of spaces to a single space
+				case '_':
+					if (b == '_' && !change_underscore)
+						break;
+					// also any number of spaces to a single space (drop leading and trailing)
 					int spacepos = pos;
 					while (spacepos < len) {
 						b = src[spacepos];
-						if (b != ' ' && b != '\t')
+						if (b != ' ' && b != '\t' && change_underscore && b != '_')
 							break;
 						else
 							spacepos++;
 					}
-					if (pos == 1) { // ignore leading space(s)
-						if (bfr == null)
-							bfr = Bry_bfr_.New();
-						pos = spacepos;
-						sofar = pos;
+					if (pos == 1 || spacepos == len) { // ignore leading space(s)/ trailing
+						size = spacepos - pos;
 					}
 					else if (spacepos > pos) {
-						if (bfr == null)
-							bfr = Bry_bfr_.New();
-						bfr.Add_mid(src, sofar, pos - 1);
-						bfr.Add_byte(Byte_ascii.Space);
-						pos = spacepos;
-						sofar = pos;
+						size = spacepos - pos;
+						rb = Byte_ascii.Space;
 					}
 					break;
-				case '\'': // remove excess single quotes
 				case ':': // remove excess colons?
-					if (bfr == null)
-						bfr = Bry_bfr_.New();
-					bfr.Add_mid(src, sofar, pos - 1);
-					sofar = pos;
+					// and following space???
+					if (src[pos] == ' ') {
+						size = 1;
+						break;
+					}
+					// fall through
+				case '\'': // remove excess single quotes
+					size = 0;
 					break;
 				case '<': // tags
  					int close = pos;
@@ -219,14 +246,58 @@ public class Pfunc_displaytitle extends Pf_func_base {
 							break;
 						}
 					}
-					if (close < len) {
-						if (bfr == null)
-							bfr = Bry_bfr_.New();
-						bfr.Add_mid(src, sofar, pos - 1);
-						pos = close;
-						sofar = pos;
+					if (close < len)
+						size = close - pos;
+					break;
+				case -30: // \xE2
+					if (pos + 1 < len && src[pos] == -128 && src[pos+1] == -109) { // \xE2\x80\x93 &ndash;
+						size = 2;
+						rb = Byte_ascii.Dash;
+					}
+					else if (pos + 1 < len && src[pos] == -120 && src[pos+1] == -110) { // \xE2\x88\x92
+						size = 2;
+						rb = Byte_ascii.Dash;
+					}
+					else if (pos + 1 < len && src[pos] == -103 && src[pos+1] == -83) { // \xE2\x99\xAD
+						size = 2;
+						rb = Byte_ascii.Dash;
 					}
 					break;
+				case -49: // \xCF
+					if (pos + 1 < len && src[pos] == -128) { // \xCF\x80 lowercase PI
+						size = 1;
+						rb = Byte_ascii.Dash;
+					}
+			}
+			if (size >= 0) {
+				if (bfr == null)
+					bfr = Bry_bfr_.New();
+				bfr.Add_mid(src, sofar, pos - 1);
+				if (rb != 0)
+					bfr.Add_byte(rb);
+				pos += size;
+				sofar = pos;
+			}
+		}
+		if (bfr != null) {
+			bfr.Add_mid(src, sofar, len);
+			return bfr.To_bry();
+		}
+		else
+			return src;
+	}
+	private byte[] remove_slash(byte[] src) {
+		int len = src.length;
+		int pos = 0;
+		int sofar = 0;
+		Bry_bfr bfr = null;
+		while (pos < len) {
+			byte b = src[pos++];
+			if (b == '/') {
+				if (bfr == null)
+					bfr = Bry_bfr_.New();
+				bfr.Add_mid(src, sofar, pos - 1);
+				sofar = pos;
 			}
 		}
 		if (bfr != null) {

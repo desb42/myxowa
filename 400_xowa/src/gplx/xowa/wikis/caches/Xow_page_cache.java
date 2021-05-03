@@ -24,13 +24,14 @@ public class Xow_page_cache {
 	private final    Object thread_lock = new Object(); // NOTE: thread-safety needed for xomp since one page-cache is shared across all wkrs
 	private final    Object cache_lock = new Object();
 	private final    Xowe_wiki wiki;
-	private final    Lru_cache cache;
+	private final    xLru_cache cache;
 	private long cache_tries = 0;
 	private long cache_misses = 0;
 	public Xow_page_cache(Xowe_wiki wiki) {
 		this.wiki = wiki;
 		this.cache_key = "xowa.app.page_cache.'" + wiki.Domain_str() + "'." + this.hashCode();
-		this.cache = new Lru_cache(Bool_.Y, cache_key, 8 * Io_mgr.Len_mb, 16 * Io_mgr.Len_mb);
+		//this.cache = new xLru_cache(Bool_.Y, cache_key, 8 * Io_mgr.Len_mb, 16 * Io_mgr.Len_mb);
+		this.cache = xLru_cache.Instance;
 		this.cache_log = Gfo_log_wtr.New_dflt("page", "cache_log_{0}.csv");
 	}
 	public String Cache_key() {return cache_key;} private final    String cache_key;
@@ -39,7 +40,7 @@ public class Xow_page_cache {
 
 	public void Add_itm(String ttl_full_db, Xow_page_cache_itm itm) {
 		synchronized (thread_lock) {
-			cache.Set(ttl_full_db, itm, 20/*itm.Cache_len()*/);
+			cache.Set(ttl_full_db, itm, itm.Cache_len());
 		}
 	}
 	public Xow_page_cache_itm Get_itm_or_null(String ttl_full_db) {
@@ -130,7 +131,7 @@ public class Xow_page_cache {
 		return rv;
 	}
 	public void Cleanup() {
-		int count = 0;
+/*		int count = 0;
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		// dump out the cache items
 		java.util.Iterator iterator = cache.iterator();
@@ -149,7 +150,8 @@ public class Xow_page_cache {
 		}
 		//System.out.println(count + " " + t);
 		cache_log.Flush();
-	}
+*/
+}
 	public String To_str() {
 		return String_.Format("cache_pct:{0} cache_misses:{1} cache_evicts:{2} cache_tries:{3} cache_size:{4}", Decimal_adp_.divide_(cache_misses * 100, cache_tries).To_str("0.00"), cache_misses, cache.Evicts(), cache_tries, cache.Cur());
 	}

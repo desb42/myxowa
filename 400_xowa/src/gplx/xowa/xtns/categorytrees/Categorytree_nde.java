@@ -34,7 +34,7 @@ public class Categorytree_nde implements Xox_xnde {
 			Mwh_atr_itm atr = atrs_ary[i];
 			byte[] key = atr.Key_bry();
 			byte[] val = atr.Val_as_bry();
-                        cat_mgr.Update_params(key, val, params);
+			cat_mgr.Update_params(key, val, params);
 		}
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {

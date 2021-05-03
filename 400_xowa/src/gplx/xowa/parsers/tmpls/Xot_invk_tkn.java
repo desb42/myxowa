@@ -49,6 +49,7 @@ import gplx.xowa.wikis.pages.Xopg_tmpl_prepend_mgr;
 import gplx.xowa.xtns.pfuncs.ttls.Pfunc_rel2abs;
 
 import gplx.xowa.wikis.domains.Xow_domain_tid_;
+import gplx.xowa.xtns.pfuncs.Pf_func_;
 public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 	public Xot_invk_tkn(int bgn, int end) {this.Tkn_ini_pos(false, bgn, end);}
 	@Override public byte Tkn_tid() {return typeId;} private byte typeId = Xop_tkn_itm_.Tid_tmpl_invk;
@@ -135,8 +136,22 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 			}
 
 			int colon_pos = Bry_find_.Find_fwd(name_ary, Byte_ascii.Colon, 0, name_ary_len);
+			if (name_ary[0] == '#') {
+                                // no colon!
+				if (colon_pos == Bry_find_.Not_found) {
+					bfr.Add_str_a7("{{");
+					bfr.Add(name_ary_orig);
+					for (int i = 0; i < args_len; i++) {
+						bfr.Add_byte(Byte_ascii.Pipe);
+						bfr.Add(Pf_func_.Eval_arg_or_empty(ctx, src, caller, this, args_len, i));
+					}
+					bfr.Add_str_a7("}}");
+					return true;
+				}
+				ctx.Page().Stat_itm().Tmpl1_count++; // or should it be another counter?
+			}
 			// only if we have found a colon
-			if (colon_pos != Bry_find_.Not_found && name_ary[0] != '#') {
+			else if (colon_pos != Bry_find_.Not_found) {
 
 				// ignore "{{Template:"; EX: {{Template:a}} is the same thing as {{a}}
 				//int tmpl_ns_len = wiki.Ns_mgr().Tmpls_get_w_colon_found(name_ary, colon_pos);
@@ -338,10 +353,10 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
                                     	int  a=1;
                                     }
 */
-if (Bry_.Eq(caller.Frame_ttl(), Bry_.new_a7("Template:BookCat/core"))) {
-    return true;
+//a if (Bry_.Eq(caller.Frame_ttl(), Bry_.new_a7("Template:BookCat/core"))) {
+//a     return true;
 //    int a=1;
-}
+//a }
 //System.out.println(String_.new_u8(caller.Frame_ttl()));
 					Xot_invk_tkn_.Eval_func(ctx, src, caller, this, bfr, defn, argx_ary);
 					rv = true;
@@ -459,10 +474,11 @@ if (Bry_.Eq(caller.Frame_ttl(), Bry_.new_a7("Template:BookCat/core"))) {
 
 			Xow_page_cache_itm cache_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(page_ttl);
 			if (	cache_itm != null) {
-				if (!Bry_.Eq(cache_itm.Ttl().Full_db(), ctx.Page().Ttl().Full_db())) {	// make sure that transcluded item is not same as page_ttl; DATE:2014-01-10
+//?? remove 				if (!Bry_.Eq(cache_itm.Ttl().Full_db(), ctx.Page().Ttl().Full_db())) {	// make sure that transcluded item is not same as page_ttl; DATE:2014-01-10
+// {{Wikipedia:Featured articles}} calls itself! 20210418
 					transclude_tmpl = ctx.Wiki().Parser_mgr().Main().Parse_text_to_defn_obj(ctx, ctx.Tkn_mkr(), page_ttl.Ns(), page_ttl.Page_db(), cache_itm.Wtxt__direct());
 					page_ttl = cache_itm.Ttl();
-				}
+//				}
 			}
 		}
 		if (transclude_tmpl == null) {
