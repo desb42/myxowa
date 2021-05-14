@@ -63,8 +63,9 @@ public class Xof_ext_ {
 	, Bry_.new_a7("video/ogg"), Bry_.new_a7("video/webm"), Bry_.new_a7("audio/flac")
 	, Bry_.new_a7("image/bmp")
 	, Bry_.new_a7("image/x-xcf") // changed from "/xcf"; DATE:2020-04-21
-	, Bry_.new_a7("audio/x-wav"), Bry_.new_a7("audio/opus")
-	, Bry_.new_a7("model/stl"), Bry_.new_a7("video/webp")
+	, Bry_.new_a7("audio/x-wav")
+			, Bry_.new_a7("audio/opus"), Bry_.new_a7("model/stl"), Bry_.new_a7("video/webp")
+			, Bry_.new_a7("model/sla"), Bry_.new_a7("image/mpeg")
 	};
 	private static final    Hash_adp id_hash = id_hash_new_();
 	private static Hash_adp id_hash_new_() {

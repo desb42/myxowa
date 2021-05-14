@@ -721,7 +721,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 			rv = Bry_.Add(wik_itm.Key_bry(), Byte_ascii.Colon_bry, Full_db());
 		else
 			rv = Full_db(); //ns.Gen_ttl(this.Page_db());
-		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);
+		Bry_.Replace_reuse(rv, Byte_ascii.Underline, Byte_ascii.Space);
 		return rv;
 	}
 	public String toString() {

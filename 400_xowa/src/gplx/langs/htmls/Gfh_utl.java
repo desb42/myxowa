@@ -71,7 +71,9 @@ public class Gfh_utl {// TS:Gfo_url_encoder is TS
 		finally {tmp_bfr.Mkr_rls();}
 	}
 	public static byte[] Escape_html_as_bry(Bry_bfr bfr, byte[] bry, boolean lt, boolean gt, boolean amp, boolean quote, boolean apos)
-																			{return Escape_html(false, bfr, bry, 0, bry.length, lt, gt, amp, quote, apos);}
+	{
+		return Escape_html(false, bfr, bry, 0, bry.length, lt, gt, amp, quote, apos);
+	}
 	public static void Escape_html_to_bfr(Bry_bfr bfr, byte[] bry, int bgn, int end, boolean escape_lt, boolean escape_gt, boolean escape_amp, boolean escape_quote, boolean escape_apos) {
 		Escape_html(true, bfr, bry, bgn, end, escape_lt, escape_gt, escape_amp, escape_quote, escape_apos);
 	}

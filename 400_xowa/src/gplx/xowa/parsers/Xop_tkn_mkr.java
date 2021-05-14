@@ -103,6 +103,8 @@ public class Xop_tkn_mkr {
 	public gplx.xowa.xtns.template_styles.Template_styles_nde Xnde__template_styles()		{return new gplx.xowa.xtns.template_styles.Template_styles_nde();}
 	public gplx.xowa.xtns.stripstate.StripState_xnde Xnde__StripState()		{return new gplx.xowa.xtns.stripstate.StripState_xnde();}
 
+	public gplx.xowa.xtns.cleanspace.Xtn_cleanspace_xnde Xnde__cleanspace()						{return new gplx.xowa.xtns.cleanspace.Xtn_cleanspace_xnde();}
+
 	public gplx.xowa.xtns.translates.Xop_tvar_tkn Tvar(int tkn_bgn, int tkn_end, int key_bgn, int key_end, int txt_bgn, int txt_end, byte[] wikitext) {return new gplx.xowa.xtns.translates.Xop_tvar_tkn(tkn_bgn, tkn_end, key_bgn, key_end, txt_bgn, txt_end, wikitext);}
 //		public void Clear() {
 //			space_tkns_len = txt_tkns_len = 0;

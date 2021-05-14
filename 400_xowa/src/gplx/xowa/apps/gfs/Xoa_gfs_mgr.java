@@ -41,6 +41,7 @@ public class Xoa_gfs_mgr implements Gfo_invk, Gfo_invk_root_wkr {
 		else
 			raw = Io_mgr.Instance.LoadFilStr_args(url).MissingIgnored_().Exec();
 		if (String_.Len_eq_0(raw)) return;
+		raw = raw.replace("\r\n", "\n"); // guarantee no CR
 		Run_str_for(invk, raw);
 	}
 	public Object Run_str(String raw) {return Run_str_for(GfsCore.Instance.Root(), raw);}

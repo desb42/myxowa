@@ -753,6 +753,7 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__ref:
 			case Xop_xnde_tag_.Tid__references:
 			case Xop_xnde_tag_.Tid__inputBox:
+			case Xop_xnde_tag_.Tid__cleanspace:
 			case Xop_xnde_tag_.Tid__imageMap:
 			case Xop_xnde_tag_.Tid__pages:
 			case Xop_xnde_tag_.Tid__pagequality:

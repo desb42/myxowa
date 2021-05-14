@@ -157,8 +157,10 @@ public class Xop_xnde_tag_ {
 , Tid__figure_inline = 129
 , Tid__figcaption = 130
 , Tid__chem = 131
+
+, Tid__cleanspace = 132
 	;
-	public static final int Tid__len = 132;
+	public static final int Tid__len = 133;
 	public static final    Xop_xnde_tag[] Ary = new Xop_xnde_tag[Tid__len];
 	private static Xop_xnde_tag New(int id, String name) {
 		Xop_xnde_tag rv = new Xop_xnde_tag(id, name);
@@ -301,5 +303,7 @@ public class Xop_xnde_tag_ {
 , Tag__figure = New(Tid__figure, "figure")
 , Tag__figure_inline = New(Tid__figure_inline, "figure-inline")
 , Tag__figcaption = New(Tid__figcaption, "figcaption")
+
+, Tag__cleanspace = New(Tid__cleanspace, "cleanspace").Xtn_mw_()
 	;
 }

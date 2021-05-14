@@ -329,7 +329,6 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 			db_tmpl_trie = new Db_btrie_src_end_b(tmpl_trie.Objs());
 		else
 			tmpl_trie.Dumpit("parser anchor tmpl");
-
 	}
 }
 /*

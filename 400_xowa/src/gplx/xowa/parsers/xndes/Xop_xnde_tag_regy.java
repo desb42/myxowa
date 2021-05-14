@@ -24,8 +24,8 @@ public class Xop_xnde_tag_regy {
 	;
 	public Xop_xnde_tag Get_tag_in_tmpl(byte[] tag) {
 		if (init_needed) Init_by_hash(null); // TEST:
-                if (db_trie_defn != null)
-                    return (Xop_xnde_tag)db_trie_defn.Match_bgn(tag, 0, tag.length);
+		if (db_trie_defn != null)
+			return (Xop_xnde_tag)db_trie_defn.Match_bgn(tag, 0, tag.length);
 		return (Xop_xnde_tag)trie_tmpl.Match_bgn(tag, 0, tag.length);
 	}
 	public Btrie_slim_mgr Get_trie(int i) {

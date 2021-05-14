@@ -130,7 +130,9 @@ public class Db_wikistrip {
 						return pos;
 					return pos - scount + count;
 				case '<':
-					pos = nowikicheck(src, src_len, pos);
+					int newpos = nowikicheck(src, src_len, pos);
+					if (newpos >= 0)
+						pos = newpos;
 					break;
 			}
 		}
@@ -159,7 +161,9 @@ public class Db_wikistrip {
 					}
 					break;
 				case '<':
-					pos = nowikicheck(src, src_len, pos);
+					int newpos = nowikicheck(src, src_len, pos);
+					if (newpos >= 0)
+						pos = newpos;
 					break;
 			}
 		}
@@ -314,11 +318,11 @@ public class Db_wikistrip {
 				}
 			}
 			else if (pos - namestart > 15) // no more than 15 character name!
-				return namestart;
-			else if ((b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z')) // allow only alpha?????????
+				return -1;
+			else if ((b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9')) // allow only alphanumeric?????????
 				continue;
 			else
-				return namestart; // ignore the '<'
+				return -1; // ignore the '<'
 		}
 		int tagend = pos;
 		// check for special tags to remove <br > <hr > <img >
@@ -508,7 +512,11 @@ public class Db_wikistrip {
 					break;
 				case '<':
 					bfr.Add_mid(src, startpos, pos-1);
-					pos = findclosingangle(src, src_len, pos);
+					int end = findclosingangle(src, src_len, pos);
+					if (end < 0)
+						bfr.Add_byte(Byte_ascii.Angle_bgn);
+					else
+						pos = end;
 					startpos = pos;
 					break;
 				case '=':
