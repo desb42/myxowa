@@ -16,7 +16,6 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx;
 import gplx.core.strings.*; import gplx.core.envs.*;
 import gplx.core.lists.*; /*EnumerAble,ComparerAble*/
-import gplx.xowa.langs.Xol_lang_itm;
 public class Ordered_hash_base extends Hash_adp_base implements Ordered_hash, Gfo_invk {
 	private final    List_adp ordered = List_adp_.New();
 	@Override protected void Add_base(Object key, Object val) {
