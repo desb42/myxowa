@@ -26,6 +26,25 @@ public class Db_Nav_template {
 	public static Json_nde Build_Sidebar_json(Xowe_wiki wiki, byte[] id, byte[] text, byte[] itms, int iter_count) {
 		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_PORTAL, iter_count);
 	}
+	public static Json_nde Build_Menu(Xowe_wiki wiki, byte[] label, byte[] text, byte[] itms) {
+		byte[] id = Bry_.Add(Bry_.new_a7("p-"), label);
+		int type;
+		if ((label[0] == 'u' && label[5] == 'm')) // 'user-menu'
+			type = MENU_TYPE_DEFAULT;
+		else if (label[0] == 'a' || (label[0] == 'v' && label[1] == 'a')) // 'actions' or 'variants'
+			type = MENU_TYPE_DROPDOWN;
+		else if ((label[0] == 'v' && label[1] == 'i') || (label[0] == 'n' && label[1] == 'a')) // 'views' or 'namespaces'
+			type = MENU_TYPE_TABS;
+		else if ((label[0] == 'n' && label[1] == 'o') || (label[0] == 'p' && label[1] == 'e') || (label[0] == 'u' && label[5] == 'p')) // 'notifications' or 'personal' or 'user-page'
+			type = MENU_TYPE_DEFAULT;
+		else if (label[0] == 'l') // 'lang'
+//				$type = $this->isLanguagesInHeader() ?
+//					self::MENU_TYPE_DROPDOWN : self::MENU_TYPE_PORTAL;
+			type = MENU_TYPE_PORTAL;
+		else
+			type = MENU_TYPE_PORTAL;
+		return s_getMenuData(wiki, id, text, itms, type, 1);
+	}
 	public static Json_nde Build_Menu_json(Xowe_wiki wiki, byte[] id, byte[] text, byte[] itms) {
 		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_TABS, 1);
 	}
@@ -291,8 +310,10 @@ public class Db_Nav_template {
 		Bry_.new_a7("mw-portlet mw-portlet-"
 		        + label
 		        + " "
-		        + (iter_count == 0 ? "portal-first ":"")
-		        + (urls == Bry_.Empty ? "emptyPortlet ":""))
+//		        + (iter_count == 0 ? "portal-first ":"")
+		        + (urls == Bry_.Empty ? "emptyPortlet ":"")
+		        + ((id[2] == 'p' && id[3] == 'e') ? "vector-user-menu-legacy ":"") //'p-personal'?
+		        )
 			, extraClasses[type]);
 		props.AddKvStr("class", classes);
 		//props.AddKvStr("class", extraClasses[type]);

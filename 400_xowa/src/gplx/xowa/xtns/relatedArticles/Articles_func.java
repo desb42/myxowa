@@ -29,6 +29,7 @@ public class Articles_func extends Pf_func_base {
 			ctx.Page().Html_data().Xtn_skin_mgr().Add(xtn_itm);
 		}
 		Parse(xtn_itm, argx);
+		Gfo_usr_dlg_.Instance.Log_many("", "", "#related: arg=~{0}", argx);
 		ctx.Page().Html_data().Related().Add(argx);
 	}
 	private void Parse(Articles_xtn_skin_itm xtn_itm, byte[] argx) {

@@ -101,6 +101,9 @@ public class Xof_url_bldr {
 		}
 	}
 	private Xof_url_bldr Add_core() {
+            if (root == null) {
+                int a=1;
+            }
 		tmp_bfr.Add(root);																	// add root;				EX: "C:\xowa\file\"; assume trailing dir_spr
 		if (area != null && !(wmf_dir_hive && !file_is_thumb))								// !(wmf_dir_hive && !thumb) means never add if wmf_dir_hive and orig
 			tmp_bfr.Add(area).Add_byte(dir_spr);											// add area;				EX: "thumb\"

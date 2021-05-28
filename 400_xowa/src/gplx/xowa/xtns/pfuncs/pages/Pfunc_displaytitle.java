@@ -22,7 +22,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 	@Override public Pf_func New(int id, byte[] name) {return new Pfunc_displaytitle().Name_(name);}
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
 		if (ctx.Page().Html_data().Display_ttl() != null) return; // only once
-		byte[] val_dat_ary = remove_slash(Eval_argx(ctx, src, caller, self));
+		byte[] val_dat_ary = /*remove_slash(*/Eval_argx(ctx, src, caller, self)/*)*/;
 		Xowe_wiki wiki = ctx.Wiki(); Xop_parser parser = wiki.Parser_mgr().Main();
 		Xop_ctx display_ttl_ctx = Xop_ctx.New__sub__reuse_page(ctx);
 		Xop_root_tkn display_ttl_root = parser.Parse_text_to_wdom(display_ttl_ctx, val_dat_ary, false);
@@ -229,13 +229,14 @@ public class Pfunc_displaytitle extends Pf_func_base {
 					}
 					break;
 				case ':': // remove excess colons?
-					// and following space???
-					if (src[pos] == ' ') {
-						size = 1;
-						break;
-					}
+					// and following space??? if a real namespace???
+//					if (src[pos] == ' ') {
+//						size = 1;
+//						break;
+//					}
 					// fall through
 				case '\'': // remove excess single quotes
+				case '/': // remove excess slash
 					size = 0;
 					break;
 				case '<': // tags

@@ -195,4 +195,7 @@ public class Xol_lang_itm implements Gfo_invk {
 	public static Xol_lang_itm New(Xoa_lang_mgr lang_mgr, byte[] key_bry) {
 		return new Xol_lang_itm(lang_mgr, key_bry);
 	}
+	public String toString() {
+		return key_str;
+	}
 }

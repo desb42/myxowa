@@ -39,7 +39,9 @@ public class Xoa_lang_mgr implements Gfo_invk {
 		if (rv == null) {
 			rv = Xol_lang_itm.New(this, key);
 			rv.Init_by_load();
-			this.Add(rv);
+			// Init_by_load may have already added - eg zh (en.wikipedia.org/wiki/Republic_of_China_calendar)
+			if (hash.Get_by(key) == null)
+				this.Add(rv);
 		}
 		return rv;
 	}

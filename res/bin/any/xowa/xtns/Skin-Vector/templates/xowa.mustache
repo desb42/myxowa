@@ -3,9 +3,8 @@
 		Also used by CentralNotice to inject banners into Vector.
 	Indicator[] array-indicators wiki-defined badges such as "good article",
 		"featured article". An empty array if none are defined.
-	string page-langcode the content language of the article. Assumed to be escaped HTML.
 	string html-title
-	bool page-isarticle
+	bool is-article
 	string msg-tagline
 	string html-subtitle
 	string html-undelete-link
@@ -18,16 +17,17 @@
 	string html-after-content
 	string msg-navigation-heading
 	LogoOptions data-logos
-	MenuDefinition data-personal-menu
-	MenuDefinition data-namespace-tabs
-	MenuDefinition data-variants
-	MenuDefinition data-page-actions
-	MenuDefinition data-page-actions-more
+	object data-portlets
+	MenuDefinition data-portlets.data-personal
+	MenuDefinition data-portlets.data-namespaces
+	MenuDefinition data-portlets.data-variants
+	MenuDefinition data-portlets.data-views
+	MenuDefinition data-portlets.data-actions
 	object data-search-box. See SearchBox.mustache for documentation.
 	boolean sidebar-visible For users that want to see the sidebar on initial render, this should be
 	  true.
 	string msg-vector-action-toggle-sidebar The label used by the sidebar button.
-	object data-sidebar. See Sidebar.mustache for documentation.
+	object data-portlets-sidebar. See Sidebar.mustache for documentation.
 	object data-footer for footer template partial. see Footer.mustache for documentation.
 }}
 <div class="mw-page-container">
@@ -43,24 +43,50 @@
 {{>Header}}
 
 <div class="mw-workspace-container">
-	{{#data-sidebar}}{{>Sidebar}}{{/data-sidebar}}
 	{{>Navigation}}
 	<div class="mw-content-container">
 {{! `role` is unnecessary but kept to support selectors in any gadgets or user styles. }}
-<!-- Please do not use role attribute as CSS selector, it is deprecated. -->
 <main id="content" class="mw-body" role="main">
 	<a id="top"></a>
-	<div id="siteNotice" class="mw-body-content">{{{html-site-notice}}}</div>
+	<div id="siteNotice">{{{html-site-notice}}}</div>
+
+	{{^is-language-in-header}}
 	{{>Indicators}}
-	<h1 id="firstHeading" class="firstHeading" lang="{{page-langcode}}">{{{html-title}}}</h1>
-	<div id="bodyContent" class="mw-body-content">
-		{{#page-isarticle}}<div id="siteSub" class="noprint">{{msg-tagline}}</div>{{/page-isarticle}}
+	<h1 id="firstHeading" class="firstHeading" {{{html-user-language-attributes}}}>{{{html-title}}}</h1>
+	{{/is-language-in-header}}
+
+	{{#is-language-in-header}}
+	<header class="mw-body-header">
+		{{^is-mainpage}}
+			{{#data-portlets.data-languages}}{{>Menu}}{{/data-portlets.data-languages}}
+		{{/is-mainpage}}
+		<h1 id="firstHeading" class="firstHeading" {{{html-user-language-attributes}}}>
+			{{{html-title}}}
+		</h1>
+		{{>Indicators}}
+		{{#is-article}}
+			<div id="siteSub" class="noprint">{{msg-tagline}}</div>
+		{{/is-article}}
+	</header>
+	{{/is-language-in-header}}
+
+	<div id="bodyContent" class="vector-body">
+		{{^is-language-in-header}}
+			{{#is-article}}<div id="siteSub" class="noprint">{{msg-tagline}}</div>{{/is-article}}
+		{{/is-language-in-header}}
 		<div id="contentSub"{{{html-user-language-attributes}}}>{{{html-subtitle}}}</div>
 		<div id="contentSub2">{{{html-undelete-link}}}</div>
 		{{{html-user-message}}}
 		{{{html-body-content}}}
 		{{{html-categories}}}
 	</div>
+
+	{{#is-mainpage}}
+	{{#is-language-in-header}}
+		{{#data-portlets.data-languages}}{{>Menu}}{{/data-portlets.data-languages}}
+	{{/is-language-in-header}}
+	{{/is-mainpage}}
+
 </main>
 {{{html-after-content}}}
 	</div> {{! END mw-content-container }}
@@ -68,7 +94,7 @@
 
 <div class="mw-workspace-container mw-footer-container">
 	<div class="mw-content-container">
-{{{portal_div_footer}}}
+		{{{portal_div_footer}}}
 	</div>
 </div>
 	</div> {{! END mw-page-container-inner }}

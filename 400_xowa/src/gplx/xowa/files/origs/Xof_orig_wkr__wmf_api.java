@@ -33,7 +33,12 @@ public class Xof_orig_wkr__wmf_api implements Xof_orig_wkr {
 		if (!found) return Xof_orig_itm.Null;	// ttl not found by api; return
 
 		// deserialize values and return
-		byte api_repo = Bry_.Eq(api_rv.Orig_wiki(), wiki_domain) ? Xof_orig_itm.Repo_wiki : Xof_orig_itm.Repo_comm;
+                byte[] orig_wiki = api_rv.Orig_wiki();
+		byte api_repo = Xof_orig_itm.Repo_comm;
+                if (Bry_.Eq(orig_wiki, wiki_domain)) {
+                    if (orig_wiki[0] != 'c' || orig_wiki[8] != 'w') // and domain is not commos.wikimedia.org
+                        api_repo = Xof_orig_itm.Repo_wiki;
+                }
 		byte[] api_page = api_rv.Orig_page();
 		int api_w = api_rv.Orig_w(), api_h = api_rv.Orig_h();
 		Xof_ext api_ext = Xof_ext_.new_by_ttl_(api_page); api_ext = Ext__handle_ogg(api_ext, api_w, api_h);

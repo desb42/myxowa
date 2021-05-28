@@ -6402,6 +6402,9 @@ vector-simplesearch-preference|Enable simplified search bar (Vector skin only)
 vector-skin-desc|Stellt eine modernisierte Benutzeroberfläche bereit
 vector.css|/* Das folgende CSS wird für Benutzer der Vector-Benutzeroberfläche geladen. */
 vector.js|/* Das folgende JavaScript wird für Benutzer der Vector-Benutzeroberfläche geladen. */
+vector-jumptonavigation|Zur Navigation springen
+vector-jumptosearch|Zur Suche springen
+vector-jumptocontent|Zum Inhalt springen
 version-db-mariadb-url|https://mariadb.org/
 version-db-mssql-url|https://www.microsoft.com/sql/
 version-db-mysql-url|https://www.mysql.com/

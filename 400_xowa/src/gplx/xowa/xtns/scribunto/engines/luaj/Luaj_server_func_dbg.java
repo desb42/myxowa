@@ -35,6 +35,8 @@ public class Luaj_server_func_dbg extends VarArgFunction {
 		for (int i = 1; i <= len; ++i) {
 			String s = args.arg(i).toString();
 			if (i != 1) dbg_bfr.Add_byte(dbg_separator);
+                        // handle UNIQs
+                        s = String_.new_u8(core.Wiki().Parser_mgr().Uniq_mgr().Parse(Bry_.new_u8(s)));
 			dbg_bfr.Add_str_u8(s);
 			html_bfr.Add_str_u8(gplx.langs.htmls.Gfh_utl.Escape_html_as_str(s) + "&nbsp;");
 		}

@@ -16,9 +16,11 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx;
 import gplx.core.strings.*; import gplx.core.envs.*;
 import gplx.core.lists.*; /*EnumerAble,ComparerAble*/
+import gplx.xowa.langs.Xol_lang_itm;
 public class Ordered_hash_base extends Hash_adp_base implements Ordered_hash, Gfo_invk {
 	private final    List_adp ordered = List_adp_.New();
 	@Override protected void Add_base(Object key, Object val) {
+		AssertCounts("preAdd_base", key);
 		super.Add_base(key, val);
 		ordered.Add(val);
 		AssertCounts("Add_base", key);
@@ -63,11 +65,17 @@ public class Ordered_hash_base extends Hash_adp_base implements Ordered_hash, Gf
 	}
 	private void AssertCounts(String proc, Object key) {
 		if (super.Count() != ordered.Count()) {
-                    for (int i=0; i < ordered.Count(); i++) {
-                        System.out.println(ordered.Get_at(i).toString());
-                    }
+			for (int i=0; i < ordered.Count(); i++) {
+				System.out.println(ordered.Get_at(i));
+			}
+			System.out.println("---");
+			java.util.Iterator iterator = super.iterator();
+			while(iterator.hasNext()) {
+				Object itm = iterator.next();
+				System.out.println(itm);
+			}
 			throw Err_.new_wo_type("counts do not match; same key is either added twice, or delete failed", "proc", proc, "key", Object_.Xto_str_strict_or_null_mark(key), "hash", super.Count(), "list", ordered.Count());
-                }
+		}
 	}
 	public void Resize_bounds(int i) {if (locked) Lock_fail(); ordered.Resize_bounds(i);}
 	public void Lock() {locked = true;} private boolean locked = false;

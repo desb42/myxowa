@@ -33,7 +33,7 @@ class Xoh_sidebar_htmlr {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 
 		Json_nde top = Json_nde.NewByVal();
-		Json_ary portals_rest = Json_ary.NewByVal();
+		Json_ary portlets_rest = Json_ary.NewByVal();
 		Json_nde jd;
 
 		for (int i = 0; i < len; ++i) {
@@ -42,20 +42,20 @@ class Xoh_sidebar_htmlr {
 			itms_fmtr.Bfr_arg__add(tmp_bfr);
 			jd = Db_Nav_template.Build_Sidebar_json(wiki, grp.Id(), grp.Text(), tmp_bfr.To_bry_and_clear(), i);
 			if (i == 0) {
-				top.AddKvNde("data-portals-first", jd);
+				top.AddKvNde("data-portlets-first", jd);
 			}
 			else {
-				portals_rest.Add(jd);
+				portlets_rest.Add(jd);
 			}
 		}
 		// dummy toolbox
 		// id="p-tb" used by some js
 		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("p-tb"), Bry_.new_a7("Toolbar"), Bry_.Empty, 1);
-		portals_rest.Add(jd);
+		portlets_rest.Add(jd);
 		byte[] buf = Bry_.new_u8(wiki.Appe().Gui_mgr().Html_mgr().Portal_mgr().Wikis().Itms_as_html());
 		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("p-xowa-wiki"), Bry_.new_a7("Wikis"), buf, 1);
-		portals_rest.Add(jd);
-		top.AddKvAry("array-portals-rest", portals_rest);
+		portlets_rest.Add(jd);
+		top.AddKvAry("array-portlets-rest", portlets_rest);
 		buf = Bry_.Add(wiki.Msg_mgr().Val_html_accesskey_and_title("p-logo")
 			, Bry_.new_a7(" class=\"mw-wiki-logo xowa-hover-off\" href=\"/wiki/\""));
 		top.AddKvStr("html-logo-attributes", buf);

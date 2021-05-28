@@ -556,6 +556,9 @@ public class Xoh_page_wtr_wkr {
 			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
 			root_legacy = parser.Parse("xowa-legacy"); // aka skin-legacy
 			//parser = new Mustache_tkn_parser(template_root);
+			//// it seem frwiki is at a different stage of development 20210525
+			//template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates_xowa");
+			//parser = new Mustache_tkn_parser(template_root);
 			root_new = parser.Parse("xowa"); // aka skin
 		}
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
@@ -566,7 +569,9 @@ public class Xoh_page_wtr_wkr {
 		}
 		else {
 			root_new.Render(mbfr, mctx);
-			vectortags = " skin-vector-max-width skin-vector-search-header";
+			//vectortags = " skin-vector-max-width skin-vector-search-header";
+			// as of 20210526
+			vectortags = " skin-vector-search-vue";
 		}
 	}
 	private byte[] Content(Xow_portal_mgr portal_mgr, byte[] page_data, Xoae_page page, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte html_gen_tid, byte[] pagename_for_h1, byte[] modified_on_msg) {
@@ -577,12 +582,35 @@ public class Xoh_page_wtr_wkr {
 
 		boolean is_legacy = !wiki.Skin_mgr().Get_skin().equals("vector-new");
 
-		//data.AddKvStr("page-langcode", "en"); // set in Page_heading
-		data.AddKvBool("page-isarticle", true);
-		data.AddKvBool("sidebar-visible", true); // for skin.mustache
-		data.AddKvStr("html-user-language-attributes", "");
-		
+		data.AddKvBool("is-consolidated-user-links", false);
+//			'is-consolidated-user-links' => $this->shouldConsolidateUserLinks(),
+
+		data.AddKvBool("is-article", true); // strictly Special: is not an article
+//			'is-article' => (bool)$out->isArticle(),
+
+		data.AddKvBool("is-mainpage", Bry_.Eq(page.Ttl().Page_db(), wiki.Props().Main_page()));
+//			'is-mainpage' => $title->isMainPage(),
+			// Remember that the string '0' is a valid title.
+			// From OutputPage::getPageTitle, via ::setPageTitle().
+// 			'html-title' => $out->getPageTitle(),// this is set in Xopg_page_heading
+
+		if (page_mode == Xopg_view_mode_.Tid__read) // only generate categories if READ
+			data.AddKvStr("html-categories", Categories(portal_mgr, wiki, ctx, hctx, page, html_gen_tid));
+//			'html-categories' => $skin->getCategories(),
+
 		data.AddKvStr("input-location", is_legacy ? "header-navigation" : "header-moved");
+//			'input-location' => $this->getSearchBoxInputLocation(),
+
+		data.AddKvBool("sidebar-visible", true); // for skin.mustache
+//			'sidebar-visible' => $this->isSidebarVisible(),
+
+		data.AddKvBool("is-language-in-header", false); // for now
+//?			'is-language-in-header' => $this->isLanguagesInHeader(),
+
+		data.AddKvBool("should-search-expand", false); // for now
+//?			'should-search-expand' => $this->shouldSearchExpand(),
+
+		data.AddKvStr("html-user-language-attributes", "");
 
 		Xopg_page_heading ph = page.Html_data().Page_heading();
 		ph.Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), pagename_for_h1, page.Lang().Key_bry());
@@ -590,36 +618,43 @@ public class Xoh_page_wtr_wkr {
 
 		data.AddKvStr("html-subtitle", Xoh_page_wtr_wkr_.Bld_page_content_sub(app, wiki, page, tmp_bfr, isnoredirect));
 		data.AddKvStr("html-body-content", Pagebody(portal_mgr, page_data, page));
-		if (page_mode == Xopg_view_mode_.Tid__read) // only generate categories if READ
-			data.AddKvStr("html-categories", Categories(portal_mgr, wiki, ctx, hctx, page, html_gen_tid));
 
 		page.Html_data().Indicators().Build_json(data);
 		portal_mgr.Sidebar_mgr().Build_json(data);
 
+		Json_nde portlets = Json_nde.NewByVal();
 		//data.AddKvStr("portal_div_personal", portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect));
-		data.AddKvNde("data-personal-menu",
-			Db_Nav_template.Build_Menu_Default_json(wiki, Bry_.new_a7("p-personal"), Bry_.new_a7("Personal"), portal_mgr.Txt_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect))
+		portlets.AddKvNde("data-personal",
+			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("personal"), Bry_.new_a7("Personal"), portal_mgr.Txt_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect))
 		);
 
 		//data.AddKvStr("portal_div_ns", portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page));
-		data.AddKvNde("data-namespace-tabs",
-			Db_Nav_template.Build_Menu_json(wiki, Bry_.new_a7("p-namespaces"), Bry_.new_a7("Namespaces"), portal_mgr.Txt_ns_bry(wiki, page_ttl, ispage_in_wikisource, page))
+		portlets.AddKvNde("data-namespaces",
+			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("namespaces"), Bry_.new_a7("Namespaces"), portal_mgr.Txt_ns_bry(wiki, page_ttl, ispage_in_wikisource, page))
 		);
 
+		// possibly data-variants
 
 		//data.AddKvStr("portal_div_view", portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect));
-		data.AddKvNde("data-page-actions",
-			Db_Nav_template.Build_Menu_json(wiki, Bry_.new_a7("p-views"), Bry_.new_a7("Views"), portal_mgr.Txt_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect))
+		portlets.AddKvNde("data-views",
+			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("views"), Bry_.new_a7("Views"), portal_mgr.Txt_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect))
 		);
 
+		//  possibly data-actions
+
+		data.AddKvNde("data-portlets", portlets);
+
 		data.AddKvStr("portal_div_footer", portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date));
+
+		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikivoyage)
+			data.AddKvStr("html-after-content", "<div id='mw-data-after-content'>\n	<div class=\"read-more-container\"></div>\n</div>\n");
 
 		build_msg(data, wiki);
 
 		Build_json_logos(data, String_.new_a7(page.Lang().Key_bry()));
 		Build_json_search(data, wiki);
 
- 		//System.out.println(data.Print_as_json());
+		//System.out.println(data.Print_as_json());
 
 		Render_Content(wiki, tmp_bfr, data, is_legacy);
 		return tmp_bfr.To_bry_and_clear();

@@ -47,17 +47,17 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
                 
 		if (jdoc != null) {
 			Db_karto_counters counters = ctx.Page().Karto_counters();
-                        Json_grp grp = jdoc.Root_grp();
-                        if (grp instanceof Json_nde)
-                            doCountersRecursive(grp, counters);
-                        else if (grp.Len() == 1) {
-                            grp = (Json_grp)grp.Get_at(0);
-                            doCountersRecursive(grp, counters);
-                        }
-                        else {
-                            // not sure what to do
-                            int a = 1;
-                        }
+			Json_grp grp = jdoc.Root_grp();
+			if (grp instanceof Json_nde)
+				doCountersRecursive(grp, counters);
+			else if (grp.Len() == 1) {
+				grp = (Json_grp)grp.Get_at(0);
+				doCountersRecursive(grp, counters);
+			}
+			else {
+				// not sure what to do
+				int a = 1;
+			}
 		}
 //		if (jdoc == null) {
 //			Gfo_usr_dlg_.Instance.Warn_many("", "", "invalid jdoc for ttl: orig=~{0} cur=~{1}", ttl_bry, cur_ttl_bry);
@@ -142,16 +142,19 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			this.text = this.firstMarker;
 		}
 		if (text != null && text.length > 2) {
-                    Xop_root_tkn root = ctx.Tkn_mkr().Root(text);
-                    Xop_parser parser = ctx.Wiki().Parser_mgr().Main();
-                    parser.Parse_wtxt_to_wdom(root, ctx, ctx.App().Parser_mgr().Tkn_mkr(), text, Xop_parser_.Doc_bgn_bos);
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		ctx.Wiki().Html_mgr().Html_wtr().Write_doc(tmp_bfr, ctx, Xoh_wtr_ctx.Basic, text, root);
-                tmp_bfr.Delete_rng_to_bgn(3); // remove <p>
-                tmp_bfr.Delete_rng_to_end(-6); // remove \n</p>\n
-                text = tmp_bfr.To_bry_and_clear_and_rls();
+			text = Bry_.Replace(text, Byte_ascii.Underline, Byte_ascii.Space); // eek!!!????
+			Xop_root_tkn root = ctx.Tkn_mkr().Root(text);
+			Xop_parser parser = ctx.Wiki().Parser_mgr().Main();
+			parser.Parse_wtxt_to_wdom(root, ctx, ctx.App().Parser_mgr().Tkn_mkr(), text, Xop_parser_.Doc_bgn_bos);
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			ctx.Wiki().Html_mgr().Html_wtr().Write_doc(tmp_bfr, ctx, Xoh_wtr_ctx.Basic, text, root);
+			if (tmp_bfr.Bfr()[0] == '<' && tmp_bfr.Bfr()[1] == 'p') {
+				tmp_bfr.Delete_rng_to_bgn(3); // remove <p>
+				tmp_bfr.Delete_rng_to_end(-6); // remove \n</p>\n
+			}
+			text = tmp_bfr.To_bry_and_clear_and_rls();
 			//text = Bry_.Replace(text, Byte_ascii.Underline, Byte_ascii.Space);
-                }
+		}
                 
 		byte[] klass = Bry_.new_a7("mw-kartographer-maplink");
 		byte[] attrs = Bry_.Add(

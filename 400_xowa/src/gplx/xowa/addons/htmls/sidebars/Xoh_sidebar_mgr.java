@@ -25,14 +25,14 @@ public class Xoh_sidebar_mgr {
 		Bry_bfr bfr = Bry_bfr_.New();
 		if (top != null) {
 			Json_nde data = Json_nde.NewByVal();
-			data.AddKvNde("data-sidebar", top);
+			data.AddKvNde("data-portlets-sidebar", top);
 			Db_Nav_template.Render_Sidebar(wiki, bfr, data);
 		}
 		return bfr.To_bry_and_clear();
 	}
 	public void Build_json(Json_nde data) {
 		if (top != null)
-			data.AddKvNde("data-sidebar", top);
+			data.AddKvNde("data-portlets-sidebar", top);
 	}
 	public void Init_by_wiki() {
 		try {
