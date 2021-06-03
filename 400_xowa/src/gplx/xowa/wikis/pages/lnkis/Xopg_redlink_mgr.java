@@ -17,6 +17,7 @@ package gplx.xowa.wikis.pages.lnkis; import gplx.*; import gplx.xowa.*; import g
 import gplx.xowa.guis.cbks.js.*; import gplx.core.primitives.*;
 import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.langs.vnts.*; import gplx.xowa.xtns.proofreadPage.*;
+import gplx.xowa.wikis.data.Xow_db_mgr;
 public class Xopg_redlink_mgr implements Gfo_invk {
 	private final    Xoa_page page; private final    Xog_js_wkr js_wkr;
 	public Xopg_redlink_mgr(Xoa_page page, Xog_js_wkr js_wkr) {this.page = page; this.js_wkr = js_wkr;	}
@@ -50,7 +51,9 @@ public class Xopg_redlink_mgr implements Gfo_invk {
 		for (int i = 0; i < page_len; i += Batch_size) {
 			if (usr_dlg.Canceled()) return;
 			int end = i + Batch_size; if (end > page_len) end = page_len;
-			wiki.Data__core_mgr().Tbl__page().Select_in__ns_ttl(usr_dlg, lnki_hash, wiki.Ns_mgr(), Bool_.Y, i, end);
+                        Xow_db_mgr db_mgr = wiki.Data__core_mgr();
+                        if (db_mgr != null)
+			db_mgr.Tbl__page().Select_in__ns_ttl(usr_dlg, lnki_hash, wiki.Ns_mgr(), Bool_.Y, i, end);
 			// wiki.Db_mgr().Load_mgr().Load_by_ttls(usr_dlg, lnki_hash, Bool_.Y, i, end);
 		}
 

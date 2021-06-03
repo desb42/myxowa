@@ -25,7 +25,7 @@ public class Map_deg2dd_func extends Pf_func_base {
 		byte[] precision_bry = Pf_func_.Eval_val_or(ctx, src, caller, self, self.Args_len(), 0, null);
 		int prec = precision_bry == null ? -1 : Bry_.To_int_or(precision_bry, -1);
 		Map_math map_math = Map_math.Instance;
-		if (map_math.Ctor(coord, prec, Bry_.Empty, 2))
+		if (map_math.Ctor(coord, prec, Bry_.Empty, 2, null))
 			bfr.Add_double(map_math.Coord_dec());
 		else
 			map_math.Fail(ctx, src, self, bfr, this.Name());			

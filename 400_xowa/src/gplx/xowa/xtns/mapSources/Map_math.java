@@ -35,6 +35,7 @@ class Map_math {// REF.MW:MapSources_math.php
 	private byte dir_id;
 	private int prec;
 	private int step;
+        private byte[] glb_ttl;
 	public double Dec() {return dec;} private double dec;
 	public int Error() {return error;} private int error;
 	public double Coord_dec() {return coord_dec;} private double coord_dec;
@@ -43,7 +44,8 @@ class Map_math {// REF.MW:MapSources_math.php
 	public double Coord_sec() {return coord_sec;} private double coord_sec;
 	public byte[] Coord_dir_ns() {return coord_dir_ns;} private byte[] coord_dir_ns;
 	public byte[] Coord_dir_ew() {return coord_dir_ew;} private byte[] coord_dir_ew;
-	public boolean Ctor(byte[] input, int prec, byte[] dir, int until_step) {
+	public boolean Ctor(byte[] input, int prec, byte[] dir, int until_step, byte[] glb_ttl) {
+            this.glb_ttl = glb_ttl;
 		try {
 			New_coord(input, dir, prec);
 			if (until_step > 1 && error == 0)
@@ -213,7 +215,7 @@ class Map_math {// REF.MW:MapSources_math.php
 				if (word_idx > 2) {error = -4; return;}
 				switch (word_idx) {
 					case 0:
-						if (word_val <= -180 || word_val > 180) {error = -5; return;}
+						if (glb_ttl != null && glb_ttl[0] == 'Q' && glb_ttl[1] == '2' && (word_val <= -180 || word_val > 180)) {error = -5; return;} // only if earth!
 						rv[0] = word_val;
 						break;
 					case 1:

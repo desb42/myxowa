@@ -49,8 +49,8 @@ public class Map_geolink_func extends Pf_func_base {
 			}
 			Map_math mer_x_math = new Map_math();
 			Map_math mer_y_math = new Map_math();
-			boolean mer_x_pass = mer_x_math.Ctor(mer_x_val, prec, Map_math.Dir_lat_bry, 2);
-			boolean mer_y_pass = mer_y_math.Ctor(mer_y_val, prec, Map_math.Dir_long_bry, 2);
+			boolean mer_x_pass = mer_x_math.Ctor(mer_x_val, prec, Map_math.Dir_lat_bry, 2, null);
+			boolean mer_y_pass = mer_y_math.Ctor(mer_y_val, prec, Map_math.Dir_long_bry, 2, null);
 			if (!mer_x_pass) mer_x_math.Fail(ctx, src, self, bfr, this.Name());				
 			if (!mer_y_pass) mer_y_math.Fail(ctx, src, self, bfr, this.Name());
 			Object[] args = new Object[6];

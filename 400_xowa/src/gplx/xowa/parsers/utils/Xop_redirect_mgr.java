@@ -14,7 +14,10 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.parsers.utils; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
-import gplx.langs.htmls.*; import gplx.langs.htmls.encoders.*; import gplx.xowa.htmls.*; import gplx.xowa.htmls.hrefs.*; import gplx.xowa.parsers.tmpls.*;
+import gplx.langs.htmls.*; import gplx.langs.htmls.encoders.*;import gplx.langs.jsons.Json_doc;
+import gplx.langs.jsons.Json_nde;
+import gplx.langs.jsons.Json_parser;
+ import gplx.xowa.htmls.*; import gplx.xowa.htmls.hrefs.*; import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.langs.kwds.*;
 import gplx.xowa.wikis.pages.redirects.*;
 public class Xop_redirect_mgr {
@@ -35,10 +38,36 @@ public class Xop_redirect_mgr {
 		return Extract_redirect(src, src.length);
 	}
 	private int ttl_bgn, ttl_end; // used by Adjust_redirect
+	private final Json_parser jsonParser = new Json_parser();
+	private static final byte[] Bry__redirect = Bry_.new_a7("redirect"); // repeated from Wbase_doc_mgr
 	public Xoa_ttl Extract_redirect(byte[] src, int src_len) {	// NOTE: this proc is called by every page. be careful of changes; DATE:2014-07-05
 		if (src_len == 0) return Redirect_null_ttl;
 		int bgn = Bry_find_.Find_fwd_while_not_ws(src, 0, src_len);
 		if (bgn == src_len) return Redirect_null_ttl; // article is entirely whitespace
+		// check for json (wikidata redirect)
+		if (src[bgn] == '{') {
+			if (src_len - bgn < 100) { // only small json data
+				if (bgn > 0)
+					src = Bry_.Mid(src, bgn);
+				Json_doc jdoc = null;
+				// only real json
+				try {
+					jdoc = jsonParser.Parse(src);
+				}
+				catch (Exception e) {
+					return Redirect_null_ttl;
+				}
+				if (jdoc != null) {
+					Json_nde jdoc_root = jdoc.Root_nde();
+					byte[] redirect_ttl = jdoc_root.Get_as_bry_or(Bry__redirect, null);
+					if (redirect_ttl != null) {
+						return Xoa_ttl.Parse(wiki, redirect_ttl);
+					}
+				}
+			}
+			else // cannot be redirect
+				return Redirect_null_ttl;
+		}
 		int kwd_end = Xop_redirect_mgr_.Get_kwd_end_or_end(src, bgn, src_len);
 		if (kwd_end == src_len) return Redirect_null_ttl;
 		if (redirect_hash == null) redirect_hash = Xol_kwd_mgr.hash_(wiki.Lang().Kwd_mgr(), Xol_kwd_grp_.Id_redirect);

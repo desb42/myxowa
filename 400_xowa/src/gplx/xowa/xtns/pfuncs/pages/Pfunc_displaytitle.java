@@ -88,6 +88,8 @@ public class Pfunc_displaytitle extends Pf_func_base {
 					// &#39;
 					// &#8201; (&thinsp) -> ' '
 					// &#8202; (Hair Space) -> ' '
+					// &#8206; (Left-To-Right Mark) -> ''
+					// &#8207; (Right-To-Left Mark) -> ''
 					// &#8211; (&ndash;) -> '-'
 					// &#8214; (&mdash;) -> '-'
 					// &#8722; (&minus;) -> '-'
@@ -135,15 +137,32 @@ public class Pfunc_displaytitle extends Pf_func_base {
 												b = src[cpos++];
 												switch(b) {
 													case '2':
-														if ((src[cpos] == '0' && src[cpos+1] == '1') || // &#8201; (&thinsp) -> ' '
-														    (src[cpos] == '0' && src[cpos+1] == '2')) { // &#8202; (Hair Space) -> ' '
-															size = 6;
-															rb = Byte_ascii.Space;
-														}
-														else if ((src[cpos] == '1' && src[cpos+1] == '1') || // &#8211; (&ndash;) -> '-'
-														         (src[cpos] == '1' && src[cpos+1] == '4')) { // &#8214; (&mdash;) -> '-'
-															size = 6;
-															rb = Byte_ascii.Dash;
+														b = src[cpos++];
+														switch(b) {
+															case '0':
+																b = src[cpos++];
+																switch(b) {
+																	case '1': // &#8201; (&thinsp) -> ' '
+																	case '2': // &#8202; (Hair Space) -> ' '
+																		size = 6;
+																		rb = Byte_ascii.Space;
+																		break;
+																	case '6': // &#8206; (Left-To-Right Mark) -> ''
+																	case '7': // &#8207; (Right-To-Left Mark) -> ''
+																		size = 6;
+																		break;
+																}
+																break;
+															case '1':
+																b = src[cpos++];
+																switch(b) {
+																	case '1': // &#8211; (&ndash;) -> '-'
+																	case '4': // &#8214; (&mdash;) -> '-'
+																		size = 6;
+																		rb = Byte_ascii.Dash;
+																		break;
+																}
+																break;
 														}
 														break;
 													case '7':

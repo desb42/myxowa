@@ -133,20 +133,24 @@ public class Wbase_doc_mgr {
 				Xoae_page page = wbase_mgr.Wdata_wiki().Data_mgr().Load_page_by_ttl(cur_ttl);
 				if (!page.Db().Page().Exists()) break;
 
+				byte[] json_text = page.Db().Text().Text_bry();
 				// parse jdoc
-				Json_doc jdoc = jsonParser.Parse(page.Db().Text().Text_bry());
+				Json_doc jdoc = jsonParser.Parse(json_text);
 				if (jdoc == null) {
 					Gfo_usr_dlg_.Instance.Warn_many("", "", "invalid jdoc for ttl: orig=~{0} cur=~{1}", ttl_bry, cur_ttl_bry);
 					break;
 				}
 
 				// check for redirect; EX: {"entity":"Q22350516","redirect":"Q21006972"}; PAGE:fr.w:Tour_du_Táchira_2016; DATE:2016-08-13
-				Json_nde jdoc_root = jdoc.Root_nde();
-				byte[] redirect_ttl = jdoc_root.Get_as_bry_or(Bry__redirect, null);
-				if (redirect_ttl != null) {
-					cur_ttl_bry = redirect_ttl;
-					load_count++;
-					continue;
+				// only if short enough
+				if (json_text.length < 100) {
+					Json_nde jdoc_root = jdoc.Root_nde();
+					byte[] redirect_ttl = jdoc_root.Get_as_bry_or(Bry__redirect, null);
+					if (redirect_ttl != null) {
+						cur_ttl_bry = redirect_ttl;
+						load_count++;
+						continue;
+					}
 				}
 
 				// is json doc, and not a redirect; return

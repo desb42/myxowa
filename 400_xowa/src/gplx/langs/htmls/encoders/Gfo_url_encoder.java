@@ -28,7 +28,8 @@ public class Gfo_url_encoder implements Url_encoder_interface {	// TS; Gfo_url_e
 	public void		Encode(Bry_bfr bfr, byte[] bry, int bgn, int end) {
 		for (int i = bgn; i < end; ++i) {
 			byte b = bry[i];
-			if (anchor_encoder != null && (b == Byte_ascii.Hash || b == Byte_ascii.Question)) {
+                        // only encode anchor if '#' NOT '?' 20210603 eg en.wikiversity.org/wiki/Template:?
+			if (anchor_encoder != null && (b == Byte_ascii.Hash /*|| b == Byte_ascii.Question*/)) {
 				bfr.Add_byte(Byte_ascii.Hash);
 				anchor_encoder.Encode(bfr, bry, i + 1, end);
 				break;

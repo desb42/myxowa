@@ -133,55 +133,59 @@ public class Xob_xml_parser {
 		return -1;
 	}	boolean gt_was_inline = false;
 	static final String GRP_KEY = "xowa.bldrs.xmls.xml_parser";
+
+	public static int Model_unknown = 0
+	, Model_wikitext = 1      // <model>wikitext</model>
+	, Model_scribunto = 2     // <model>Scribunto</model>
+	, Model_css = 3           // <model>css</model>
+	, Model_js = 4            // <model>javascript</model>
+	, Model_sanitized_css = 5 // <model>sanitized-css</model>
+	, Model_mmlc = 6          // <model>MassMessageListContent</model> // species
+	, Model_flow_board = 7    // <model>flow-board</model> // species, wikidata
+	, Model_pr_page = 8       // <model>proofread-page</model> // wikisource
+	, Model_entityschema = 9  // <model>EntitySchema</model> // wikidata
+	, Model_campaign = 10     // <model>Campaign</model> // commons
+	, Model_tabjson = 11      // <model>Tabular.JsonConfig</model> // commons
+	, Model_bad = 12
+//
+	, Format_wiki = 1         // <format>text/x-wiki</format>
+	, Format_plain = 2        // <format>text/plain</format>
+	, Format_css = 3          // <format>text/css</format>
+	, Format_js = 4           // <format>text/javascript</format>
+	, Format_bad = 5
+	;
 }
 class Xob_xml_parse_model_format {
-
-//1      <model>wikitext</model>
-//2      <model>Scribunto</model>
-//3      <model>css</model>
-//4      <model>javascript</model>
-//5      <model>sanitized-css</model>
-//6      <model>MassMessageListContent</model> // species
-//7      <model>flow-board</model> // species, wikidata
-//8      <model>proofread-page</model> // wikisource
-//9      <model>EntitySchema</model> // wikidata
-//10     <model>Campaign</model> // commons
-//11     <model>Tabular.JsonConfig</model> // commons
-//
-//1      <format>text/x-wiki</format>
-//2      <format>text/plain</format>
-//3      <format>text/css</format>
-//4      <format>text/javascript</format>
 
 	public int Parse_model(byte[] src, int bgn, int end, byte[] ttl) {
 		byte b = src[bgn];
 		switch (b) {
-			case 'w': return 1;
-			case 'S': return 2;
-			case 'c': return 3;
-			case 'j': return 4;
-			case 's': return 5;
-			case 'M': return 6;
-			case 'f': return 7;
-			case 'p': return 8;
-			case 'E': return 9;
-			case 'C': return 10; // Campaign
-			case 'T': return 11; // Tabular.JsonConfig
+			case 'w': return Xob_xml_parser.Model_wikitext;
+			case 'S': return Xob_xml_parser.Model_scribunto;
+			case 'c': return Xob_xml_parser.Model_css;
+			case 'j': return Xob_xml_parser.Model_js;
+			case 's': return Xob_xml_parser.Model_sanitized_css;
+			case 'M': return Xob_xml_parser.Model_mmlc;
+			case 'f': return Xob_xml_parser.Model_flow_board;
+			case 'p': return Xob_xml_parser.Model_pr_page;
+			case 'E': return Xob_xml_parser.Model_entityschema;
+			case 'C': return Xob_xml_parser.Model_campaign; // Campaign
+			case 'T': return Xob_xml_parser.Model_tabjson; // Tabular.JsonConfig
 			default:
 				Gfo_usr_dlg_.Instance.Log_many("", "", "Model unknown: model=~{0} ttl=~{1}", Bry_.Mid(src, bgn, end), ttl);
-				return 12;
+				return Xob_xml_parser.Model_bad;
 		}
 	}
 	public int Parse_format(byte[] src, int bgn, int end, byte[] ttl) {
 		byte b = src[bgn + 5];
 		switch (b) {
-			case 'x': return 1;
-			case 'p': return 2;
-			case 'c': return 3;
-			case 'j': return 4;
+			case 'x': return Xob_xml_parser.Format_wiki;
+			case 'p': return Xob_xml_parser.Format_plain;
+			case 'c': return Xob_xml_parser.Format_css;
+			case 'j': return Xob_xml_parser.Format_js;
 			default:
 				Gfo_usr_dlg_.Instance.Log_many("", "", "Format unknown: format=~{0} ttl=~{1}", Bry_.Mid(src, bgn, end), ttl);
-				return 5;
+				return Xob_xml_parser.Format_bad;
 		}
 	}
 }

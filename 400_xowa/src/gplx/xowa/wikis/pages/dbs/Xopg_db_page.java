@@ -37,6 +37,8 @@ public class Xopg_db_page {
 	public int			Redirect_to_id()	{return redirect_to_id;}	private int redirect_to_id;
 	public int			Score()				{return score;}				private int score;
 	public int		Model_format()				{return model_format;}				private int model_format;
+	public int		Format()				{return model_format & 0x0f;}
+	public int		Model()				{return (model_format >> 4);}
 
 	public void Exists_y_()							{this.Exists_(Bool_.Y);}
 	public void Exists_n_()							{this.Exists_(Bool_.N);}

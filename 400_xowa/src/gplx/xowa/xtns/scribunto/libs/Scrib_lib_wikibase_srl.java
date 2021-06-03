@@ -41,6 +41,7 @@ import gplx.xowa.xtns.wbases.core.Wdata_dict_langtext;
 import gplx.xowa.xtns.wbases.core.Wdata_dict_sitelink;
 import gplx.xowa.xtns.wbases.core.Wdata_langtext_itm;
 import gplx.xowa.xtns.wbases.core.Wdata_sitelink_itm;
+import gplx.xowa.xtns.wbases.dbs.Xowb_prop_tbl_itm;
 import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v2;
 import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr;
 
@@ -225,9 +226,14 @@ public class Scrib_lib_wikibase_srl {
 		rv[1 + snak_is_valued_adj] = Keyval_.new_("snaktype", Wbase_claim_value_type_.Reg.Get_str_or_fail(itm.Snak_tid()));
 
 		// get prop datatype; NOTE: datatype needed for Modules; PAGE:eo.w:WikidataKoord; DATE:2015-11-08
-		String datatype = prop_mgr.Get_or_null(pid, page_url);
-		if (datatype == null)	// if null, fallback to value based on tid; needed for (a) tests and (b) old wbase dbs that don't have wbase_prop tbl; DATE:2016-12-01
+		Xowb_prop_tbl_itm tbl_itm = prop_mgr.Get_or_null(pid, page_url);
+		String datatype;
+		if (tbl_itm == null) {	// if null, fallback to value based on tid; needed for (a) tests and (b) old wbase dbs that don't have wbase_prop tbl; DATE:2016-12-01
 			datatype = Wbase_claim_type_.Get_scrib_or_unknown(itm.Val_tid());
+		}
+		else {
+			datatype = tbl_itm.Key();
+		}
 		rv[2 + snak_is_valued_adj] = Keyval_.new_("datatype", datatype);
 		return rv;
 	}

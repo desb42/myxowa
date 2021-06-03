@@ -223,9 +223,10 @@ public class Db_wikistrip {
 			return true;
 		}
 		else if (sz > 10 && (
-		  (((src[bgn+1] | 32) == 'c') && src[bgn+9] == ':') // Category:
+		  (  ((src[bgn+1] | 32) == 'c') && src[bgn+8] == 'y' && src[bgn+9] == ':') // Category:
 		  || (src[bgn+1] == -41 && src[bgn+9] == ':') // %d7%a7%d7%95%d7%91%d7%a5: hebrew
-		  )) {
+		  || ((src[bgn+1] | 32) == 'c') && src[bgn+10] == 'e' && src[bgn+11] == ':') // Cat%c3%a9gorie: (french)
+		  ) {
 			return true;
 		}
 		return false;
@@ -523,8 +524,13 @@ public class Db_wikistrip {
 					if ((pos > 1 && src[pos-2] == '\n') || (pos == 1)) { // '\n='
 						bfr.Add_mid(src, startpos, pos-1);
 						while (pos + 1 < src_len) { // find next '=\n'
-							if (src[pos++] == '=' && src[pos] == '\n')
-								break;
+							if (src[pos++] == '=') {
+								// check for space
+								while (src[pos] == ' ' || src[pos] == '\t')
+									pos++;
+								if (src[pos] == '\n')
+									break;
+							}
 						}
 						startpos = pos;
 						if (firstparaonly)

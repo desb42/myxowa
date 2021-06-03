@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -18,8 +18,10 @@ import gplx.core.brys.fmtrs.*;
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.claims.itms.times.*; import gplx.xowa.xtns.wbases.claims.enums.*; import gplx.xowa.xtns.wbases.claims.itms.*; import gplx.xowa.xtns.scribunto.*; import gplx.xowa.xtns.wbases.hwtrs.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.commas.*;
 import gplx.xowa.parsers.*;
+import gplx.xowa.xtns.wbases.dbs.Xowb_prop_tbl_itm;
+import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr;
 public class Wdata_prop_val_visitor_ {
-	public static String Render_snaks(Xowe_wiki wiki, byte[] page_url, Keyval[] snaks) {
+	public static String Render_snaks(Xowe_wiki wiki, byte[] page_url, Keyval[] snaks, boolean format) {
 		String rv = null;
 		int len = snaks.length;
 		Wdata_wiki_mgr wdata_mgr = wiki.Appe().Wiki_mgr().Wdata_mgr();
@@ -27,23 +29,23 @@ public class Wdata_prop_val_visitor_ {
 		try {
 			for (int i = 0; i < len; ++i) {
 				Keyval[] itm = (Keyval[])snaks[i].Val();
-				Render_snak(bfr, wdata_mgr, wiki, wiki.Lang(), page_url, itm, i, len);
+				Render_snak(bfr, wdata_mgr, wiki, wiki.Lang(), page_url, itm, i, len, format);
 			}
 			wiki.Lang().Comma_wkr().Comma__end(bfr);
 			rv = bfr.To_str_and_clear();
 		} finally {bfr.Mkr_rls();}
 		return rv;
 	}
-	public static String Render_snak(Wdata_wiki_mgr wdata_mgr, Xowe_wiki wiki, byte[] page_url, Keyval[] props) {
+	public static String Render_snak(Wdata_wiki_mgr wdata_mgr, Xowe_wiki wiki, byte[] page_url, Keyval[] props, boolean format) {
 		String rv = null;
 		Bry_bfr bfr = wiki.Utl__bfr_mkr().Get_b512();
 		try {
-			Render_snak(bfr, wdata_mgr, wiki, wiki.Lang(), page_url, props, 0, 1);
+			Render_snak(bfr, wdata_mgr, wiki, wiki.Lang(), page_url, props, 0, 1, format);
 			rv = bfr.To_str_and_clear();
 		} finally {bfr.Mkr_rls();}
 		return rv;
 	}
-	private static void Render_snak(Bry_bfr bfr, Wdata_wiki_mgr wdata_mgr, Xowe_wiki wiki, Xol_lang_itm lang, byte[] page_url, Keyval[] props, int sub_idx, int sub_len) {
+	private static void Render_snak(Bry_bfr bfr, Wdata_wiki_mgr wdata_mgr, Xowe_wiki wiki, Xol_lang_itm lang, byte[] page_url, Keyval[] props, int sub_idx, int sub_len, boolean format) {
 		// loop props to get (a) snaktype; (b) property; (c) datavalue
 		byte snak_tid = Byte_.Max_value_127;
 		int pid = -1;
@@ -84,15 +86,45 @@ public class Wdata_prop_val_visitor_ {
 
 		// write claim
 		switch (tid) {
-			case Wbase_claim_type_.Tid__entity:				Write_entity			(bfr, wdata_mgr, lang, page_url, (Keyval[])val_obj); break;
-			case Wbase_claim_type_.Tid__string:				Wdata_prop_val_visitor.Write_str(bfr, To_bry_by_str(val_obj)); break;
-			case Wbase_claim_type_.Tid__time:				Write_time				(bfr, wdata_mgr, wiki, page_url, pid, snak_tid, (Keyval[])val_obj); break;
-			case Wbase_claim_type_.Tid__globecoordinate:	Write_geo				(bfr, wdata_mgr, lang, page_url, (Keyval[])val_obj); break;
-			case Wbase_claim_type_.Tid__quantity:			Write_quantity			(bfr, wdata_mgr, lang, page_url, (Keyval[])val_obj); break;
-			case Wbase_claim_type_.Tid__monolingualtext:	Write_langtext			(bfr, page_url, (Keyval[])val_obj); break;
-			default:										throw Err_.new_unhandled_default(tid);
+			case Wbase_claim_type_.Tid__entity:				Write_entity(bfr, wdata_mgr, lang, page_url, (Keyval[])val_obj); break;
+			case Wbase_claim_type_.Tid__string:
+				byte[] txt = To_bry_by_str(val_obj);
+				if (format) {
+					Wbase_prop_mgr prop_mgr = wiki.Appe().Wiki_mgr().Wdata_mgr().Prop_mgr();
+					Xowb_prop_tbl_itm tbl_itm = prop_mgr.Get_or_null("p" + Integer.toString(pid), page_url);
+					byte[] extern = tbl_itm.Data();
+					txt = replace_dollar_1(txt, extern);
+				}
+				Wdata_prop_val_visitor.Write_str(bfr, txt);
+				break;
+			case Wbase_claim_type_.Tid__time:				Write_time(bfr, wdata_mgr, wiki, page_url, pid, snak_tid, (Keyval[])val_obj); break;
+			case Wbase_claim_type_.Tid__globecoordinate:	Write_geo(bfr, wdata_mgr, lang, page_url, (Keyval[])val_obj); break;
+			case Wbase_claim_type_.Tid__quantity:			Write_quantity(bfr, wdata_mgr, lang, page_url, (Keyval[])val_obj); break;
+			case Wbase_claim_type_.Tid__monolingualtext:	Write_langtext(bfr, page_url, (Keyval[])val_obj); break;
+			default:
+				throw Err_.new_unhandled_default(tid);
 		}
 		lang.Comma_wkr().Comma__itm(bfr, sub_idx, sub_len);
+	}
+	private static byte[] replace_dollar_1(byte[] txt, byte[] extern) {
+		if (extern == null || extern.length == 0) return txt;
+		int len = extern.length;
+		Bry_bfr bfr = Bry_bfr_.New();
+		bfr.Add_byte(Byte_ascii.Brack_bgn);
+		int upto = 0;
+		for (int i = 0; i < len - 1; i++) {
+			if (extern[i] == '$' && extern[i+1] == '1') {
+				bfr.Add_mid(extern, upto, i);
+				bfr.Add(txt);
+				i += 1;
+				upto = i + 1; 
+			}
+		}
+		bfr.Add_mid(extern, upto, len);
+		bfr.Add_byte(Byte_ascii.Space);
+		bfr.Add(txt);
+		bfr.Add_byte(Byte_ascii.Brack_end);
+		return bfr.To_bry();
 	}
 	private static void Write_entity(Bry_bfr bfr, Wdata_wiki_mgr wdata_mgr, Xol_lang_itm lang, byte[] page_url, Keyval[] kvs) {
 		byte entity_tid = Byte_.Max_value_127;

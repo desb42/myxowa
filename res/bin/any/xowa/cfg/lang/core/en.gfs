@@ -1677,7 +1677,29 @@ databaseerror-textcl|A database query error has occurred.
 databaseerror-text|A database query error has occurred.\nThis may indicate a bug in the software.
 databaseerror|Database error
 databasenotlocked|The database is not locked.
+datatypes-type-boolean|Boolean
+datatypes-type-commonsMedia|Commons media file
+datatypes-type-entity-schema|Entity Schema
+datatypes-type-external-id|External identifier
+datatypes-type-geo-shape|Geographic shape
+datatypes-type-globe-coordinate|Geographic coordinates
+datatypes-type-math|Mathematical expression
+datatypes-type-mediawiki-title|MediaWiki title
+datatypes-type-monolingualtext|Monolingual text
+datatypes-type-multilingualtext|Multilingual text
+datatypes-type-musical-notation|Musical Notation
+datatypes-type-number|Number
+datatypes-type-quantity|Quantity
+datatypes-type-string|String
+datatypes-type-tabular-data|Tabular data
+datatypes-type-time|Point in time
+datatypes-type-unknown|Unspecified
 datatypes-type-url|URL
+datatypes-type-wikibase-form|Form
+datatypes-type-wikibase-item|Item
+datatypes-type-wikibase-lexeme|Lexeme
+datatypes-type-wikibase-property|Property
+datatypes-type-wikibase-sense|Sense
 datedefault|No preference
 days-abbrev|~{0} d
 days|{{PLURAL:~{0}\u007C~{0} day\u007C~{0} days}}
@@ -5685,31 +5707,44 @@ wikibase-label-edit-placeholder-language-aware|enter a label in ~{0}
 wikibase-label-edit-placeholder|enter a label
 wikibase-label-empty|No label defined
 wikibase-label-input-help-message|Enter the label of this entity in ~{0}.
-wikibase-listdatatypes-commonsmedia-body|Link to files stored at Wikimedia Commons. When a value is entered, the "File" namespace on Commons will be searched for matching files.
+wikibase-listdatatypes-commonsmedia-body|Link to files stored at Wikimedia Commons. When a value is entered, the \"File\" namespace on Commons will be searched for matching files.
 wikibase-listdatatypes-commonsmedia-head|Commons media
-wikibase-listdatatypes-globe-coordinate-body|Literal data for a geographical position given as a latitude-longitude pair in gms or decimal degrees for the given stellar body. Defaults to "Earth" and then "WGS84". It adds a resolution and range.\n* latitude â€“ implicit first part (float, dms, dm, dd) of the coordinate string, direction is either given by prefixed sign or by postfixed N/S\n* longitude â€“ implicit second part (float, dms, dm, dd) of the coordinate string, direction is either given by prefixed sign or by postfixed E/W\n* globe â€“ explicit (?) data value, given as stellar body that defaults to Earth "http://www.wikidata.org/entity/Q2"\n* precision - numeric precision of the coordinate
+wikibase-listdatatypes-entity-schema-body|Link to Entity Schemas stored in the configured namespace in the same wiki. The value must be without the \"EntitySchema:\" namespace prefix
+wikibase-listdatatypes-entity-schema-head|Entity Schema
+wikibase-listdatatypes-external-id-body|Literal data field for an external identifier. External identifiers may automatically be linked to an authoritative resource for display.
+wikibase-listdatatypes-external-id-head|External identifier
+wikibase-listdatatypes-geo-shape-body|Link to geographic map data stored on Wikimedia Commons (or other configured wiki). See \"https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Map_Data\" for more documentation about map data.
+wikibase-listdatatypes-geo-shape-head|Geographic shape
+wikibase-listdatatypes-globe-coordinate-body|Literal data for a geographical position given as a latitude-longitude pair in gms or decimal degrees for the given stellar body. Defaults to \"Earth\" and then \"WGS84\". It adds a resolution and range.\n* latitude – implicit first part (float, dms, dm, dd) of the coordinate string, direction is either given by prefixed sign or by postfixed N/S\n* longitude – implicit second part (float, dms, dm, dd) of the coordinate string, direction is either given by prefixed sign or by postfixed E/W\n* globe – explicit (?) data value, given as stellar body that defaults to Earth \"http://www.wikidata.org/entity/Q2\"\n* precision - numeric precision of the coordinate
 wikibase-listdatatypes-globe-coordinate-head|Globe coordinate
-wikibase-listdatatypes-intro|This is a list of all data types available on this installation:
-wikibase-listdatatypes-monolingual-text-body|Literal data field for a string that is not translated into other languages. This type of string is defined once and reused across all languages. Typical use is a geographical names written in the local language, an identifier of some kind, a chemical formula or a Latin scientific name.\n* language â€“ explicit value for identifying the language for the text part\n* value â€“ explicit value for the language specific variant string
-wikibase-listdatatypes-monolingual-text-head|Monolingual text
-wikibase-listdatatypes-monolingualtext-body|Literal data field for a string that is not translated into other languages. This type of string is defined once and reused across all languages. Typical use is a geographical names written in the local language, an identifier of some kind, a chemical formula or a Latin scientific name.\n* language â€“ explicit value for identifying the language for the text part\n* value â€“ explicit value for the language specific variant string
+wikibase-listdatatypes-math-body|Literal data field for mathematical expressions, formula, equations and such, expressed in a variant of LaTeX.
+wikibase-listdatatypes-math-head|Mathematical expression
+wikibase-listdatatypes-monolingualtext-body|Literal data field for a string that is not translated into other languages. This type of string is defined once and reused across all languages. Typical use is a geographical names written in the local language, an identifier of some kind, a chemical formula or a Latin scientific name.\n* language – explicit value for identifying the language for the text part\n* value – explicit value for the language specific variant string
 wikibase-listdatatypes-monolingualtext-head|Monolingual text
-wikibase-listdatatypes-multilingual-text-body|Literal data field for a string that must be translated into other languages. Typical use is an entity name of global interest that has non-local written forms. Those can differ both in languages and script systems.\n* language â€“ explicit value for identifying the language for the text part\n* value â€“ explicit value for the language specific variant string
-wikibase-listdatatypes-multilingual-text-head|Multilingual text
-wikibase-listdatatypes-multilingualtext-body|Literal data field for a string that must be translated into other languages. Typical use is an entity name of global interest that has non-local written forms. Those can differ both in languages and script systems.\n* language â€“ explicit value for identifying the language for the text part\n* value â€“ explicit value for the language specific variant string
+wikibase-listdatatypes-multilingualtext-body|Literal data field for a string that must be translated into other languages. Typical use is an entity name of global interest that has non-local written forms. Those can differ both in languages and script systems.\n* language – explicit value for identifying the language for the text part\n* value – explicit value for the language specific variant string
 wikibase-listdatatypes-multilingualtext-head|Multilingual text
-wikibase-listdatatypes-quantity-body|Literal data field for a quantity that relates to some kind of well-defined unit. The actual unit goes in the data values that is entered.\n* amount â€“ implicit part of the string (mapping of unit prefix is unclear)\n* unit â€“ implicit part of the string that defaults to "1" (mapping to standardizing body is unclear)\n* upperbound - quantity's upper bound\n* lowerbound - quantity's lower bound
+wikibase-listdatatypes-musical-notation-body|Literal data field for a musical score written in LilyPond notation.
+wikibase-listdatatypes-musical-notation-head|Musical Notation
+wikibase-listdatatypes-quantity-body|Literal data field for a quantity that relates to some kind of well-defined unit. The actual unit goes in the data values that is entered.\n* amount – implicit part of the string (mapping of unit prefix is unclear)\n* unit – implicit part of the string that defaults to \"1\" (mapping to standardizing body is unclear)\n* upperbound - quantity's upper bound\n* lowerbound - quantity's lower bound
 wikibase-listdatatypes-quantity-head|Quantity
-wikibase-listdatatypes-string-body|Literal data field for a string of glyphs. Typical use are identifiers that have written forms which do not depend on the language of the reader.\n* value â€“ explicit value for the language specific variant string
+wikibase-listdatatypes-string-body|Literal data field for a string of glyphs. Typical use are identifiers that have written forms which do not depend on the language of the reader.\n* value – explicit value for the language specific variant string
 wikibase-listdatatypes-string-head|String
-wikibase-listdatatypes-time-body|Literal data field for a time value. Given as a time with some precision and boundaries. The time is always saved internally in the Proleptic Gregorian format, but can use other formats during parsing and formatting.\n* time â€“ explicit value for point in time, represented as a timestamp resembling ISO 8601, e.g. +2013-01-01T00:00:00Z. The year is always signed and padded to have between 1 and 16 digits.\n* timezone â€“ explicit value as a signed integer. Timezone information as an offset from UTC in minutes.\n* before â€“ explicit integer value for how many units after the given time it could be. The unit is given by the precision.\n* after â€“ explicit integer value for how many units before the given time it could be. The unit is given by the precision.\n* precision â€“ explicit value encoded in a shortint. The numbers have the following meaning: 0 - billion years, 1 - hundred million years, ..., 6 - millennium, 7 - century, 8 - decade, 9 - year, 10 - month, 11 - day, 12 - hour, 13 - minute, 14 - second.\n* calendarmodel â€“ explicit value given as a URI. It will identify the calendar model that should be used to display this time value.
+wikibase-listdatatypes-tabular-data-body|Link to tabular data stored on Wikimedia Commons (or other configured wiki). See \"https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Tabular_Data\" for more documentation about tabular data.
+wikibase-listdatatypes-tabular-data-head|Tabular data
+wikibase-listdatatypes-time-body|Literal data field for a point in time. Given as a date and time with some precision and boundaries. The time is saved internally in the specified calendar model.\n* time – explicit value for point in time, represented as a timestamp resembling ISO 8601, e.g. +2013-01-01T00:00:00Z. The year is always signed and padded to have between 4 and 16 digits.\n* timezone – explicit value as a signed integer. Timezone information as an offset from UTC in minutes.\n* before – explicit integer value for how many units after the given time it could be. The unit is given by the precision.\n* after – explicit integer value for how many units before the given time it could be. The unit is given by the precision.\n* precision – explicit value encoded in a shortint. The numbers have the following meaning: 0 - billion years, 1 - hundred million years, ..., 6 - millennium, 7 - century, 8 - decade, 9 - year, 10 - month, 11 - day, 12 - hour, 13 - minute, 14 - second.\n* calendarmodel – explicit value given as a URI. It identifies the calendar model of the timestamp.
 wikibase-listdatatypes-time-head|Time
 wikibase-listdatatypes-url-body|Literal data field for a URL. URLs are restricted to the protocols also supported for external links in wikitext.
 wikibase-listdatatypes-url-head|URL
-wikibase-listdatatypes-wikibase-item-body|Link to other items at the project. When a value is entered, the project's "Item" namespace will be searched for matching items.
+wikibase-listdatatypes-wikibase-form-body|Link to forms on the project. When a value is entered, the project's \"Lexeme\" namespace will be searched for matching forms.
+wikibase-listdatatypes-wikibase-form-head|Form
+wikibase-listdatatypes-wikibase-item-body|Link to other Items on the project. When a value is entered, the project's \"Item\" namespace will be searched for matching Items.
 wikibase-listdatatypes-wikibase-item-head|Item
-wikibase-listdatatypes-wikibase-property-body|Link to properties at the project. When a value is entered, the project's "Property" namespace will be searched for matching properties.
+wikibase-listdatatypes-wikibase-lexeme-body|Link to lexemes on the project. When a value is entered, the project's \"Lexeme\" namespace will be searched for matching lexemes.
+wikibase-listdatatypes-wikibase-lexeme-head|Lexeme
+wikibase-listdatatypes-wikibase-property-body|Link to Properties on the project. When a value is entered, the project's \"Property\" namespace will be searched for matching Properties.
 wikibase-listdatatypes-wikibase-property-head|Property
+wikibase-listdatatypes-wikibase-sense-body|Link to senses on the project. When a value is entered, the project's \"Lexeme\" namespace will be searched for matching senses.
+wikibase-listdatatypes-wikibase-sense-head|Sense
 wikibase-mergeitems-fromid|The id to merge from
 wikibase-mergeitems-intro|If you merge two items, all labels, descriptions, aliases, sitelinks and statements will be moved from one item to the other.
 wikibase-mergeitems-submit|Merge items

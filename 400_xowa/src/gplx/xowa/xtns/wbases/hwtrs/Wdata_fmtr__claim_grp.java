@@ -71,18 +71,20 @@ class Wdata_fmtr__claim_tbl implements gplx.core.brys.Bfr_arg {
 			int pid = grp.Id();
 			byte[] pid_lbl = lbl_mgr.Get_text__pid(pid);
 			fmtr_row.Init_by_grp(ttl, grp);
-			fmtr.Bld_bfr_many(bfr, pid, pid_lbl, fmtr_row);				
+			fmtr.Bld_bfr_many(bfr, pid, pid_lbl, fmtr_row);
 		}
 	}
+	// https://github.com/wikimedia/Wikibase/view/resources/templates.php L55-63
 	private Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "            <div id=\"P~{pid}\" class=\"wikibase-statementgroupview\">"
-	, "              <div class=\"wikibase-statementgroupview-property\">"
-	, "                <div class=\"wikibase-statementgroupview-property-label\" dir=\"auto\">"
-	, "                  P~{pid}&nbsp;-&nbsp;<a href=\"/wiki/Property:P~{pid}\" title=\"Property:P~{pid}\">~{pid_lbl}</a>"
-	, "                </div>"
-	, "              </div>~{itms}"
-	, "            </div>"
+	, "<div class=\"wikibase-statementgroupview\" id=\"P~{pid}\" data-property-id=\"P~{pid}\">"
+	, "  <div class=\"wikibase-statementgroupview-property\">"
+	, "    <div class=\"wikibase-statementgroupview-property-label\" dir=\"auto\">"
+	, "      P~{pid}&nbsp;-&nbsp;<a href=\"/wiki/Property:P~{pid}\" title=\"Property:P~{pid}\">~{pid_lbl}</a>"
+	, "    </div>"
+	, "  </div>"
+	, "  ~{itms}"
+	, "</div>"
 	), "pid", "pid_lbl", "itms");
 }
 class Wdata_fmtr__claim_row implements gplx.core.brys.Bfr_arg {

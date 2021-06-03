@@ -217,15 +217,15 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 		int numDigits = (int)Math_.Ceil(-Math.log10(((double)(unitsPerDegree) * precision)));
 		numDigits += 4; // +4 b/c Map_dd2dms_func.Deg_to_dms needs 4 places to evaluate MS while fracs are evaulated as numDigits
 
+		byte[] glb_ttl = Wdata_lbl_itm.Extract_ttl(glb);
 		// write lat / lng
-		Map_dd2dms_func.Deg_to_dms_lat_long(bfr, Bool_.Y, Bry_.new_a7(Double_.To_str(latitude)), Bry_.new_a7(Double_.To_str(longitude)), numDigits);
+		Map_dd2dms_func.Deg_to_dms_lat_long(bfr, Bool_.Y, Bry_.new_a7(Double_.To_str(latitude)), Bry_.new_a7(Double_.To_str(longitude)), numDigits, glb_ttl);
 		//Map_dd2dms_func.Deg_to_dms(bfr, Bool_.Y, Bool_.N, Bry_.new_a7(Double_.To_str(latitude)), numDigits);
 		//bfr.Add_byte_comma().Add_byte_space();
 		//Map_dd2dms_func.Deg_to_dms(bfr, Bool_.Y, Bool_.Y, Bry_.new_a7(Double_.To_str(longitude)), numDigits);
 
 		// write globe
 		if (wikidata_page) {
-			byte[] glb_ttl = Wdata_lbl_itm.Extract_ttl(glb);
 			if (glb_ttl != null) {
 				byte[] glb_lbl = lbl_mgr.Get_text__ttl(glb_ttl, glb);
 				bfr.Add_byte_space().Add_byte(Byte_ascii.Paren_bgn);

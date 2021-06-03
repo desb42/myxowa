@@ -35,6 +35,7 @@ import gplx.xowa.files.Xof_file_wkr_;
 import gplx.xowa.files.*;
 import gplx.xowa.langs.Xol_lang_stub_;
 import gplx.xowa.langs.Xol_lang_itm;
+import gplx.xowa.bldrs.xmls.Xob_xml_parser;
 public class Http_server_wkr implements Gfo_invk {
 	private static String rootdir;
 	private final    int uid;
@@ -176,7 +177,7 @@ public class Http_server_wkr implements Gfo_invk {
 			else {
 				page_html = page.Html();
 				byte[] stripped = null;
-				if (page.Page() != null && (page.Page().Db().Page().Model_format() & 0xf) == 1) { //1 <format>text/x-wiki</format>
+				if (page.Page() != null && page.Page().Db().Page().Format() == Xob_xml_parser.Format_wiki) { //1 <format>text/x-wiki</format>
 					wikitext = page.Page().Db().Text().Text_bry();
 					stripped = ws.Search_text(wikitext, page.Ttl()); //.Strip_wiki(wikitext);
 				}

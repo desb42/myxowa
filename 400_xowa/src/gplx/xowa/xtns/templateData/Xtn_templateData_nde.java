@@ -48,7 +48,7 @@ public class Xtn_templateData_nde implements Xox_xnde {
 				Json_kv param = params.Get_at_as_kv(i);
 				byte[] param_key = param.Key_as_bry();
 				Json_nde param_val = param.Val_as_nde();
-				Template_row tr = new Template_row(list, param_val, param_key);
+				Template_row tr = new Template_row(param_val, param_key);
 				if (tr.badkey) {
 					Xoa_app_.Usr_dlg().Warn_many("", "", "bad argument to templatedata: page=~{0} arg=~{1}", ctx.Page().Url().To_str(), String_.new_u8(tr.fld_key));
 				}
@@ -149,6 +149,39 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		//jdoc.Root_grp().Print_as_json(bfr, 0);
 	}
 	private void Make_row(Bry_bfr bfr, Template_row tr) {
+		if (tr.fld_inherit != null) {
+			// inherit from another field definition
+			int list_len = list.Len();
+			for (int i = 0; i < list_len; i++) {
+				Template_row itr = (Template_row)list.Get_at(i);
+				byte[] itr_key = itr.fld_key;
+				if (Bry_.Eq(itr_key, tr.fld_inherit)) {
+					// now copy values (but do not overwrite)
+					if (itr.fld_aliases != null && tr.fld_aliases == null)
+						tr.fld_aliases = itr.fld_aliases;
+					if (itr.fld_autovalue != Bry_.Empty && tr.fld_autovalue == Bry_.Empty)
+						tr.fld_autovalue = itr.fld_autovalue;
+					if (itr.fld_default != Bry_.Empty && tr.fld_default == Bry_.Empty)
+						tr.fld_default = itr.fld_default;
+					if (itr.fld_deprecated != false && tr.fld_deprecated == false)
+						tr.fld_deprecated = itr.fld_deprecated;
+					if (itr.fld_description != Bry_.Empty && tr.fld_description == Bry_.Empty)
+						tr.fld_description = itr.fld_description;
+					if (itr.fld_example != Bry_.Empty && tr.fld_example == Bry_.Empty)
+						tr.fld_example = itr.fld_example;
+					if (itr.fld_label != null && tr.fld_label == null)
+						tr.fld_label = itr.fld_label;
+					if (itr.fld_required != false && tr.fld_required == false)
+						tr.fld_required = itr.fld_required;
+					if (itr.fld_suggested != false && tr.fld_suggested == false)
+						tr.fld_suggested = itr.fld_suggested;
+					if (itr.fld_suggestedvalues != null && tr.fld_suggestedvalues == null)
+						tr.fld_suggestedvalues = itr.fld_suggestedvalues;
+					if (itr.fld_type != Bry_.Empty && tr.fld_type == Bry_.Empty)
+						tr.fld_type = itr.fld_type;
+				}
+			}
+		}
 
 		byte[] statusClass = Bry_.Empty;
 		byte[] status;
@@ -322,9 +355,10 @@ class Template_row {
 	boolean fld_suggested;
 	Json_ary fld_suggestedvalues;
 	byte[] fld_type;
+	byte[] fld_inherit;
 	boolean badkey = false;
 
-	Template_row(List_adp tr_list, Json_nde param_val, byte[] param_key) {
+	Template_row(Json_nde param_val, byte[] param_key) {
 		fld_key = param_key;
 		fld_aliases = null;
 		fld_autovalue = Bry_.Empty; 
@@ -337,6 +371,7 @@ class Template_row {
 		fld_suggested = false;
 		fld_suggestedvalues = null;
 		fld_type = Bry_.Empty;
+		fld_inherit = null;
 		int param_val_len = param_val.Len();
 		for (int j = 0; j < param_val_len; j++) {
 			Json_kv itm = Json_kv.Cast(param_val.Get_at(j));
@@ -397,40 +432,7 @@ class Template_row {
 					break;
 				case 'i':
 					if (len == 8) { // inherits
-						byte[] inherit_key = ((Json_itm_str)val).Data_bry();
-						// inherit from another field definition (previously defined?)
-						int list_len = tr_list.Len();
-						badkey = true;
-						for (int i = 0; i < list_len; i++) {
-							Template_row tr = (Template_row)tr_list.Get_at(i);
-							byte[] tr_key = tr.fld_key;
-							if (Bry_.Eq(tr_key, inherit_key)) {
-								// now copy values (but do not overwrite)
-								if (tr.fld_aliases != null && fld_aliases == null)
-									fld_aliases = tr.fld_aliases;
-								if (tr.fld_autovalue != Bry_.Empty && fld_autovalue == Bry_.Empty)
-									fld_autovalue = tr.fld_autovalue;
-								if (tr.fld_default != Bry_.Empty && fld_default == Bry_.Empty)
-									fld_default = tr.fld_default;
-								if (tr.fld_deprecated != false && fld_deprecated == false)
-									fld_deprecated = tr.fld_deprecated;
-								if (tr.fld_description != Bry_.Empty && fld_description == Bry_.Empty)
-									fld_description = tr.fld_description;
-								if (tr.fld_example != Bry_.Empty && fld_example == Bry_.Empty)
-									fld_example = tr.fld_example;
-								if (tr.fld_label != null && fld_label == null)
-									fld_label = tr.fld_label;
-								if (tr.fld_required != false && fld_required == false)
-									fld_required = tr.fld_required;
-								if (tr.fld_suggested != false && fld_suggested == false)
-									fld_suggested = tr.fld_suggested;
-								if (tr.fld_suggestedvalues != null && fld_suggestedvalues == null)
-									fld_suggestedvalues = tr.fld_suggestedvalues;
-								if (tr.fld_type != Bry_.Empty && fld_type == Bry_.Empty)
-									fld_type = tr.fld_type;
-								badkey = false;
-							}
-						}
+						fld_inherit = ((Json_itm_str)val).Data_bry();
 					}
 					break;
 				default:

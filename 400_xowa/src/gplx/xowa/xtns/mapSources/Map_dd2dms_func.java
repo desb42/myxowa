@@ -44,14 +44,14 @@ public class Map_dd2dms_func extends Pf_func_base {
 		}
 		tmp_bfr.Mkr_rls();
 		Map_math map_math = Map_math.Instance;
-		if (map_math.Ctor(coord, prec, Bry_.Empty, 2))
+		if (map_math.Ctor(coord, prec, Bry_.Empty, 2, null))
 			bfr.Add(map_math.Get_dms(Bool_.N, plus, minus));
 		else
 			map_math.Fail(ctx, src, self, bfr, this.Name());
 	}
 	public static void Deg_to_dms(Bry_bfr bfr, boolean wikibase, boolean coord_is_lng, byte[] coord, int prec) { // NOTE: called by wikibase
 		Map_math map_math = Map_math.Instance;
-		if (map_math.Ctor(coord, prec, Bry_.Empty, 2)) {
+		if (map_math.Ctor(coord, prec, Bry_.Empty, 2, null)) {
 			bfr.Add(map_math.Get_dms(wikibase, Bry_.Empty, Bry_.Empty));
 			byte[] dir = coord_is_lng ? map_math.Coord_dir_ew() : map_math.Coord_dir_ns();
 			if (!wikibase)	// NOTE: do not add space if wikibase, else will fail in Module:en.w:WikidataCoord; PAGE:en.w:Hulme_Arch_Bridge DATE:2017-04-02
@@ -59,29 +59,37 @@ public class Map_dd2dms_func extends Pf_func_base {
 			bfr.Add(dir);
 		}
 	}
-	public static void Deg_to_dms_lat_long(Bry_bfr bfr, boolean wikibase, byte[] coord_lat, byte[] coord_lon, int prec) { // NOTE: called by wikibase
+	public static void Deg_to_dms_lat_long(Bry_bfr bfr, boolean wikibase, byte[] coord_lat, byte[] coord_lon, int prec, byte[] glb_ttl) { // NOTE: called by wikibase
 		byte[] lat = null;
 		byte[] lat_dir = null;
 		byte[] lon = null;
 		byte[] lon_dir = null;
 		Map_math map_math = Map_math.Instance;
-		if (map_math.Ctor(coord_lat, prec, Bry_.Empty, 2)) {
+		if (map_math.Ctor(coord_lat, prec, Bry_.Empty, 2, glb_ttl)) {
 			lat = map_math.Get_dms(wikibase, Bry_.Empty, Bry_.Empty);
 			lat_dir = map_math.Coord_dir_ns();
 		}
-		if (map_math.Ctor(coord_lon, prec, Bry_.Empty, 2)) {
+                else {
+                    System.out.println("Bad latitude " + Integer.toString(map_math.Error()));
+                    return; // should repor an error!
+                }
+		if (map_math.Ctor(coord_lon, prec, Bry_.Empty, 2, glb_ttl)) {
 			lon = map_math.Get_dms(wikibase, Bry_.Empty, Bry_.Empty);
 			lon_dir = map_math.Coord_dir_ew();
 		}
+                else {
+                    System.out.println("Bad longitude " + Integer.toString(map_math.Error()));
+                    return; // should repor an error!
+                }
 		// make sure they are the same 'length' ie DMS or DM
 		byte lat_dms = lat[lat.length - 2];
 		byte lon_dms = lon[lon.length - 2];
 		if (lat_dms != lon_dms) {
 			if (lat_dms == '4') {
-                            lat = reduce(lat);
+				lat = reduce(lat);
 			}
 			else {
-                            lon = reduce(lon);
+				lon = reduce(lon);
 			}
 		}
 		bfr.Add(lat);
@@ -94,18 +102,18 @@ public class Map_dd2dms_func extends Pf_func_base {
 			bfr.Add_byte_space();
 		bfr.Add(lon_dir);
 	}
-        private static byte[] reduce(byte[] coord) {
-            int len = coord.length;
-            for (int i = len - 2; i > 0; i--) {
-                if (coord[i] == ';') {
-                    byte[] newcoord = new byte[i + 1];
-                    for (int j = 0; j <= i; j++)
-                        newcoord[j] = coord[j];
-                    return newcoord;
-                }
-            }
-            return coord;
-        }
+	private static byte[] reduce(byte[] coord) {
+		int len = coord.length;
+		for (int i = len - 2; i > 0; i--) {
+			if (coord[i] == ';') {
+				byte[] newcoord = new byte[i + 1];
+				for (int j = 0; j <= i; j++)
+					newcoord[j] = coord[j];
+				return newcoord;
+			}
+		}
+		return coord;
+	}
 	public static final    Map_dd2dms_func Instance = new Map_dd2dms_func(); Map_dd2dms_func() {}
 	private static final byte Key_tid_plus = 1, Key_tid_minus = 2, Key_tid_precision = 3;
 	private static final    Hash_adp_bry Key_hash = Hash_adp_bry.cs()
