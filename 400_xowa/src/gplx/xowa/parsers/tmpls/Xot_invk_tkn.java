@@ -421,7 +421,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 			if (tmpl != null) transclude_src = tmpl.Data_raw();
 		}
 		if (transclude_src == null && ctx.Tmpl_load_enabled()) {	// ttl is template not in cache, or some other ns; do load
-			Xow_page_cache_itm cache_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(page_ttl);
+			Xow_page_cache_itm cache_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(page_ttl, wiki.Domain_str());
 			if (	cache_itm != null
 //					&&  Bry_.Eq(cache_itm.Ttl().Full_db(), ctx.Page().Page_ttl().Full_db())	// make sure that transcluded item is not same as page_ttl; DATE:2014-01-10
 				) {
@@ -472,7 +472,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikisource && page_ttl.Ns().Id() == wiki.Ns_mgr().Ns_page_id())
 			ctx.Page().Html_data().Quality_tots().Check_quality(page_ttl, wiki);
 
-			Xow_page_cache_itm cache_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(page_ttl);
+			Xow_page_cache_itm cache_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(page_ttl, wiki.Domain_str());
 			if (	cache_itm != null) {
 //?? remove 				if (!Bry_.Eq(cache_itm.Ttl().Full_db(), ctx.Page().Ttl().Full_db())) {	// make sure that transcluded item is not same as page_ttl; DATE:2014-01-10
 // {{Wikipedia:Featured articles}} calls itself! 20210418

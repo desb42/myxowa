@@ -66,7 +66,7 @@ public class Xoh_href_wtr {	// TS:do not move to app-level
 			byte[] wik_txt = ttl.Wik_txt();
 			Build_to_bfr_page(ttl, hctx, page, wik_txt.length + 1);
 		} */
-		byte[] page = ttl.Full_txt(); // was ttl.Full_txt_raw(); 20210409
+		byte[] page = ttl.Full_txt_raw_unders(); // was ttl.Full_txt_raw(); 20210615
 		Build_to_bfr_page(ttl, hctx, page, 0);												// write page only; NOTE: changed to remove leaf logic DATE:2014-09-07
 
                 if (xwiki == null) {																	// not an xwiki

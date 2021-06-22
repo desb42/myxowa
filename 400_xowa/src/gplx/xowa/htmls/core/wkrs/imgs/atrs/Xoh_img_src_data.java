@@ -59,14 +59,13 @@ public class Xoh_img_src_data implements Bfr_arg_clearable, Xoh_itm_parser {
 		if (src_end == src_bgn) return true;						// empty src; just return true;
 		this.src_mid = Bry_.Mid(src_bry, src_bgn, src_end);
 
-                if (src_mid.length > 6 && src_mid[0] == 'f' && src_mid[1] == 'i' && src_mid[2] == 'l' && src_mid[3] == 'e' && src_mid[4] == ':' && src_mid[5] == '/') return false;
 		// get repo_bgn; note that some <img> may be hiero / enlarge / magnify and should exit
 		rdr.Init_by_wkr(err_wkr, "img.src.xowa", src_bgn, src_end).Fail_throws_err_(fail_throws_err);
 		repo_bgn = rdr.Find_fwd_rr_or(Bry__file, -1);
 		if (repo_bgn == -1) {
 			repo_bgn = rdr.Find_fwd_rr_or(Bry__math, Bry_find_.Not_found);
 			if (repo_bgn == Bry_find_.Not_found) return false;
-            this.file_ttl_bry = Bry_.Mid(rdr.Src(), repo_bgn, src_end);
+			this.file_ttl_bry = Bry_.Mid(rdr.Src(), repo_bgn, src_end);
 			this.repo_is_commons = true;
 			this.repo_tid = Xof_repo_tid_.Tid__math;
 			this.file_is_orig = true;

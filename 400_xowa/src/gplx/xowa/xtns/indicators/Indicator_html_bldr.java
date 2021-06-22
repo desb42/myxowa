@@ -33,6 +33,7 @@ import gplx.xowa.htmls.hxtns.blobs.Hxtn_blob_tbl;
 import gplx.xowa.htmls.hxtns.pages.Hxtn_page_mgr;
 import gplx.xowa.parsers.Xop_parser_;
 
+import gplx.Hash_adp;
 import gplx.langs.jsons.Json_nde;
 import gplx.langs.jsons.Json_ary;
 public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
@@ -82,7 +83,8 @@ public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 		hxtnPageMgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Id__indicators, pageId, indicators);
 	}
 
-	public void Deserialise(Xow_wiki wiki, Xoh_page hpg, byte[] data) {
+	public void Deserialise(Xow_wiki wiki, Xoh_page hpg, Hash_adp props) {
+		byte[] data = (byte[])props.Get_by(Indicator_hxtn_page_wkr.KEY);
 		// exit if empty
 		if (Bry_.Len_eq_0(data)) return;
 

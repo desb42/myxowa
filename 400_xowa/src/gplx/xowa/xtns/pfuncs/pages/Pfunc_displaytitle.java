@@ -84,10 +84,12 @@ public class Pfunc_displaytitle extends Pf_func_base {
 				case '&':
 					// &#160;
 					// &#32;
+					// &#34; -> '"'
 					// &#38; -> '&'
 					// &#39;
 					// &#8201; (&thinsp) -> ' '
 					// &#8202; (Hair Space) -> ' '
+					// &#8204; (Zero Width Non-Joiner) -> ''
 					// &#8206; (Left-To-Right Mark) -> ''
 					// &#8207; (Right-To-Left Mark) -> ''
 					// &#8211; (&ndash;) -> '-'
@@ -117,15 +119,19 @@ public class Pfunc_displaytitle extends Pf_func_base {
 											if (cpos + 1 < len && src[cpos+1] == ';') {
 												b = src[cpos++];
 												switch(b) {
-												case '2':
+												case '2': // &#32;
 													size = 4;
 													rb = Byte_ascii.Space;
 													break;
-												case '8': // &
+												case '4': // &#34; -> "
+													size = 4;
+													rb = Byte_ascii.Quote;
+													break;
+												case '8': // &#38; -> &
 													size = 4;
 													rb = Byte_ascii.Amp;
 													break;
-												case '9':
+												case '9': // &#39; -> '
 													size = 4;
 													// remove apos //rb = Byte_ascii.Apos;
 													break;
@@ -147,6 +153,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 																		size = 6;
 																		rb = Byte_ascii.Space;
 																		break;
+																	case '4': // &#8204; (Zero Width Non-Joiner) -> ''
 																	case '6': // &#8206; (Left-To-Right Mark) -> ''
 																	case '7': // &#8207; (Right-To-Left Mark) -> ''
 																		size = 6;

@@ -25,7 +25,7 @@ public class Related_hxtn_page_wkr implements Hxtn_page_wkr {
 		this.page_text_tbl = page_text_tbl;
 	}
 	public void Load_by_page(Xoh_page hpg, Xoa_ttl ttl, int page_id) {
-		byte[] data = page_text_tbl.Select_text(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Id__related, page_id);
+		byte[] data = page_text_tbl.Select_text(Hxtn_blob_tbl.Blob_tid__wtxt, Id(), page_id);
 		hpg.Props().Add(KEY, data);
 	}
 	public static final String KEY = "xowa.xtns.related";

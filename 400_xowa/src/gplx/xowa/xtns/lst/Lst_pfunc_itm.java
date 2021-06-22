@@ -43,7 +43,7 @@ public class Lst_pfunc_itm {
 			// get sub_src;
 			Xop_ctx sub_ctx = Xop_ctx.New__top(wiki).Ref_ignore_(true);
 			sub_ctx.Page().Ttl_(ctx.Page().Ttl());	// NOTE: must set ttl on page, else test fails;
-			byte[] sub_src = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl); 
+			byte[] sub_src = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, wiki.Domain_str()); 
 			if (sub_src == null) return null; // {{#lst:missing}} -> ""
 			
                         Db_Section_list sect = new Db_Section_list(sub_src, 0, ctx, sub_ctx, ttl, ttl_bry);
@@ -88,7 +88,7 @@ public class Lst_pfunc_itm {
 			Xop_ctx sub_ctx = Xop_ctx.New__top(wiki).Ref_ignore_(true);
 			sub_ctx.Page().Ttl_(ctx.Page().Ttl());	// NOTE: must set ttl on page, else test fails;
                         sub_ctx.Page().Html_data().Display_ttl_(ctx.Page().Html_data().Display_ttl());
-			byte[] sub_src = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl);
+			byte[] sub_src = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, wiki.Domain_str());
 			if (sub_src == null) return null; // {{#lst:missing}} -> ""
 
 			// parse sub_src; note adding to page's stack to prevent circular recursions

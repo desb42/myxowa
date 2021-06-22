@@ -102,7 +102,11 @@ public class Hxtn_page_mgr {
 		//}
 	}
 	public void Reg_wkr(Hxtn_page_wkr wkr) {
-		wkrs.Add(wkr.Id(), wkr);
+		int id = wkr.Id();
+		if (wkrs.Get_by_or_null(id) == null)
+			wkrs.Add(id, wkr);
+		else
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "hxtn.duplicate wkr: wkr_id=~{0} type=~{1}", id, wkr.Key());
 	}
 	public void Load_by_page(Xoh_page hpg, Xoa_ttl ttl) {
 		if (dbs_missing) return; // PERF:do not call SELECT if dbs don't exist

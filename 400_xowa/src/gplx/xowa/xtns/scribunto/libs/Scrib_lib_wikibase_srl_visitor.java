@@ -41,12 +41,12 @@ import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_value;
 
 public class Scrib_lib_wikibase_srl_visitor implements Wbase_claim_visitor {
 	public Keyval[] Rv() {return rv;} Keyval[] rv;
-	public void Visit_str(Wbase_claim_string itm) {
+	public void Visit_str(Wbase_claim_string itm, boolean rich_wikitext) {
 		rv = new Keyval[2];
 		rv[0] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_type, Wbase_claim_type_.Reg.Get_str_or(itm.Val_tid(), Wbase_claim_type_.Itm__unknown.Key_str()));
 		rv[1] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_value, String_.new_u8(itm.Val_bry()));
 	}
-	public void Visit_entity(Wbase_claim_entity itm) {
+	public void Visit_entity(Wbase_claim_entity itm, boolean rich_wikitext) {
 		rv = new Keyval[2];
 		rv[0] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_type, Wbase_claim_type_.Itm__entity.Key_str());
 		rv[1] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_value, Entity_value(itm));
@@ -59,7 +59,7 @@ public class Scrib_lib_wikibase_srl_visitor implements Wbase_claim_visitor {
 		rv[2] = Keyval_.new_(Wbase_claim_entity_.Itm__id.Key_str(), Wbase_claim_entity.To_xid__db(Wbase_claim_entity_.Itm__entity_type.Tid(), claim_entity.Entity_id_bry())); // "id" needed PAGE:es.w:Premio_Hugo_a_la_mejor_novela DATE:2017-09-04
 		return rv;
 	}
-	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm) {
+	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm, boolean rich_wikitext) {
 		rv = new Keyval[2];
 		rv[0] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_type, Wbase_claim_type_.Itm__monolingualtext.Key_str());
 		rv[1] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_value, Monolingualtext_value(itm));
@@ -70,7 +70,7 @@ public class Scrib_lib_wikibase_srl_visitor implements Wbase_claim_visitor {
 		rv[1] = Keyval_.new_(Wbase_claim_monolingualtext_.Itm__language.Key_str()	, String_.new_u8(itm.Lang()));
 		return rv;
 	}
-	public void Visit_quantity(Wbase_claim_quantity itm) {
+	public void Visit_quantity(Wbase_claim_quantity itm, boolean rich_wikitext) {
 		rv = new Keyval[2];
 		rv[0] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_type, Wbase_claim_type_.Itm__quantity.Key_str());
 		rv[1] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_value, Quantity_value(itm));
@@ -83,7 +83,7 @@ public class Scrib_lib_wikibase_srl_visitor implements Wbase_claim_visitor {
 		rv[3] = Keyval_.new_(Wbase_claim_quantity_.Itm__lowerbound.Key_str()		, itm.Lbound_as_num() == null ? null : itm.Lbound_as_num().To_str());
 		return rv;
 	}
-	public void Visit_time(Wbase_claim_time itm) {
+	public void Visit_time(Wbase_claim_time itm, boolean rich_wikitext) {
 		rv = new Keyval[2];
 		rv[0] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_type, Wbase_claim_type_.Itm__time.Key_str());
 		rv[1] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_value, Time_value(itm));
@@ -98,7 +98,7 @@ public class Scrib_lib_wikibase_srl_visitor implements Wbase_claim_visitor {
 		rv[5] = Keyval_.new_(Wbase_claim_time_.Itm__calendarmodel.Key_str()		, Wbase_claim_time_.Dflt__calendarmodel.Val_str());
 		return rv;
 	}
-	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm) {
+	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm, boolean rich_wikitext) {
 		rv = new Keyval[2];
 		rv[0] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_type, Wbase_claim_type_.Itm__globecoordinate.Key_str());
 		rv[1] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_value, Globecoordinate_value(itm));
@@ -112,7 +112,7 @@ public class Scrib_lib_wikibase_srl_visitor implements Wbase_claim_visitor {
 		rv[4] = Keyval_.new_(Wbase_claim_globecoordinate_.Itm__precision.Key_str()			, CalcPrecision(itm.Prc(), itm.Lng()).To_double());
 		return rv;
 	}
-	public void Visit_system(Wbase_claim_value itm) {
+	public void Visit_system(Wbase_claim_value itm, boolean rich_wikitext) {
 		rv = Keyval_.Ary_empty;
 	}
 	public static Decimal_adp CalcPrecision(byte[] prc, byte[] lng) {

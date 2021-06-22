@@ -108,7 +108,7 @@ public class Ref_html_wtr {
 				// extra span
 				tmp.Add_str_a7("<span class=\"reference-text\">");
 				wtr.Write_tkn_to_html(tmp, ctx, opts, text_itm.Body().Root_src(), null, Xoh_html_wtr.Sub_idx_null, text_itm.Body());
-                                tmp.Add(Gfh_tag_.Span_rhs);
+				tmp.Add(Gfh_tag_.Span_rhs);
 			}
 
 			// add follows
@@ -151,6 +151,7 @@ public class Ref_html_wtr {
 		if (response_wrap) {
 			bfr.Add(Bry_.new_a7("</div>\n"));
 		}
+		lst.Itms_clear(); // so as not to reuse
 	}
 	public void Xnde_ref_x(Bry_bfr bfr, byte[] src, Xop_xnde_tkn xnde) {
 		Bry_bfr tmp_ref = Bry_bfr_.New();

@@ -23,13 +23,13 @@ import gplx.xowa.htmls.hxtns.pages.Hxtn_page_wkr;
 
 public class Pp_quality_hxtn_page_wkr implements Hxtn_page_wkr {
 	private final Hxtn_blob_tbl page_text_tbl;
-	public int Id() {return Hxtn_page_mgr.Id__pgbnr;}
+	public int Id() {return Hxtn_page_mgr.Id__pp_pagequality;}
 	public String Key() {return KEY;}
 	public Pp_quality_hxtn_page_wkr(Hxtn_blob_tbl page_text_tbl) {
 		this.page_text_tbl = page_text_tbl;
 	}
 	public void Load_by_page(Xoh_page hpg, Xoa_ttl ttl, int page_id) {
-		byte[] data = page_text_tbl.Select_text(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Id__pp_pagequality, page_id);
+		byte[] data = page_text_tbl.Select_text(Hxtn_blob_tbl.Blob_tid__wtxt, Id(), page_id);
 		hpg.Props().Add(KEY, data);
 	}
 	public static final String KEY = "xowa.xtns.pp_quality_tots";

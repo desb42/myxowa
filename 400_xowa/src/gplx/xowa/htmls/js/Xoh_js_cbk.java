@@ -95,7 +95,7 @@ public class Xoh_js_cbk implements Gfo_invk {
 		try {
 			String ctTitle = m.Args_getAt(0).Val_to_str_or_empty();
 			String options = m.Args_getAt(1).Val_to_str_or_empty();
-                        byte[] data = Db_special_api.Gen_gui(html_itm.Owner_tab().Wiki(), ctTitle, options);
+			byte[] data = Db_special_api.Gen_gui(html_itm.Owner_tab().Wiki(), ctTitle, options);
 
 			return String_.new_u8(data);
 		} catch (Exception e) {Err_.Noop(e); return null;}

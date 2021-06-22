@@ -30,6 +30,7 @@ public interface Xodb_load_mgr {
 	byte[] Find_random_ttl			(Xow_ns ns);
 	void Clear();	// TEST:helper function
 	byte[] Load_qid					(byte[] wiki_alias, int ns_num, byte[] ttl);
+	byte[] Load_qid_desc(byte[] wiki_alias, int ns_num, byte[] ttl);
 	int Load_pid					(byte[] lang_key, byte[] pid_name);
 	Xodb_page_rdr Get_page_rdr		(Xowe_wiki wiki);
 	void Load_ttls_for_langs(List_adp rslt_list, Int_obj_ref rslt_count, Xow_ns ns, byte[] key);

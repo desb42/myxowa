@@ -149,7 +149,7 @@ public class Scrib_lib_title implements Scrib_lib {
 		if (ttl == Xoa_ttl.Null) return rslt.Init_null();
 		// TODO_OLD: MW does extra logic here to cache ttl in ttl cache to avoid extra title lookups
 		boolean ttl_exists = false, ttl_redirect = false; int ttl_id = 0;
-		Xow_page_cache_itm cache_itm = core.Wiki().Cache_mgr().Page_cache().Get_itm_else_load_or_null(ttl);
+		Xow_page_cache_itm cache_itm = core.Wiki().Cache_mgr().Page_cache().Get_itm_else_load_or_null(ttl, core.Wiki().Domain_str());
 		if (cache_itm != null) {
 			ttl_exists = cache_itm.Page_exists();
 			ttl_id = cache_itm.Page_id();
@@ -212,7 +212,7 @@ public class Scrib_lib_title implements Scrib_lib {
 		Xoae_page page = core.Page();
 		if (Bry_.Eq(page.Ttl().Full_db(), ttl.Full_db()))
 			return page.Db().Text().Text_bry();
-		Xow_page_cache_itm page_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(ttl);
+		Xow_page_cache_itm page_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(ttl, wiki.Domain_str());
 		byte[] rv = null;
 		if (page_itm != null) {
 			byte[] redirected_src = page_itm.Wtxt__redirect();

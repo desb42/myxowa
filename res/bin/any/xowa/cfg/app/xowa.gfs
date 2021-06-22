@@ -207,7 +207,7 @@ app.wikis.get('~{wiki_key}').html.portal {
 ;
   txt_pageread =
 <:["
-    <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-body-content mw-content-~{page_lang_ltr}">~{page_data}
+    <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-body-content mw-content-~{page_lang_ltr} lang="~{page_lang}" dir="~{page_lang_ltr}">~{page_data}
     </div>
 "]:>
 ;
@@ -248,7 +248,7 @@ app.wikis.get('~{wiki_key}').html.article {
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <meta charset="UTF-8"/>
   <title>~{page_name} - XOWA ~{wiki_key}</title>
-  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/file/app.window/~{app_icon}" />
+  <link rel="shortcut icon" href="~{app_root_dir}bin/any/xowa/extra/app.window/~{app_icon}" />
   <link rel="stylesheet" href="~{html_css_common_path}" type="text/css">
   <link rel="stylesheet" href="~{html_css_wiki_path}" type="text/css">
   ~{html_css_night_tag}<!--XOWA.SCRIPT.HEAD.TOP-->~{xowa_head}<!--XOWA.SCRIPT.HEAD.BOT-->

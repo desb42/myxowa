@@ -22,7 +22,7 @@ public class Wbase_claim_string extends Wbase_claim_base {
 	@Override public byte	Val_tid() {return Wbase_claim_type_.Tid__string;}
 	public byte[]			Val_bry() {return val_bry;} private final    byte[] val_bry;
 
-	@Override public void Welcome(Wbase_claim_visitor visitor) {visitor.Visit_str(this);}
+	@Override public void Welcome(Wbase_claim_visitor visitor, boolean rich_wikitext) {visitor.Visit_str(this, rich_wikitext);}
 	@Override public String toString() {// TEST:
 		return String_.Concat_with_str("|", Wbase_claim_value_type_.Reg.Get_str_or_fail(this.Snak_tid()), Wbase_claim_type_.Reg.Get_str_or_fail(this.Val_tid()), String_.new_u8(val_bry));
 	}

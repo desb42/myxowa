@@ -152,7 +152,7 @@ public class Xoh_page_wtr_wkr {
 		byte[] page_body_class = Xoh_page_body_cls.Calc(tmp_bfr, page_ttl, page_tid);
 		// byte[] html_content_editable = wiki.Gui_mgr().Cfg_browser().Content_editable() ? Content_editable_bry : Bry_.Empty;
 		byte[] html_content_editable = Bry_.Empty;
-		byte[] page_content_sub = Xoh_page_wtr_wkr_.Bld_page_content_sub(app, wiki, page, tmp_bfr, isnoredirect);
+//??20210622		byte[] page_content_sub = Xoh_page_wtr_wkr_.Bld_page_content_sub(app, wiki, page, tmp_bfr, isnoredirect);
 		byte[] js_edit_toolbar_bry = html_gen_tid == Xopg_view_mode_.Tid__edit ? wiki.Fragment_mgr().Html_js_edit_toolbar() : Bry_.Empty;
 		Xol_vnt_mgr vnt_mgr = wiki.Lang().Vnt_mgr();
 		if (vnt_mgr.Enabled()) {
@@ -470,7 +470,7 @@ public class Xoh_page_wtr_wkr {
 			dl = Json_nde.NewByVal();
 			Json_nde wm = Json_nde.NewByVal();
 			Json_nde tl = Json_nde.NewByVal();
-	
+
 			dl.AddKvStr("link-mainpage", "/wiki/");
 			dl.AddKvStr("icon", "/xowa/static/images/mobile/copyright/wikipedia.png");
 	
@@ -485,7 +485,7 @@ public class Xoh_page_wtr_wkr {
 			dl.AddKvNde("tagline", tl);
 		}
 		data.AddKvNde("data-logos", dl);
-        }
+	}
 	private void Build_json_search(Json_nde data, Xowe_wiki wiki) {
 
 		Json_nde ds = Json_nde.NewByVal();

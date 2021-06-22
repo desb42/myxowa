@@ -41,12 +41,12 @@ public class Xop_redirect_mgr {
 	private final Json_parser jsonParser = new Json_parser();
 	private static final byte[] Bry__redirect = Bry_.new_a7("redirect"); // repeated from Wbase_doc_mgr
 	public Xoa_ttl Extract_redirect(byte[] src, int src_len) {	// NOTE: this proc is called by every page. be careful of changes; DATE:2014-07-05
-		if (src_len == 0) return Redirect_null_ttl;
+		if (src_len < 3) return Redirect_null_ttl;
 		int bgn = Bry_find_.Find_fwd_while_not_ws(src, 0, src_len);
 		if (bgn == src_len) return Redirect_null_ttl; // article is entirely whitespace
 		// check for json (wikidata redirect)
 		if (src[bgn] == '{') {
-			if (src_len - bgn < 100) { // only small json data
+			if (src_len - bgn < 100 && src[bgn+1] != '{') { // only small json data
 				if (bgn > 0)
 					src = Bry_.Mid(src, bgn);
 				Json_doc jdoc = null;

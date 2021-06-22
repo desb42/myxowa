@@ -57,7 +57,7 @@ public class GeoCrumbs_html_bldr implements gplx.core.brys.Bfr_arg {
 	}
 	public void Set_ctx(Xop_ctx ctx) {
 		this.ctx = ctx;
-                this.wiki = ctx.Wiki();
+		this.wiki = ctx.Wiki();
 	}
 	public void Add(byte[] isin, Xoa_ttl ttl) {
 		if (!enabled) return;  // ??
@@ -117,8 +117,8 @@ public class GeoCrumbs_html_bldr implements gplx.core.brys.Bfr_arg {
 	}
 
 	public void Deserialise(Xow_wiki wiki, Xoh_page hpg, Hash_adp props) {
-            ttl = hpg.Ttl();
-            byte[] data = (byte[])props.Get_by(GeoCrumbs_hxtn_page_wkr.KEY);
+		ttl = hpg.Ttl();
+		byte[] data = (byte[])props.Get_by(GeoCrumbs_hxtn_page_wkr.KEY);
 		// exit if empty
 		if (Bry_.Len_eq_0(data)) return;
 

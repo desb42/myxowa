@@ -24,11 +24,11 @@ import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_time;
 import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_value;
 
 public interface Wbase_claim_visitor {
-	void Visit_str              (Wbase_claim_string itm);
-	void Visit_entity           (Wbase_claim_entity itm);
-	void Visit_monolingualtext  (Wbase_claim_monolingualtext itm);
-	void Visit_quantity         (Wbase_claim_quantity itm);
-	void Visit_time             (Wbase_claim_time itm);
-	void Visit_globecoordinate  (Wbase_claim_globecoordinate itm);
-	void Visit_system           (Wbase_claim_value itm);
+	void Visit_str              (Wbase_claim_string itm, boolean rich_wikitext);
+	void Visit_entity           (Wbase_claim_entity itm, boolean rich_wikitext);
+	void Visit_monolingualtext  (Wbase_claim_monolingualtext itm, boolean rich_wikitext);
+	void Visit_quantity         (Wbase_claim_quantity itm, boolean rich_wikitext);
+	void Visit_time             (Wbase_claim_time itm, boolean rich_wikitext);
+	void Visit_globecoordinate  (Wbase_claim_globecoordinate itm, boolean rich_wikitext);
+	void Visit_system           (Wbase_claim_value itm, boolean rich_wikitext);
 }

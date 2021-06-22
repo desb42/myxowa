@@ -28,10 +28,10 @@ class Wdata_visitor__html_wtr implements Wbase_claim_visitor {
 		this.tmp_bfr = tmp_bfr; this.ttl = ttl;
 		return this;
 	}
-	public void Visit_str(Wbase_claim_string itm) {
+	public void Visit_str(Wbase_claim_string itm, boolean rich_wikitext) {
 		tmp_bfr.Add(itm.Val_bry());
 	}
-	public void Visit_entity(Wbase_claim_entity itm) {
+	public void Visit_entity(Wbase_claim_entity itm, boolean rich_wikitext) {
 		int entity_id = itm.Entity_id();
 		byte[] text = null;
 		switch (itm.Entity_tid()) {
@@ -68,7 +68,7 @@ class Wdata_visitor__html_wtr implements Wbase_claim_visitor {
 	private byte[] Getsensestuff(Wbase_claim_entity itm) {
 		return Bry_.new_a7("SENSE");
 	}
-	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm) {
+	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm, boolean rich_wikitext) {
 		String langname = wdata_mgr.Wdata_wiki().App().Lang_mgr().Name_mgr().fetchLanguageName(String_.new_a7(itm.Lang()), lang.Key_str(), "", ttl);
 		// "<span lang=\"$2\" class=\"wb-monolingualtext-value\">$1</span> <span class=\"wb-monolingualtext-language-name\" dir=\"auto\">($3)</span>"
 		tmp_bfr.Add(Bry_.new_a7("<span lang=\""));
@@ -80,16 +80,16 @@ class Wdata_visitor__html_wtr implements Wbase_claim_visitor {
 		tmp_bfr.Add(Bry_.new_a7(")</span>"));
 		//tmp_bfr.Add_byte(Byte_ascii.Space).Add_byte(Byte_ascii.Paren_bgn).Add(Bry_.new_u8(langname)/*itm.Lang()*/).Add_byte(Byte_ascii.Paren_end);
 	}
-	public void Visit_quantity(Wbase_claim_quantity itm) {
+	public void Visit_quantity(Wbase_claim_quantity itm, boolean rich_wikitext) {
 		Wdata_prop_val_visitor.Write_quantity(tmp_bfr, wdata_mgr, lang, itm.Amount(), itm.Lbound(), itm.Ubound(), itm.Unit());
 	}
-	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm) {
+	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm, boolean rich_wikitext) {
 		Wdata_prop_val_visitor.Write_geo(Bool_.Y, tmp_bfr, lbl_mgr, msgs, itm.Lat(), itm.Lng(), itm.Alt(), itm.Prc(), itm.Glb());
 	}
-	public void Visit_time(Wbase_claim_time itm) {
+	public void Visit_time(Wbase_claim_time itm, boolean rich_wikitext) {
 		itm.Write_to_bfr(tmp_bfr, tmp_time_bfr, tmp_time_fmtr, msgs, ttl);
 	}
-	public void Visit_system(Wbase_claim_value itm) {
+	public void Visit_system(Wbase_claim_value itm, boolean rich_wikitext) {
 		switch (itm.Snak_tid()) {
 			case Wbase_claim_value_type_.Tid__somevalue:
                             tmp_bfr.Add(someval);

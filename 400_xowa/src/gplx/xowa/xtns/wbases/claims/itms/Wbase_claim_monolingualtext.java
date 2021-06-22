@@ -23,7 +23,7 @@ public class Wbase_claim_monolingualtext extends Wbase_claim_base {
 	public byte[]			Lang() {return lang;} private final    byte[] lang;
 	public byte[]			Text() {return text;} private final    byte[] text;
 
-	@Override public void Welcome(Wbase_claim_visitor visitor) {visitor.Visit_monolingualtext(this);}
+	@Override public void Welcome(Wbase_claim_visitor visitor, boolean rich_wikitext) {visitor.Visit_monolingualtext(this, rich_wikitext);}
 	@Override public String toString() {// TEST:
 		return String_.Concat_with_str("|", Wbase_claim_value_type_.Reg.Get_str_or_fail(this.Snak_tid()), Wbase_claim_type_.Reg.Get_str_or_fail(this.Val_tid()), String_.new_u8(lang), String_.new_u8(text));
 	}

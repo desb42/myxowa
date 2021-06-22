@@ -49,7 +49,7 @@ public class Wbase_claim_entity extends Wbase_claim_base {
 	public byte[]           Entity_tid_bry()    {return Wbase_claim_entity_type_.Reg.Get_bry_or_fail(entityType);}
 	public byte[]           Page_ttl_db()       {return To_xid__db(entityType, numericIdBry);}
 	public byte[]           Page_ttl_gui()      {return Bry_.Add(ToTtlPrefix(entityType), numericIdBry);}
-	@Override public void Welcome(Wbase_claim_visitor visitor) {visitor.Visit_entity(this);}
+	@Override public void Welcome(Wbase_claim_visitor visitor, boolean rich_wikitext) {visitor.Visit_entity(this, rich_wikitext);}
 	@Override public String toString() {// TEST:
 		return String_.Concat_with_str("|", Wbase_claim_value_type_.Reg.Get_str_or_fail(this.Snak_tid()), Wbase_claim_type_.Reg.Get_str_or_fail(this.Val_tid()), this.Entity_tid_str(), Int_.To_str(numericId), String_.new_u8(id));
 	}

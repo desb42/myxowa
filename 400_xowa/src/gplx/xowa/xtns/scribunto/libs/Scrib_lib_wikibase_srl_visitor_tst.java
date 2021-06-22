@@ -49,7 +49,7 @@ class Scrib_lib_wikibase_srl_visitor_fxt {
 	public void TestGeoPrecision(double expd, String prc) {
 		String lat = "12";
 		String lng = "34";
-		visitor.Visit_globecoordinate(new Wbase_claim_globecoordinate(123, Wbase_claim_value_type_.Tid__value, Bry_.new_a7(lat), Bry_.new_a7(lng), null, Bry_.new_u8_safe(prc), null));
+		visitor.Visit_globecoordinate(new Wbase_claim_globecoordinate(123, Wbase_claim_value_type_.Tid__value, Bry_.new_a7(lat), Bry_.new_a7(lng), null, Bry_.new_u8_safe(prc), null), false);
 		Keyval[] actl = visitor.Rv();
 		Keyval[] actlGeo = (Keyval[])actl[1].Val();
 		Gftest.Eq__double(expd, Double_.cast(actlGeo[4].Val()));

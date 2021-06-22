@@ -58,7 +58,7 @@ public class Wbase_claim_quantity extends Wbase_claim_base {
 		return lbound_as_num;
 	}	private Decimal_adp lbound_as_num;
 
-	@Override public void Welcome(Wbase_claim_visitor visitor) {visitor.Visit_quantity(this);}
+	@Override public void Welcome(Wbase_claim_visitor visitor, boolean rich_wikitext) {visitor.Visit_quantity(this, rich_wikitext);}
 	@Override public String toString() {// TEST:
 		return String_.Concat_with_str("|", Wbase_claim_value_type_.Reg.Get_str_or_fail(this.Snak_tid()), Wbase_claim_type_.Reg.Get_str_or_fail(this.Val_tid()), String_.new_u8(amount), String_.new_u8(unit), String_.new_u8(ubound), String_.new_u8(lbound));
 	}

@@ -38,7 +38,7 @@ public class Db_special_api {
 		return tidyup(bfr, tmp_bfr, "\"}}");
 	}
 
-	public byte[] Gen_json(Xowe_wiki wiki, Xoae_page page, Xoa_url url, Xoa_ttl ttl) {
+	public byte[] Gen_json(Xowe_wiki wiki, Xoae_page page, Xoa_url url, Xoa_ttl ttl, Xowe_wiki wdata_wiki) {
 		arg_hash.Load(url.Qargs_ary());
 		byte[] cmd_type_bry = arg_hash.Get_val_bry_or(Arg_action, null);
 		if (cmd_type_bry == null) {
@@ -63,8 +63,8 @@ public class Db_special_api {
 			case Type_query:
 				bfr.Add_str_a7("{\"batchcomplete\":true,\"query\":{");
 				byte[] titles = arg_hash.Get_val_bry_or(Arg_titles, null);
-				Related(wiki, bfr, titles);
-                                bfr.Add_str_a7("}}");
+				Related(wiki, bfr, titles, wdata_wiki);
+				bfr.Add_str_a7("}}");
 				return bfr.To_bry_and_clear();
 		}
 		return Bry_.Empty;
@@ -91,7 +91,7 @@ public class Db_special_api {
 		bfr.Add_str_a7(end);
 		return bfr.To_bry_and_clear();
 	}
-	private void Related(Xowe_wiki wiki, Bry_bfr bfr, byte[] titles) {
+	private void Related(Xowe_wiki wiki, Bry_bfr bfr, byte[] titles, Xowe_wiki wdata_wiki) {
 		int len = titles.length;
 		int pos;
 		int bgn;
@@ -115,23 +115,23 @@ public class Db_special_api {
 		while (pos < len) {
 			byte b = titles[pos++];
 			if (b == '|') {
-				Build_one_page(wiki, bfr, titles, bgn, pos - 1);
+				Build_one_page(wiki, bfr, titles, bgn, pos - 1, wdata_wiki);
 				bfr.Add_str_a7(",");
 				bgn = pos;
 			}
 		}
-		Build_one_page(wiki, bfr, titles, bgn, pos);
+		Build_one_page(wiki, bfr, titles, bgn, pos, wdata_wiki);
 		bfr.Add_str_a7("]");
 	}
 	private void Build_one_normalized(Xowe_wiki wiki, Bry_bfr bfr, byte[] titles, int bgn, int end) {
-            byte[] ttl_bry = Bry_.Mid(titles, bgn, end);
+		byte[] ttl_bry = Bry_.Mid(titles, bgn, end);
 		bfr.Add_str_a7("{\"fromencoded\":false,\"to\":\"");
 		bfr.Add(Xoa_ttl.Replace_unders(ttl_bry));
 		bfr.Add_str_a7("\",\"from\":\"");
 		bfr.Add(Xoa_ttl.Replace_spaces(ttl_bry));
 		bfr.Add_str_a7("\"}");
 	}
-	private void Build_one_page(Xowe_wiki wiki, Bry_bfr bfr, byte[] titles, int bgn, int end) {
+	private void Build_one_page(Xowe_wiki wiki, Bry_bfr bfr, byte[] titles, int bgn, int end, Xowe_wiki wdata_wiki) {
 		Xoa_ttl ttl = Xoa_ttl.Parse(wiki, titles, bgn, end);
 		// need
 		Xowd_page_itm tmp_page = wiki.Data__core_mgr().Db__core().Tbl__page().Select_by_ttl_as_itm_or_null(ttl, wiki.Wrk_id());
@@ -142,7 +142,7 @@ public class Db_special_api {
 		//  page_namespace
 		bfr.Add_int_variable(ttl.Ns().Id());
 		bfr.Add_str_a7(",\"title\":\"");
-                bfr.Add(Xoa_ttl.Replace_unders(Bry_.Mid(titles, bgn, end)));
+		bfr.Add(Xoa_ttl.Replace_unders(Bry_.Mid(titles, bgn, end)));
 		bfr.Add_str_a7("\",");
 		Db_page_image_ pi = wiki.Page_image().Get_page_image(tmp_page.Id());
 		if (pi.height > 0) {
@@ -159,9 +159,12 @@ public class Db_special_api {
 		}
 		bfr.Add_str_a7("\"description\":\"");
 		//  description - from wikidata
+		byte[] desc = wdata_wiki.Db_mgr().Load_mgr().Load_qid_desc(wiki.Wdata_wiki_abrv(), ttl.Ns().Id(), ttl.Page_db());
+		if (desc != null)
+			bfr.Add(desc);
 		bfr.Add_str_a7("\",\"descriptionsource\":\"central\"}");
 	}
-	private static final    Bry_fmtr
+	private static final Bry_fmtr
 	 thumb_fmtr = Bry_fmtr.new_("\"thumbnail\": {\"source\": \"/xowa/api/wikipedia/~{site}/thumb/~{md5}/~{fname}/160px-~{fname}~{ext}\",\"width\":~{width},\"height\":~{height}},",
 	              "site", "md5", "fname", "ext", "width", "height");
 	private void Categorytree(Xowe_wiki wiki, Bry_bfr bfr, byte[] category, byte[] options) {
@@ -175,7 +178,7 @@ public class Db_special_api {
 		params.Isjson_(true);
 		cat_mgr.Renderchild(bfr, category, 0, category.length, params);
 	}
-	private static final	byte[]
+	private static final byte[]
 	  Arg_action = Bry_.new_a7("action")
 	, Arg_category = Bry_.new_a7("category")
 	, Arg_options = Bry_.new_a7("options")
@@ -186,14 +189,14 @@ public class Db_special_api {
 	  Type_categorytree = 1
 	, Type_query = 2
 	;
-	private static final	Hash_adp_bry type_hash = Hash_adp_bry.cs()
+	private static final Hash_adp_bry type_hash = Hash_adp_bry.cs()
 	.Add_str_byte("categorytree", Type_categorytree)
 	.Add_str_byte("query", Type_query)
 	;
 
-	static public byte[] Gen(Http_server_page page) {
+	static public byte[] Gen(Http_server_page page, Xowe_wiki wdata_wiki) {
 		Db_special_api api = new Db_special_api();
-		return api.Gen_json(page.Wiki(), page.Page(), page.Url(), page.Ttl());
+		return api.Gen_json(page.Wiki(), page.Page(), page.Url(), page.Ttl(), wdata_wiki);
 	}
 
 	static public byte[] Gen_gui(Xowe_wiki wiki, String title, String options) {
@@ -265,7 +268,7 @@ public class Db_special_api {
 						state = -1;
 						valend = pos - 1;
 						process();
-                                        }
+					}
 					break;
 				case State_quoted_value:
 					if (b == '"') {

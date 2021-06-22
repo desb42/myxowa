@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.langs.htmls.docs; import gplx.*; import gplx.langs.*; import gplx.langs.htmls.*;
 import gplx.core.btries.*;
+import gplx.xowa.Db_readwrite;
 public class Gfh_doc_parser {
 	private final    Btrie_slim_mgr trie = Btrie_slim_mgr.cs();
 	private final    Gfh_txt_wkr txt_wkr;
@@ -24,6 +25,7 @@ public class Gfh_doc_parser {
 			trie.Add_obj(wkr.Hook(), wkr);
 	}
 	public void Parse(byte[] page_url, byte[] src, int src_bgn, int src_end) {
+			Db_readwrite.writeFile(String_.new_u8(src), "d:/des/xowa_x/pre_html.htm");
             trie.Dumpit("Gfh_doc_parser");
 		int txt_bgn = -1;
 		int pos = src_bgn;

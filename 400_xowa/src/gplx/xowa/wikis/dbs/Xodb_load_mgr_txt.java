@@ -378,7 +378,11 @@ public class Xodb_load_mgr_txt implements Xodb_load_mgr {
 			qids_root = wiki.Appe().Wiki_mgr().Wdata_mgr().Wdata_wiki().Tdb_fsys_mgr().Site_dir().GenSubDir_nest("data", "qid");
 		Xob_xdat_itm qid_itm = Load_xdat_itm_by_dir(qids_root.GenSubDir_nest(xwiki_key, ns_num_str), ttl); if (qid_itm == null) return null;
 		return Bry_.Mid(qid_itm.Src(), qid_itm.Itm_bgn() + ttl.length + 1, qid_itm.Itm_end());	// extract qid; note that all itms have format of "ttl|qid"
-	}	Io_url qids_root;
+	}
+	public byte[] Load_qid_desc(byte[] wiki_alias, int ns_num, byte[] ttl) {
+		return null;
+	}
+	Io_url qids_root;
 	public int Load_pid(byte[] lang_key, byte[] pid_name) {
 		if (pids_root == null)
 			pids_root = wiki.Appe().Wiki_mgr().Wdata_mgr().Wdata_wiki().Tdb_fsys_mgr().Site_dir().GenSubDir_nest("data", "pid");

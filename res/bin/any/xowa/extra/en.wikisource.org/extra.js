@@ -16,7 +16,8 @@ jQuery( document ).ready( function ( $ ) {
 	}
 } );
 
-xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/en.wikisource.org/Gadget-PageNumbers-core.js');
+xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/extra/en.wikisource.org/Gadget-PageNumbers-core.js');
+xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/extra/en.wikisource.org/Corrections.js');
 
 /*XOWA: en.wikisource.org/wiki/MediaWiki:IndexForm.js*/
 /********************************
@@ -137,7 +138,7 @@ $( document ).ready( function() {
 		return;
 	}
 
-init_layout() // get the layout setup HACKy
+//init_layout() // get the layout setup HACKy
 
 	var $nofooterElt = $( '#nofooter' );
 	var $hp = $( '#headerprevious' );
@@ -206,7 +207,7 @@ self.ws_messages = addObj(self.ws_messages, {
 	'progress_OCR':'Source file needs an OCR text layer',
 	'progress_L':'Source file is incorrect (missing pages, unordered pages, etc)',
 	'progress_X':'Pagelist needed (to verify file is complete and correct before commencing proofreading)',
-//	'▲':'Return to the top of the page.',
+	'▲':'Return to the top of the page.',
  
 	'corr_list':'List of typos identified on this page',
 	'corr_link':'Typos Marked',

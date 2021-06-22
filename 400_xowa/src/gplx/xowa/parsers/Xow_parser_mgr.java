@@ -108,7 +108,7 @@ public class Xow_parser_mgr {
 		if (	Xow_page_tid.Identify(wiki.Domain_tid(), ttl.Ns().Id(), ttl.Page_db()) == Xow_page_tid.Tid_wikitext) {	// only parse page if wikitext; skip .js, .css, Module; DATE:2013-11-10
 			byte[] data_raw = page.Db().Text().Text_bry();
 			data_raw = dbp.stripcomments(data_raw);
-//		data_raw = Bry_.Add(data_raw, Bry_.new_a7("<references/>\n")); - causes problems in en.wikisource.org/wiki/The_New_Student%27s_Reference_Work/Cumberland,_Md.
+			data_raw = Bry_.Add(data_raw, Bry_.new_a7("<references/>\n")); //- causes problems in en.wikisource.org/wiki/The_New_Student%27s_Reference_Work/Cumberland,_Md.
 			// reset Cite info
 			wiki.Html_mgr().Html_wtr().Init_per_page();
 			parser.Parse_text_to_wdom(root, ctx, tkn_mkr, data_raw , Xop_parser_.Doc_bgn_bos);

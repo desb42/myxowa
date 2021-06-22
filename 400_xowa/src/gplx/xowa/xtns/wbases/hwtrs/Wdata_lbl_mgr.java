@@ -97,7 +97,7 @@ public class Wdata_lbl_mgr {
 			for (int j = 0; j < grp_len; ++j) {
 				Wbase_claim_base itm = (Wbase_claim_base)grp.Get_at(j);
 				this.Queue_if_missing__pid(itm.Pid());
-				itm.Welcome(lbl_gatherer);
+				itm.Welcome(lbl_gatherer, false);
 				Wbase_claim_grp_list qual_list = itm.Qualifiers();
 				if (qual_list != null) {
 					int qual_list_len = qual_list.Len();
@@ -107,7 +107,7 @@ public class Wdata_lbl_mgr {
 						for (int m = 0; m < qual_grp_len; ++m) {
 							Wbase_claim_base qual = qual_grp.Get_at(m);
 							this.Queue_if_missing__pid(qual.Pid());
-							qual.Welcome(lbl_gatherer);
+							qual.Welcome(lbl_gatherer, false);
 						}
 					}
 				}
@@ -124,7 +124,7 @@ public class Wdata_lbl_mgr {
 							for (int n = 0; n < claim_grp_len; ++n) {
 								Wbase_claim_base claim = claim_grp.Get_at(n);
 								this.Queue_if_missing__pid(claim.Pid());
-								claim.Welcome(lbl_gatherer);
+								claim.Welcome(lbl_gatherer, false);
 							}
 						}
 					}

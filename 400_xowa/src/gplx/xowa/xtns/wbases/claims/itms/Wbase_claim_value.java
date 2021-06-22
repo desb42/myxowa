@@ -23,7 +23,7 @@ public class Wbase_claim_value extends Wbase_claim_base {
 	public byte[] Hash() { return hash; } private final byte[] hash;
 	@Override public byte	Val_tid() {return val_tid;} private final    byte val_tid;
 
-	@Override public void Welcome(Wbase_claim_visitor visitor) {visitor.Visit_system(this);}
+	@Override public void Welcome(Wbase_claim_visitor visitor, boolean rich_wikitext) {visitor.Visit_system(this, rich_wikitext);}
 	@Override public String toString() {// TEST:
 		return String_.Concat_with_str("|", Wbase_claim_value_type_.Reg.Get_str_or_fail(this.Snak_tid()), Wbase_claim_type_.Reg.Get_str_or_fail(this.Val_tid()));
 	}

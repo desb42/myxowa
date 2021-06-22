@@ -21,6 +21,7 @@ import gplx.Bry_bfr_;
 import gplx.Io_mgr;
 import gplx.String_;
 import gplx.core.envs.Runtime_;
+import gplx.xowa.Db_readwrite;
 import gplx.xowa.Xoa_ttl;
 import gplx.xowa.Xoa_url;
 import gplx.xowa.Xoae_app;
@@ -61,7 +62,8 @@ public class Http_server_page {
 		// check for Special:Api
 		if (page.ttl.Ns().Id() == Xow_ns_.Tid__special) {
 			if (Bry_.Has_at_bgn(page.ttl.Base_txt(), Bry_.new_a7("Api"))) {
-				page.html = String_.new_u8(Db_special_api.Gen(page));
+                            //app.Wiki_mgr().Wdata_mgr().Wdata_wiki()
+				page.html = String_.new_u8(Db_special_api.Gen(page, app.Wiki_mgr().Wdata_mgr().Wdata_wiki()));
 				page.content_type = json_mime;
 				return page;
 			}
@@ -156,7 +158,6 @@ public class Http_server_page {
 
 			byte mode = url_parser.Action();
 			page_html = wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode);
-                        this.html = String_.new_u8(page_html);
 			switch (retrieve_mode) {
 				case File_retrieve_mode.Mode_skip:	// noop
 					break;
@@ -169,15 +170,18 @@ public class Http_server_page {
 			}
 //                        if (page.Db().Page().Html_db_id() == Xopg_db_page.HTML_DB_ID_NULL) // already done if HTML page
 			// NOTE: substitutes xoimg tags for actual file; ISSUE#:686; DATE:2020-06-27
+
+			//Db_readwrite.writeFile(String_.new_u8(page_html), "d:/des/xowa_x/pre_html.htm");
+
 			page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);
-		byte[] redlinks = null;
-                Bry_bfr tmp_bfr = Bry_bfr_.New();
+			byte[] redlinks = null;
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
 			Xopg_redlink_mgr red_mgr = new Xopg_redlink_mgr(page, null);
 			red_mgr.Redlink(tmp_bfr);
 			redlinks = tmp_bfr.To_bry_and_clear();
-                        //System.out.println(String_.new_u8(redlinks));
-                        this.redlink = String_.new_u8(redlinks);
-                }
+			//System.out.println(String_.new_u8(redlinks));
+			this.redlink = String_.new_u8(redlinks);
+		}
 		page_html = Http_server_wkr.Replace_fsys_hack(page_html);
 		this.html = String_.new_u8(page_html);
 	}

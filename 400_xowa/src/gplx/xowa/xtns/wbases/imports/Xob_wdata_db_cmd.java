@@ -299,7 +299,7 @@ class Wbase_claim_tbl extends Wdata_tbl_base {
 			byte[] claim_val = Bry_.Empty;
 			for (int j = 0; j < itms_len; j++) {
 				Wbase_claim_base claim = claim_grp.Get_at(j);
-				claim.Welcome(visitor);
+				claim.Welcome(visitor, false);
 				claim_val = visitor.Rv();
 				Exec_insert(++next_claim_id, page_id, claim_grp.Id(), claim.Val_tid(), claim.Snak_tid(), entity_id, claim_val, claim.Wguid(), claim.Rank_tid(), 0, 0);
 			}
@@ -446,13 +446,13 @@ class Xob_wdata_db_visitor implements Wbase_claim_visitor {
 	public Xob_wdata_db_visitor(Wdata_wiki_mgr wdata_mgr) {this.wdata_mgr = wdata_mgr;}
 	public void Init(byte[] lang_key) {this.lang_key = lang_key;}
 	public byte[] Rv() {return rv;} private byte[] rv;
-	public void Visit_str(Wbase_claim_string itm)						{rv = itm.Val_bry();}
-	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm)	{rv = Bry_.Add_w_dlm(Byte_ascii.Pipe, itm.Lang(), itm.Text());}
-	public void Visit_quantity(Wbase_claim_quantity itm)				{rv = itm.Amount();}
-	public void Visit_time(Wbase_claim_time itm)						{rv = itm.Time();}
-	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm)	{rv = Bry_.Add_w_dlm(Byte_ascii.Comma, itm.Lat(), itm.Lng());}
-	public void Visit_system(Wbase_claim_value itm)                     {rv = Bry_.Empty;}
-	public void Visit_entity(Wbase_claim_entity itm) {
+	public void Visit_str(Wbase_claim_string itm, boolean rich_wikitext)						{rv = itm.Val_bry();}
+	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm, boolean rich_wikitext)	{rv = Bry_.Add_w_dlm(Byte_ascii.Pipe, itm.Lang(), itm.Text());}
+	public void Visit_quantity(Wbase_claim_quantity itm, boolean rich_wikitext)				{rv = itm.Amount();}
+	public void Visit_time(Wbase_claim_time itm, boolean rich_wikitext)						{rv = itm.Time();}
+	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm, boolean rich_wikitext)	{rv = Bry_.Add_w_dlm(Byte_ascii.Comma, itm.Lat(), itm.Lng());}
+	public void Visit_system(Wbase_claim_value itm, boolean rich_wikitext)                     {rv = Bry_.Empty;}
+	public void Visit_entity(Wbase_claim_entity itm, boolean rich_wikitext) {
 		Wdata_doc entity_doc = wdata_mgr.Doc_mgr.Get_by_xid_or_null(itm.Page_ttl_db());
 		if (entity_doc != null) {
 			rv = entity_doc.Get_label_bry_or_null(lang_key);

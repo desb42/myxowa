@@ -29,7 +29,7 @@ public abstract class Wbase_claim_base implements CompareAble {
 	public int[]					Qualifiers_order()	{return qualifiers_order;} private int[] qualifiers_order;
 	public Wbase_references_grp[]	References()		{return references;} private Wbase_references_grp[] references;
 	public abstract byte			Val_tid();
-	public abstract void			Welcome(Wbase_claim_visitor visitor);
+	public abstract void			Welcome(Wbase_claim_visitor visitor, boolean rich_wikitext);
 
 	public Wbase_claim_base			Rank_tid_(byte v) {this.rank_tid = v; return this;} 
 	public void						Wguid_(byte[] v) {this.wguid = v;} 
@@ -42,5 +42,5 @@ public abstract class Wbase_claim_base implements CompareAble {
 		return Int_.Compare(pid, comp.pid);
 	}
 
-	public static final    Wbase_claim_base[] Ary_empty = new Wbase_claim_base[0];
+	public static final    Wbase_claim_base[] Ary_empty = new Wbase_claim_base[] {null};
 }

@@ -48,6 +48,11 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 		return Bry_.Mid(full_txt, bgn, end);
 	}
 	public byte[] Full_txt_raw()		{return full_txt;} private byte[] full_txt = Bry_.Empty;
+	public byte[] Full_txt_raw_unders() {
+		synchronized (url_encoder) {	// LOCK:static-obj
+			return url_encoder.Encode(Replace_unders(Full_txt_raw()));
+		}
+        }
 	public byte[] Full_db_wo_xwiki()	{
 		byte[] rv = Bry_.Mid(full_txt, wik_bgn == -1 ? 0 : ns_bgn == -1 ? page_bgn - 1 : ns_bgn - 1, full_txt.length);
 		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);

@@ -143,7 +143,8 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 		img_alt.Set_by_mid_or_empty(src, data.Img_alt_bgn(), data.Img_alt_end());
 		img_cls.Set_by_arg(data.Img_cls());
 		img_style.Set_by_arg(data.Img_style());
-		if (data.Img_imap_idx() != -1) img_imap_usemap.Set(data.Img_imap_idx());
+		if (data.Img_imap_idx() != -1)
+			img_imap_usemap.Set(data.Img_imap_idx());
 		return true;
 	}
 	public void Init_by_gly(Bfr_arg_clearable href, byte[] xowa_title, Bfr_arg_clearable xoimg) {

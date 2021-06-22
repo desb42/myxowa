@@ -1003,12 +1003,12 @@ if (!window.xowa) {
     if (visible) {
       elem.style.display = '';
       icon.title = xowa_global_values.show;      
-      icon.src = xowa_root_dir + 'bin/any/xowa/file/app.general/twisty_down.png';
+      icon.src = xowa_root_dir + 'bin/any/xowa/extra/app.general/twisty_down.png';
     }
     else {
       elem.style.display = 'none';
       icon.title = xowa_global_values.hide;
-      icon.src = xowa_root_dir + 'bin/any/xowa/file/app.general/twisty_right.png';
+      icon.src = xowa_root_dir + 'bin/any/xowa/extra/app.general/twisty_right.png';
     }
     // xowa.gfs.exec(null, 'xowa.api.html.page.toggles.get(' + xowa.gfs.arg_str(prefix) + ').visible = ' + xowa.gfs.arg_yn(visible) + ';');
     xowa.gfs.exec(null, "app.cfg.set('app', 'xowa.html.toggles." + prefix + "', " + xowa.gfs.arg_yn(visible) + ");");
@@ -1419,9 +1419,9 @@ function ascii_to_hexa(str)
 	  var locjs = '/';
     if (window.location.pathname.substring(0,5) == '/xowa')
       locjs = '/xowa/';
-    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '/extra.js');
-    xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '/extra.css')
-//    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/file/' + x_p.wiki + '.js');
+    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/extra/' + x_p.wiki + '/extra.js');
+    xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/extra/' + x_p.wiki + '/extra.css')
+//    xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/extra/' + x_p.wiki + '.js');
     var pageurl = locjs + x_p.wiki + '/wiki/' + xowa_global_values.wgPageName;
     //if (pageurl != location.pathname)
     //  window.history.pushState('page2', xowa_global_values.wgTitle, pageurl);

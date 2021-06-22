@@ -67,7 +67,12 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 				if (b == 's') { // for 'src'
 					if (pos + 10 < top) {
 						if (src[pos] == 'r' && src[pos+1] == 'c' && src[pos+2] == '{' && src[pos+3] == '{' && src[pos+4] == '=' && src[pos+5] == '}' && src[pos+6] == '}' && src[pos+7] == '"') {
-							css_ttl_bry = Bry_.Mid(src, pos+8, top-2);
+							while (top > pos) {
+								if (src[top] == '"')
+									break;
+								top--;
+							}
+							css_ttl_bry = Bry_.Mid(src, pos+8, top);
 							css_ttl = css_ttl_bry == null ? null : wiki.Ttl_parse(css_ttl_bry); // must check for null ttl; EX:"<templatestyle src{{=}}A.css>"; PAGE:en.w:Switzerland; ISSUE#:416; DATE:2019-03-31
 						}
 					}
@@ -86,7 +91,7 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		}
 
 		// get page
-		Xow_page_cache_itm page_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(css_ttl);
+		Xow_page_cache_itm page_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(css_ttl, wiki.Domain_str());
 		if (page_itm != null) {
 			css_src = page_itm.Wtxt__direct();
 			css_page_id = page_itm.Page_id();

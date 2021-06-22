@@ -39,7 +39,7 @@ public class Wbase_claim_globecoordinate extends Wbase_claim_base {
 
 	public void Glb_ttl_(byte[] v) {glb_ttl = v;} 
 
-	@Override public void Welcome(Wbase_claim_visitor visitor) {visitor.Visit_globecoordinate(this);}
+	@Override public void Welcome(Wbase_claim_visitor visitor, boolean rich_wikitext) {visitor.Visit_globecoordinate(this, rich_wikitext);}
 	@Override public String toString() {// TEST:
 		return String_.Concat_with_str("|", Wbase_claim_value_type_.Reg.Get_str_or_fail(this.Snak_tid()), Wbase_claim_type_.Reg.Get_str_or_fail(this.Val_tid()), String_.new_u8(lat), String_.new_u8(lng), String_.new_u8(alt), String_.new_u8(prc), String_.new_u8(glb));
 	}

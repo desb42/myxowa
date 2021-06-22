@@ -92,12 +92,20 @@ public class Pp_qualitytot_html_bldr implements gplx.core.brys.Bfr_arg {
 		hxtnPageMgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_page_mgr.Id__pp_pagequality, pageId, crumb);
 	}
 
-	public void Deserialise(Xow_wiki wiki, Xoh_page hpg, Hash_adp props) {
+	public void Deserialise(Xow_wiki wiki, Xoae_page wpg, Hash_adp props) {
 		byte[] data = (byte[])props.Get_by(Pp_quality_hxtn_page_wkr.KEY);
 		// exit if empty
 		if (Bry_.Len_eq_0(data)) return;
 
 		// deserialize data
-		qualitycount = Pp_quality_serialCore.Load(data);
+		wpg.Html_data().Quality_tots().Set_quality(Pp_quality_serialCore.Load(data));
+	}
+	public void Set_quality(int[] qualitycount) {
+		int len = qualitycount.length;
+		if (len != 6) return; // sanity check
+		qualitytot = 0;
+		for (int i = 0; i < 6; i++)
+			qualitytot += qualitycount[i];
+		this.qualitycount = qualitycount;
 	}
 }

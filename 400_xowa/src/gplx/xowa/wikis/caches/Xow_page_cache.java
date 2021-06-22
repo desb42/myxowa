@@ -48,12 +48,12 @@ public class Xow_page_cache {
 			return (Xow_page_cache_itm)cache.Get_or_null(ttl_full_db);
 		}
 	}
-	public Xow_page_cache_itm Get_itm_else_load_or_null(Xoa_ttl ttl) {
+	public Xow_page_cache_itm Get_itm_else_load_or_null(Xoa_ttl ttl, String domain) {
 		//synchronized (thread_lock) {
 		synchronized (cache_lock) {
 			cache_tries++;
 		}
-		Xow_page_cache_itm rv = (Xow_page_cache_itm)cache.Get_or_null(ttl.Full_db_as_str());
+		Xow_page_cache_itm rv = (Xow_page_cache_itm)cache.Get_or_null(domain + ttl.Full_db_as_str());
 //System.out.println("ttl " + String_.new_u8(ttl.Full_db()));
 		if (rv == Xow_page_cache_itm.Missing)
 			return null;
@@ -70,9 +70,9 @@ public class Xow_page_cache {
 			}
 		}
 	}
-	public byte[] Get_src_else_load_or_null(Xoa_ttl ttl) {
+	public byte[] Get_src_else_load_or_null(Xoa_ttl ttl, String domain) {
 		//synchronized (thread_lock) {
-			Xow_page_cache_itm rv = Get_itm_else_load_or_null(ttl);
+			Xow_page_cache_itm rv = Get_itm_else_load_or_null(ttl, domain);
 			return rv == null ? null : rv.Wtxt__direct();
 		//}
 	}

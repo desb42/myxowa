@@ -451,7 +451,7 @@ public class Srl__tst {// see also FOOTNOTE:VIEWING_WIKIDATA_JSON
 	@Test   public void Claims_time_typed() {
 		Wbase_claim_time claim = (Wbase_claim_time)fxt.Wdata_fxt().Make_claim_time(2, "2001-02-03 04:05:06", 9);
 		Scrib_lib_wikibase_srl_visitor visitor = new Scrib_lib_wikibase_srl_visitor();
-		visitor.Visit_time(claim);
+		visitor.Visit_time(claim, false);
 		Keyval keyval = Keyval_find_.Find(true, visitor.Rv(), "value", "timezone");
 		Gftest.Eq__str("timezone", keyval.Key());
 		Gftest.Eq__int(0, (int)keyval.Val());	// fails when keyval.Val() is String; DATE:2016-10-28
@@ -501,7 +501,7 @@ public class Srl__tst {// see also FOOTNOTE:VIEWING_WIKIDATA_JSON
 	@Test   public void Numeric_id_is_int() {	// PURPOSE: assert that numeric-id is integer, not String, else will fail when comparing directly to integer; PAGE:en.w:Hollywood_Walk_of_Fame DATE:2016-12-17
 		Wbase_claim_entity claim = (Wbase_claim_entity)fxt.Wdata_fxt().Make_claim_entity_qid(123, 456);
 		Scrib_lib_wikibase_srl_visitor visitor = new Scrib_lib_wikibase_srl_visitor();
-		visitor.Visit_entity(claim);
+		visitor.Visit_entity(claim, false);
 		Keyval keyval = Keyval_find_.Find(true, visitor.Rv(), "value", "numeric-id");
 		Gftest.Eq__int(456, (int)keyval.Val());	// NOTE: must be 456 not "456"
 	}

@@ -207,7 +207,7 @@ public class Http_server_wkr implements Gfo_invk {
 //testing                        page.Wiki().Cache_mgr().Page_cache().Cleanup();
 //testing		Xowe_wiki_.Rls_mem(page.Wiki(), true);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!test
 		}
-		writeFile(page_html, rootdir + "html.htm");
+		Db_readwrite.writeFile(page_html, rootdir + "html.htm");
 		response.Write_response_as_html(client_wtr, Bool_.N, page_html);
 	}
 	private void Process_post(Http_request_itm request, byte[] url_bry) {
@@ -406,22 +406,6 @@ public class Http_server_wkr implements Gfo_invk {
                 return sb.toString();
             } else {
                 return html;
-            }
-        }
-        private static void writeFile(String data, String filename) {
-            OutputStream os = null;
-            try {
-                os = new FileOutputStream(new File(filename));
-                byte[] db = data.getBytes();
-                os.write(db, 0, db.length);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }finally{
-                try {
-                    os.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     // time that tick() was called

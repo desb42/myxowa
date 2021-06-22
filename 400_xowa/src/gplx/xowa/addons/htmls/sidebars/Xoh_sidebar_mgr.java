@@ -61,6 +61,7 @@ public class Xoh_sidebar_mgr {
 	public void Make(Bry_bfr tmp_bfr, byte[] src) {	// TEST:
 		Xoh_sidebar_parser.Parse(tmp_bfr, wiki, grps, src);
 		top = Xoh_sidebar_htmlr.To_json(wiki, grps);
+		top.AddKvStr("link-mainpage", "/wiki/");
 	}
 	private static final    byte[] Ttl__sidebar = Bry_.new_a7("Sidebar");	// MediaWiki:Sidebar
 }

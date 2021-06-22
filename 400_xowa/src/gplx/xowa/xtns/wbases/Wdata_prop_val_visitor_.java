@@ -90,41 +90,23 @@ public class Wdata_prop_val_visitor_ {
 			case Wbase_claim_type_.Tid__string:
 				byte[] txt = To_bry_by_str(val_obj);
 				if (format) {
-					Wbase_prop_mgr prop_mgr = wiki.Appe().Wiki_mgr().Wdata_mgr().Prop_mgr();
-					Xowb_prop_tbl_itm tbl_itm = prop_mgr.Get_or_null("p" + Integer.toString(pid), page_url);
-					byte[] extern = tbl_itm.Data();
-					txt = replace_dollar_1(txt, extern);
+					txt = Wdata_prop_val_visitor.Build_lnke(txt, pid, wiki.Appe().Wiki_mgr().Wdata_mgr());
 				}
 				Wdata_prop_val_visitor.Write_str(bfr, txt);
 				break;
 			case Wbase_claim_type_.Tid__time:				Write_time(bfr, wdata_mgr, wiki, page_url, pid, snak_tid, (Keyval[])val_obj); break;
-			case Wbase_claim_type_.Tid__globecoordinate:	Write_geo(bfr, wdata_mgr, lang, page_url, (Keyval[])val_obj); break;
+			case Wbase_claim_type_.Tid__globecoordinate:
+				if (format)
+					Db_coordformatter.format(bfr, wiki, page_url, (Keyval[])val_obj);
+				else
+					Write_geo(bfr, wdata_mgr, lang, page_url, (Keyval[])val_obj);
+				break;
 			case Wbase_claim_type_.Tid__quantity:			Write_quantity(bfr, wdata_mgr, lang, page_url, (Keyval[])val_obj); break;
 			case Wbase_claim_type_.Tid__monolingualtext:	Write_langtext(bfr, page_url, (Keyval[])val_obj); break;
 			default:
 				throw Err_.new_unhandled_default(tid);
 		}
 		lang.Comma_wkr().Comma__itm(bfr, sub_idx, sub_len);
-	}
-	private static byte[] replace_dollar_1(byte[] txt, byte[] extern) {
-		if (extern == null || extern.length == 0) return txt;
-		int len = extern.length;
-		Bry_bfr bfr = Bry_bfr_.New();
-		bfr.Add_byte(Byte_ascii.Brack_bgn);
-		int upto = 0;
-		for (int i = 0; i < len - 1; i++) {
-			if (extern[i] == '$' && extern[i+1] == '1') {
-				bfr.Add_mid(extern, upto, i);
-				bfr.Add(txt);
-				i += 1;
-				upto = i + 1; 
-			}
-		}
-		bfr.Add_mid(extern, upto, len);
-		bfr.Add_byte(Byte_ascii.Space);
-		bfr.Add(txt);
-		bfr.Add_byte(Byte_ascii.Brack_end);
-		return bfr.To_bry();
 	}
 	private static void Write_entity(Bry_bfr bfr, Wdata_wiki_mgr wdata_mgr, Xol_lang_itm lang, byte[] page_url, Keyval[] kvs) {
 		byte entity_tid = Byte_.Max_value_127;

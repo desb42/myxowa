@@ -25,7 +25,6 @@ class Pp_index_page {
 	public List_adp		Main_lnkis()		{return main_lnkis;} private List_adp main_lnkis = List_adp_.New();
 	public List_adp		Invk_args()			{return invk_args;} private List_adp invk_args = List_adp_.New();
 	public boolean		Is_jpg() {return is_jpg;} private boolean is_jpg = false;
-	//public Xoa_ttl[] Get_ttls_rng(Xowe_wiki wiki, int ns_page_id, byte[] bgn_page_bry, byte[] end_page_bry, Int_obj_ref bgn_page_ref, Int_obj_ref end_page_ref) {
 	public List_adp Get_ttls_rng(Xowe_wiki wiki, int ns_page_id, byte[] bgn_page_bry, byte[] end_page_bry, Int_obj_ref bgn_page_ref, Int_obj_ref end_page_ref) {
 		List_adp rv = List_adp_.New();
 		//int list_len = page_ttls.Count(); if (list_len == 0) return Pp_pages_nde.Ttls_null;
@@ -34,7 +33,7 @@ class Pp_index_page {
 		boolean add = bgn_page_ttl == Xoa_ttl.Null;		// if from is missing, default to bgn; EX: <pages index=A to="A/5"/>
 		for (int i = 0; i < list_len; i++) {			// REF.MW:ProofreadPageRenderer|renderPages
 			Xoa_ttl ttl = (Xoa_ttl)page_ttls.Get_at(i);
-			// check for '.jpg/1'
+/* removed 20210620			// check for '.jpg/1'
 			if (list_len == 1) {
 				byte[] raw = ttl.Raw();
 				int ttl_len = raw.length;
@@ -53,6 +52,7 @@ class Pp_index_page {
 				    )
 					add = Bool_.Y;
 			}
+*/
 			if (ttl.Eq_page_db(bgn_page_ttl)) {
 				add = Bool_.Y;
 				bgn_page_ref.Val_(i);

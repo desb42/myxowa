@@ -59,9 +59,9 @@ enwikisource
             byte[] basemsg = Bry_.new_a7("Mediawiki:proofreadpage_quality0_category");
             for (int i = 0; i < 5; i++) {
                 ttl = Xoa_ttl.Parse(wiki, basemsg);
-                qualitysrcs[i] = ((Xowe_wiki)wiki).Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl);
+                qualitysrcs[i] = ((Xowe_wiki)wiki).Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, ((Xowe_wiki)wiki).Domain_str());
                 ttl = Xoa_ttl.Parse(wiki, 14, qualitysrcs[i]);
-                Xow_page_cache_itm itm = ((Xowe_wiki)wiki).Cache_mgr().Page_cache().Get_itm_else_load_or_null(ttl);
+                Xow_page_cache_itm itm = ((Xowe_wiki)wiki).Cache_mgr().Page_cache().Get_itm_else_load_or_null(ttl, ((Xowe_wiki)wiki).Domain_str());
                 qualityids[i] = itm.Page_id();
                 basemsg[31]++; // bit of a hack!
                 if (i > 0)

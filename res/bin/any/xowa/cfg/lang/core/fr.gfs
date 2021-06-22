@@ -1,4 +1,4 @@
-numbers {
+﻿numbers {
   separators {
     clear;
     set(',', ' ');
@@ -6493,6 +6493,12 @@ group-checkuser|Check users
 group-oversight|Oversighters
 group-upwizcampeditors|Upload Wizard campaign editors
 grouppage-upwizcampeditors|{{ns:project}}:Upload Wizard campaign editors
+kartographer-coord-combined|$1 $2
+kartographer-coord-dms|$1° $2′ $3″
+kartographer-coord-lat-positive|$1 N
+kartographer-coord-lat-negative|$1 S
+kartographer-coord-lon-positive|$1 E
+kartographer-coord-lon-negative|$1 O
 ']:>
 ).lang
 .time_formats

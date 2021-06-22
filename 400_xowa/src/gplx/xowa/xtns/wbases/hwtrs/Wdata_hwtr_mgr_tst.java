@@ -307,7 +307,7 @@ class Wdata_hwtr_mgr_fxt {
 		doc_hwtr.Init_by_wdoc(wdoc_bldr.Add_claims(claim).Xto_wdoc());
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		Wdata_visitor__html_wtr html_wtr = new Wdata_visitor__html_wtr().Init(tmp_bfr, wdata_fxt.Wdata_mgr(), doc_hwtr.Msgs(), doc_hwtr.Lbl_mgr(), wdata_fxt.Wiki().Lang(), Bry_.Empty);
-		claim.Welcome(html_wtr);
+		claim.Welcome(html_wtr, false);
 		byte[] actl = tmp_bfr.To_bry_and_clear();
 		Tfds.Eq(expd, String_.new_u8(actl));
 	}

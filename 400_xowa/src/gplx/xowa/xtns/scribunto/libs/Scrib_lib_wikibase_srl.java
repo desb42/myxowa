@@ -242,7 +242,7 @@ public class Scrib_lib_wikibase_srl {
 			case Wbase_claim_value_type_.Tid__somevalue:		return Datavalue_somevalue;
 			case Wbase_claim_value_type_.Tid__novalue:		return Datavalue_novalue;	// TODO_OLD: throw exc
 			default:
-				itm.Welcome(visitor);
+				itm.Welcome(visitor, false);
 				return visitor.Rv();
 			}
 	}

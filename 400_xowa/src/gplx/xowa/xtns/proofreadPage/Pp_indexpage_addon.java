@@ -16,11 +16,11 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.proofreadPage; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import gplx.xowa.addons.*;
 import gplx.xowa.bldrs.wkrs.*;
-public class ProofreadPage_addon implements Xoax_addon_itm, Xoax_addon_itm__init {
+public class Pp_indexpage_addon implements Xoax_addon_itm, Xoax_addon_itm__init {
 	public void Init_addon_by_app(Xoa_app app) {}
 	public void Init_addon_by_wiki(Xow_wiki wiki) {
-//		wiki.Hxtn_mgr().Reg_wkr(new Hxtn_page_wkr__pagequality(wiki.Hxtn_mgr().Blob_tbl()));
+		wiki.Hxtn_mgr().Reg_wkr(new Pp_index_hxtn_page_wkr(wiki.Hxtn_mgr().Blob_tbl()));
 	}
 
-	public String Addon__key() {return "xowa.pp_pagequality";}
+	public String Addon__key() {return "xowa.pp_indexpage";}
 }

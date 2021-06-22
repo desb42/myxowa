@@ -129,7 +129,7 @@ public class Xoh_head_mgr implements gplx.core.brys.Bfr_arg {
 		}
 
 		if (app.Mode().Tid_is_http()) {
-			wtr.Write_js_include(app.Fsys_mgr().Bin_any_dir().GenSubFil_nest("xowa", "file", "myscript.js").To_http_file_bry());
+			wtr.Write_js_include(app.Fsys_mgr().Bin_xowa_file_dir().GenSubFil_nest("myscript.js").To_http_file_bry());
 			//wtr.Write_js_include(Bry_.new_a7("https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=lua&skin=sunburst"));
 			//if (page.Ttl().Ns().Id() == 828)
 				//wtr.Write_js_include(Bry_.new_a7("https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=lua"));

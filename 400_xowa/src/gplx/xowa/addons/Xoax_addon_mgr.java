@@ -78,11 +78,11 @@ public class Xoax_addon_mgr {
 		, new gplx.xowa.xtns.hieros                     .Hiero_addon()
 		, new gplx.xowa.xtns.imaps                      .Imap_addon()
 		, new gplx.xowa.xtns.graphs                     .Graph_addon()
-		, new gplx.xowa.xtns.proofreadPage              .ProofreadPage_addon()
+		, new gplx.xowa.xtns.proofreadPage              .Pp_pagequality_addon()
 		, new gplx.xowa.xtns.geoCrumbs                  .GeoCrumbs_addon()
 		, new gplx.xowa.xtns.indicators                 .Indicator_addon()
 		, new gplx.xowa.xtns.pagebanners                .Pagebanners_addon()
-		, new gplx.xowa.xtns.proofreadPage              .ProofreadPage_addon2()
+		, new gplx.xowa.xtns.proofreadPage              .Pp_indexpage_addon()
 		, new gplx.xowa.xtns.related                    .Related_addon()
 
 		// specials

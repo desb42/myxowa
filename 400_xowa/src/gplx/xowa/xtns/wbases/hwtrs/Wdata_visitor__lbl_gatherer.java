@@ -19,7 +19,7 @@ import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*;impor
 class Wdata_visitor__lbl_gatherer implements Wbase_claim_visitor {
 	private Wdata_lbl_mgr lbl_mgr;
 	public Wdata_visitor__lbl_gatherer(Wdata_lbl_mgr lbl_mgr) {this.lbl_mgr = lbl_mgr;}
-	public void Visit_entity(Wbase_claim_entity itm) {
+	public void Visit_entity(Wbase_claim_entity itm, boolean rich_wikitext) {
             switch(itm.Entity_tid()) {
                 case Wbase_claim_entity_type_.Tid__item:
 			lbl_mgr.Queue_if_missing__qid(itm.Entity_id());
@@ -35,18 +35,18 @@ class Wdata_visitor__lbl_gatherer implements Wbase_claim_visitor {
                         break;
             }
 	}
-	public void Visit_time(Wbase_claim_time itm) {
+	public void Visit_time(Wbase_claim_time itm, boolean rich_wikitext) {
 		byte[] ttl = Wdata_lbl_itm.Extract_ttl(itm.Calendar());
 		itm.Calendar_ttl_(ttl);
 		lbl_mgr.Queue_if_missing__ttl(ttl);
 	}
-	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm) {
+	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm, boolean rich_wikitext) {
 		byte[] ttl = Wdata_lbl_itm.Extract_ttl(itm.Glb());
 		itm.Glb_ttl_(ttl);
 		lbl_mgr.Queue_if_missing__ttl(ttl);
 	}
-	public void Visit_str(Wbase_claim_string itm) {}
-	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm) {}
-	public void Visit_quantity(Wbase_claim_quantity itm) {}
-	public void Visit_system(Wbase_claim_value itm) {}
+	public void Visit_str(Wbase_claim_string itm, boolean rich_wikitext) {}
+	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm, boolean rich_wikitext) {}
+	public void Visit_quantity(Wbase_claim_quantity itm, boolean rich_wikitext) {}
+	public void Visit_system(Wbase_claim_value itm, boolean rich_wikitext) {}
 }

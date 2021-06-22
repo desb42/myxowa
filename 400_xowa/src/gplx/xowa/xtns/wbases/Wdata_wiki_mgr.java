@@ -148,7 +148,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 
 			Wdata_prop_val_visitor local_prop_val_visitor = new Wdata_prop_val_visitor(app, this, rv, hwtr_mgr.Msgs(), domain.Lang_orig_key(), Bool_.N);
 			//prop_val_visitor.Init(rv, hwtr_mgr.Msgs(), domain.Lang_orig_key(), Bool_.N);
-			claim_itm.Welcome(local_prop_val_visitor);
+			claim_itm.Welcome(local_prop_val_visitor, false);
 		}
 	}
 	public void Resolve_to_bfr(Bry_bfr bfr, Xowe_wiki wiki, Wbase_claim_grp prop_grp, byte[] lang_key, boolean mode_is_statements) {
@@ -174,7 +174,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 				default: {
 					Wdata_prop_val_visitor local_prop_val_visitor = new Wdata_prop_val_visitor(app, this, bfr, hwtr_mgr.Msgs(), lang_key, mode_is_statements);
 					//prop_val_visitor.Init(bfr, hwtr_mgr.Msgs(), lang_key, mode_is_statements);
-					selected.Welcome(local_prop_val_visitor);
+					selected.Welcome(local_prop_val_visitor, mode_is_statements);
 					break;
 				}
 			}

@@ -83,7 +83,8 @@ public class Process_adp implements Gfo_invk, Rls_able {
 			args_fmtr.Bld_bfr_many(tmp_bfr, args);
 			args_str = tmp_bfr.To_str_and_clear();
 		}
-		prog_dlg.Log_many(GRP_KEY, "run", "running process: ~{0} ~{1}", exe_url.Raw(), args_str);
+		if (prog_dlg != null)
+			prog_dlg.Log_many(GRP_KEY, "run", "running process: ~{0} ~{1}", exe_url.Raw(), args_str);
 		exit_code = Exit_init;
 		switch (run_mode) {
 			case Run_mode_async:		return Run_async();

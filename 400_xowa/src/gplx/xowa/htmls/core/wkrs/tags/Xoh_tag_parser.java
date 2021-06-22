@@ -73,7 +73,7 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 				case Gfh_tag_.Id__h1: case Gfh_tag_.Id__h2: case Gfh_tag_.Id__h3: case Gfh_tag_.Id__h4: case Gfh_tag_.Id__h5: case Gfh_tag_.Id__h6:
 					nxt = tag_rdr.Tag__peek_fwd_head();
 					if (	nxt.Name_id() == Gfh_tag_.Id__span
-						&&	nxt.Atrs__match_pair(Gfh_atr_.Bry__class		, Xoh_hdr_data.Bry__class__mw_headline)) {
+						&&	nxt.Atrs__match_pair(Gfh_atr_.Bry__class, Xoh_hdr_data.Bry__class__mw_headline)) {
 						rv = Parse_by_data(hdoc_wkr, hctx, tag_rdr, src, cur, nxt, Xoh_hzip_dict_.Tid__hdr);
 					}
 					break;

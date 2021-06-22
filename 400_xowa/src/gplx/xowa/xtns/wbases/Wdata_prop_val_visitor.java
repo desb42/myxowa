@@ -29,6 +29,7 @@ import gplx.Gfo_usr_dlg_;
 import gplx.Math_;
 import gplx.String_;
 import gplx.core.brys.fmtrs.Bry_fmtr;
+import gplx.xowa.Xoa_ttl;
 import gplx.xowa.Xoae_app;
 import gplx.xowa.langs.Xol_lang_itm;
 import gplx.xowa.langs.Xol_lang_itm_;
@@ -44,11 +45,13 @@ import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_value;
 import gplx.xowa.xtns.wbases.claims.itms.times.Wbase_date;
 import gplx.xowa.xtns.wbases.claims.itms.times.Wbase_date_;
 import gplx.xowa.xtns.wbases.core.Wdata_langtext_itm;
+import gplx.xowa.xtns.wbases.dbs.Xowb_prop_tbl_itm;
 import gplx.xowa.xtns.wbases.hwtrs.Wdata_hwtr_mgr;
 import gplx.xowa.xtns.wbases.hwtrs.Wdata_hwtr_msgs;
 import gplx.xowa.xtns.wbases.hwtrs.Wdata_lbl_itm;
 import gplx.xowa.xtns.wbases.hwtrs.Wdata_lbl_mgr;
-
+import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr;
+import gplx.xowa.Db_coordformatter;
 public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.UNSAFE; callers must do synchronized
 	private Wdata_wiki_mgr wdata_mgr; private Xoae_app app; private Bry_bfr bfr;
 	private Xol_lang_itm lang;
@@ -65,9 +68,46 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 		if (lang == null) lang = app.Lang_mgr().Lang_en();	// TEST: needed for one test; DATE:2016-10-20
 		this.mode_is_statements = mode_is_statements;
 	}
-	public void Visit_str(Wbase_claim_string itm) {Write_str(bfr, itm.Val_bry());}
+	public void Visit_str(Wbase_claim_string itm, boolean rich_wikitext) {
+		byte[] txt = itm.Val_bry();
+		if (rich_wikitext) {
+			if (itm.Pid() == 18) { // Image
+				Write_str(bfr, txt); // for now
+			}
+			else {
+				txt = Build_lnke(txt, itm.Pid(), wdata_mgr);
+				Write_str(bfr, txt);
+			}
+		}
+		else
+			Write_str(bfr, txt);
+	}
 	public static void Write_str(Bry_bfr bfr, byte[] bry) {bfr.Add(bry);}
-	public void Visit_time(Wbase_claim_time itm) {
+	public static byte[] Build_lnke(byte[] txt, int pid, Wdata_wiki_mgr wdata_mgr) {
+		Wbase_prop_mgr prop_mgr = wdata_mgr.Prop_mgr();
+		Xowb_prop_tbl_itm tbl_itm = prop_mgr.Get_or_null("p" + Integer.toString(pid), null);
+		byte[] extern = tbl_itm.Data();
+		if (extern == null || extern.length == 0) return txt;
+		int len = extern.length;
+		Bry_bfr bfr = Bry_bfr_.New();
+		bfr.Add_byte(Byte_ascii.Brack_bgn);
+		int upto = 0;
+		for (int i = 0; i < len - 1; i++) {
+			if (extern[i] == '$' && extern[i+1] == '1') {
+				bfr.Add_mid(extern, upto, i);
+				//  not quite the same as mw
+				bfr.Add(Xoa_ttl.Replace_spaces(txt));
+				i += 1;
+				upto = i + 1; 
+			}
+		}
+		bfr.Add_mid(extern, upto, len);
+		bfr.Add_byte(Byte_ascii.Space);
+		bfr.Add(txt);
+		bfr.Add_byte(Byte_ascii.Brack_end);
+		return bfr.To_bry();
+	}
+	public void Visit_time(Wbase_claim_time itm, boolean rich_wikitext) {
 		Write_time(bfr, tmp_time_bfr, tmp_time_fmtr, msgs, Bry_.Empty, -1, itm.Time_as_date());	// for now, don't bother passing ttl; only used for error msg; DATE:2015-08-03
 	}
 	public static void Write_time(Bry_bfr bfr, Bry_bfr tmp_bfr, Bry_fmtr tmp_fmtr, Wdata_hwtr_msgs msgs, byte[] page_url, int pid, Wbase_date date) {
@@ -78,9 +118,9 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "failed to write time; ttl=~{0} pid=~{1} err=~{2}", page_url, pid, Err_.Message_gplx_log(e));
 		}
 	}
-	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm)	{Write_langtext(bfr, itm.Text());}
+	public void Visit_monolingualtext(Wbase_claim_monolingualtext itm, boolean rich_wikitext)	{Write_langtext(bfr, itm.Text());}
 	public static void Write_langtext(Bry_bfr bfr, byte[] text) {bfr.Add(text);}			// phrase only; PAGE:en.w:Alberta; EX: {{#property:motto}} -> "Fortis et libre"; DATE:2014-08-28
-	public void Visit_entity(Wbase_claim_entity itm) {Write_entity(bfr, wdata_mgr, lang.Key_bry(), itm.Page_ttl_db(), mode_is_statements);}
+	public void Visit_entity(Wbase_claim_entity itm, boolean rich_wikitext) {Write_entity(bfr, wdata_mgr, lang.Key_bry(), itm.Page_ttl_db(), mode_is_statements);}
 	public static void Write_entity(Bry_bfr bfr, Wdata_wiki_mgr wdata_mgr, byte[] lang_key, byte[] entity_ttl_db, boolean mode_is_statements) {
 		// get entity
 		Wdata_doc entity_doc = wdata_mgr.Doc_mgr.Get_by_xid_or_null(entity_ttl_db);
@@ -109,7 +149,7 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 				bfr.Add(label);
 		}
 	}
-	public void Visit_quantity(Wbase_claim_quantity itm) {Write_quantity(bfr, wdata_mgr, lang, itm.Amount(), itm.Lbound(), itm.Ubound(), itm.Unit());}
+	public void Visit_quantity(Wbase_claim_quantity itm, boolean rich_wikitext) {Write_quantity(bfr, wdata_mgr, lang, itm.Amount(), itm.Lbound(), itm.Ubound(), itm.Unit());}
 	public static void Write_quantity(Bry_bfr bfr, Wdata_wiki_mgr wdata_mgr, Xol_lang_itm lang, byte[] val_bry, byte[] lo_bry, byte[] hi_bry, byte[] unit) {
 		// get val, lo, hi; NOTE: must handle large numbers; EX:{{#property:P1082}} PAGE:en.w:Earth; DATE:2015-08-02; NOTE: must handle decimals; PAGE:en.w:Malinao,_Aklan; DATE:2016-11-08
 		Decimal_adp val = Decimal__parse_or(val_bry, null); if (val == null) throw Err_.new_wo_type("wbase:quanity val can not be null");
@@ -182,7 +222,15 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 		}
 		return bfr == null ? bry : bfr.To_bry_and_clear();
 	}
-	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm) {Write_geo(Bool_.N, bfr, wdata_mgr.Hwtr_mgr().Lbl_mgr(), msgs, itm.Lat(), itm.Lng(), itm.Alt(), itm.Prc(), itm.Glb());}
+	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm, boolean rich_wikitext) {
+				//if (rich_wikitext)
+				//	Db_coordformatter.format(
+                                //                Double_.parse_or(String_.new_a7(itm.Lat()), Double_.NaN),
+                                //                Double_.parse_or(String_.new_a7(itm.Lng()), Double_.NaN)
+                                //                , lang.Msg_mgr());
+                                //else
+		Write_geo(Bool_.N, bfr, wdata_mgr.Hwtr_mgr().Lbl_mgr(), msgs, itm.Lat(), itm.Lng(), itm.Alt(), itm.Prc(), itm.Glb());
+	}
 	public static void Write_geo(boolean wikidata_page, Bry_bfr bfr, Wdata_lbl_mgr lbl_mgr, Wdata_hwtr_msgs msgs, byte[] lat, byte[] lng, byte[] alt, byte[] prc, byte[] glb) {
 		// 2020-09-06|ISSUE#:792|rewrite based on https://en.wikipedia.org/w/index.php?title=Module:Wd&action=edit; REF.MW: https://github.com/DataValues/Geo/blob/master/src/Formatters/LatLongFormatter.php
 		// normalize precision
@@ -240,5 +288,5 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 	;
 
 	private static final byte[] Wikidata_url = Bry_.new_a7("http://www.wikidata.org/entity/");
-	public void Visit_system(Wbase_claim_value itm) {}
+	public void Visit_system(Wbase_claim_value itm, boolean rich_wikitext) {}
 }

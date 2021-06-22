@@ -27,7 +27,7 @@ public class Xof_img_wkr_resize_img_imageMagick implements Xof_img_wkr_resize_im
 		Io_mgr.Instance.CreateDirIfAbsent(trg.OwnerDir());
 		if (init_needed) {
 			init_needed = false;
-			Gfo_usr_dlg usr_dlg = Xoa_app_.Usr_dlg();
+			Gfo_usr_dlg usr_dlg = null; // Xoa_app_.Usr_dlg(); // less noise 20210609
 			cmd_convert.Prog_dlg_(usr_dlg);
 			cmd_convert_svg_to_png.Prog_dlg_(usr_dlg);
 		}

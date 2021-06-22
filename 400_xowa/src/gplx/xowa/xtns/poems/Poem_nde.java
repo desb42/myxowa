@@ -33,7 +33,15 @@ public class Poem_nde implements Xox_xnde {
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		if (xtn_root == null) return;	// inline poem; write nothing; EX: <poem/>
-		bfr.Add(Div_poem_bgn);
+		int bgn = xnde.Atrs_bgn();
+		int end = xnde.Atrs_end();
+		if (end - bgn > 0) {
+			bfr.Add(Div_poem_bgn_seg);
+			bfr.Add_mid(src, bgn, end);
+			bfr.Add(Div_poem_end_seg);
+		}
+		else
+			bfr.Add(Div_poem_bgn);
 		html_wtr.Write_tkn_to_html(bfr, ctx, hctx, xtn_root.Root_src(), xnde, Xoh_html_wtr.Sub_idx_null, xtn_root);
 		bfr.Add(Div_poem_end);			
 	}
@@ -81,6 +89,8 @@ public class Poem_nde implements Xox_xnde {
 	private static byte[]
 	  Div_poem_bgn = Bry_.new_a7("<div class=\"poem\">\n<p>\n")	// NOTE: always enclose in <p>; MW does this implicitly in its modified parse; DATE:2014-04-27
 	, Div_poem_end = Bry_.new_a7("\n</p>\n</div>")
+	, Div_poem_bgn_seg = Bry_.new_a7("<div ")
+	, Div_poem_end_seg = Bry_.new_a7(" class=\"poem\">\n<p>\n")
 	, Indent_bgn = Bry_.new_a7("\n<span class='mw-poem-indented' style='display: inline-block; margin-left: ")
 	, Indent_end = Bry_.new_a7("em;'>")
 	, Xowa_br_mark = Bry_.new_a7("<!--xowa.br-->")

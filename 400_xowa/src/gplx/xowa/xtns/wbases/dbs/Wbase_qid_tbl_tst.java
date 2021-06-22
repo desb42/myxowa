@@ -36,7 +36,7 @@ class Xowd_wbase_qid_tbl_fxt {
 	}
 	public void Exec_insert(String src_wiki, int src_ns, String src_ttl, String trg_ttl) {
 		qid_tbl.Insert_bgn();
-		qid_tbl.Insert_cmd_by_batch(Bry_.new_u8(src_wiki), src_ns, Bry_.new_u8(src_ttl), Bry_.new_u8(trg_ttl));
+		qid_tbl.Insert_cmd_by_batch(Bry_.new_u8(src_wiki), src_ns, Bry_.new_u8(src_ttl), Bry_.new_u8(trg_ttl), null);
 		qid_tbl.Insert_end();
 	}
 	public void Test_select(String src_wiki, int src_ns, String src_ttl, String expd) {

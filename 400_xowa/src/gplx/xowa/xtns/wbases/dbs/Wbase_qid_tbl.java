@@ -19,7 +19,7 @@ import gplx.xowa.wikis.data.*; import gplx.xowa.xtns.wbases.core.*;
 public class Wbase_qid_tbl implements Rls_able {
 	private final    Object thread_lock = new Object();
 	private final    String tbl_name; private final    Dbmeta_fld_list flds = new Dbmeta_fld_list();
-	private final    String fld_src_wiki, fld_src_ns, fld_src_ttl, fld_trg_ttl;
+	private final    String fld_src_wiki, fld_src_ns, fld_src_ttl, fld_trg_ttl, fld_trg_desc;
 	private final    Db_conn conn; private Db_stmt stmt_select, stmt_insert;
 	private boolean src_ttl_has_spaces;
 	Wbase_qid_tbl(Db_conn conn, boolean schema_is_1, boolean src_ttl_has_spaces) {
@@ -33,6 +33,7 @@ public class Wbase_qid_tbl implements Rls_able {
 			fld_src_ns			= flds.Add_int(fld_prefix + "src_ns");
 			fld_src_ttl			= flds.Add_str(fld_prefix + "src_ttl", 512);
 			fld_trg_ttl			= flds.Add_str(fld_prefix + "trg_ttl", 512);
+			fld_trg_desc			= flds.Add_str(fld_prefix + "trg_desc", 512);
 			conn.Rls_reg(this);
 		}
 	}
@@ -40,9 +41,13 @@ public class Wbase_qid_tbl implements Rls_able {
 	public void Create_idx() {conn.Meta_idx_create(Xoa_app_.Usr_dlg(), Dbmeta_idx_itm.new_normal_by_tbl(tbl_name, "src", fld_src_wiki, fld_src_ns, fld_src_ttl));}
 	public void Insert_bgn() {conn.Txn_bgn("schema__wbase_qid__insert"); stmt_insert = conn.Stmt_insert(tbl_name, flds);}
 	public void Insert_end() {conn.Txn_end(); stmt_insert = Db_stmt_.Rls(stmt_insert);}
-	public void Insert_cmd_by_batch(byte[] src_wiki, int src_ns, byte[] src_ttl, byte[] trg_ttl) {
+	public void Insert_cmd_by_batch(byte[] src_wiki, int src_ns, byte[] src_ttl, byte[] trg_ttl, byte[] desc) {
 		stmt_insert.Clear()
-			.Val_bry_as_str(fld_src_wiki, src_wiki).Val_int(fld_src_ns, src_ns).Val_bry_as_str(fld_src_ttl, src_ttl).Val_bry_as_str(fld_trg_ttl,trg_ttl)
+			.Val_bry_as_str(fld_src_wiki, src_wiki)
+                        .Val_int(fld_src_ns, src_ns)
+                        .Val_bry_as_str(fld_src_ttl, src_ttl)
+                        .Val_bry_as_str(fld_trg_ttl, trg_ttl)
+                        .Val_bry_as_str(fld_trg_desc, desc)
 			.Exec_insert();
 	}
 	public byte[] Select_qid(byte[] src_wiki, int src_ns, byte[] src_ttl) {
@@ -60,6 +65,22 @@ public class Wbase_qid_tbl implements Rls_able {
 						if (rv.length > 0 && rv[0] == Byte_ascii.Ltr_q)
 							rv[0] = Byte_ascii.Ltr_Q;
 					}
+				}
+				return rv;
+			} finally {rdr.Rls();}
+		}
+	}
+	public byte[] Select_qid_desc(byte[] src_wiki, int src_ns, byte[] src_ttl) {
+		if (stmt_select == null) stmt_select = conn.Stmt_select(tbl_name, flds, fld_src_wiki, fld_src_ns, fld_src_ttl);
+		synchronized (stmt_select) {	// LOCK:stmt-rls; DATE:2016-07-06
+			if (src_ttl_has_spaces) src_ttl = Xoa_ttl.Replace_unders(src_ttl);	// NOTE: v2.4.2.1-v2.4.3.2 stores ttl in spaces ("A B"), while xowa will use under form ("A_B"); DATE:2015-04-21
+			Db_rdr rdr = stmt_select.Clear()
+					.Crt_bry_as_str(fld_src_wiki, src_wiki).Crt_int(fld_src_ns, src_ns).Crt_bry_as_str(fld_src_ttl, src_ttl)
+					.Exec_select__rls_manual();
+			try {
+				byte[] rv = null;
+				if (rdr.Move_next()) {
+					rv = rdr.Read_bry_by_str(fld_trg_desc);
 				}
 				return rv;
 			} finally {rdr.Rls();}

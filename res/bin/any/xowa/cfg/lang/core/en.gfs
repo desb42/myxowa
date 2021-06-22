@@ -1,4 +1,4 @@
-numbers {
+﻿numbers {
   separators {
     clear;
     set(',', ',');
@@ -1250,7 +1250,7 @@ apihelp-wbsetsitelink-example-1|Add a sitelink "Hydrogen" for English page with 
 apihelp-wbsetsitelink-example-2|Add a sitelink "Hydrogen" for English page with ID "Q42", if the site link does not exist with an edit summary of "World domination will be mine soon!"
 apihelp-wbsetsitelink-example-3|Add a sitelink "Wasserstoff" for the German page on item with the link for the English page to "Hydrogen", if the site link does not exist
 apihelp-wbsetsitelink-example-4|Removes the German sitelink from the item
-apihelp-wbsetsitelink-example-5|Add a sitelink "Wodór" for the Polish page on item with the link for the English page to "Hydrogen" with one badge pointing to the item with ID "Q149"
+apihelp-wbsetsitelink-example-5|Add a sitelink to the Polish page "Wodór" to the item that is linked with the English page "Hydrogen", with one badge pointing to the item with ID "Q149"
 apihelp-wbsetsitelink-example-6|Change badges for the link to Polish page from the item with ID "Q42" to two badges pointing to the items with IDs "Q2" and "Q149" wothout providing the link title
 apihelp-wbsetsitelink-example-7|Change the link to Polish page from the item with ID"Q42" without changing badges
 apihelp-wbsetsitelink-example-8|Change the link to Polish page from the item with ID "Q42" and remove all of its badges
@@ -1513,17 +1513,16 @@ cite_references_link_many_and|&#32;
 cite_references_link_many_format_backlink_labels|a b c d e f g h i j k l m n o p q r s t u v w x y z aa ab ac ad ae af ag ah ai aj ak al am an ao ap aq ar as at au av aw ax ay az ba bb bc bd be bf bg bh bi bj bk bl bm bn bo bp bq br bs bt bu bv bw bx by bz ca cb cc cd ce cf cg ch ci cj ck cl cm cn co cp cq cr cs ct cu cv cw cx cy cz da db dc dd de df dg dh di dj dk dl dm dn do dp dq dr ds dt du dv dw dx dy dz ea eb ec ed ee ef eg eh ei ej ek el em en eo ep eq er es et eu ev ew ex ey ez fa fb fc fd fe ff fg fh fi fj fk fl fm fn fo fp fq fr fs ft fu fv fw fx fy fz ga gb gc gd ge gf gg gh gi gj gk gl gm gn go gp gq gr gs gt gu gv gw gx gy gz ha hb hc hd he hf hg hh hi hj hk hl hm hn ho hp hq hr hs ht hu hv hw hx hy hz ia ib ic id ie if ig ih ii ij ik il im in io ip iq ir is it iu iv iw ix iy iz ja jb jc jd je jf jg jh ji jj jk jl jm jn jo jp jq jr js jt ju jv jw jx jy jz ka kb kc kd ke kf kg kh ki kj kk kl km kn ko kp kq kr ks kt ku kv kw kx ky kz la lb lc ld le lf lg lh li lj lk ll lm ln lo lp lq lr ls lt lu lv lw lx ly lz ma mb mc md me mf mg mh mi mj mk ml mm mn mo mp mq mr ms mt mu mv mw mx my mz na nb nc nd ne nf ng nh ni nj nk nl nm nn no np nq nr ns nt nu nv nw nx ny nz oa ob oc od oe of og oh oi oj ok ol om on oo op oq or os ot ou ov ow ox oy oz pa pb pc pd pe pf pg ph pi pj pk pl pm pn po pp pq pr ps pt pu pv pw px py pz qa qb qc qd qe qf qg qh qi qj qk ql qm qn qo qp qq qr qs qt qu qv qw qx qy qz ra rb rc rd re rf rg rh ri rj rk rl rm rn ro rp rq rr rs rt ru rv rw rx ry rz sa sb sc sd se sf sg sh si sj sk sl sm sn so sp sq sr ss st su sv sw sx sy sz ta tb tc td te tf tg th ti tj tk tl tm tn to tp tq tr ts tt tu tv tw tx ty tz ua ub uc ud ue uf ug uh ui uj uk ul um un uo up uq ur us ut uu uv uw ux uy uz va vb vc vd ve vf vg vh vi vj vk vl vm vn vo vp vq vr vs vt vu vv vw vx vy vz wa wb wc wd we wf wg wh wi wj wk wl wm wn wo wp wq wr ws wt wu wv ww wx wy wz xa xb xc xd xe xf xg xh xi xj xk xl xm xn xo xp xq xr xs xt xu xv xw xx xy xz ya yb yc yd ye yf yg yh yi yj yk yl ym yn yo yp yq yr ys yt yu yv yw yx yy yz za zb zc zd ze zf zg zh zi zj zk zl zm zn zo zp zq zr zs zt zu zv zw zx zy zz
 cite_references_link_many_format|<sup>[[#~{0}\u007C~{1}]]</sup>
 cite_references_link_many_sep|&#32;
-cite_references_link_many|<li id="~{0}"><span class="mw-cite-backlink">↑ ~{1}</span> ~{2}</li>
-cite_references_link_one|<li id="~{0}"><span class="mw-cite-backlink">[[#~{1}\u007C↑]]</span> ~{2}</li>
+cite_references_link_many|<li id="~{0}"><span class="mw-cite-backlink">^ ~{1}</span> ~{2}</li>
+cite_references_link_one|<li id="~{0}"~{3}><span class="mw-cite-backlink">[[#~{1}\u007C^]]</span> ~{2}</li>
 cite_references_link_prefix|cite_note-
 cite_references_link_suffix|
 cite_references_no_link|<p id="~{0}">~{1}</p>
 cite_references_prefix|<ol class="references">
 cite_references_suffix|</ol>
 cite_submit|Cite
-cite_text|__NOTOC__\n<div class="mw-specialcite-bibliographic">\n\n== Bibliographic details for {{FULLPAGENAME}} ==\n\n* Page name: {{FULLPAGENAME}}\n* Author: {{SITENAME}} contributors\n* Publisher: ''{{SITENAME}}, {{int:sitesubtitle}}''.\n* Date of last revision: {{CURRENTDAY}} {{CURRENTMONTHNAME}} {{CURRENTYEAR}} {{CURRENTTIME}} UTC\n* Date retrieved: <citation>{{CURRENTDAY}} {{CURRENTMONTHNAME}} {{CURRENTYEAR}} {{CURRENTTIME}} UTC</citation>\n* Permanent URL: {{canonicalurl:{{FULLPAGENAME}}\u007Coldid={{REVISIONID}}}}\n* Page Version ID: {{REVISIONID}}\n\n</div>\n<div class="plainlinks mw-specialcite-styles">\n\n== Citation styles for {{FULLPAGENAME}} ==\n\n=== [[APA style]] ===\n{{FULLPAGENAME}}. ({{CURRENTYEAR}}, {{CURRENTMONTHNAME}} {{CURRENTDAY}}). ''{{SITENAME}}, {{int:sitesubtitle}}''. Retrieved <citation>{{CURRENTTIME}}, {{CURRENTMONTHNAME}} {{CURRENTDAY}}, {{CURRENTYEAR}}</citation> from {{canonicalurl:{{FULLPAGENAME}}\u007Coldid={{REVISIONID}}}}.\n\n=== [[The MLA style manual\u007CMLA style]] ===\n"{{FULLPAGENAME}}." ''{{SITENAME}}, {{int:sitesubtitle}}''. {{CURRENTDAY}} {{CURRENTMONTHABBREV}} {{CURRENTYEAR}}, {{CURRENTTIME}} UTC. <citation>{{CURRENTDAY}} {{CURRENTMONTHABBREV}} {{CURRENTYEAR}}, {{CURRENTTIME}}</citation> &lt;{{canonicalurl:{{FULLPAGENAME}}\u007Coldid={{REVISIONID}}}}&gt;.\n\n=== [[MHRA Style Guide\u007CMHRA style]] ===\n{{SITENAME}} contributors, '{{FULLPAGENAME}}', ''{{SITENAME}}, {{int:sitesubtitle}},'' {{CURRENTDAY}} {{CURRENTMONTHNAME}} {{CURRENTYEAR}}, {{CURRENTTIME}} UTC, &lt;{{canonicalurl:{{FULLPAGENAME}}\u007Coldid={{REVISIONID}}}}&gt; [accessed <citation>{{CURRENTDAY}} {{CURRENTMONTHNAME}} {{CURRENTYEAR}}</citation>]\n\n=== [[The Chicago Manual of Style\u007CChicago style]] ===\n{{SITENAME}} contributors, "{{FULLPAGENAME}}," ''{{SITENAME}}, {{int:sitesubtitle}},'' {{canonicalurl:{{FULLPAGENAME}}\u007Coldid={{REVISIONID}}}} (accessed <citation>{{CURRENTMONTHNAME}} {{CURRENTDAY}}, {{CURRENTYEAR}}</citation>).\n\n=== [[Council of Science Editors\u007CCBE/CSE style]] ===\n{{SITENAME}} contributors. {{FULLPAGENAME}} [Internet]. {{SITENAME}}, {{int:sitesubtitle}}; {{CURRENTYEAR}} {{CURRENTMONTHABBREV}} {{CURRENTDAY}}, {{CURRENTTIME}} UTC [cited <citation>{{CURRENTYEAR}} {{CURRENTMONTHABBREV}} {{CURRENTDAY}}</citation>]. Available from:\n{{canonicalurl:{{FULLPAGENAME}}\u007Coldid={{REVISIONID}}}}.\n\n=== [[Bluebook\u007CBluebook style]] ===\n{{FULLPAGENAME}}, {{canonicalurl:{{FULLPAGENAME}}\u007Coldid={{REVISIONID}}}} (last visited <citation>{{CURRENTMONTHNAME}} {{CURRENTDAY}}, {{CURRENTYEAR}}</citation>).\n\n=== [[BibTeX]] entry ===\n\n  @misc{ wiki:xxx,\n    author = "{{SITENAME}}",\n    title = "{{FULLPAGENAME}} --- {{SITENAME}}{,} {{int:sitesubtitle}}",\n    year = "{{CURRENTYEAR}}",\n    url = "{{canonicalurl:{{FULLPAGENAME}}\u007Coldid={{REVISIONID}}}}",\n    note = "[Online; accessed <citation>{{CURRENTDAY}}-{{CURRENTMONTHNAME}}-{{CURRENTYEAR}}</citation>]"\n  }\n\nWhen using the [[LaTeX]] package url (<code>�age{url}</code> somewhere in the preamble) which tends to give much more nicely formatted web addresses, the following may be preferred:\n\n  @misc{ wiki:xxx,\n    author = "{{SITENAME}}",\n    title = "{{FULLPAGENAME}} --- {{SITENAME}}{,} {{int:sitesubtitle}}",\n    year = "{{CURRENTYEAR}}",\n    url = "'''�{canonicalurl:{{FULLPAGENAME}}\u007Coldid={{REVISIONID}}}}'''}'''",\n    note = "[Online; accessed <citation>{{CURRENTDAY}}-{{CURRENTMONTHNAME}}-{{CURRENTYEAR}}</citation>]"\n  }\n\n\n</div> <!--closing div for "plainlinks"-->
 cite|Cite
-clearyourcache|<strong>Note:</strong> After saving, you may have to bypass your browser's cache to see the changes.\n* <strong>Firefox / Safari:</strong> Hold <em>Shift</em> while clicking <em>Reload</em>, or press either <em>Ctrl-F5</em> or <em>Ctrl-R</em> (<em>⌘-R</em> on a Mac)\n* <strong>Google Chrome:</strong> Press <em>Ctrl-Shift-R</em> (<em>⌘-Shift-R</em> on a Mac)\n* <strong>Internet Explorer:</strong> Hold <em>Ctrl</em> while clicking <em>Refresh</em>, or press <em>Ctrl-F5</em>\n* <strong>Opera:</strong> Go to <em>Menu → Settings</em> (<em>Opera → Preferences</em> on a Mac) and then to <em>Privacy & security → Clear browsing data → Cached images and files</em>.
+clearyourcache|{{#switch: {{NAMESPACE}} \n\u007C MediaWiki = \n  {{#ifexist: Template:Editnotices/Page/{{FULLPAGENAME}}\n  \u007C <!--This MediaWiki page has an editnotice, display it-->\n    {{ Template:Editnotices/Page/{{FULLPAGENAME}} \u007C notice action=view }}\n  }}\n\u007C User = {{MediaWiki:Jswarning}}{{script doc auto}}\n}}<span id="clearprefcache">'''Note:''' After saving, you have to bypass your browser's cache to see the changes. '''Google Chrome''', '''Firefox''', '''Microsoft Edge''' and '''Safari''': Hold down the {{key press\u007CShift}} key and click the ''Reload'' toolbar button. For details and instructions about other browsers, see [[Wikipedia:Bypass your cache]].</span>
 collapsible-collapse|Collapse
 collapsible-expand|Expand
 cologneblue.css|/* CSS placed here will affect users of the Cologne Blue skin */
@@ -2279,7 +2278,7 @@ expand_templates_generate_rawhtml|Show raw HTML
 expand_templates_generate_xml|Show XML parse tree
 expand_templates_html_output|Raw HTML output
 expand_templates_input|Input wikitext:
-expand_templates_intro|This special page takes wikitext and expands all templates in it recursively.\nIt also expands supported parser functions like\n<code><nowiki>{{</nowiki>#language:…}}</code> and variables like\n<code><nowiki>{{</nowiki>CURRENTDAY}}</code>.\nIn fact, it expands pretty much everything in double-braces.
+expand_templates_intro|This [[Help:Special page\u007Cspecial page]] takes some text and expands all [[Help:Template\u007Ctemplate]]s in it recursively. It also expands [[mw:Help:Extension:ParserFunctions\u007Cparser functions]] like <code><nowiki>{{#if:...}}</nowiki></code>, and [[mw:Help:Magic_words#Variables\u007Cvariables]] like <code><nowiki>{{CURRENTDAY}}</nowiki></code>&mdash;in fact pretty much everything in double-braces. It does this by calling the relevant parser stage from MediaWiki itself. One can't supply values for template parameters (e.g. <code><nowiki>{{{1}}}</nowiki></code>).
 expand_templates_ok|OK
 expand_templates_output|Result
 expand_templates_preview_fail_html_anon|<em>Because {{SITENAME}} has raw HTML enabled and you are not logged in, the preview is hidden as a precaution against JavaScript attacks.</em>\n\n<strong>If this is a legitimate preview attempt, please [[Special:UserLogin\u007Clog in]] and try again.</strong>
@@ -3773,8 +3772,8 @@ previewconflict|This preview reflects the text in the upper text editing area as
 previewerrortext|An error occurred while attempting to preview your changes.
 previewnote|<strong>Remember that this is only a preview.</strong>\nYour changes have not yet been saved!
 preview|Preview
-previousdiff|← Older edit
-previousrevision|← Older revision
+previousdiff|← Older edit
+previousrevision|← Older revision
 prevn-title|Previous ~{0} {{PLURAL:~{0}\u007Cresult\u007Cresults}}
 prevn|previous {{PLURAL:~{0}\u007C~{0}}}
 prevpage|Previous page (~{0})
@@ -4866,7 +4865,6 @@ thumbsize|Thumbnail size:
 thursday-at|Thursday at ~{0}
 timezone-utc|UTC
 timezonelegend|Time zone:
-timezoneoffset|Offset¹:
 timezoneregion-africa|Africa
 timezoneregion-america|America
 timezoneregion-antarctica|Antarctica
@@ -5465,7 +5463,7 @@ whatlinkshere-hideimages|~{0} file links
 whatlinkshere-hidelinks|~{0} links
 whatlinkshere-hideredirs|~{0} redirects
 whatlinkshere-hidetrans|~{0} transclusions
-whatlinkshere-links|← links
+whatlinkshere-links|links
 whatlinkshere-next|{{PLURAL:~{0}\u007Cnext\u007Cnext ~{0}}}
 whatlinkshere-page|Page:
 whatlinkshere-prev|{{PLURAL:~{0}\u007Cprevious\u007Cprevious ~{0}}}
@@ -5715,23 +5713,23 @@ wikibase-listdatatypes-external-id-body|Literal data field for an external ident
 wikibase-listdatatypes-external-id-head|External identifier
 wikibase-listdatatypes-geo-shape-body|Link to geographic map data stored on Wikimedia Commons (or other configured wiki). See \"https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Map_Data\" for more documentation about map data.
 wikibase-listdatatypes-geo-shape-head|Geographic shape
-wikibase-listdatatypes-globe-coordinate-body|Literal data for a geographical position given as a latitude-longitude pair in gms or decimal degrees for the given stellar body. Defaults to \"Earth\" and then \"WGS84\". It adds a resolution and range.\n* latitude � implicit first part (float, dms, dm, dd) of the coordinate string, direction is either given by prefixed sign or by postfixed N/S\n* longitude � implicit second part (float, dms, dm, dd) of the coordinate string, direction is either given by prefixed sign or by postfixed E/W\n* globe � explicit (?) data value, given as stellar body that defaults to Earth \"http://www.wikidata.org/entity/Q2\"\n* precision - numeric precision of the coordinate
+wikibase-listdatatypes-globe-coordinate-body|Literal data for a geographical position given as a latitude-longitude pair in gms or decimal degrees for the given stellar body. Defaults to \"Earth\" and then \"WGS84\". It adds a resolution and range.\n* latitude – implicit first part (float, dms, dm, dd) of the coordinate string, direction is either given by prefixed sign or by postfixed N/S\n* longitude – implicit second part (float, dms, dm, dd) of the coordinate string, direction is either given by prefixed sign or by postfixed E/W\n* globe – explicit (?) data value, given as stellar body that defaults to Earth \"http://www.wikidata.org/entity/Q2\"\n* precision - numeric precision of the coordinate
 wikibase-listdatatypes-globe-coordinate-head|Globe coordinate
 wikibase-listdatatypes-math-body|Literal data field for mathematical expressions, formula, equations and such, expressed in a variant of LaTeX.
 wikibase-listdatatypes-math-head|Mathematical expression
-wikibase-listdatatypes-monolingualtext-body|Literal data field for a string that is not translated into other languages. This type of string is defined once and reused across all languages. Typical use is a geographical names written in the local language, an identifier of some kind, a chemical formula or a Latin scientific name.\n* language � explicit value for identifying the language for the text part\n* value � explicit value for the language specific variant string
+wikibase-listdatatypes-monolingualtext-body|Literal data field for a string that is not translated into other languages. This type of string is defined once and reused across all languages. Typical use is a geographical names written in the local language, an identifier of some kind, a chemical formula or a Latin scientific name.\n* language – explicit value for identifying the language for the text part\n* value – explicit value for the language specific variant string
 wikibase-listdatatypes-monolingualtext-head|Monolingual text
-wikibase-listdatatypes-multilingualtext-body|Literal data field for a string that must be translated into other languages. Typical use is an entity name of global interest that has non-local written forms. Those can differ both in languages and script systems.\n* language � explicit value for identifying the language for the text part\n* value � explicit value for the language specific variant string
+wikibase-listdatatypes-multilingualtext-body|Literal data field for a string that must be translated into other languages. Typical use is an entity name of global interest that has non-local written forms. Those can differ both in languages and script systems.\n* language – explicit value for identifying the language for the text part\n* value – explicit value for the language specific variant string
 wikibase-listdatatypes-multilingualtext-head|Multilingual text
 wikibase-listdatatypes-musical-notation-body|Literal data field for a musical score written in LilyPond notation.
 wikibase-listdatatypes-musical-notation-head|Musical Notation
-wikibase-listdatatypes-quantity-body|Literal data field for a quantity that relates to some kind of well-defined unit. The actual unit goes in the data values that is entered.\n* amount � implicit part of the string (mapping of unit prefix is unclear)\n* unit � implicit part of the string that defaults to \"1\" (mapping to standardizing body is unclear)\n* upperbound - quantity's upper bound\n* lowerbound - quantity's lower bound
+wikibase-listdatatypes-quantity-body|Literal data field for a quantity that relates to some kind of well-defined unit. The actual unit goes in the data values that is entered.\n* amount – implicit part of the string (mapping of unit prefix is unclear)\n* unit – implicit part of the string that defaults to \"1\" (mapping to standardizing body is unclear)\n* upperbound - quantity's upper bound\n* lowerbound - quantity's lower bound
 wikibase-listdatatypes-quantity-head|Quantity
-wikibase-listdatatypes-string-body|Literal data field for a string of glyphs. Typical use are identifiers that have written forms which do not depend on the language of the reader.\n* value � explicit value for the language specific variant string
+wikibase-listdatatypes-string-body|Literal data field for a string of glyphs. Typical use are identifiers that have written forms which do not depend on the language of the reader.\n* value – explicit value for the language specific variant string
 wikibase-listdatatypes-string-head|String
 wikibase-listdatatypes-tabular-data-body|Link to tabular data stored on Wikimedia Commons (or other configured wiki). See \"https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Tabular_Data\" for more documentation about tabular data.
 wikibase-listdatatypes-tabular-data-head|Tabular data
-wikibase-listdatatypes-time-body|Literal data field for a point in time. Given as a date and time with some precision and boundaries. The time is saved internally in the specified calendar model.\n* time � explicit value for point in time, represented as a timestamp resembling ISO 8601, e.g. +2013-01-01T00:00:00Z. The year is always signed and padded to have between 4 and 16 digits.\n* timezone � explicit value as a signed integer. Timezone information as an offset from UTC in minutes.\n* before � explicit integer value for how many units after the given time it could be. The unit is given by the precision.\n* after � explicit integer value for how many units before the given time it could be. The unit is given by the precision.\n* precision � explicit value encoded in a shortint. The numbers have the following meaning: 0 - billion years, 1 - hundred million years, ..., 6 - millennium, 7 - century, 8 - decade, 9 - year, 10 - month, 11 - day, 12 - hour, 13 - minute, 14 - second.\n* calendarmodel � explicit value given as a URI. It identifies the calendar model of the timestamp.
+wikibase-listdatatypes-time-body|Literal data field for a point in time. Given as a date and time with some precision and boundaries. The time is saved internally in the specified calendar model.\n* time – explicit value for point in time, represented as a timestamp resembling ISO 8601, e.g. +2013-01-01T00:00:00Z. The year is always signed and padded to have between 4 and 16 digits.\n* timezone – explicit value as a signed integer. Timezone information as an offset from UTC in minutes.\n* before – explicit integer value for how many units after the given time it could be. The unit is given by the precision.\n* after – explicit integer value for how many units before the given time it could be. The unit is given by the precision.\n* precision – explicit value encoded in a shortint. The numbers have the following meaning: 0 - billion years, 1 - hundred million years, ..., 6 - millennium, 7 - century, 8 - decade, 9 - year, 10 - month, 11 - day, 12 - hour, 13 - minute, 14 - second.\n* calendarmodel – explicit value given as a URI. It identifies the calendar model of the timestamp.
 wikibase-listdatatypes-time-head|Time
 wikibase-listdatatypes-url-body|Literal data field for a URL. URLs are restricted to the protocols also supported for external links in wikitext.
 wikibase-listdatatypes-url-head|URL
@@ -6619,6 +6617,12 @@ wikibase-sitelinks-wikisource|Wikisource
 wikibase-sitelinks-wikiversity|Wikiversity
 wikibase-sitelinks-wikivoyage|Wikivoyage
 wikibase-sitelinks-wiktionary|Wiktionary
+kartographer-coord-combined|~{0} ~{1}
+kartographer-coord-dms|~{0}°~{1}′~{2}″
+kartographer-coord-lat-positive|~{0}N
+kartographer-coord-lat-negative|~{0}S
+kartographer-coord-lon-positive|~{0}E
+kartographer-coord-lon-negative|~{0}W
 ']:>
 ).lang
 .time_formats

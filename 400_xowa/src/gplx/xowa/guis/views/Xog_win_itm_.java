@@ -24,7 +24,7 @@ public class Xog_win_itm_ {
 		app.Gui_mgr().Nightmode_mgr().Enabled_by_cfg();
 		Xog_startup_win_.Startup(app, win_box);
 
-		win_box.Icon_(IconAdp.file_or_blank(app.Fsys_mgr().Bin_xowa_dir().GenSubFil_nest("file", "app.window", "app_icon.png")));
+		win_box.Icon_(IconAdp.file_or_blank(app.Fsys_mgr().Bin_xowa_file_dir().GenSubFil_nest("app.window", "app_icon.png")));
 	}
 	public static void Show_widget(boolean show, GfuiElem box, GfuiElem btn) {
 		int box_w, btn_w;

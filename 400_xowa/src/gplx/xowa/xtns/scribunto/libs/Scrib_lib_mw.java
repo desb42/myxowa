@@ -104,7 +104,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 			return rslt.Init_obj(core.Interpreter().LoadString("@" + mod_name + ".lua", mod_code));
 		Xoa_ttl ttl = Xoa_ttl.Parse(cur_wiki, Bry_.new_u8(mod_name));// NOTE: should have Module: prefix
 		if (ttl == null) return rslt.Init_ary_empty();
-		byte[] page_db = cur_wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl);
+		byte[] page_db = cur_wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, cur_wiki.Domain_str());
 		if (page_db == null) return rslt.Init_ary_empty();
 		Scrib_lua_mod mod = new Scrib_lua_mod(core, mod_name);
                 page_db = Db_lua_comp.Check(page_db);
@@ -138,6 +138,11 @@ public class Scrib_lib_mw implements Scrib_lib {
 			if (nde == null)
 				return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
 			nde.Val_tkn().Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
+
+// frwikisource seems to need this                        // empty string? - do not add to array 20210618
+// frwikisource seems to need this			if (tmp_bfr.Len_eq_0())
+// frwikisource seems to need this				return rslt.Init_obj(null);
+
                         //ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(tmp_bfr);
                         //System.out.println(idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));
 			return rslt.Init_obj(tmp_bfr.To_str_and_clear_and_trim());	// NOTE: must trim if key_exists; DUPE:TRIM_IF_KEY
@@ -219,6 +224,11 @@ public class Scrib_lib_mw implements Scrib_lib {
 			}
 //				ctx.Scribunto = Bool_.Y; // CHART
 			nde.Val_tkn().Tmpl_evaluate(ctx, src, parent_frame, tmp_bfr);
+
+// frwikisource seems to need this                        // empty string? - do not add to array 20210618
+// frwikisource seems to need this			if (tmp_bfr.Len_eq_0())
+// frwikisource seems to need this				continue;
+
 //				ctx.Scribunto = Bool_.N;
 			String val = key_missing ? tmp_bfr.To_str_and_clear() : tmp_bfr.To_str_and_clear_and_trim(); // NOTE: must trim if key_exists; DUPE:TRIM_IF_KEY
 			Keyval kv = key_is_str ? Keyval_.new_(key_as_str, val) : Keyval_.int_(key_as_int, val);
@@ -345,7 +355,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 
 		// ttl is not in template cache; load title
 		if (sub_src == null)
-			sub_src = core.Wiki().Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl);
+			sub_src = core.Wiki().Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, core.Wiki().Domain_str());
 
 		// ttl does not exist; fail
 		if (sub_src == null)
