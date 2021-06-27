@@ -214,7 +214,7 @@ public class Scrib_lib_language implements Scrib_lib {
 		Xol_lang_itm lang = lang_(args);
 		byte[] fmt_bry = args.Pull_bry(1);
 		byte[] date_bry = args.Cast_bry_or_empty(2); // NOTE: optional empty is required b/c date is sometimes null; use Bry_.Empty b/c this is what Pft_func_time.ParseDate takes; DATE:2013-04-05
-		boolean utc = args.Cast_bool_or_n(3);
+		boolean utc = !args.Cast_bool_or_n(3);
 
 		// init vars
 		int date_bry_len = date_bry.length;

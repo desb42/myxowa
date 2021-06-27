@@ -29,7 +29,10 @@ class Wdata_visitor__html_wtr implements Wbase_claim_visitor {
 		return this;
 	}
 	public void Visit_str(Wbase_claim_string itm, boolean rich_wikitext) {
-		tmp_bfr.Add(itm.Val_bry());
+            byte[] txt = itm.Val_bry();
+            if (rich_wikitext)
+                txt = Wdata_prop_val_visitor.Build_lnke(txt, itm.Pid(), wdata_mgr);
+		tmp_bfr.Add(txt);
 	}
 	public void Visit_entity(Wbase_claim_entity itm, boolean rich_wikitext) {
 		int entity_id = itm.Entity_id();

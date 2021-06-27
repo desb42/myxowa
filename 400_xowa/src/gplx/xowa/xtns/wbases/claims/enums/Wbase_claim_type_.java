@@ -16,8 +16,11 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.wbases.claims.enums;
 
 import gplx.Bry_;
+import gplx.Ordered_hash;
+import gplx.Ordered_hash_;
 
 public class Wbase_claim_type_ {
+	private static Ordered_hash datatype_hash = null;
 	public static final byte	// SERIALIZED:wbase_prop|datatype; REF:https://www.wikidata.org/wiki/Help:Data_type
 	  Tid__unknown              =  0
 	, Tid__value                =  1
@@ -86,7 +89,28 @@ public class Wbase_claim_type_ {
 	, Bry_.new_a7("Sense") // ?
 	, Bry_.new_a7("Form") // ?
 	, Bry_.new_a7("Musical Notation") // possibly mediawiki\extensions\Math\i18n\en.json "datatypes-type-math"
-        };
+	};
+	private static byte[][] external_names = { // keep in sync with names
+	  Bry_.new_a7("unknown")
+	, Bry_.new_a7("bad")
+	, Bry_.new_a7("string")
+	, Bry_.new_a7("quantity")
+	, Bry_.new_a7("time")
+	, Bry_.new_a7("globe-coordinate")
+	, Bry_.new_a7("monolingualtext")
+	, Bry_.new_a7("wikibase-item")
+	, Bry_.new_a7("wikibase-property")
+	, Bry_.new_a7("math")
+	, Bry_.new_a7("url")
+	, Bry_.new_a7("external-id")
+	, Bry_.new_a7("commonsMedia")
+	, Bry_.new_a7("geo-shape")
+	, Bry_.new_a7("tabular-data")
+	, Bry_.new_a7("wikibase-lexeme")
+	, Bry_.new_a7("wikibase-sense")
+	, Bry_.new_a7("wikibase-form")
+	, Bry_.new_a7("musical-notation")
+	};
 
 	private static Wbase_enum_itm New(byte tid, String key)						{return New(tid, key, key);}
 	private static Wbase_enum_itm New(byte tid, String key, String scrib)		{return Reg.Add(new Wbase_claim_type(tid, key, scrib));}
@@ -97,5 +121,33 @@ public class Wbase_claim_type_ {
 	public static byte[] Get_name(byte[] key) {
 		byte tid = Get_tid_or_unknown(key);
 		return names[tid];
+	}
+	public static byte[] Names(int tid) {
+		return names[tid];
+	}
+	public static byte[] External_Name(int tid) {
+		return external_names[tid];
+	}
+	private static void Init_hash() {
+		// init datatype_hash
+		Wbase_enum_hash enum_hash = Reg;
+		byte len = (byte)enum_hash.Len();
+		for (byte i = 0; i < len; i++) {
+			Wbase_claim_type claim_type = (Wbase_claim_type)enum_hash.Get_itm_or(i, null);
+			datatype_hash.Add(Bry_.new_u8(claim_type.Key_for_scrib()), claim_type);
+		}
+	}
+	private static Object sync = new Object();
+	public static int Get_tid_by_scrib(byte[] datatype) {
+		synchronized (sync) {
+			if (datatype_hash == null) {
+				datatype_hash = Ordered_hash_.New_bry();
+				Init_hash();
+			}
+		}
+		Wbase_claim_type claim_type = (Wbase_claim_type)datatype_hash.Get_by(datatype);
+		if (claim_type == null)
+			return Tid__unknown;
+		return claim_type.Tid();
 	}
 }

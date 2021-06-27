@@ -27,7 +27,7 @@ public class Http_server_wkr_tst {
 		fxt.Test__Replace_fsys_hack("a 'file:////home/lnxusr/xowa/file/A.png' b \"file:////home/lnxusr/xowa/file/B.png\" c", "a '/fsys/file/A.png' b \"/fsys/file/B.png\" c");
 	}
 	@Test   public void Non_file() {
-		fxt.Test__Replace_fsys_hack("a file:////home/lnxusr/xowa/bin/any/xowa/file/app.window/app_icon.png b", "a /fsys/bin/any/xowa/file/app.window/app_icon.png b");
+		fxt.Test__Replace_fsys_hack("a file:////home/lnxusr/xowa/bin/any/xowa/extra/app.window/app_icon.png b", "a /fsys/bin/any/xowa/file/app.window/app_icon.png b");
 	}
 	@Test   public void Url() {
 		fxt.Test__Replace_fsys_hack("url(file:////home/lnxusr/xowa/anonymous/wiki/www.wikidata.org/html/logo.png)", "url(/fsys/anonymous/wiki/www.wikidata.org/html/logo.png)");

@@ -19,6 +19,7 @@ import gplx.langs.jsons.*;
 import gplx.xowa.langs.*;
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.parsers.*;
 import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_entity_type_;
+import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_type_;
 public class Wdata_doc {
 	private final    Wdata_wiki_mgr mgr;
 	public Wdata_doc(Wdata_wiki_mgr mgr, Json_doc jdoc, byte[] qid) {
@@ -30,7 +31,9 @@ public class Wdata_doc {
 	public int Jdoc_size() {return jdoc == null ? 1 : jdoc.Src().length;}
 	public byte[][] Sort_langs() {return sort_langs;} public void Sort_langs_(byte[][] v) {sort_langs = v;} private byte[][] sort_langs = Bry_.Ary_empty;
 
-	public byte[] Datatype() {if (datatype == null) datatype = mgr.Wdoc_parser(jdoc).Parse_datatype(qid, jdoc); return datatype;} private byte[] datatype;
+	public int Datatype_id() {if (datatype_id == -1) datatype_id = mgr.Wdoc_parser(jdoc).Parse_datatype_id(qid, jdoc); return datatype_id;} private int datatype_id = -1;
+	public byte[] Datatype() {return Wbase_claim_type_.Names(Datatype_id());}
+	public byte[] Datatype_external() {return Wbase_claim_type_.External_Name(Datatype_id());}
 
 	// NOTE: lazy instantiation b/c we don't want to parse entire json unless called; particulary necessary for {{#property}} calls;
 	private Ordered_hash slink_list;

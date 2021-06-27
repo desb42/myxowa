@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,17 +13,15 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios; import gplx.*; import gplx.core.*;
+package gplx.core.ios;
+import gplx.*;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.nio.*;
 import java.nio.channels.*;
-import gplx.core.criterias.*; import gplx.core.bits.*; import gplx.core.envs.*;
-import gplx.core.ios.streams.*; import gplx.core.ios.atrs.*;
-import gplx.core.progs.*;
+import gplx.core.envs.*;
+import gplx.core.ios.streams.*;
+import gplx.core.ios.atrs.*;
 import java.util.concurrent.locks.*;
 public class IoEngine_system extends IoEngine_base {
 	public static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
@@ -217,11 +215,7 @@ public class IoEngine_system extends IoEngine_base {
 	}
 	@Override public void UpdateFilModifiedTime(Io_url url, DateAdp modified) {
 		File f = new File(url.Xto_api());
-		long timeInt = modified.UnderDateTime().getTimeInMillis();
-//		if (timeInt < 0) {
-//			UsrDlg_._.Notify("{0} {1}", url.Xto_api(), timeInt);
-//			return;
-//		}
+		long timeInt = modified.UnderDateTime().toEpochSecond();
 		if (!f.setLastModified(timeInt)) {
 			if (Fil_ReadOnly(f)) {
 				boolean success = false;

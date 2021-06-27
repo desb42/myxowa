@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -14,7 +14,6 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx;
-import java.util.GregorianCalendar;
 public class Datetime_now {
 	private static final    DateAdp dflt = DateAdp_.parse_gplx("2001-01-01 00:00:00.000");
 	private static DateAdp manual;
@@ -41,32 +40,16 @@ public class Datetime_now {
 	}
 
 	public static DateAdp Get() {
-		if (manual == null) return new DateAdp(new GregorianCalendar());
+		if (manual == null) return new DateAdp();
 		DateAdp rv = manual;
 		if (autoincrement) manual = rv.Add_minute(1);		// simulate passage of manual by increasing manual by 1 minute with each call
 		return rv;
 	}
-	public static DateAdp Get(java.util.TimeZone tz) {
-		DateAdp rv = new DateAdp(new GregorianCalendar());
-		rv.SetTimeZone(tz);
+	public static DateAdp Get(java.time.ZoneId zoneid) {
+		DateAdp rv = new DateAdp(zoneid);
 		return rv;
 	}
 	public static DateAdp Get_force() {	// ignore manual and force get of real time
-		return new DateAdp(new GregorianCalendar());
+		return new DateAdp();
 	}
-//		private static final    DateAdp manual_time_dflt = DateAdp_.parse_gplx("2001-01-01 00:00:00.000");
-//		private static DateAdp manual_time;
-//		static boolean Now_enabled() {return now_enabled;} private static boolean now_enabled;
-//		static void Now_enabled_y_() {now_enabled = Bool_.Y; manual_time = manual_time_dflt;}
-//		static void Now_enabled_n_() {now_enabled = Bool_.N; now_freeze = false;}
-	// public static void Now_set(DateAdp date) {now_enabled = true; manual_time = date;}
-	// public static void Now_freeze_y_() {now_freeze = true;} 
-//		private static boolean now_freeze;
-	// public static DateAdp Now_time0_add_min(int minutes) {return manual_time_dflt.Add_minute(minutes);}
-//		@gplx.Internal protected static DateAdp Now() {
-//			DateAdp rv = manual_time;
-//			if (!now_freeze) manual_time = rv.Add_minute(1);
-//			return rv;
-//		}
-
 }

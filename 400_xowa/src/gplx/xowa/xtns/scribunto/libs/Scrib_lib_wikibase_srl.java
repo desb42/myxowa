@@ -60,8 +60,9 @@ public class Scrib_lib_wikibase_srl {
 
 			// for Property pages, add a "datatype" property PAGE:ru.w:Маргарян,_Андраник_Наапетович; wd:Property:P18; DATE:2017-03-27
 			if (entity_itm == Wbase_claim_entity_type_.Itm__property) {
-				String pid_name = String_.new_u8(Bry_.Mid(qid, Wdata_wiki_mgr.Ns_property_name_bry.length + 1));// +1 for ":" in "Property:"
-				rv.Add(Keyval_.new_("datatype", prop_mgr.Get_or_null(pid_name, page_url)));
+				//String pid_name = String_.new_u8(Bry_.Mid(qid, Wdata_wiki_mgr.Ns_property_name_bry.length + 1));// +1 for ":" in "Property:"
+				//rv.Add(Keyval_.new_("datatype", prop_mgr.Get_or_null(pid_name, page_url)));
+				rv.Add(Keyval_.new_("datatype", wdoc.Datatype_external()));
 			}
 		}
 		Srl_root(rv, Wdata_doc_parser_v2.Str_labels			, Srl_langtexts	(Wdata_dict_langtext.Itm__language.Key_str(), Wdata_dict_langtext.Itm__value.Key_str(), wdoc.Label_list()));

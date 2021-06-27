@@ -115,7 +115,7 @@ class Wdata_fmtr__claim_row implements gplx.core.brys.Bfr_arg {
 		claim_html_wtr.Init(tmp_bfr, wdata_mgr, msgs, lbl_mgr, lang, ttl);
 		for (int i = 0; i < len; ++i) {
 			Wbase_claim_base itm = claim_grp.Get_at(i);
-			itm.Welcome(claim_html_wtr, false);
+			itm.Welcome(claim_html_wtr, false );
 			byte[] val = tmp_bfr.To_bry_and_clear();
 			fmtr_qual.Init_by_claim(ttl, itm);
 			fmtr_ref.Init_by_claim(ttl, itm);
@@ -129,7 +129,7 @@ class Wdata_fmtr__claim_row implements gplx.core.brys.Bfr_arg {
 	, "              <div class=\"wikibase-statementview wikibase-statement\">"
 	, "                <div class=\"wikibase-statementview-rankselector\">"
 	, "                  <div class=\"wikibase-rankselector ui-state-disabled\">"
-	, "                    <span class=\"ui-icon ui-icon-rankselector wikibase-rankselector-~{rank_name}\" title=\"~{rank_name} rank\"/>"
+	, "                    <span class=\"ui-icon ui-icon-rankselector wikibase-rankselector-~{rank_name}\" title=\"~{rank_name} rank\"></span>"
 	, "                  </div>"
 	, "                </div>"
 	, "                <div class=\"wikibase-statementview-mainsnak-container\">"	// omit -Q2$e8ba1188-4aec-9e37-a75e-f79466c1913e

@@ -68,7 +68,7 @@ public class XomwEvaluator {
 		// NOTE: '/^ -? ( ([0-9]+) (?: \. ([0-9]+) )? )$/x'
 		XophpArray m = XophpArray.New();
 		if (!XophpRegex_.preg_match_bool(gplx.langs.regxs.Regx_adp_.new_("^-?(([0-9]+)(?:\\.([0-9]+))?)"), number_str, m, 0, 0)) {
-			XomwLog_.wfDebug_by_method("evaluateCompiled", ": invalid number input, returning \"other\"\n");
+			XomwLog_.wfDebug_by_method("evaluateCompiled", ": invalid number ('" + number_str + "') input, returning \"other\"\n");
 			return XophpArray.count(rules);
 		}
 

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -21,6 +21,8 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.zone.ZoneRules;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAdjusters;
 public class Dbx_scan_support {
 	public static int TIMELIB_UNSET  =-99999;
 
@@ -708,51 +710,76 @@ public class Dbx_scan_support {
 				time.relative.weekday = 7;
 			}
 
-			time.d -= current_dow;
-			time.d += time.relative.weekday;
+			time.ldt = time.ldt.plusDays(time.relative.weekday - current_dow);
 			return;
 		}
 		difference = time.relative.weekday - current_dow;
 		if ((time.relative.d < 0 && difference < 0) || (time.relative.d >= 0 && difference <= -time.relative.weekday_behavior)) {
 			difference += 7;
 		}
-		if (time.relative.weekday >= 0) {
-			time.d += difference;
-		} else {
-			time.d -= (7 - (Math.abs(time.relative.weekday) - current_dow));
+		if (time.relative.weekday < 0) {
+			difference = -(7 - (Math.abs(time.relative.weekday) - current_dow));
 		}
+		time.ldt = time.ldt.plusDays(difference);
 		time.relative.have_weekday_relative = false;
 	}
 
 	private static void do_adjust_relative(timelib_time time)
 	{
+		int maxdays = DateAdp_.DaysInMonth(time.m, time.y);
+		if (time.d > 28 && time.d <= 31 && time.d > maxdays) { // special handling (to behave like PHP)
+			time.m++;
+			time.d -= maxdays;
+		}
+                if (time.d == 0) { // backwards a day
+                    time.m--;
+                    if (time.m == 0) {
+                        time.m = 12;
+                        time.y--;
+                    }
+                    time.d = DateAdp_.DaysInMonth(time.m, time.y);
+                }
+		time.ldt = LocalDateTime.of(time.y, time.m, time.d, time.h, time.i, time.s, time.us * 1000);
+
 		if (time.relative.have_weekday_relative) {
 			do_adjust_for_weekday(time);
 		}
 		//timelib_do_normalize(time);
 	
 		if (time.have_relative) {
-			time.us += time.relative.us;
-	
-			time.s += time.relative.s;
-			time.i += time.relative.i;
-			time.h += time.relative.h;
-	
-			time.d += time.relative.d;
-			time.m += time.relative.m;
-			time.y += time.relative.y;
+			int v;
+			if ((v = time.relative.us) != 0)
+				time.ldt = time.ldt.plusNanos(v * 1000);
+			if ((v = time.relative.s) != 0)
+				time.ldt = time.ldt.plusSeconds(v);
+			if ((v = time.relative.i) != 0)
+				time.ldt = time.ldt.plusMinutes(v);
+			if ((v = time.relative.h) != 0)
+				time.ldt = time.ldt.plusHours(v);
+			if ((v = time.relative.d) != 0)
+				time.ldt = time.ldt.plusDays(v);
+			if ((v = time.relative.m) != 0)
+				time.ldt = time.ldt.plusMonths(v);
+			if ((v = time.relative.y) != 0)
+				time.ldt = time.ldt.plusYears(v);
 		}
-	
+
 		switch (time.relative.first_last_day_of) {
 			case TIMELIB_SPECIAL_FIRST_DAY_OF_MONTH: /* first */
-				time.d = 1;
+				time.ldt = time.ldt.with(TemporalAdjusters.firstDayOfMonth());
 				break;
 			case TIMELIB_SPECIAL_LAST_DAY_OF_MONTH: /* last */
-				time.d = 0;
-				time.m++;
+				time.ldt = time.ldt.with(TemporalAdjusters.lastDayOfMonth());
 				break;
 		}
 	
+		time.us = time.ldt.getNano()/1000;
+		time.s = time.ldt.getSecond();
+		time.i = time.ldt.getMinute();
+		time.h = time.ldt.getHour();
+		time.d = time.ldt.getDayOfMonth();
+		time.m = time.ldt.getMonthValue();
+		time.y = time.ldt.getYear();
 	//??	timelib_do_normalize(time);
 	}
 
@@ -821,30 +848,41 @@ public class Dbx_scan_support {
 
 	private static void do_adjust_special_early(timelib_time time)
 	{
+		time.ldt = null;
+
 		if (time.relative.have_special_relative) {
+			time.ldt = LocalDateTime.of(time.y, time.m, 1, 0, 0, 0, 0);
 			switch (time.relative.special_type) {
 				case TIMELIB_SPECIAL_DAY_OF_WEEK_IN_MONTH:
-					time.d = 1;
-					time.m += time.relative.m;
+					//time.d = 1;
+					time.ldt = time.ldt.plusMonths(time.relative.m);
 					time.relative.m = 0;
 					break;
 				case TIMELIB_SPECIAL_LAST_DAY_OF_WEEK_IN_MONTH:
-					time.d = 1;
-					time.m += time.relative.m + 1;
+					//time.d = 1;
+					time.ldt = time.ldt.plusMonths(time.relative.m + 1);
 					time.relative.m = 0;
 					break;
+				default:
+					time.ldt = null;
 			}
 		}
+		if (time.relative.first_last_day_of > 0)
+			time.ldt = LocalDateTime.of(time.y, time.m, 1, 0, 0, 0, 0);
 		switch (time.relative.first_last_day_of) {
 			case TIMELIB_SPECIAL_FIRST_DAY_OF_MONTH: /* first */
-				time.d = 1;
+				time.ldt = time.ldt.with(TemporalAdjusters.firstDayOfMonth());
 				break;
 			case TIMELIB_SPECIAL_LAST_DAY_OF_MONTH: /* last */
-				time.d = 0;
-				time.m++;
+				time.ldt = time.ldt.with(TemporalAdjusters.lastDayOfMonth());
 				break;
 		}
-	//	timelib_do_normalize(time);
+		//	timelib_do_normalize(time);
+		if (time.ldt != null) {
+			time.d = time.ldt.getDayOfMonth();
+			time.m = time.ldt.getMonthValue();
+			time.y = time.ldt.getYear();
+		}
 	}
 
 	private static int timelib_parse_tz_cor(Dbx_scanner s)
@@ -900,7 +938,7 @@ public class Dbx_scan_support {
 			ZoneId zone = ZoneId.of(String_.new_a7(time.tz_abbr));
 			if (zone != null) {
 				ZoneRules rules = zone.getRules();
-				LocalDateTime loc = LocalDateTime.of(time.y, time.m, time.d, time.h, time.i);
+				LocalDateTime loc = LocalDateTime.of(time.y, time.m, time.d, time.h, time.i, time.s, time.us*1000);
 				ZoneOffset ofs = rules.getOffset(loc);
 				time.z = ofs.getTotalSeconds();
 			}

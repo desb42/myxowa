@@ -15,12 +15,11 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.wbases.imports;
 
-import gplx.Bool_;
 import gplx.Bry_;
 import gplx.Gfo_invk;
-import gplx.Ordered_hash;
-import gplx.Ordered_hash_;
 import gplx.String_;
+import gplx.Ordered_hash;
+import gplx.Err_;
 import gplx.dbs.Db_conn;
 import gplx.langs.jsons.Json_doc;
 import gplx.langs.jsons.Json_parser;
@@ -30,9 +29,7 @@ import gplx.xowa.bldrs.wkrs.Xob_itm_dump_base;
 import gplx.xowa.bldrs.wkrs.Xob_page_wkr;
 import gplx.xowa.wikis.data.tbls.Xowd_page_itm;
 import gplx.xowa.xtns.wbases.Wdata_wiki_mgr;
-import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_type;
 import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_type_;
-import gplx.xowa.xtns.wbases.claims.enums.Wbase_enum_hash;
 import gplx.xowa.xtns.wbases.core.Wdata_dict_mainsnak;
 import gplx.xowa.xtns.wbases.core.Wdata_langtext_itm;
 import gplx.xowa.xtns.wbases.dbs.Wbase_pid_tbl;
@@ -45,7 +42,6 @@ public class Xob_wdata_pid extends Xob_itm_dump_base implements Xob_page_wkr, Gf
 	private Wbase_pid_tbl tbl__pid;
 	private Xowb_prop_tbl tbl__prop;
 	private final Json_parser jdoc_parser = new Json_parser();
-	private final    Ordered_hash datatype_hash = Ordered_hash_.New_bry();
 	public Xob_wdata_pid(Db_conn conn) {
 		this.conn = conn;
 	}
@@ -71,14 +67,6 @@ public class Xob_wdata_pid extends Xob_itm_dump_base implements Xob_page_wkr, Gf
 		if (conn == null) // conn will be null unless test
 			conn = wiki.Data__core_mgr().Db__wbase().Conn();
 
-		// init datatype_hash
-		Wbase_enum_hash enum_hash = Wbase_claim_type_.Reg;
-		byte len = (byte)enum_hash.Len();
-		for (byte i = 0; i < len; i++) {
-			Wbase_claim_type claim_type = (Wbase_claim_type)enum_hash.Get_itm_or(i, null);
-			datatype_hash.Add(Bry_.new_u8(claim_type.Key_for_scrib()), claim_type);
-		}
-
 		// init wbase_pid
 		tbl__pid = Wbase_pid_tbl.New_make(conn);
 		tbl__pid.Create_tbl();
@@ -95,8 +83,11 @@ public class Xob_wdata_pid extends Xob_itm_dump_base implements Xob_page_wkr, Gf
 
 		// add datatype
 		byte[] datatype = jdoc.Root_nde().Get_as_bry(Wdata_dict_mainsnak.Itm__datatype.Key_str());
-		Wbase_claim_type claim_type = (Wbase_claim_type)datatype_hash.Get_by_or_fail(datatype);
-		tbl__prop.Insert_cmd_by_batch(pid, claim_type.Tid());
+		int tid = Wbase_claim_type_.Get_tid_by_scrib(datatype);
+		if (tid == Wbase_claim_type_.Tid__unknown) {
+			throw Err_.new_missing_key(String_.new_u8(datatype));
+		}
+		tbl__prop.Insert_cmd_by_batch(pid, tid);
 
 		// add langs
 		Ordered_hash list = wdoc_parser.Parse_langvals(pid, jdoc, Wdata_doc_parser_v2.Bry_labels);

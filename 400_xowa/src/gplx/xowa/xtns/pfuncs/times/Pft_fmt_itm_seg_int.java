@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -117,12 +117,8 @@ class Pft_fmt_itm_rfc_5322 implements Pft_fmt_itm {
 	public Pft_fmt_itm_rfc_5322() {}
 	public int TypeId() {return Pft_fmt_itm_.Tid_rfc_5322;}
 	public void Fmt(Bry_bfr bfr, Xowe_wiki wiki, Xol_lang_itm lang, DateAdp date, Pft_func_formatdate_bldr bldr) {// Mon, 02 Jan 2012 10:15:01 +0000
-		int dow = date.DayOfWeek();
-		DateAdpTranslator_xapp.Translate(wiki, lang, DateAdp_.SegIdx_dayOfWeek, dow, bfr);
-		bfr.Add_byte(Byte_ascii.Comma).Add_byte(Byte_ascii.Space);
-		bfr.Add_str_a7(date.XtoStr_fmt("dd MMM yyyy HH:mm:ss"));	// NOTE: always UTC time 
-		bfr.Add(CONST_timezone);									// NOTE: always UTC time zone
-	}	private static final    byte[] CONST_timezone = Bry_.new_a7(" +0000"); 
+		bfr.Add_str_a7(date.XtoStr_fmt("EEE, dd MMM yyyy HH:mm:ss ZZ"));
+	}
 }
 class Pft_fmt_itm_timezone_offset implements Pft_fmt_itm {
 	public Pft_fmt_itm_timezone_offset() {}

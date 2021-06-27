@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,16 +13,13 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.stores; import gplx.*; import gplx.core.*;
-import java.sql.Date;
+package gplx.core.stores;
+import gplx.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.GregorianCalendar;
-import gplx.dbs.*;
 public class Db_data_rdr extends DataRdr_base implements DataRdr {
 	@Override public String NameOfNode() {return commandText;} public String To_str() {return commandText;} private String commandText;
-		private ResultSet rdr;
+	private ResultSet rdr;
 	private int fieldCount;
 	@Override public int FieldCount() {return fieldCount;}
 	@Override public String KeyAt(int i) {
@@ -43,10 +40,7 @@ public class Db_data_rdr extends DataRdr_base implements DataRdr {
 	}
 	@Override public DateAdp ReadDate(String key) {
 		Object o = this.Read(key);
-		Timestamp ts = (Timestamp)o;
-		GregorianCalendar g = new GregorianCalendar();		
-		g.setTime(ts);
-		return DateAdp_.dateTime_(g);
+		return DateAdp_.db_(o);
 	}
 	@Override public Decimal_adp ReadDecimal(String key) {return Decimal_adp_.db_(this.Read(key));}
 	@Override public gplx.core.ios.streams.Io_stream_rdr ReadRdr(String key) {

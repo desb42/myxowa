@@ -197,11 +197,21 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 			} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse form", "lid", String_.new_u8(doc.Src()));}
 		}
 	}
+/* replaced 20210622
 	public byte[] Parse_datatype(byte[] qid, Json_doc doc) {
 		synchronized (this) {// ?
 			try {
 				byte[] datatype = doc.Get_val_as_bry_or(Bry_datatype, Bry_.Empty);
 				return Wbase_claim_type_.Get_name(datatype);
+			} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse datatype", "lid", String_.new_u8(doc.Src()));}
+		}
+	}
+*/
+	public int Parse_datatype_id(byte[] qid, Json_doc doc) {
+		synchronized (this) {// ?
+			try {
+				byte[] datatype = doc.Get_val_as_bry_or(Bry_datatype, Bry_.Empty);
+				return Wbase_claim_type_.Get_tid_by_scrib(datatype);
 			} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse datatype", "lid", String_.new_u8(doc.Src()));}
 		}
 	}

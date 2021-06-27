@@ -22,7 +22,7 @@ public class Xoh_lnke_html__basic__tst {
 	@Test  public void Text__basic()	{fxt.Test_parse_page_wiki_str("[https://a b]"				, "<a href=\"https://a\" rel=\"nofollow\" class=\"external text\">b</a>");}
 	@Test  public void Text__wtxt()		{fxt.Test_parse_page_wiki_str("[https://a ''b'']"			, "<a href=\"https://a\" rel=\"nofollow\" class=\"external text\"><i>b</i></a>");}
 	@Test  public void Xowa_protocol()	{
-		String img = "<img src=\"file:///mem/xowa/bin/any/xowa/file/app.general/xowa_exec.png\"/>";
+		String img = "<img src=\"file:///mem/xowa/bin/any/xowa/extra/app.general/xowa_exec.png\"/>";
 		fxt.Wiki().Sys_cfg().Xowa_proto_enabled_(true);
 		fxt.Test_parse_page_wiki_str("[xowa-cmd:\"a\" z]"			, "<a href=\"xowa-cmd:a\">z" + img + "</a>");
 		fxt.Test_parse_page_wiki_str("[xowa-cmd:\"a.b('c_d');\" z]"	, "<a href=\"xowa-cmd:a.b('c_d');\">z" + img + "</a>");

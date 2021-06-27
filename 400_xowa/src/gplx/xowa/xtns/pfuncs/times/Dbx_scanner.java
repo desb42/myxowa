@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,7 +13,9 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.pfuncs.times; import gplx.*;
+package gplx.xowa.xtns.pfuncs.times;
+import gplx.*;
+import java.time.LocalDateTime;
 class Dbx_scanner {
 	//int           fd;
 	//uchar        *lim, *str, *ptr, *cur, *tok, *pos;
@@ -87,6 +89,7 @@ class timelib_error_container {
 }
 
 class timelib_time {
+    public LocalDateTime ldt; // to aid releative dates
 	public int      y, m, d;     /* Year, Month, Day */
 	public int      h, i, s;     /* Hour, mInute, Second */
 	public int      us;          /* Microseconds */

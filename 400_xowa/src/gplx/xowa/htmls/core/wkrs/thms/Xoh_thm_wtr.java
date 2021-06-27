@@ -88,5 +88,5 @@ public class Xoh_thm_wtr implements gplx.core.brys.Bfr_arg {
 	,     "<div class=\"thumbcaption\">~{alt}</div>~{xowa_alt_text_end}"
 	,	  ""
 	), "xowa_alt_text_bgn", "alt", "xowa_alt_text_end");
-	private static final    byte[] bry_div_2_magnify = Bry_.new_a7("bin/any/xowa/file/mediawiki.file/magnify-clip.png");
+	private static final    byte[] bry_div_2_magnify = Bry_.new_a7("bin/any/xowa/extra/mediawiki.file/magnify-clip.png");
 }

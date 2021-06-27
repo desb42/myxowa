@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -41,16 +41,10 @@ import gplx.xowa.wikis.Xow_page_tid;
 import gplx.xowa.wikis.domains.Xow_domain_tid_;
 import gplx.xowa.wikis.nss.Xow_ns_;
 import gplx.xowa.wikis.pages.Xopg_view_mode_;
-import gplx.xowa.wikis.pages.skins.Xopg_xtn_skin_fmtr_arg;
-import gplx.xowa.wikis.pages.skins.Xopg_xtn_skin_itm_tid;
-import gplx.xowa.xtns.pfuncs.times.Pft_func_formatdate;
 import gplx.xowa.xtns.wbases.Wdata_xwiki_link_wtr;
 
-import gplx.xowa.addons.wikis.ctgs.htmls.pageboxs.Xoctg_pagebox_itm;
 import gplx.xowa.langs.msgs.Xow_msg_mgr;
 import gplx.xowa.Db_expand;
-import gplx.xowa.wikis.pages.lnkis.Xopg_redlink_mgr;
-import gplx.xowa.htmls.hxtns.blobs.Hxtn_blob_tbl;
 import gplx.langs.jsons.*;
 //import gplx.langs.jsons.Json_doc;
 //import gplx.langs.jsons.Json_nde;
@@ -134,7 +128,7 @@ public class Xoh_page_wtr_wkr {
 		DateAdp modified_on = page.Db().Page().Modified_on();
 		byte[] modified_on_msg = Bry_.Empty;
 		if (modified_on != DateAdp_.MinValue && wiki.Installed()) {
-			modified_on = modified_on.XtoZone(wiki.Tz_mgr().Get_timezone());
+			modified_on = modified_on.XtoZone(wiki.Tz_mgr().Get_zoneid());
 			modified_on_msg = wiki.Msg_mgr().Val_by_key_args(Key_lastmodifiedat, 
 						wiki.Lang().Time_format_mgr().Get_date_defaultfmt(wiki, modified_on),
 						wiki.Lang().Time_format_mgr().Get_time_defaultfmt(wiki, modified_on));

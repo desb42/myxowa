@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -114,7 +114,7 @@ public class Db_stmt_cmd implements Db_stmt {
 	public Db_stmt Val_date(String k, DateAdp v)	{return Add_date(Bool_.N, k, v);}
 	@gplx.Virtual protected Db_stmt Add_date(boolean where, String k, DateAdp v) {
 		if (k == Dbmeta_fld_itm.Key_null) return this;	// key is explicitly null; ignore; allows version_2+ type definitions
-		try {stmt.setTimestamp(++val_idx, new java.sql.Timestamp(v.UnderDateTime().getTime().getTime()));} catch (Exception e) {this.Rls(); throw Err_.new_exc(e, "db", "failed to add value", "type", "date", "val", v, "sql", sql);}
+		try {stmt.setTimestamp(++val_idx, new java.sql.Timestamp(v.UnderDateTime().toEpochSecond()));} catch (Exception e) {this.Rls(); throw Err_.new_exc(e, "db", "failed to add value", "type", "date", "val", v, "sql", sql);}
 		return this;
 	}
 	public Db_stmt Crt_text(String k, String v)	{return Add_text(Bool_.Y, k, v);}
