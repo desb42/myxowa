@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -81,7 +81,6 @@ public class Pft_func_time extends Pf_func_base {
 		}
 		if (rv != null && !utc)
 			rv.SetTimeZone(ctx.Wiki().Tz_mgr().Get_zoneid());
-			//rv.SetTimeZone(ctx.Wiki().Tz_mgr().Get_timezone());
 		return rv;
 	}
 	private static final byte[] zerohours = Bry_.new_a7("00:00 ");

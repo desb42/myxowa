@@ -19,8 +19,11 @@ public class Xowb_prop_tbl_itm {
 	public String Key() {return key;}
 	private byte[] data;
 	public byte[] Data() {return data;}
-	public Xowb_prop_tbl_itm(String key, byte[] data) {
+	private int datatype;
+	public int Datatype() {return datatype;}
+	public Xowb_prop_tbl_itm(String key, byte[] data, int datatype) {
 		this.key = key;
 		this.data = data;
+		this.datatype = datatype;
 	}
 }

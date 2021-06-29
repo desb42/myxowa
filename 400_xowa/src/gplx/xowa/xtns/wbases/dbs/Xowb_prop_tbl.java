@@ -59,7 +59,7 @@ public class Xowb_prop_tbl implements Db_tbl {
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "wbase:invalid prop datatype_id; pid=~{0} datatype=~{1}", pid, datatype_id);
 			datatype_itm = (Wbase_claim_type)Wbase_claim_type_.Itm__string;
 		}
-		hash.Add(pid, new Xowb_prop_tbl_itm(datatype_itm.Key_for_scrib(), data)); // NOTE: must use Key_for_scrib, else multiple invalid-data-type errors in fr.w; DATE:2017-02-26
+		hash.Add(pid, new Xowb_prop_tbl_itm(datatype_itm.Key_for_scrib(), data, datatype_id)); // NOTE: must use Key_for_scrib, else multiple invalid-data-type errors in fr.w; DATE:2017-02-26
 	}
 	public void Rls() {}
 }

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -20,6 +20,7 @@ public class Pfunc_sub extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_strx_sub;}
 	@Override public Pf_func New(int id, byte[] name) {return new Pfunc_sub().Name_(name);}
 	@Override public boolean Func_require_colon_arg() {return true;}
+	// not used by enwiki
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
 		byte[] s = Eval_argx(ctx, src, caller, self);
 		int self_args_len = self.Args_len();
@@ -33,11 +34,26 @@ public class Pfunc_sub extends Pf_func_base {
 			}
 		}
 		int s_len = s.length;
-		if (bgn < 0) bgn = s_len + bgn;
-		if (len == Int_.Min_value) len = s_len - bgn;
-		if (len < 0) len = s_len - bgn + len;	// neg len should remove letters from end; EX: {{#sub:abcde|2|-1}} -> "cd"
-		if (bgn < 0 || len < 0) return;			// if still negative, return blank; EX: {{#sub:abcde|2|-5}} -> ""
-		byte[] mid = Bry_.Mid(s, bgn, bgn + len);
+		int u_len = gplx.core.intls.Utf8_.Len_of_bry(s);
+		if (s_len == u_len) {
+			if (bgn < 0) bgn = s_len + bgn;
+			if (len == Int_.Min_value) len = s_len - bgn;
+			if (len < 0) len = s_len - bgn + len;	// neg len should remove letters from end; EX: {{#sub:abcde|2|-1}} -> "cd"
+			if (bgn < 0 || len < 0) return;			// if still negative, return blank; EX: {{#sub:abcde|2|-5}} -> ""
+			len += bgn;
+		}
+		else {
+			if (len == Int_.Min_value) len = u_len - bgn;
+			if (len < 0) len = u_len - bgn + len;	// neg len should remove letters from end; EX: {{#sub:abcde|2|-1}} -> "cd"
+			if (bgn > 0)
+				bgn = gplx.core.intls.Utf8_.Count(s, 0, bgn); // from byte count to character count
+			else {
+				bgn = gplx.core.intls.Utf8_.Count(s, 0, u_len + bgn);
+			}
+			if (bgn < 0 || len < 0) return;			// if still negative, return blank; EX: {{#sub:abcde|2|-5}} -> ""
+			len = gplx.core.intls.Utf8_.Count(s, bgn, len);
+		}
+		byte[] mid = Bry_.Mid(s, bgn, len);
 		bfr.Add(mid);
 	}
 }	

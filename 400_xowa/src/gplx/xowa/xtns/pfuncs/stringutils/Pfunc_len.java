@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -20,6 +20,7 @@ public class Pfunc_len extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_strx_len;}
 	@Override public Pf_func New(int id, byte[] name) {return new Pfunc_len().Name_(name);}
 	@Override public boolean Func_require_colon_arg() {return true;}
+	// not used by enwiki
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
 		byte[] argx = Eval_argx(ctx, src, caller, self);
 		int char_count = gplx.core.intls.Utf8_.Len_of_bry(argx);

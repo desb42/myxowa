@@ -125,8 +125,8 @@ public class DateAdp implements CompareAble, Gfo_invk {
 		return under.toEpochSecond(); // should not be zone dependent
 	}
 	public int WeekOfYear() {return Math.floorDiv(under.getDayOfYear(), 7) + 1;} //.get(Calendar.WEEK_OF_YEAR);}
-	public int Frac() {return under.getNano()/1000;} // MILLISECONDs
-	public DateAdp Add_frac(int val) {return CloneAndAdd(under.plusNanos(val * 1000));}
+	public int Frac() {return under.getNano()/1000000;} // MILLISECONDs
+	public DateAdp Add_frac(int val) {return CloneAndAdd(under.plusNanos(val * 1000000));}
 	public DateAdp Add_second(int val) {return CloneAndAdd(under.plusSeconds(val));}
 	public DateAdp Add_minute(int val) {return CloneAndAdd(under.plusMinutes(val));}
 	public DateAdp Add_hour(int val) {return CloneAndAdd(under.plusHours(val));}

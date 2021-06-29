@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -15,16 +15,35 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.core.intls; import gplx.*; import gplx.core.*;
 public class Utf8_ {
-	public static int Len_of_bry(byte[] ary) {
+	public static int Len_of_bry(byte[] ary, int bgn, int end) {
 		if (ary == null) return 0;
 		int rv = 0;
-		int pos = 0, len = ary.length;
-		while (pos < len) {
-			int char_len = Len_of_char_by_1st_byte(ary[pos]);
+		int len = ary.length;
+		if (bgn < 0 || bgn >= len) return 0;
+		if (end > len)
+			end = len;
+		while (bgn < end) {
+			int char_len = Len_of_char_by_1st_byte(ary[bgn]);
 			++rv;
-			pos += char_len;
+			bgn += char_len;
 		}
 		return rv;
+	}
+	public static int Len_of_bry(byte[] ary) {
+		return Len_of_bry(ary, 0, ary.length);
+	}
+	public static int Count(byte[] ary, int bgn, int char_count) {
+		if (ary == null) return 0;
+		int len = ary.length;
+		int rv = 0;
+		while (bgn < len) {
+			int char_len = Len_of_char_by_1st_byte(ary[bgn]);
+			bgn += char_len;
+			char_count--;
+			if (char_count == 0)
+				return bgn;
+		}
+		return len;
 	}
 	public static int Len_of_char_by_1st_byte(byte b) {// SEE:w:UTF-8
 		int i = b & 0xff;	// PATCH.JAVA:need to convert to unsigned byte
