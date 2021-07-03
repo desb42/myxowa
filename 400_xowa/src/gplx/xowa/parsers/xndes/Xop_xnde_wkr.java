@@ -127,16 +127,10 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 			}
 		}
 		Xop_xnde_tag tag = (Xop_xnde_tag)tag_obj;
-                if (ctx.Cur_tkn_tid() == Xop_tkn_itm_.Tid_list_new)
-                    if (tag.Id() == Xop_xnde_tag_.Tid__div && tag_is_closing) {
-				Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-				if (prev != null) {
-					// inject a list close
-					Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, prev);
-					ctx.Subs_add_and_stack(root, itm);
-					ctx.Page().Prev_list_tkn_(null);
-				}
-                    }
+		if (ctx.Cur_tkn_tid() == Xop_tkn_itm_.Tid_list_new &&
+		    tag.Id() == Xop_xnde_tag_.Tid__div && tag_is_closing) {
+			Xop_list_tkn_new.Reset(root, ctx);
+		}
 		if (pre_at_bos) {
 			pre_at_bos = false;
 			if (tag.Block_close() == Xop_xnde_tag.Block_end

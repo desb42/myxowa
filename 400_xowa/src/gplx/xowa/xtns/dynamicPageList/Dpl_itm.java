@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -56,9 +56,10 @@ public class Dpl_itm {
 		int fld_bgn = content_bgn;
 		byte key_id = 0;
 		Gfo_usr_dlg usr_dlg = wiki.Appe().Usr_dlg();
-		boolean ws_bgn_chk = true; int ws_bgn_idx = -1, ws_end_idx = -1;
+		boolean ws_bgn_chk = true, ws_key_found = false;
+		int ws_bgn_idx = -1, ws_end_idx = -1;
 		boolean loop = true;
-                boolean badfield = false;
+		boolean badfield = false;
 		while (loop) {										// iterate over content
 			boolean done = pos >= content_end;
 			byte b = done ? Byte_ascii.Nl : src[pos];		// get cur byte
@@ -68,6 +69,10 @@ public class Dpl_itm {
 					else			{if (ws_end_idx == -1) ws_end_idx = pos;};				// possible ws at end; may be overriden later; see AdjustWsForTxtTkn
 					break;
 				case Byte_ascii.Eq: {						// =; make key; EX: "=" in "category="
+					if (ws_key_found) {
+						ws_end_idx = -1;
+						break; // ignore spurious = signs
+					}
 					if (ws_bgn_idx != -1) fld_bgn = ws_bgn_idx + 1;	// +1 to position after last known ws
 					int fld_end = ws_end_idx == -1 ? pos : ws_end_idx;
 					key_id = Dpl_itm_keys.Parse(src, fld_bgn, fld_end, Dpl_itm_keys.Key_null);
@@ -84,15 +89,16 @@ public class Dpl_itm {
 					}
 					else {									// known key; set pos to val_bgn
 						fld_bgn = pos + Byte_ascii.Len_1;
+						ws_key_found = true;
 					}
 					ws_bgn_chk = true; ws_bgn_idx = ws_end_idx = -1;
 					break;
 				}
 				case Byte_ascii.Nl: { // dlm is nl; EX: "\n" in "category=abc\n"
 					if (fld_bgn == pos) { // blank arg - still needs to process
-                                            if (ws_bgn_chk == false)
-						Parse_cmd(wiki, key_id, Bry_.Empty, usr_dlg, page_ttl);
-                                        }
+						if (ws_bgn_chk == false)
+							Parse_cmd(wiki, key_id, Bry_.Empty, usr_dlg, page_ttl);
+					}
 					else {
 						if (ws_bgn_idx != -1) fld_bgn = ws_bgn_idx + 1;	// +1 to position after last known ws
 						int fld_end = ws_end_idx == -1 ? pos : ws_end_idx;
@@ -104,6 +110,7 @@ public class Dpl_itm {
 					}
 					fld_bgn = pos + Byte_ascii.Len_1;
 					ws_bgn_chk = true; ws_bgn_idx = ws_end_idx = -1;
+					ws_key_found = false;
 					break;
 				}
 				default:	// text token
@@ -174,7 +181,7 @@ public class Dpl_itm {
 			byte val_key = Keys_get_or(val);
 			if (val_key == Dpl_itm_keys.Key_true)
 				ctg_date = true;
-                        else
+			else
 				ctg_date = false;
 //			else {
 //				if (val.length == 8) { 	// HACK: preg_match( '/^(?:[ymd]{2,3}|ISO 8601)$/'

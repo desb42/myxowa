@@ -622,12 +622,12 @@ Object.defineProperties(ToggleCategory.prototype, {
 				return buttons;
 			buttons = $("<ul>");
 			var collapsed = mw.cookie.get("vector-nav-p-visibility") === "false";
-			var toolbox = $("<nav>", {
+			var toolbox = $("<div>", {
 					"class": "vector-menu vector-menu-portal portal portlet",
 					"id": "p-visibility"
 				})
 				.append($("<h3>Visibility</h3>"))
-				.append($("<div>", { class: "pBody body" }).append(buttons));
+				.append($("<div>", { class: "pBody body vector-menu-content" }).append(buttons));
 			var insert = document.getElementById("p-lang") || document.getElementById("p-feedback");
 			if (insert) {
 				$(insert).before(toolbox);

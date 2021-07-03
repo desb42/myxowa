@@ -32,9 +32,9 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		// close apos
 		ctx.Apos().End_frame(ctx, root, src, bgn_pos, false);
 
-                // reset para if not already in a list
-                if (ctx.Page().Prev_list_tkn() == null)
-		ctx.Para().Process_nl(ctx, root, src, bgn_pos, cur_pos);
+		// reset para if not already in a list
+		if (ctx.Page().Prev_list_tkn() == null)
+			ctx.Para().Process_nl(ctx, root, src, bgn_pos, cur_pos);
 
 		// Multiple prefixes may abut each other for nested lists.
 		byte b = 0;
@@ -62,12 +62,11 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		ctx.Subs_add_and_stack(root, itm);
 		ctx.Page().Prev_list_tkn_(itm);
 		// peek ahead for a table eg :{|
-		if (peek_pos + 2 < src_len) {
-			if (src[peek_pos] == '{' && src[peek_pos+1] == '|') {
-                Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
-                        ctx.Page().Prev_list_tkn_(null);
-				cur_pos = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, peek_pos+2, false, Xop_tblw_wkr.Tblw_type_tb, Xop_tblw_wkr.Called_from_list, -1, -1, list_tkn);
-                        }
+		if (peek_pos + 2 < src_len &&
+		    src[peek_pos] == '{' && src[peek_pos+1] == '|') {
+			Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
+			ctx.Page().Prev_list_tkn_(null);
+			cur_pos = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, peek_pos+2, false, Xop_tblw_wkr.Tblw_type_tb, Xop_tblw_wkr.Called_from_list, -1, -1, list_tkn);
 		}
 		//return cur_pos;
 		return peek_pos;

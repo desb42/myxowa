@@ -280,8 +280,8 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 	private byte[] Bld_caption_div(Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_lnki_tkn lnki, int uid, byte[] img_orig_src, byte[] lnki_href) {
 		byte[] caption = Bld_caption(ctx, hctx, src, lnki);
 		byte[] magnify_btn = lnki.Media_icon() ? html_fmtr.Bld_thumb_part_magnify(lnki_href, msg_file_enlarge) : Bry_.Empty;
-                if (caption == Bry_.Empty && magnify_btn == Bry_.Empty)
-                    return Bry_.Empty;
+		if (caption == Bry_.Empty && magnify_btn == Bry_.Empty)
+			return Bry_.Empty;
 		return html_fmtr.Bld_thumb_part_caption(magnify_btn, caption);
 	}
 	private byte[] Bld_caption(Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_lnki_tkn lnki) {

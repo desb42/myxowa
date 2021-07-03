@@ -30,16 +30,7 @@ public class Xop_hr_lxr implements Xop_lxr {
 			nl_adj = 0;		// no nl at bgn, so nl_adj = 0
 		}
 		ctx.Apos().End_frame(ctx, root, src, bgn_pos, false);
-					// any outstanding list?
-					if (ctx.Page().Prev_list_tkn() != null) {
-						// inject a list close
-						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-						if (prev != null && prev.Src_bgn() > src.length)
-							System.out.println("tbl");
-						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-						ctx.Subs_add_and_stack(root, itm);
-						ctx.Page().Prev_list_tkn_(null);
-					}
+		Xop_list_tkn_new.Reset(root, ctx);
 		ctx.CloseOpenItms(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos);		// close open items
 		cur_pos = Bry_find_.Find_fwd_while(src, cur_pos, src_len, Hook_byt);	// gobble consecutive dashes
 		if (!bos)

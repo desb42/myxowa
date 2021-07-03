@@ -27,5 +27,5 @@ public class Xop_tblw_tc_tkn extends Xop_tkn_itm_base implements Xop_tblw_tkn {
 	public int Tblw_subs_len() {return tblw_subs_len;} public void Tblw_subs_len_add_() {++tblw_subs_len;} private int tblw_subs_len;
 	public Xop_tblw_tc_tkn Subs_add_ary(Xop_tkn_itm... ary) {for (Xop_tkn_itm itm : ary) super.Subs_add(itm); return this;}
 	public Xop_tblw_tc_tkn(int bgn, int end, boolean tblw_xml) {this.tblw_xml = tblw_xml; this.Tkn_ini_pos(false, bgn, end);}
-        public Xop_list_tkn_new List_tkn() { return null; }
+	public Xop_list_tkn_new List_tkn() { return null; }
 }

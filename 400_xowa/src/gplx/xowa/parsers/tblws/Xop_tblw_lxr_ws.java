@@ -48,7 +48,7 @@ public class Xop_tblw_lxr_ws {
 			if (tkn_idx == -1) {								// bos reached; all tkns are ws;
 				if (wlxr_type == Xop_tblw_wkr.Tblw_type_tb) {	// wlxr_type is {|;
 					root.Subs_del_after(0);						// trim
-                        ctx.Page().Prev_list_tkn_(null);
+					ctx.Page().Prev_list_tkn_(null);
 					return ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, false, wlxr_type, Xop_tblw_wkr.Called_from_general, -1, -1, list_tkn);	// process {|
 				}
 				else											// wlxr_type is something else, but invalid since no containing {|
@@ -60,7 +60,7 @@ public class Xop_tblw_lxr_ws {
 			if (nl_found)
 				root.Subs_del_after(tkn_idx);
 		}
-                        ctx.Page().Prev_list_tkn_(null);
+		ctx.Page().Prev_list_tkn_(null);
 		return ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, false, wlxr_type, Xop_tblw_wkr.Called_from_general, -1, -1, list_tkn);
 	}
 	public static final byte[] Hook_tb = Bry_.new_a7("{|"), Hook_te = Bry_.new_a7("|}"), Hook_tr = Bry_.new_a7("|-")

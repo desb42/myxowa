@@ -23,11 +23,12 @@ public class Ref_html_wtr_cfg {
 	public Bry_fmtr Itm_id_key_one() 	{return itm_id_key_one;} 	private Bry_fmtr itm_id_key_one; 	public Ref_html_wtr_cfg Itm_id_key_one_(String v) {itm_id_key_one 	= Bry_fmtr.new_(v, "pre", "itm_key", "uid", "minor", "suf"); return this;}
 	public Bry_fmtr Itm_id_key_many() 	{return itm_id_key_many;} 	private Bry_fmtr itm_id_key_many; 	public Ref_html_wtr_cfg Itm_id_key_many_(String v) {itm_id_key_many	= Bry_fmtr.new_(v, "pre", "itm_key", "uid", "suf"); return this;}
 	public Bry_fmtr Itm_grp_text() 		{return itm_grp_text;} 		private Bry_fmtr itm_grp_text; 		public Ref_html_wtr_cfg Itm_grp_text_(String v) {itm_grp_text 		= Bry_fmtr.new_(v, "grp_key", "major"); return this;}
-	public Bry_fmtr Grp_html_one() 		{return grp_html_one;} 		private Bry_fmtr grp_html_one; 		public Ref_html_wtr_cfg Grp_html_one_(String v) {grp_html_one 		= Bry_fmtr.new_(v, "grp_id", "itm_id", "text"); return this;}
-	public Bry_fmtr Grp_html_many() 	{return grp_html_many;}		private Bry_fmtr grp_html_many; 	public Ref_html_wtr_cfg Grp_html_many_(String v) {grp_html_many 	= Bry_fmtr.new_(v, "grp_id", "related_ids", "text"); return this;}
+	public Bry_fmtr Grp_html_one() 		{return grp_html_one;} 		private Bry_fmtr grp_html_one; 		public Ref_html_wtr_cfg Grp_html_one_(String v) {grp_html_one 		= Bry_fmtr.new_(v, "grp_id", "itm_id", "text", "class"); return this;}
+	public Bry_fmtr Grp_html_many() 	{return grp_html_many;}		private Bry_fmtr grp_html_many; 	public Ref_html_wtr_cfg Grp_html_many_(String v) {grp_html_many 	= Bry_fmtr.new_(v, "grp_id", "related_ids", "text", "class"); return this;}
 	public Bry_fmtr Grp_html_list()		{return grp_html_list;}		private Bry_fmtr grp_html_list;		public Ref_html_wtr_cfg Grp_html_list_(String v) {grp_html_list		= Bry_fmtr.new_(v, "itm_id", "backlabel"); return this;}
 	public Bry_fmtr Grp_id_uid() 		{return grp_id_uid;} 		private Bry_fmtr grp_id_uid; 		public Ref_html_wtr_cfg Grp_id_uid_(String v) {grp_id_uid 			= Bry_fmtr.new_(v, "pre", "uid", "suf"); return this;}
 	public Bry_fmtr Grp_id_key() 		{return grp_id_key;} 		private Bry_fmtr grp_id_key; 		public Ref_html_wtr_cfg Grp_id_key_(String v) {grp_id_key 			= Bry_fmtr.new_(v, "pre", "itm_key", "major", "suf"); return this;}
+	public Bry_fmtr Backlabels_err() {return backlabels_err;} private Bry_fmtr backlabels_err; public Ref_html_wtr_cfg Backlabels_err_(String v) {backlabels_err = Bry_fmtr.new_(v, "grp_id", "page"); return this;}
 	public String Grp_many_and() 		{return grp_many_and;} 		private String grp_many_and; 		public void Grp_many_and_(String v) {grp_many_and = v;}
 	public String Grp_many_sep() 		{return grp_many_sep;} 		private String grp_many_sep; 		public void Grp_many_sep_(String v) {grp_many_sep = v;}
 	public String Itm_crlp() 		{return itm_ref_prefix;} 		private String itm_ref_prefix; 		public void Itm_crlp_(String v) {itm_ref_prefix = v;}
@@ -43,9 +44,12 @@ public class Ref_html_wtr_cfg {
 		this.wiki = wiki;
 		byte[] ref1_bry, ref2_bry;
                 
+		ref1_bry = wiki.Msg_mgr().Val_by_key_obj(Msg_backlabels_err);
+		Backlabels_err_(cvt(String_.new_u8(ref1_bry)));
+
 		ref1_bry = wiki.Msg_mgr().Val_by_key_obj(Msg_backlabels);
 		Backlabels_(Ref_backlabels_xby_bry(ref1_bry));
-                
+
 		ref1_bry = wiki.Msg_mgr().Val_by_key_obj(Msg_crlp);
 		//System.out.println("crlp" + String_.new_u8(ref1_bry));
 		Itm_crlp_(cvt(String_.new_u8(ref1_bry)));
@@ -143,14 +147,17 @@ public class Ref_html_wtr_cfg {
 	public static final    byte[] Note_href_bgn = Bry_.new_a7("#cite_note-");	// for TOC
 	public static Ref_html_wtr_cfg new_() {
 		Ref_html_wtr_cfg rv = new Ref_html_wtr_cfg();
-		rv.Itm_html_		("<sup id=\"~{0}\" class=\"reference\"><a href=\"#~{1}\">[~{2}]</a></sup>");
+//		rv.Itm_html_		("<sup id=\"~{0}\" class=\"reference\">[[#~{1}|&#91;~{2}&#93;]]</sup>");
+		                //<sup id=\"~{0}\" class=\"reference\"><a href=\"#~{1}\">[~{2}]</a></sup>
 		rv.Itm_id_uid_		("~{pre}~{uid}~{suf}");
 		rv.Itm_id_key_one_	("~{pre}~{itm_key}_~{uid}-~{minor}~{suf}");
 		rv.Itm_id_key_many_	("~{pre}~{itm_key}-~{uid}~{suf}");
 		rv.Itm_grp_text_	("~{grp_key} ~{major}");
-		rv.Grp_html_one_	("<li id=\"cite_note-~{grp_id}\"><span class=\"mw-cite-backlink\"><b><a href=\"#cite_ref-~{itm_id}\">^</a></b></span> <span class=\"reference-text\">~{text}</span></li>\n");
-		rv.Grp_html_many_	("<li id=\"cite_note-~{grp_id}\"><span class=\"mw-cite-backlink\">^~{related_ids}</span> <span class=\"reference-text\">~{text}</span></li>\n");
-		rv.Grp_html_list_	("<sup><i><b>[[#~{0}|~{2}]]</b></i></sup>");
+		                 //"<li id=\"~{0}\"~{3}><span class=\"mw-cite-backlink\">[[#~{1}|↑]]</span> ~{2}</li>"
+		                 //"<li id=\"~{0}\"~{3}><span class=\"mw-cite-backlink\">'''[[#~{1}|^]]'''</span> ~{2}</li>"
+//		rv.Grp_html_one_	("<li id=\"cite_note-~{grp_id}\"><span class=\"mw-cite-backlink\"><b><a href=\"#cite_ref-~{itm_id}\">^</a></b></span> <span class=\"reference-text\">~{text}</span></li>\n");
+//		rv.Grp_html_many_	("<li id=\"cite_note-~{grp_id}\"><span class=\"mw-cite-backlink\">^~{related_ids}</span> <span class=\"reference-text\">~{text}</span></li>\n");
+//		rv.Grp_html_list_	("<sup><i><b>[[#~{0}|~{2}]]</b></i></sup>");
 		rv.Grp_id_uid_		("~{pre}~{uid}~{suf}");
 		rv.Grp_id_key_		("~{pre}~{itm_key}-~{major}~{suf}");
 		rv.Grp_many_sep_        (" ");
@@ -158,10 +165,12 @@ public class Ref_html_wtr_cfg {
 		rv.Itm_accessibility_label_ ("");
 		rv.grp_bgn = Bry_.new_a7("<ol class=\"references\">\n");
 		rv.grp_end = Bry_.new_a7("</ol>\n");
-		rv.Backlabels_		(Ref_backlabels_default);
+//		rv.Backlabels_err_("Ran out of custom link labels for group \"~{0}\". Define more in the [[MediaWiki:~{1}]] message.");
+//		rv.Backlabels_		(Ref_backlabels_default);
 		return rv;
 	}
 	Ref_html_wtr_cfg() {}
+/*
 	private static final    byte[][] Ref_backlabels_default = Ref_backlabels_xby_str_ary(String_.Ary	// TEST:default backlabels for test only; actual backlabels will be overrriden by MediaWiki:Cite_references_link_many_format_backlink_labels; DATE:2014-06-07
 	(  "a",  "b",  "c",  "d",  "e",  "f",  "g",  "h",  "i",  "j",  "k",  "l",  "m",  "n",  "o",  "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w",  "x",  "y",  "z"
 	, "aa", "ab", "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq", "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az"
@@ -191,6 +200,7 @@ public class Ref_html_wtr_cfg {
 	, "ya", "yb", "yc", "yd", "ye", "yf", "yg", "yh", "yi", "yj", "yk", "yl", "ym", "yn", "yo", "yp", "yq", "yr", "ys", "yt", "yu", "yv", "yw", "yx", "yy", "yz"
 	, "za", "zb", "zc", "zd", "ze", "zf", "zg", "zh", "zi", "zj", "zk", "zl", "zm", "zn", "zo", "zp", "zq", "zr", "zs", "zt", "zu", "zv", "zw", "zx", "zy", "zz"
 	));
+*/
 	private static byte[][] Ref_backlabels_xby_str_ary(String[] ary) {
 		int ary_len = ary.length;
 		byte[][] rv = new byte[ary_len][];
@@ -199,7 +209,7 @@ public class Ref_html_wtr_cfg {
 		return rv;
 	}
 	public static byte[][] Ref_backlabels_xby_bry(byte[] raw) {
-		if (raw == null) return Ref_backlabels_default;
+//		if (raw == null) return Ref_backlabels_default;
 		List_adp list = List_adp_.New();
 		int len = raw.length, pos = 0, bgn = -1;
 		while (true) {

@@ -419,7 +419,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 	private byte[] display_type(boolean from_hdump, Xoa_ttl ttl, byte html_gen_tid) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		Xoh_href_wtr href_wtr = wiki.Html__href_wtr();
-		subj_href = href_wtr.Build_to_bry(wiki, ttl.Subj_txt()); // or ttl.Full_url()?????
+		subj_href = href_wtr.Build_to_bry(wiki, ttl);
 		//subj_href = Xoh_html_wtr_escaper.Escape(Xop_amp_mgr.Instance, tmp_bfr, Bry_.Add(Xoh_href_.Bry__wiki, ttl.Subj_url()));
 		//subj_href = Bry_.Add(Xoh_href_.Bry__wiki, ttl.Full_url());
 		//subj_href = Bry_.Replace(subj_href, Bry_.new_a7("%"), Bry_.new_a7("%25"));

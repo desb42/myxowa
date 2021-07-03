@@ -110,9 +110,10 @@ public class Xoh_href_wtr {	// TS:do not move to app-level
 		bfr.Add_bfr_and_clear(encoder_bfr);
 	}
 	private void Build_to_bfr_page(Xoa_ttl ttl, Xoh_wtr_ctx hctx, byte[] ttl_full, int page_bgn) {
-		int anch_bgn = Bry_find_.Find_fwd(ttl_full, Byte_ascii.Hash);	// NOTE: cannot use Anch_bgn b/c Anch_bgn has bug with whitespace
+/*		int anch_bgn = Bry_find_.Find_fwd(ttl_full, Byte_ascii.Hash);	// NOTE: cannot use Anch_bgn b/c Anch_bgn has bug with whitespace
 		if (anch_bgn == Bry_find_.Not_found){	// no anchor; just add page
-			encoder.Encode(encoder_bfr, ttl_full, page_bgn, ttl_full.length);
+                    encoder_bfr.Add(ttl_full);
+			//encoder.Encode(encoder_bfr, ttl_full, page_bgn, ttl_full.length);
 			if (hctx.Mode_is_file_dump()) {
 				byte[] href_end = hctx.Anch__href__end();
 				if (href_end != null) encoder_bfr.Add(href_end);
@@ -121,7 +122,8 @@ public class Xoh_href_wtr {	// TS:do not move to app-level
 		else {									// anchor exists; check if anchor is preceded by ws; EX: [[A #b]] -> "/wiki/A#b"
 			int page_end = Bry_find_.Find_bwd_last_ws(ttl_full, anch_bgn);		// first 1st ws before #; handles multiple ws
 			page_end = page_end == Bry_find_.Not_found ? anch_bgn : page_end;	// if ws not found, use # pos; else use 1st ws pos
-			encoder.Encode(encoder_bfr, ttl_full, page_bgn, page_end);			// add page
+                    encoder_bfr.Add(ttl_full);
+			//encoder.Encode(encoder_bfr, ttl_full, page_bgn, page_end);			// add page
 			if (hctx.Mode_is_file_dump()) {
 				byte[] href_end = hctx.Anch__href__end();
 				if (	href_end != null
@@ -130,5 +132,12 @@ public class Xoh_href_wtr {	// TS:do not move to app-level
 			}
 			encoder.Encode(encoder_bfr, ttl_full, anch_bgn, ttl_full.length);	// add anchor
 		}
+*/
+// 20210630
+                  encoder_bfr.Add(ttl_full);
+			if (hctx.Mode_is_file_dump()) {
+				byte[] href_end = hctx.Anch__href__end();
+				if (href_end != null) encoder_bfr.Add(href_end);
+			}
 	}
 }

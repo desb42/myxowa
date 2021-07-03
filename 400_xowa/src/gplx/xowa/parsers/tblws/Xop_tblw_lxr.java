@@ -30,11 +30,11 @@ public class Xop_tblw_lxr implements Xop_lxr {
                         ctx.Page().Prev_list_tkn_(null);
                 }
 */
-                Xop_list_tkn_new prev = null;
-                if (wlxr_type == Xop_tblw_wkr.Tblw_type_tb) {
-                    prev = ctx.Page().Prev_list_tkn();
-                        ctx.Page().Prev_list_tkn_(null);
-                }
+		Xop_list_tkn_new prev = null;
+		if (wlxr_type == Xop_tblw_wkr.Tblw_type_tb) {
+			prev = ctx.Page().Prev_list_tkn();
+			ctx.Page().Prev_list_tkn_(null);
+		}
 		int rv = Handle_bang(wlxr_type, ctx, ctx.Tkn_mkr(), root, src, src_len, bgn_pos, cur_pos);
 		if (rv != Continue) return rv;
 		rv = Handle_lnki(wlxr_type, ctx, ctx.Tkn_mkr(), root, src, src_len, bgn_pos, cur_pos);

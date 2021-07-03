@@ -24,5 +24,5 @@ public interface Xop_tblw_tkn extends Xop_tkn_itm {
 	int Atrs_end();
 	void Atrs_rng_set(int bgn, int end);
 	Mwh_atr_itm[] Atrs_ary(); Xop_tblw_tkn Atrs_ary_as_tblw_(Mwh_atr_itm[] v);
-        public Xop_list_tkn_new List_tkn();
+	public Xop_list_tkn_new List_tkn();
 }

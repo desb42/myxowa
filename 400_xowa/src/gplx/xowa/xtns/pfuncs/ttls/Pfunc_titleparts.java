@@ -48,9 +48,9 @@ public class Pfunc_titleparts extends Pf_func_base {
 			parts_bgn = 0;	// NOTE: do not return
 		}
 		else if (parts_bgn > 0) parts_bgn -= List_adp_.Base1;	// adjust for base1
-		bfr.Add(TitleParts(argx, parts_len, parts_bgn, argx_as_ttl.Full_txt()));
+		bfr.Add(TitleParts(argx_as_ttl.Full_txt(), parts_len, parts_bgn, argx));
 	}
-	private byte[] TitleParts(byte[] src, int parts_len, int parts_bgn, byte[] ttl) {
+	private byte[] TitleParts(byte[] src, int parts_len, int parts_bgn, byte[] orig_ttl) {
 		// find dlm positions; EX: ab/cde/f/ will have -1,2,6,8
 		synchronized (dlms_ary) {// LOCK:static-obj; DATE:2016-07-06
 			int src_len = src.length; int dlms_ary_len = 1;	// 1 b/c dlms_ary[0] will always be -1
@@ -61,7 +61,7 @@ public class Pfunc_titleparts extends Pf_func_base {
 				switch(b) {
 					case Byte_ascii.Slash:
 						if (dotty && (dotcount == 1 || dotcount == 2))
-							return src;
+							return orig_ttl;
 						dlms_ary[dlms_ary_len++] = i;
 						dotty = true;
 						dotcount = 0;
@@ -75,7 +75,7 @@ public class Pfunc_titleparts extends Pf_func_base {
 				}
 			}
 			if (dotty && (dotcount == 1 || dotcount == 2))
-				return src;
+				return orig_ttl;
 			dlms_ary[dlms_ary_len] = src_len;	// put src_len into last dlms_ary; makes dlms_ary[] logic easier
 			// calc bgn_idx; must occur before adjust parts_len
 			int bgn_idx = parts_bgn > -1 ? parts_bgn : parts_bgn + dlms_ary_len;			// negative parts_bgn means calc from end of dlms_ary_len; EX a/b/c|1|-1 means start from 2
@@ -88,14 +88,13 @@ public class Pfunc_titleparts extends Pf_func_base {
 				parts_len = dlms_ary_len;
 				if (parts_len < 1) return Bry_.Empty;									// NOTE: if zerod'd b/c of neg length, return empty; contrast with line below; EX: a/b/c|-4
 			}
-			if (parts_len == 0) return src;													// if no dlms, return orig
+			if (parts_len == 0) return orig_ttl;													// if no dlms, return orig
 			// calc idxs for extraction
 			int bgn_pos = dlms_ary[bgn_idx] + 1; // +1 to start after slash
 			int end_idx = bgn_idx + parts_len;
 			int end_pos = end_idx > dlms_ary_len ? dlms_ary[dlms_ary_len] : dlms_ary[end_idx];
 			if (end_pos < bgn_pos) return Bry_.Empty;
-			// assume ttl is same length as src
-			return Bry_.Mid(ttl, bgn_pos, end_pos);
+			return Bry_.Mid(src, bgn_pos, end_pos);
 		}
 	}
 	private static final int[] dlms_ary = new Int_ary_bldr(26).Set(0, -1).Xto_int_ary();	// set pos0 to -1; makes +1 logic easier

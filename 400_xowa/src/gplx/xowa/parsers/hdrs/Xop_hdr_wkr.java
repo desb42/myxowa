@@ -68,12 +68,7 @@ public class Xop_hdr_wkr implements Xop_ctx_wkr {
 			default: ctx.Msg_log().Add_itm_none(Xop_hdr_log.Len_7_or_more, src, bgn_pos, new_pos); break;	// <h7>+; limit to 6; flag; NOTE: only 14 pages in 2011-07-27
 		}
 
-		Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-		if (prev != null) {
-			Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-			ctx.Subs_add_and_stack(root, itm);
-			ctx.Page().Prev_list_tkn_(null);
-		}
+		Xop_list_tkn_new.Reset(root, ctx);
 
 		Xop_hdr_tkn tkn = tkn_mkr.Hdr(bgn_pos, new_pos, hdr_len);	// make tkn
 		ctx.StackTkn_add(root, tkn);

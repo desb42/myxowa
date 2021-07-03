@@ -61,7 +61,7 @@ public class Xop_lnki_arg_parser {
 	}
 	public byte Identify_tid(byte[] src, int bgn, int end) {
 		int len = end - bgn;
-            key_trie.Dumpit("lang_trie");
+//            key_trie.Dumpit("lang_trie");
 		Byte_obj_val val = (Byte_obj_val)key_trie.Match_at(key_trie_rv, src, bgn, end);
 		if (val != null && len == key_trie_rv.Pos() - bgn)		// check for false matches; EX: alternate= should not match alt=
 			return val.Val();									// match; return val;
@@ -114,11 +114,11 @@ public class Xop_lnki_arg_parser {
 			int dim = int_bfr.To_int_and_clear(-1);
 			if	(mode_width)	this.lnki_w = dim;
 			else				this.lnki_h = dim;
-                        // check bounds
-                        if (this.lnki_h == 0) {
-                            if (this.lnki_w != 0)
-                                this.lnki_h = this.lnki_w;
-                        }
+			// check bounds
+			if (this.lnki_h == 0) {
+				if (this.lnki_w != 0)
+					this.lnki_h = this.lnki_w;
+			}
 			return Tid_dim;
 		}
 		return Tid_caption;

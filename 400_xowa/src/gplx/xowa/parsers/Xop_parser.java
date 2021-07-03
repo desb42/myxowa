@@ -113,25 +113,18 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 	}
 	private void Parse(Xop_root_tkn root, Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, byte[] src, byte parse_type, Btrie_fast_mgr trie, int doc_bgn_pos) {
 		int len = src.length; if (len == 0) return;	// nothing to parse;
-                // remove trailing whitespace
-                len = Bry_find_.Find_bwd__skip_ws(src, len, 0);
-                if (len == 0) return;	// nothing to parse;
+		// remove trailing whitespace
+		len = Bry_find_.Find_bwd__skip_ws(src, len, 0);
+		if (len == 0) return;	// nothing to parse;
 		byte parse_tid_old = ctx.Parse_tid();	// NOTE: must store parse_tid b/c ctx can be reused by other classes
 		ctx.Parse_tid_(parse_type);
 		ctx.Parser__page_init(root, src);
 		ctx.App().Parser_mgr().Core__uniq_mgr().Clear();
-                Xop_list_tkn_new saved_tkn = ctx.Page().Prev_list_tkn();
-                ctx.Page().Prev_list_tkn_(null); // reset list new
+		Xop_list_tkn_new saved_tkn = ctx.Page().Prev_list_tkn();
+		ctx.Page().Prev_list_tkn_(null); // reset list new
 		Parse_to_src_end(root, ctx, tkn_mkr, src, trie, doc_bgn_pos, len);
-					// any outstanding list?
-					Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-					if (prev != null) {
-						// inject a list close
-						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, prev);
-						ctx.Subs_add_and_stack(root, itm);
-						ctx.Page().Prev_list_tkn_(null);
-					}
-                ctx.Page().Prev_list_tkn_(saved_tkn);
+		Xop_list_tkn_new.Reset(root, ctx);
+		ctx.Page().Prev_list_tkn_(saved_tkn);
 		ctx.Parser__page_term(root, src, len);
 		ctx.Parse_tid_(parse_tid_old);
 	}

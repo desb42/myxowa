@@ -706,7 +706,7 @@ public class Xoh_page_wtr_wkr {
 		// Add retrieved from for printing and as a hook for wikisource (and others)
 		tmp_bfr.Add(aref);
 		tmp_bfr.Add(gplx.xowa.htmls.hrefs.Xoh_href_.Bry__wiki);
-		tmp_bfr.Add(page.Ttl().Full_db_w_anch());
+		tmp_bfr.Add(page.Ttl().Full_txt_raw_unders()); //.Full_db_w_anch());
 		tmp_bfr.Add(aref2);
 		tmp_bfr.Add(page.Ttl().Full_url());
 		tmp_bfr.Add(endaref);

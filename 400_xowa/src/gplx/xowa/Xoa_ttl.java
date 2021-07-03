@@ -49,8 +49,11 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 	}
 	public byte[] Full_txt_raw()		{return full_txt;} private byte[] full_txt = Bry_.Empty;
 	public byte[] Full_txt_raw_unders() {
-		synchronized (url_encoder) {	// LOCK:static-obj
-			return url_encoder.Encode(Replace_unders(Full_txt_raw()));
+		//synchronized (url_encoder) {	// LOCK:static-obj
+		//	return url_encoder.Encode(Replace_unders(Full_txt_raw()));
+		//}
+		synchronized (href_encoder) {	// LOCK:static-obj
+			return href_encoder.Encode(Replace_unders(Full_txt_raw()));
 		}
         }
 	public byte[] Full_db_wo_xwiki()	{
@@ -422,6 +425,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 						// remove any trailing whitespace from the bfr
 						txt_bb_len = stripwhitespace(bfr, txt_bb_len);
 						anch_bgn = (txt_bb_len) + 1; 
+						add_ws = false; // skip any acumulated white space
 					}
 					break;
 				case Byte_ascii.Slash:

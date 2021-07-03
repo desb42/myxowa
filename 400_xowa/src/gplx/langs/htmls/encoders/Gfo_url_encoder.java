@@ -32,7 +32,7 @@ public class Gfo_url_encoder implements Url_encoder_interface {	// TS; Gfo_url_e
 			if (anchor_encoder != null && (b == Byte_ascii.Hash /*|| b == Byte_ascii.Question*/)) {
 				bfr.Add_byte(Byte_ascii.Hash);
 				anchor_encoder.Encode(bfr, bry, i + 1, end);
-				break;
+				return;
 			}
 			Gfo_url_encoder_itm itm = encode_ary[b & 0xff];// PATCH.JAVA:need to convert to unsigned byte
 			i += itm.Encode(bfr, bry, end, i, b);

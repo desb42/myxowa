@@ -79,13 +79,6 @@ public class Xop_para_wkr implements Xop_ctx_wkr {
 		if (!para_enabled) return;
 		Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);
 		Process_block__bgn_y__end_n(tag);
-/* 20210115		Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-		if (prev != null) {
-			Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-			ctx.Subs_add_and_stack(root, itm);
-			ctx.Page().Prev_list_tkn_(null);
-		}
-*/
 	}
 	public void Process_nl(Xop_ctx ctx, Xop_root_tkn root, byte[] src, int bgn_pos, int cur_pos) {// REF.MW:Parser.php|doBlockLevels
 		Dd_clear(ctx);

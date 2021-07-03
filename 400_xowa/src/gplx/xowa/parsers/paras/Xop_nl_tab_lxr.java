@@ -35,26 +35,19 @@ public class Xop_nl_tab_lxr implements Xop_lxr {
 					case Xop_tblw_ws_itm.Type_xnde:		// ignore xnde
 						break;
 					default: {							// handle tblw
-                Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
+						Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
 						int tblw_rv = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, non_ws_pos + tblw_itm.Hook_len(), false, itm_type, Xop_tblw_wkr.Called_from_pre, -1, -1, list_tkn);
 						if (tblw_rv != -1) {	// \n\s| is valid tblw tkn and processed; otherwise fall through; 
-                        ctx.Page().Prev_list_tkn_(null);
+							ctx.Page().Prev_list_tkn_(null);
 							return tblw_rv;
-                                                }
+						}
 						break;
 					}
 				}
 			}
 		}
 		if (bgn_pos != Xop_parser_.Doc_bgn_bos) { // don't add \n if BOS; EX: "<BOS> a" should be " ", not "\n "
-			Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-			if (prev != null) {
-				if (prev.Src_bgn() > src.length)
-					System.out.println("nl");
-				Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-				ctx.Subs_add_and_stack(root, itm);
-				ctx.Page().Prev_list_tkn_(null);
-			}
+			Xop_list_tkn_new.Reset(root, ctx);
 			Xop_para_wkr para_wkr = ctx.Para();
 			if (	ctx.Parse_tid() == Xop_parser_tid_.Tid__wtxt			// parse_mode is wiki
 				&&	para_wkr.Enabled()											// check that para is enabled

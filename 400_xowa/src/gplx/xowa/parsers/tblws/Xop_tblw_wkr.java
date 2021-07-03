@@ -56,17 +56,6 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 				case Tblw_type_tb: {							// "{|";
 					// close para when table starts; needed for TRAILING_TBLW fix; PAGE:en.w:Template_engine_(web) DATE:2017-04-08
 					ctx.Para().Process_block__bgn__nl_w_symbol(ctx, root, src, bgn_pos, cur_pos - 1, Xop_xnde_tag_.Tag__table);	// -1 b/c cur_pos includes sym_byte; EX: \n{
-/* 20210115					// any outstanding list?
-					if (ctx.Page().Prev_list_tkn() != null && called_from != Called_from_list) {
-						// inject a list close
-						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-						if (prev != null && prev.Src_bgn() > src.length)
-							System.out.println("tbl");
-						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-						ctx.Subs_add_and_stack(root, itm);
-						ctx.Page().Prev_list_tkn_(null);
-					}
-*/
 					break;										//	noop; by definition "{|" does not need to have a previous "{|"
 				}
 				case Tblw_type_td:								// "|"
@@ -82,16 +71,6 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 							return -1;
 						else {	// DATE:2014-02-19; NOTE: do not add nl if ||; DATE:2014-04-14							
 							if (wlxr_type == Tblw_type_td) {	// "\n|"
-/*					// any outstanding list?
-					if (ctx.Page().Prev_list_tkn() != null && called_from != Called_from_list) {
-						// inject a list close
-						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-						if (prev != null && prev.Src_bgn() > src.length)
-							System.out.println("tbl_td");
-						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-						ctx.Subs_add_and_stack(root, itm);
-						ctx.Page().Prev_list_tkn_(null);
-					}*/
 								ctx.Subs_add(root, ctx.Tkn_mkr().NewLine(bgn_pos, bgn_pos + 1, Xop_nl_tkn.Tid_char, 1));
 								ctx.Subs_add(root, ctx.Tkn_mkr().Pipe(bgn_pos + 1, cur_pos));
 							}
@@ -217,6 +196,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			case Tblw_type_td:								// <td>
 			case Tblw_type_td2:
 				boolean create_th = false;
+								Xop_list_tkn_new.Reset(root, ctx); // trial
 				switch (prv_tid) {
 					case Xop_tkn_itm_.Tid_tblw_tr:
 						if (wlxr_type == Tblw_type_td2) {	// ignore sequences like "\n|- ||"; PAGE: nl.w:Tabel_van_Belgische_gemeenten; DATE:2015-12-03
@@ -241,26 +221,18 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 						else {
 							if (!tbl_is_xml) { // only for "\n|" not <td>
 								ctx.Para().Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);	// simulate "\n"; DATE:2014-02-20; ru.w:;home/wiki/Dashboard/Image_databases; DATE:2014-02-20
-					// any outstanding list?
-					if (ctx.Page().Prev_list_tkn() != null) {
-						// inject a list close
-						Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-						if (prev != null && prev.Src_bgn() > src.length)
-							System.out.println("tbl");
-						Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-						ctx.Subs_add_and_stack(root, itm);
-						ctx.Page().Prev_list_tkn_(null);
-					}
+								// any outstanding list?
+								Xop_list_tkn_new.Reset(root, ctx);
 							}
-                                // trim trailing whitespace
-                                root.Subs_ignore_whitespace();
+							// trim trailing whitespace
+							root.Subs_ignore_whitespace();
 							ctx.Para().Process_block__bgn_y__end_n(Xop_xnde_tag_.Tag__td);		// <td>
 							ctx.Stack_pop_til(root, src, ctx.Stack_idx_typ(prv_tid), true, bgn_pos, bgn_pos, Xop_tkn_itm_.Tid_tblw_td);
 						}
 						break;
 					case Xop_tkn_itm_.Tid_tblw_th:			// fix;  <th><td>           -> <th></th><td>
-                                // trim trailing whitespace
-                                root.Subs_ignore_whitespace();
+						// trim trailing whitespace
+						root.Subs_ignore_whitespace();
 						ctx.Stack_pop_til(root, src, ctx.Stack_idx_typ(prv_tid), true, bgn_pos, bgn_pos, Xop_tkn_itm_.Tid_tblw_td);
 						if (wlxr_type == Tblw_type_td2) create_th = true;	// !a||b -> <th><th>; but !a|b -> <th><td>
 						break;
@@ -283,10 +255,8 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 						prv_tid = new_tkn.Tkn_tid();
 						break;
 				}
-//					if (prv_tid == Xop_tkn_itm_.Tid_xnde)
-//						ctx.Stack_auto_close(root, src, prv_tkn, prv_tkn.Src_bgn(), prv_tkn.Src_end());
-                                // trim trailing whitespace
-                                root.Subs_ignore_whitespace();
+				// trim trailing whitespace
+				root.Subs_ignore_whitespace();
 				if (create_th)	new_tkn = tkn_mkr.Tblw_th(bgn_pos, cur_pos, tbl_is_xml);
 				else			new_tkn = tkn_mkr.Tblw_td(bgn_pos, cur_pos, tbl_is_xml);
 				cell_pipe_seen = false;
@@ -323,8 +293,8 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 						ctx.Subs_add_and_stack_tblw(root, prv_tkn, tkn_mkr.Tblw_tr(bgn_pos, cur_pos, tbl_is_xml, true));
 						break;
 				}
-                                // trim trailing whitespace
-                                root.Subs_ignore_whitespace();
+				// trim trailing whitespace
+				root.Subs_ignore_whitespace();
 				new_tkn = tkn_mkr.Tblw_th(bgn_pos, cur_pos, tbl_is_xml);
 				cell_pipe_seen = false;
 				break;					
@@ -368,25 +338,19 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 				ctx.Para().Process_block__bgn_n__end_y(Xop_xnde_tag_.Tag__td);
 				break;
 		}
-                return Bry_find_.Find_fwd_while(src, cur_pos, src_len, Byte_ascii.Space); // skip leading space
+		return Bry_find_.Find_fwd_while(src, cur_pos, src_len, Byte_ascii.Space); // skip leading space
 		//return cur_pos;
 	}
 	public int Make_tkn_end(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, int typeId, byte wlxr_type, Xop_tblw_tkn prv_tkn, int prv_tid, boolean tbl_is_xml) {
 		if (!tbl_is_xml)													// only for "\n|}" not </table>
 			ctx.Para().Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);	// simulate "\n"; process para (which will create paras for cells) 2012-12-08
 
-		Xop_list_tkn_new prev = ctx.Page().Prev_list_tkn();
-		//if (prev != null && typeId == Xop_tkn_itm_.Tid_tblw_te) {
-		if (prev != null) {
-			Xop_list_tkn_new itm = new Xop_list_tkn_new(0, 0, ctx.Page().Prev_list_tkn());
-			ctx.Subs_add_and_stack(root, itm);
-			ctx.Page().Prev_list_tkn_(null);
-		}
-                // restore previous list
-                if (prv_tkn != null)
-                ctx.Page().Prev_list_tkn_(prv_tkn.List_tkn());
-                // trim trailing whitespace
-                root.Subs_ignore_whitespace();
+		Xop_list_tkn_new.Reset(root, ctx);
+		// restore previous list
+		if (prv_tkn != null)
+			ctx.Page().Prev_list_tkn_(prv_tkn.List_tkn());
+		// trim trailing whitespace
+		root.Subs_ignore_whitespace();
 		if (tbl_is_xml && typeId == Xop_tkn_itm_.Tid_tblw_tb	// tblx: </table>
 			&& prv_tkn != null && !prv_tkn.Tblw_xml()) {		// tblw is prv_tkn
 			++tblw_te_ignore_count;								// suppress subsequent occurrences of "|}"; EX:ru.q:Авель; DATE:2014-02-22

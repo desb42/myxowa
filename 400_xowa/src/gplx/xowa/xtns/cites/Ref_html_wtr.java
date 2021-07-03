@@ -143,6 +143,7 @@ public class Ref_html_wtr {
 					, Itm_id(text_itm, false, cfg.Itm_crslp(), cfg.Itm_crsls())
 					, grp_list_fmtr
 					, tmp
+					, null // 20200409 (fourth arg) strictly this should be $extraAttributes = Html::expandAttributes( [ 'class' => 'mw-cite-dir-' . $dir ] );
 					);
 			}
 			bfr.Add(Db_expand.Extracheck(tmp_ref, cfg.Itm_accessibility_label()));

@@ -48,12 +48,12 @@ public class Xopg_redlink_mgr implements Gfo_invk {
 		// load page_rows from page_tbl
 		int page_len = lnki_hash.Len();
                 System.out.println("redlinks " + Integer.toString(page_len));
+		Xow_db_mgr db_mgr = wiki.Data__core_mgr();
 		for (int i = 0; i < page_len; i += Batch_size) {
 			if (usr_dlg.Canceled()) return;
 			int end = i + Batch_size; if (end > page_len) end = page_len;
-                        Xow_db_mgr db_mgr = wiki.Data__core_mgr();
-                        if (db_mgr != null)
-			db_mgr.Tbl__page().Select_in__ns_ttl(usr_dlg, lnki_hash, wiki.Ns_mgr(), Bool_.Y, i, end);
+			if (db_mgr != null)
+				db_mgr.Tbl__page().Select_in__ns_ttl(usr_dlg, lnki_hash, wiki.Ns_mgr(), Bool_.Y, i, end);
 			// wiki.Db_mgr().Load_mgr().Load_by_ttls(usr_dlg, lnki_hash, Bool_.Y, i, end);
 		}
 
@@ -66,6 +66,7 @@ public class Xopg_redlink_mgr implements Gfo_invk {
 			byte[] full_db = lnki.Ttl().Full_db();
 			Xowd_page_itm page_row = (Xowd_page_itm)lnki_hash.Get_by(full_db);
 			String html_uid = Xopg_lnki_list.Lnki_id_prefix + Int_.To_str(lnki.Html_uid());
+//                System.out.println("redlink " + Integer.toString(i) + ": " + String_.new_u8(full_db) + " " + page_row.Exists());
 			if (page_row.Exists()) { // may need to colour
 				Xopg_colour colour = new Xopg_colour(page_row, html_uid);
 				lnki_ids.Add(colour);
@@ -101,13 +102,13 @@ public class Xopg_redlink_mgr implements Gfo_invk {
 		Pp_pagelist_colour.Colour(lnki_ids, bfr, wiki); // check for page colour (only wikisource)
 		usr_dlg.Log_many("", "", "redlink.redlink_end: redlinks_run=~{0}", redlink_count);
 	}
-        private void Build_class(Bry_bfr bfr, String html_uid, String klass) {
-                bfr.Add_byte_comma().Add_byte(Byte_ascii.Brack_bgn);
-                bfr.Add_byte_quote().Add_str_u8(html_uid).Add_byte_quote();
-                bfr.Add_byte_comma();
-                bfr.Add_byte_quote().Add_str_u8(klass).Add_byte_quote();
-                bfr.Add_byte(Byte_ascii.Brack_end);
-        }
+	private void Build_class(Bry_bfr bfr, String html_uid, String klass) {
+		bfr.Add_byte_comma().Add_byte(Byte_ascii.Brack_bgn);
+		bfr.Add_byte_quote().Add_str_u8(html_uid).Add_byte_quote();
+		bfr.Add_byte_comma();
+		bfr.Add_byte_quote().Add_str_u8(klass).Add_byte_quote();
+		bfr.Add_byte(Byte_ascii.Brack_end);
+	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_run)) {synchronized (this) {Redlink(null);}}	// NOTE: attempt to eliminate random IndexBounds errors; DATE:2014-09-02
 		else	return Gfo_invk_.Rv_unhandled;
