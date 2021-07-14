@@ -25,7 +25,7 @@ public class Xow_db_layout {
 			case Xow_db_layout.Tid__all:		return Key__all;
 			case Xow_db_layout.Tid__few:		return Key__few;
 			case Xow_db_layout.Tid__lot:		return Key__lot;
-			default: 							throw Err_.new_unimplemented();
+			default: 							throw Err_.new_unimplemented(98);
 		}
 	}
 
@@ -40,6 +40,6 @@ public class Xow_db_layout {
 		if		(String_.Eq(v, Key__all))	return Itm_all;
 		else if	(String_.Eq(v, Key__few))	return Itm_few;
 		else if	(String_.Eq(v, Key__lot))	return Itm_lot;
-		else								throw Err_.new_unimplemented();
+		else								throw Err_.new_unimplemented(99);
 	}
 }

@@ -100,6 +100,8 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 		ctx.Parse_tid_(Xop_parser_tid_.Tid__tmpl);
 		root.Reset();
 		byte[] mid_bry = Expand_tmpl(root, ctx, tkn_mkr, src);
+		mid_bry = Db_highlight.RemoveSH(mid_bry, ctx.Page());
+//		Db_readwrite.writeFile(String_.new_u8(mid_bry), "d:/des/xowa_x/expand.txt");
 //                Gfo_usr_dlg_.Instance.Log_many("", "", "mid_bry=~{0}", String_.new_u8(mid_bry));
 //System.out.println(String_.new_u8(mid_bry));
 		root.Data_mid_(mid_bry);

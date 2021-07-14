@@ -160,7 +160,7 @@ public abstract class Xop_tkn_itm_base implements Xop_tkn_itm {
 		}
 		subs_len = 0;
 	}
-	@gplx.Virtual public void Html__write(Bry_bfr bfr, Xoh_html_wtr wtr, Xowe_wiki wiki, Xoae_page page, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoh_html_wtr_cfg cfg, Xop_tkn_grp grp, int sub_idx, byte[] src) {throw Err_.new_unimplemented();}
+	@gplx.Virtual public void Html__write(Bry_bfr bfr, Xoh_html_wtr wtr, Xowe_wiki wiki, Xoae_page page, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoh_html_wtr_cfg cfg, Xop_tkn_grp grp, int sub_idx, byte[] src) {throw Err_.new_unimplemented(90);}
 	public void Clear() {
 		src_bgn = src_end = tkn_sub_idx = -1; ignore = false;  tmpl_static = false;
 		Subs_clear();

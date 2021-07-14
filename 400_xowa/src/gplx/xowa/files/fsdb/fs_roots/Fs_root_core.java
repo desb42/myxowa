@@ -23,7 +23,7 @@ public class Fs_root_core implements Xof_fsdb_mgr, Gfo_invk {	// reads images fr
 		this.mgr = new Fs_root_mgr(wiki);
 	}
 	public String Key() {return Fsdb_mgr_key;}
-	public gplx.xowa.files.bins.Xof_bin_mgr Bin_mgr() {throw Err_.new_unimplemented();}
+	public gplx.xowa.files.bins.Xof_bin_mgr Bin_mgr() {throw Err_.new_unimplemented(80);}
 	public gplx.fsdb.meta.Fsm_mnt_mgr Mnt_mgr()       {return null;}
 	public void Init_by_wiki(Xow_wiki wiki) {
 		this.wiki = (Xowe_wiki)wiki;

@@ -19,13 +19,13 @@ public class Scrib_engine_type {
 		switch (v) {
 			case Type_lua:				return "lua";
 			case Type_luaj:				return "luaj";
-			default:					throw Err_.new_unimplemented();
+			default:					throw Err_.new_unimplemented(104);
 		}
 	}
 	public static byte Xto_byte(String s) {
 		if		(String_.Eq(s, "lua"))				return Type_lua;
 		else if	(String_.Eq(s, "luaj"))				return Type_luaj;
-		else										throw Err_.new_unimplemented();
+		else										throw Err_.new_unimplemented(105);
 	}
 	public static final byte Type_lua = 0, Type_luaj = 1;
 	public static Keyval[] Options__list = Keyval_.Ary(Keyval_.new_("luaj"), Keyval_.new_("lua"));

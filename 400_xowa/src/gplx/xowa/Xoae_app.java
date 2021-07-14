@@ -144,9 +144,10 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 	public Xoa_cur				Cur_redirect() {return cur_redirect;} private Xoa_cur cur_redirect;
 	public Io_stream_zip_mgr	Zip_mgr() {return zip_mgr;} Io_stream_zip_mgr zip_mgr = new Io_stream_zip_mgr();
 
-	public Xosrv_server			Tcp_server() {return tcp_server;} private Xosrv_server tcp_server = new Xosrv_server();
-	public Http_server_mgr		Http_server() {return http_server;} private Http_server_mgr http_server;
-	public Xop_amp_mgr			Parser_amp_mgr() {return parser_amp_mgr;} private final    Xop_amp_mgr parser_amp_mgr = Xop_amp_mgr.Instance;
+	public Xosrv_server     Tcp_server() {return tcp_server;} private Xosrv_server tcp_server = new Xosrv_server();
+	public Http_server_mgr  Http_server() {return http_server;} private Http_server_mgr http_server;
+	public Xop_amp_mgr      Parser_amp_mgr() {return parser_amp_mgr;} private final    Xop_amp_mgr parser_amp_mgr = Xop_amp_mgr.Instance;
+	public Db_highlight     SyntaxHighlighter() {return highlight;} private final    Db_highlight highlight = new Db_highlight();
 
 	private Xoa_fmtr_mgr fmtr_mgr;
 	public Gfo_number_parser Utl_num_parser() {return utl_num_parser;} private Gfo_number_parser utl_num_parser = new Gfo_number_parser();
@@ -173,6 +174,7 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 		special_mgr.Init_by_app(this);
 		sys_cfg.Init_by_app(this);
 		Db_timezone.Set_wiki(wiki_mgr.Get_at_or_null(0), this);
+                highlight.Init_by_app(this);
                 
                 user.Init_assert();
 	}

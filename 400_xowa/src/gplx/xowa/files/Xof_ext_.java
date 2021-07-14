@@ -132,6 +132,14 @@ public class Xof_ext_ {
 			ttl[i + dot_pos + 1] = ext[i];
 		return ttl;
 	}
+	public static int Get_ext_id(byte[] ttl) {
+		int dot_pos = Bry_find_.Find_bwd(ttl, Byte_ascii.Dot);
+		int ttl_len = ttl.length;
+		if (dot_pos == Bry_find_.Not_found || dot_pos == ttl_len - 1) return Id_unknown;
+		byte[] ext_bry = Bry_.Mid(ttl, dot_pos+1, ttl_len);
+		Object o = id_hash.Get_by(ext_bry);
+		return o == null ? Id_unknown : ((Int_obj_val)o).Val();
+	}
 	public static boolean Orig_file_is_img(int v) {	// identifies if orig_file can be used for <img src>; EX: png is valid, but svg, ogv, pdf is not
 		switch (v) {
 			case Id_png:

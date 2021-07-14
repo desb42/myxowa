@@ -44,9 +44,21 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 
 			Bry_bfr full_bfr = wiki.Utl__bfr_mkr().Get_m001();
 			try {
+				byte[] page_bry;
 				Hash_adp_bry lst_page_regy = ctx.Lst_page_regy(); 
 				if (lst_page_regy == null) lst_page_regy = Hash_adp_bry.cs();	// SEE:NOTE:page_regy; DATE:2014-01-01
-				byte[] page_bry = Bld_wikitext(full_bfr, page.Ttl());
+				byte[] base_txt = page.Ttl().Base_txt();
+				int base_txt_len = base_txt.length;
+				if (maxpagecount < 0) { // assume any negative is a one oage item // && base_txt_len > 4 && base_txt[base_txt_len-4] == '.' && base_txt[base_txt_len-3] == 'j' && base_txt[base_txt_len-2] == 'p' && base_txt[base_txt_len-1] == 'g') {
+					full_bfr.Add_str_a7("[[Page:");
+					full_bfr.Add(base_txt).Add_byte_pipe();
+					full_bfr.Add_byte(Byte_ascii.Num_1);
+					full_bfr.Add_str_a7("]]\n");
+					page_bry = full_bfr.To_bry_and_clear();
+				}
+				else {
+					page_bry = Bld_wikitext(full_bfr, base_txt);
+				}
 				if (page_bry != null)
 					xtn_root = Bld_root_nde(full_bfr, lst_page_regy, ctx, wiki, page_bry);	// NOTE: this effectively reparses page twice; needed b/c of "if {| : ; # *, auto add new_line" which can build different tokens
 			} finally {
@@ -69,7 +81,7 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 		Page_number pagnum = lst.getNumber(i);
 		return pagnum.getRawPageNumber();
 	}
-	private byte[] Bld_wikitext(Bry_bfr bfr, Xoa_ttl ttl) {
+	private byte[] Bld_wikitext(Bry_bfr bfr, byte[] base_txt) {
 		int countsize;
 		if (rangeto < 10)
 			countsize = 1;
@@ -83,7 +95,7 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 		for (int i = rangefrom; i <= rangeto; i++) {
 			Page_number pagnum = lst.getNumber(i);
 			bfr.Add_str_a7("[[Page:");
-			bfr.Add(ttl.Base_txt()).Add_byte_slash().Add_long_variable(i).Add_byte_pipe();
+			bfr.Add(base_txt).Add_byte_slash().Add_long_variable(i).Add_byte_pipe();
 			byte[] view = pagnum.getFormattedPageNumber();
 			switch(pagnum.Mode()) {
 				case Page_list_row.Display_highroman:

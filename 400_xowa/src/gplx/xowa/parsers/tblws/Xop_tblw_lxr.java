@@ -30,16 +30,11 @@ public class Xop_tblw_lxr implements Xop_lxr {
                         ctx.Page().Prev_list_tkn_(null);
                 }
 */
-		Xop_list_tkn_new prev = null;
-		if (wlxr_type == Xop_tblw_wkr.Tblw_type_tb) {
-			prev = ctx.Page().Prev_list_tkn();
-			ctx.Page().Prev_list_tkn_(null);
-		}
 		int rv = Handle_bang(wlxr_type, ctx, ctx.Tkn_mkr(), root, src, src_len, bgn_pos, cur_pos);
 		if (rv != Continue) return rv;
 		rv = Handle_lnki(wlxr_type, ctx, ctx.Tkn_mkr(), root, src, src_len, bgn_pos, cur_pos);
 		if (rv != Continue) return rv;
-		return ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, false, wlxr_type, Xop_tblw_wkr.Called_from_general, -1, -1, prev);
+		return ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, false, wlxr_type, Xop_tblw_wkr.Called_from_general, -1, -1, null);
 	}
 	public static final int Continue = -2;	// -2 b/c -1 used by Called_from_pre
 	public static int Handle_bang(int wlxr_type, Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos) {

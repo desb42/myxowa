@@ -61,7 +61,7 @@ public class IoEngine_memory extends IoEngine_base {
 		else
 			SaveFilStr(args.Url(), args.Text());
 	}
-	@Override public boolean Truncate_fil(Io_url url, long size) {throw Err_.new_unimplemented();}
+	@Override public boolean Truncate_fil(Io_url url, long size) {throw Err_.new_unimplemented(10);}
 	@Override public String LoadFilStr(IoEngine_xrg_loadFilStr args) {
 		return FetchFil(args.Url()).Text();
 	}

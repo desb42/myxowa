@@ -102,12 +102,12 @@ public class DbMaprRdr extends DataRdr_base implements SrlMgr {
 		Object dbVal = null; try {dbVal = row.Read(arg.DbFld());} catch (Exception e) {throw Err_.new_exc(e, "db", "failed to read dbVal from row", "key", key, "fld", arg.DbFld());}
 		return dbVal;
 	}
-	@Override public DataRdr Subs_byName_moveFirst(String name) {throw Err_.new_unimplemented();}
-	@Override public DataRdr Subs() {throw Err_.new_unimplemented();}
-	@Override public int FieldCount() {throw Err_.new_unimplemented();}
-	@Override public String KeyAt(int i) {throw Err_.new_unimplemented();}
-	@Override public Object ReadAt(int i) {throw Err_.new_unimplemented();}
-	@Override public Keyval KeyValAt(int i) {throw Err_.new_unimplemented();}
+	@Override public DataRdr Subs_byName_moveFirst(String name) {throw Err_.new_unimplemented(19);}
+	@Override public DataRdr Subs() {throw Err_.new_unimplemented(20);}
+	@Override public int FieldCount() {throw Err_.new_unimplemented(21);}
+	@Override public String KeyAt(int i) {throw Err_.new_unimplemented(22);}
+	@Override public Object ReadAt(int i) {throw Err_.new_unimplemented(23);}
+	@Override public Keyval KeyValAt(int i) {throw Err_.new_unimplemented(24);}
 	@Override public SrlMgr SrlMgr_new(Object o) {return new DbMaprRdr();}
 	Hash_adp tables = Hash_adp_.New();
 	Db_conn conn; Criteria rootCrt;

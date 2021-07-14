@@ -279,7 +279,7 @@ for (var i = 0; i < redlinks.length; i++) {
         var kl = klasses[j];
         elem.classList.add(kl);
         if (kl == "new")
-          elem.title += " (page does not exist)" // should be language sensitive
+          elem.title = xowa_global_values['red-link-title'].replace("\u007e{0}", elem.title);
       }
     }
   }

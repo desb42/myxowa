@@ -85,7 +85,7 @@ public class Fsdb_db_mgr__v2_bldr {
 			case Xow_db_layout.Tid__all:	return Main_core_name_all(wiki_domain);
 			case Xow_db_layout.Tid__few:	return Main_core_name_few(wiki_domain);
 			case Xow_db_layout.Tid__lot:  return Main_core_name_lot(wiki_domain);
-			default:						throw Err_.new_unimplemented();
+			default:						throw Err_.new_unimplemented(64);
 		}
 	}
 	private static byte Main_core_tid(Xow_db_layout layout) {
@@ -93,7 +93,7 @@ public class Fsdb_db_mgr__v2_bldr {
 			case Xow_db_layout.Tid__all:	return Xow_db_file_.Tid__core;
 			case Xow_db_layout.Tid__few:	return Xow_db_file_.Tid__file_solo;
 			case Xow_db_layout.Tid__lot:	return Xow_db_file_.Tid__file_core;
-			default:						throw Err_.new_unimplemented();
+			default:						throw Err_.new_unimplemented(65);
 		}
 	}
 	public static void Make_cfg_data(Xow_wiki wiki, String file_core_name, Fsdb_db_file file, byte file_tid, int part_id) {

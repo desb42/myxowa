@@ -42,7 +42,7 @@ public class Xodb_mgr_txt implements Xodb_mgr {
 		return category_version;
 	}	byte category_version = Xoa_ctg_mgr.Version_null;
 	public byte Search_version() {return gplx.xowa.addons.wikis.searchs.specials.Srch_special_page.Version_2;}
-	public void Search_version_refresh() {throw Err_.new_unimplemented();}
+	public void Search_version_refresh() {throw Err_.new_unimplemented(100);}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_data_storage_format))				return Io_stream_tid_.Obsolete_to_str(data_storage_format);
 		else if	(ctx.Match(k, Invk_data_storage_format_))				data_storage_format = Io_stream_tid_.Obsolete_to_tid(m.ReadStr("v"));

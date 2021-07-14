@@ -130,14 +130,14 @@ public class Mem_stmt implements Db_stmt {
 		Mem_tbl tbl = engine.Tbls__get(qry.Base_table());
 		return tbl.Delete(this);
 	}
-	public DataRdr Exec_select() {throw Err_.new_unimplemented();}	
+	public DataRdr Exec_select() {throw Err_.new_unimplemented(35);}	
 	public Db_rdr Exec_select__rls_auto() {return this.Exec_select__rls_manual();}
 	public Db_rdr Exec_select__rls_manual() {
 //			Mem_tbl tbl = engine.Tbls_get(qry.Base_table());
 //			return tbl.Select(this);
 		return engine.Qry_runner().Select(this);
 	}
-	public Object Exec_select_val() {throw Err_.new_unimplemented();}
+	public Object Exec_select_val() {throw Err_.new_unimplemented(36);}
 	private void Add(String k, boolean where, Object v) {
 		if (k == Dbmeta_fld_itm.Key_null) return;		// key is explicitly null; ignore; allows schema_2+ type definitions
 		val_list.Add_if_dupe_use_1st(k, v);				// NOTE: only add if new; WHERE with IN will call Add many times; fld_ttl IN ('A.png', 'B.png');

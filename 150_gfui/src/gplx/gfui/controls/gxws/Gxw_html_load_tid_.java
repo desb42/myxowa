@@ -19,6 +19,6 @@ public class Gxw_html_load_tid_ {
 	public static byte Xto_tid(String s) {
 		if		(String_.Eq(s, "mem"))			return Tid_mem;
 		else if	(String_.Eq(s, "url"))			return Tid_url;
-		else										throw Err_.new_unimplemented();
+		else										throw Err_.new_unimplemented(54);
 	}
 }

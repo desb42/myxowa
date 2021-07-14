@@ -33,7 +33,7 @@ class Dbui_val_fmtr__edit implements gplx.core.brys.Bfr_arg, Dbui_val_fmtr {
 		switch (col.Type()) {
 			case Dbui_col_itm.Type_id_str:	input_fmtr_str.Bld_bfr_many(bfr, col.Key(), col.Width(), val.Data(), row_id); break;
 			case Dbui_col_itm.Type_id_text: textarea_fmtr_str.Bld_bfr_many(bfr, col.Key(), col.Width(), val.Data(), row_id); break;
-			default: throw Err_.new_unimplemented();
+			default: throw Err_.new_unimplemented(81);
 		}
 	}
 	private static final    Bry_fmtr input_fmtr_str = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last

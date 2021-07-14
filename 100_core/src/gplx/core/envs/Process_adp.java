@@ -369,7 +369,7 @@ class Thread_ProcessAdp_sync extends Thread {
 	        String result = input_gobbler.Rslt() + "\n" + error_gobbler.Rslt();
 	        process_adp.Process_post(result);
     	} 	catch (Exception e) {	// NOTE: warn; do not throw, else multiple errors if timidity not available; PAGE:fr.u:Pentatoniques_altérées/Gammes_avec_deux_notes_altérées DATE:2015-05-08
-    		Gfo_usr_dlg_.Instance.Warn_many("", "", "process.sync failed; cmd=~{0} args=~{1}", process_adp.Exe_url().Raw(), process_adp.Args_str());    		
+    		//???!! Gfo_usr_dlg_.Instance.Warn_many("", "", "process.sync failed; cmd=~{0} args=~{1}", process_adp.Exe_url().Raw(), process_adp.Args_str());    		
     	}
     	finally {done = true;}
     }

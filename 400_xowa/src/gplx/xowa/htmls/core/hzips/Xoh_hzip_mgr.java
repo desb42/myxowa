@@ -29,7 +29,7 @@ public class Xoh_hzip_mgr implements Xoh_hzip_wkr {
 	public Xoh_hdoc_ctx Hctx() {return hctx;} private final    Xoh_hdoc_ctx hctx = new Xoh_hdoc_ctx();
 	public void Init_by_app(Xoa_app app) {hctx.Init_by_app(app);}
 	public byte[] Encode_as_bry(Xoh_hzip_bfr bfr, Xow_wiki wiki, Xoh_page hpg, byte[] src) {Encode(bfr, wiki, hpg, src); return bfr.To_bry_and_clear();}
-	public Gfo_poolable_itm	Encode1(Xoh_hzip_bfr bfr, Xoh_hdoc_wkr hdoc_wkr, Xoh_hdoc_ctx hctx, Xoh_page hpg, boolean wkr_is_root, byte[] src, Object data_obj) {throw Err_.new_unimplemented();}
+	public Gfo_poolable_itm	Encode1(Xoh_hzip_bfr bfr, Xoh_hdoc_wkr hdoc_wkr, Xoh_hdoc_ctx hctx, Xoh_page hpg, boolean wkr_is_root, byte[] src, Object data_obj) {throw Err_.new_unimplemented(82);}
 	public void Encode(Xoh_hzip_bfr bfr, Xow_wiki wiki, Xoh_page hpg, byte[] src) {
 		hctx.Init_by_page(wiki, hpg);
 		hdoc_parser.Parse(bfr, hpg, hctx, src);

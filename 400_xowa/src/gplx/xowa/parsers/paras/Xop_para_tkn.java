@@ -49,7 +49,7 @@ public class Xop_para_tkn extends Xop_tkn_itm_base {
 		if (space_bgn > 0)
 			bfr.Add_byte_repeat(Byte_ascii.Space, space_bgn);
 	}
-        private void Para_end(Bry_bfr bfr, byte[] open_term, byte[] close_term) {
-            bfr.Add_close_tag_or_empty(open_term, close_term);
-        }
+	private void Para_end(Bry_bfr bfr, byte[] open_term, byte[] close_term) {
+		bfr.Add_close_tag_or_empty(open_term, close_term);
+	}
 }

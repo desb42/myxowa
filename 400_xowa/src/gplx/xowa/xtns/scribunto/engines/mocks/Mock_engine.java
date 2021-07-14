@@ -35,7 +35,7 @@ public class Mock_engine implements Scrib_engine {
 		return fnc.Exec_by_scrib(args);
 	}
 	public void RegisterLibrary(Keyval[] functions_ary) {}
-	public Keyval[] ExecuteModule(int mod_id) {throw Err_.new_unimplemented();}
+	public Keyval[] ExecuteModule(int mod_id) {throw Err_.new_unimplemented(106);}
 	public void CleanupChunks(Keyval[] ids) {}
 	public void	Clear() {fnc_hash.Clear();}
 

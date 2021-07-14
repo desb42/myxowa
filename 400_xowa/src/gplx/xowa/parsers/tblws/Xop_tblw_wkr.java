@@ -54,6 +54,9 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			) {
 			switch (wlxr_type) {
 				case Tblw_type_tb: {							// "{|";
+					if (!tbl_is_xml)
+						Xop_list_tkn_new.Reset(root, ctx); // trial 20210704
+
 					// close para when table starts; needed for TRAILING_TBLW fix; PAGE:en.w:Template_engine_(web) DATE:2017-04-08
 					ctx.Para().Process_block__bgn__nl_w_symbol(ctx, root, src, bgn_pos, cur_pos - 1, Xop_xnde_tag_.Tag__table);	// -1 b/c cur_pos includes sym_byte; EX: \n{
 					break;										//	noop; by definition "{|" does not need to have a previous "{|"
@@ -120,7 +123,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 		if (wlxr_type == Tblw_type_te) {
 //??                    ctx.Page().Prev_list_tkn_(null); // reset list new
 			return Make_tkn_end(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, Xop_tkn_itm_.Tid_tblw_te, wlxr_type, prv_tkn, prv_tid, tbl_is_xml);
-                }
+		}
 		else
 			return Make_tkn_bgn_tblw(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, wlxr_type, tbl_is_xml, atrs_bgn, atrs_end, prv_tkn, prv_tid, list_tkn);
 	}
@@ -172,8 +175,8 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 					case Xop_tkn_itm_.Tid_tblw_th:			// fix;  <th><tr>           -> <th></th></tr><tr>
 						if (!tbl_is_xml)
 							ctx.Para().Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);	// simulate "\n"; 2012-12-08
-                                // trim trailing whitespace
-                                root.Subs_ignore_whitespace();
+							// trim trailing whitespace
+							root.Subs_ignore_whitespace();
 						int stack_pos = ctx.Stack_idx_typ(Xop_tkn_itm_.Tid_tblw_tr);
 						if	(	stack_pos != Xop_ctx.Stack_not_found	// don't pop <tr> if none found; PAGE:en.w:Turks_in_Denmark DATE:2014-03-02
 							&&	!tbl_is_xml								// cur is "|-", not <tr>; PAGE:en.w:Aargau; DATE:2016-08-14
@@ -196,7 +199,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			case Tblw_type_td:								// <td>
 			case Tblw_type_td2:
 				boolean create_th = false;
-								Xop_list_tkn_new.Reset(root, ctx); // trial
+				Xop_list_tkn_new.Reset(root, ctx); // trial 20210702
 				switch (prv_tid) {
 					case Xop_tkn_itm_.Tid_tblw_tr:
 						if (wlxr_type == Tblw_type_td2) {	// ignore sequences like "\n|- ||"; PAGE: nl.w:Tabel_van_Belgische_gemeenten; DATE:2015-12-03
@@ -221,8 +224,6 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 						else {
 							if (!tbl_is_xml) { // only for "\n|" not <td>
 								ctx.Para().Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);	// simulate "\n"; DATE:2014-02-20; ru.w:;home/wiki/Dashboard/Image_databases; DATE:2014-02-20
-								// any outstanding list?
-								Xop_list_tkn_new.Reset(root, ctx);
 							}
 							// trim trailing whitespace
 							root.Subs_ignore_whitespace();
@@ -268,10 +269,10 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 					case Xop_tkn_itm_.Tid_tblw_th:			// fix;  <th><th>           -> <th></th><th>
 						if (tbl_is_xml														// tbl_is_xml always closes previous token
 							|| (wlxr_type == Tblw_type_th2 || wlxr_type == Tblw_type_th)) {	// ! always closes; EX: "! !!"; "!! !!"; REMOVE: 2012-05-07; had (&& !ws_enabled) but caused "\n !" to fail; guard is no longer necessary since tblw_ws changed...
-                                // trim trailing whitespace
-                                root.Subs_ignore_whitespace();
+							// trim trailing whitespace
+							root.Subs_ignore_whitespace();
 							ctx.Stack_pop_til(root, src, ctx.Stack_idx_typ(prv_tid), true, bgn_pos, bgn_pos, Xop_tkn_itm_.Tid_tblw_td);
-                                                } else {
+						} else {
 							ctx.Subs_add(root, tkn_mkr.Txt(bgn_pos, cur_pos));
 							return cur_pos;
 						}
@@ -346,9 +347,6 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			ctx.Para().Process_nl(ctx, root, src, bgn_pos, bgn_pos + 1);	// simulate "\n"; process para (which will create paras for cells) 2012-12-08
 
 		Xop_list_tkn_new.Reset(root, ctx);
-		// restore previous list
-		if (prv_tkn != null)
-			ctx.Page().Prev_list_tkn_(prv_tkn.List_tkn());
 		// trim trailing whitespace
 		root.Subs_ignore_whitespace();
 		if (tbl_is_xml && typeId == Xop_tkn_itm_.Tid_tblw_tb	// tblx: </table>
@@ -411,6 +409,7 @@ public class Xop_tblw_wkr implements Xop_ctx_wkr {
 			Xop_tblw_tb_tkn tb = (Xop_tblw_tb_tkn)ctx.Stack_pop_til(root, src, tb_idx, false, bgn_pos, bgn_pos, Xop_tkn_itm_.Tid_tblw_td);	// NOTE: need to pop manually in order to set all intermediate node ends to bgn_pos, but tb ent to cur_pos; EX: for stack of "tb,tr,td" tr and td get End_() of bgn_pos but tb gets End_() of cur_pos
 			tb.Subs_move(root);
 			tb.Src_end_(cur_pos);
+                        ctx.Page().Prev_list_tkn_(tb.List_tkn());
 			ctx.Para().Process_block__bgn_n__end_y(Xop_xnde_tag_.Tag__table);	// NOTE: must clear block state that was started by <tr>; code implicitly relies on td clearing block state, but no td was created
 			return cur_pos;
 		}

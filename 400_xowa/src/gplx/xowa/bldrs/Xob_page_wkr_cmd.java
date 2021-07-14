@@ -91,6 +91,6 @@ public class Xob_page_wkr_cmd implements Xob_cmd {
 	String optRdrFillFmt = "reading ~{0} MB: ~{1} ~{2}";
 	static final String GRP_KEY = "xowa.bldr.rdr";
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
-		throw Err_.new_unimplemented();
+		throw Err_.new_unimplemented(77);
 	}
 }

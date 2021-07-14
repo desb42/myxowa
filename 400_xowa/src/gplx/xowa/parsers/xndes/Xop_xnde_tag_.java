@@ -237,7 +237,8 @@ public class Xop_xnde_tag_ {
 , Tag__ref = New(Tid__ref, "ref").Xtn_mw_()
 , Tag__references = New(Tid__references, "references").Xtn_mw_()
 , Tag__source = New(Tid__source, "source").Xtn_mw_().Block_open_bgn_().Block_close_end_()	// deactivate pre; pre; PAGE:en.w:Comment_(computer_programming); DATE:2014-06-23
-, Tag__syntaxHighlight = New(Tid__syntaxHighlight, "syntaxHighlight").Xtn_mw_().Block_open_bgn_().Block_close_end_()	// deactivate pre; pre; PAGE:en.w:Comment_(computer_programming); DATE:2014-06-23
+//, Tag__syntaxHighlight = New(Tid__syntaxHighlight, "syntaxHighlight").Xtn_mw_().Block_open_bgn_().Block_close_end_()	// deactivate pre; pre; PAGE:en.w:Comment_(computer_programming); DATE:2014-06-23
+, Tag__syntaxHighlight = New(Tid__syntaxHighlight, "syntaxHighlight").Xtn_mw_().Raw_().Block_open_bgn_().Block_close_end_().Ignore_empty_().Xtn_skips_template_args_()	// reenable 20210711
 , Tag__gallery = New(Tid__gallery, "gallery").Xtn_mw_().Block_open_bgn_().Block_close_end_().Xtn_auto_close_()
 , Tag__imageMap = New(Tid__imageMap, "imageMap").Xtn_mw_()
 , Tag__timeline = New(Tid__timeline, "timeline").Xtn_mw_()

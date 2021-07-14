@@ -46,7 +46,7 @@ public class TdbEngine implements Db_engine {
 		return wkr.Exec(this, qry);
 	}
 	public Db_stmt	Stmt_by_qry(Db_qry qry) {return new Db_stmt_sql().Parse(qry, sql_wtr.To_sql_str(qry, true));}
-	public Object	Stmt_by_sql(String sql) {throw Err_.new_unimplemented();}
+	public Object	Stmt_by_sql(String sql) {throw Err_.new_unimplemented(41);}
 	public Db_rdr	Exec_as_rdr__rls_manual(Object rdr_obj, String sql) {return Db_rdr_.Empty;}
 	public Db_rdr	Exec_as_rdr__rls_auto(Db_stmt stmt, Object rdr_obj, String sql) {return Db_rdr_.Empty;}
 	public DataRdr	New_rdr(java.sql.ResultSet rdr, String sql) {return DataRdr_.Null;} 
@@ -61,10 +61,10 @@ public class TdbEngine implements Db_engine {
 	public void FlushTbl(TdbTable tbl) {
 		saveMgr.SaveFile(db, tbl.File());
 	}
-	public void	Meta_tbl_create(Dbmeta_tbl_itm meta) {throw Err_.new_unimplemented();}
-	public void Meta_idx_create(Gfo_usr_dlg usr_dlg, Dbmeta_idx_itm... ary) {throw Err_.new_unimplemented();}
-	public void	Meta_idx_delete(String idx) {throw Err_.new_unimplemented();}
-	public void				Meta_fld_append(String tbl, Dbmeta_fld_itm fld) {throw Err_.new_unimplemented();}
+	public void	Meta_tbl_create(Dbmeta_tbl_itm meta) {throw Err_.new_unimplemented(42);}
+	public void Meta_idx_create(Gfo_usr_dlg usr_dlg, Dbmeta_idx_itm... ary) {throw Err_.new_unimplemented(43);}
+	public void	Meta_idx_delete(String idx) {throw Err_.new_unimplemented(44);}
+	public void				Meta_fld_append(String tbl, Dbmeta_fld_itm fld) {throw Err_.new_unimplemented(45);}
 	public void				Meta_tbl_delete(String tbl)						{}
 	public boolean				Meta_tbl_exists(String name)					{return false;}
 	public boolean				Meta_fld_exists(String tbl, String fld)			{return false;}

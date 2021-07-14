@@ -32,10 +32,10 @@ import gplx.xowa.xtns.pfuncs.exprs.Pfunc_expr_shunter;
 public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	private boolean init_in_process = false;
 	public Xowe_wiki(Xoae_app app, Xol_lang_itm lang, Xow_ns_mgr ns_mgr, Xow_domain_itm domain_itm, Io_url wiki_dir) {
-		System.out.println("wiki:" + wiki_dir);
-                if (wiki_dir.toString().endsWith("\\www.wikidata.org\\")) {
-                    int a = 1;
-                }
+//		System.out.println("wiki:" + wiki_dir);
+//                if (wiki_dir.toString().endsWith("\\www.wikidata.org\\")) {
+//                    int a = 1;
+//                }
 		this.ev_mgr = new Gfo_evt_mgr(this);
 		this.app = app; this.lang = lang; this.ns_mgr = ns_mgr;
 

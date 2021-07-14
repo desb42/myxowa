@@ -59,6 +59,6 @@ public class Xobd_parser implements Xob_page_wkr {
 		}
 	}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
-		throw Err_.new_unimplemented();
+		throw Err_.new_unimplemented(76);
 	}
 }

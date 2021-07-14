@@ -193,10 +193,10 @@ public class Xoh_lnki_wtr {
 					bfr.Add_byte(Byte_ascii.Slash).Add(leaf_txt);
 				return true;
 			case Pfunc_rel2abs.Id_dot_dot_slash:
-                            bfr.Add(lnki.Ttl().Page_txt());
-                            System.out.println(String_.new_u8(lnki.Ttl().Page_txt()));
+//                            bfr.Add(lnki.Ttl().Page_txt());
+//                            System.out.println(String_.new_u8(lnki.Ttl().Page_txt()));
                             // 20210702 Check this!!
-/*				if (subpage_slash_at_end) {		// "/" at end; only add text;		EX: [[../A/]] -> A
+				if (subpage_slash_at_end) {		// "/" at end; only add text;		EX: [[../A/]] -> A
 					// search backwards for "/"
 					int i;
 					for (i = leaf_txt.length - 1; i >= 0; i--)
@@ -209,7 +209,7 @@ public class Xoh_lnki_wtr {
 				}
 				else							// "/" absent; add page;			EX: [[../A]]  -> Page/A
 					bfr.Add(lnki.Ttl().Page_txt());
-*/
+
 				return true;
 		}
 		return false;

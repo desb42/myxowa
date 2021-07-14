@@ -23,10 +23,12 @@ import gplx.xowa.xtns.lst.*; import gplx.xowa.wikis.pages.*; import gplx.xowa.wi
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.amps.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.htmls.*; import gplx.xowa.parsers.lnkis.*; import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.parsers.lnkis.files.*;
 import gplx.xowa.mediawiki.*;
+import gplx.xowa.files.Xof_ext_;
 public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	private boolean xtn_literal = false;
 	private Xop_root_tkn xtn_root;
 	private byte[] index_ttl_bry, bgn_page_bry, end_page_bry, bgn_sect_bry, end_sect_bry;		
+	private int index_ttl_ext;
 	private int step_int;
 	private byte[] include, exclude, step_bry, header, onlysection;
 	private byte[] toc_cur, toc_nxt, toc_prv;
@@ -53,6 +55,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		switch (xatr_id.Val()) {
 			case Xatr_index_ttl:
 				index_ttl_bry = checkquotes(val_bry);
+				index_ttl_ext = Xof_ext_.Get_ext_id(index_ttl_bry);
 				break;
 			case Xatr_bgn_page:		bgn_page_bry = val_bry; break;
 			case Xatr_end_page:		end_page_bry = val_bry; break;
@@ -130,13 +133,20 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		}
 	}
 	// Underscore to space - inplace
-	private void Under_to_space(byte[] txt) {
-		if (txt == null) return;
+	private byte[] Under_to_space(byte[] txt) {
+		if (txt == null) return null;
 		int len = txt.length;
+                boolean tmpl = false;
 		for (int i = 0; i < len; i++) {
-			if (txt[i] == '_')
+			byte b = txt[i];
+			if (b == '_')
 				txt[i] = ' ';
+                        if (b == '{')
+                            tmpl = true;
 		}
+                if (tmpl)
+                    txt = wiki.Wtxt__expand_tmpl(txt);
+                return txt;
 	}
 	private boolean Init_vars(Xowe_wiki wiki, Xop_ctx ctx, byte[] src, Xop_xnde_tkn xnde) {
 		this.wiki = wiki; this.ctx = ctx; app = wiki.Appe(); usr_dlg = app.Usr_dlg();
@@ -149,11 +159,11 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		bgn_page_bry = amp_mgr.Decode_as_bry(bgn_page_bry);
 		end_page_bry = amp_mgr.Decode_as_bry(end_page_bry);
 		// quick check on '_' -> ' '
-		Under_to_space(bgn_sect_bry);
-		Under_to_space(end_sect_bry);
-		Under_to_space(include);
-		Under_to_space(exclude);
-		Under_to_space(onlysection);
+		bgn_sect_bry = Under_to_space(bgn_sect_bry);
+		end_sect_bry = Under_to_space(end_sect_bry);
+		include = Under_to_space(include);
+		exclude = Under_to_space(exclude);
+		onlysection = Under_to_space(onlysection);
 		Xowc_xtn_pages cfg_pages = wiki.Cfg_parser().Xtns().Itm_pages();
 		if (cfg_pages.Init_needed()) cfg_pages.Init(wiki.Ns_mgr());
 		ns_index_id = cfg_pages.Ns_index_id(); if (ns_index_id == Int_.Min_value) return Fail_msg("wiki does not have an Index ns");
@@ -391,15 +401,15 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	}
 	private List_adp Get_ttls_from_xnde_args__include(List_adp list) {
 		if (Bry_.Len_eq_0(include)) return list;	// include is blank; exit early;
-		//if (Isnumberlist(include)) { // all digits (and commas) // removed 20210621
+		if (Isnumberlist(include)) { // all digits (and commas) // removed 20210621
 			int[] include_pages = Int_ary_.Parse_or(include, null);
 			if (include_pages == null) return list;	// ignore invalid include; DATE:2014-02-22
 			int include_pages_len = include_pages.length;
 			for (int i = 0; i < include_pages_len; i++)
 				list.Add(new Int_obj_val(include_pages[i]));
-		//}
-		//else
-		//	list.Add(new Int_obj_val(-1));
+		}
+		else
+			list.Add(new Int_obj_val(-1));
 		return list;
 	}
 	private List_adp Get_ttls_from_xnde_args__rng(Gfo_number_parser num_parser, List_adp list) {
@@ -502,7 +512,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		Xoa_ttl rv;
 		ttl_bfr.Add(ns_page.Name_db_w_colon()) // EX: 'Page:'
 			.Add(index_ttl_bry);                 // EX: 'File.djvu'
-		if (page_no > 0)
+		if (page_no > 0 && index_ttl_ext != Xof_ext_.Id_jpg)
 			ttl_bfr.Add_byte(Byte_ascii.Slash)   // EX: '/'
 				.Add_int_variable(page_no);        // EX: '123'
 		rv = Xoa_ttl.Parse(wiki, ttl_bfr.To_bry_and_clear());

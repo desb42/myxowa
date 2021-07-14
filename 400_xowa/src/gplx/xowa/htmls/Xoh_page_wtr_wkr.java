@@ -278,7 +278,7 @@ public class Xoh_page_wtr_wkr {
 			if (page_mode == Xopg_view_mode_.Tid__edit) {
 				data_raw = Db_lua_comp.Text(data_raw);
 				Write_body_edit(bfr, data_raw, page_ns_id, page_tid);
-                        }
+			}
 			else {
 				switch (page_tid) {
 					case Xow_page_tid.Tid_msg:
@@ -308,6 +308,8 @@ public class Xoh_page_wtr_wkr {
 						break;
 					case Xow_page_tid.Tid_wikitext:
 						Write_body_wikitext(bfr, app, wiki, data_raw, ctx, hctx, page, page_tid, page_ns_id);
+						if (page.Html_data().Syntaxhighlight())
+							app.SyntaxHighlighter().Highlight_bfr(bfr, wiki.Wrk_id(), wiki.Domain_bry(), page.Ttl());
 						break;
 				}
 			}
@@ -360,6 +362,8 @@ public class Xoh_page_wtr_wkr {
 						tidy_bfr.Add_str_a7("<div class=\"mw-parser-output\">");
 					}
 					wiki.Html_mgr().Html_wtr().Write_doc(tidy_bfr, ctx, hctx, page.Root().Data_mid(), page.Root());
+                                        // any rogue refs?
+                                        wiki.Html_mgr().Html_wtr().Ref_wtr().Xnde_references(wiki.Html_mgr().Html_wtr(), ctx, hctx, page, tidy_bfr, page.Root().Data_mid(), null);
 					if (wiki.Html_mgr().Html_wtr().Cfg().Toc__show()
 						&& (page.Html_data().Pagebanner().Show_toc_in_html())) // do not write TOC in HTML body if pageBanner is enabled
 						gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_toc(tidy_bfr, page, hctx);

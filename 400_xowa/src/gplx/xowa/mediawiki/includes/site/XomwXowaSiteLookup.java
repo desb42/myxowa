@@ -21,7 +21,7 @@ public class XomwXowaSiteLookup implements XomwSiteLookup {
 		return (XomwSite)sites.getSite(String_.new_u8(globalId));
 	}
 	public XomwSiteList getSites() {
-		throw Err_.new_unimplemented();
+		throw Err_.new_unimplemented(89);
 	}
 	public XomwSite addSite(String type, String global_key, int id, boolean forward, String group, byte[] language, String source) {
 		// REF:DBSiteStore

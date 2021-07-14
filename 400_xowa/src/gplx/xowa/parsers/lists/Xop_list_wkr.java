@@ -19,7 +19,7 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 	public void Ctor_ctx(Xop_ctx ctx) {}
 	public void Page_bgn(Xop_ctx ctx, Xop_root_tkn root) {}
 	public void Page_end(Xop_ctx ctx, Xop_root_tkn root, byte[] src, int src_len) {}
-	public boolean List_dirty() {throw Err_.new_unimplemented();}
+	public boolean List_dirty() {throw Err_.new_unimplemented(91);}
 	public boolean Dd_chk() {return dd_chk;} public Xop_list_wkr Dd_chk_(boolean v) {dd_chk = v; return this;} private boolean dd_chk;
 	public void AutoClose(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, Xop_tkn_itm tkn) {}
 	public int MakeTkn_bgn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos) {// REF.MW: Parser|doBlockLevels
@@ -64,9 +64,9 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		// peek ahead for a table eg :{|
 		if (peek_pos + 2 < src_len &&
 		    src[peek_pos] == '{' && src[peek_pos+1] == '|') {
-			Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
-			ctx.Page().Prev_list_tkn_(null);
-			cur_pos = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, peek_pos+2, false, Xop_tblw_wkr.Tblw_type_tb, Xop_tblw_wkr.Called_from_list, -1, -1, list_tkn);
+		  Xop_list_tkn_new list_itm = ctx.Page().Prev_list_tkn();
+		  ctx.Page().Prev_list_tkn_(null);
+			peek_pos = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, peek_pos+2, false, Xop_tblw_wkr.Tblw_type_tb, Xop_tblw_wkr.Called_from_list, -1, -1, list_itm);
 		}
 		//return cur_pos;
 		return peek_pos;

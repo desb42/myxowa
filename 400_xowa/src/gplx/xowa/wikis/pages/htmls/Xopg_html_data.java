@@ -60,6 +60,7 @@ public class Xopg_html_data {
 	public Related_html_bldr	Related() {return related;} private final    Related_html_bldr related = new Related_html_bldr();
 	public Pp_qualitytot_html_bldr	Quality_tots() {return qualitytots;} private Pp_qualitytot_html_bldr qualitytots = new Pp_qualitytot_html_bldr();
 	public Pp_index_html_bldr Pp_indexpage() {return pp_indexpage; } private Pp_index_html_bldr pp_indexpage = new Pp_index_html_bldr();
+	public boolean Syntaxhighlight() {return syntaxhighlight;} public void Syntaxhighlight_(boolean v) {syntaxhighlight = v;} private boolean syntaxhighlight = false;
 
 	public int					Xtn_gallery_next_id() {return ++xtn_gallery_next_id;} private int xtn_gallery_next_id = -1;
 	public boolean				Xtn_gallery_packed_exists() {return xtn_gallery_packed_exists;} public void Xtn_gallery_packed_exists_y_() {xtn_gallery_packed_exists = true;} private boolean xtn_gallery_packed_exists;

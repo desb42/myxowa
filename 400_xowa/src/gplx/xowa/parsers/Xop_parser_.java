@@ -21,6 +21,9 @@ import gplx.xowa.Xoae_page;
 import gplx.xowa.Xowe_wiki;
 import gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx;
 
+import gplx.xowa.Db_readwrite;
+import gplx.String_;
+
 public class Xop_parser_ {
 	public static final int Doc_bgn_bos = -1, Doc_bgn_char_0 = 0;
 	public static byte[] Parse_text_to_html(Xowe_wiki wiki, Xop_ctx owner_ctx, Xoae_page page, byte[] src, boolean para_enabled) {

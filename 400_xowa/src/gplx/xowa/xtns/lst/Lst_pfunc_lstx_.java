@@ -18,6 +18,10 @@ import gplx.xowa.parsers.*;
 class Lst_pfunc_lstx_ {
 	public static void Sect_exclude(Bry_bfr bfr, Lst_pfunc_itm itm, byte[] sect_exclude, byte[] sect_replace) {
                 Db_Section_list sect = itm.Sect();
+                if (sect == null) { // how??
+                	Db_readwrite.writeFile("null? " + String_.new_u8(sect_exclude) + ":" + String_.new_u8(sect_replace), "/null.txt");
+                        return;
+                }
                 byte[] txt = sect.Exclude(sect_exclude, sect_replace);
                 //System.out.println(String_.new_a7(txt));
                 bfr.Add(txt);

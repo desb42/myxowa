@@ -29,7 +29,7 @@ public class Xof_orig_wkr__img_links implements Xof_orig_wkr {
 		else if (rv == null)	rv = Load_from_db(ttl);
 		return rv == Missing ? Xof_orig_itm.Null : rv;
 	}
-	public void			Find_by_list(Ordered_hash rv, List_adp itms) {throw Err_.new_unimplemented();}
+	public void			Find_by_list(Ordered_hash rv, List_adp itms) {throw Err_.new_unimplemented(66);}
 	public boolean		Add_orig(byte repo, byte[] page, int ext_id, int w, int h, byte[] redirect) {return false;}
 	public void			Db_txn_save() {}
 	public void			Db_rls() {}

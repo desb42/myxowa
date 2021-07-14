@@ -27,7 +27,7 @@ public class Criteria_in implements Criteria {
 		this.itm_type = ary_len == 0 ? Object.class : Type_.Type_by_obj(ary[0]);
 	}
 	public void			Val_as_obj_(Object v) {Ary_((Object[])v);}
-	public void			Val_from_args(Hash_adp args) {throw Err_.new_unimplemented();}
+	public void			Val_from_args(Hash_adp args) {throw Err_.new_unimplemented(7);}
 	public boolean Matches(Object comp) {
 		if (ary_len == 0) return false;	// empty array never matches
 		if (!Type_.Eq_by_obj(comp, itm_type)) throw Err_.new_type_mismatch(itm_type, comp);

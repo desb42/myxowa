@@ -102,7 +102,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		}
 		wtr.Write_js_global_ini_atr_val(Key_wgPopupsGateway, Bry_.new_a7("restbaseHTML"));
 
-                Bry_bfr tmp = wtr.Bfr();
+		Bry_bfr tmp = wtr.Bfr();
 		//wtr.Write_js_global_ini_atr_val(Key_wgPopupsRestGatewayEndpoint, Bry_.new_a7("/api/rest_v1/page/summary/"));
 		//tmp.Add(Bry_.new_a7("\n \"wgPopupsRestGatewayEndpoint\" : \"/xowa/api/"));
 		//tmp.Add(page.Wiki().Domain_bry());
@@ -115,12 +115,11 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		tmp.Add(page.Wiki().Domain_bry());
 		tmp.Add(Bry_.new_a7("/wiki/$1\","));
 
-                if (page.Redirect_trail().Itms__len() > 0) {
-		tmp.Add(Bry_.new_a7("\n \"wgInternalRedirectTargetUrl\" : \""));
-		tmp.Add(page.Ttl().Full_url());
-		tmp.Add(Bry_.new_a7("\","));
-                    
-                }
+		if (page.Redirect_trail().Itms__len() > 0) {
+			tmp.Add(Bry_.new_a7("\n \"wgInternalRedirectTargetUrl\" : \""));
+			tmp.Add(page.Ttl().Full_url());
+			tmp.Add(Bry_.new_a7("\","));
+		}
 		// list of categories (not hidden)
 		tmp.Add(Bry_.new_a7("\n \"wgCategories\":["));
 		Xoctg_double_grp grp = page.Grp_normal();
@@ -140,6 +139,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 			}
 			tmp.Add(Bry_.new_a7("],"));
 		}
+		wtr.Write_js_global_ini_atr_val(Key_red_link_msg, wiki.Msg_mgr().Find_or_null(Key_red_link_msg).Val());
 	}
 	public static final    byte[]	// NOTE: most of these are for the table-sorter
 	  Key_mode_is_gui					= Bry_.new_a7("mode_is_gui")
@@ -167,6 +167,7 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 	, Bry_other					= Bry_.new_a7("other")
 	, Key_brackets				= Bry_.new_a7("brackets")
 	, Key_word_separator				= Bry_.new_a7("word-separator")
+	, Key_red_link_msg				= Bry_.new_a7("red-link-title")
 	;
 	private static byte[] Html_js_table_months(Xoh_head_wtr tmp_wtr, Xow_msg_mgr msg_mgr, int january_id, int december_id) {
 		tmp_wtr.Write_js_ary_bgn();

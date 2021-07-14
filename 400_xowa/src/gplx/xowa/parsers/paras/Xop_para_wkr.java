@@ -185,10 +185,8 @@ public class Xop_para_wkr implements Xop_ctx_wkr {
 					}
 					break;
 				default: {
-                Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
-					int tblw_rv = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, txt_pos + ws_itm.Hook_len(), false, tblw_type, Xop_tblw_wkr.Called_from_pre, -1, -1, list_tkn);
+					int tblw_rv = ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, txt_pos + ws_itm.Hook_len(), false, tblw_type, Xop_tblw_wkr.Called_from_pre, -1, -1, null);
 					if (tblw_rv != -1) {	// \n\s| is valid tblw tkn and processed; otherwise process pre-code below; EX:w:Wikipedia:WikiProject_History/CategoryExample; DATE:2014-04-14
-                        ctx.Page().Prev_list_tkn_(null);
 						return tblw_rv;
                                         }
 					break;

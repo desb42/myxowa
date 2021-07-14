@@ -23,7 +23,7 @@ public class GxwElemFactory_cls_mock extends GxwElemFactory_base {
 	@Override public GxwTextFld text_fld_() {return new MockTextBox();}
 	@Override public GxwTextFld text_memo_() {return new MockTextBoxMulti();}
 	@Override public GxwTextHtml text_html_() {return new MockTextBoxMulti();}
-	@Override public GxwCheckListBox checkListBox_(Keyval_hash ctorArgs) {throw Err_.new_unimplemented();}
+	@Override public GxwCheckListBox checkListBox_(Keyval_hash ctorArgs) {throw Err_.new_unimplemented(49);}
 	@Override public GxwComboBox comboBox_() {return new MockComboBox();}
 	@Override public GxwListBox listBox_() {return new MockListBox();}
 }

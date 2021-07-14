@@ -19,7 +19,7 @@ import gplx.xowa.parsers.*; import gplx.xowa.parsers.logs.*; import gplx.xowa.pa
 public class Xomath_xnde implements Xox_xnde {
 	private int tkn;
 	public Xomath_xnde(int tkn) {this.tkn = tkn;}
-	public Xop_xnde_tkn Xnde() {throw Err_.new_unimplemented();}
+	public Xop_xnde_tkn Xnde() {throw Err_.new_unimplemented(102);}
 	public void Xatr__set(Xowe_wiki wiki, byte[] src, Mwh_atr_itm xatr, Object xatr_id_obj) {}
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
 		Xomath_core math_mgr = wiki.Parser_mgr().Math__core();

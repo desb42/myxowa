@@ -36,8 +36,8 @@ public class Io_stream_rdr_process implements Io_stream_rdr {
     	stream_read = process.getInputStream();
 		return this;
 			}
-	public void Open_mem(byte[] v) {throw Err_.new_unimplemented();}
-	public Object Under() {throw Err_.new_unimplemented();}
+	public void Open_mem(byte[] v) {throw Err_.new_unimplemented(59);}
+	public Object Under() {throw Err_.new_unimplemented(60);}
 
 	public int Read(byte[] bry, int bgn, int len) {
 				try {

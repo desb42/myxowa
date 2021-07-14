@@ -49,7 +49,8 @@ public class Xop_lnki_wkr_ {
 			Int_obj_ref rel2abs_tid = ctx.Tmp_mgr().Pfunc_rel2abs().Val_zero_();
 			byte[] new_bry = Pfunc_rel2abs.Rel2abs(tmp_bfr, wiki.Parser_mgr().Rel2abs_ary(), ttl_bry, page_ttl.Raw(), rel2abs_tid);
 			lnki.Subpage_tid_(rel2abs_tid.Val());
-			lnki.Subpage_slash_at_end_(Bry_.Get_at_end(ttl_bry) == Byte_ascii.Slash);
+			//lnki.Subpage_slash_at_end_(Bry_.Get_at_end(ttl_bry) == Byte_ascii.Slash);
+			lnki.Subpage_slash_at_end_(ttl_bry[ttl_bry.length-1] == Byte_ascii.Slash && ttl_bry[ttl_bry.length-2] != Byte_ascii.Dot);
 			ttl_bry = new_bry;
 			tmp_bfr.Mkr_rls();
 		}

@@ -19,7 +19,7 @@ public abstract class Criteria_bool_base implements Criteria {
 	public abstract byte	Tid();
 	public abstract boolean	Matches(Object curVal);
 	public void				Val_from_args(Hash_adp args) {lhs.Val_from_args(args); rhs.Val_from_args(args);}
-	public void				Val_as_obj_(Object v) {throw Err_.new_unimplemented();}
+	public void				Val_as_obj_(Object v) {throw Err_.new_unimplemented(2);}
 	public String			To_str() {return String_.Concat(lhs.To_str(), " ", this.op_literal, " ", rhs.To_str());}
 	public String			Op_literal() {return op_literal;} private String op_literal;
 	public Criteria			Lhs() {return lhs;} private Criteria lhs;
@@ -41,6 +41,6 @@ class Criteria_const implements Criteria {
 	public byte				Tid() {return Criteria_.Tid_const;}
 	public boolean				Matches(Object comp) {return val;} private final boolean val;
 	public void				Val_from_args(Hash_adp args) {;}
-	public void				Val_as_obj_(Object v) {throw Err_.new_unimplemented();}
+	public void				Val_as_obj_(Object v) {throw Err_.new_unimplemented(3);}
 	public String			To_str() {return String_.Concat(" IS ", Bool_.To_str_lower(val));}
 }

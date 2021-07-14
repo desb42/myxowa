@@ -91,6 +91,6 @@ public class Xot_defn_tmpl implements Xot_defn {
 		ctx.Wiki().Parser_mgr().Tmpl_stack_del();
 		return rv;
 	}
-	public Xot_defn Clone(int id, byte[] name) {throw Err_.new_unimplemented();}
+	public Xot_defn Clone(int id, byte[] name) {throw Err_.new_unimplemented(92);}
 	boolean onlyInclude_exists;
 }

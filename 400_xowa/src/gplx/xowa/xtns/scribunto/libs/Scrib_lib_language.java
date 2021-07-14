@@ -291,7 +291,7 @@ public class Scrib_lib_language implements Scrib_lib {
 		lang.Grammar().Grammar_eval(bfr, lang, word, type);
 		return rslt.Init_obj(bfr.To_str_and_rls());
 	}
-	public boolean gender(Scrib_proc_args args, Scrib_proc_rslt rslt) {throw Err_.new_unimplemented();}
+	public boolean gender(Scrib_proc_args args, Scrib_proc_rslt rslt) {throw Err_.new_unimplemented(109);}
 	public boolean IsRTL(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		Xol_lang_itm lang = lang_(args);
 		return rslt.Init_obj(!lang.Dir_ltr());

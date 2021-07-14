@@ -35,13 +35,13 @@ public class Gxw_html_server implements Gxw_html {
 	public String		Html_js_eval_script(String script) {return Exec_as_str(script);}
 	public Object		Html_js_eval_script_as_obj(String script) {return Exec_as_str(script);}
 	public void			Html_js_cbks_add(String js_func_name, Gfo_invk invk) {}
-	public String		Html_js_send_json(String name, String data) {throw Err_.new_unimplemented();}
+	public String		Html_js_send_json(String name, String data) {throw Err_.new_unimplemented(68);}
 	public void			Html_invk_src_(Gfo_evt_itm v) {}
-	public GxwCore_base	Core() {throw Err_.new_unimplemented();}
-	public GxwCbkHost	Host() {throw Err_.new_unimplemented();} public void Host_set(GxwCbkHost host) {throw Err_.new_unimplemented();}
-	public Object		UnderElem() {throw Err_.new_unimplemented();}
-	public String		TextVal() {throw Err_.new_unimplemented();} public void TextVal_set(String v) {throw Err_.new_unimplemented();} 
-			public void			EnableDoubleBuffering() {throw Err_.new_unimplemented();}
+	public GxwCore_base	Core() {throw Err_.new_unimplemented(69);}
+	public GxwCbkHost	Host() {throw Err_.new_unimplemented(118);} public void Host_set(GxwCbkHost host) {throw Err_.new_unimplemented(70);}
+	public Object		UnderElem() {throw Err_.new_unimplemented(71);}
+	public String		TextVal() {throw Err_.new_unimplemented(119);} public void TextVal_set(String v) {throw Err_.new_unimplemented(72);} 
+	public void			EnableDoubleBuffering() {throw Err_.new_unimplemented(73);}
 	private boolean Exec_as_bool(String s) {
 		Exec_as_str(s);
 		return true;	// NOTE: js is async, so immediate return value is not possible; return true for now;

@@ -26,7 +26,7 @@ public class Db_rdr__basic implements Db_rdr {
 	}
 	@gplx.Virtual public byte[]		Read_bry(String k)			{try {return (byte[])rdr.getObject(k);} catch (Exception e) {throw Err_.new_exc(e, "db", "read failed", "key", k, "type", Bry_.Cls_val_name);}} 
 	@gplx.Virtual public byte[]		Read_bry_by_str(String k)	{try {return Bry_.new_u8_safe((String)rdr.getObject(k));} catch (Exception e) {throw Err_.new_exc(e, "db", "read failed", "key", k, "type", String_.Cls_val_name);}} 
-	@gplx.Virtual public void			Save_bry_in_parts(Io_url url, String tbl, String fld, String crt_key, Object crt_val) {throw Err_.new_unimplemented();}
+	@gplx.Virtual public void			Save_bry_in_parts(Io_url url, String tbl, String fld, String crt_key, Object crt_val) {throw Err_.new_unimplemented(28);}
 	@gplx.Virtual public String 		Read_str(String k)			{try {return (String)rdr.getObject(k);} catch (Exception e) {throw Err_.new_exc(e, "db", "read failed", "key", k, "type", String_.Cls_val_name);}} 
 	@gplx.Virtual public DateAdp		Read_date_by_str(String k)	{return DateAdp_.parse_iso8561(Read_str(k));}
 	@gplx.Virtual public int 			Read_int(String k)			{try {return Int_.Cast(rdr.getObject(k));} catch (Exception e) {throw Err_.new_exc(e, "db", "read failed", "key", k, "type", Int_.Cls_val_name);}} 

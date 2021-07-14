@@ -58,6 +58,7 @@ public class Xop_hdr_wkr implements Xop_ctx_wkr {
 			ctx.Subs_add(root, tkn);
 			return new_pos;
 		}
+		Xop_list_tkn_new.Reset(root, ctx); // 20210704
 		ctx.Apos().End_frame(ctx, root, src, bgn_pos, false);
 		Close_open_itms(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos);
 		ctx.Para().Process_block__bgn__nl_w_symbol(ctx, root, src, bgn_pos, cur_pos, Xop_xnde_tag_.Tag__h2);	// pass h2; should pass h# where # is correct #, but for purpose of Para_wkr, <h2> tag does not matter

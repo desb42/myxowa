@@ -55,8 +55,8 @@ class Gfo_fld_crt implements Criteria {
 		Object comp = owner.Fld_val_as_obj(fld_idx);
 		return crt.Matches(comp);
 	}
-	public void				Val_from_args(Hash_adp args) {throw Err_.new_unimplemented();}
-	public void				Val_as_obj_(Object v) {throw Err_.new_unimplemented();}
+	public void				Val_from_args(Hash_adp args) {throw Err_.new_unimplemented(107);}
+	public void				Val_as_obj_(Object v) {throw Err_.new_unimplemented(108);}
 	public String To_str() {return String_.Concat(Byte_.To_str(fld_idx), " ", crt.To_str());}
 	public static Gfo_fld_crt new_(byte fld_idx, Criteria crt) {
 		Gfo_fld_crt rv = new Gfo_fld_crt();

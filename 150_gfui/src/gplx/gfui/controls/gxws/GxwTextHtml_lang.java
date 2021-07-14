@@ -88,7 +88,7 @@ public class GxwTextHtml_lang extends JScrollPane implements GxwTextHtml {
 		editor.Html_enabled(v);
 	}
 	public GxwTextHtml_editor Editor() {return editor;} GxwTextHtml_editor editor;
-	public void ScrollTillCaretIsVisible() {throw Err_.new_unimplemented();}
+	public void ScrollTillCaretIsVisible() {throw Err_.new_unimplemented(50);}
 	public GxwTextHtml_lang ctor() {
 		editor = new GxwTextHtml_editor().ctor();
 		core = new GxwCore_host(GxwCore_lang.new_(this), editor.core);
@@ -154,7 +154,7 @@ class GxwTextHtml_editor extends JEditorPane implements GxwTextHtml {
 //		this.setEditorKit(v ? new StyledEditorKit() : new DefaultEditorKit());
 		this.setEditorKit(v ? htmlKit : styledKit);
 	}
-	public void ScrollTillCaretIsVisible() {throw Err_.new_unimplemented();}
+	public void ScrollTillCaretIsVisible() {throw Err_.new_unimplemented(51);}
 	public void Html_css_set(String s) {
 		StyleSheet styleSheet = htmlKit.getStyleSheet();
 		styleSheet.addRule(s);

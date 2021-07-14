@@ -47,9 +47,9 @@ public class Dbui_tbl_itm__history implements Dbui_tbl_itm {
 		tbl.Delete(db_row.Id());
 		return msg_bldr.To_json_str__empty();
 	}
-	public String Edit(byte[] row_id, byte[] row_pkey) {throw Err_.new_unimplemented();}
-	public String Save(byte[] row_id, byte[] row_pkey, Dbui_val_hash vals) {throw Err_.new_unimplemented();}
-	public String Reorder(byte[][] pkeys, int owner) {throw Err_.new_unimplemented();}
+	public String Edit(byte[] row_id, byte[] row_pkey) {throw Err_.new_unimplemented(93);}
+	public String Save(byte[] row_id, byte[] row_pkey, Dbui_val_hash vals) {throw Err_.new_unimplemented(94);}
+	public String Reorder(byte[][] pkeys, int owner) {throw Err_.new_unimplemented(95);}
 	public Dbui_row_itm[] To_ui_rows(Xoud_history_row[] db_rows) {
 		int len = db_rows.length;
 		Dbui_row_itm[] rv = new Dbui_row_itm[len];

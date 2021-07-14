@@ -20,7 +20,7 @@ public class Criteria_between implements Criteria {
 	public boolean			Neg()	{return neg;} private final    boolean neg;
 	public Comparable	Lo()	{return lo;} private Comparable lo; public void Lo_(Comparable v) {this.lo = v;}
 	public Comparable	Hi()	{return hi;} private Comparable hi; public void Hi_(Comparable v) {this.hi = v;}
-	public void			Val_from_args(Hash_adp args) {throw Err_.new_unimplemented();}
+	public void			Val_from_args(Hash_adp args) {throw Err_.new_unimplemented(1);}
 	public void			Val_as_obj_(Object v) {
 		Object[] ary = (Object[])v;
 		lo = (Comparable)ary[0];

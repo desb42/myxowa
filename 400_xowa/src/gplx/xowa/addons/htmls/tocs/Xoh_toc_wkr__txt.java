@@ -34,6 +34,7 @@ class Xoh_toc_wkr__txt {
 		this.page_url_bry = page_url == null ? Bry_.new_a7("null_url") : page_url.To_bry();
 	}
 	public void Calc_anch_text(Xoh_toc_itm rv, byte[] src) {	// text within hdr; EX: <h2>Abc</h2> -> Abc
+		src = Db_highlight.Check_for_base64(src);
 		int end = src.length;
 		src = Gfh_utl.Del_comments(text_bfr, src, 0, end);
 		end = src.length;

@@ -60,7 +60,7 @@ public class Sqlite_engine extends Db_engine_sql_base {
 	@Override public boolean			Meta_idx_exists(String idx)					{return schema_mgr.Idx_exists(idx);}
 	@Override public Db_stmt Stmt_by_qry(Db_qry qry) {return new Sqlite_stmt(this, qry);}
 		private static boolean loaded = false;
-	protected void Meta_tbl_gather_hook() {throw Err_.new_unimplemented();}
+	protected void Meta_tbl_gather_hook() {throw Err_.new_unimplemented(40);}
 	@gplx.Internal @Override protected Connection Conn_make() {
 		if (!loaded) {
 			try {

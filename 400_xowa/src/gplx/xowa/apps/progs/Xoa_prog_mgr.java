@@ -39,6 +39,8 @@ public class Xoa_prog_mgr implements Gfo_invk {
 		Process_adp.ini_(this, usr_dlg, app_trim_img				, cmd_eval, Process_adp.Run_mode_sync_timeout	,  1 * 60, "~{<>bin_plat_dir<>}imagemagick\\convert", "-trim \"~{source}\"  \"~{target}\"", "source", "target");
 		Process_adp.ini_(this, usr_dlg, app_midi_to_ogg				, cmd_eval, Process_adp.Run_mode_sync_timeout	,  1 * 60, "~{<>bin_plat_dir<>}timidity\\timidity", "-Ov \"--output-file=~{target}\" \"~{source}\"", "source", "target");
 		Process_adp.ini_(this, usr_dlg, app_view_text				, cmd_eval, Process_adp.Run_mode_async			,  0	 , "cmd", "/c start \"~{url}\"", "url");
+		//Process_adp.ini_(this, usr_dlg, app_highlight	, cmd_eval, Process_adp.Run_mode_sync_timeout	,  1 * 60, "C:\\Users\\des\\AppData\\Local\\Programs\\Python\\Python37\\python", "fil.py ~{src} ~{trg}", "src", "trg");
+		Process_adp.ini_(this, usr_dlg, app_highlight	, cmd_eval, Process_adp.Run_mode_sync_timeout	,  1 * 60, "~{<>bin_plat_dir<>}highlight\\python\\pythonw", "fil.py ~{src} ~{trg}", "src", "trg");
 
 		for (int i = 0; i < apps_by_ext.length; i++) {
 			apps_by_ext[i] = Process_adp.New(usr_dlg, cmd_eval, Process_adp.Run_mode_async, 0, "cmd", "/c start \"\" \"~{file}\"", "file");
@@ -73,6 +75,7 @@ public class Xoa_prog_mgr implements Gfo_invk {
 	public Process_adp App_trim_img()					{return app_trim_img;}					private Process_adp app_trim_img = new Process_adp();
 	public Process_adp App_convert_midi_to_ogg()		{return app_midi_to_ogg;}		private Process_adp app_midi_to_ogg = new Process_adp();
 	public Process_adp App_by_ext(String ext)			{return App_by_ext_key(String_.Mid(ext, 1));}	// ignore 1st . in ext; EX: ".png" -> "png"
+	public Process_adp App_highlight()					{return app_highlight;}					private Process_adp app_highlight = new Process_adp();
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_convert_tex_to_dvi))			return app_convert_tex_to_dvi;
 		else if	(ctx.Match(k, Invk_convert_dvi_to_png))			return app_convert_dvi_to_png;

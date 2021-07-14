@@ -430,9 +430,7 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 			case Xop_xnde_tag_.Tid__th:		wlxr_type = Xop_tblw_wkr.Tblw_type_th; break;
 			case Xop_xnde_tag_.Tid__caption:	wlxr_type = Xop_tblw_wkr.Tblw_type_tc; break;
 		}
-                Xop_list_tkn_new list_tkn = ctx.Page().Prev_list_tkn();
-                        ctx.Page().Prev_list_tkn_(null);
-		ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, true, wlxr_type, Xop_tblw_wkr.Called_from_general, atrs_bgn, atrs_end, list_tkn);
+		ctx.Tblw().Make_tkn_bgn(ctx, tkn_mkr, root, src, src_len, bgn_pos, cur_pos, true, wlxr_type, Xop_tblw_wkr.Called_from_general, atrs_bgn, atrs_end, null);
 	}
 	private void Tblw_end(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, int tagId) {
 		int typeId = 0;

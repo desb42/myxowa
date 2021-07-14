@@ -16,17 +16,16 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.syntax_highlights; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import gplx.langs.htmls.*; import gplx.xowa.htmls.*;
 class Synh_xtn_nde_ {
-	public static void Make(Bry_bfr bfr, Xoae_app app, byte[] src, int src_bgn, int src_end, byte[] lang, byte[] enclose, byte[] style, boolean line_enabled, int start, Int_rng_mgr highlight_idxs) {
-		boolean enclose_is_none	= Bry_.Eq(enclose, Enclose_none);
-		if (enclose_is_none) {	// enclose=none -> put in <code>
+	public static void Make(Bry_bfr bfr, Xoae_app app, byte[] src, int src_bgn, int src_end, byte[] lang, boolean inline, byte[] style, boolean line_enabled, int start, Int_rng_mgr highlight_idxs, byte[] klass, byte[] id, byte[] dir) {
+		if (dir == null || dir.length != 3 || dir[0] != 'r' || dir[1] != 't' || dir[2] != 'l')
+			dir = Bry__ltr;
+		if (inline) {	// put in <code>
 			bfr.Add(Bry__code_bgn);
-			if (style != null) bfr.Add(Xoh_consts.Style_atr).Add(style).Add_byte(Byte_ascii.Quote);
-			bfr.Add_byte(Byte_ascii.Gt);
+			addhtmlattrs(bfr, lang, style, klass, id, dir, line_enabled);
 		}
 		else {
 			bfr.Add(Bry__div_bgn);
-			if (style != null) bfr.Add(Xoh_consts.Style_atr).Add(style).Add_byte(Byte_ascii.Quote);
-			bfr.Add_byte(Byte_ascii.Angle_end);
+			addhtmlattrs(bfr, lang, style, klass, id, dir, line_enabled);
 			Gfh_tag_.Bld_lhs_bgn(bfr, Gfh_tag_.Id__pre);
 			Gfh_atr_.Add(bfr, Gfh_atr_.Bry__style, Bry__style__overflow__auto);
 			if (Bry_.Len_gt_0(lang)) {
@@ -64,7 +63,7 @@ class Synh_xtn_nde_ {
 		}
 		else
 			Xox_mgr_base.Xtn_write_escape_pre(app, bfr, src, text_bgn, text_end);
-		if 		(enclose_is_none) {
+		if (inline) {
 			bfr.Add(Xoh_consts.Code_end);
 		}
 		else {
@@ -72,12 +71,30 @@ class Synh_xtn_nde_ {
 			bfr.Add(Gfh_bldr_.Bry__div_rhs);
 		}
 	}
+	private static void addhtmlattrs(Bry_bfr bfr, byte[] lang, byte[] style, byte[] klass, byte[] id, byte[] dir, boolean line_enabled) {
+		if (klass != null) bfr.Add(klass).Add_byte(Byte_ascii.Space);
+		bfr.Add(Bry__mw_highlight).Add_byte(Byte_ascii.Space);
+		if (lang != null) bfr.Add(Bry__mw_highlight).Add(Bry__lang).Add(lang).Add_byte(Byte_ascii.Space);
+		bfr.Add(Bry__content).Add(dir).Add_byte(Byte_ascii.Space);
+		if (line_enabled) bfr.Add(Bry__mw_highlight).Add(Bry__lines).Add_byte(Byte_ascii.Space);
+		bfr.Add_byte(Byte_ascii.Quote).Add_byte(Byte_ascii.Space);
+		bfr.Add(Bry__dir).Add(dir).Add_byte(Byte_ascii.Quote).Add_byte(Byte_ascii.Space);
+		if (style != null) bfr.Add(Xoh_consts.Style_atr).Add(style).Add_byte(Byte_ascii.Quote);
+		bfr.Add_byte(Byte_ascii.Gt);
+	}
+
 	private static final    byte[] 
 	  Enclose_none = Bry_.new_a7("none")
 	, Style_line = Bry_.new_a7("-moz-user-select:none;"), Style_highlight = Bry_.new_a7("background-color: #FFFFCC;")
 	, Bry__style__overflow__auto = Bry_.new_a7("overflow:auto")
 	, Bry__pretty_print = Bry_.new_a7("prettyprint lang-")
-	, Bry__div_bgn = Bry_.new_a7("<div class=\"mw-highlight mw-code\"")
-	, Bry__code_bgn = Bry_.new_a7("<code class=\"mw-highlight\"")
+	, Bry__div_bgn = Bry_.new_a7("<div class=\"mw-code ")
+	, Bry__code_bgn = Bry_.new_a7("<code class=\"")
+	, Bry__mw_highlight = Bry_.new_a7("mw-highlight")
+	, Bry__lang = Bry_.new_a7("-lang-")
+	, Bry__content = Bry_.new_a7("mw-content-")
+	, Bry__lines = Bry_.new_a7("-lines")
+	, Bry__dir = Bry_.new_a7("dir=\"")
+	, Bry__ltr = Bry_.new_a7("ltr")
 	;
 }

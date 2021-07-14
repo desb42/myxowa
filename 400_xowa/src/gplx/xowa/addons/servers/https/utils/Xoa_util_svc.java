@@ -37,7 +37,7 @@ public class Xoa_util_svc {
 		// get wiki
 		Xow_wiki wiki_base = app.Wiki_mgri().Get_by_or_make_init_y(wiki_bry);
 		if (!wiki_base.Type_is_edit()) {
-			throw Err_.new_unimplemented();
+			throw Err_.new_unimplemented(67);
 		}
 		Xowe_wiki wiki = (Xowe_wiki)wiki_base;
 

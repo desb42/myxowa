@@ -149,7 +149,7 @@ public abstract class XomwAbstractContent implements XomwContent {
 	*/
 	public String serialize(String format) {
 		// return this.getContentHandler().serializeContent(this, format);
-		throw Err_.new_unimplemented();
+		throw Err_.new_unimplemented(87);
 	}
 
 	/**
@@ -277,7 +277,7 @@ public abstract class XomwAbstractContent implements XomwContent {
 //			}
 //
 //			return (XomwTitleOld[])titles.To_ary_and_clear(typeof(XomwTitleOld));
-		throw Err_.new_unimplemented();
+		throw Err_.new_unimplemented(88);
 	}
 
 //		/**

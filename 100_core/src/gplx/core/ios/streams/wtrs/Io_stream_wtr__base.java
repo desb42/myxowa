@@ -54,5 +54,5 @@ public abstract class Io_stream_wtr__base implements Io_stream_wtr {
 		}
 		catch (Exception e) {throw Err_.new_exc(e, "io", "close failed", "url", url.Raw());}
 	}
-	@Virtual protected java.io.OutputStream Wrap_stream(java.io.OutputStream stream) {throw Err_.new_unimplemented();}
+	@Virtual protected java.io.OutputStream Wrap_stream(java.io.OutputStream stream) {throw Err_.new_unimplemented(12);}
 	}

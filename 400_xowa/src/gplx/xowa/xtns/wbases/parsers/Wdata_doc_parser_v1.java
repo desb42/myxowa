@@ -122,7 +122,7 @@ public class Wdata_doc_parser_v1 implements Wdata_doc_parser {
 			return Claims_list_to_hash(temp_list);
 		} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse claims", "qid", String_.new_u8(doc.Src()));}
 	}
-	public Wbase_claim_base Parse_claims_data(byte[] qid, int pid, byte snak_tid, Json_nde nde) {throw Err_.new_unimplemented();}
+	public Wbase_claim_base Parse_claims_data(byte[] qid, int pid, byte snak_tid, Json_nde nde) {throw Err_.new_unimplemented(111);}
 	public static Ordered_hash Claims_list_to_hash(List_adp full_list) {
 		full_list.Sort();
 		Ordered_hash rv = Ordered_hash_.New(); List_adp temp_itms = List_adp_.New();
@@ -236,12 +236,12 @@ public class Wdata_doc_parser_v1 implements Wdata_doc_parser {
 		}
 		return rv;
 	}
-	public Wbase_claim_grp_list Parse_qualifiers(byte[] qid, Json_nde nde)		{throw Err_.new_unimplemented();}
-	public Wbase_references_grp[] Parse_references(byte[] qid, Json_ary owner)	{throw Err_.new_unimplemented();}
-	public int[] Parse_pid_order(byte[] qid, Json_ary ary) {throw Err_.new_unimplemented();}
-	public Ordered_hash Parse_sense(byte[] qid, Json_doc doc) {throw Err_.new_unimplemented();}
-	public Ordered_hash Parse_form(byte[] qid, Json_doc doc) {throw Err_.new_unimplemented();}
-	public int Parse_datatype_id(byte[] qid, Json_doc doc) {throw Err_.new_unimplemented();}
+	public Wbase_claim_grp_list Parse_qualifiers(byte[] qid, Json_nde nde)		{throw Err_.new_unimplemented(112);}
+	public Wbase_references_grp[] Parse_references(byte[] qid, Json_ary owner)	{throw Err_.new_unimplemented(113);}
+	public int[] Parse_pid_order(byte[] qid, Json_ary ary) {throw Err_.new_unimplemented(114);}
+	public Ordered_hash Parse_sense(byte[] qid, Json_doc doc) {throw Err_.new_unimplemented(115);}
+	public Ordered_hash Parse_form(byte[] qid, Json_doc doc) {throw Err_.new_unimplemented(116);}
+	public int Parse_datatype_id(byte[] qid, Json_doc doc) {throw Err_.new_unimplemented(117);}
 	public static final String
 	  Str_entity								= "entity"
 	, Str_id									= "id"

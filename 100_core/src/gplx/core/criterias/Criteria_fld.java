@@ -21,7 +21,7 @@ public class Criteria_fld implements Criteria {
 	public String		Key() {return key;} private final    String key;
 	public Criteria		Crt() {return crt;} private final    Criteria crt;
 	public String		Pre_w_key() {return pre == Pre_null ? key : String_.Concat(pre, ".", key);}
-	public void			Val_as_obj_(Object v) {throw Err_.new_unimplemented();}
+	public void			Val_as_obj_(Object v) {throw Err_.new_unimplemented(6);}
 	public void			Val_from_args(Hash_adp args) {
 		List_adp list = (List_adp)args.Get_by(key); if (list == null) throw Err_.new_wo_type("criteria.fld key not found", "key", key);
 		Object o = Fill_val(key, crt.Tid(), list);

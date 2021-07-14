@@ -55,9 +55,9 @@ public class Db_data_rdr extends DataRdr_base implements DataRdr {
 		try {return rdr.next();}
 		catch (Exception e) {throw Err_.new_exc(e, "db", "could not move next; check column casting error in SQL", "sql", commandText);}
 	}
-	@Override public DataRdr Subs()							{throw Err_.new_unimplemented();}
-	public DataRdr Subs_byName(String fld)					{throw Err_.new_unimplemented();}
-	@Override public DataRdr Subs_byName_moveFirst(String fld)		{throw Err_.new_unimplemented();}		
+	@Override public DataRdr Subs()							{throw Err_.new_unimplemented(25);}
+	public DataRdr Subs_byName(String fld)					{throw Err_.new_unimplemented(26);}
+	@Override public DataRdr Subs_byName_moveFirst(String fld)		{throw Err_.new_unimplemented(27);}		
 	public void Rls() {
 		try {rdr.close();}
 		catch (SQLException e) {throw Err_.new_exc(e, "db", "reader dispose failed", "commandText", commandText);}

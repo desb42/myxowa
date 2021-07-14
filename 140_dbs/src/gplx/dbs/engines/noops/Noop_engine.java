@@ -30,7 +30,7 @@ public class Noop_engine implements Db_engine {
 	public Db_rdr				Exec_as_rdr__rls_manual	(Object rdr_obj, String sql)				{return Db_rdr_.Empty;}
 	public Db_rdr				Exec_as_rdr__rls_auto	(Db_stmt stmt, Object rdr_obj, String sql)	{return Db_rdr_.Empty;}
 	public Db_stmt				Stmt_by_qry(Db_qry qry) {return Db_stmt_.Null;}
-	public Object				Stmt_by_sql(String sql) {throw Err_.new_unimplemented();}
+	public Object				Stmt_by_sql(String sql) {throw Err_.new_unimplemented(38);}
 	public DataRdr				New_rdr(java.sql.ResultSet rdr, String sql) {return DataRdr_.Null;} 
 	public void					Txn_bgn(String name)	{}
 	public String				Txn_end()				{return "";}

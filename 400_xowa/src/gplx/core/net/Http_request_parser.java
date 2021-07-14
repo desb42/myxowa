@@ -63,7 +63,7 @@ public class Http_request_parser {
 							if (reading_post_data || post_nl_seen) throw Err_.new_wo_type("http.request.parser;invalid new line during post", "request", To_str());
 							post_nl_seen = true;	// only allow one \n per POST
 							continue;				// ignore line and get next
-						default:							throw Err_.new_unimplemented();
+						default:							throw Err_.new_unimplemented(62);
 					}
 					break;	// only GET will reach this line; GET requests always end with blank line; stop;
 				}
@@ -122,7 +122,7 @@ public class Http_request_parser {
 		switch (tid) {
 			case Tid_get	: this.type = Http_request_itm.Type_get; break;
 			case Tid_post	: this.type = Http_request_itm.Type_post; break;
-			default			: throw Err_.new_unimplemented();
+			default			: throw Err_.new_unimplemented(63);
 		}
                 if (val_bgn + 5 < url_end && line[val_bgn] == '/' && line[val_bgn+1] == 'x' && line[val_bgn+2] == 'o' && line[val_bgn+3] == 'w' && line[val_bgn+4] == 'a')
                     val_bgn += 5;

@@ -71,8 +71,14 @@ public class Ref_html_wtr {
 		return rv;
 	}
 	public void Xnde_references(Xoh_html_wtr wtr, Xop_ctx ctx, Xoh_wtr_ctx opts, Xoae_page wpg, Bry_bfr bfr, byte[] src, Xop_xnde_tkn xnde) {
-		References_nde references = (References_nde)xnde.Xnde_xtn();
-		Ref_itm_lst lst = wpg.Ref_mgr().Lst_get(references.Group(), references.List_idx());	// get group; EX: <references group="note"/>
+		Ref_itm_lst lst;
+		References_nde references = null;
+		if (xnde == null)
+			lst = wpg.Ref_mgr().Lst_get(Bry_.Empty, 0);
+		else {
+			references = (References_nde)xnde.Xnde_xtn();
+			lst = wpg.Ref_mgr().Lst_get(references.Group(), references.List_idx());	// get group; EX: <references group="note"/>
+		}
 		if (lst == null) return;	// NOTE: possible to have a grouped references without references; EX: Infobox planet; <references group=note> in sidebar, but no refs 
 		if (lst.Itms_len() == 0) return;
 		boolean response_wrap; // default case (depends on wiki!!)
@@ -81,12 +87,16 @@ public class Ref_html_wtr {
 			response_wrap = false;
 		else
 			response_wrap = true;
-                    
-		if (references.Responsive() != Bry_.Empty) {
-			if  (references.Responsive()[0] == '0')
-				response_wrap = false;
-			else
-				response_wrap = true;
+
+		if (references == null)
+			response_wrap = false;
+		else {
+			if (references.Responsive() != Bry_.Empty) {
+				if  (references.Responsive()[0] == '0')
+					response_wrap = false;
+				else
+					response_wrap = true;
+			}
 		}
 		if (response_wrap) {
 			bfr.Add(Bry_.new_a7("<div class=\"mw-references-wrap"));

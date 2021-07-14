@@ -65,7 +65,7 @@ class Swt_core__frames extends Swt_core__base {
 		for (int i = 0; i < frames_len; i++)
 			frames[i].Item().setForeground(color);
 	}
-	@Override public void Controls_add(GxwElem sub)	{throw Err_.new_unimplemented();}
+	@Override public void Controls_add(GxwElem sub)	{throw Err_.new_unimplemented(55);}
 	@Override public void Controls_del(GxwElem sub)	{}
 	@Override public void Invalidate() {
 		inner.redraw();

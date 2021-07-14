@@ -247,7 +247,7 @@ public class XomwMessageOld {
 		this.language = language;
 	}
 	public byte[] text() {return textBry;} private byte[] textBry;
-	public byte[] escaped() {throw Err_.new_unimplemented();}
+	public byte[] escaped() {throw Err_.new_unimplemented(85);}
 
 //		/**
 //		* @since 1.17
@@ -802,7 +802,7 @@ public class XomwMessageOld {
 //			}
 //
 //			return this.content;
-		throw Err_.new_unimplemented();
+		throw Err_.new_unimplemented(86);
 	}
 
 	/**

@@ -117,7 +117,7 @@ public class Xow_db_file__core_ {
 			case Xow_db_layout.Tid__all:		return domain_name + ".xowa";		// EX: en.wikipedia.org.xowa
 			case Xow_db_layout.Tid__few:		//return domain_name + "-text.xowa";	// EX: en.wikipedia.org-text.xowa	// DB.FEW: DATE:2016-06-07
 			case Xow_db_layout.Tid__lot:		return domain_name + "-core.xowa";	// EX: en.wikipedia.org-core.xowa
-			default: 							throw Err_.new_unimplemented();
+			default: 							throw Err_.new_unimplemented(96);
 		}
 	}
 	public static byte Core_db_tid(Xow_db_layout layout) {
@@ -125,7 +125,7 @@ public class Xow_db_file__core_ {
 			case Xow_db_layout.Tid__all:		return Xow_db_file_.Tid__wiki_solo;
 			case Xow_db_layout.Tid__few:		// return Xow_db_file_.Tid__core;	// DB.FEW: DATE:2016-06-07
 			case Xow_db_layout.Tid__lot:		return Xow_db_file_.Tid__core;
-			default:							throw Err_.new_unimplemented();
+			default:							throw Err_.new_unimplemented(97);
 		}
 	}
 }

@@ -187,7 +187,7 @@ public abstract class DataRdr_base implements SrlMgr {
 	public DateAdp SrlDateOr(String key, DateAdp or) {return ReadDateOr(key, or);}
 	public Decimal_adp SrlDecimalOr(String key, Decimal_adp or) {return ReadDecimalOr(key, or);}
 	public double SrlDoubleOr(String key, double or) {return ReadDoubleOr(key, or);}
-	public Object SrlObjOr(String key, Object or) {throw Err_.new_unimplemented();}
+	public Object SrlObjOr(String key, Object or) {throw Err_.new_unimplemented(15);}
 	public void XtoStr_gfml(String_bldr sb) {
 		sb.Add(this.NameOfNode()).Add(":");
 		for (int i = 0; i < this.FieldCount(); i++) {

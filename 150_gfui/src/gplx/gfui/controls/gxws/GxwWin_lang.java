@@ -261,7 +261,7 @@ class GxwElemFactory_swt extends GxwElemFactory_base {
 	public GxwTextFld text_fld_() {return null;}
 	public GxwTextFld text_memo_() {return null;}
 	public GxwTextHtml text_html_() {return null;}
-	public GxwCheckListBox checkListBox_(Keyval_hash ctorArgs) {throw Err_.new_unimplemented();}
+	public GxwCheckListBox checkListBox_(Keyval_hash ctorArgs) {throw Err_.new_unimplemented(53);}
 	public GxwComboBox comboBox_() {return null;}
 	public GxwListBox listBox_() {return null;}
 }
