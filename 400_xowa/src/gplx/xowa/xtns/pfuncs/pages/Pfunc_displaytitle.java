@@ -17,6 +17,9 @@ package gplx.xowa.xtns.pfuncs.pages; import gplx.*; import gplx.xowa.*; import g
 import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*;
 import gplx.xowa.langs.kwds.*; import gplx.xowa.langs.cases.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
+import gplx.xowa.parsers.amps.*;
+import gplx.core.btries.*;
+import gplx.langs.htmls.entitys.*;
 public class Pfunc_displaytitle extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_page_displaytitle;}
 	@Override public Pf_func New(int id, byte[] name) {return new Pfunc_displaytitle().Name_(name);}
@@ -24,6 +27,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		if (ctx.Page().Html_data().Display_ttl() != null) return; // only once
 		byte[] val_dat_ary = /*remove_slash(*/Eval_argx(ctx, src, caller, self)/*)*/;
 		Xowe_wiki wiki = ctx.Wiki(); Xop_parser parser = wiki.Parser_mgr().Main();
+		Xop_amp_mgr amp_mgr = wiki.App().Parser_amp_mgr();
 		Xop_ctx display_ttl_ctx = Xop_ctx.New__sub__reuse_page(ctx);
 		Xop_root_tkn display_ttl_root = parser.Parse_text_to_wdom(display_ttl_ctx, val_dat_ary, false);
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
@@ -36,8 +40,8 @@ public class Pfunc_displaytitle extends Pf_func_base {
 			wiki.Html_mgr().Html_wtr().Write_tkn_to_html(tmp_bfr, display_ttl_ctx, Xoh_wtr_ctx.Alt, display_ttl_root.Data_mid(), display_ttl_root, 0, display_ttl_root);
 			byte[] val_html_lc = tmp_bfr.To_bry_and_clear();
 			Xol_case_mgr case_mgr = wiki.Lang().Case_mgr();
-			val_html_lc = Standardize_displaytitle_text(case_mgr, val_html_lc, Bool_.Y);
-			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_db(), Bool_.N); // NOTE: must be .Full_db() to handle non-main ns; PAGE:en.w:Template:Infobox_opera; ISSUE#:277 DATE:2018-11-14;
+			val_html_lc = Standardize_displaytitle_text(case_mgr, val_html_lc, Bool_.Y, amp_mgr);
+			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_db(), Bool_.N, amp_mgr); // NOTE: must be .Full_db() to handle non-main ns; PAGE:en.w:Template:Infobox_opera; ISSUE#:277 DATE:2018-11-14;
 			if (!Bry_.Eq(val_html_lc, page_ttl_lc)) {
 				Xoa_app_.Usr_dlg().Warn_many("", "", "DISPLAYTITLE fail:~{0} not ~{1}", val_html_lc, page_ttl_lc);
 				val_html = null;
@@ -46,9 +50,9 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		ctx.Page().Html_data().Display_ttl_(val_html);
 		tmp_bfr.Mkr_rls();
 	}
-	private static byte[] Standardize_displaytitle_text(Xol_case_mgr case_mgr, byte[] val, boolean change_underscore) {
-		byte[] rv = case_mgr.Case_build_lower(val);							// lower-case
-		rv = Replaceamp(rv, change_underscore);
+	private static byte[] Standardize_displaytitle_text(Xol_case_mgr case_mgr, byte[] val, boolean change_underscore, Xop_amp_mgr amp_mgr) {
+		byte[] rv = Replaceamp(val, change_underscore, amp_mgr);
+		rv = case_mgr.Case_build_lower(rv);							// lower-case
 		return Bry_.Replace(rv, Byte_ascii.Space, Byte_ascii.Underline);	// force underline; PAGE:de.w:Mod_qos DATE:2014-11-06
 	}
 	// replace &quot; and &amp;
@@ -60,11 +64,15 @@ public class Pfunc_displaytitle extends Pf_func_base {
 	//  {{DISPLAYTITLE:''iTunes Originals&nbsp;? R.E.M.''}} &nsbp; goes to &#160; and then should be space
 	// how to cope with {{DISPLAYTITLE:''Sleepless in __________''}} this will elimiminate trailing space
 	// how to cope with {{DISPLAYTITLE:''N''-Isopropyl-''N'''-phenyl-1,4-phenylenediamine}} wxtra apost
-	private static byte[] Replaceamp(byte[] src, boolean change_underscore) {
+	private static byte[] Replaceamp(byte[] src, boolean change_underscore, Xop_amp_mgr amp_mgr) {
 		int len = src.length;
 		int pos = 0;
 		int sofar = 0;
 		Bry_bfr bfr = null;
+		Btrie_slim_mgr amp_trie = amp_mgr.Amp_trie();
+		Btrie_rv trv = new Btrie_rv();
+		byte[] b_ary = null;
+		byte rb = 0;
 		// trim trailing space
 		while (len > 0) {
 			byte b = src[len-1];
@@ -79,132 +87,33 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		while (pos < len) {
 			byte b = src[pos++];
 			int size = -1;
-			byte rb = 0;
 			switch (b) {
 				case '&':
-					// &#160;
-					// &#32;
-					// &#34; -> '"'
-					// &#38; -> '&'
-					// &#39;
-					// &#8201; (&thinsp) -> ' '
-					// &#8202; (Hair Space) -> ' '
-					// &#8204; (Zero Width Non-Joiner) -> ''
-					// &#8206; (Left-To-Right Mark) -> ''
-					// &#8207; (Right-To-Left Mark) -> ''
-					// &#8211; (&ndash;) -> '-'
-					// &#8214; (&mdash;) -> '-'
-					// &#8722; (&minus;) -> '-'
-					// &#928; - Capital PI -> '-'
-					// &#x266d;, 0xE2 0x99 0xAD, &#9837;(music flat) -> '-'
 					// &amp;
 					// &lt;
 					// &quot;
 					// &tinysp;
-					int cpos = pos;
-					if (cpos < len) {
-						b = src[cpos++];
-						switch(b) {
-							case '#':
-								if (cpos < len) {
-									b = src[cpos++];
-									switch(b) {
-										case '1':
-											if (cpos + 2 < len && src[cpos] == '6' && src[cpos+1] == '0' && src[cpos+2] == ';') {
-												size = 5;
-												rb = Byte_ascii.Space;
-											}
-											break;
-										case '3':
-											if (cpos + 1 < len && src[cpos+1] == ';') {
-												b = src[cpos++];
-												switch(b) {
-												case '2': // &#32;
-													size = 4;
-													rb = Byte_ascii.Space;
-													break;
-												case '4': // &#34; -> "
-													size = 4;
-													rb = Byte_ascii.Quote;
-													break;
-												case '8': // &#38; -> &
-													size = 4;
-													rb = Byte_ascii.Amp;
-													break;
-												case '9': // &#39; -> '
-													size = 4;
-													// remove apos //rb = Byte_ascii.Apos;
-													break;
-												}
-											}
-											break;
-										case '8':
-											if (cpos + 3 < len && src[cpos+3] == ';') {
-												b = src[cpos++];
-												switch(b) {
-													case '2':
-														b = src[cpos++];
-														switch(b) {
-															case '0':
-																b = src[cpos++];
-																switch(b) {
-																	case '1': // &#8201; (&thinsp) -> ' '
-																	case '2': // &#8202; (Hair Space) -> ' '
-																		size = 6;
-																		rb = Byte_ascii.Space;
-																		break;
-																	case '4': // &#8204; (Zero Width Non-Joiner) -> ''
-																	case '6': // &#8206; (Left-To-Right Mark) -> ''
-																	case '7': // &#8207; (Right-To-Left Mark) -> ''
-																		size = 6;
-																		break;
-																}
-																break;
-															case '1':
-																b = src[cpos++];
-																switch(b) {
-																	case '1': // &#8211; (&ndash;) -> '-'
-																	case '4': // &#8214; (&mdash;) -> '-'
-																		size = 6;
-																		rb = Byte_ascii.Dash;
-																		break;
-																}
-																break;
-														}
-														break;
-													case '7':
-														if (src[cpos] == '2' && src[cpos+1] == '2') { // &#8722; (&minus;) -> '-'
-															size = 6;
-															rb = Byte_ascii.Dash;
-														}
-														break;
-												}
-											}
-											break;
-										case '9':
-											if (cpos + 2 < len && src[cpos] == '2' && src[cpos+1] == '8' && src[cpos+2] == ';') { // &#928; - Capital PI -> '-'
-												size = 5;
-												rb = Byte_ascii.Dash;
-											}
-											break;
-										case 'x': // x266d
-											if (cpos + 4 < len && src[cpos] == '2' && src[cpos+1] == '6' && src[cpos+2] == '6' && src[cpos+3] == 'd' && src[cpos+4] == ';') { // &#x266d (music flat) -> '-'
-												size = 7;
-												rb = Byte_ascii.Dash;
-											}
-											break;
-									}
-								}
-								break;
-							case 'a':
-								if (cpos + 2 < len && src[cpos] == 'm' && src[cpos+1] == 'p' && src[cpos+2] == ';') {
-									size = 4;
-									rb = Byte_ascii.Amp;
-								}
-								break;
-							case 'l':
-								if (cpos + 1 < len && src[cpos] == 't' && src[cpos+1] == ';') {
-									int close = cpos + 2;
+					Object html_ent_obj = amp_trie.Match_at(trv, src, pos, len);
+					if (html_ent_obj != null) {
+						Gfh_entity_itm amp_itm = (Gfh_entity_itm)html_ent_obj;
+						size = trv.Pos() - pos;
+						if (amp_itm.Tid() == Gfh_entity_itm.Tid_name_std) {
+							switch (amp_itm.Char_int()) {
+								case 160:
+									rb = Byte_ascii.Space;
+									break;
+								case Byte_ascii.Amp:
+									b_ary = Byte_ascii.Amp_bry;
+									break;
+								case Byte_ascii.Quote:
+									b_ary = amp_itm.Xml_name_bry();
+									break;
+								case Gfh_entity_itm.Char_int_null:	// &#xx;
+									b_ary = amp_itm.Xml_name_bry();
+									break;
+								case Byte_ascii.Lt:
+								//case Byte_ascii.Gt:
+									int close = trv.Pos();
 									while (close < len) {
 										byte c = src[close++];
 										if (c == '&' && close + 2 < len && src[close] == 'g' && src[close+1] == 't' && src[close+2] == ';') {
@@ -215,15 +124,66 @@ public class Pfunc_displaytitle extends Pf_func_base {
 										size = close - pos + 3; //???
 										rb = 0;
 									}
+									break;
+								default:
+									b_ary = amp_itm.U8_bry();
+									break;
+							}
+						}
+						else {
+							// &#160;
+							// &#32;
+							// &#34; -> '"'
+							// &#38; -> '&'
+							// &#39;
+							// &#8201; (&thinsp) -> ' '
+							// &#8202; (Hair Space) -> ' '
+							// &#8204; (Zero Width Non-Joiner) -> ''
+							// &#8206; (Left-To-Right Mark) -> ''
+							// &#8207; (Right-To-Left Mark) -> ''
+							// &#8211; (&ndash;) -> '-'
+							// &#8214; (&mdash;) -> '-'
+							// &#8722; (&minus;) -> '-'
+							// &#928; - Capital PI -> '-'
+							// &#x266d;, 0xE2 0x99 0xAD, &#9837;(music flat) -> '-'
+							Xop_amp_mgr_rslt amp_rv = new Xop_amp_mgr_rslt();
+							amp_mgr.Parse_ncr(amp_rv, amp_itm.Tid() == Gfh_entity_itm.Tid_num_hex, src, len, pos, trv.Pos());
+							if (amp_rv.Pass()) {
+								int val = amp_rv.Val();
+								switch(val) {
+									case 160: case 32:
+									case 8201: // (&thinsp) -> ' '
+									case 8202: // (Hair Space) -> ' '
+										rb = Byte_ascii.Space;
+										break;
+									case 8211: // (&ndash;) -> '-'
+									case 8214: // (&mdash;) -> '-'
+									case 8722: // (&minus;) -> '-'
+									case 928: // - Capital PI -> '-'
+									case 9837: // (music flat) -> '-'
+										rb = Byte_ascii.Dash;
+										break;
+									case 34: // &#34; -> "
+										rb = Byte_ascii.Quote;
+										break;
+									case 38: // &#38; -> &
+										rb = Byte_ascii.Amp;
+										break;
+									case 39: // &#39; -> ' - ignore
+									case 8204: // (Zero Width Non-Joiner) -> ''
+									case 8206: // (Left-To-Right Mark) -> ''
+									case 8207: // (Right-To-Left Mark) -> ''
+										break;
+									default:
+										b_ary = gplx.core.intls.Utf16_.Encode_int_to_bry(val);
+										break;
 								}
-								break;
-							case 'q':
-								if (cpos + 3 < len && src[cpos] == 'u' && src[cpos+1] == 'o' && src[cpos+2] == 't' && src[cpos+3] == ';') {
-									size = 5;
-									rb = Byte_ascii.Quote;
-								}
-								break;
-							case 't':
+							}
+							size = amp_rv.Pos() - pos; // assume the semicolon?!
+						}
+					}
+					break;
+/*						case 't':
 								if (pos + 5 < len && src[cpos] == 'h' && src[cpos+1] == 'i' && src[cpos+2] == 'n' && src[cpos+3] == 's' && src[cpos+4] == 'p' && src[cpos+5] == ';') {
 									size = 7;
 									rb = Byte_ascii.Space;
@@ -232,6 +192,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 						}
 					}
 					break;
+*/
 				case ' ':
 				case '\t':
 				case '_':
@@ -295,13 +256,26 @@ public class Pfunc_displaytitle extends Pf_func_base {
 						size = 1;
 						rb = Byte_ascii.Dash;
 					}
+					break;
+				case -62: // \xC2
+					if (pos + 1 < len && src[pos] == -96) { // \xC2\xA0 -> &nbsp; -> space
+						size = 1;
+						rb = Byte_ascii.Space;
+					}
+					break;
 			}
 			if (size >= 0) {
 				if (bfr == null)
 					bfr = Bry_bfr_.New();
 				bfr.Add_mid(src, sofar, pos - 1);
-				if (rb != 0)
+				if (rb != 0) {
 					bfr.Add_byte(rb);
+					rb = 0;
+				}
+				if (b_ary != null) {
+					bfr.Add(b_ary);
+					b_ary = null;
+				}
 				pos += size;
 				sofar = pos;
 			}

@@ -38,7 +38,7 @@ public class Xof_file_fxt {
 		Db_conn conn = Db_conn_bldr.Instance.Get_or_new(Io_url_.mem_fil_("mem/xowa/wiki/" + wiki.Domain_str() + "/orig.xowa")).Conn();
 		Xof_orig_tbl orig_tbl = new Xof_orig_tbl(conn, Bool_.Y);
 		orig_tbl.Create_tbl();
-		wiki.File_mgr().Orig_mgr().Init_by_wiki(wiki, Xof_fsdb_mode.New__v2__gui(), new Xof_orig_tbl[] {orig_tbl}, Xof_url_bldr.new_v2());
+		wiki.File_mgr().Orig_mgr().Init_by_wiki(wiki, Xof_fsdb_mode.New__v2__gui(), new Xof_orig_tbl[] {orig_tbl}, Xof_url_bldr.new_v2(), null);
 		return this;
 	}
 	public void Exec_orig_add(boolean repo_is_commons, String orig_ttl, int orig_ext_id, int orig_w, int orig_h, String orig_redirect) {

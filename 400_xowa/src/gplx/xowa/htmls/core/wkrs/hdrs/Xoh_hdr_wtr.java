@@ -32,6 +32,7 @@ public class Xoh_hdr_wtr implements gplx.core.brys.Bfr_arg, Xoh_wtr_itm {
 		this.hdr_num = data.Hdr_level();
                 this.atrs = data.Atrs();
 		this.hdr_content = Bry_.Mid(src, data.Capt_bgn(), data.Capt_end());
+                Checkanchor();
 		if (data.Anch_is_diff())
 			hdr_id = Bry_.Mid(src, data.Anch_bgn(), data.Anch_end());
 		else
@@ -53,4 +54,13 @@ public class Xoh_hdr_wtr implements gplx.core.brys.Bfr_arg, Xoh_wtr_itm {
 	private static final    Bry_fmtr fmtr = Bry_fmtr.new_
 	( "<h~{lvl}~{atrs}><span class=\"mw-headline\" id=\"~{id}\">~{content}</span>~{capt_rhs}</h~{lvl}>"
 	, "lvl", "atrs", "id", "content", "capt_rhs");
+        private void Checkanchor() {
+            int len = hdr_content.length - 5;
+            for (int i = 0; i < len; i++) {
+                if (hdr_content[i] == '<' && hdr_content[i+1] == 'a' && hdr_content[i+2] == ' ' && hdr_content[i+3] == 'h') {
+                    Gfo_usr_dlg_.Instance.Log_many("", "", "header with anchr: ttl=~{0}", hpg.Ttl());
+                    return;
+                }
+            }
+        }
 }

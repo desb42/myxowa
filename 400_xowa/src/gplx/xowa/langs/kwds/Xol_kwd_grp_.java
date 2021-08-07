@@ -241,8 +241,9 @@ public static final int
 , Id_expectunusedcategory = 221
 , Id_shortdesc = 222
 , Id_related = 223
+, Id_expectedunconnectedpage = 224
 ;
-public static final int Id__max = 224;
+public static final int Id__max = 225;
 
 	private static byte[] ary_itm_(int id) {
 		switch (id) {
@@ -470,6 +471,7 @@ case Xol_kwd_grp_.Id_pagelanguage: return Bry_.new_u8("pagelanguage");
 case Xol_kwd_grp_.Id_expectunusedcategory: return Bry_.new_u8("expectunusedcategory");
 case Xol_kwd_grp_.Id_shortdesc: return Bry_.new_u8("shortdesc");
 case Xol_kwd_grp_.Id_related: return Bry_.new_u8("related");
+case Xol_kwd_grp_.Id_expectedunconnectedpage: return Bry_.new_u8("expectedunconnectedpage");
 default: throw Err_.new_unhandled(id);
 		}
 	}

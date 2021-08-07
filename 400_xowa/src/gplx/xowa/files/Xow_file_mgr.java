@@ -159,7 +159,7 @@ public class Xow_file_mgr implements Gfo_invk {
 			db_core = Fsdb_db_mgr__v2_bldr.Get_or_make(wiki, false);	// make it
 		this.version = Version_2;
 		this.fsdb_mode = Xof_fsdb_mode.New__v2__gui();
-		orig_mgr.Init_by_wiki(wiki, fsdb_mode, db_core.File__orig_tbl_ary(), Xof_url_bldr.new_v2());
+		orig_mgr.Init_by_wiki(wiki, fsdb_mode, db_core.File__orig_tbl_ary(), Xof_url_bldr.new_v2(), db_core.Invalidtab());
 		fsdb_mgr.Init_by_wiki(wiki);
 	}
 	public void Rls() {

@@ -572,7 +572,12 @@ public class Dbx_scan_support {
 			Object o = trie.Match_at_w_b0(trv, b, s.str, s.str_ptr, s.str_len);	// now match String against tkn
 			if (o != null && o instanceof Pxd_itm_tz_abbr) {
 				Pxd_itm_tz_abbr tza = (Pxd_itm_tz_abbr)o;
-				if (tza.Tz_abbr().length == s.str_len) {
+				b = s.str[trv.Pos()];
+				if ((b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z')) {
+					// a letter is following a possible match - not a timezone then
+				}
+				else {
+				//if (tza.Tz_abbr().length == s.str_len) {
 					s.str_ptr = trv.Pos();
 					t.zone_type = TIMELIB_ZONETYPE_ABBR;
 					retval = tza.Tz_offset();
@@ -731,14 +736,14 @@ public class Dbx_scan_support {
 			time.m++;
 			time.d -= maxdays;
 		}
-                if (time.d == 0) { // backwards a day
-                    time.m--;
-                    if (time.m == 0) {
-                        time.m = 12;
-                        time.y--;
-                    }
-                    time.d = DateAdp_.DaysInMonth(time.m, time.y);
-                }
+		if (time.d == 0) { // backwards a day
+			time.m--;
+			if (time.m == 0) {
+				time.m = 12;
+				time.y--;
+			}
+			time.d = DateAdp_.DaysInMonth(time.m, time.y);
+		}
 		time.ldt = LocalDateTime.of(time.y, time.m, time.d, time.h, time.i, time.s, time.us * 1000);
 
 		if (time.relative.have_weekday_relative) {
@@ -942,6 +947,18 @@ public class Dbx_scan_support {
 				ZoneOffset ofs = rules.getOffset(loc);
 				time.z = ofs.getTotalSeconds();
 			}
+		}
+		else if (time.zone_type == TIMELIB_ZONETYPE_OFFSET) {
+			time.ldt = LocalDateTime.of(time.y, time.m, time.d, time.h, time.i, time.s, time.us * 1000);
+			time.ldt = time.ldt.plusSeconds(-time.z);
+//			time.us = time.ldt.getNano()/1000;
+			time.s = time.ldt.getSecond();
+			time.i = time.ldt.getMinute();
+			time.h = time.ldt.getHour();
+			time.d = time.ldt.getDayOfMonth();
+			time.m = time.ldt.getMonthValue();
+			time.y = time.ldt.getYear();
+			time.z = 0;
 		}
 	}
 

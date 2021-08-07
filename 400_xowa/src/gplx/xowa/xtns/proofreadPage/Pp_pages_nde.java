@@ -572,7 +572,8 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 					page_bfr.Add(Bry_tmpl_page_end);
 				}
 				byte[] cur_sect_bgn = Lst_pfunc_itm.Null_arg, cur_sect_end = Lst_pfunc_itm.Null_arg;
-				if (i == 0) {
+				boolean last_page = false;
+				if (i == 0) { // first
 					if (bgn_sect_bry != null)
 						cur_sect_bgn = bgn_sect_bry;
 					else if (onlysection != null) {
@@ -580,13 +581,14 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 						cur_sect_end = onlysection;
 					}
 				}
-				else if	(i == list_len - 1) {
+				else if	(i + step_int >= list_len) { // last
 					if	(end_sect_bry != null)
 						cur_sect_end = end_sect_bry;
 					else if (onlysection != null) {
 						cur_sect_bgn = onlysection;
 						cur_sect_end = onlysection;
 					}
+					last_page = true;
 				}
 				Xopg_tmpl_prepend_mgr prepend_mgr = ctx.Page().Tmpl_prepend_mgr().Bgn(full_bfr);
 				Lst_pfunc_itm lst_itm = Lst_pfunc_itm.New_sect_or_null(ctx, ttl.Full_db());
@@ -594,7 +596,13 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				if (lst_itm != null) Lst_pfunc_lst_.Sect_include(page_bfr, lst_itm.Sect(), cur_sect_bgn, cur_sect_end);
 				prepend_mgr.End(ctx, full_bfr, page_bfr.Bfr(), page_bfr.Len(), Bool_.Y);
 				full_bfr.Add_bfr_and_clear(page_bfr);
-				full_bfr.Add(gplx.langs.htmls.entitys.Gfh_entity_.Space_bry);	// $out.= "&#32;"; REF.MW:ProofreadPageRenderer.pn
+				if (last_page && full_bfr.Match_end_byt(Byte_ascii.Gt)) { // ?? 202010715 big HACK see fr.wikisource.org/wiki/Œuvres_poétiques_de_Chénier/Moland,_1889/L’Oaristys
+					full_bfr.Add(Bry_.new_a7("<p>"));
+					full_bfr.Add(gplx.langs.htmls.entitys.Gfh_entity_.Space_bry);
+					full_bfr.Add(Bry_.new_a7("</p>"));
+				}
+				else
+					full_bfr.Add(gplx.langs.htmls.entitys.Gfh_entity_.Space_bry);	// $out.= "&#32;"; REF.MW:ProofreadPageRenderer.pn
 			}
 		}
 		finally {

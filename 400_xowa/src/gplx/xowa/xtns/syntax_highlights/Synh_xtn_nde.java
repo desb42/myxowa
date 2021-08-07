@@ -73,7 +73,7 @@ public class Synh_xtn_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		bfr.Add(Bry_.new_a7(Base64Converter.Encode(Bry_.Mid(src, xnde.Tag_open_bgn(), xnde.Tag_close_end()))));
-                bfr.Add_str_a7("!!");
+                bfr.Add_str_a7("$$");
 //		Synh_xtn_nde_.Make(bfr, app, src, xnde.Tag_open_end(), xnde.Tag_close_bgn(), lang, inline, style, line_enabled, start, highlight_idxs, klass, id, dir);
 	}
 	private static final byte

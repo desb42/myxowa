@@ -85,7 +85,7 @@ public class Xofulltext_indexer_mgr {
 					byte[] html_text;
 					if (iswiki) {
 						wiki.Html__hdump_mgr().Load_mgr().Load_by_wiki(hpg, page_ttl, false);
-						html_text = wikistrip.Search_text(hpg.Db().Text().Text_bry(), page_ttl);
+						html_text = wikistrip.Search_text(hpg.Db().Text().Text_bry(), page_ttl, wiki);
 					}
 					else {
 						if (!html_db.Tbl__html().Select_by_page(hpg))

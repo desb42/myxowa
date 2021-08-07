@@ -46,7 +46,7 @@ public class Xop_redirect_mgr {
 		if (bgn == src_len) return Redirect_null_ttl; // article is entirely whitespace
 		// check for json (wikidata redirect)
 		if (src[bgn] == '{') {
-			if (src_len - bgn < 100 && src[bgn+1] != '{') { // only small json data
+			if (src_len - bgn < 100 && src[bgn+1] != '{' && src[bgn+1] != '|') { // only small json data
 				if (bgn > 0)
 					src = Bry_.Mid(src, bgn);
 				Json_doc jdoc = null;

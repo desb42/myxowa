@@ -18,10 +18,11 @@ import gplx.core.primitives.*; import gplx.dbs.*;
 import gplx.xowa.files.repos.*; import gplx.xowa.files.fsdb.*; import gplx.xowa.files.downloads.*;
 import gplx.xowa.apps.wms.apis.*; import gplx.xowa.apps.wms.apis.origs.*;
 public class Xof_orig_mgr {
+	private Xof_orig_wkr invalid_wkr = null;
 	private Xof_orig_wkr[] wkrs; private int wkrs_len;
 	private Xof_url_bldr url_bldr; private Xow_repo_mgr repo_mgr; private final    Xof_img_size img_size = new Xof_img_size();
 	public Xof_orig_mgr() {this.Wkrs__clear();}
-	public void Init_by_wiki(Xow_wiki wiki, Xof_fsdb_mode fsdb_mode, Xof_orig_tbl[] orig_tbls, Xof_url_bldr url_bldr) {
+	public void Init_by_wiki(Xow_wiki wiki, Xof_fsdb_mode fsdb_mode, Xof_orig_tbl[] orig_tbls, Xof_url_bldr url_bldr, Xof_orig_tbl invalidtab) {
 		this.repo_mgr = wiki.File__repo_mgr(); this.url_bldr = url_bldr;
 
 		// if embeddable, do not load orig wkrs which will download images DATE:2017-10-23
@@ -43,6 +44,8 @@ public class Xof_orig_mgr {
 			}
 			this.Wkrs__add(new Xof_orig_wkr__wmf_api(new Xoapi_orig_wmf(), wiki.App().Wmf_mgr().Download_wkr(), repo_mgr, wiki.Domain_bry()));
 		}
+		if (invalidtab != null)
+			invalid_wkr = new Xof_orig_wkr__orig_db(invalidtab, true); // make sure we can write to the 'invalid' table
 	}
 	public Xof_orig_itm Find_by_ttl_or_null(byte[] ttl) {return Find_by_ttl_or_null(ttl, 0, 1);}
 	public Xof_orig_itm Find_by_ttl_or_null(byte[] ttl, int list_idx, int list_len) {
@@ -52,7 +55,9 @@ public class Xof_orig_mgr {
 			if (orig.Insert_new()) this.Insert(orig.Repo(), ttl, orig.Ext_id(), orig.W(), orig.H(), orig.Redirect()); // NOTE: orig_page must be same as find_arg not orig.Page() else will not be found for next call; DATE:2015-04-14
 			return orig;
 		}
-                this.Insert((byte)0, ttl, -1, 0, 0, Bry_.Empty); // make sure this is 'cached'
+//		if (invalid_wkr != null) {
+//			invalid_wkr.Add_orig((byte)-1, ttl, -1,  0, 0, Bry_.Empty); // make sure this is 'cached'
+//		}
 		return Xof_orig_itm.Null;
 	}
 	public void Find_by_list(Ordered_hash rv, List_adp itms, int exec_tid) {

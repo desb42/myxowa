@@ -235,7 +235,7 @@ public class Db_wikistrip {
 		int levelcount = 1;
 		int endpos = 0;
 		int startpos = pos;
-		int barpos = 0;
+		int barpos = -1;
 		while (pos < src_len) {
 			byte b = src[pos++];
 			switch (b) {
@@ -250,7 +250,8 @@ public class Db_wikistrip {
 					}
 					break;
 				case '|':
-					barpos = pos;
+					if (barpos == -1)
+						barpos = pos; // first pipe
 					break;
 			}
 		}
@@ -263,7 +264,7 @@ public class Db_wikistrip {
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "unclosed [ ttl=~{0} pos=~{2} src=~{1}", ttl.Full_db(), Bry_.Mid(src, beg, end), startpos);
 			return startpos + 1; // skip the '['
 		}
-		// check for File: and Category: [what about other langage wikis?]
+		// check for File: and Category: [what about other language wikis?]
 		if (!check_ns(src, startpos, endpos)) {
 			// beware bad links
 			// beware pipe trick (currently use full link)
@@ -410,7 +411,7 @@ public class Db_wikistrip {
 		return tagend;
 	}
 
-	public byte[] Strip_wiki(byte[] src, boolean firstparaonly) {
+	public byte[] Strip_wiki(byte[] src, boolean firstparaonly, Xowe_wiki wiki) {
 		Bry_bfr bfr = Bry_bfr_.New();
 		int src_len = src.length;
 		int startpos = 0;
@@ -430,6 +431,7 @@ public class Db_wikistrip {
 							bfr.Add_mid(src, startpos, pos-1);
 							int namestart = pos + 1;
 							pos = findclosingsquiggle(src, src_len, pos + 1);
+/*
 							if ((src[namestart] | 32) == 'p' && src[namestart+1] == 'H' && (src[namestart+2] == ' ' || src[namestart+2] == '_') && src[namestart+3] == 'w' && src[namestart+4] == 'i' && src[namestart+5] == 'k' && src[namestart+6] == 'i' && src[namestart+7] == 'd' && src[namestart+8] == 'a' && src[namestart+9] == 't' && src[namestart+10] == 'a') { // PH wikidata
 								//bfr.Add(Compile3(Bry_.Mid(src, namestart-2, pos), page));
 							}
@@ -472,7 +474,35 @@ public class Db_wikistrip {
 									bfr.Add(Strip_wiki(txt, false));
 								}
 							}
-							startpos = pos;
+*/
+							// allow some templates?
+							boolean template = false;
+							switch((src[namestart] | 32)) {
+								case 'c':
+									if (src[namestart+1] == 'o' && src[namestart+2] == 'n') // convert
+										template = true;
+									break;
+								case 'd':
+									if (src[namestart+1] == 'a' && src[namestart+2] == 't' && src[namestart+3] == 'e') // fr:template:date
+										template = true;
+									break;
+								case 'l':
+									if (src[namestart+1] == 'a' && src[namestart+2] == 'n' && src[namestart+3] == 'g' && (src[namestart+4] == '|' || src[namestart+4] == '-')) // lang...
+										template = true;
+									break;
+								case 'n':
+									if (src[namestart+1] == 'i' && src[namestart+2] == 'h' && src[namestart+3] == 'o' && src[namestart+4] == 'n' && src[namestart+5] == 'g' && src[namestart+6] == 'o') // nihongo
+										template = true;
+									break;
+								case 'p':
+									if (src[namestart+1] == 'H' && (src[namestart+2] == ' ' || src[namestart+2] == '_') && src[namestart+3] == 'w' && src[namestart+4] == 'i' && src[namestart+5] == 'k' && src[namestart+6] == 'i' && src[namestart+7] == 'd' && src[namestart+8] == 'a' && src[namestart+9] == 't' && src[namestart+10] == 'a') // PH wikidata
+										template = true;
+									break;
+							}
+							if (template)
+								startpos = namestart - 2;
+							else
+								startpos = pos;
 						}
 					}
 					break;
@@ -534,7 +564,7 @@ public class Db_wikistrip {
 						}
 						startpos = pos;
 						if (firstparaonly)
-							return bfr.To_bry();
+							return wiki.Parser_mgr().Main().Expand_tmpl(bfr.To_bry());
 					}
 					break;
 				case '_':
@@ -571,11 +601,11 @@ public class Db_wikistrip {
 		}
 		if (startpos < src_len)
 			bfr.Add_mid(src, startpos, src_len);
-		return bfr.To_bry();
+		return wiki.Parser_mgr().Main().Expand_tmpl(bfr.To_bry());
 	}
-	public byte[] Search_text(byte[] src, Xoa_ttl ttl) {
+	public byte[] Search_text(byte[] src, Xoa_ttl ttl, Xowe_wiki wiki) {
 		this.ttl = ttl;
-		src = Strip_wiki(src, false);
+		src = Strip_wiki(src, false, wiki);
 		// now remove '', ''', () and &...; and multiple newlines
 		Bry_bfr bfr = Bry_bfr_.New();
 		int src_len = src.length;
@@ -650,9 +680,9 @@ public class Db_wikistrip {
 		bfr.Add_mid(src, startpos, src_len);
 		return bfr.To_bry();
 	}
-	public byte[] First_para(byte[] src, Xoa_ttl ttl) {
+	public byte[] First_para(byte[] src, Xoa_ttl ttl, Xowe_wiki wiki) {
 		this.ttl = ttl;
-		src = Strip_wiki(src, true);
+		src = Strip_wiki(src, true, wiki);
 		// now change '' and '''
 		Bry_bfr bfr = Bry_bfr_.New();
 		int src_len = src.length;
@@ -812,6 +842,16 @@ public class Db_wikistrip {
 					else {
 						bfr.Add_byte(Byte_ascii.Amp);
 						pos = startpos;
+					}
+					break;
+				case '[':
+					if (pos < src_len) {
+						b = src[pos];
+						if (b == '[') {
+							bfr.Add_mid(src, startpos, pos-1);
+							pos = findclosingsquare(src, src_len, pos, bfr);
+							startpos = pos;
+						}
 					}
 					break;
 			}

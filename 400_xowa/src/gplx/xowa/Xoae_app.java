@@ -30,7 +30,9 @@ import gplx.xowa.wikis.tdbs.*; import gplx.xowa.wikis.tdbs.hives.*; import gplx.
 import gplx.xowa.addons.*; import gplx.xowa.specials.mgrs.*;
 import gplx.xowa.addons.apps.cfgs.*; import gplx.xowa.apps.miscs.*;
 public class Xoae_app implements Xoa_app, Gfo_invk {
+	public static Io_url Root_dir() {return static_root_dir;} private static Io_url static_root_dir;
 	public Xoae_app(Gfo_usr_dlg usr_dlg, Xoa_app_mode mode, Io_url root_dir, Io_url pages_articles_file, Io_url wiki_dir, Io_url file_dir, Io_url user_dir, Io_url css_dir, String bin_dir_name) {
+		static_root_dir = root_dir;
 		Xoa_app_.Usr_dlg_(usr_dlg);
 		usr_dlg.Log_wkr().Log_to_session_fmt("app.ctor.bgn");
 

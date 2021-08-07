@@ -13,7 +13,8 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.envs; import gplx.*; import gplx.core.*;
+package gplx.core.envs;import com.ibm.icu.impl.duration.TimeUnit;
+ import gplx.*; import gplx.core.*;
 import gplx.Bool_;
 import gplx.Bry_;
 import gplx.Bry_bfr;
@@ -112,7 +113,7 @@ public class Process_adp implements Gfo_invk, Rls_able {
 		else	return Gfo_invk_.Rv_unhandled;
 		return this;
 	}
-	static final    String Invk_cmd = "cmd", Invk_cmd_ = "cmd_", Invk_args = "args", Invk_args_ = "args_", Invk_cmd_args_ = "cmd_args_", Invk_enabled = "enabled", Invk_enabled_ = "enabled_", Invk_mode_ = "mode_", Invk_timeout_ = "timeout_", Invk_tmp_dir_ = "tmp_dir_", Invk_owner = "owner";
+	static final String Invk_cmd = "cmd", Invk_cmd_ = "cmd_", Invk_args = "args", Invk_args_ = "args_", Invk_cmd_args_ = "cmd_args_", Invk_enabled = "enabled", Invk_enabled_ = "enabled_", Invk_mode_ = "mode_", Invk_timeout_ = "timeout_", Invk_tmp_dir_ = "tmp_dir_", Invk_owner = "owner";
 	Bry_fmtr_eval_mgr cmd_url_eval;
 	public static Process_adp ini_(Gfo_invk owner, Gfo_usr_dlg usr_dlg, Process_adp process, Bry_fmtr_eval_mgr cmd_url_eval, byte run_mode, int timeout, String cmd_url_fmt, String args_fmt, String... args_keys) {
 		process.Run_mode_(run_mode).Thread_timeout_seconds_(timeout);
@@ -165,54 +166,54 @@ public class Process_adp implements Gfo_invk, Rls_able {
 		Process_start();
 		return this;
 	}
-    public Process_adp Run_async() {
+	public Process_adp Run_async() {
 		if (Env_.Mode_testing()) return Test_runs_add();
-        Process_bgn();
-        Thread_ProcessAdp_async thread = new Thread_ProcessAdp_async(this);
-        thread.start();
+		Process_bgn();
+		Thread_ProcessAdp_async thread = new Thread_ProcessAdp_async(this);
+		thread.start();
 		return this;
-    }
-    public Process_adp Run_wait() {
-		if (Env_.Mode_testing()) return Test_runs_add();
-        int notify_interval = 100; int notify_checkpoint = notify_interval;
-        int elapsed = 0;
-		try {
-	        Process_bgn();
-	        Thread_ProcessAdp_sync thread = new Thread_ProcessAdp_sync(this);
-	        thread.start();
-	//        thread_timeout = 15000;
-	        boolean thread_run = false;
-	        notify_fmtr.Fmt_(prog_fmt);
-	        while (thread.isAlive()) {
-	        	thread_run = true;
-	        	long prv = System_.Ticks();
-	        	Thread_adp_.Sleep(thread_interval);
-//	        	try {thread.join(thread_interval);}
-//	        	catch (InterruptedException e) {throw Err_.err_key_(e, "gplx.ProcessAdp", "thread interrupted at join");}
-	        	long cur = System_.Ticks();
-	        	int dif = (int)(cur - prv); 
-	        	elapsed += dif;
-	        	if (prog_dlg != null) {
-	        		if (elapsed > notify_checkpoint) {
-	        			elapsed = notify_checkpoint;
-	        			notify_checkpoint += notify_interval;
-	        			notify_fmtr.Bld_bfr_many(notify_bfr, exe_url.NameAndExt(), args_str, elapsed / 1000);
-	        			prog_dlg.Prog_none(GRP_KEY, "notify.prog", notify_bfr.To_str_and_clear());
-	        		}
-	        	}
-	        	if (thread_timeout == 0) break;
-	        	if (elapsed > thread_timeout) {
-	        		thread.interrupt();
-	        		thread.Cancel();
-	        		try {thread.join();}
-	        		catch (InterruptedException e) {throw Err_.new_exc(e, "core", "thread interrupted at timeout");}
-	        		break;
-	        	}
-	        }
-	        if (!thread_run) {
-        		try {thread.join();}
-        		catch (InterruptedException e) {throw Err_.new_exc(e, "core", "thread interrupted at join 2");}	        	
-	        }
+	}
+			public Process_adp Run_wait() {
+			if (Env_.Mode_testing()) return Test_runs_add();
+			int notify_interval = 100; int notify_checkpoint = notify_interval;
+			int elapsed = 0;
+			try {
+			Process_bgn();
+			Thread_ProcessAdp_sync thread = new Thread_ProcessAdp_sync(this);
+			thread.start();
+			//        thread_timeout = 15000;
+			boolean thread_run = false;
+			notify_fmtr.Fmt_(prog_fmt);
+			while (thread.isAlive()) {
+				thread_run = true;
+				long prv = System_.Ticks();
+				Thread_adp_.Sleep(thread_interval);
+				//	        	try {thread.join(thread_interval);}
+				//	        	catch (InterruptedException e) {throw Err_.err_key_(e, "gplx.ProcessAdp", "thread interrupted at join");}
+				long cur = System_.Ticks();
+				int dif = (int)(cur - prv); 
+				elapsed += dif;
+				if (prog_dlg != null) {
+					if (elapsed > notify_checkpoint) {
+						elapsed = notify_checkpoint;
+						notify_checkpoint += notify_interval;
+						notify_fmtr.Bld_bfr_many(notify_bfr, exe_url.NameAndExt(), args_str, elapsed / 1000);
+						prog_dlg.Prog_none(GRP_KEY, "notify.prog", notify_bfr.To_str_and_clear());
+					}
+				}
+				if (thread_timeout == 0) break;
+				if (elapsed > thread_timeout) {
+					thread.interrupt();
+					thread.Cancel();
+					try {thread.join();}
+					catch (InterruptedException e) {throw Err_.new_exc(e, "core", "thread interrupted at timeout");}
+					break;
+				}
+			}
+			if (!thread_run) {
+				try {thread.join();}
+				catch (InterruptedException e) {throw Err_.new_exc(e, "core", "thread interrupted at join 2");}	        	
+			}
 		} catch (Exception exc) {
 			Tfds.Write(Err_.Message_gplx_full(exc));
 		}
@@ -220,16 +221,30 @@ public class Process_adp implements Gfo_invk, Rls_able {
 			notify_fmtr.Bld_bfr_many(notify_bfr, exe_url.NameAndExt(), args_str, elapsed / 1000);
 			if (prog_dlg != null) prog_dlg.Prog_none(GRP_KEY, "notify.prog", notify_bfr.To_str_and_clear());
 		}
-        return this;
-    }
-    public synchronized void Process_post(String result) {
-        exit_code = process.exitValue();
-        rslt_out = result;
-        WhenEnd_run();
-        process.destroy();    	
-    }
-    String Kill() {
-    	if (thread_kill_name == String_.Empty) return "";
+		return this;
+	}
+	public synchronized void Process_post(String result) {
+		rslt_out = result;
+		while (true) {
+			try {
+				exit_code = process.exitValue();
+			break;
+			}
+			catch (IllegalThreadStateException e) {
+			
+			}
+			try {
+				process.waitFor(1, java.util.concurrent.TimeUnit.SECONDS);
+			}
+			catch (InterruptedException e) {
+			
+			}
+		}
+		WhenEnd_run();
+		process.destroy();
+	}
+	String Kill() {
+		if (thread_kill_name == String_.Empty) return "";
 //		Runtime rt = Runtime.getRuntime();
 		String kill_exe = "", kill_args = "";
 		if (Op_sys.Cur().Tid_is_wnt()) {
@@ -244,7 +259,7 @@ public class Process_adp implements Gfo_invk, Rls_able {
 		Process_adp kill_process = new Process_adp().Exe_url_(Io_url_.new_fil_(kill_exe)).Args_str_(kill_args).Thread_kill_name_("");
 		boolean pass = kill_process.Run_wait().Exit_code_pass();
 		return "killed|" + kill_exe + "|" + kill_args + "|" + pass + "|" + exe_url.Raw() + "|" + args_str;
-    }
+	}
 	synchronized void Process_bgn() {
 		exit_code = Exit_init;
 		rslt_out = "";
@@ -268,19 +283,19 @@ public class Process_adp implements Gfo_invk, Rls_able {
 	}
 	void Process_run_and_end() {
 		String_bldr sb = String_bldr_.new_();	
-	    BufferedReader rdr = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        try {
-    	    String line = "";
-		    while ((line = rdr.readLine()) != null)
-		    	sb.Add_str_w_crlf(line);
-	    	process.waitFor();
-        }
-        catch (InterruptedException e) 	{throw Err_.new_exc(e, "core", "thread interrupted at wait_for", "exe_url", exe_url.Xto_api(), "exeArgs", args_str);}
-        catch (IOException e) 			{throw Err_.new_exc(e, "core", "io error", "exe_url", exe_url.Xto_api(), "exeArgs", args_str);}
-        exit_code = process.exitValue();
-        WhenEnd_run();
-        process.destroy();
-    	rslt_out = sb.To_str_and_clear();    	
+		BufferedReader rdr = new BufferedReader(new InputStreamReader(process.getInputStream()));
+		try {
+			String line = "";
+			while ((line = rdr.readLine()) != null)
+			sb.Add_str_w_crlf(line);
+			process.waitFor();
+		}
+		catch (InterruptedException e) 	{throw Err_.new_exc(e, "core", "thread interrupted at wait_for", "exe_url", exe_url.Xto_api(), "exeArgs", args_str);}
+		catch (IOException e) 			{throw Err_.new_exc(e, "core", "io error", "exe_url", exe_url.Xto_api(), "exeArgs", args_str);}
+		exit_code = process.exitValue();
+		WhenEnd_run();
+		process.destroy();
+		rslt_out = sb.To_str_and_clear();
 	}
 	public void Process_term() {
 		try {
@@ -295,7 +310,7 @@ public class Process_adp implements Gfo_invk, Rls_able {
 		process.Process_run_and_end();
 		return;
 	}
-		public static final    List_adp Test_runs = List_adp_.New();
+		public static final List_adp Test_runs = List_adp_.New();
 	private Process_adp Test_runs_add() {Test_runs.Add(exe_url.Raw() + " " + args_str); exit_code = Exit_pass; return this;}
 	public static int run_wait_arg_(Io_url url, String arg) {
 		Process_adp process = new Process_adp();
@@ -332,9 +347,9 @@ class Thread_ProcessAdp_async extends Thread {
 	public Thread_ProcessAdp_async(Process_adp process_adp) {this.process_adp = process_adp;} Process_adp process_adp;
 	public boolean Done() {return done;} boolean done = false;
 	public void Cancel() {process_adp.UnderProcess().destroy();}
-    public void run() {
-    	process_adp.Run_wait();
-    }
+	public void run() {
+		process_adp.Run_wait();
+	}
 }
 class Thread_ProcessAdp_sync extends Thread {
 	public Thread_ProcessAdp_sync(Process_adp process_adp) {this.process_adp = process_adp;} private final Process_adp process_adp;
@@ -342,37 +357,38 @@ class Thread_ProcessAdp_sync extends Thread {
 	public void Cancel() {
 		process_adp.UnderProcess().destroy();
 	}
-    public synchronized void run() {
-    	done = false;
-    	try {
+	public synchronized void run() {
+		done = false;
+		try {
 			Process process = process_adp.Process_start();
 			StreamGobbler input_gobbler = new StreamGobbler("input", process.getInputStream());
 			StreamGobbler error_gobbler = new StreamGobbler("error", process.getErrorStream());
 			input_gobbler.start();
 			error_gobbler.start();
-	        try {process.waitFor();}
-	        catch (InterruptedException e) 	{
-	        	this.Cancel();
-	        	String kill_rslt = process_adp.Kill();        	
-	            process_adp.Process_post(kill_rslt);
-	        	done = false;
-	        	return;
-	        }
-	        while (input_gobbler.isAlive()) {
-	        	try {input_gobbler.join(50);}
-	        	catch (InterruptedException e) {throw Err_.new_exc(e, "core", "thread interrupted at input gobbler");}
-	        }
-	        while (error_gobbler.isAlive()) {
-	        	try {error_gobbler.join(50);}
-	        	catch (InterruptedException e) {throw Err_.new_exc(e, "core", "thread interrupted at error gobbler");}
-	        }
-	        String result = input_gobbler.Rslt() + "\n" + error_gobbler.Rslt();
-	        process_adp.Process_post(result);
-    	} 	catch (Exception e) {	// NOTE: warn; do not throw, else multiple errors if timidity not available; PAGE:fr.u:Pentatoniques_altérées/Gammes_avec_deux_notes_altérées DATE:2015-05-08
-    		//???!! Gfo_usr_dlg_.Instance.Warn_many("", "", "process.sync failed; cmd=~{0} args=~{1}", process_adp.Exe_url().Raw(), process_adp.Args_str());    		
-    	}
-    	finally {done = true;}
-    }
+			try {process.waitFor();}
+			catch (InterruptedException e) 	{
+				this.Cancel();
+				String kill_rslt = process_adp.Kill();
+				process_adp.Process_post(kill_rslt);
+				done = false;
+				return;
+			}
+			while (input_gobbler.isAlive()) {
+				try {input_gobbler.join(50);}
+				catch (InterruptedException e) {throw Err_.new_exc(e, "core", "thread interrupted at input gobbler");}
+			}
+			while (error_gobbler.isAlive()) {
+				try {error_gobbler.join(50);}
+				catch (InterruptedException e) {throw Err_.new_exc(e, "core", "thread interrupted at error gobbler");}
+			}
+			String result = input_gobbler.Rslt() + "\n" + error_gobbler.Rslt();
+			process_adp.Process_post(result);
+		}
+		catch (Exception e) {	// NOTE: warn; do not throw, else multiple errors if timidity not available; PAGE:fr.u:Pentatoniques_altérées/Gammes_avec_deux_notes_altérées DATE:2015-05-08
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "process.sync failed; cmd=~{0} args=~{1}", process_adp.Exe_url().Raw(), process_adp.Args_str());
+		}
+		finally {done = true;}
+	}
 }
 class StreamGobbler extends Thread {
 	private final String name; private final InputStream stream;

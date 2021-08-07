@@ -137,6 +137,7 @@ public class Http_server_wkr implements Gfo_invk {
 			else if (url_parser.Action() == Xopg_view_mode_.Tid__firstpara) {
 				if (page.Page() != null) {
 					wikitext = page.Page().Db().Text().Text_bry();
+                                        page.Wiki().Parser_mgr().Ctx().Page().Ttl_(page.Ttl());	// NOTE: must set cur_page, else page-dependent templates won't work; EX: {{FULLPAGENAME}};
 				}
 				byte[] thumb = null;
 				byte[] orig = null;
@@ -168,7 +169,7 @@ public class Http_server_wkr implements Gfo_invk {
 				byte[] page_title = page.Ttl().Full_db_wo_ns();
 				json_fmtr.Bld_bfr_many(bfr, 
                                 stype, page_title, page.Page().Db().Page().Id(), 
-                                thumb, orig, ws.First_para(wikitext, page.Ttl()),
+                                thumb, orig, ws.First_para(wikitext, page.Ttl(), page.Wiki()),
                                 page.Wiki().Lang().Key_bry(), page.Wiki().Lang().Dir_ltr_bry());
 
 				page_html = String_.new_u8(bfr.To_bry());
@@ -176,14 +177,17 @@ public class Http_server_wkr implements Gfo_invk {
 			}
 			else {
 				page_html = page.Html();
-				byte[] stripped = null;
-				if (page.Page() != null && page.Page().Db().Page().Format() == Xob_xml_parser.Format_wiki) { //1 <format>text/x-wiki</format>
-					wikitext = page.Page().Db().Text().Text_bry();
-					stripped = ws.Search_text(wikitext, page.Ttl()); //.Strip_wiki(wikitext);
-				}
-				if (stripped != null) {
-					page_html += "----\n" + String_.new_u8(stripped);
-					page_html += "----\n" + String_.new_u8(ws.First_para(wikitext, page.Ttl()));
+				boolean show_stripped = true;//false;
+				if (show_stripped) {
+					byte[] stripped = null;
+					if (page.Page() != null && page.Page().Db().Page().Format() == Xob_xml_parser.Format_wiki) { //1 <format>text/x-wiki</format>
+						wikitext = page.Page().Db().Text().Text_bry();
+						stripped = ws.Search_text(wikitext, page.Ttl(), page.Wiki()); //.Strip_wiki(wikitext);
+					}
+					if (stripped != null) {
+						page_html += "----\n" + String_.new_u8(stripped);
+						page_html += "----\n" + String_.new_u8(ws.First_para(wikitext, page.Ttl(), page.Wiki()));
+					}
 				}
 			}
 			if (page_html == null) {
@@ -203,7 +207,7 @@ public class Http_server_wkr implements Gfo_invk {
 				}
 			}
 			response.Set_content_type(page.Content_type());
-                        response.Set_content_lang(page.Wiki().Lang());
+			response.Set_content_lang(page.Wiki().Lang());
 //testing                        page.Wiki().Cache_mgr().Page_cache().Cleanup();
 //testing		Xowe_wiki_.Rls_mem(page.Wiki(), true);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!test
 		}
@@ -467,7 +471,7 @@ public class Http_server_wkr implements Gfo_invk {
 	private static String test_wikistrip() {
             byte[] wiki = Load_from_file_as_bry(rootdir + "wiki_test.txt");
             Db_wikistrip ws = new Db_wikistrip();
-            byte[] stripped = ws.Strip_wiki(wiki, false);
+            byte[] stripped = ws.Strip_wiki(wiki, false, null);
             return String_.new_u8(stripped);
 	}
         private static void perform() {

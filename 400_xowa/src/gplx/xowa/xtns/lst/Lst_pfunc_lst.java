@@ -30,14 +30,13 @@ public class Lst_pfunc_lst extends Pf_func_base {
 		// parse
 		Lst_pfunc_itm itm = Lst_pfunc_itm.New_sect_or_null(ctx, page_ttl); if (itm == null) return;
 		//Lst_pfunc_lst_.Sect_include(bfr, itm.Sec_mgr(), itm.Itm_src(), sect_bgn, sect_end);
-                Db_Section_list sect = itm.Sect();
-                if (sect == null) { // got here via section-h?
+		Db_Section_list sect = itm.Sect();
+		if (sect == null) { // got here via section-h?
 			Xop_ctx sub_ctx = Xop_ctx.New__top(ctx.Wiki()).Ref_ignore_(true);
-                        Xoa_ttl ttl = ctx.Page().Ttl();
+			Xoa_ttl ttl = ctx.Page().Ttl();
 			sub_ctx.Page().Ttl_(ttl);	// NOTE: must set ttl on page, else test fails;
-			
-                        sect = new Db_Section_list(itm.Itm_src(), 0, ctx, sub_ctx, ttl, null);
-                }
+			sect = new Db_Section_list(itm.Itm_src(), 0, ctx, sub_ctx, ttl, null);
+		}
 		Lst_pfunc_lst_.Sect_include(bfr, sect, sect_bgn, sect_end);
 	}
 

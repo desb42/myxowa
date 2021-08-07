@@ -75,7 +75,7 @@ class Xofulltext_highlighter_mgr implements Gfo_invk {
 			wiki.Html__hdump_mgr().Load_mgr().Load_by_wiki(hpg, page_ttl, false); // don't load categories for perf reasons
 		}
 		//byte[] html = hpg.Db().Html().Html_bry();
-		html = extractor.Extract(hpg.Db(), page_ttl);
+		html = extractor.Extract(hpg.Db(), page_ttl, (Xowe_wiki)wiki); //???20210728 does this work???
 		item.body = String_.new_u8(html);
 
 		// loop pages

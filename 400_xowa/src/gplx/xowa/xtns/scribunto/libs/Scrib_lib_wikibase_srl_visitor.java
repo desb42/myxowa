@@ -89,9 +89,17 @@ public class Scrib_lib_wikibase_srl_visitor implements Wbase_claim_visitor {
 		rv[1] = Keyval_.new_(Scrib_lib_wikibase_srl.Key_value, Time_value(itm));
 	}
 	private static Keyval[] Time_value(Wbase_claim_time itm) {
+		// HACK 20210719 - if time is precision=9 (year) make sure of a valid day and month
+		int prec = itm.Precision_int();		// NOTE: must return int, not str; DATE:2014-02-18
+		String tme = String_.new_a7(itm.Time());
+		if (prec == 9) {
+			tme = tme.substring(0,5) + "-01-01T00:00:00Z"; // this is NOT what mw does
+			// ex en.wikipedia.org/wiki/Bacalar_Municipality
+			// mw subtracts one day (to previous year - this is wrong)
+		}
 		Keyval[] rv = new Keyval[6];
-		rv[0] = Keyval_.new_(Wbase_claim_time_.Itm__time.Key_str()				, String_.new_a7(itm.Time()));
-		rv[1] = Keyval_.new_(Wbase_claim_time_.Itm__precision.Key_str()			, itm.Precision_int());		// NOTE: must return int, not str; DATE:2014-02-18
+		rv[0] = Keyval_.new_(Wbase_claim_time_.Itm__time.Key_str()				, tme);
+		rv[1] = Keyval_.new_(Wbase_claim_time_.Itm__precision.Key_str()			, prec);
 		rv[2] = Keyval_.new_(Wbase_claim_time_.Itm__before.Key_str()			, itm.Before_int());
 		rv[3] = Keyval_.new_(Wbase_claim_time_.Itm__after.Key_str()				, itm.After_int());
 		rv[4] = Keyval_.new_(Wbase_claim_time_.Itm__timezone.Key_str()			, Wbase_claim_time_.Dflt__timezone.Val_int());	// ASSUME: always 0 b/c UTC?; DATE:2015-09-21

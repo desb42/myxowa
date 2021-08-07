@@ -81,7 +81,7 @@ public class Db_highlight {
 					if (synpos_end > 0) {
 						bfr.Add_mid(src, startpos, synpos_bgn);
 						bfr.Add(Bry_.new_a7(Base64Converter.Encode(Bry_.Mid(src, synpos_bgn, synpos_end))));
-						bfr.Add_str_a7("!!");
+						bfr.Add_str_a7("$$");
 						startpos = synpos_end;
                                                 page.Html_data().Syntaxhighlight_(true);
 					}
@@ -109,9 +109,9 @@ public class Db_highlight {
 					int b64_bgn = pos - 1;
 					pos += 50;
 					int b64_end = -1;
-					while (pos < src_len) {
+					while (pos < src_len) { // look for "$$"
 						b = src[pos++];
-						if (b == '!' && src[pos] == '!') {
+						if (b == '$' && src[pos] == '$') {
 							b64_end = pos + 1;
 							break;
 						}

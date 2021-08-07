@@ -32,6 +32,7 @@ public class Fsdb_db_mgr__v1 implements Fsdb_db_mgr {
 		this.atr_file__user	= get_db(Get_atr_db_url(Bool_.N, file_dir, Fsm_mnt_tbl.Mnt_name_user));			// EX: /xowa/enwiki/fsdb.user/fsdb.atr.00.sqlite3
 		this.orig_tbl_ary	= new Xof_orig_tbl[] {new Xof_orig_tbl(orig_file.Conn(), this.File__schema_is_1())};
 	}
+	public Xof_orig_tbl Invalidtab() {return null;}
 	public boolean				File__schema_is_1()					{return Bool_.Y;}
 	public boolean				File__solo_file()					{return Bool_.N;}
 	public String			File__cfg_tbl_name()				{return "fsdb_cfg";}

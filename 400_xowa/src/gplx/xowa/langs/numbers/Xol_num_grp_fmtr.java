@@ -53,6 +53,10 @@ public class Xol_num_grp_fmtr {
 					pos = num_end;
 					break;
 				}
+				case 127: // strip marker?
+					bfr.Add_mid(src, pos, src_len);
+					pos = src_len;
+					break;
 				default:
 					if (dirty)
 						bfr.Add_byte(b);

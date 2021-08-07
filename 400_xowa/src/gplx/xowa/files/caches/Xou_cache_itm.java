@@ -69,11 +69,16 @@ public class Xou_cache_itm {
 	}
 	public static final    Xou_cache_itm Null = null;
 	public static byte[] Key_gen(Bry_bfr key_bfr, byte[] lnki_wiki_abrv, byte[] ttl, int type, double upright, int w, int h, double time, int page, int user_thumb_w) {
-		key_bfr.Add(lnki_wiki_abrv).Add_byte_pipe()
-			.Add(ttl).Add_byte_pipe().Add_int_variable(type).Add_byte_pipe().Add_double(upright).Add_byte_pipe()
-			.Add_int_variable(w).Add_byte_pipe().Add_int_variable(h).Add_byte_pipe().Add_double(time).Add_byte_pipe().Add_int_variable(page)
-			.Add_int_variable(user_thumb_w)
-			;
+		key_bfr.Add(lnki_wiki_abrv)
+		       .Add_byte_pipe().Add(ttl)
+		       .Add_byte_pipe().Add_int_variable(type)
+		       .Add_byte_pipe().Add_double(upright)
+		       .Add_byte_pipe().Add_int_variable(w)
+		       .Add_byte_pipe().Add_int_variable(h)
+		       .Add_byte_pipe().Add_double(time)
+		       .Add_byte_pipe().Add_int_variable(page)
+		       .Add_byte_pipe().Add_int_variable(user_thumb_w)
+		 ;
 		return key_bfr.To_bry_and_clear();
 	}
 }

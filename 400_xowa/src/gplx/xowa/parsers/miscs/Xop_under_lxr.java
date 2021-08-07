@@ -76,6 +76,7 @@ public class Xop_under_lxr implements Xop_lxr {
 	, Xol_kwd_grp_.Id_hiddencat, Xol_kwd_grp_.Id_index, Xol_kwd_grp_.Id_noindex, Xol_kwd_grp_.Id_staticredirect
 	, Xol_kwd_grp_.Id_disambig
 	, Xol_kwd_grp_.Id_expectunusedcategory, Xol_kwd_grp_.Id_nonewsectionlink
+	, Xol_kwd_grp_.Id_expectedunconnectedpage
 	};
 	private static final    Btrie_fast_mgr Hook_trie = Btrie_fast_mgr.cs()
 	.Add(Xop_under_hook.Key_std, Xop_under_hook.Itm_std)

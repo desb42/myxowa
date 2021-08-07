@@ -19,7 +19,7 @@ public class Lst_pfunc_lst_ {
 	private static final byte Include_between = 0, Include_to_eos = 1, Include_to_bos = 2;
 	public static void Sect_include(Bry_bfr bfr, Db_Section_list sect, byte[] lst_bgn, byte[] lst_end) {
                 byte[] txt = sect.Include(lst_bgn, lst_end);
-                //System.out.println(String_.new_a7(txt));
+//                System.out.println(String_.new_a7(txt));
                 bfr.Add(txt);
 /*                
             Lst_section_nde_mgr sec_mgr = itm.Sec_mgr();

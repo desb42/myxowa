@@ -280,5 +280,6 @@ kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_expectunusedcategory, "__EXPECTUNUSEDCATEGO
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_nonewsectionlink, "__NONEWSECTIONLINK__");
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_shortdesc, "SHORTDESC");
 kwd_mgr.New(Bool_.N, Xol_kwd_grp_.Id_related, "#xxxrelated"); // duplicate
+kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_expectedunconnectedpage, "__EXPECTED_UNCONNECTED_PAGE__");
 	}
 }

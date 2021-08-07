@@ -57,12 +57,12 @@ public class Err_ {
 	public static String Message_gplx_full(Exception e)	{return Cast_or_make(e).To_str__full();}
 	public static String Message_gplx_log(Exception e)	{return Cast_or_make(e).To_str__log();}
 
-		public static String Message_lang(Throwable e) {
+	public static String Message_lang(Throwable e) {
 		return Error.class.isAssignableFrom(e.getClass())
 			? e.toString()    // error has null for "getMessage()" return "toString()" instead
 			: e.getMessage();
 	}
-			public static String Trace_lang(Throwable e) 	{return Trace_lang_exec(e.getStackTrace());}
+	public static String Trace_lang(Throwable e) 	{return Trace_lang_exec(e.getStackTrace());}
 	private static String Trace_lang_exec(StackTraceElement[] ary) {
 		String rv = "";
 		int len = ary.length;
@@ -75,5 +75,5 @@ public class Err_ {
 	
 	public static Err Cast_or_null(Exception e) {return Type_.Eq_by_obj(e, Err.class) ? (Err)e : null;}
 	public static Err Cast_or_make(Throwable e) {return Type_.Eq_by_obj(e, Err.class) ? (Err)e : new Err(Bool_.N, Err_.Trace_lang(e), Type_.Name_by_obj(e), Err_.Message_lang(e));}
-	public static final    String Type__op_canceled = "gplx.op_canceled";
+	public static final String Type__op_canceled = "gplx.op_canceled";
 }

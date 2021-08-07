@@ -215,6 +215,7 @@ public class Scrib_lib_language implements Scrib_lib {
 		byte[] fmt_bry = args.Pull_bry(1);
 		byte[] date_bry = args.Cast_bry_or_empty(2); // NOTE: optional empty is required b/c date is sometimes null; use Bry_.Empty b/c this is what Pft_func_time.ParseDate takes; DATE:2013-04-05
 		boolean utc = !args.Cast_bool_or_n(3);
+                //System.out.println(String_.new_u8(fmt_bry) + " " + String_.new_u8(date_bry) + " " + utc);
 
 		// init vars
 		int date_bry_len = date_bry.length;
@@ -251,6 +252,7 @@ public class Scrib_lib_language implements Scrib_lib {
 		// format and return
 		wiki.Parser_mgr().Date_fmt_bldr().Format(tmp_bfr, wiki, lang, date, fmt_ary);
 		byte[] rv = tmp_bfr.To_bry_and_rls();
+                //System.out.println(String_.new_u8(rv));
 		return rslt.Init_obj(rv);
 	}
 	public boolean ParseFormattedNumber(Scrib_proc_args args, Scrib_proc_rslt rslt) {

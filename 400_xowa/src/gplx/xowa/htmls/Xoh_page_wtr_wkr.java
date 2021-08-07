@@ -64,6 +64,7 @@ import gplx.langs.mustaches.Mustache_render_ctx;
 import gplx.langs.mustaches.Mustache_tkn_itm;
 import gplx.langs.mustaches.Mustache_tkn_parser;
 import gplx.Io_url;
+import gplx.Gfo_usr_dlg_;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
@@ -309,7 +310,8 @@ public class Xoh_page_wtr_wkr {
 					case Xow_page_tid.Tid_wikitext:
 						Write_body_wikitext(bfr, app, wiki, data_raw, ctx, hctx, page, page_tid, page_ns_id);
 						if (page.Html_data().Syntaxhighlight())
-							app.SyntaxHighlighter().Highlight_bfr(bfr, wiki.Wrk_id(), wiki.Domain_bry(), page.Ttl());
+                                                    Gfo_usr_dlg_.Instance.Log_many("", "", "#syntaxh_highlight: ttl=~{0}", page_ttl.Full_db());
+//							app.SyntaxHighlighter().Highlight_bfr(bfr, wiki.Wrk_id(), wiki.Domain_bry(), page.Ttl());
 						break;
 				}
 			}

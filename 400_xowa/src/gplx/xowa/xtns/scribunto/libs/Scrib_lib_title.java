@@ -88,7 +88,10 @@ public class Scrib_lib_title implements Scrib_lib {
 			? rslt.Init_obj(null)	// invalid title; exit; matches MW logic
 		    : rslt.Init_obj(GetInexpensiveTitleData(ttl));
 	}
-	public void Notify_page_changed() {if (notify_page_changed_fnc != null) core.Interpreter().CallFunction(notify_page_changed_fnc.Id(), Keyval_.Ary_empty);}
+	public void Notify_page_changed() {
+            if (notify_page_changed_fnc != null)
+                core.Interpreter().CallFunction(notify_page_changed_fnc.Id(), Keyval_.Ary_empty);
+        }
 	public boolean GetUrl(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		Xowe_wiki wiki = core.Wiki();
 		byte[] ttl_bry = args.Pull_bry(0);

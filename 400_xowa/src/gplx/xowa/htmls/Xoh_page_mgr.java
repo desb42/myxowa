@@ -25,8 +25,8 @@ public class Xoh_page_mgr implements Gfo_invk {
 		font_css_bry = font_css_fmt.Bld_many_to_bry(Bry_bfr_.New(), font_name, font_size);
 	}
 	public void Write_css(gplx.xowa.htmls.heads.Xoh_head_wtr wtr) {
-		if (font_enabled)
-			wtr.Write_css_style_itm(font_css_bry);
+//		if (font_enabled) // not sure this is necesaary 20210716
+//			wtr.Write_css_style_itm(font_css_bry);
 		if (Bry_.Len_gt_0(custom_script))
 			wtr.Write_css_style_itm(custom_script);
 	}

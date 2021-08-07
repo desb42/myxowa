@@ -175,7 +175,8 @@ public class DateAdp implements CompareAble, Gfo_invk {
 		//System.out.println(under.getTimeZone());
 	}
 	public void SetTimeZone(ZoneId zoneid) {
-		under = under.withZoneSameLocal(zoneid);
+		//under = ZonedDateTime.of(under.toLocalDateTime(), zoneid); //.withZoneSameLocal(zoneid);
+		under = ZonedDateTime.ofInstant(under.toInstant(), zoneid); //.withZoneSameLocal(zoneid);
 	}
 	public void SetTzOffset(int offset) {
 		under = under.plusSeconds(offset*-1);

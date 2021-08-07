@@ -112,7 +112,7 @@ public class Xowv_wiki implements Xow_wiki, Xow_ttl_parser, Gfo_invk {
 		file_mgr__repo_mgr.Add_repo(app, fsys_mgr.File_dir(), Xow_domain_itm_.Bry__commons, Xow_domain_itm_.Bry__commons);
 		file_mgr__repo_mgr.Add_repo(app, fsys_mgr.File_dir(), domain_bry, domain_bry);
 		Xof_orig_tbl[] orig_tbls = db_core_mgr == null ? new Xof_orig_tbl[0] : db_core_mgr.File__orig_tbl_ary();
-		orig_mgr.Init_by_wiki(this, file_mgr__fsdb_mode, orig_tbls, Xof_url_bldr.new_v2());
+		orig_mgr.Init_by_wiki(this, file_mgr__fsdb_mode, orig_tbls, Xof_url_bldr.new_v2(), null);
 		fsdb_mgr.Init_by_wiki(this);
 		data_mgr__core_mgr.Db__core().Tbl__ns().Select_all(ns_mgr);
 		data_mgr__core_mgr.Db__core().Tbl__site_stats().Select(stats);

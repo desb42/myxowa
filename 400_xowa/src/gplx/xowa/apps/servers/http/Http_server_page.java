@@ -158,6 +158,8 @@ public class Http_server_page {
 
 			byte mode = url_parser.Action();
 			page_html = wiki.Html_mgr().Page_wtr_mgr().Gen(page, mode);
+			if (page.Html_data().Syntaxhighlight())
+				page_html = app.SyntaxHighlighter().Highlight(page_html, wiki.Wrk_id(), wiki.Domain_bry(), page.Ttl());
 			switch (retrieve_mode) {
 				case File_retrieve_mode.Mode_skip:	// noop
 					break;

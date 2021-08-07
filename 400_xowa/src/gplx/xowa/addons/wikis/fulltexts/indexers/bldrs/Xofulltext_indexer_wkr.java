@@ -34,7 +34,7 @@ public class Xofulltext_indexer_wkr {
 	}
 	public void Index(Xoae_page wpg) {
 		synchronized (index_wtr) {// NOTE:synchronized needed for mass_parse; don't launch separate indexer per mp_thread b/c (a) lucene may not handle it well; (b) everything needs to be serialized to the same lucene dir, so no real performance benefits; DATE:2017-04-08
-			byte[] html = extractor.Extract(wpg.Db(), wpg.Ttl());
+			byte[] html = extractor.Extract(wpg.Db(), wpg.Ttl(), wpg.Wikie());
 			Index(wpg.Db().Page().Id(), wpg.Db().Page().Score(), wpg.Ttl().Page_txt(), html);
 		}
 	}

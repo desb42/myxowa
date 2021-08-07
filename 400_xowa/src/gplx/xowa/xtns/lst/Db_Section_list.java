@@ -258,6 +258,7 @@ public class Db_Section_list {
 		return wikie.Parser_mgr().Main().Expand_tmpl(sub_root, sub_ctx, tkn_mkr, msg_val);
 	}
 	private byte[] Compile3(byte[] sub_src) {
+//            return wiki.Wtxt__expand_tmpl(sub_src);
             //System.out.println(String_.new_u8(sub_src));
 		// parse page; note adding to stack to prevent circular recursions
 		if (!wiki.Parser_mgr().Tmpl_stack_add(ttl.Full_db())) return null;

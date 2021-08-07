@@ -65,6 +65,13 @@ public class Pfunc_rel2abs extends Pf_func_base {
 		
 		// qry_len = RTrim(qry, Byte_ascii.Slash, qry_bgn, qry_len); // not needed, but test anyway		
 		if (qry_len == 0) return src;// no qry; return src; EX:{{#rel2abs:|a/b}} -> a/b
+
+		// special case of [[/]] enwiki Wikipedia:Articles_for_deletion/Wes_Watters
+		if (qry_len == 1 && qry[0] == Byte_ascii.Slash) {
+			tmp_bfr.Add(src).Add_byte(Byte_ascii.Slash);
+			return tmp_bfr.To_bry_and_clear();
+		}
+
 		byte[] tmp = src;
 		int tmp_adj = 0, i = 0, prv_slash_end = 0, tmp_len = src_len, seg_pos = 0;
 		boolean tmp_is_1st = true;
@@ -132,7 +139,8 @@ public class Pfunc_rel2abs extends Pf_func_base {
 						case 2:	
 							if (dot_mode) {				// "/../"; pop seg_ary
 								seg_pos -= 2;
-								if (seg_pos < 0) return Bry_.Empty; // FUTURE: return MediaWiki error
+								//was if (seg_pos < 0) return Bry_.Empty; // FUTURE: return MediaWiki error
+								if (seg_pos <= 0) return Bry_.Empty; // FUTURE: return MediaWiki error
 							}
 							else create_seg = true;		// something else; create seg
 							break;

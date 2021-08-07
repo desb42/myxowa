@@ -69,7 +69,7 @@ public class Xofulltext_extractor implements Mwh_doc_wkr {
 		// add to bfr
 		bfr.Add_mid(src, itm_bgn, itm_end);
 	}
-	public byte[] Extract(Xopg_db_data db, Xoa_ttl ttl) {
+	public byte[] Extract(Xopg_db_data db, Xoa_ttl ttl, Xowe_wiki wiki) {
 		byte[] src;
 		if (false) {
 			src = db.Html().Html_bry();
@@ -78,7 +78,7 @@ public class Xofulltext_extractor implements Mwh_doc_wkr {
 		}
 		else {
 			src = db.Text().Text_bry();
-			return wikistrip.Search_text(src, ttl);
+			return wikistrip.Search_text(src, ttl, wiki);
 		}
 	}
 	public byte[] Extract(byte[] src) { // for testing

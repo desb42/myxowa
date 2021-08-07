@@ -120,11 +120,23 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	}	private Xowe_wiki wdata_wiki;
 	public void Init_by_app() {}
 	public Wdata_doc_parser Wdoc_parser(Json_doc jdoc) {
+		// override 20210719
+//		return wdoc_parser_v2;
+
 		Json_kv itm_0 = Json_kv.Cast(jdoc.Root_nde().Get_at(0));										// get 1st node
-		return Bry_.Eq(itm_0.Key().Data_bry(), Wdata_doc_parser_v2.Bry_type) 
-			|| Bry_.Eq(itm_0.Key().Data_bry(), Wdata_doc_parser_v2.Bry_id) 
-			? wdoc_parser_v2 : wdoc_parser_v1;	// if "type", must be v2
+		if (Bry_.Eq(itm_0.Key().Data_bry(), Wdata_doc_parser_v2.Bry_type) 
+			|| Bry_.Eq(itm_0.Key().Data_bry(), Wdata_doc_parser_v2.Bry_id))
+			return wdoc_parser_v2;
+		else if (Bry_.Eq(itm_0.Key().Data_bry(), Bry_entity))
+			return wdoc_parser_v1;
+		else {
+			app.Usr_dlg().Warn_many("", "", "v1 in a v2 first: ~{0} env: ~{1}", String_.new_a7(itm_0.Key().Data_bry()), String_.new_u8(jdoc.Src()));
+			//return wdoc_parser_v1;	// if "type", must be v2
+			return wdoc_parser_v2;	// ALWAYS v2
+		}
+
 	}
+	private static byte[] Bry_entity = Bry_.new_a7("entity");
 	public Xop_log_property_wkr Property_wkr() {return property_wkr;} private Xop_log_property_wkr property_wkr;
 	public void Clear() {
 		synchronized (thread_lock) {	// LOCK:app-level

@@ -41,6 +41,11 @@ class Luaj_value_ {
 			LuaValue orig_data_obj = ((LuaTable)metatable_obj).get("xo_orig_data");
 			if (orig_data_obj != null && !orig_data_obj.isnil())
 				tbl = (LuaTable)orig_data_obj;
+			else {
+				int a=1;
+//				gplx.core.consoles.Console_adp__sys.Instance.Write_str("metatable");
+				System.out.println("metatable");
+			}
 		}
 
 		// loop over pairs in tbl; no direct way to get kvs

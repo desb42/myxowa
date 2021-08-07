@@ -148,6 +148,9 @@ public class Xop_curly_wkr implements Xop_ctx_wkr {
                 // is the template on one line?
                 if (open_curl_pos >= 0) {
                     if (lxr_end_pos + 3 < src_len) {
+                        //if ( src[lxr_end_pos] == '\n' && (open_curl_pos == 0 || src[open_curl_pos-1] == '\n'))
+                        //    if (src[lxr_end_pos+1] == '{' && src[lxr_end_pos+2] == '{')
+                        //        lxr_end_pos++;
                         if (false && src[lxr_end_pos] == '\n' && (open_curl_pos == 0 || src[open_curl_pos-1] == '\n')) {
                             // make sure no interior '\n'
                             byte nxt;
