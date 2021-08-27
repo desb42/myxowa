@@ -31,7 +31,8 @@ public class Pfunc_expr extends Pf_func_base {
 			return false;
 		}
 		else {
-			bfr.Add_str_u8(rslt.To_str());
+			String s = rslt.To_str();
+			bfr.Add_str_u8(s);
 			return true;
 		}
 	}

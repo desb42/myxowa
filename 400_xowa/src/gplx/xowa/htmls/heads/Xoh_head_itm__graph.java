@@ -28,6 +28,9 @@ public class Xoh_head_itm__graph extends Xoh_head_itm__base {
 		if (version_is_1 && version_is_2)
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "page should not have both version 1 and version 2 graphs; page=~{0}", url.To_bry_full_wo_qargs());
 	}
+	public int Version() {
+		return ((version_is_1 ? 1 : 0) | (version_is_2 ? 2 : 0));
+	}
 	@Override public void Write_js_include(Xoae_app app, Xowe_wiki wiki, Xoae_page page, Xoh_head_wtr wtr) {
 		// collect tags
 		Io_url http_root = app.Fsys_mgr().Http_root();
@@ -36,8 +39,8 @@ public class Xoh_head_itm__graph extends Xoh_head_itm__base {
 		Xopg_tag_wtr_.Add__xologger(tags, http_root);
 		Xopg_tag_wtr_.Add__xolog(tags, http_root, false);
 		Xopg_tag_wtr_.Add__xoajax(tags, http_root, app);
-                if (!version_is_1 && !version_is_2)
-                    version_is_2 = true; // no version - set to v2
+		if (!version_is_1 && !version_is_2)
+			version_is_2 = true; // no version - set to v2
 		Add__xograph(tags, http_root, page, version_is_1, version_is_2);
 
 		// write tags

@@ -29,7 +29,10 @@ public class Xot_invk_mock implements Xot_invk {
 	public boolean Rslt_is_redirect() {return rslt_is_redirect;} public void Rslt_is_redirect_(boolean v) {rslt_is_redirect = v;} private boolean rslt_is_redirect;
 	public Arg_nde_tkn Name_tkn() {return Arg_nde_tkn.Null;}
 	public int Args_len() {return args.Count() + idx_adj;} private Ordered_hash args = Ordered_hash_.New_bry();
-	public Arg_nde_tkn Args_get_by_idx(int i) {return (Arg_nde_tkn)args.Get_at(i - idx_adj);}
+	public Arg_nde_tkn Args_get_by_idx(int i) {
+            if (i - idx_adj < 0)
+                return null; //20210824
+            return (Arg_nde_tkn)args.Get_at(i - idx_adj);}
 	public Arg_nde_tkn Args_eval_by_idx(byte[] src, int idx) {// DUPE:MW_ARG_RETRIEVE
 		int cur = 0, list_len = args.Count(); 
 		if (idx >= list_len) return null;

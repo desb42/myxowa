@@ -21,9 +21,12 @@ import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; impo
 import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_entity_type_;
 import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_type_;
 public class Wdata_doc {
-	private final    Wdata_wiki_mgr mgr;
+	//private final    Wdata_wiki_mgr mgr;
+	private final Wdata_doc_parser wdoc_parser;
 	public Wdata_doc(Wdata_wiki_mgr mgr, Json_doc jdoc, byte[] qid) {
-		this.mgr = mgr; this.jdoc = jdoc; this.qid = qid;
+//		this.mgr = mgr;
+		this.wdoc_parser = mgr.Wdoc_parser(jdoc);
+		this.jdoc = jdoc; this.qid = qid;
 		Set_type_();
 	}
 	public byte[] Qid() {return qid;} private final    byte[] qid;
@@ -31,7 +34,7 @@ public class Wdata_doc {
 	public int Jdoc_size() {return jdoc == null ? 1 : jdoc.Src().length;}
 	public byte[][] Sort_langs() {return sort_langs;} public void Sort_langs_(byte[][] v) {sort_langs = v;} private byte[][] sort_langs = Bry_.Ary_empty;
 
-	public int Datatype_id() {if (datatype_id == -1) datatype_id = mgr.Wdoc_parser(jdoc).Parse_datatype_id(qid, jdoc); return datatype_id;} private int datatype_id = -1;
+	public int Datatype_id() {if (datatype_id == -1) datatype_id = wdoc_parser.Parse_datatype_id(qid, jdoc); return datatype_id;} private int datatype_id = -1;
 	public byte[] Datatype() {return Wbase_claim_type_.Names(Datatype_id());}
 	public byte[] Datatype_external() {return Wbase_claim_type_.External_Name(Datatype_id());}
 
@@ -40,7 +43,7 @@ public class Wdata_doc {
 	public Ordered_hash Slink_list() {
 		if (slink_list == null)
 			synchronized (this) {
-				slink_list = mgr.Wdoc_parser(jdoc).Parse_sitelinks(qid, jdoc);
+				slink_list = wdoc_parser.Parse_sitelinks(qid, jdoc);
 			}
 		return slink_list;
 	}
@@ -49,7 +52,7 @@ public class Wdata_doc {
 	public Ordered_hash Label_list() {
 		if (label_list == null)
 			synchronized (this) {
-				label_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_labels);
+				label_list = wdoc_parser.Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_labels);
 			}
 		return label_list;
 	}
@@ -58,7 +61,7 @@ public class Wdata_doc {
 	public Ordered_hash Descr_list() {
 		if (descr_list == null)
 			synchronized (this) {
-				descr_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_descriptions);
+				descr_list = wdoc_parser.Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_descriptions);
 			}
 		return descr_list;
 	}
@@ -67,7 +70,7 @@ public class Wdata_doc {
 	public Ordered_hash Alias_list() {
 		if (alias_list == null)
 			synchronized (this) {
-				alias_list = mgr.Wdoc_parser(jdoc).Parse_aliases(qid, jdoc);
+				alias_list = wdoc_parser.Parse_aliases(qid, jdoc);
 			}
 		return alias_list;
 	}
@@ -76,7 +79,7 @@ public class Wdata_doc {
 	public Ordered_hash Claim_list() {
 		if (claim_list == null)
 			synchronized (this) {
-				claim_list = mgr.Wdoc_parser(jdoc).Parse_claims(qid, jdoc);
+				claim_list = wdoc_parser.Parse_claims(qid, jdoc);
 			}
 		return claim_list;
 	}
@@ -85,7 +88,7 @@ public class Wdata_doc {
 	public Ordered_hash Lemma_list() {
 		if (lemma_list == null)
 			synchronized (this) {
-				lemma_list = mgr.Wdoc_parser(jdoc).Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_lemmas);
+				lemma_list = wdoc_parser.Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_lemmas);
 			}
 		return lemma_list;
 	}
@@ -94,7 +97,7 @@ public class Wdata_doc {
 	public Ordered_hash Sense_list() {
 		if (sense_list == null)
 			synchronized (this) {
-				sense_list = mgr.Wdoc_parser(jdoc).Parse_sense(qid, jdoc);
+				sense_list = wdoc_parser.Parse_sense(qid, jdoc);
 			}
 		return sense_list;
 	}
@@ -103,7 +106,7 @@ public class Wdata_doc {
 	public Ordered_hash Form_list() {
 		if (form_list == null)
 			synchronized (this) {
-				form_list = mgr.Wdoc_parser(jdoc).Parse_form(qid, jdoc);
+				form_list = wdoc_parser.Parse_form(qid, jdoc);
 			}
 		return form_list;
 	}

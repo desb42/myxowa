@@ -22,6 +22,7 @@ public class Db_parser {
 	private Bry_bfr m_newsrc = Bry_bfr_.New();
 	private Xop_ctx ctx;
 	private Tag_match translate_tag = new Tag_match("translate");
+	private Tag_match tvar_tag = new Tag_match("tvar");
 	private Tag_match noinclude_tag = new Tag_match("noinclude");
 	private Tag_match section_tag = new Tag_match("section");
 
@@ -96,21 +97,32 @@ public class Db_parser {
 							break;
 						checkpos++;
 					}
-					if (m_src[checkpos] == '<' && m_src[checkpos+1] == '!') {
-						newpos = checkpos + 2;
-						while (newpos < m_src_end) {
-							if (m_src[newpos++] == '>')
-								break;
+					if (checkpos +1 < m_src_end) {
+						if (m_src[checkpos] == '<' && m_src[checkpos+1] == '!') {
+							newpos = checkpos + 2;
+							while (newpos < m_src_end) {
+								if (m_src[newpos++] == '>')
+									break;
+							}
+							while (newpos < m_src_end) {
+								b = m_src[newpos];
+								if (b != ' ' && b != '\n')
+									break;
+								newpos++;
+							}
 						}
-						while (newpos < m_src_end) {
-							b = m_src[newpos];
-							if (b != ' ' && b != '\n')
-								break;
-							newpos++;
-						}
+						start_text = newpos;
+						m_pos = newpos - 1;
 					}
-					start_text = newpos;
-					m_pos = newpos - 1;
+				}
+				else {
+					newpos = tvar_tag.Match_all(m_src, m_pos, m_src_end);
+					if (newpos > 0) {
+						addtext(start_text, m_pos);
+						// skip the tag
+						start_text = newpos;
+						m_pos = newpos - 1;
+					}
 				}
 			}
 			m_pos++;

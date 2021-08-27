@@ -41,7 +41,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 			byte[] val_html_lc = tmp_bfr.To_bry_and_clear();
 			Xol_case_mgr case_mgr = wiki.Lang().Case_mgr();
 			val_html_lc = Standardize_displaytitle_text(case_mgr, val_html_lc, Bool_.Y, amp_mgr);
-			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_db(), Bool_.N, amp_mgr); // NOTE: must be .Full_db() to handle non-main ns; PAGE:en.w:Template:Infobox_opera; ISSUE#:277 DATE:2018-11-14;
+			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_txt(), Bool_.N, amp_mgr);
 			if (!Bry_.Eq(val_html_lc, page_ttl_lc)) {
 				Xoa_app_.Usr_dlg().Warn_many("", "", "DISPLAYTITLE fail:~{0} not ~{1}", val_html_lc, page_ttl_lc);
 				val_html = null;
@@ -106,7 +106,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 									b_ary = Byte_ascii.Amp_bry;
 									break;
 								case Byte_ascii.Quote:
-									b_ary = amp_itm.Xml_name_bry();
+									rb = Byte_ascii.Quote;
 									break;
 								case Gfh_entity_itm.Char_int_null:	// &#xx;
 									b_ary = amp_itm.Xml_name_bry();
@@ -126,58 +126,18 @@ public class Pfunc_displaytitle extends Pf_func_base {
 									}
 									break;
 								default:
-									b_ary = amp_itm.U8_bry();
+									b_ary = specials(amp_itm.Char_int());
+									if (b_ary == null)
+										b_ary = amp_itm.U8_bry();
 									break;
 							}
 						}
 						else {
-							// &#160;
-							// &#32;
-							// &#34; -> '"'
-							// &#38; -> '&'
-							// &#39;
-							// &#8201; (&thinsp) -> ' '
-							// &#8202; (Hair Space) -> ' '
-							// &#8204; (Zero Width Non-Joiner) -> ''
-							// &#8206; (Left-To-Right Mark) -> ''
-							// &#8207; (Right-To-Left Mark) -> ''
-							// &#8211; (&ndash;) -> '-'
-							// &#8214; (&mdash;) -> '-'
-							// &#8722; (&minus;) -> '-'
-							// &#928; - Capital PI -> '-'
-							// &#x266d;, 0xE2 0x99 0xAD, &#9837;(music flat) -> '-'
 							Xop_amp_mgr_rslt amp_rv = new Xop_amp_mgr_rslt();
 							amp_mgr.Parse_ncr(amp_rv, amp_itm.Tid() == Gfh_entity_itm.Tid_num_hex, src, len, pos, trv.Pos());
 							if (amp_rv.Pass()) {
 								int val = amp_rv.Val();
-								switch(val) {
-									case 160: case 32:
-									case 8201: // (&thinsp) -> ' '
-									case 8202: // (Hair Space) -> ' '
-										rb = Byte_ascii.Space;
-										break;
-									case 8211: // (&ndash;) -> '-'
-									case 8214: // (&mdash;) -> '-'
-									case 8722: // (&minus;) -> '-'
-									case 928: // - Capital PI -> '-'
-									case 9837: // (music flat) -> '-'
-										rb = Byte_ascii.Dash;
-										break;
-									case 34: // &#34; -> "
-										rb = Byte_ascii.Quote;
-										break;
-									case 38: // &#38; -> &
-										rb = Byte_ascii.Amp;
-										break;
-									case 39: // &#39; -> ' - ignore
-									case 8204: // (Zero Width Non-Joiner) -> ''
-									case 8206: // (Left-To-Right Mark) -> ''
-									case 8207: // (Right-To-Left Mark) -> ''
-										break;
-									default:
-										b_ary = gplx.core.intls.Utf16_.Encode_int_to_bry(val);
-										break;
-								}
+								b_ary = specials(val);
 							}
 							size = amp_rv.Pos() - pos; // assume the semicolon?!
 						}
@@ -202,7 +162,9 @@ public class Pfunc_displaytitle extends Pf_func_base {
 					int spacepos = pos;
 					while (spacepos < len) {
 						b = src[spacepos];
-						if (b != ' ' && b != '\t' && change_underscore && b != '_')
+						if (change_underscore && b == '_')
+							b = ' ';
+						if (b != ' ' && b != '\t')
 							break;
 						else
 							spacepos++;
@@ -251,12 +213,12 @@ public class Pfunc_displaytitle extends Pf_func_base {
 						rb = Byte_ascii.Dash;
 					}
 					break;
-				case -49: // \xCF
-					if (pos + 1 < len && src[pos] == -128) { // \xCF\x80 lowercase PI
-						size = 1;
-						rb = Byte_ascii.Dash;
-					}
-					break;
+//				case -49: // \xCF
+//					if (pos + 1 < len && src[pos] == -128) { // \xCF\x80 lowercase PI
+//						size = 1;
+//						rb = Byte_ascii.Dash;
+//					}
+//					break;
 				case -62: // \xC2
 					if (pos + 1 < len && src[pos] == -96) { // \xC2\xA0 -> &nbsp; -> space
 						size = 1;
@@ -307,6 +269,58 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		}
 		else
 			return src;
+	}
+	// &#160;
+	// &#32;
+	// &#34; -> '"'
+	// &#38; -> '&'
+	// &#39;
+	// &#8201; (&thinsp) -> ' '
+	// &#8202; (Hair Space) -> ' '
+	// &#8204; (Zero Width Non-Joiner) -> ''
+	// &#8206; (Left-To-Right Mark) -> ''
+	// &#8207; (Right-To-Left Mark) -> ''
+	// &#8211; (&ndash;) -> '-'
+	// &#8214; (&mdash;) -> '-'
+	// &#8722; (&minus;) -> '-'
+	// &#928; - Capital PI -> '-' ???20210815
+	// &#x266d;, 0xE2 0x99 0xAD, &#9837;(music flat) -> '-'
+	private static byte[] specials(int val) {
+		byte rb = 0;
+		byte[] b_ary = null;
+		switch(val) {
+			case 160: case 32:
+			case 8201: // (&thinsp) -> ' '
+			case 8202: // (Hair Space) -> ' '
+				rb = Byte_ascii.Space;
+				break;
+			case 8211: // (&ndash;) -> '-'
+			case 8214: // (&mdash;) -> '-'
+			case 8722: // (&minus;) -> '-'
+			//case 928: // - Capital PI -> '-' ???20210815
+			case 9837: // (music flat) -> '-'
+				rb = Byte_ascii.Dash;
+				break;
+			case 34: // &#34; -> "
+				rb = Byte_ascii.Quote;
+				break;
+			case 38: // &#38; -> &
+				rb = Byte_ascii.Amp;
+				break;
+			case 39: // &#39; -> ' - ignore
+			case 8204: // (Zero Width Non-Joiner) -> ''
+			case 8206: // (Left-To-Right Mark) -> ''
+			case 8207: // (Right-To-Left Mark) -> ''
+				break;
+			default:
+				b_ary = gplx.core.intls.Utf16_.Encode_int_to_bry(val);
+				break;
+		}
+		if (rb != 0) {
+			b_ary = new byte[1];
+			b_ary[0] = rb;
+		}
+		return b_ary;
 	}
 	public static final    Pfunc_displaytitle Instance = new Pfunc_displaytitle(); Pfunc_displaytitle() {}
 }	

@@ -95,7 +95,7 @@ public class Xoh_page implements Xoa_page {
 		Xopg_html_data html = page.Html_data();
 		html.Init_by_page(page.Ttl());
 		Xoh_head_mgr mod_mgr = html.Head_mgr();	
-		head_mgr.Init(mod_mgr.Itm__mathjax().Enabled(), mod_mgr.Itm__popups().Bind_hover_area(), mod_mgr.Itm__gallery().Enabled(), mod_mgr.Itm__hiero().Enabled(), mod_mgr.Itm__graph().Enabled());
+		head_mgr.Init(mod_mgr.Itm__mathjax().Enabled(), mod_mgr.Itm__popups().Bind_hover_area(), mod_mgr.Itm__gallery().Enabled(), mod_mgr.Itm__hiero().Enabled(), mod_mgr.Itm__graph().Version());
 		this.display_ttl = html.Display_ttl();
 		this.content_sub = html.Content_sub();
 		this.sidebar_div = Xoh_page_.Save_sidebars(tmp_bfr, page, html);

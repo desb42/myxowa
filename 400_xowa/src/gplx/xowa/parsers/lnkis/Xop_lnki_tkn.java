@@ -62,7 +62,7 @@ public class Xop_lnki_tkn extends Xop_tkn_itm_base implements gplx.xowa.wikis.pa
 	public byte[] Ttl_ary() {
 		return ttl.ForceLiteralLink() //202100410 || ns_id != Xow_ns_.Tid__main		// if [[:]] or non-main (Category, Template)
 			? ttl.Full_txt()									// use full_txt (no initial colon; capitalize first)
-			: ttl.Raw();												// use raw (preserve case, white-spaces)
+			: ttl.Raw(); // use raw (preserve case, white-spaces)
 	}
 	public boolean Caption_exists() {
 		return !((caption_tkn == Xop_tkn_null.Null_tkn)		// trg only; no caption: EX: [[a]] vs. [[a|b]] which has a trg of a and a caption of b

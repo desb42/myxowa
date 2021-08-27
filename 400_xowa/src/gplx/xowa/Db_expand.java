@@ -18,7 +18,7 @@ import gplx.langs.htmls.*;
 public class Db_expand {
 
 	private static Object lock = "a";
-	private static byte[][] uniq = new byte[10][];
+	private static byte[][] uniq = new byte[20][];
 	private static int uniqcount;
 	private static void substitute(Bry_bfr tmp, int uniqofs) {
             if (uniqofs < uniqcount)
@@ -34,6 +34,7 @@ public class Db_expand {
 		}
 	}
 	public static byte[] Extracheck(byte[] buf, String accessibility_label) {
+//            System.out.println(String_.new_u8(buf));
 		Bry_bfr tmp_ref = Bry_bfr_.New();
 		tmp_ref.Add(buf);
 		return Extracheck(tmp_ref, accessibility_label);

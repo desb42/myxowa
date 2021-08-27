@@ -6623,6 +6623,9 @@ kartographer-coord-lat-positive|~{0}N
 kartographer-coord-lat-negative|~{0}S
 kartographer-coord-lon-positive|~{0}E
 kartographer-coord-lon-negative|~{0}W
+group-propertycreator|Property creators
+group-interface-admin|Interface administrators
+group-wikidata-staff|Wikidata staff
 ']:>
 ).lang
 .time_formats

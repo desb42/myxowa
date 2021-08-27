@@ -29,9 +29,13 @@ public class Xop_languages_xnde implements Xox_xnde {
 	public List_adp Langs() {return langs;} private List_adp langs;
 	public Xoa_ttl Root_ttl() {return root_ttl;} private Xoa_ttl root_ttl;
 	private Xoa_ttl Root_ttl_of(Xowe_wiki wiki, Xoa_ttl ttl) {
+		// check if the page ends in a language (eg Page/fr) if so return Page else leave alone
 		byte[] page_bry = ttl.Page_db();
 		int slash_pos = Bry_find_.Find_bwd(page_bry, Xoa_ttl.Subpage_spr);
 		if (slash_pos == Bry_find_.Not_found) return ttl;
+		byte[] lang_key = Bry_.Mid(page_bry, slash_pos + 1, page_bry.length);
+		Xol_lang_stub lang_itm = Xol_lang_stub_.Get_by_key_or_null(lang_key);
+		if (lang_itm == null) return ttl; // not a known lang
 		byte[] root_bry = Bry_.Mid(page_bry, 0, slash_pos);
 		return Xoa_ttl.Parse(wiki, ttl.Ns().Id(), root_bry);
 	}

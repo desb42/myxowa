@@ -182,6 +182,8 @@ public class Http_server_wkr implements Gfo_invk {
 					byte[] stripped = null;
 					if (page.Page() != null && page.Page().Db().Page().Format() == Xob_xml_parser.Format_wiki) { //1 <format>text/x-wiki</format>
 						wikitext = page.Page().Db().Text().Text_bry();
+                                        page.Wiki().Parser_mgr().Ctx().Clear_all();
+                                        page.Wiki().Parser_mgr().Ctx().Page().Ttl_(page.Ttl());	// NOTE: must set cur_page, else page-dependent templates won't work; EX: {{FULLPAGENAME}};
 						stripped = ws.Search_text(wikitext, page.Ttl(), page.Wiki()); //.Strip_wiki(wikitext);
 					}
 					if (stripped != null) {

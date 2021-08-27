@@ -193,6 +193,8 @@ public class Scrib_lib_mw implements Scrib_lib {
 		int arg_idx = 0;
 		for (int i = 0; i < args_len; i++) {
 			Arg_nde_tkn nde = frame.Args_get_by_idx(i + frame_arg_adj);
+                        if (nde == null)
+                             return rslt.Init_obj(Keyval_.Ary_empty); // enwiki Portal:Abkhazia/Selected_article/16
 			if (nde.KeyTkn_exists()) {	// BLOCK:ignore_args_with_empty_keys;
 				byte[] key_dat_ary = nde.Key_tkn().Dat_ary();
 				int key_dat_len = Bry_.Len(key_dat_ary);

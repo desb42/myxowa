@@ -57,6 +57,7 @@ public class Xomp_load_wkr implements Gfo_invk {
 		, ",       pp.page_title"
 		, ",       pp.page_text_db_id"
 		, ",       pp.page_score"
+		, ",       pp.page_touched"
 		, ",       pp.page_len"
 		, ",       pp.page_text_db_offset"
 		, "FROM    xomp_page mp"
@@ -84,6 +85,7 @@ public class Xomp_load_wkr implements Gfo_invk {
 				, rdr.Read_bry_by_str("page_title")
 				, text_db_id
 				, rdr.Read_int("page_score")
+				, rdr.Read_str("page_touched")
 				, rdr.Read_int("page_len")
 				, rdr.Read_long("page_text_db_offset")
 				);

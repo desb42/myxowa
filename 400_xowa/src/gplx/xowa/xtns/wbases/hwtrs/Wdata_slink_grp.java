@@ -32,17 +32,17 @@ class Wdata_slink_grp {
 		for (int i = 0; i < list_len; ++i) {
 			Wdata_sitelink_itm itm = (Wdata_sitelink_itm)list.Get_at(i);				
 			int idx = Idx_by_tid(itm.Domain_info().Domain_type_id());
-                        // ignore some specials!
-                        if (idx == Idx_x) {
-                            switch (itm.Domain_info().Domain_type_id()) {
-                                case Xow_domain_tid_.Tid__incubator:
-                                case Xow_domain_tid_.Tid__wikisource_org:
-                                    continue;
-                                default:
-                                    break;
-                            }
-                        }
-        		rv[idx].Rows().Add(itm.Site(), itm);
+			// ignore some specials!
+			if (idx == Idx_x) {
+				switch (itm.Domain_info().Domain_type_id()) {
+					case Xow_domain_tid_.Tid__incubator:
+					case Xow_domain_tid_.Tid__wikisource_org:
+						continue;
+					default:
+						break;
+				}
+			}
+			rv[idx].Rows().Add(itm.Site(), itm);
 		}
 	}
 	public static int Idx_by_tid(int tid) {
@@ -88,13 +88,13 @@ class Wdata_slink_grp {
 	}
 	public static byte[] Sitename_by_tid(int idx, byte[] langcode) {
 		Bry_bfr bfr = Bry_bfr_.New();
-                bfr.Add(langcode);
-            if (idx == Idx_w)
-                bfr.Add(Bry_.new_a7("wiki"));
-            else
-                bfr.Add(Name_by_tid(idx));
+		bfr.Add(langcode);
+		if (idx == Idx_w)
+			bfr.Add(Bry_.new_a7("wiki"));
+		else
+			bfr.Add(Name_by_tid(idx));
 		return bfr.To_bry_and_clear();
-        }
+	}
 	public static final int Idx__len = 9, Idx_w = 0, Idx_d = 1, Idx_s = 2, Idx_v = 3, Idx_q = 4, Idx_b = 5, Idx_u = 6, Idx_n = 7, Idx_x = 8;
 	private static final    byte[] Name_special = Bry_.new_a7("special");
 }

@@ -236,6 +236,7 @@ public class Db_wikistrip {
 		int endpos = 0;
 		int startpos = pos;
 		int barpos = -1;
+		boolean intmpl = false;
 		while (pos < src_len) {
 			byte b = src[pos++];
 			switch (b) {
@@ -249,9 +250,17 @@ public class Db_wikistrip {
 						pos = src_len; // terminate loop
 					}
 					break;
+				case '{':
+					intmpl = true;
+					break;
+				case '}':
+					intmpl = false;
+					break;
 				case '|':
-					if (barpos == -1)
-						barpos = pos; // first pipe
+					if (!intmpl) {
+						if (barpos == -1)
+							barpos = pos; // first pipe
+					}
 					break;
 			}
 		}
@@ -563,8 +572,9 @@ public class Db_wikistrip {
 							}
 						}
 						startpos = pos;
-						if (firstparaonly)
+						if (firstparaonly) {
 							return wiki.Parser_mgr().Main().Expand_tmpl(bfr.To_bry());
+                                                }
 					}
 					break;
 				case '_':
@@ -657,6 +667,16 @@ public class Db_wikistrip {
 					}
                                     }
 					break;
+				case '[':
+					if (pos < src_len) {
+						b = src[pos];
+						if (b == '[') {
+							bfr.Add_mid(src, startpos, pos-1);
+							pos = findclosingsquare(src, src_len, pos, bfr);
+							startpos = pos;
+						}
+					}
+					break;
 				case '\n':
 					// check for multiple \n (only \n\n)
 					int nlcount = 1;
@@ -691,6 +711,7 @@ public class Db_wikistrip {
 		boolean inbold = false;
 		boolean initalic = false;
 		boolean firstbracket = true;
+		boolean firstpara = false;
 		bfr.Add(Gfh_tag_.P_lhs);
 		byte b;
 		// remove initial '\n's
@@ -823,6 +844,7 @@ public class Db_wikistrip {
 					}
 					if (nlcount > 1) {
 						pos = src_len; // break out
+						firstpara = true;
 					}
 					else
 						startpos = pos;
@@ -856,6 +878,8 @@ public class Db_wikistrip {
 					break;
 			}
 		}
+		if (!firstpara) // add the rest (if we have not found any paragraph break
+			bfr.Add_mid(src, startpos, src_len);
 		bfr.Add(Gfh_tag_.P_rhs);
 		return bfr.To_bry();
 	}

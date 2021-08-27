@@ -72,7 +72,8 @@ end
 -- @param s
 local function isValidAttributeName( s )
 	-- Good estimate: http://www.w3.org/TR/2000/REC-xml-20001006#NT-Name
-	return s:match( '^[a-zA-Z_:][a-zA-Z0-9_.:-]*$' )
+--	return s:match( '^[a-zA-Z_:][a-zA-Z0-9_.:-]*$' )
+	return string.match_x1(s)
 end
 
 -- Is this a valid tag name?

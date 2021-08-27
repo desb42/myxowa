@@ -173,6 +173,8 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 	public void Fill_page(Xoae_page wpg, Xoh_page hpg) {
 		Xopg_html_data html_data = wpg.Html_data();
 
+                wpg.Db().Page().Modified_on_(hpg.Db().Page().Modified_on());
+
 		html_data.Display_ttl_(tmp_hpg.Display_ttl());
 		html_data.Content_sub_(tmp_hpg.Content_sub());			
 		html_data.Xtn_skin_mgr().Add(new Xopg_xtn_skin_itm_stub(tmp_hpg.Sidebar_div()));
@@ -192,6 +194,13 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		wpg_head.Itm__popups().Bind_hover_area_	(hpg_head.Imap_exists());
 		wpg_head.Itm__gallery().Enabled_		(hpg_head.Gallery_packed_exists());
 		wpg_head.Itm__hiero().Enabled_			(hpg_head.Hiero_exists());
+		if (hpg_head.Graph2_exists() || hpg_head.Graph1_exists()) {
+			wpg_head.Itm__graph().Enabled_(true);
+			if (hpg_head.Graph2_exists())
+				wpg_head.Itm__graph().Version_(null, 2); // FIX
+			if (hpg_head.Graph1_exists())
+				wpg_head.Itm__graph().Version_(null, 1); // FIX
+		}
 		wpg_head.Itm__timeline().Enabled_		(hpg.Xtn__timeline_exists());
 		wpg_head.Itm__gallery_styles().Enabled_	(hpg.Xtn__gallery_exists());
 		wpg_head.Itm__categorytree().Enabled_	(hpg.Xtn__categorytree_exists());

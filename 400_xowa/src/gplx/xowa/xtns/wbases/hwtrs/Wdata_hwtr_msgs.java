@@ -205,7 +205,7 @@ public class Wdata_hwtr_msgs {
 		, "hide", "show", "toc"
 		, "wikibase-aliases-label"						, "wikibase-aliases-empty"
 		, "wikibase-sitelinks-sitename-columnheading"	, "wikibase-sitelinks-siteid-columnheading"
-		, "xowa-wikidata-sitelinks-hdr"					, "xowa-wikidata-sitelinks-hdr-special", "wikibase-sitelinks-link-columnheading"
+		, "xowa-wikidata-sitelinks-hdr"					, "wikibase-sitelinks-special/*xowa-wikidata-sitelinks-hdr-special*/", "wikibase-sitelinks-link-columnheading"
 		, "xowa-wikidata-labels-hdr"					, "xowa-wikidata-labels-col"
 		, "xowa-wikidata-aliases-hdr"					, "xowa-wikidata-aliases-col"
 		, "xowa-wikidata-descriptions-hdr"				, "xowa-wikidata-descriptions-col"

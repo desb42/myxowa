@@ -60,9 +60,7 @@
 		{{^is-mainpage}}
 			{{#data-portlets.data-languages}}{{>Menu}}{{/data-portlets.data-languages}}
 		{{/is-mainpage}}
-		<h1 id="firstHeading" class="firstHeading" {{{html-user-language-attributes}}}>
-			{{{html-title}}}
-		</h1>
+		<h1 id="firstHeading" class="firstHeading" {{{html-user-language-attributes}}}>{{{html-title}}}</h1>
 		{{>Indicators}}
 		{{#is-article}}
 			<div id="siteSub" class="noprint">{{msg-tagline}}</div>
@@ -70,7 +68,7 @@
 	</header>
 	{{/is-language-in-header}}
 
-	<div id="bodyContent">
+	<div id="bodyContent" class="vector-body">
 		{{^is-language-in-header}}
 			{{#is-article}}<div id="siteSub" class="noprint">{{msg-tagline}}</div>{{/is-article}}
 		{{/is-language-in-header}}

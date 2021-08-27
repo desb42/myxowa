@@ -50,7 +50,7 @@ import gplx.xowa.parsers.Xow_parser_mgr;
 import gplx.xowa.parsers.logs.Xop_log_wkr_factory;
 import gplx.xowa.wikis.pages.Xopg_view_mode_;
 import gplx.xowa.wikis.caches.Db_html_body;
-
+import gplx.DateAdp_;
 public class Xomp_parse_wkr implements Gfo_invk {
 	// mgr vars
 	private final Xomp_parse_mgr mgr;
@@ -165,6 +165,8 @@ public class Xomp_parse_wkr implements Gfo_invk {
 				wpg.Bldr__ns_ord_(ns_ord_mgr.Get_ord_by_ns_id(cur_ns));	// NOTE: must set ns_id for tier_id in lnki_temp; DATE:2016-09-19
 				wpg.Db().Text().Text_bry_(ppg.Text());
 				wpg.Db().Page().Init_by_mp(ppg.Id(), ppg.Page_score());
+				wpg.Db().Page().Modified_on_(ppg.Page_touched()); // need this date occassionally en.wikipedia.org/wiki/Good_Angels_Ko%C5%A1ice
+                                
 				//wpg.Stat_itm().Init(uid);
 
 				// parse page

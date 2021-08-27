@@ -229,12 +229,12 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		byte[] args = tmp_bfr.To_bry_and_clear();
 
 		byte[] md5hash = null;
-		if (groups == Bry_.Empty) {
+//		if (groups == Bry_.Empty) {
 			Hash_algo md5_algo = Hash_algo_.New__md5();
 			md5_algo.Update_digest(args, 0, args.length);
 			md5hash = md5_algo.To_hash_bry();
-			args = Bry_.Add(args, md5hash);
-		}
+			args = Bry_.Add(args, Bry_.new_a7("&md5="), md5hash);
+//		}
 
 		Fmt__img.Bld_many(tmp_bfr, server, this.mapstyle, args, staticWidth, this.height);
 		img = tmp_bfr.To_bry_and_clear();

@@ -76,6 +76,7 @@ public class Pft_func_time extends Pf_func_base {
 			}
 			catch (Exception exc) {
 				Err_.Noop(exc);
+//                                System.out.println("invalid date/time:" + String_.new_u8(date));
 				error_bfr.Add_str_a7("Invalid time");
 			}
 		}

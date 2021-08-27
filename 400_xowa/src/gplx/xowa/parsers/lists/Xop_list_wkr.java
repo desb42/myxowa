@@ -56,6 +56,11 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		}
 		if (b == Byte_ascii.Nl) // blank line - ignore
 			return peek_pos;
+		// HACK 20210810 if \n*]] ignore asterix
+		if (b == Byte_ascii.Brack_end) {
+			if (peek_pos + 1 < src_len && src[peek_pos + 1] == Byte_ascii.Brack_end)
+				return peek_pos;
+		}
 		//Xop_list_tkn_new itm = tkn_mkr.List_bgn(bgn_pos, cur_pos, curSymAry[curSymLen - 1], curSymLen).List_path_(posBldr.XtoIntAry()).List_uid_(listId);
 		// bgn_pos + 1 skips the nl char
 		Xop_list_tkn_new itm = new Xop_list_tkn_new(bgn_pos + 1, cur_pos, ctx.Page().Prev_list_tkn());

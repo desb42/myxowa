@@ -310,7 +310,7 @@ public class Xoh_page_wtr_wkr {
 					case Xow_page_tid.Tid_wikitext:
 						Write_body_wikitext(bfr, app, wiki, data_raw, ctx, hctx, page, page_tid, page_ns_id);
 						if (page.Html_data().Syntaxhighlight())
-                                                    Gfo_usr_dlg_.Instance.Log_many("", "", "#syntaxh_highlight: ttl=~{0}", page_ttl.Full_db());
+								Gfo_usr_dlg_.Instance.Log_many("", "", "#syntax_highlight: ttl=~{0}", page_ttl.Full_db());
 //							app.SyntaxHighlighter().Highlight_bfr(bfr, wiki.Wrk_id(), wiki.Domain_bry(), page.Ttl());
 						break;
 				}

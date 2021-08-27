@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.pfuncs.exprs; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.pfuncs.*;
 import gplx.xowa.parsers.*;
 import gplx.xowa.langs.msgs.*;
+import java.math.BigDecimal;
 class Func_tkn_divide extends Func_tkn_base {
 	public Func_tkn_divide(String v) {this.Ctor(v);}
 	@Override public int ArgCount()		{return 2;}
@@ -27,7 +28,12 @@ class Func_tkn_divide extends Func_tkn_base {
 			shunter.Err_set(ctx, Xol_msg_itm_.Id_pfunc_expr_division_by_zero);
 			return false;
 		}
-		val_stack.Push(lhs.Divide(rhs));
+		if (lhs.Eq(0)) // special check for lhs zero 20210816
+			rhs = Decimal_adp_.Zero;
+		else
+			rhs = lhs.Divide(rhs);
+
+		val_stack.Push(rhs);
 		return true;
 	}
 }

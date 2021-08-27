@@ -20,17 +20,19 @@ public class Xomp_page_itm implements Xowd_text_bry_owner {
 	public int Id() {return id;} private final    int id;
 	public int Ns_id() {return ns_id;} private int ns_id;
 	public int Page_score() {return page_score;} private int page_score;
+	public DateAdp Page_touched() {return page_touched;} private DateAdp page_touched;
 	public byte[] Ttl_bry() {return ttl_bry;} private byte[] ttl_bry;
 	public int Text_db_id() {return text_db_id;} private int text_db_id;
 	public byte[] Text() {return text;} private byte[] text;
 	public int Page_len() {return orig_page_len;} private int orig_page_len;
 	public long Offset() {return orig_page_text_offset;} private long orig_page_text_offset;
 
-	public void Init_by_page(int ns_id, byte[] ttl_bry, int text_db_id, int page_score, int page_len, long text_offset) {
+	public void Init_by_page(int ns_id, byte[] ttl_bry, int text_db_id, int page_score, String page_touched, int page_len, long text_offset) {
 		this.ns_id = ns_id;
 		this.ttl_bry = ttl_bry;
 		this.text_db_id = text_db_id;
 		this.page_score = page_score;
+		this.page_touched = DateAdp_.parse_fmt(page_touched, gplx.xowa.wikis.data.tbls.Xowd_page_tbl.Page_touched_fmt);
 		this.orig_page_text_offset = text_offset;
 		this.orig_page_len = page_len;
 	}

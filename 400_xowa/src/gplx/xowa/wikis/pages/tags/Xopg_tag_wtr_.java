@@ -84,6 +84,6 @@ public class Xopg_tag_wtr_ {
 		head_tags.Add(Xopg_tag_itm.New_js_file(http_root.GenSubFil_nest("bin", "any", "xowa", "html", "res", "lib", "mustache", "mustache-2.2.1.js")));
 	}
 	public static void Add__jquery(Xopg_tag_mgr head_tags, Io_url http_root) {
-		head_tags.Add(Xopg_tag_itm.New_js_file(http_root.GenSubFil_nest("bin", "any", "xowa", "html", "res", "lib", "jquery", "jquery-1.11.3.js")));
+//		head_tags.Add(Xopg_tag_itm.New_js_file(http_root.GenSubFil_nest("bin", "any", "xowa", "html", "res", "lib", "jquery", "jquery-1.11.3.js")));
 	}
 }

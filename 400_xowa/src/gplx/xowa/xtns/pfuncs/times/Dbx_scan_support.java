@@ -964,6 +964,11 @@ public class Dbx_scan_support {
 
 	public static DateAdp Parse(byte[] src) {
 		timelib_time parsed = Dbx_strtotime.timelib_strtotime(src);
+                // hack for month == 0
+                if (parsed.have_date && parsed.m == 0) {
+                    parsed.m = 12; // 20210824 enwiki Takasago_International_Corporation
+                    parsed.y--; //more like mw BUT?
+                }
 		// check for errors
 
 		timelib_time now = timelib_now();

@@ -24,7 +24,11 @@ public class Hiero_hdump_wkr implements Xoh_hdump_wkr {
 			bfr.Add_mid(src, tag.Src_bgn(), tag.Src_end());
 		}
 		else {
-			Xoh_hdump_wkr_utl.Write_tag_with_val_at_atr_bgn(bfr, src, tag, atr, Hiero_xtn_mgr.Img_src_dir);
+			// guard against multiple calls to the same cartouche
+			byte[] val = Hiero_xtn_mgr.Img_src_dir;
+			if (src[atr.Val_bgn()] == 'f')
+				val = null;
+			Xoh_hdump_wkr_utl.Write_tag_with_val_at_atr_bgn(bfr, src, tag, atr, val);
 		}
 		return tag.Src_end();
 	}

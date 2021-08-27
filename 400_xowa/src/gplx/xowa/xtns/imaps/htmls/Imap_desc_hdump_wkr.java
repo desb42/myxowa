@@ -29,7 +29,11 @@ public class Imap_desc_hdump_wkr implements Xoh_hdump_wkr {
 			bfr.Add_mid(src, tag.Src_bgn(), tag.Src_end());
 		}
 		else {
-			Xoh_hdump_wkr_utl.Write_tag_with_val_at_atr_bgn(bfr, src, tag, atr, desc_icon_url);
+			// guard against multiple calls
+			byte[] val = desc_icon_url;
+			if (src[atr.Val_bgn()] == 'f')
+				val = null;
+			Xoh_hdump_wkr_utl.Write_tag_with_val_at_atr_bgn(bfr, src, tag, atr, val);
 		}
 		return tag.Src_end();
 	}

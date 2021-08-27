@@ -17,14 +17,6 @@
 		{{/data-portlets}}
 	{{/is-consolidated-user-links}}
 	{{#is-consolidated-user-links}}
-		{{#data-portlets}}
-			{{#data-notifications}}{{>Menu}}{{/data-notifications}}
-		{{/data-portlets}}
-		{{#data-portlets}}
-			{{#data-user-page}}{{>Menu}}{{/data-user-page}}
-		{{/data-portlets}}
-		{{#data-portlets}}
-			{{#data-user-menu}}{{>Menu}}{{/data-user-menu}}
-		{{/data-portlets}}
+		{{#data-vector-user-links}}{{>UserLinks}}{{/data-vector-user-links}}
 	{{/is-consolidated-user-links}}
 </header>

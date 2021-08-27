@@ -33,6 +33,7 @@ public class Bridge_cmd_itm__srch_suggest implements Bridge_cmd_itm {
 		Srch_rslt_cbk__js cbk = new Srch_rslt_cbk__js(cbk_func, search_bry);
 
 		// do search and return result
+		search_bry = Bry_.Replace(search_bry, Byte_ascii.Underline, Byte_ascii.Space);
 		app.Addon_mgr().Itms__search__htmlbar().Search(wiki, search_bry, cbk);
 		return cbk.To_str_and_clear();
 	}
