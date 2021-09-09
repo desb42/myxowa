@@ -235,6 +235,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		init_in_process = true;
 
                 if (!once) {
+		this.skin_mgr = new Db_skin_mgr(this);
 		redirect_mgr = new Xop_redirect_mgr(this);
 		data_mgr = new Xow_page_mgr(this);
 		file_mgr = new Xow_file_mgr(this);
@@ -250,7 +251,6 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		this.index_page = new Db_index_page(this);
 		this.tz_mgr = new Db_tz_mgr(this);
 		this.page_image = new Db_page_image(this);
-		this.skin_mgr = new Db_skin_mgr(this);
 		stats = new Xowd_site_stats_mgr(this);
 		hive_mgr = new Xob_hive_mgr(this);
 		util = new Xow_html_util(this);

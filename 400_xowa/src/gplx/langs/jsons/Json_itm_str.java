@@ -162,4 +162,5 @@ public class Json_itm_str extends Json_itm_base {
 
 	public static Json_itm_str NewByDoc(Json_doc doc, int src_bgn, int src_end, boolean escaped) {return new Json_itm_str(doc, src_bgn + 1, src_end - 1, null, escaped);}
 	public static Json_itm_str NewByVal(String val) {return new Json_itm_str(null, -1, -1, val, false);}
+	@Override public String toString() {return String_.new_u8(this.Data_bry());}
 }

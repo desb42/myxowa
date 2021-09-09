@@ -29,12 +29,21 @@ public class Xoae_page implements Xoa_page {
 	public Xop_list_tkn_new Prev_list_tkn() { return prev_list_tkn; }
 	public void Prev_list_tkn_(Xop_list_tkn_new prev_list_tkn) { this.prev_list_tkn = prev_list_tkn; } private Xop_list_tkn_new prev_list_tkn;
 	Xoae_page(Xowe_wiki wiki, Xoa_ttl ttl) {
-		this.wiki = wiki; this.ttl = ttl;
+		this.wiki = wiki;
+		this.ttl = ttl;
 		this.lang = wiki.Lang();	// default to wiki.lang; can be override later by wikitext
 		html.Init_by_page(ttl);
 		Ttl_(ttl);
 		html.Toc_mgr().Init(wiki.Html_mgr().Tidy_mgr(), url, wiki.Lang().Msg_mgr().Itm_by_id_or_null(gplx.xowa.langs.msgs.Xol_msg_itm_.Id_toc).Val());
-	}	Xoae_page() {}	// called by Empty
+		this.page_skin = wiki.Skin_mgr().Get_skin(); // can be overridden (?useskin=minerva)
+	}
+	public String Page_skin() {return page_skin;} private String page_skin;
+	public void Page_skin_(String v) {
+		if (v == null) return;
+		if (v.equals("vector-new") || v.equals("vector") || v.equals("minerva")) // only values allowed
+			page_skin = v;
+	}
+	Xoae_page() {}	// called by Empty
 	public Xow_wiki					Wiki()				{return wiki;}
 	public Xoa_ttl					Ttl()				{return ttl;} private Xoa_ttl ttl;
 	public Xoae_page				Ttl_(Xoa_ttl v) {

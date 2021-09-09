@@ -112,13 +112,18 @@ public class Xow_msg_mgr implements Gfo_invk {
 			bfr.Add_byte(Byte_ascii.Space).Add_byte(Byte_ascii.Brack_bgn).Add(accesskey_val).Add_byte(Byte_ascii.Brack_end);
 		bfr.Add_byte(Byte_ascii.Quote);
 		byte[] rv = bfr.To_bry_and_clear();
-		if (itm == null)
-			return rv;
+		if (itm == null) {
+			if (tooltip_found || accesskey_found)
+				return rv;
+			else
+				return Bry_.Empty;
+		}
 		else {
 			itm.Init_by_title_and_accesskey(tooltip_val, accesskey_val, rv);
 			return null;
 		}
-	}	private static final byte[] CONST_prefix_tooltip = Bry_.new_a7("tooltip-"), CONST_prefix_accesskey = Bry_.new_a7("accesskey-"), CONST_atr_title = Bry_.new_a7(" title=\""), CONST_atr_accesskey = Bry_.new_a7(" accesskey=\"");
+	}
+	private static final byte[] CONST_prefix_tooltip = Bry_.new_a7("tooltip-"), CONST_prefix_accesskey = Bry_.new_a7("accesskey-"), CONST_atr_title = Bry_.new_a7(" title=\""), CONST_atr_accesskey = Bry_.new_a7(" accesskey=\"");
 	public Xol_msg_itm Set(String key_str, String val_str) { // TEST
 		Xol_msg_itm msg_itm = this.Get_or_make(Bry_.new_u8(key_str));
 		msg_itm.Atrs_set(Bry_.new_u8(val_str), false, false);

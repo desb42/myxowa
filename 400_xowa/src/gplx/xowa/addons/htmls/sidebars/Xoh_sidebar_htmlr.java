@@ -50,7 +50,7 @@ class Xoh_sidebar_htmlr {
 		}
 		// dummy toolbox
 		// id="p-tb" used by some js
-		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("p-tb"), Bry_.new_a7("Toolbar"), Bry_.Empty, 1);
+		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("p-tb"), Bry_.new_a7("toolbox"), Bry_.Empty, 1);
 		portlets_rest.Add(jd);
 		byte[] buf = Bry_.new_u8(wiki.Appe().Gui_mgr().Html_mgr().Portal_mgr().Wikis().Itms_as_html());
 		jd = Db_Nav_template.Build_Sidebar_json(wiki, Bry_.new_a7("p-xowa-wiki"), Bry_.new_a7("Wikis"), buf, 1);

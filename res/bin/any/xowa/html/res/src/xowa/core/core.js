@@ -84,6 +84,7 @@ if (!window.xowa) {
 			}
 
 			if ( typeof selection === 'string' ) {
+  	console.log(selection, window.xowa_global_values[ selection ])
 				return hasOwn.call( window.xowa_global_values, selection ) ?
 					window.xowa_global_values[ selection ] :
 					fallback;
@@ -101,8 +102,20 @@ if (!window.xowa) {
 			return fallback;
     //return window.xowa_global_values[key] || null;
   };
-  xowa.cfg.set = function(key, val) {
-    window.xowa_global_values[key] = val;
+  xowa.cfg.set = function(selection, value) {
+    var s;
+    if (arguments.length > 1) {
+        if (typeof selection === 'string') {
+            window.xowa_global_values[selection] = value;
+            return !0;
+        }
+    } else if (typeof selection === 'object') {
+        for (s in selection) {
+            window.xowa_global_values[s] = selection[s];
+        }
+        return !0;
+    }
+    return !1;
   };
 
   xowa.cookie = function(key, val, cookieData) {
@@ -202,6 +215,9 @@ if (!window.xowa) {
   	window.mw = 
     window.mediaWiki = {
         msg: xowa.cfg.get,
+        messages: {
+        	set: xowa.cfg.set
+        },
         log: function () {},
         config: {
             get: xowa.cfg.get

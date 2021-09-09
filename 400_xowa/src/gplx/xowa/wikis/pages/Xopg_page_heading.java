@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.wikis.pages;
 
 import gplx.Bry_;
+import gplx.String_;
 import gplx.Bry_bfr;
 import gplx.Bry_bfr_;
 import gplx.Bry_fmt;
@@ -57,7 +58,7 @@ public class Xopg_page_heading implements Bfr_arg {
 
 		fmtr.Bld_many(bfr, lang_code, display_title, edit_lead_section);
 	}
-	public void Build_json(Json_nde data) {
+	public void Build_json(Json_nde data) { // vector
 		data.AddKvStr("page-langcode", lang_code);
 		if (html_data.Pagebanner().IsValid()) {
 			// just an empty firstHeading
@@ -71,6 +72,21 @@ public class Xopg_page_heading implements Bfr_arg {
 			edit_lead_section = tmp_bfr.To_bry_and_clear();
 		}
 		data.AddKvStr("html-title", Bry_.Add(display_title, edit_lead_section));
+	}
+	public void Build_json_minerva(Json_nde data) { // minerva_skin
+		data.AddKvStr("page-langcode", lang_code);
+		if (html_data.Pagebanner().IsValid()) {
+			// just an empty firstHeading
+			return;
+		}	// pgbnr exists; don't add title
+		byte[] edit_lead_section = Bry_.Empty;
+		if (	wiki.Parser_mgr().Hdr__section_editable__mgr().Enabled()
+			&&	mode_is_read) {
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			wiki.Parser_mgr().Hdr__section_editable__mgr().Write_html(tmp_bfr, ttl_full_db, Bry_.Empty, Bry__lead_section_hint);
+			edit_lead_section = tmp_bfr.To_bry_and_clear();
+		}
+		data.AddKvStr("headinghtml", "<h1 id=\"section_0\">" + String_.new_u8(display_title) + "</h1>");
 	}
 	private static final    byte[] Bry__lead_section_hint = Bry_.new_u8("(Lead)");
 	private final    Bry_fmt fmtr = Bry_fmt.Auto_nl_apos("<h1 id=\"firstHeading\" class=\"firstHeading\" lang=\"~{lang}\">~{page_title}~{edit_lead_section}</h1>");	// <span>~{page_title}</span>

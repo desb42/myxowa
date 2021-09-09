@@ -1,59 +1,39 @@
-/* eslint-disable vars-on-top, camelcase, one-var */
+/* eslint-disable camelcase */
 
 ( function ( mw, $ ) {
 
-	function init_setting( variable_name, cookie_name, init ) {
+	function initSetting( cookie_name, init ) {
 	/* Sets JS variable to (in order of preference):
-		1. previously initialized JS variable value
 		2. current cookie value
 		3. provided init parameter
 		4. false
-
-		Then, if cookie was not previously set, set it to current value of JS variable
-		(this bit currently disabled)
 	*/
 		// get current value of appropriate cookie
 		var cookie_val = mw.cookie.get( cookie_name );
-		//      some code so that people's cookies will change from digits to boolean values. remove after a week or so.
-		//      in case you are wondering, this is to avoid the mixed use of digits as numbers and as booleans. --Eliyak
-		//  if ( cookie_val === "0" ) { cookie_val = false; mw.cookie.set( cookie_name, false ); }
-		//      else if ( cookie_val === "1" ) { cookie_val = true; mw.cookie.set( cookie_name, true ); }
 
-		// If JS variable was not previously initialized in this page load, set it now to the cookie value.
-		self[ variable_name ] = self[ variable_name ] || cookie_val;
-
-		// If JS variable still has no value, use provided init value. If no init value provided, use false.
-		if ( typeof self[ variable_name ] === 'undefined' || self[ variable_name ] === null ) {
-			self[ variable_name ] = init || false;
+		// If JS variable still has no value, use provided init value. If no init
+		// value provided, use false.
+		if ( typeof cookie_val === 'undefined' || cookie_val === null ) {
+			cookie_val = init || false;
 		}
 
-		// If cookie was not set, set it now to the current value of the JS variable.
-		//  disabling for now - cookie should not need to be set if value was initialized but not changed afterwards.
-		//  if ( typeof cookie_val === "undefined" ) mw.cookie.set( cookie_name, self[ variable_name ] );
-
-		// If JS variable is now the string "false", convert to boolean false (to fix JS confusion where "false" string evaluates to true).
-		if ( self[ variable_name ] === 'false' ) {
-			self[ variable_name ] = false;
+		// If JS variable is now the string "false", convert to boolean false
+		// (to fix JS confusion where "false" string evaluates to true).
+		if ( cookie_val === 'false' ) {
+			cookie_val = false;
 		}
+
+		return cookie_val;
 	}
 
-	if ( !self.ws_messages ) {
-		self.ws_messages = {};
+	function saveSetting( name, value ) {
+		mw.cookie.set( name, value );
 	}
-
-	window.ws_msg = function ( name ) {
-		var m = self.ws_messages[ name ];
-		if ( m ) {
-			return m;
-		} else {
-			return name;
-		}
-	};
 
 	/**
 	 * Messages are configurable here
 	 */
-	self.ws_messages = {
+	mw.messages.set( {
 		do: 'Display Options',
 		displayOptions: 'Display Options',
 		optlist: 'Display Options',
@@ -62,156 +42,274 @@
 		page_numbers_displayed: 'Page links displayed',
 		page_numbers_inline: 'Page links within text',
 		page_numbers_beside: 'Page links beside text',
-		layout_name: 'Layout',
+		layout_name: 'layout_1',
 		layout: 'Layout',
-		layout_1: 'Layout 1',
-		layout_2: 'Layout 2',
-		layout_3: 'Layout 3',
-		layout_4: 'Layout 4'
-	};
+		use_serif: 'Use serif fonts',
+		use_sans_serif: 'Use sans-serif fonts',
+		serif_text_title: 'Change between serif and sans-serif fonts',
+		default_layout_on: 'Default layouts on',
+		default_layout_off: 'Default layouts off',
+		default_layout_title: 'Default layouts allow pages to choose a specific layout for you. Turn it off if you always want the layout you set.',
+		default_layout_suffix: 'default',
+		what_is_this_title: 'What is this?',
+		what_is_this_symbol: '?'
+	} );
 
-	// Dynamic layouts
-	if ( !self.ws_layouts ) {
-		self.ws_layouts = {};
+	var standard_layouts = [
+		{
+			id: 'layout_1',
+			name: 'Layout 1'
+		},
+		{
+			id: 'layout_2',
+			name: 'Layout 2'
+		},
+		{
+			id: 'layout_3',
+			name: 'Layout 3'
+		},
+		{
+			id: 'layout_4',
+			name: 'Layout 4'
+		}
+	];
+
+	// eslint-disable-next-line no-jquery/no-global-selector
+	var $classedContainer = $( '#mw-content-text' );
+
+	var containers = {};
+
+	function removeClassesWithPrefix( el, prefix ) {
+		var classes = el.className.split( ' ' ).filter( function ( c ) {
+			return c.lastIndexOf( prefix, 0 ) !== 0;
+		} );
+		// eslint-disable-next-line mediawiki/class-doc
+		el.className = classes.join( ' ' ).trim();
 	}
-	self.ws_layouts[ 'Layout 1' ] = {
-		'#pageContainer': '',
-		'#regionContainer': '',
-		'#columnContainer': '',
-		'.sidenote-right': 'float:right; margin:0.5em; padding:3px; border:solid 1px gray; max-width:9em; text-indent:0em; text-align:left;',
-		'.sidenote-left': 'float:left; margin:0.5em; padding:3px; border:solid 1px gray; max-width:9em; text-indent:0em; text-align:left;',
-		'.mw-editsection': '',
-		'#headerContainer': ''
-	};
-	self.ws_layouts[ 'Layout 2' ] = {
-		'#pageContainer': '',
-		'#regionContainer': 'width:36em; margin:0 auto 0 auto; font-family:Georgia,serif;',
-		'#columnContainer': 'text-align:justify;',
-		'.sidenote-right': 'position:absolute; left:37em; width:16em; text-indent:0em; text-align:left;',
-		'.sidenote-left': 'position:absolute; left:37em; width:16em; text-indent:0em; text-align:left;',
-		'.mw-editsection': '',
-		'#headerContainer': 'font-family:sans-serif;'
-	};
-	self.ws_layouts[ 'Layout 3' ] = {
-		'#pageContainer': '',
-		'#regionContainer': '',
-		'#columnContainer': 'margin-right:calc(1rem * 9); text-align:justify;',
-		'.sidenote-right': 'position:absolute; right:0; width:9.00em; background-color:#eeeeee; text-indent:0.00em; text-align:left;',
-		'.sidenote-left': 'position:absolute; right:0; width:9.00em; background-color:#eeeeee; text-indent:0.00em; text-align:left;',
-		'.mw-editsection': '',
-		'#headerContainer': 'font-family:sans-serif;'
-	};
-	self.ws_layouts[ 'Layout 4' ] = {
-		'#pageContainer': '',
-		'#regionContainer': 'width:36em; margin:0 auto 0 auto; font-family:sans-serif;',
-		'#columnContainer': 'text-align:justify;',
-		'.sidenote-right': 'position:absolute; left:37em; width:16em; text-indent:0em; text-align:left;',
-		'.sidenote-left': 'position:absolute; left:37em; width:16em; text-indent:0em; text-align:left;',
-		'.mw-editsection': '',
-		'#headerContainer': 'font-family:sans-serif;'
-	};
+
+	/*
+	 * The display control options:
+	 *  * serif/sans serif fonts
+	 */
+	var display = ( function () {
+
+		// My kingdom for Vuex
+		var State = {
+			serif: false,
+
+			cache: {}
+		};
+
+		function updateSerifs() {
+			// tthe relevant class on the content
+			containers.$page.toggleClass( 'ws-display-serif', State.serif );
+
+			var msg = mw.msg( State.serif ? 'use_sans_serif' : 'use_serif' );
+			State.cache.$serifSwitch.children( 'a' ).html( msg );
+		}
+
+		function init() {
+
+			State.cache.$serifSwitch = $( mw.util.addPortletLink(
+				'p-do', '#', '', 'd-serif', mw.msg( 'serif_text_title' ) )
+			)
+				.on( 'click', function () {
+					State.serif = !State.serif;
+					updateSerifs();
+					saveSetting( 'ws-display-serif', State.serif );
+				} );
+
+			State.serif = initSetting( 'ws-display-serif', false );
+			updateSerifs();
+		}
+
+		return {
+			init: init
+		};
+	}() );
 
 	var layout = ( function () {
-			if ( !self.ws_layouts ) {
-				self.ws_layouts = {};
-			} else {
-				self.ws_layouts.names = [];
-			}
+			var State = {
+				allow_default: true,
+				default_applied: false,
+				layout_name: 'Layout 1',
+				layouts: [],
+				cache: {}
+			};
 
-			var n = 0;
-			for ( var key in self.ws_layouts ) {
-				self.ws_layouts[ key ].number = n; // get number easily in the future
-				self.ws_layouts.names[ n ] = key; // get name from number easily as well
-				n++;
-			}
-			n -= 1;
+			function set_by_name( name ) {
 
-			function set_by_name( name, persist ) {
-				var selected_layout = self.ws_layouts[ name ];
+				var selected_layout;
+				for ( var i = 0; i < State.layouts.length; ++i ) {
+					if ( State.layouts[ i ].name === name ) {
+						selected_layout = State.layouts[ i ];
+					}
+				}
+
 				if ( !selected_layout ) {
 					return; // does not exist
 				}
 
-				$.each( selected_layout, function ( selector, style ) {
-					$( selector ).attr( 'style', style );
-				} );
+				State.layout_name = selected_layout.name;
 
-				$( '#d-textLayout' ).children( 'a' ).html( name );
-
-				self.layout_name = name;
-				if ( persist ) {
-					mw.cookie.set( 'layout', name );
+				var layoutText = selected_layout.name;
+				if ( State.allow_default && State.default_applied ) {
+					layoutText += ' (' + mw.msg( 'default_layout_suffix' ) + ')';
 				}
+
+				State.cache.$layoutSwitch.children( 'a' ).html( layoutText );
+
+				removeClassesWithPrefix( $classedContainer[ 0 ], 'dynlayout-' );
+				// eslint-disable-next-line mediawiki/class-doc
+				$classedContainer.addClass( 'dynlayout-' + selected_layout.id );
 
 				pagenumbers.refresh_offsets();
 			}
 
-			function set_by_number( number, persist ) {
-				set_by_name( self.ws_layouts.names[ number ], persist );
+			function updateLayout() {
+				var name;
+				State.default_applied = false;
+				if ( State.allow_default || !mw.cookie.get( 'layout' ) ) {
+					var overrider = State.cache.$overrider || $classedContainer.find( '#dynamic_layout_overrider' );
+					name = overrider.text();
+					if ( name ) {
+						State.default_applied = true;
+					}
+				} else {
+					name = State.layout_name || mw.cookie.get( 'layout' );
+				}
+				set_by_name( name || State.layout_name );
+			}
+
+			function set_by_number( number ) {
+				State.layout_name = State.layouts[ number ].name;
+				updateLayout();
+			}
+
+			function getLayoutIndexWithName( name ) {
+				for ( var i = 0; i < State.layouts.length; ++i ) {
+					if ( State.layouts[ i ].name === name ) {
+						return i;
+					}
+				}
+
+				return -1;
 			}
 
 			function toggle() {
-				set_by_number( ( self.ws_layouts[ self.layout_name ].number + 1 ) % n, true );
+				var cur = getLayoutIndexWithName( State.layout_name );
+
+				// disable override for this page only (no persistence)
+				State.allow_default = false;
+
+				set_by_number( ( cur + 1 ) % State.layouts.length );
+
+				// store the changed layout
+				mw.cookie.set( 'layout', State.layout_name );
 			}
 
-			function isNumeric( candidate ) {
-				return !isNaN( parseFloat( candidate ) ) && isFinite( candidate );
+			function updateDefault() {
+				var msg = mw.msg( State.allow_default ? 'default_layout_on' : 'default_layout_off' );
+				State.cache.$defaultLayoutSwitch.children( 'a' ).html( msg );
+
+				updateLayout();
 			}
 
 			function init() {
-				var name;
 				// do return if we're already set up
 				if ( document.getElementById( 'pageContainer' ) ) {
 					return;
 				}
 
-				// get_optlist();
-				var portletLink = mw.util.addPortletLink(
+				// collect any user or other gadget layouts
+				mw.hook( 'ws.layouts.register' ).fire( {
+					layouts: standard_layouts
+				} );
+// XOWA HACK
+layouts = standard_layouts
+// end XOWA HACK
+
+				State.layouts = standard_layouts;
+
+				// If cookie is not set, default layout is first available option.
+				// Use index "0" in case layout name is ever changed.
+				State.layout_name = initSetting( 'layout', '0' );
+
+				State.allow_default = initSetting( 'ws-display-default-layouts', true );
+
+				State.cache.$layoutSwitch = $( mw.util.addPortletLink(
 					'p-do',
 					'#',
-					ws_msg( 'layout' ),
+					mw.msg( 'layout' ),
 					'd-textLayout',
-					'The designation of the dynamic layout being applied [alt-l]',
-					'l'
-				);
-				$( portletLink ).on( 'click', function ( e ) {
-					e.preventDefault();
-					toggle();
-				} );
+					'The designation of the dynamic layout being applied',
+					'l',
+					'#d-defaultLayouts'
+				) )
+					.on( 'click', function ( e ) {
 
-				// Check for presence of Proofreading extension by looking for pr_quality color status bar
-				// or any .prp-pages-output blocks
-				if ( $( 'table.pr_quality' ).length || $( '.prp-pages-output' ).length ) {
-					// remove all these classes to maintain backwards-compatibility
-					$( 'div.text, .lefttext, .centertext, .indented-page, .prose' ).removeClass();
-					// DynamicFlaw - a independent Div should have been the parent to this 3-into-1 step
-					$( '#mw-content-text .mw-parser-output' )
-						.contents().not( '.dynlayout-exempt' )
-						.wrapAll( '<div id="pageContainer"><div id="regionContainer"><div id="columnContainer"></div></div></div>' );
-				}
+						e.preventDefault();
+						toggle();
+					} );
 
-				// If cookie is not set, default layout is first available option. Use index "0" in case layout name is ever changed.
-				init_setting( 'layout_name', 'layout', '0' );
+				State.cache.$defaultLayoutSwitch = $( mw.util.addPortletLink(
+					'p-do',
+					'#',
+					'',
+					'd-defaultLayouts',
+					mw.msg( 'default_layout_title' )
+				) )
+					.on( 'click', function ( e ) {
+						State.allow_default = !State.allow_default;
+
+						// if we just turned the default off, use the cookie value
+						if ( !State.allow_default ) {
+							State.layout_name = mw.cookie.get( 'layout' );
+						}
+
+						updateDefault();
+						saveSetting( 'ws-display-default-layouts', State.allow_default );
+						e.preventDefault();
+					} );
+
+				// remove all these classes to maintain backwards-compatibility
+				$classedContainer
+					.find( 'div.text, .lefttext, .centertext, .indented-page, .prose' )
+					.removeClass();
+
+				// DynamicFlaw - a independent Div should have been the parent
+				// to this 3-into-1 step
+				var $parserOutput = $classedContainer.find( '.mw-parser-output' )
+					.contents()
+					.not( '.dynlayout-exempt' )
+					.wrapAll( $( '<div>' )
+						.attr( 'id', 'pageContainer' )
+						.append( $( '<div>' )
+							.attr( 'id', 'regionContainer' )
+							.append( $( '<div>' )
+								.attr( 'id', 'columnContainer' )
+							)
+						)
+					);
+
+				// cache the containers
+				containers.$column = $parserOutput.parent();
+				containers.$region = containers.$column.parent();
+				containers.$page = containers.$region.parent();
 
 				// If layouts have changed, the cookie might refer to a missing layout
 				// in which case, set the first one
-				if ( !self.ws_layouts[ self.layout_name ] ) {
+				if ( getLayoutIndexWithName( State.layout_name ) === -1 ) {
 					set_by_number( 0, true );
 				}
 
-				if ( self.layout_overrides_have_precedence || !mw.cookie.get( 'layout' ) ) {
-					name = $( '#dynamic_layout_overrider' ).text();
-				}
+				// set the layout by default (override) layout, or from the user's setting
+				updateDefault();
 
-				name = name || self.layout_name;
-
-				if ( isNumeric( name ) ) {
-					set_by_number( name, false );
-				} else if ( name ) {
-					set_by_name( name, false );
-				} else {
-					set_by_number( 0, false );
-				}
+				mw.hook( 'ws.layouts.ready' ).fire();
+// XOWA HACK
+pagenumbers.doInit();
+// end XOWA HACK
 			}
 
 			return {
@@ -222,8 +320,7 @@
 		pagenumbers = ( function () {
 
 			// some shared variables to avoid selecting these elements repeatedly
-			var $container,
-				$div_pagenumbers,
+			var $div_pagenumbers,
 				dp_y,
 				y_prev,
 				$pagenumbers_collection,
@@ -231,11 +328,11 @@
 				$div_highlight,
 
 				show_params = {
-					link_text: ws_msg( 'page_numbers_displayed' ),
+					link_text: mw.msg( 'page_numbers_displayed' ),
 					visible: true
 				},
 				hide_params = {
-					link_text: ws_msg( 'page_numbers_hidden' ),
+					link_text: mw.msg( 'page_numbers_hidden' ),
 					visible: false
 				};
 
@@ -253,6 +350,8 @@
 				if ( $next.length === 0 ) {
 					$next = $div_ss;
 				}
+
+				var $container = containers.$column;
 
 				// we need to use document offsets in case a page break occurs within
 				// a positioned element
@@ -379,34 +478,39 @@
 					pagenumber_id += ( '_' + count );
 				}
 
-				$.data( page_span, 'pagenumber_id', pagenumber_id );
-				var page_title = decodeURI( page_span.title ).replace( /%26/g, '&' ).replace( /%3F/g, '?' ),
-					page_url =
-			mw.config.get( 'wgArticlePath' )
-				.replace( '$1', encodeURIComponent( page_title.replace( / /g, '_' ) ) )
-			// encodeURIComponent encodes '/', which breaks subpages
-				.replace( /%2F/g, '/' ),
+				if ( !page_span.title ) {
+					// there's no page to link to - just set plain text
+					$.data( page_span, 'link_str', mw.html.escape( name ) );
+				} else {
+					$.data( page_span, 'pagenumber_id', pagenumber_id );
+					var page_title = decodeURI( page_span.title ).replace( /%26/g, '&' ).replace( /%3F/g, '?' ),
+						page_url =
+				mw.config.get( 'wgArticlePath' )
+					.replace( '$1', encodeURIComponent( page_title.replace( / /g, '_' ) ) )
+				// encodeURIComponent encodes '/', which breaks subpages
+					.replace( /%2F/g, '/' ),
 
-					// if transcluded Page: (ll) is a redlink then make page class
-					// (class_str) a redlink also
-					ll = page_span.parentNode.nextSibling,
-					class_str = '',
-					action_str = '';
+						// if transcluded Page: (ll) is a redlink then make page class
+						// (class_str) a redlink also
+						ll = page_span.parentNode.nextSibling,
+						class_str = '',
+						action_str = '';
 
-				if ( ll && ll.tagName === 'A' && ll.className === 'new' ) {
-					class_str = ' class="new" ';
-					action_str = '?action=edit&redlink=1';
+					if ( ll && ll.tagName === 'A' && ll.className === 'new' ) {
+						class_str = ' class="new" ';
+						action_str = '?action=edit&redlink=1';
+					}
+
+					$.data(
+						page_span,
+						'link_str',
+						'<a href= "' + page_url + action_str + '"' +
+				class_str +
+				' title= "' + mw.html.escape( page_title ) + '">' +
+				mw.html.escape( name ) +
+				'</a>'
+					);
 				}
-
-				$.data(
-					page_span,
-					'link_str',
-					'<a href= "' + page_url + action_str + '"' +
-			class_str +
-			' title= "' + mw.html.escape( page_title ) + '">' +
-			mw.html.escape( name ) +
-			'</a>'
-				);
 
 				setup_elem( i, page_span );
 			}
@@ -431,7 +535,7 @@
 					//  put pagenumbers container div in the outermost layout container
 					$div_pagenumbers = $( '<div>' )
 						.attr( 'id', 'ct-pagenumbers' )
-						.appendTo( 'div#pageContainer' );
+						.appendTo( containers.$page );
 					dp_y = $div_pagenumbers.offset().top;
 					y_prev = {
 						val: -10
@@ -462,33 +566,34 @@
 				// toggle inline view unless layouts are not set up
 				self.proofreadpage_numbers_inline = !layout || !self.proofreadpage_numbers_inline;
 				$( '#d-pageNumbers_inline' ).children( 'a' )
-					.html( ws_msg( self.proofreadpage_numbers_inline ? 'page_numbers_inline' : 'page_numbers_beside' ) );
+					.html( mw.msg( self.proofreadpage_numbers_inline ? 'page_numbers_inline' : 'page_numbers_beside' ) );
 				mw.cookie.set( 'pagenums_inline', self.proofreadpage_numbers_inline );
 				refresh_display();
 			}
 
-			function init() {
-				// skip if pagenumbers are already set up
-				if ( $pagenumbers_collection ) {
-					return false;
-				}
+			function doInit() {
+				// Mark the container as having pagenumbers.
+				// Some layouts can use that information.
+				$( containers.$page )
+					.addClass( 'dynlayout-haspagenums' );
 
 				// get_optlist();
-				init_setting( 'proofreadpage_numbers_visible', 'pagenums_visible', true );
+				self.proofreadpage_numbers_visible = initSetting( 'pagenums_visible', true );
 				var portletLink = mw.util.addPortletLink(
 					'p-do',
 					'#',
-					self.proofreadpage_numbers_visible ? ws_msg( 'page_numbers_displayed' ) : ws_msg( 'page_numbers_hidden' ),
+					self.proofreadpage_numbers_visible ? mw.msg( 'page_numbers_displayed' ) : mw.msg( 'page_numbers_hidden' ),
 					'd-pageNumbers_visible',
-					'The current state of embedded link visibility [alt-n]',
-					'n'
+					'The current state of embedded link visibility',
+					'n',
+					'#d-serif'
 				);
 				$( portletLink ).on( 'click', function ( e ) {
 					e.preventDefault();
 					toggle_visible();
 				} );
 
-				init_setting( 'proofreadpage_numbers_inline', 'pagenums_inline', false );
+				self.proofreadpage_numbers_inline = initSetting( 'pagenums_inline', false );
 
 				// if layouts are not initialized show pagenumbers inline since
 				// "beside" view won't work
@@ -499,10 +604,11 @@
 				portletLink = mw.util.addPortletLink(
 					'p-do',
 					'#',
-					self.proofreadpage_numbers_inline ? ws_msg( 'page_numbers_inline' ) : ws_msg( 'page_numbers_beside' ),
+					self.proofreadpage_numbers_inline ? mw.msg( 'page_numbers_inline' ) : mw.msg( 'page_numbers_beside' ),
 					'd-pageNumbers_inline',
-					'The current positioning used for embedded link presentation [alt-i]',
-					'i'
+					'The current positioning used for embedded link presentation',
+					'i',
+					'#d-pageNumbers_visible'
 				);
 
 				$( portletLink ).on( 'click', function ( e ) {
@@ -510,50 +616,61 @@
 					toggle_inline();
 				} );
 
-				var opacity = 'background-color:#000000; opacity:0.2; filter:alpha(opacity=20);';
 				// store container for the highlight to shared variable "div_highlight"
-				$div_highlight = $( '<div id= "highlight-area" style= "display:none; position:absolute; width:100%;">' +
-			'<div style= "' + opacity + ' float:right; width:0px;"><div class= "clearFix"></div></div>' +
-			'<div style= "' + opacity + ' width:100%; height:0px; clear:both;"></div>' +
-			'<div style= "' + opacity + ' width:0px;"><div class= "clearFix" style= "float:left; clear:both;"></div></div>' +
-			'</div>' );
+				$div_highlight = $( '<div id= "highlight-area">' +
+					'<div style="float:right; width:0px;"><div class= "clearFix"></div></div>' +
+					'<div style="width:100%; height:0px; clear:both;"></div>' +
+					'<div style="width:0px;"><div class= "clearFix" style= "float:left; clear:both;"></div></div>' +
+					'</div>'
+				);
 
 				// assign new div element to shared variable "div_ss"
 				$div_ss = $( '<div id= "my-ss"><div class= "clearFix"></div></div>' ); // empty span following some text
 
 				// put divs in the innermost dynamic layout container
 				if ( layout ) {
-					$container = $( '#columnContainer' )
+					containers.$column
 						.append( $div_highlight );
-					$( '.mw-content-ltr' ).append( $div_ss );
+					$classedContainer.append( $div_ss );
 				} else {
-					$( '.mw-content-ltr' ).append( $div_highlight, $div_ss );
+					$classedContainer.append( $div_highlight, $div_ss );
 				}
 
-				self.$pagenum_ml = $( '.pagenum' );
+				self.$pagenum_ml = $classedContainer.find( '.pagenum' );
 				refresh_display();
+			}
+
+			function init() {
+				// skip if pagenumbers are already set up
+				if ( $pagenumbers_collection ) {
+					return false;
+				}
+
+				// wait for the layouts code to signal that the containers are ready
+				mw.hook( 'ws.layouts.ready' ).add( function () {
+					doInit();
+				} );
 			}
 
 			return {
 				init: init,
 				refresh_offsets: refresh_offsets
+// XOWA HACK
+				,doInit: doInit
+// end XOWA HACK
 			};
 		}() );
 
 	if ( [ 'view', 'submit', 'purge' ].indexOf( mw.config.get( 'wgAction' ) ) !== -1 ) {
 		if ( !self.debug_page_layout &&
 			// don't do anything on DoubleWiki or difference comparison views
-			document.URL.indexOf( 'match=' ) === -1 &&
-			document.URL.indexOf( 'diff=' ) === -1 &&
-			( 'self.proofreadpage_source_href' ) ) {
+			document.URL.indexOf( 'match=' ) === -1 ) {
 
-			if ( !$.isEmptyObject( self.ws_layouts ) ) {
-				layout.init();
-			}
+			layout.init();
+			display.init();
 
 			$( function () {
-				// eslint-disable-next-line no-jquery/no-global-selector
-				if ( $( '.pagenum' ).length ) {
+				if ( $classedContainer.find( '.pagenum' ).length ) {
 					pagenumbers.init();
 
 					if ( document.readyState === 'complete' ) {
@@ -563,37 +680,52 @@
 					}
 				}
 			} );
+
+			// Add a "what's this" helper to display options
+			// eslint-disable-next-line no-jquery/no-global-selector
+			$( '#p-do-label' ).append( $( '<span>' )
+				.css( { float: 'right' } )
+				.append( $( '<a>' )
+					.attr( {
+						href: '/wiki/Help:Layout',
+						title: mw.msg( 'what_is_this_title' )
+					} )
+					.append( mw.msg( 'what_is_this_symbol' ) )
+				)
+			);
 		}
 		var position = window.location.hash.substring( 1 );
 		if ( position && document.getElementById( position ) ) {
 			document.getElementById( position ).scrollIntoView();
 		}
+
+		/**
+		 * Install the DOM-ready hook to force header and footer content out of
+		 * Dynamic Layouts
+		 */
+		$( function () {
+
+			var $c = $classedContainer;
+
+			$c.find( '.acContainer' ).insertAfter( $c.find( 'div.printfooter' ) );
+
+			$( '<div>' )
+				.addClass( 'dynlayout-exempt dynlayout-exempt-footer' )
+				.insertBefore( 'div#catlinks' )
+				.append( $c.find( '.acContainer' ) )
+				.append( $c.find( 'div.licenseContainer' ).not( 'div.licenseContainer div.licenseContainer' ) )
+				.append( $c.find( '#editform' ) )
+				.append( $c.find( '#footertemplate' ) );
+
+			$( '<div>' )
+				.addClass( 'dynlayout-exempt dynlayout-exempt-header' )
+				.insertBefore( containers.$page )
+				.prepend( $c.find( 'div#headerContainer' ) )
+				.prepend( $c.find( 'div#heederContainer' ) )
+				.prepend( $c.find( 'div#heedertemplate' ) )
+				.prepend( $c.find( '#mw-previewheader' ) );
+		} );
 	}
-
-	/**
-	 * Install the DOM-ready hook to force header and footer content out of
-	 * Dynamic Layouts
-	 */
-	$( function () {
-
-		$( '.acContainer' ).insertAfter( $( 'div.printfooter' ) );
-
-		$( '<div>' )
-			.addClass( 'dynlayout-exempt dynlayout-exempt-footer' )
-			.insertBefore( 'div#catlinks' )
-			.append( $( '.acContainer' ) )
-			.append( $( 'div.licenseContainer' ).not( 'div.licenseContainer div.licenseContainer' ) )
-			.append( $( '#editform' ) )
-			.append( $( '#footertemplate' ) );
-
-		$( '<div>' )
-			.addClass( 'dynlayout-exempt dynlayout-exempt-header' )
-			.insertBefore( 'div#pageContainer' )
-			.prepend( $( 'div#headerContainer' ) )
-			.prepend( $( 'div#heederContainer' ) )
-			.prepend( $( 'div#heedertemplate' ) )
-			.prepend( $( '#mw-previewheader' ) );
-	} );
 
 /* eslint-disable-next-line no-undef */
 }( mediaWiki, jQuery ) );

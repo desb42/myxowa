@@ -173,8 +173,6 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 	public void Fill_page(Xoae_page wpg, Xoh_page hpg) {
 		Xopg_html_data html_data = wpg.Html_data();
 
-                wpg.Db().Page().Modified_on_(hpg.Db().Page().Modified_on());
-
 		html_data.Display_ttl_(tmp_hpg.Display_ttl());
 		html_data.Content_sub_(tmp_hpg.Content_sub());			
 		html_data.Xtn_skin_mgr().Add(new Xopg_xtn_skin_itm_stub(tmp_hpg.Sidebar_div()));

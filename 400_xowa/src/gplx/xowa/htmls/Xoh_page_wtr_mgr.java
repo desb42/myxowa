@@ -34,9 +34,12 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	public Bry_fmtr Page_edit_fmtr() {return page_edit_fmtr;} private Bry_fmtr page_edit_fmtr = Bry_fmtr.new_("", Fmtr_keys);
 	public Bry_fmtr Page_html_fmtr() {return page_html_fmtr;} private Bry_fmtr page_html_fmtr = Bry_fmtr.new_("", Fmtr_keys);
 	public byte[] Edit_rename_div_bry(Xoa_ttl ttl) {return div_edit_rename_fmtr.Bld_bry_many(tmp_bfr, ttl.Full_db_href());}
+	private byte[] base_common_bry, base_wiki_bry;
 	public void Init_css_urls(Xoa_app app, String wiki_domain, Io_url css_common_url, Io_url css_wiki_url) {
 		this.css_common_bry = css_common_url.To_http_file_bry();
 		this.css_wiki_bry = css_wiki_url.To_http_file_bry();
+		this.base_common_bry = Bry_.Mid(css_common_bry, 0, css_common_bry.length - 4);
+		this.base_wiki_bry = Bry_.Mid(css_wiki_bry, 0, css_wiki_bry.length - 4);
 
 		// xowa_night.css;
 		Io_url css_night_url = app.Fsys_mgr().Url_finder().Find_by_css_or(wiki_domain, "xowa_night.css", String_.Ary("bin", "any", "xowa", "html", "css", "nightmode"), true);
@@ -48,6 +51,14 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	}
 	public byte[] Gen(Xoae_page page, byte output_tid) {return Gen(page, Xoh_page_html_source_.Noop, output_tid);}
 	public byte[] Gen(Xoae_page page, Xoh_page_html_source page_html_source, byte output_tid) {
+		if (page.Page_skin().equals("minerva")) {
+			css_common_bry = Bry_.Add(base_common_bry, bry_minerva);
+			css_wiki_bry = Bry_.Add(base_wiki_bry, bry_minerva);
+		}
+		else {
+			css_common_bry = Bry_.Add(base_common_bry, bry_css);
+			css_wiki_bry = Bry_.Add(base_wiki_bry, bry_css);
+		}
 		Xoh_page_wtr_wkr wtr = Wkr(output_tid);
 		Xowe_wiki wiki = page.Wikie();
 		if (init) {
@@ -99,7 +110,7 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 		, "page_lang"
 		, "page_name"
 		, "redlinks"
-		, "vectortags"
+		, "skintags"
 		, "wiki_key"
 		, "xowa_head"
 /*		"app_root_dir", "app_version", "app_build_date", "xowa_mode_is_server"
@@ -132,9 +143,13 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
         , "page_pgbnr_bread"
         , "app_icon"
         , "tagline"
-        , "vectortags"
+        , "vectortags" // now "skintags"
 */	};
 	private static final String Cfg__scripting_enabled = "xowa.html.scripting.enabled";
+	private static byte[]
+	  bry_minerva = Bry_.new_a7("_minerva.css")
+	, bry_css = Bry_.new_a7(".css")
+	;
 }
 /*
 NOTE_1:xowa_anchor_button

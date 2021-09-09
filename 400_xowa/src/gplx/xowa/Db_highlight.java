@@ -81,9 +81,15 @@ public class Db_highlight {
 					if (synpos_end > 0) {
 						bfr.Add_mid(src, startpos, synpos_bgn);
 						bfr.Add(Bry_.new_a7(Base64Converter.Encode(Bry_.Mid(src, synpos_bgn, synpos_end))));
+						// HACK dont like trailing '=' (can be two of them)
+						int endpos = bfr.Start() + bfr.Len();
+						if (bfr.Bfr()[endpos-2] == '=')
+							bfr.Bfr()[endpos-2] = '.';
+						if (bfr.Bfr()[endpos-1] == '=')
+							bfr.Bfr()[endpos-1] = '.';
 						bfr.Add_str_a7("$$");
 						startpos = synpos_end;
-                                                page.Html_data().Syntaxhighlight_(true);
+						page.Html_data().Syntaxhighlight_(true);
 					}
 				}
 			}

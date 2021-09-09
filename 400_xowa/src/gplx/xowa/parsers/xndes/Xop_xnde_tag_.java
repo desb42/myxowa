@@ -294,7 +294,7 @@ public class Xop_xnde_tag_ {
 , Tag__mapframe = New(Tid__mapframe, "mapframe").Xtn_mw_()
 , Tag__maplink = New(Tid__maplink, "maplink").Xtn_mw_()
 , Tag__meta = New(Tid__meta, "meta")
-, Tag__link = New(Tid__link, "link")
+, Tag__link = New(Tid__link, "link").Single_only_()
 , Tag__template_styles = New(Tid__template_styles, "templatestyles").Xtn_().Html_mkr_(Tag_html_mkr_.Basic(false))
 
 , Tag__audio = New(Tid__audio, "audio")

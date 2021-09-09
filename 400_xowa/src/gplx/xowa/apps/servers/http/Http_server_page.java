@@ -101,7 +101,7 @@ public class Http_server_page {
 		this.ttl_bry = url_parser.Page();
 		if (Bry_.Len_eq_0(ttl_bry) || Bry_.Eq(Xoa_ttl.Replace_unders(ttl_bry), wiki.Props().Main_page())) {
 			this.ttl_bry = wiki.Props().Main_page();
-                        url_parser.Is_main_page_set();
+			url_parser.Is_main_page_set();
 		}
 		// generate ttl of domain/wiki/page; needed for pages with leading slash; EX: "/abcd" -> "en.wikipedia.org/wiki//abcd"; ISSUE#:301; DATE:2018-12-16
 		else {
@@ -129,9 +129,10 @@ public class Http_server_page {
 	}
 	public void Make_page(Http_data__client data__client) {
 		// get the page
-                this.redlink = "";
+		this.redlink = "";
 		this.tab = Gxw_html_server.Assert_tab2(app, wiki);	// HACK: assert tab exists
 		this.page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display(), url_parser.Action());
+		this.page.Page_skin_(url_parser.Useskin());
 		app.Gui_mgr().Browser_win().Active_page_(page);	// HACK: init gui_mgr's page for output (which server ordinarily doesn't need)
 		if (page.Db().Page().Exists_n()) { // if page does not exist, replace with message; else null_ref error; DATE:2014-03-08
 			page.Db().Text().Text_bry_(Bry_.new_a7("'''Page not found.'''"));

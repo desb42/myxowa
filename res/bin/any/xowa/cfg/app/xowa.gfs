@@ -207,7 +207,7 @@ app.wikis.get('~{wiki_key}').html.portal {
 ;
   txt_pageread =
 <:["
-    <div id="mw-content-text" lang="~{page_lang}" dir="~{page_lang_ltr}" class="mw-body-content mw-content-~{page_lang_ltr} lang="~{page_lang}" dir="~{page_lang_ltr}">~{page_data}
+    <div id="mw-content-text" class="mw-body-content mw-content-~{page_lang_ltr}" lang="~{page_lang}" dir="~{page_lang_ltr}">~{page_data}
     </div>
 "]:>
 ;
@@ -264,7 +264,7 @@ app.wikis.get('~{wiki_key}').html.article {
     .new {!important; color:green;}
   </style>
 </head>
-<body class="mediawiki ~{page_lang_ltr} sitedir-~{page_lang_ltr} mw-hide-empty-elt ~{page_body_cls} skin-vector action-view~{vectortags}"~{html_content_editable} spellcheck="false">~{content}
+<body class="mediawiki ~{page_lang_ltr} sitedir-~{page_lang_ltr} mw-hide-empty-elt ~{page_body_cls} ~{skintags}"~{html_content_editable} spellcheck="false">~{content}
 
 <script type="text/javascript">
 var redlinks = [""~{redlinks}];

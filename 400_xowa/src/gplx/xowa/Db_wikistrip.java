@@ -824,9 +824,14 @@ public class Db_wikistrip {
 					startpos = pos - 1;
 					break;
 				}
-				case '"': // convet to &quot;
+				case '"': // convert to &quot;
 					bfr.Add_mid(src, startpos, pos-1);
 					bfr.Add_str_a7("&quot;");
+					startpos = pos;
+					break;
+				case '\t':
+					bfr.Add_mid(src, startpos, pos-1);
+					bfr.Add_str_a7("\\t");
 					startpos = pos;
 					break;
 				case '\n':

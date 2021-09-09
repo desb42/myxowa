@@ -137,7 +137,7 @@ public class Http_server_wkr implements Gfo_invk {
 			else if (url_parser.Action() == Xopg_view_mode_.Tid__firstpara) {
 				if (page.Page() != null) {
 					wikitext = page.Page().Db().Text().Text_bry();
-                                        page.Wiki().Parser_mgr().Ctx().Page().Ttl_(page.Ttl());	// NOTE: must set cur_page, else page-dependent templates won't work; EX: {{FULLPAGENAME}};
+					page.Wiki().Parser_mgr().Ctx().Page().Ttl_(page.Ttl());	// NOTE: must set cur_page, else page-dependent templates won't work; EX: {{FULLPAGENAME}};
 				}
 				byte[] thumb = null;
 				byte[] orig = null;

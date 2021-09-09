@@ -36,5 +36,6 @@ public class Xoa_url_ {
 	, Qarg__action__wikitextver = Xopg_display_mode_.Bry__wikitextver
 	, Qarg__action__htmlver     = Xopg_display_mode_.Bry__htmlver
 	, Qarg__curid               = Bry_.new_a7("curid")
+	, Qarg__useskin             = Bry_.new_a7("useskin")
 	;
 }

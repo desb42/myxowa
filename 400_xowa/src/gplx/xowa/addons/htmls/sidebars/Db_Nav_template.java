@@ -29,9 +29,32 @@ public class Db_Nav_template {
 	public static Json_nde Build_Menu(Xowe_wiki wiki, byte[] label, byte[] text, byte[] itms) {
 		byte[] id = Bry_.Add(Bry_.new_a7("p-"), label);
 		int type;
-		if ((label[0] == 'u' && label[5] == 'm')) // 'user-menu'
-			type = MENU_TYPE_DEFAULT;
-		else if (label[0] == 'a' || (label[0] == 'v' && label[1] == 'a')) // 'actions' or 'variants'
+/* from SkinVector.php 20210908 :592
+		switch ( $label ) {
+			case 'user-menu':
+			case 'actions':
+			case 'variants':
+				$type = self::MENU_TYPE_DROPDOWN;
+				break;
+			case 'views':
+			case 'namespaces':
+				$type = self::MENU_TYPE_TABS;
+				break;
+			case 'notifications':
+			case 'personal':
+			case 'user-page':
+				$type = self::MENU_TYPE_DEFAULT;
+				break;
+			case 'lang':
+				$type = $this->isLanguagesInHeader() ?
+					self::MENU_TYPE_DROPDOWN : self::MENU_TYPE_PORTAL;
+				break;
+			default:
+				$type = self::MENU_TYPE_PORTAL;
+				break;
+		}
+*/
+		if ((label[0] == 'u' && label[5] == 'm') || label[0] == 'a' || (label[0] == 'v' && label[1] == 'a')) // 'user-menu', 'actions' or 'variants'
 			type = MENU_TYPE_DROPDOWN;
 		else if ((label[0] == 'v' && label[1] == 'i') || (label[0] == 'n' && label[1] == 'a')) // 'views' or 'namespaces'
 			type = MENU_TYPE_TABS;
@@ -209,7 +232,7 @@ public class Db_Nav_template {
 		props.AddKvStr("html-tooltip", wiki.Msg_mgr().Val_html_accesskey_and_title(plabel));
 
 		// 'html-tooltip' => Linker::tooltip( 'p-' . $label ),
-		props.AddKvStr("html-tooltip", linkertooltip);
+		//props.AddKvStr("html-tooltip", linkertooltip); // already set above!!!!!!!
 
 //		foreach ( $urls as $key => $item ) {
 //			$props['html-items'] .= $this->getSkin()->makeListItem( $key, $item );
@@ -259,7 +282,10 @@ public class Db_Nav_template {
 		String plabel = String_.new_u8(id);
 		String label = plabel.substring(2);
 		String msg = String_.new_u8(label_bry); // for now
-		String linkertooltip = String_.Empty;
+		//String msg = msg_mgr.Val_by_str_or_empty(label_bry);
+		//if (msg == "")
+		//	msg = String_.new_u8(label_bry);
+		//String linkertooltip = String_.Empty;
 
 		Json_nde props = Json_nde.NewByVal();
 		props.AddKvStr("id", plabel);
@@ -267,7 +293,7 @@ public class Db_Nav_template {
 		props.AddKvStr("label", msg);
 		props.AddKvBool("is-dropdown", type == MENU_TYPE_DROPDOWN);
 		props.AddKvStr("html-tooltip", wiki.Msg_mgr().Val_html_accesskey_and_title(plabel));
-		props.AddKvStr("html-tooltip", linkertooltip);
+		//props.AddKvStr("html-tooltip", linkertooltip); // already set above
 
 //		foreach ( $urls as $key => $item ) {
 //			$props['html-items'] .= $this->getSkin()->makeListItem( $key, $item );

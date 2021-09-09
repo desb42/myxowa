@@ -30,6 +30,7 @@ class Http_url_parser {
 	public String Popup_id() {return popup_id;} public Http_url_parser Popup_id_(String v) {this.popup_id = v; return this;} private String popup_id;
 	public String Err_msg() {return err_msg;} public Http_url_parser Err_msg_(String v) {this.err_msg = v; return this;} private String err_msg;
 	public boolean Is_main_page() {return is_main_page;} public void Is_main_page_set() {is_main_page = true;}  private boolean is_main_page;
+	public String Useskin() {return useskin;} public Http_url_parser Useskin_id_(String v) {this.useskin = v; return this;} private String useskin;
 //	public Gfo_qarg_mgr Qarg_mgr() {return qarg_mgr;} private Gfo_qarg_mgr qarg_mgr;
 
 	public String To_str() {
@@ -46,6 +47,8 @@ class Http_url_parser {
 		if (popup_link != null)
 			bfr.Add_str_a7("popup_link=").Add_str_u8(popup_link).Add_byte_nl();
 		bfr.Add_str_a7("err_msg=").Add_str_u8_null(err_msg).Add_byte_nl();
+		if (useskin != null)
+			bfr.Add_str_a7("useskin=").Add_str_u8(useskin).Add_byte_nl();
 		return bfr.To_str_and_clear();
 	}
 
@@ -122,6 +125,9 @@ class Http_url_parser {
 					case Tid__popup_link:
 						this.popup_link = String_.new_u8(qarg_val);
 						break;
+					case Tid__useskin:
+						this.useskin = String_.new_u8(qarg_val);
+						break;
 					default:
 						Add_qarg(qarg_bfr, qarg_key, qarg_val);
 						break;
@@ -161,6 +167,7 @@ class Http_url_parser {
 	, Tid__popup_id = 2
 	, Tid__popup_mode = 3
 	, Tid__popup_link = 4
+	, Tid__useskin = 5
 	;
 	private static final    byte[]
 	  Qarg__action__popup = Bry_.new_a7("popup")
@@ -171,9 +178,10 @@ class Http_url_parser {
 	, specialname = Bry_.new_a7("Special:")
 	;
 	private static final    Hash_adp_bry qarg_keys = Hash_adp_bry.ci_a7()
-		.Add_bry_int(Xoa_url_.Qarg__action, Tid__action)
-		.Add_bry_int(Qarg__popup_id       , Tid__popup_id)
-		.Add_bry_int(Qarg__popup_mode     , Tid__popup_mode)
-		.Add_bry_int(Qarg__popup_link     , Tid__popup_link)
+		.Add_bry_int(Xoa_url_.Qarg__action , Tid__action)
+		.Add_bry_int(Qarg__popup_id        , Tid__popup_id)
+		.Add_bry_int(Qarg__popup_mode      , Tid__popup_mode)
+		.Add_bry_int(Qarg__popup_link      , Tid__popup_link)
+		.Add_bry_int(Xoa_url_.Qarg__useskin, Tid__useskin)
 	;
 }

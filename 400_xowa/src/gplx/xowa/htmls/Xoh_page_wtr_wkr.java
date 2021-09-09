@@ -65,6 +65,9 @@ import gplx.langs.mustaches.Mustache_tkn_itm;
 import gplx.langs.mustaches.Mustache_tkn_parser;
 import gplx.Io_url;
 import gplx.Gfo_usr_dlg_;
+import gplx.xowa.Db_skin;
+import gplx.xowa.Db_vector_skin;
+import gplx.xowa.Db_minerva_skin;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
@@ -72,6 +75,9 @@ public class Xoh_page_wtr_wkr {
 	private final	Xoh_page_wtr_mgr mgr; private final	byte page_mode;
 	private final	Wdata_xwiki_link_wtr wdata_lang_wtr = new Wdata_xwiki_link_wtr();	// In other languages
 	private final	gplx.xowa.addons.apps.scripts.Xoscript_mgr scripting_mgr = new gplx.xowa.addons.apps.scripts.Xoscript_mgr();
+        private final   Db_skin skin_vector = new Db_vector_skin();
+        private final   Db_skin skin_minerva = new Db_minerva_skin();
+        private Db_skin skin_choice = null;
 	private Xoae_app app; private Xowe_wiki wiki; private Xoae_page page; private byte[] root_dir_bry;
 	public Xoh_page_wtr_wkr(Xoh_page_wtr_mgr mgr, byte page_mode) {this.mgr = mgr; this.page_mode = page_mode;}		
 	public Xoh_page_wtr_wkr Ctgs_enabled_(boolean v) {ctgs_enabled = v; return this;} private boolean ctgs_enabled = true;
@@ -189,6 +195,11 @@ public class Xoh_page_wtr_wkr {
 			edit_lang_ltr = Bry_.new_a7("ltr");
 		}
 
+		if (page.Page_skin().equals("minerva"))
+			skin_choice = skin_minerva;
+		else
+			skin_choice = skin_vector;
+
 		// main build
 		Xow_portal_mgr portal_mgr = wiki.Html_mgr().Portal_mgr().Init_assert();
 		boolean nightmode_enabled = app.Gui_mgr().Nightmode_mgr().Enabled();
@@ -196,7 +207,8 @@ public class Xoh_page_wtr_wkr {
 		fmtr.Bld_bfr_many(bfr
 		, Bry_.new_a7("app_icon.png")
 		, root_dir_bry
-		, Content(portal_mgr, page_data, page, wiki, ctx, hctx, html_gen_tid, pagename_for_h1, modified_on_msg)
+		//, Content(portal_mgr, page_data, page, wiki, ctx, hctx, html_gen_tid, pagename_for_h1, modified_on_msg)
+		, skin_choice.Content(portal_mgr, page_data, page, wiki, ctx, hctx, html_gen_tid, pagename_for_h1, modified_on_msg, page_mode, tmp_bfr, ispage_in_wikisource, wdata_lang_wtr, ctgs_enabled, mgr)
 		, html_content_editable
 		, mgr.Css_common_bry()
 		, mgr.Css_night_bry(nightmode_enabled)
@@ -207,7 +219,7 @@ public class Xoh_page_wtr_wkr {
 		, page.Lang().Key_bry()
 		, page_title
 		, redlinks
-		, vectortags // instance variable set by Content()
+		, skin_choice.Skintags()
 		, null
 		, page.Html_data().Head_mgr().Init(app, wiki, page).Init_dflts(html_gen_tid)
 
@@ -448,296 +460,6 @@ public class Xoh_page_wtr_wkr {
 	, Key_retrieved = Bry_.new_a7("retrievedfrom")
 		;
 
-	private Json_nde dl = null;
-	private void Build_json_logos(Json_nde data, String lang) {
-/* to produce
-"data-logos": {
-	"link-mainpage":"/wiki/",
-	"icon":"wikipedia.png",
-	"wordmark":{
-		"src":"wikipedia-wordmark-en.svg",
-		"width":"119",
-		"height":"18",
-	},
-	"tagline":{
-		"src":"wikipedia-tagline-en.svg",
-		"width":"113",
-		"height":"13",
-	},
-}
-*/
-		if (dl == null) {
-			dl = Json_nde.NewByVal();
-			Json_nde wm = Json_nde.NewByVal();
-			Json_nde tl = Json_nde.NewByVal();
-
-			dl.AddKvStr("link-mainpage", "/wiki/");
-			dl.AddKvStr("icon", "/xowa/static/images/mobile/copyright/wikipedia.png");
-	
-			wm.AddKvStr("src", "/xowa/static/images/mobile/copyright/wikipedia-wordmark-" + lang +".svg");
-			wm.AddKvStr("width", "119");
-			wm.AddKvStr("height", "18");
-			dl.AddKvNde("wordmark", wm);
-			
-			tl.AddKvStr("src", "/xowa/static/images/mobile/copyright/wikipedia-tagline-" + lang +".svg");
-			tl.AddKvStr("width", "113");
-			tl.AddKvStr("height", "13");
-			dl.AddKvNde("tagline", tl);
-		}
-		data.AddKvNde("data-logos", dl);
-	}
-	private void Build_json_search(Json_nde data, Xowe_wiki wiki) {
-
-		Json_nde ds = Json_nde.NewByVal();
-		ds.AddKvStr("form-action", "/wiki/Special:XowaSearch");
-		ds.AddKvStr("html-input", "<input type=\"search\" name=\"search\" placeholder=\""
-			 + msgvalue("searchsuggest-search", wiki) 
-			 + "\"" + tooltip( "search", wiki ) + " id=\"searchInput\"/>");
-		ds.AddKvStr("page-title", "Special:XowaSearch");
-		ds.AddKvStr("html-button-search-fallback", makeSearchButton("fulltext", wiki));
-		ds.AddKvStr("html-button-search", makeSearchButton("go", wiki));
-		data.AddKvNde("data-search-box", ds);
-	}
-
-	private String makeSearchButton(String mode, Xowe_wiki wiki) {
-		boolean isgo = mode.equals("go");
-		String input_html = "<input name=\""
-			+ mode
-			+ "\" type=\"submit\" id=\"" 
-			+ (isgo ? "searchButton" : "mw-searchButton")
-			+ "\"" + tooltip( "search-" + mode, wiki ) + " class=\""
-			+ (isgo ? "searchButton" : "searchButton mw-fallbackSearchButton")
-			+ "\" value=\""
-			+ msgvalue(isgo ? "searcharticle" : "searchbutton", wiki)
-			+ "\" />";
-
-		return input_html;
-	}
-	private String msgvalue(String msgkey, Xowe_wiki wiki) {
-		return String_.new_u8(wiki.Lang().Msg_mgr().Val_by_str_or_empty(wiki, msgkey));
-	}
-	private String tooltip(String tipkey, Xowe_wiki wiki) {
-		return String_.new_u8(wiki.Msg_mgr().Val_html_accesskey_and_title(tipkey));
-	}
-
-	private static String[] msgs = new String[] {
-						"tagline",
-						"search",
-						"vector-opt-out-tooltip",
-						"vector-opt-out",
-						"navigation-heading",
-						"vector-action-toggle-sidebar",
-						"vector-jumptonavigation",
-						"vector-jumptosearch",
-						"vector-jumptocontent",
-						"sitesubtitle",
-						"sitetitle"
-					};
-
-	//all thes messages should be preprocessed (per language) as $data["msg-{$message}"] = $this->msg( $message )->text();
-	private void build_msg(Json_nde data, Xowe_wiki wiki) {
-		Xol_msg_mgr msg_mgr = wiki.Lang().Msg_mgr();
-		int msg_len = msgs.length;
-		for (int i = 0; i < msg_len; i++) {
-			String msg = msgs[i];
-			if (msg.equals("tagline"))
-				data.AddKvStr("msg-" + msg, wiki.Tagline());
-			else
-				data.AddKvStr("msg-" + msg, msg_mgr.Val_by_str_or_empty(wiki, msg));
-		}
-	}
-	private boolean once = true;
-	private Mustache_tkn_itm root_legacy;
-	private Mustache_tkn_itm root_new;
-	public void Render_Content(Xowe_wiki wiki, Bry_bfr bfr, Json_nde data, boolean is_legacy) {
-		if (once) {
-			once = false;
-			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
-			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
-			root_legacy = parser.Parse("xowa-legacy"); // aka skin-legacy
-			//parser = new Mustache_tkn_parser(template_root);
-			//// it seem frwiki is at a different stage of development 20210525
-			//template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates_xowa");
-			//parser = new Mustache_tkn_parser(template_root);
-			root_new = parser.Parse("xowa"); // aka skin
-		}
-		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
-		Mustache_bfr mbfr = Mustache_bfr.New_bfr(bfr);
-		if (is_legacy) {
-			root_legacy.Render(mbfr, mctx);
-			vectortags = " skin-vector-legacy";
-		}
-		else {
-			root_new.Render(mbfr, mctx);
-			//vectortags = " skin-vector-max-width skin-vector-search-header";
-			// as of 20210526
-			vectortags = " skin-vector-search-vue";
-		}
-	}
-	private byte[] Content(Xow_portal_mgr portal_mgr, byte[] page_data, Xoae_page page, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte html_gen_tid, byte[] pagename_for_h1, byte[] modified_on_msg) {
-		boolean isnoredirect = page.Url().Qargs_mgr().IsNoRedirect();
-		Xoa_ttl page_ttl = page.Ttl();
-
-		Json_nde data = Json_nde.NewByVal();
-
-		boolean is_legacy = !wiki.Skin_mgr().Get_skin().equals("vector-new");
-
-		data.AddKvBool("is-consolidated-user-links", false);
-//			'is-consolidated-user-links' => $this->shouldConsolidateUserLinks(),
-
-		data.AddKvBool("is-article", true); // strictly Special: is not an article
-//			'is-article' => (bool)$out->isArticle(),
-
-		data.AddKvBool("is-mainpage", Bry_.Eq(page.Ttl().Page_db(), wiki.Props().Main_page()));
-//			'is-mainpage' => $title->isMainPage(),
-			// Remember that the string '0' is a valid title.
-			// From OutputPage::getPageTitle, via ::setPageTitle().
-// 			'html-title' => $out->getPageTitle(),// this is set in Xopg_page_heading
-
-		if (page_mode == Xopg_view_mode_.Tid__read) // only generate categories if READ
-			data.AddKvStr("html-categories", Categories(portal_mgr, wiki, ctx, hctx, page, html_gen_tid));
-//			'html-categories' => $skin->getCategories(),
-
-		data.AddKvStr("input-location", is_legacy ? "header-navigation" : "header-moved");
-//			'input-location' => $this->getSearchBoxInputLocation(),
-
-		data.AddKvBool("sidebar-visible", true); // for skin.mustache
-//			'sidebar-visible' => $this->isSidebarVisible(),
-
-		data.AddKvBool("is-language-in-header", false); // for now
-//?			'is-language-in-header' => $this->isLanguagesInHeader(),
-
-		data.AddKvBool("should-search-expand", false); // for now
-//?			'should-search-expand' => $this->shouldSearchExpand(),
-
-		data.AddKvStr("html-user-language-attributes", "");
-
-		Xopg_page_heading ph = page.Html_data().Page_heading();
-		ph.Init(wiki, html_gen_tid == Xopg_view_mode_.Tid__read, page.Html_data(), page.Ttl().Full_db(), pagename_for_h1, page.Lang().Key_bry());
-		ph.Build_json(data);
-
-		data.AddKvStr("html-subtitle", Xoh_page_wtr_wkr_.Bld_page_content_sub(app, wiki, page, tmp_bfr, isnoredirect));
-		data.AddKvStr("html-body-content", Pagebody(portal_mgr, page_data, page));
-
-		page.Html_data().Indicators().Build_json(data);
-		portal_mgr.Sidebar_mgr().Build_json(data);
-
-		Json_nde portlets = Json_nde.NewByVal();
-		//data.AddKvStr("portal_div_personal", portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect));
-		portlets.AddKvNde("data-personal",
-			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("personal"), Bry_.new_a7("Personal"), portal_mgr.Txt_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect))
-		);
-
-		//data.AddKvStr("portal_div_ns", portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page));
-		portlets.AddKvNde("data-namespaces",
-			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("namespaces"), Bry_.new_a7("Namespaces"), portal_mgr.Txt_ns_bry(wiki, page_ttl, ispage_in_wikisource, page))
-		);
-
-		// possibly data-variants
-
-		//data.AddKvStr("portal_div_view", portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect));
-		portlets.AddKvNde("data-views",
-			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("views"), Bry_.new_a7("Views"), portal_mgr.Txt_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect))
-		);
-
-		//  possibly data-actions
-
-		data.AddKvNde("data-portlets", portlets);
-
-		data.AddKvStr("portal_div_footer", portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date));
-
-		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikivoyage)
-			data.AddKvStr("html-after-content", "<div id='mw-data-after-content'>\n	<div class=\"read-more-container\"></div>\n</div>\n");
-
-		build_msg(data, wiki);
-
-		Build_json_logos(data, String_.new_a7(page.Lang().Key_bry()));
-		Build_json_search(data, wiki);
-
-		//System.out.println(data.Print_as_json());
-
-		Render_Content(wiki, tmp_bfr, data, is_legacy);
-		return tmp_bfr.To_bry_and_clear();
-	}
-	private byte[] Pagebody(Xow_portal_mgr portal_mgr, byte[] page_data, Xoae_page page) {
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		switch (page_mode) {
-			case Xopg_view_mode_.Tid__read:
-				portal_mgr.Txt_pageread_fmtr().Bld_bfr_many(tmp_bfr, page.Lang().Key_bry(), page.Lang().Dir_ltr_bry(), page_data);
-				break;
-			case Xopg_view_mode_.Tid__edit:
-				byte[] edit_lang = page.Lang().Key_bry();
-				byte[] edit_lang_ltr = page.Lang().Dir_ltr_bry();
-				// if editing page and editing a module always english
-				if (page.Ttl().Ns().Id() == 828) {
-					edit_lang = Bry_.new_a7("en");
-					edit_lang_ltr = Bry_.new_a7("ltr");
-				}
-				// "edit_div_editnotices", "edit_div_preview", "edit_lang", "edit_lang_ltr", "edit_div_rename", "page_data", "page_text", "page_ttl_full"
-				portal_mgr.Txt_pageedit_fmtr().Bld_bfr_many(tmp_bfr
-					, Editnotices(page.Ttl().Ns().Id())
-					, page.Html_data().Edit_preview_w_dbg()
-					, edit_lang
-					, edit_lang_ltr
-					, mgr.Edit_rename_div_bry(page.Ttl())
-					, page_data
-					, Bry_.Empty // ???
-					, page.Ttl().Full_db_href()
-					);
-				break;
-			case Xopg_view_mode_.Tid__html:
-				portal_mgr.Txt_pagehtml_fmtr().Bld_bfr_many(tmp_bfr, page.Lang().Key_bry(), page.Lang().Dir_ltr_bry(), page_data);
-				break;
-		}
-		return tmp_bfr.To_bry_and_clear();
-	}
-	private byte[] Editnotices(int ns) {
-		String en = "editnotice-" + Integer.toString(ns);
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		byte[] editnotices = Db_expand.Extracheck(wiki.Msg_mgr().Val_by_key_obj(en), ""); // this should be the full blown expansion!
-		if (editnotices.length > 0) {
-			Bry_fmt en_fmt = Bry_fmt.Auto("<div class=\"mw-editnotice mw-editnotice-namespace mw-~{0}\">~{1}</div>");
-			en_fmt.Bld_many(tmp_bfr, Bry_.new_a7(en), editnotices);
-		}
-		return tmp_bfr.To_bry_and_clear();
-	}
-	private byte[] Categories(Xow_portal_mgr portal_mgr, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page, byte html_gen_tid) {
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		byte[] printfooter = Printfooter(wiki, ctx, hctx, page, html_gen_tid);
-		portal_mgr.Txt_categoties_fmtr().Bld_bfr_many(tmp_bfr, printfooter, wdata_lang_wtr);
-		return tmp_bfr.To_bry_and_clear();
-	}
-	private byte[] Printfooter(Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page, byte html_gen_tid) {
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		// Add retrieved from for printing and as a hook for wikisource (and others)
-		tmp_bfr.Add(aref);
-		tmp_bfr.Add(gplx.xowa.htmls.hrefs.Xoh_href_.Bry__wiki);
-		tmp_bfr.Add(page.Ttl().Full_txt_raw_unders()); //.Full_db_w_anch());
-		tmp_bfr.Add(aref2);
-		tmp_bfr.Add(page.Ttl().Full_url());
-		tmp_bfr.Add(endaref);
-		byte[] retrieved_msg = wiki.Msg_mgr().Val_by_key_args(Key_retrieved, tmp_bfr.To_bry_and_clear());
-		Bry_fmt retreive_fmt = Bry_fmt.Auto("<div class=\"printfooter\">~{0}</div>");
-		retreive_fmt.Bld_many(tmp_bfr, retrieved_msg);
-
-		// handle Categories at bottom of page;
-		//int ctgs_len = page.Wtxt().Ctgs__len();
-		if (	ctgs_enabled
-			//&&	ctgs_len > 0						// skip if no categories found while parsing wikitext
-			&&	!wiki.Html_mgr().Importing_ctgs()	// do not show categories if importing categories, page will wait for category import to be done; DATE:2014-10-15
-			&&	!hctx.Mode_is_hdump_only()				// do not dump categories during hdump; DATE:2016-10-12
-			&& page.Ttl().Ns().Id() >= 0 // not Special
-			&& html_gen_tid != Xopg_view_mode_.Tid__edit // not Edit page
-			) {
-			//if (app.Mode().Tid_is_gui()) app.Usr_dlg().Prog_many("", "", "loading categories: count=~{0}", ctgs_len);
-			//wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, wiki, page);
-			wiki.Ctg__pagebox_wtr().Write_pagebox(tmp_bfr, page);
-		}
-
-		Add_stats(tmp_bfr, page);
-
-		return tmp_bfr.To_bry_and_clear();
-	}
 	private byte[] Get_text(Json_nde titles_nde) {
 		int titles_len = titles_nde.Len();
 		for (int k = 0; k < titles_len; ++k) {
@@ -894,62 +616,6 @@ public class Xoh_page_wtr_wkr {
 		else
 			ispage_in_wikisource = false;
 	}
-	private void Add_stats(Bry_bfr bfr, Xoae_page page) {
-		Xop_log_stat stats = page.Stat_itm();
-		counts_fmtr.Bld_bfr_many(bfr
-			, stats.Tidy_time
-			, stats.Image_count
-			, stats.Audio_count
-			, stats.Video_count
-			, stats.Media_count
-			, stats.Hdr_count
-			, stats.Lnki_count
-			, stats.Lnke_count
-			, stats.Math_count
-			, stats.Imap_count
-			, stats.Hiero_count
-			, stats.Gallery_count
-			, stats.Gallery_packed_count
-			, stats.Tmpl_count
-			, stats.Tmpl1_count
-			, stats.Tmpl2_count
-			, stats.Tmpl3_count
-			, stats.Scrib().Time()
-			, stats.Scrib().Count()
-			, stats.Scrib().Depth_max()
-			, stats.Scrib().PageTime()
-		);
-	}
-	private static final Bry_fmtr counts_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
-	( ""
-	, "<!--"
-	, "Counts:"
-	, " Tidy_time: ~{t1}"
-	, " Image_count: ~{t2}"
-	, " Audio_count: ~{t3}"
-	, " Video_count: ~{t4}"
-	, " Media_count: ~{t5}"
-	, " Hdr_count: ~{t6}"
-	, " Lnki_count: ~{t7}"
-	, " Lnke_count: ~{t8}"
-	, " Math_count: ~{t9}"
-	, " Imap_count: ~{t10}"
-	, " Hiero_count: ~{t11}"
-	, " Gallery_count: ~{t12}"
-	, " Gallery_packed_count: ~{t13}"
-	, " Tmpl_count: ~{t14}"
-	, " Tmpl1_count: ~{t15}"
-	, " Tmpl2_count: ~{t16}"
-	, " Tmpl3_count: ~{t17}"
-	, "Scribunto:"
-	, " Time: ~{s1}"
-	, " Count: ~{s2}"
-	, " Max_depth: ~{s3}"
-	, "Total time:"
-	, "  ~{p1}"
-	, "-->"
-	), "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "t14", "t15", "t16", "t17", 
-	   "s1", "s2", "s3", "p1");
 }
 class data_head {
 	public void Name_(byte[] val) {name = val;}; byte[] name;
