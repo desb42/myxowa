@@ -21,7 +21,7 @@ public class Db_btrie_http implements Db_btrie {
 	private int found;
 	private int offset;
 	public Db_btrie_http(Object[] objs) {this.objs = objs; }
-	public static byte[] Hash() { return Bry_.new_a7("844b07a639ffea63a60137965f147f0e"); }
+	public static byte[] Hash() { return Bry_.new_a7("156b1a707b252b633b2d05c023b182f5"); }
 	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
 		found = -1;
 		offset = -1;
@@ -169,9 +169,19 @@ public class Db_btrie_http implements Db_btrie {
 							if (ofs+8 < src_len && (src[ofs+5] | 32) == 'h' && src[ofs+6] == '-' && (src[ofs+7] | 32) == 'u' && (src[ofs+8] | 32) == 'a') {
 								if (ofs+9 < src_len) switch (src[ofs+9]) {
 									case '-':
-										if (ofs+16 < src_len && (src[ofs+10] | 32) == 'm' && (src[ofs+11] | 32) == 'o' && (src[ofs+12] | 32) == 'b' && (src[ofs+13] | 32) == 'i' && (src[ofs+14] | 32) == 'l' && (src[ofs+15] | 32) == 'e' && src[ofs+16] == ':') {
-											found = ofs + 17;
-											offset = 26; // ('Sec-Ch-Ua-Mobile:', 26)
+										if (ofs+10 < src_len) switch ((src[ofs+10] | 32)) {
+											case 'm':
+												if (ofs+16 < src_len && (src[ofs+11] | 32) == 'o' && (src[ofs+12] | 32) == 'b' && (src[ofs+13] | 32) == 'i' && (src[ofs+14] | 32) == 'l' && (src[ofs+15] | 32) == 'e' && src[ofs+16] == ':') {
+													found = ofs + 17;
+													offset = 26; // ('Sec-Ch-Ua-Mobile:', 26)
+												}
+												break;
+											case 'p':
+												if (ofs+18 < src_len && (src[ofs+11] | 32) == 'l' && (src[ofs+12] | 32) == 'a' && (src[ofs+13] | 32) == 't' && (src[ofs+14] | 32) == 'f' && (src[ofs+15] | 32) == 'o' && (src[ofs+16] | 32) == 'r' && (src[ofs+17] | 32) == 'm' && src[ofs+18] == ':') {
+													found = ofs + 19;
+													offset = 28; // ('Sec-Ch-Ua-platform:', 28)
+												}
+												break;
 										}
 										break;
 									case ':':

@@ -346,17 +346,17 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		}
 		
 		full_bfr.Add(Bry_tmpl);											// {{:MediaWiki:Proofreadpage_header_template
-		full_bfr.Add(Bry_value).Add(header);							// |value=toc"
+		full_bfr.Add(Bry_value).Add(header);							// |value=toc
 		if (toc_cur != null)
-			full_bfr.Add(Bry_toc_cur).Add(toc_cur);						// |current=Page/2"
+			full_bfr.Add(Bry_toc_cur).Add(toc_cur);						// |current=Page/2
 		if (toc_prv != null)
-			full_bfr.Add(Bry_toc_prv).Add(toc_prv);						// |prev=Page/1"
+			full_bfr.Add(Bry_toc_prv).Add(toc_prv);						// |prev=Page/1
 		if (toc_nxt != null)
-			full_bfr.Add(Bry_toc_nxt).Add(toc_nxt);						// |next=Page/3"
+			full_bfr.Add(Bry_toc_nxt).Add(toc_nxt);						// |next=Page/3
 		if (bgn_page_int != -1 && pl_nde != null)
-			full_bfr.Add(Bry_page_bgn).Add(pl_nde.FormattedPageNumber(bgn_page_int));	// |from=1"
+			full_bfr.Add(Bry_page_bgn).Add(pl_nde.FormattedPageNumber(bgn_page_int));	// |from=1
 		if (end_page_int != -1 && pl_nde != null)
-			full_bfr.Add(Bry_page_end).Add(pl_nde.FormattedPageNumber(end_page_int));	// |to=3"
+			full_bfr.Add(Bry_page_end).Add(pl_nde.FormattedPageNumber(end_page_int));	// |to=3
 		Add_args(full_bfr, index_page.Invk_args());
 		Add_args(full_bfr, unknown_xatrs);
 		full_bfr.Add(gplx.xowa.parsers.tmpls.Xop_curly_end_lxr.Hook);

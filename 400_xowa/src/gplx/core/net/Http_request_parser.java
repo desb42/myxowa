@@ -111,6 +111,7 @@ public class Http_request_parser {
 					case Tid_sec_ch_ua:                 break;
 					case Tid_sec_ch_ua_mobile:          break;
 					case Tid_sec_gpc:                   break;
+					case Tid_sec_ch_ua_platform:        break;
 					default:							throw Err_.new_unhandled(tid);
 				}
 			}
@@ -182,7 +183,7 @@ public class Http_request_parser {
 	, Tid_x_requested_with = 9, Tid_cookie = 10, Tid_referer = 11, Tid_content_length = 12, Tid_content_type = 13, Tid_connection = 14, Tid_pragma = 15, Tid_cache_control = 16
 	, Tid_origin = 17, Tid_accept_charset = 188, Tid_upgrade_request = 19, Tid_x_host = 20, Tid_x_real_ip = 21
 	, Tid_sec_fetch_mode = 22, Tid_sec_fetch_site = 23, Tid_sec_fetch_dest = 24, Tid_sec_fetch_user = 25
-	, Tid_sec_ch_ua = 26, Tid_sec_ch_ua_mobile = 27, Tid_sec_gpc = 28;
+	, Tid_sec_ch_ua = 26, Tid_sec_ch_ua_mobile = 27, Tid_sec_gpc = 28, Tid_sec_ch_ua_platform = 29;
 	private static final    Btrie_slim_mgr trie = Btrie_slim_mgr.ci_a7()
 	.Add_str_int("GET"                                    , Tid_get)
 	.Add_str_int("POST"                                   , Tid_post)
@@ -212,6 +213,7 @@ public class Http_request_parser {
 	.Add_str_int("Sec-Ch-Ua:"                             , Tid_sec_ch_ua)
 	.Add_str_int("Sec-Ch-Ua-Mobile:"                      , Tid_sec_ch_ua_mobile)
 	.Add_str_int("Sec-GPC:"                               , Tid_sec_gpc)
+	.Add_str_int("Sec-Ch-Ua-platform:"                    , Tid_sec_ch_ua_platform)
 	;
 	private static Db_btrie_http trie_http;
 	private static final    byte[] Tkn_boundary = Bry_.new_a7("boundary="), Tkn_content_type_boundary_end = Bry_.new_a7("--")

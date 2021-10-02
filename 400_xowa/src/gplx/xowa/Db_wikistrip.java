@@ -488,7 +488,7 @@ public class Db_wikistrip {
 							boolean template = false;
 							switch((src[namestart] | 32)) {
 								case 'c':
-									if (src[namestart+1] == 'o' && src[namestart+2] == 'n') // convert
+									if (src[namestart+1] == 'o' && src[namestart+2] == 'n' && src[namestart+3] == 'v' && src[namestart+4] == 'e' && src[namestart+5] == 'r' && src[namestart+6] == 't') // convert
 										template = true;
 									break;
 								case 'd':
@@ -750,6 +750,8 @@ public class Db_wikistrip {
 							if (inbold) {
 								bfr.Add(Gfh_tag_.B_rhs);
 								inbold = false;
+								if (pos + 2 < src_len && (src[pos] == '(' || (src[pos] == ' ' && src[pos+1] == '(')))
+									firstbracket = true;
 							}
 							else {
 								bfr.Add(Gfh_tag_.B_lhs);

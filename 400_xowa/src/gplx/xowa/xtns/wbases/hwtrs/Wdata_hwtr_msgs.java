@@ -38,10 +38,12 @@ public class Wdata_hwtr_msgs {
 		descr_col_hdr							= brys[offset +  5];
 		lemma_tbl_hdr							= brys[offset +  6];
 		lemma_col_hdr							= brys[offset +  7];
-		claim_tbl_hdr							= brys[offset +  8];
-		wiki_no_label							= brys[offset +  9];
-		wiki_no_desc							= brys[offset + 10];
-		json_div_hdr							= brys[offset + 11]; offset += 12;
+		statements_tbl_hdr				= brys[offset +  8];
+		indicators_tbl_hdr				= brys[offset +  9];
+		constraints_tbl_hdr				= brys[offset + 10];
+		wiki_no_label							= brys[offset + 11];
+		wiki_no_desc							= brys[offset + 12];
+		json_div_hdr							= brys[offset + 13]; offset += 14;
 		sym_list_comma							= brys[offset +  0];
 		sym_list_word							= brys[offset +  1];
 		sym_time_spr							= brys[offset +  2];
@@ -128,7 +130,9 @@ public class Wdata_hwtr_msgs {
 	public byte[] Slink_tbl_hdr_n() {return slink_tbl_hdr_n;} private final    byte[] slink_tbl_hdr_n;
 	public byte[] Slink_tbl_hdr_x() {return slink_tbl_hdr_x;} private final    byte[] slink_tbl_hdr_x;
 	public byte[] Slink_col_hdr_text() {return slink_col_hdr_text;} private final    byte[] slink_col_hdr_text;
-	public byte[] Claim_tbl_hdr() {return claim_tbl_hdr;} private final    byte[] claim_tbl_hdr;
+	public byte[] Statements_tbl_hdr() {return statements_tbl_hdr;} private final    byte[] statements_tbl_hdr;
+	public byte[] Indicators_tbl_hdr() {return indicators_tbl_hdr;} private final    byte[] indicators_tbl_hdr;
+	public byte[] Constraints_tbl_hdr() {return constraints_tbl_hdr;} private final    byte[] constraints_tbl_hdr;
 	public byte[] Wiki_no_label() {return wiki_no_label;} private final    byte[] wiki_no_label;
 	public byte[] Wiki_no_desc() {return wiki_no_desc;} private final    byte[] wiki_no_desc;
 	public byte[] Json_div_hdr() {return json_div_hdr;} private final    byte[] json_div_hdr;
@@ -186,7 +190,8 @@ public class Wdata_hwtr_msgs {
 		, "Labels", "Label"
 		, "Aliases", "Alias"
 		, "Descriptions", "Description"
-		, "Statements", "No label defined", "No description defined"
+		, "Statements", "Indicators", "Constraints"
+		, "No label defined", "No description defined"
 		, "JSON"
 		, ",&#32;", "&#32;", ":"
 		, "+", "-", "±", "(~{0})"
@@ -210,7 +215,8 @@ public class Wdata_hwtr_msgs {
 		, "xowa-wikidata-aliases-hdr"					, "xowa-wikidata-aliases-col"
 		, "xowa-wikidata-descriptions-hdr"				, "xowa-wikidata-descriptions-col"
 		, "xowa-wikidata-lemmas-hdr"				, "xowa-wikidata-lemmas-col"
-		, "wikibase-statements"						, "wikibase-label-empty", "wikibase-description-empty"
+		, "wikibase-statementsection-statements", "wikibase-statementsection-identifiers", "wikibase-statementsection-constraintsx"
+		, "wikibase-label-empty", "wikibase-description-empty"
 		, "xowa-wikidata-json"
 		, "comma-separator", "word-separator", "xowa-wikidata-time-spr"
 		, "xowa-wikidata-plus", "xowa-wikidata-minus", "xowa-wikidata-plusminus"

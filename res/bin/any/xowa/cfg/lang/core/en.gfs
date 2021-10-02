@@ -5889,7 +5889,9 @@ wikibase-snakview-variation-nonewvaluefordeletedproperty|It is not possible to d
 wikibase-snakview-variations-novalue-label|no value
 wikibase-snakview-variations-somevalue-label|unknown value
 wikibase-special-mergeitems-error-prefix|The items could not be merged. The following error occurred:
-wikibase-statements|Statements
+wikibase-statementsection-statements|Statements
+wikibase-statementsection-identifiers|Identifiers
+wikibase-statementsection-constraintsx|Constraints
 wikibase-statementview-rank-deprecated|Deprecated rank
 wikibase-statementview-rank-normal|Normal rank
 wikibase-statementview-rank-preferred|Preferred rank
