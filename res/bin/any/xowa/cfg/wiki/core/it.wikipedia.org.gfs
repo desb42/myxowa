@@ -32,3 +32,5 @@ ns_mgr.get_by_id_or_new(829).subpages_enabled_('y');
 catpage_mgr.collation_('uca-it');
 // wiki.ctgs.collations.end
 tz_mgr.set_('Europe/Berlin');
+skin_mgr.set_wordmark_('/static/images/mobile/copyright/wikipedia-wordmark-en.svg', 119, 18);
+skin_mgr.set_tagline_('/static/images/mobile/copyright/wikipedia-tagline-it.svg', 117, 13);

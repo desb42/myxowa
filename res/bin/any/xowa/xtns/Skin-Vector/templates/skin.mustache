@@ -15,7 +15,6 @@
 	string html-body-content
 	string html-categories
 	string html-after-content
-	string msg-navigation-heading
 	LogoOptions data-logos
 	object data-portlets
 	MenuDefinition data-portlets.data-personal
@@ -27,6 +26,9 @@
 	boolean sidebar-visible For users that want to see the sidebar on initial render, this should be
 	  true.
 	string msg-vector-action-toggle-sidebar The label used by the sidebar button.
+	string msg-vector-main-menu-tooltip The title attribute for the main menu icon.
+	string msg-vector-menu-checkbox-expanded Dropdown menu span content for expanded selection in checkbox hack.
+	string msg-vector-menu-checkbox-collapsed Dropdown menu span content for collapsed selection in checkbox hack.
 	object data-portlets-sidebar. See Sidebar.mustache for documentation.
 	object data-footer for footer template partial. see Footer.mustache for documentation.
 }}
@@ -41,7 +43,6 @@
 	{{#sidebar-visible}}checked{{/sidebar-visible}}>
 
 {{>Header}}
-
 <div class="mw-workspace-container">
 	{{>Navigation}}
 	<div class="mw-content-container">
@@ -97,3 +98,6 @@
 </div>
 	</div> {{! END mw-page-container-inner }}
 </div> {{! END mw-page-container }}
+{{#data-vector-sticky-header}}
+{{>StickyHeader}}
+{{/data-vector-sticky-header}}

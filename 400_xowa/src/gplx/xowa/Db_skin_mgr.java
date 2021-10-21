@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -25,6 +25,12 @@ import java.util.concurrent.locks.*;
 public class Db_skin_mgr implements Gfo_invk {
 	private final Xow_wiki wiki;
 	private String skin = "vector";
+	private String wordmark = "*";
+	private String wordmark_width = "";
+	private String wordmark_height = "";
+	private String tagline = "*";
+	private String tagline_width = "";
+	private String tagline_height = "";
 	public Db_skin_mgr(Xow_wiki wiki) {
 		this.wiki = wiki;
 	}
@@ -35,10 +41,41 @@ public class Db_skin_mgr implements Gfo_invk {
 	private void Set_skin(String skin) {
 		this.skin = skin;
 	}
+	private void Set_wordmark(GfoMsg m) {
+		int len = m.Args_count();
+		if (len >= 3)
+			wordmark_height = m.Args_getAt(2).Val_to_str_or_empty();
+		if (len >= 2)
+			wordmark_width = m.Args_getAt(1).Val_to_str_or_empty();
+		if (len >= 1)
+			wordmark = m.Args_getAt(0).Val_to_str_or_empty();
+	}
+	public String Get_wordmark_img() { return wordmark; }
+	public String Get_wordmark_width() { return wordmark_width; }
+	public String Get_wordmark_height() { return wordmark_height; }
+	private void Set_tagline(GfoMsg m) {
+		int len = m.Args_count();
+		if (len >= 3)
+			tagline_height = m.Args_getAt(2).Val_to_str_or_empty();
+		if (len >= 2)
+			tagline_width = m.Args_getAt(1).Val_to_str_or_empty();
+		if (len >= 1)
+			tagline = m.Args_getAt(0).Val_to_str_or_empty();
+	}
+	public String Get_tagline_img() { return tagline; }
+	public String Get_tagline_width() { return tagline_width; }
+	public String Get_tagline_height() { return tagline_height; }
+
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk__set_))		Set_skin(m.ReadStr("v"));
+		else if		(ctx.Match(k, Invk__set_wordmark_))		Set_wordmark(m);
+		else if		(ctx.Match(k, Invk__set_tagline_))		Set_tagline(m);
 		else	return Gfo_invk_.Rv_unhandled;
 		return this;
 	}
-	private static final String Invk__set_ = "set_";
+	private static final String
+	  Invk__set_ = "set_"
+	, Invk__set_wordmark_ = "set_wordmark_"
+	, Invk__set_tagline_ = "set_tagline_"
+	;
 }

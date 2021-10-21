@@ -6493,12 +6493,15 @@ group-checkuser|Check users
 group-oversight|Oversighters
 group-upwizcampeditors|Upload Wizard campaign editors
 grouppage-upwizcampeditors|{{ns:project}}:Upload Wizard campaign editors
-kartographer-coord-combined|$1 $2
-kartographer-coord-dms|$1° $2′ $3″
-kartographer-coord-lat-positive|$1 N
-kartographer-coord-lat-negative|$1 S
-kartographer-coord-lon-positive|$1 E
-kartographer-coord-lon-negative|$1 O
+kartographer-coord-combined|~{0} ~{1}
+kartographer-coord-dms|~{0}° ~{1}′ ~{2}″
+kartographer-coord-lat-positive|~{0} N
+kartographer-coord-lat-negative|~{0} S
+kartographer-coord-lon-positive|~{0} E
+kartographer-coord-lon-negative|~{0} O
+vector-main-menu-tooltip|Menu principal
+vector-menu-checkbox-expanded|développé
+vector-menu-checkbox-collapsed|replié
 ']:>
 ).lang
 .time_formats

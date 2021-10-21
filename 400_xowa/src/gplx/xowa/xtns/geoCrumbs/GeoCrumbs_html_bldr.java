@@ -74,18 +74,31 @@ public class GeoCrumbs_html_bldr implements gplx.core.brys.Bfr_arg {
 		if (len > 0) {
 			for (int i = 0; i < len; i++) {
 				byte[] parent = (byte[])list.Get_at(i);
+				byte[] parent_name = parent;
+				int parent_len = parent.length;
+				int slash = -1;
+				int pos = 0;
+				while (pos < parent_len) { // should this be backwards???
+					if (parent[pos] == Byte_ascii.Slash) {
+						slash = pos;
+						break;
+					}
+					pos++;
+				}
+				if (slash != -1)
+					parent_name = Bry_.Mid(parent, slash+1);
 				if (i > 0)
 					tmp_bfr.Add_str_a7( " > " );
 				byte[] lnk;
 				if (nsid > 0) // not Main:
-					lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, Byte_ascii.Colon_bry, ttl.Ns().Name_db_w_colon(), parent, Byte_ascii.Pipe_bry, parent, Xop_tkn_.Lnki_end);		// make "[[xx:ttl ttl]]"
+					lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, Byte_ascii.Colon_bry, ttl.Ns().Name_db_w_colon(), parent, Byte_ascii.Pipe_bry, parent_name, Xop_tkn_.Lnki_end);		// make "[[:xx:ttl|ttl]]"
 				else
-					lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, parent, Xop_tkn_.Lnki_end);		// make "[[ttl]]"
+					lnk = Bry_.Add(Xop_tkn_.Lnki_bgn, parent, Byte_ascii.Pipe_bry, parent_name, Xop_tkn_.Lnki_end);		// make "[[ttl|ttl]]"
 				tmp_bfr.Add( lnk );
 			}
 			if (len > 0)
 				tmp_bfr.Add_str_a7( " > " );
-			tmp_bfr.Add(ttl.Page_txt());
+			tmp_bfr.Add(ttl.Leaf_txt());
 		}
 		byte[] bread = tmp_bfr.To_bry_and_clear();
 		wiki.Parser_mgr().Main().Parse_text_to_html(tmp_bfr, ctx, ctx.Page(), false, bread);

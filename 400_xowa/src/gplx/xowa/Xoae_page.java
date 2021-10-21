@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -36,6 +36,7 @@ public class Xoae_page implements Xoa_page {
 		Ttl_(ttl);
 		html.Toc_mgr().Init(wiki.Html_mgr().Tidy_mgr(), url, wiki.Lang().Msg_mgr().Itm_by_id_or_null(gplx.xowa.langs.msgs.Xol_msg_itm_.Id_toc).Val());
 		this.page_skin = wiki.Skin_mgr().Get_skin(); // can be overridden (?useskin=minerva)
+		this.karto_maps = new Db_karto_maps(ttl);
 	}
 	public String Page_skin() {return page_skin;} private String page_skin;
 	public void Page_skin_(String v) {
@@ -95,6 +96,7 @@ public class Xoae_page implements Xoa_page {
 	public int						Bldr__ns_ord() {return bldr__ns_ord;} public void Bldr__ns_ord_(int v) {bldr__ns_ord = v;} private int bldr__ns_ord;
 	public Xopg_tmpl_prepend_mgr	Tmpl_prepend_mgr() {return tmpl_prepend_mgr;} private Xopg_tmpl_prepend_mgr tmpl_prepend_mgr = new Xopg_tmpl_prepend_mgr();
 	public Db_karto_counters Karto_counters() {return karto_counters;} Db_karto_counters karto_counters = new Db_karto_counters();
+	public Db_karto_maps Karto_maps() {return karto_maps;} Db_karto_maps karto_maps;
 	public Xoctg_double_grp Grp_normal() {return grp_normal;}
 	public void Grp_normal_(Xoctg_double_grp v) {grp_normal = v;}
 	private Xoctg_double_grp grp_normal;

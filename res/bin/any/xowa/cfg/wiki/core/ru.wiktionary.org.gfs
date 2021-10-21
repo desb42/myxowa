@@ -45,3 +45,4 @@ ns_mgr.get_by_id_or_new(829).subpages_enabled_('y');
 // wiki.ctgs.collations.bgn
 catpage_mgr.collation_('uca-ru');
 // wiki.ctgs.collations.end
+skin_mgr.set_wordmark_('/static/images/mobile/copyright/wiktionary-wordmark-en.svg', 107, 19);

@@ -69,7 +69,7 @@ public class Xoh_href_wtr {	// TS:do not move to app-level
 		byte[] page = ttl.Full_txt_raw_unders(); // was ttl.Full_txt_raw(); 20210615
 		Build_to_bfr_page(ttl, hctx, page, 0);												// write page only; NOTE: changed to remove leaf logic DATE:2014-09-07
 
-                if (xwiki == null) {																	// not an xwiki
+		if (xwiki == null) {																	// not an xwiki
 			if (ttl.Anch_bgn() != 1) {															// not an anchor-only;	EX: "#A"
 				if (hctx.Mode_is_popup()) {                                                     // popup parser always writes as "/site/"
 					bfr.Add(Xoh_href_.Bry__site);                                               // add "/site/";    EX: /site/
@@ -134,7 +134,7 @@ public class Xoh_href_wtr {	// TS:do not move to app-level
 		}
 */
 // 20210630
-                  encoder_bfr.Add(ttl_full);
+			encoder_bfr.Add(ttl_full);
 			if (hctx.Mode_is_file_dump()) {
 				byte[] href_end = hctx.Anch__href__end();
 				if (href_end != null) encoder_bfr.Add(href_end);

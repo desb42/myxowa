@@ -6701,6 +6701,9 @@ skin-minerva-mobile-option-MinervaPageIssuesNewTreatment-description|Page issues
 skin-minerva-recentchanges-warning-enhanced-not-supported|Unfortunately, grouping results by page is not available on mobile. If you would like to use the group by page feature please visit the desktop site.
 minerva.css|/* All CSS here will be loaded for users of the MinervaNeue skin */
 minerva.js|/* All JavaScript here will be loaded for users of the MinervaNeue skin */
+vector-main-menu-tooltip|Main menu
+vector-menu-checkbox-expanded|expanded
+vector-menu-checkbox-collapsed|collapsed
 ']:>
 ).lang
 .time_formats

@@ -574,7 +574,7 @@ public class Db_wikistrip {
 						startpos = pos;
 						if (firstparaonly) {
 							return wiki.Parser_mgr().Main().Expand_tmpl(bfr.To_bry());
-                                                }
+						}
 					}
 					break;
 				case '_':

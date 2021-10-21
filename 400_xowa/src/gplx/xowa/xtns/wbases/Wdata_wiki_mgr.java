@@ -168,14 +168,21 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 			if (hwtr_mgr == null) Hwtr_mgr_assert();
 			int len = prop_grp.Len();
 			Wbase_claim_base selected = null;
+			// this does two things
+			// finds the first non deprecated prop
+			// and overrides it with the first preferred prop (if there is one)
 			for (int i = 0; i < len; i++) {								// NOTE: multiple props possible; EX: {{#property:P1082}}; PAGE:en.w:Earth DATE:2015-08-02
 				Wbase_claim_base prop = prop_grp.Get_at(i);
+				int rank = prop.Rank_tid();
+				if (rank == Wbase_claim_rank_.Tid__deprecated)
+					continue;
 				if (selected == null) selected = prop;					// if selected not set, set it; will always set to 1st prop
-				if (prop.Rank_tid() == Wbase_claim_rank_.Tid__preferred) {	// if prop is preferred, select it and exit;
+				if (rank == Wbase_claim_rank_.Tid__preferred) {	// if prop is preferred, select it and exit;
 					selected = prop;
 					break;
 				}
 			}
+			if (selected == null) return;  // no acceptable prop found
 			switch (selected.Snak_tid()) { // SEE:NOTE:novalue/somevalue
 				case Wbase_claim_value_type_.Tid__novalue:
 					bfr.Add(wiki.Msg_mgr().Val_by_id(Xol_msg_itm_.Id_xowa_wikidata_novalue));

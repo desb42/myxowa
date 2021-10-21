@@ -45,3 +45,5 @@ catpage_mgr.collation_('uca-fr');
 // wiki.ctgs.collations.end
 tz_mgr.set_('Europe/Paris');
 skin_mgr.set_('vector-new');
+skin_mgr.set_wordmark_('/static/images/mobile/copyright/wikipedia-wordmark-fr.svg', 119, 18);
+skin_mgr.set_tagline_('/static/images/mobile/copyright/wikipedia-tagline-fr.svg', 113, 13);

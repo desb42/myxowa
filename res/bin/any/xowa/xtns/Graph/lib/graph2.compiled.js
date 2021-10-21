@@ -269,7 +269,33 @@ VegaWrapper.prototype._getProtocolDomains = function _getProtocolDomains(protoco
 VegaWrapper.prototype.sanitizeUrl = function sanitizeUrl(opt) {
     // In some cases we may receive a badly formed URL in a form   customprotocol:https://...
     opt.url = opt.url.replace(/^([a-z]+:)https?:\/\//, '$1//');
-
+    
+    var protocheck = /^([a-z]+):\/\/\/(.*)$/.exec( opt.url )
+    var urlprotocol = "";
+    if (protocheck) {
+      urlprotocol = protocheck[1];
+      switch (urlprotocol) {
+         case 'mapsnapshot':
+            return 'http://localhost:9980/xowa/api/mapsnapshot/' + protocheck[2];
+         case 'wikifile':
+            if (protocheck[2].substring(0,14) == "wikirawupload:")
+               return 'http://localhost:9980/xowa/api/wikirawupload' + protocheck[2].substring(14);
+         case 'wikidatasparql':
+            return 'http://localhost:9980/xowa/api/sparql/' + protocheck[2]
+            //return 'https://query.wikidata.org/bigdata/namespace/wdq/sparql' + protocheck[2] + "&format=json";
+      }
+    }
+    else {
+       protocheck = /^([a-z]+):\/(.*)$/.exec( opt.url )
+       urlprotocol = "";
+       if (protocheck) {
+         urlprotocol = protocheck[1];
+         switch (urlprotocol) {
+            case 'wikirawupload':
+               return 'http://localhost:9980/xowa/api/wikirawupload/' + protocheck[2];
+         }
+       }
+    }
     // XOWA: comment out URL parsing code as it relies on various unavailable MediaWiki functions; DATE:2018-03-13
     // note that URL parsing will be done directly in Xograph.js
     /*
@@ -548,6 +574,7 @@ VegaWrapper.prototype.parseMWApiResponse = function parseMWApiResponse(data) {
  * Performs post-processing of the data requested by the graph's spec, and throw on error
  */
 VegaWrapper.prototype.parseDataOrThrow = function parseDataOrThrow(data, opt) {  
+	console.log(opt.xowa_protocol);
     switch (opt.xowa_protocol) { // XOWA: use opt.xowa_protocol
         case 'wikiapi:':
             data = this.parseMWApiResponse(data);

@@ -84,7 +84,6 @@ if (!window.xowa) {
 			}
 
 			if ( typeof selection === 'string' ) {
-  	console.log(selection, window.xowa_global_values[ selection ])
 				return hasOwn.call( window.xowa_global_values, selection ) ?
 					window.xowa_global_values[ selection ] :
 					fallback;

@@ -31,6 +31,8 @@ public class Graph_xnde implements Xox_xnde {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		json = Json_fmtr.clean(tmp_bfr, json);
 
+		Xoa_app_.Usr_dlg().Log_many("", "", "graph: page=~{0}", ctx.Page().Ttl().Full_db());
+
 		// swap out fsys_root; ISSUE#:553; DATE:2019-09-25
 		Graph_json_save_mgr json_save_mgr = new Graph_json_save_mgr(app.Fsys_mgr());
 		if (hctx.Mode_is_hdump()) {

@@ -58,10 +58,27 @@ public class Json_fmtr {
 					break;
 				}
 				case Byte_ascii.Nl:
-					if (inComment && !multiline) {
-						// Found the end of the current comment
-						mark = idx + 1;
-						inComment = false;
+					if (inComment) {
+						if (!multiline) {
+							// Found the end of the current comment
+							mark = idx + 1;
+							inComment = false;
+						}
+					}
+					else if (!inString) { // remove multiple new lines
+						int pos = idx + 1;
+						while (pos < maxLen) {
+							byte b = json[pos];
+							if (b == '\n' || b == '\r' || b == ' ' || b == '\t')
+								pos++;
+							else
+								break;
+						}
+						if (pos > idx + 1) {
+							tmp_bfr.Add_mid(json, mark, idx/* + 1*/);
+							mark = pos;
+							idx = pos - 1;
+						}
 					}
 					break;
 				case Byte_ascii.Comma: {  // remove trailing commas of the form {a,}; note that FormatJson.php does this in a separate regex call; '/,([ \t]*[}\]][^"\r\n]*([\r\n]|$)|[ \t]*[\r\n][ \t\r\n]*[}\]])/'

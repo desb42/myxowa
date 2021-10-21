@@ -120,6 +120,7 @@ public class Xoh_head_mgr implements gplx.core.brys.Bfr_arg {
 			}
 			page.Html_data().Pp_indexpage().Write(wtr.Bfr(), page);
 			wtr.Write_js_head_global_end();
+			page.Karto_maps().Dump(bfr);
 			wtr.Write_js_script_end();
 		}
 		len = list__js_include.Len();

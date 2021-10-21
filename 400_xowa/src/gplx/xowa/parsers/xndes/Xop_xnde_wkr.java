@@ -694,6 +694,7 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 				Xox_xnde xnde_xtn = null;
 				int tag_id = tag.Id();
 				boolean escaped = false;
+                                boolean noattrs = xnde.Atrs_end() < xnde.Atrs_bgn();
 				switch (tag_id) {
 					case Xop_xnde_tag_.Tid__xowa_cmd:				xnde_xtn = tkn_mkr.Xnde__xowa_cmd(); break;
 					case Xop_xnde_tag_.Tid__math:					xnde_xtn = tkn_mkr.Xnde__math(Xop_xnde_tag_.Tid__math); break;
@@ -733,8 +734,16 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 					case Xop_xnde_tag_.Tid__xowa_html:				xnde_xtn = tkn_mkr.Xnde__xowa_html(); break;
 					case Xop_xnde_tag_.Tid__xowa_wiki_setup:		xnde_xtn = tkn_mkr.Xnde__xowa_wiki_setup(); break;
 					case Xop_xnde_tag_.Tid__graph:					xnde_xtn = tkn_mkr.Xnde__graph(); break;
-					case Xop_xnde_tag_.Tid__mapframe:				xnde_xtn = tkn_mkr.Xnde__mapframe(); break;
-					case Xop_xnde_tag_.Tid__maplink:				xnde_xtn = tkn_mkr.Xnde__maplink(); break;
+					case Xop_xnde_tag_.Tid__mapframe:
+						xnde_xtn = tkn_mkr.Xnde__mapframe();
+						if (noattrs)
+							escaped = true;
+						break;
+					case Xop_xnde_tag_.Tid__maplink:
+						xnde_xtn = tkn_mkr.Xnde__maplink();
+						if (noattrs)
+							escaped = true;
+						break;
 					case Xop_xnde_tag_.Tid__random_selection:		xnde_xtn = tkn_mkr.Xnde__random_selection(); break;
 					case Xop_xnde_tag_.Tid__tabber:					xnde_xtn = tkn_mkr.Xnde__tabber(); break;
 					case Xop_xnde_tag_.Tid__tabview:				xnde_xtn = tkn_mkr.Xnde__tabview(); break;

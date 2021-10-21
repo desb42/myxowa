@@ -41,3 +41,5 @@ ns_mgr.get_by_id_or_new(828).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(829).subpages_enabled_('y');
 // wiki.ns_mgr.subpages.end
 tz_mgr.set_('Asia/Seoul');
+skin_mgr.set_wordmark_('/static/images/mobile/copyright/wikipedia-wordmark-ko.svg', 106, 25);
+skin_mgr.set_tagline_('/static/images/mobile/copyright/wikipedia-tagline-ko.svg', 106, 11);

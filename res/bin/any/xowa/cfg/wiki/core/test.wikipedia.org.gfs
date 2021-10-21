@@ -1,3 +1,4 @@
 // wiki.ctgs.collations.bgn
 catpage_mgr.collation_('uca-default-u-kn');
 // wiki.ctgs.collations.end
+skin_mgr.set_wordmark_('/static/images/mobile/copyright/wikipedia-wordmark-en.svg', 119, 18);

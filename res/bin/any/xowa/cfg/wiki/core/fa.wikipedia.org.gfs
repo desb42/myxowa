@@ -46,3 +46,5 @@ ns_mgr.get_by_id_or_new(829).subpages_enabled_('y');
 // wiki.ctgs.collations.bgn
 catpage_mgr.collation_('uca-fa');
 // wiki.ctgs.collations.end
+skin_mgr.set_wordmark_('/static/images/mobile/copyright/wikipedia-wordmark-fa.svg', 78, 26);
+skin_mgr.set_tagline_('/static/images/mobile/copyright/wikipedia-tagline-fa.svg', 76, 19);

@@ -588,6 +588,12 @@
   }
 ,
   {
+    "code":"en-us"
+  , "name":"American English"
+  , "note":"American English"
+  }
+,
+  {
     "code":"eo"
   , "name":"Esperanto"
   , "note":"Esperanto"

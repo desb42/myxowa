@@ -254,6 +254,9 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 								if (qte_byte == b) {	// quote closes val
 									qte_closed = true;
 									val_end = pos;
+                                                                        // HACK to trim off extra quotes 20211007 enwikisource The_poems_of_George_Eliot_(Crowell,_1884)/Agatha
+                                                                        while (pos +1 < src_end && src[pos+1] == qte_byte)
+                                                                            pos += 1;
 								}
 								else {					// quote is just char; EX: title="1 o'clock" or title='The "C" way'
 									prv_is_ws = false;

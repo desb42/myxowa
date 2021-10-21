@@ -28,3 +28,5 @@ ns_mgr.get_by_id_or_new(101).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(828).subpages_enabled_('y');
 ns_mgr.get_by_id_or_new(829).subpages_enabled_('y');
 // wiki.ns_mgr.subpages.end
+skin_mgr.set_wordmark_('/static/images/mobile/copyright/wikipedia-wordmark-tr.svg', 107, 18);
+skin_mgr.set_tagline_('/static/images/mobile/copyright/wikipedia-tagline-tr.svg', 104, 13);

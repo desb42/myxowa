@@ -27,3 +27,4 @@ ns_mgr.get_by_id_or_new(829).subpages_enabled_('y');
 catpage_mgr.collation_('xx-uca-et');
 // wiki.ctgs.collations.end
 tz_mgr.set_('Europe/Tallinn');
+skin_mgr.set_wordmark_('/static/images/mobile/copyright/wiktionary-wordmark-en.svg', 107, 19);

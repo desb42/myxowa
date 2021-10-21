@@ -25,7 +25,9 @@ public class Xol_lang_itm implements Gfo_invk {
 	private final    Object thread_lock = new Object();
 	public Xol_lang_itm(Xoa_lang_mgr lang_mgr, byte[] key_bry) {
 		this.lang_mgr = lang_mgr; this.key_bry = key_bry; this.key_str = String_.new_u8(key_bry);
-		Xol_lang_stub lang_itm = Xol_lang_stub_.Get_by_key_or_null(key_bry); if (lang_itm == null) throw Err_.new_wo_type("unknown lang_key", "key", String_.new_u8(key_bry));
+		Xol_lang_stub lang_itm = Xol_lang_stub_.Get_by_key_or_null(key_bry);
+                if (lang_itm == null)
+                    throw Err_.new_wo_type("unknown lang_key", "key", String_.new_u8(key_bry));
 		this.lang_id = lang_itm.Id();	
 		this.mw_lang = new XomwLanguage(this);
 		this.func_regy = new Xol_func_regy(lang_mgr, this);

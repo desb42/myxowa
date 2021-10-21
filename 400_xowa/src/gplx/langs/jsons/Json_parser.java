@@ -203,7 +203,19 @@ public class Json_parser {
 	private void Skip_ws() {
 		while (pos < src_len) {
 			switch (src[pos]) {
-				case Byte_ascii.Space: case Byte_ascii.Nl: case Byte_ascii.Tab: case Byte_ascii.Cr: ++pos; break;
+				case Byte_ascii.Space: case Byte_ascii.Nl: case Byte_ascii.Tab: case Byte_ascii.Cr:
+					++pos;
+					break;
+				case Byte_ascii.Slash: // possible comment
+					if (pos + 1 < src_len && src[pos+1] == Byte_ascii.Slash) {
+						pos += 2;
+						while (pos < src_len) {
+							if (src[pos] == Byte_ascii.Nl)
+								break;
+							pos++;
+						}
+					}
+					break;
 				default: return;
 			}
 		}

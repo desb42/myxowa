@@ -26,7 +26,9 @@ public class Pfunc_filepath extends Pf_func_base {
 	@Override public Pf_func New(int id, byte[] name) {return new Pfunc_filepath().Name_(name);}
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {
 		// init
+		// takes a second arg 20211018 ('nowiki' or a number for size of a thumbnail)
 		byte[] val_ary = Eval_argx(ctx, src, caller, self); if (val_ary == Bry_.Empty) return;
+		byte[] arg2 = Pf_func_.Eval_arg_or_empty(ctx, src, caller, self, self.Args_len(), 0);
 		Xowe_wiki wiki = ctx.Wiki();
 		Xoa_ttl ttl = wiki.Ttl_parse(Xow_ns_.Tid__file, val_ary); if (ttl == null) return; // text is not valid ttl; exit;
 		Pfunc_filepath_itm commons_itm = Load_page(wiki, ttl); if (!commons_itm.Exists()) return; // page not found in wiki or commons; exit;
@@ -38,7 +40,18 @@ public class Pfunc_filepath extends Pf_func_base {
 		Xof_repo_itm trg_repo = wiki.File_mgr().Repo_mgr().Repos_get_at(tmp_rslt.Repo_idx()).Trg();
 		Xof_xfer_itm xfer_itm = ctx.Tmp_mgr().Xfer_itm();
 		xfer_itm.Orig_ttl_and_redirect_(ttl_bry, Bry_.Empty);	// redirect is empty b/c Get_page does all redirect lookups
-		byte[] url = wiki.Parser_mgr().Url_bldr().Init_for_trg_html(trg_repo, Xof_img_mode_.Tid__orig, ttl_bry, xfer_itm.Orig_ttl_md5(), xfer_itm.Orig_ext(), Xof_img_size.Size__neg1, Xof_lnki_time.Null, Xof_lnki_page.Null).Xto_bry();
+		byte[] url;
+		if (arg2.length != 0 && arg2[0] != 'n') { // ignore 'nowiki' and assume if present it is a number
+			//generate Number (where is the library routine?
+			int alen = arg2.length;
+			int value = 0;
+			for (int i = 0; i < alen; i++) {
+				value = value * 10 + (arg2[i] - '0');
+			}
+			url = wiki.Parser_mgr().Url_bldr().Init_for_trg_html(trg_repo, Xof_img_mode_.Tid__thumb, ttl_bry, xfer_itm.Orig_ttl_md5(), xfer_itm.Orig_ext(), value, Xof_lnki_time.Null, Xof_lnki_page.Null).Xto_bry();
+		}
+		else
+			url = wiki.Parser_mgr().Url_bldr().Init_for_trg_html(trg_repo, Xof_img_mode_.Tid__orig, ttl_bry, xfer_itm.Orig_ttl_md5(), xfer_itm.Orig_ext(), Xof_img_size.Size__neg1, Xof_lnki_time.Null, Xof_lnki_page.Null).Xto_bry();
 		bfr.Add(url);
 	}
 	public static Pfunc_filepath_itm Load_page(Xowe_wiki wiki, Xoa_ttl ttl) {

@@ -33,3 +33,4 @@ ns_mgr.get_by_id_or_new(829).subpages_enabled_('y');
 // wiki.ctgs.collations.bgn
 catpage_mgr.collation_('uca-sk');
 // wiki.ctgs.collations.end
+skin_mgr.set_wordmark_('/static/images/mobile/copyright/wikipedia-wordmark-fr.svg', 119, 18);

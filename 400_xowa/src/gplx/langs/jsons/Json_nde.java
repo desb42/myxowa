@@ -128,6 +128,7 @@ public class Json_nde extends Json_itm_base implements Json_grp {
 		return rv;
 	}
 
+	public Json_kv Get_kv(String key) {return Get_kv(Bry_.new_u8(key));}
 	public Json_kv Get_kv(byte[] key) {return Json_kv.Cast(Get_itm(key));}
 	public Json_nde Get(String key) {return Get(Bry_.new_u8(key));}
 	public Json_nde Get(byte[] key) {
@@ -135,6 +136,7 @@ public class Json_nde extends Json_itm_base implements Json_grp {
 		Json_nde rv = Json_nde.Cast(kv.Val()); if (rv == null) throw Err_.new_("json", "nde not found", "key", key);
 		return rv;
 	}
+	public Json_itm Get_itm(String key) {return Get_itm(Bry_.new_u8(key));}
 	public Json_itm Get_itm(byte[] key) {
 		for (int i = 0; i < subs_len; i++) {
 			Json_itm itm = subs[i];
@@ -171,8 +173,10 @@ public class Json_nde extends Json_itm_base implements Json_grp {
 	public void AddKvNde(String key, Json_nde val)  {AddKv(key, val);}
 	public void AddKvAry(String key, Json_ary val)  {AddKv(key, val);}
 	private void AddKv(String key, Json_itm val) {
+            if (val != null) { // ignore null values
 		Json_kv rv = new Json_kv(Json_itm_str.NewByVal(key), val);
 		Add(rv);
+            }
 	}
 	public Json_nde Add_many(Json_itm... ary) {
 		int len = ary.length;
@@ -212,6 +216,8 @@ public class Json_nde extends Json_itm_base implements Json_grp {
 			Json_itm itm = subs[i];
 			if (itm.Tid() == Json_itm_.Tid__kv) {
 				Json_kv itm_as_kv = (Json_kv)itm;
+//                                Json_itm val = itm_as_kv.Val();
+//                                if (val != null)
 				rv.Add(itm_as_kv.Key().Data_bry(), itm_as_kv.Val());
 			}
 		}

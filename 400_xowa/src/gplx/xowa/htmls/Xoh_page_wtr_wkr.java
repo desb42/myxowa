@@ -23,7 +23,6 @@ import gplx.DateAdp;
 import gplx.DateAdp_;
 import gplx.core.brys.fmtrs.Bry_fmtr;
 import gplx.langs.htmls.Gfh_utl;
-import gplx.xowa.Xoa_app_;
 import gplx.xowa.Xoa_ttl;
 import gplx.xowa.Xoae_app;
 import gplx.xowa.Xoae_page;
@@ -46,28 +45,15 @@ import gplx.xowa.xtns.wbases.Wdata_xwiki_link_wtr;
 import gplx.xowa.langs.msgs.Xow_msg_mgr;
 import gplx.xowa.Db_expand;
 import gplx.langs.jsons.*;
-//import gplx.langs.jsons.Json_doc;
-//import gplx.langs.jsons.Json_nde;
-//import gplx.langs.jsons.Json_kv;
-//import gplx.langs.jsons.Json_ary;
 import gplx.Bry_fmt;
 import gplx.xowa.Db_lua_comp;
 import gplx.xowa.parsers.utils.Xop_redirect_mgr;
-import gplx.String_;
-import gplx.xowa.addons.htmls.sidebars.Db_Nav_template;
-import gplx.xowa.parsers.logs.stats.Xop_log_stat;
-import gplx.xowa.wikis.pages.Xopg_page_heading;
-import gplx.xowa.langs.msgs.Xol_msg_mgr;
-import gplx.langs.mustaches.JsonMustacheNde;
-import gplx.langs.mustaches.Mustache_bfr;
-import gplx.langs.mustaches.Mustache_render_ctx;
-import gplx.langs.mustaches.Mustache_tkn_itm;
-import gplx.langs.mustaches.Mustache_tkn_parser;
-import gplx.Io_url;
 import gplx.Gfo_usr_dlg_;
 import gplx.xowa.Db_skin;
 import gplx.xowa.Db_vector_skin;
 import gplx.xowa.Db_minerva_skin;
+import gplx.xowa.Db_skin_;
+import gplx.langs.jsons.Json_nde;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
@@ -199,16 +185,23 @@ public class Xoh_page_wtr_wkr {
 			skin_choice = skin_minerva;
 		else
 			skin_choice = skin_vector;
-
 		// main build
 		Xow_portal_mgr portal_mgr = wiki.Html_mgr().Portal_mgr().Init_assert();
 		boolean nightmode_enabled = app.Gui_mgr().Nightmode_mgr().Enabled();
 		page.Html_data().Related().Set_fmtr(portal_mgr.Div_after_fmtr());
+
+		Db_skin_ skin = new Db_skin_(portal_mgr, page_data, page, wiki, 
+		                             ctx, hctx, html_gen_tid, pagename_for_h1, 
+		                             modified_on_msg, page_mode, 
+		                             ispage_in_wikisource, wdata_lang_wtr, 
+		                             ctgs_enabled, mgr, skin_choice.MsgStrs());
+		Json_nde data = skin.getTemplateData();
+
 		fmtr.Bld_bfr_many(bfr
 		, Bry_.new_a7("app_icon.png")
 		, root_dir_bry
 		//, Content(portal_mgr, page_data, page, wiki, ctx, hctx, html_gen_tid, pagename_for_h1, modified_on_msg)
-		, skin_choice.Content(portal_mgr, page_data, page, wiki, ctx, hctx, html_gen_tid, pagename_for_h1, modified_on_msg, page_mode, tmp_bfr, ispage_in_wikisource, wdata_lang_wtr, ctgs_enabled, mgr)
+		, skin_choice.Content(data, tmp_bfr, skin)
 		, html_content_editable
 		, mgr.Css_common_bry()
 		, mgr.Css_night_bry(nightmode_enabled)

@@ -121,7 +121,7 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			if (Bry_.Eq(props_kv.Key_as_bry(), Bry_.new_a7("marker-color"))) {
 				Json_itm_str itm_str = (Json_itm_str)props_kv.Val();
 				// should do some validating
-				return Bry_.Add(Bry_.new_a7("background: #"), itm_str.Data_bry(), Bry_.new_a7(";"));
+				return Bry_.Add(Bry_.new_a7("background: "), itm_str.Data_bry(), Bry_.new_a7(";"));
 			}
 		}
 		return null;

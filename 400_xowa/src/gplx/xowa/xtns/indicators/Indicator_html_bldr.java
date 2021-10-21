@@ -99,9 +99,9 @@ public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 			xnde.Html_(html);
 		}
 	}
-	public void Build_json(Json_nde data) {
+	public Json_ary Build_json() {
 		int list_len = list.Count();
-		if (list_len == 0) return;		// do not build if no items
+		if (list_len == 0) return null;		// do not build if no items
 		Json_ary indicators = Json_ary.NewByVal();
 		for (int i = 0; i < list_len; i++) {	// same order
 			Indicator_xnde xnde = (Indicator_xnde)list.Get_at(i);
@@ -111,7 +111,7 @@ public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 			jd.AddKvStr("html", xnde.Html());
 			indicators.Add(jd);
 		}
-		data.AddKvAry("array-indicators", indicators);
+		return indicators;
 	}
 }
 class Indicator_html_bldr_itm implements gplx.core.brys.Bfr_arg {
