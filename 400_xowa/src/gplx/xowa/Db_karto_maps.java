@@ -35,10 +35,12 @@ public class Db_karto_maps {
 			}
 		}
 		byte[] norm = Bry_.new_u8(Buildkey(data));
+                if (norm.length == 0) return null;
 		byte[] sha1 = Hash_algo_utl.Calc_hash_as_bry(sha1_hash, norm);
 		lst.Add(new Karto_map(key, data, norm, sha1));
 		return sha1;
 	}
+	public int Count() { return lst.Len(); }
 	public void Clear() {lst.Clear();}
 	public void Dump(Bry_bfr bfr) {
 		int len = lst.Len();
@@ -57,7 +59,7 @@ public class Db_karto_maps {
 	}
 	private String Genproperty(Json_itm itm) {
 		String val = "";
-                int glen;
+		int glen;
 		switch (itm.Tid()) {
 			case Json_itm_.Tid__bool:
 				if (((Json_itm_bool)itm).Data_as_bool())
@@ -110,8 +112,9 @@ public class Db_karto_maps {
 	}
 	private String Genproperties(Json_nde nde, String service) {
 		Json_nde props = nde.Get_as_nde("properties");
+		if (props == null) return "";
 		int len = props.Len();
-		String txt = "\"properties\":{";
+		String txt = ",\"properties\":{";
 		for (int i = 0; i < len; i++) {
 			if (i > 0)
 				txt += ",";
@@ -124,7 +127,7 @@ public class Db_karto_maps {
 			// switch "stroke-width": and "stroke":
 			int s1 = txt.indexOf("\"stroke-width\":");
 			int s2 = txt.indexOf("\"stroke\":");
-			if (s1 < s2) {
+			if (s1 > 0 && s2 > 0 && s1 < s2) {
 				int s3 = txt.indexOf(",", s1);
 				int s4 = txt.indexOf(",", s2);
 				txt = txt.substring(0, s1) + txt.substring(s2, s4+1) + txt.substring(s1, s3+1) + txt.substring(s4+1);
@@ -133,7 +136,7 @@ public class Db_karto_maps {
 		// Clarendon_Park_Congregational_Church needs "marker-color" before "title"
 		int s1 = txt.indexOf("\"title\":");
 		int s2 = txt.indexOf("\"marker-color\":");
-		if (s1 < s2) {
+		if (s1 > 0 && s2 > 0 && s1 < s2) {
 			int s3 = txt.indexOf(",", s1);
 			int s4 = txt.indexOf(",", s2);
 			if (s4 < 0)
@@ -174,7 +177,7 @@ public class Db_karto_maps {
 			Json_kv kv = geometry.Get_kv("coordinates");
 			Json_itm itm = kv.Val();
 			coords = coordinates(itm);
-			geotxt = "{\"type\":\"Feature\",\"geometry\":{\"coordinates\":[" + coords + "],\"type\":\"Point\"}," + Genproperties(nde, "") + "}";
+			geotxt = "{\"type\":\"Feature\",\"geometry\":{\"coordinates\":[" + coords + "],\"type\":\"Point\"}" + Genproperties(nde, "") + "}";
 		}
 		else if (gtype.equals("LineString")) {
 			Json_kv kv = geometry.Get_kv("coordinates");
@@ -187,10 +190,32 @@ public class Db_karto_maps {
 				Json_itm pitm = points.Get_at(k);
 				coords += "[" + coordinates(pitm) + "]";
 			}
-			geotxt = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"LineString\",\"coordinates\":[" + coords + "]}," + Genproperties(nde, "") + "}";
+			geotxt = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"LineString\",\"coordinates\":[" + coords + "]}" + Genproperties(nde, "") + "}";
 		}
+		else if (gtype.equals("Polygon")) {
+			Json_kv kv = geometry.Get_kv("coordinates");
+			Json_itm itm = kv.Val();
+			Json_ary gons = Json_ary.cast(itm);
+			int glen = gons.Len();
+                        coords = "[";
+			for (int k = 0; k < glen; k++) {
+				if (k > 0)
+					coords += ",";
+				Json_itm poitm = gons.Get_at(k);
+                                Json_ary points = Json_ary.cast(poitm);
+                                int plen = points.Len();
+                                for (int j = 0; j < plen; j++) {
+                                        if (j > 0)
+                                                coords += ",";
+                                        Json_itm pitm = points.Get_at(j);
+                                        coords += "[" + coordinates(pitm) + "]";
+                                }
+                                coords += "]";
+                        }
+			geotxt = "{\"type\":\"Feature\"" + Genproperties(nde, "") + ",\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[" + coords + "]}}";
+                }
 		else {
-			Xoa_app_.Usr_dlg().Log_many("", "", "karto: bad feature page=~{0}", ttl.Full_db());
+			Xoa_app_.Usr_dlg().Log_many("", "", "karto: bad feature page=~{0} type=~{1}", ttl.Full_db(), gtype);
 		}
 		return geotxt;
 	}
@@ -329,7 +354,7 @@ public class Db_karto_maps {
 					Json_itm itm = kv.Val();
 					geotxt += "query=" + String_.new_u8(Encode(((Json_itm_str)itm).Data_bry()));
 				}
-				geotxt += "\"," + Genproperties(nde, service) + "}";
+				geotxt += "\"" + Genproperties(nde, service) + "}";
 			}
 		}
 		else if (type.equals("Feature")) {
@@ -359,7 +384,7 @@ public class Db_karto_maps {
 		Json_doc jdoc = jdoc_parser.Parse(src);
 		if (jdoc == null) {
 			Xoa_app_.Usr_dlg().Log_many("", "", "karto: bad parse page=~{0}", ttl.Full_db());
-			return "*BAD*";
+			return "";
 		}
 		Json_ary ary = jdoc.Root_ary();
 		if (ary != null) {

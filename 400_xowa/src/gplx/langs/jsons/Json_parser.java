@@ -34,11 +34,13 @@ public class Json_parser {
 	public Json_doc Parse_by_apos(String s) {return Parse(Bry_.Replace(Bry_.new_u8(s), Byte_ascii.Apos, Byte_ascii.Quote));}
 	public Json_doc Parse(String src) {return Parse(Bry_.new_u8(src));}
 	public Json_doc Parse(byte[] src) {return Parse(src, 0, src.length);}
-	public Json_doc Parse(byte[] src, int pos, int src_len) {
+	public Json_doc Parse(byte[] src, int bgn, int end) {
 		this.src = src;				if (src == null) return null;
-		this.src_len = src.length;	if (src_len == 0) return null;
-		this.pos = pos;
+		this.src_len = end;	if (end - bgn == 0) return null;
+		this.pos = bgn;
 		Skip_ws();
+                if (this.pos >= src_len)
+                    return null; // just whitespace
 		boolean root_is_nde = true;
 		switch (src[this.pos]) {
 			case Byte_ascii.Curly_bgn:	root_is_nde = Bool_.Y; break;
@@ -215,6 +217,8 @@ public class Json_parser {
 							pos++;
 						}
 					}
+                                        else
+                                            return;
 					break;
 				default: return;
 			}

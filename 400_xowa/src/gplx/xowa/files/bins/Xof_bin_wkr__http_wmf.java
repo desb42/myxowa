@@ -31,6 +31,7 @@ public class Xof_bin_wkr__http_wmf implements Xof_bin_wkr {
 	public int Fail_timeout() {return fail_timeout;} public Xof_bin_wkr__http_wmf Fail_timeout_(int v) {fail_timeout = v; return this;} private int fail_timeout = 0;	// NOTE: always default to 0; manually set to 1000 for fsdb_make only; DATE:2014-06-21
 	public Io_stream_rdr Get_as_rdr(Xof_fsdb_itm fsdb, boolean is_thumb, int w) {
 		String src = Make_src(fsdb.Orig_repo_name(), fsdb.Orig_ttl(), fsdb.Orig_ttl_md5(), fsdb.Orig_ext(), is_thumb, w, fsdb.Lnki_time(), fsdb.Lnki_page(), Io_url_.Empty);
+            src = "http://localhost:9981/xowa/IMAGE/" + src.substring(8); // ALL go thru my cache server (HTTP)
 		Io_stream_rdr rdr = download_mgr.Download_as_rdr(src);
 		boolean rv = rdr.Exists();	// NOTE: use Exists which detects for response_code 200, not content length > 0; DATE:2015-05-20
 		if (!rv) {
@@ -68,7 +69,7 @@ public class Xof_bin_wkr__http_wmf implements Xof_bin_wkr {
 		Xof_repo_pair repo_itm = repo_mgr.Repos_get_by_wiki(orig_repo);
 		String src = url_bldr.Init_for_src_file(repo_itm.Src(), mode, orig_ttl, orig_md5, orig_ext, file_w, lnki_time, lnki_page).Xto_str();
             //src = "https://www.xowa.com/xowa/IMAGE/" + src.substring(8); // ALL go thru my cache server (HTTPS)
-            src = "http://localhost:9981/xowa/IMAGE/" + src.substring(8); // ALL go thru my cache server (HTTPS)
+            src = "http://localhost:9981/xowa/IMAGE/" + src.substring(8); // ALL go thru my cache server (HTTP)
 		download_wkr.Init(src, file_url);
 	}
 	private String Make_src(byte[] orig_repo, byte[] orig_ttl, byte[] orig_md5, Xof_ext orig_ext, boolean lnki_is_thumb, int file_w, double lnki_time, int lnki_page, Io_url file_url) {

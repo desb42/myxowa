@@ -36,7 +36,7 @@ public class Op_sys {
 	public String To_str() {return os_name + Bitness_str();}
 
 	public static final byte Tid_nil = 0, Tid_wnt = 1, Tid_lnx = 2, Tid_osx = 3, Tid_drd = 4, Tid_arm = 5;
-	public static final byte Sub_tid_unknown = 0, Sub_tid_win_xp = 1, Sub_tid_win_7 = 2, Sub_tid_win_8 = 3;
+	public static final byte Sub_tid_unknown = 0, Sub_tid_win_xp = 1, Sub_tid_win_7 = 2, Sub_tid_win_8 = 3, Sub_tid_win_10 = 4, Sub_tid_win_11 = 5;
 	public static final byte Bitness_32 = 1, Bitness_64 = 2;
 	public static final    char Nl_char_lnx = '\n';
 	public static final byte Dir_spr__lnx = Byte_ascii.Slash, Dir_spr__wnt = Byte_ascii.Backslash;
@@ -83,6 +83,8 @@ public class Op_sys {
 			if 		(String_.Eq(os_name, "windows xp") && String_.Eq(os_version, "5.1"))	sub_tid = Sub_tid_win_xp;
 			else if (String_.Eq(os_name, "windows 7")  && String_.Eq(os_version, "6.1"))	sub_tid = Sub_tid_win_7;
 			else if (String_.Eq(os_name, "windows 8"))										sub_tid = Sub_tid_win_8;
+			else if (String_.Eq(os_name, "windows 10"))										sub_tid = Sub_tid_win_10;
+			else if (String_.Eq(os_name, "windows 11"))										sub_tid = Sub_tid_win_11;
 			return new_wnt_(bitness_byte, sub_tid);
 		}
 		else if	(String_.Eq(os_name, "linux")) 			return new_unx_flavor_(Tid_lnx, os_name, bitness_byte);

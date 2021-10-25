@@ -73,6 +73,10 @@ public class Xof_repo_itm implements Gfo_invk {
 			this.root_bry = root_url.RawBry();
 			this.dir_spr = root_url.Info().DirSpr_byte();
 			this.root_http = root_url.To_http_file_bry();
+			if (gplx.core.envs.Op_sys.Cur().Tid_is_wnt()) {
+				shorten_ttl = true;
+				fsys_is_wnt = true;
+			}
 		}
 		this.root_str = root_str;
 		return this;
