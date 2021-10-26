@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.htmls.styles; import gplx.*; import gplx.langs.*; import gplx.langs.htmls.*;
+package gplx.langs.htmls.styles; import gplx.*; import gplx.langs.htmls.*;
 public class Gfh_style_wkr__val_as_int implements Gfh_style_wkr {
 	private byte[] find_key;
 	private int val_bgn, val_end;

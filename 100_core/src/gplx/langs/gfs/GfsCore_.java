@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.gfs; import gplx.*; import gplx.langs.*;
+package gplx.langs.gfs; import gplx.*;
 public class GfsCore_ {
 	public static final    String Arg_primitive = "v";
 	public static Object Exec(GfsCtx ctx, Gfo_invk owner_invk, GfoMsg owner_msg, Object owner_primitive, int depth) {

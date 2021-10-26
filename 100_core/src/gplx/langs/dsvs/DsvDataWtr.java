@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.dsvs; import gplx.*; import gplx.langs.*;
+package gplx.langs.dsvs; import gplx.*;
 import gplx.core.strings.*; import gplx.core.gfo_ndes.*; import gplx.core.stores.*;
 public class DsvDataWtr extends DataWtr_base implements DataWtr {
 	public void InitWtr(String key, Object val) {

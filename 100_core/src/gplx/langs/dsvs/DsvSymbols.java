@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.dsvs; import gplx.*; import gplx.langs.*;
+package gplx.langs.dsvs; import gplx.*;
 class DsvSymbols {
 	public String FldSep() {return fldSep;} public DsvSymbols FldSep_(String v) {fldSep = v; CmdSequence_set(); return this;} private String fldSep;
 	public String RowSep() {return rowSep;}

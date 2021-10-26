@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.htmls; import gplx.*; import gplx.langs.*;
+package gplx.langs.htmls; import gplx.*;
 public class Gfh_bldr_ {
 	public static final byte[]
 	  Bry__a_lhs_bgn					= Bry_.new_a7("<a")

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.phps; import gplx.*; import gplx.langs.*;
+package gplx.langs.phps; import gplx.*;
 public class Php_itm_kv implements Php_itm, Php_itm_sub {
 	public byte Itm_tid() {return Php_itm_.Tid_kv;}
 	public byte[] Val_obj_bry() {return null;}

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.dsvs; import gplx.*; import gplx.langs.*;
+package gplx.langs.dsvs; import gplx.*;
 public class Dsv_tbl_parser implements Gfo_invk, Rls_able {
 	private Dsv_wkr_base mgr;
 	private Dsv_fld_parser[] fld_parsers = new Dsv_fld_parser[2]; private int fld_parsers_len = 2;

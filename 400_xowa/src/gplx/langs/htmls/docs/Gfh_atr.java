@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.htmls.docs; import gplx.*; import gplx.langs.*; import gplx.langs.htmls.*;
+package gplx.langs.htmls.docs; import gplx.*; import gplx.langs.htmls.*;
 public class Gfh_atr implements gplx.core.brys.Bfr_arg {
 	public Gfh_atr(int idx, int atr_bgn, int atr_end, byte[] key, byte[] val, byte[] src, int val_bgn, int val_end) {
 		this.idx = idx; this.atr_bgn = atr_bgn; this.atr_end = atr_end; this.key = key; this.val = val;

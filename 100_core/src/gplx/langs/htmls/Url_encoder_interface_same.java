@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.htmls; import gplx.*; import gplx.langs.*;
+package gplx.langs.htmls; import gplx.*;
 public class Url_encoder_interface_same implements Url_encoder_interface {
 	public String Encode_str(String v) {return v;}
 	public byte[] Encode_bry(String v) {return Bry_.new_u8(v);}

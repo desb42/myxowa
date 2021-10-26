@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.phps; import gplx.*; import gplx.langs.*;
+package gplx.langs.phps; import gplx.*;
 public class Php_tkn_comment extends Php_tkn_base {
 	public Php_tkn_comment(int src_bgn, int src_end, byte comment_tid) {this.Src_rng_(src_bgn, src_end); this.comment_tid = comment_tid;}
 	@Override public byte Tkn_tid() {return Php_tkn_.Tid_comment;}

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.regxs; import gplx.*; import gplx.langs.*;
+package gplx.langs.regxs; import gplx.*;
 public class Regx_group {
 	public Regx_group(boolean rslt, int bgn, int end, String val) {
 		this.rslt = rslt;

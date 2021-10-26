@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.phps; import gplx.*; import gplx.langs.*;
+package gplx.langs.phps; import gplx.*;
 class Php_tkn_factory {
 	public Php_tkn_generic 				Generic(int bgn, int end, byte tid) {return new Php_tkn_generic(bgn, end, tid);}
 	public Php_tkn_txt					Txt(int bgn, int end) {return new Php_tkn_txt(bgn, end);}

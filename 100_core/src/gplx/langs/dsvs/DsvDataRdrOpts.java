@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.dsvs; import gplx.*; import gplx.langs.*;
+package gplx.langs.dsvs; import gplx.*;
 import gplx.core.gfo_ndes.*;
 public class DsvDataRdrOpts {
 	public boolean HasHeader() {return hasHeader;} public DsvDataRdrOpts HasHeader_(boolean val) {hasHeader = val; return this;} private boolean hasHeader = false;

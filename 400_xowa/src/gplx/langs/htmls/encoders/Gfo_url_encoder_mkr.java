@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.htmls.encoders; import gplx.*; import gplx.langs.*; import gplx.langs.htmls.*;
+package gplx.langs.htmls.encoders; import gplx.*; import gplx.langs.htmls.*;
 import gplx.core.btries.*;
 public class Gfo_url_encoder_mkr {
 	private Gfo_url_encoder_itm[] encode_ary, decode_ary;

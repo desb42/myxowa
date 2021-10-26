@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.regxs; import gplx.*; import gplx.langs.*;
+package gplx.langs.regxs; import gplx.*;
 public class Regx_adp_ {
 	public static Regx_adp new_(String pattern) {return new Regx_adp(pattern, Regx_adp.FLAG__DEFAULT);}
 	public static List_adp Find_all(String src, String pat) {

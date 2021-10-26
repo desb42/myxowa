@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.gfs; import gplx.*; import gplx.langs.*;
+package gplx.langs.gfs; import gplx.*;
 public class Gfs_nde {
 	public byte[] Name_bry(byte[] src) {return name == null ? Bry_.Mid(src, name_bgn, name_end) : name;}
 	public byte[] Name() {return name;} public Gfs_nde Name_(byte[] v) {name = v; return this;} private byte[] name;

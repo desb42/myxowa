@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.phps; import gplx.*; import gplx.langs.*;
+package gplx.langs.phps; import gplx.*;
 import gplx.core.texts.*;
 public class Php_srl_parser {
 	@gplx.Internal protected Php_srl_factory Factory() {return factory;} Php_srl_factory factory = new Php_srl_factory();

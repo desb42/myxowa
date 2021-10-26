@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.regxs; import gplx.*; import gplx.langs.*;
+package gplx.langs.regxs; import gplx.*;
 public class Gfo_pattern {
 	private final Gfo_pattern_itm[] itms; private final int itms_len;
 	private final Gfo_pattern_ctx ctx = new Gfo_pattern_ctx();

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.dsvs; import gplx.*; import gplx.langs.*;
+package gplx.langs.dsvs; import gplx.*;
 public class DsvStoreLayout {
 	public DsvHeaderList HeaderList() {return headerList;} DsvHeaderList headerList = DsvHeaderList.new_();
 	@gplx.Internal protected boolean WriteCmdSequence() {return writeCmdSequence;} @gplx.Internal protected DsvStoreLayout WriteCmdSequence_(boolean val) {writeCmdSequence = val; return this;} private boolean writeCmdSequence;

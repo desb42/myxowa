@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.phps; import gplx.*; import gplx.langs.*;
+package gplx.langs.phps; import gplx.*;
 public class Php_itm_ {
 	public static final byte Tid_null = 0, Tid_bool_false = 1, Tid_bool_true = 2, Tid_int = 3, Tid_quote = 4, Tid_ary = 5, Tid_kv = 6, Tid_var = 7;
 	public static int Parse_int_or(Php_itm itm, int or) {

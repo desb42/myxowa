@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.xmls; import gplx.*; import gplx.langs.*;
+package gplx.langs.xmls; import gplx.*;
 import gplx.core.strings.*; import gplx.core.envs.*;
 public class HierStrBldr {
 	public String Root() {return root;} public HierStrBldr Root_(String v) {root = v; return this;} private String root;

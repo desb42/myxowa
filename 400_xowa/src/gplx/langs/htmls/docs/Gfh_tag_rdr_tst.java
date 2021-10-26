@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.htmls.docs; import gplx.*; import gplx.langs.*; import gplx.langs.htmls.*;
+package gplx.langs.htmls.docs; import gplx.*; import gplx.langs.htmls.*;
 import org.junit.*;
 public class Gfh_tag_rdr_tst {
 	private final    Gfh_tag_rdr_fxt fxt = new Gfh_tag_rdr_fxt();

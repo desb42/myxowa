@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.langs.regxs; import gplx.*; import gplx.langs.*;
+package gplx.langs.regxs; import gplx.*;
 import gplx.core.strings.*;
 public class Regx_bldr {
 	public static String Includes(String characters) {return String_.Concat_any(Regx_bldr.Tkn_CharSetBegin, characters, Regx_bldr.Tkn_CharSetEnd);}
