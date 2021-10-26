@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.addons.wikis.ctgs; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.wikis.*;
+package gplx.xowa.addons.wikis.ctgs; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*;
 public class Xoa_ctg_mgr {
 	public static final byte Version_null = Byte_.Zero, Version_1 = 1, Version_2 = 2;
 	public static final byte Tid__subc = 0, Tid__file = 1, Tid__page = 2, Tid___max = 3;	// SERIALIZED; cat_link.cl_type_id
