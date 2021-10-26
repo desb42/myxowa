@@ -18,7 +18,7 @@ import gplx.core.brys.*; import gplx.core.brys.fmts.*; import gplx.core.brys.fmt
 import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.htmls.core.htmls.*;
 import gplx.xowa.users.history.*;
-import gplx.xowa.addons.wikis.ctgs.htmls.*;
+
 public class Xoctg_double_box implements Bfr_arg {
 	public Xoctg_double_grp Grp_normal() {return grp_normal;} private final    Xoctg_double_grp grp_normal = new Xoctg_double_grp();
 	public Xoctg_double_grp Grp_hidden() {return grp_hidden;} private final    Xoctg_double_grp grp_hidden = new Xoctg_double_grp();
