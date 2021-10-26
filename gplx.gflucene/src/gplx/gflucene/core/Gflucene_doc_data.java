@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.gflucene.core; import gplx.*; import gplx.gflucene.*;
+package gplx.gflucene.core; import gplx.*;
 public class Gflucene_doc_data {
 	public String title;
 	public String body;

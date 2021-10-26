@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.gflucene.searchers; import gplx.*; import gplx.gflucene.*;
+package gplx.gflucene.searchers; import gplx.*;
 public class Gflucene_searcher_qry {
 	public String query;
 	public int match_max;
