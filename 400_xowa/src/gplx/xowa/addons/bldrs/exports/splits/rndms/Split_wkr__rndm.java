@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.addons.bldrs.exports.splits.rndms; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.bldrs.*; import gplx.xowa.addons.bldrs.exports.*; import gplx.xowa.addons.bldrs.exports.splits.*;
+package gplx.xowa.addons.bldrs.exports.splits.rndms; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.bldrs.exports.*; import gplx.xowa.addons.bldrs.exports.splits.*;
 import gplx.dbs.*; import gplx.dbs.cfgs.*; import gplx.dbs.bulks.*; import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.addons.bldrs.exports.splits.metas.*; import gplx.xowa.addons.bldrs.exports.splits.rslts.*; import gplx.xowa.addons.bldrs.exports.splits.mgrs.*;
 import gplx.xowa.addons.wikis.pages.randoms.*; import gplx.xowa.addons.wikis.pages.randoms.dbs.*; import gplx.xowa.addons.wikis.pages.randoms.bldrs.*; import gplx.xowa.addons.wikis.pages.randoms.mgrs.*;

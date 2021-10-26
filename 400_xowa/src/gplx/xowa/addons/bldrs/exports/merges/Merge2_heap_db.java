@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.addons.bldrs.exports.merges; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.bldrs.*; import gplx.xowa.addons.bldrs.exports.*;
+package gplx.xowa.addons.bldrs.exports.merges; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.bldrs.exports.*;
 import gplx.dbs.*; import gplx.xowa.addons.bldrs.exports.utls.*;
 public class Merge2_heap_db implements Merge2_trg_itm {
 	public Merge2_heap_db(Split_tbl tbl, Dbmeta_fld_list flds, int idx, Io_url url, Db_conn conn) {

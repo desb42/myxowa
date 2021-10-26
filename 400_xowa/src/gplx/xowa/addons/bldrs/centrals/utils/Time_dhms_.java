@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.addons.bldrs.centrals.utils; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.bldrs.*; import gplx.xowa.addons.bldrs.centrals.*;
+package gplx.xowa.addons.bldrs.centrals.utils; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.bldrs.centrals.*;
 public class Time_dhms_ {
 	public static String To_str(Bry_bfr bfr, long val, boolean show_unit, int max_places) {To_bfr(bfr, val, show_unit, max_places); return bfr.To_str_and_clear();}
 	public static void To_bfr(Bry_bfr bfr, long val, boolean show_unit, int max_places) {
