@@ -15,7 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.gfui.kits.swts; import gplx.*; import gplx.gfui.*;
 import gplx.*;
-import gplx.gfui.kits.*;
+
 import gplx.gfui.kits.core.Gfui_dlg_msg;
 import gplx.gfui.kits.core.Gfui_dlg_msg_;
 

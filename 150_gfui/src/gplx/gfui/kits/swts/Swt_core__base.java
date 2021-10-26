@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.*;
 import gplx.gfui.controls.gxws.GxwCore_base;
 import gplx.gfui.controls.gxws.GxwElem;
 import gplx.gfui.draws.*;
-import gplx.gfui.kits.*;
+
 import gplx.gfui.layouts.swts.*;
 
 abstract class Swt_core__base extends GxwCore_base {

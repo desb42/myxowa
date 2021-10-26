@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.*;
 
 import gplx.gfui.controls.gxws.*;
 import gplx.gfui.draws.*;
-import gplx.gfui.kits.*;
+
 import gplx.gfui.kits.core.Swt_kit;
 import gplx.gfui.layouts.swts.*;
 
