@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.addons.bldrs.updates.files; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.bldrs.updates.*;
+package gplx.xowa.addons.bldrs.updates.files; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*;
 import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.wkrs.*;
 public class Xodel_make_cmd extends Xob_cmd__base implements Xob_cmd {
 	public Xodel_make_cmd(Xob_bldr bldr, Xowe_wiki wiki) {super(bldr, wiki);}
