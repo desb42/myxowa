@@ -15,11 +15,6 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa;
 import gplx.Bry_bfr;
-import gplx.xowa.htmls.Xoh_page_wtr_mgr;
-import gplx.xowa.htmls.portal.Xow_portal_mgr;
-import gplx.xowa.parsers.Xop_ctx;
-import gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx;
-import gplx.xowa.xtns.wbases.Wdata_xwiki_link_wtr;
 import gplx.langs.jsons.Json_nde;
 public interface Db_skin {
 	public String Skintags();

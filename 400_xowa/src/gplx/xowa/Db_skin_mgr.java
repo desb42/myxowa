@@ -13,15 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.wikis.*; import gplx.xowa.addons.wikis.ctgs.*; import gplx.xowa.addons.wikis.ctgs.htmls.*;
-import gplx.xowa.wikis.dbs.*; import gplx.xowa.wikis.data.tbls.*;
-import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.htmls.core.htmls.*; import gplx.core.intls.ucas.*;
-import gplx.langs.htmls.Gfh_tag_;
-import gplx.xowa.wikis.nss.*; import gplx.xowa.htmls.heads.*;
-import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.fmts.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.dbs.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.urls.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.langs.*;
-import gplx.xowa.mediawiki.includes.XomwDefines;
-import gplx.xowa.xtns.categorytrees.*;
-import java.util.concurrent.locks.*;
+package gplx.xowa; import gplx.*;
 public class Db_skin_mgr implements Gfo_invk {
 	private final Xow_wiki wiki;
 	private String skin = "vector";
