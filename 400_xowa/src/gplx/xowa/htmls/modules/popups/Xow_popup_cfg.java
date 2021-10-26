@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.htmls.modules.popups; import gplx.*; import gplx.xowa.*; import gplx.xowa.htmls.*; import gplx.xowa.htmls.modules.*;
+package gplx.xowa.htmls.modules.popups; import gplx.*; import gplx.xowa.*; import gplx.xowa.htmls.*;
 import gplx.xowa.apps.apis.xowa.html.modules.*;
 public class Xow_popup_cfg {
 	public int Show_all_if_less_than() {return show_all_if_less_than;} public void Show_all_if_less_than_(int v) {show_all_if_less_than = v;} private int show_all_if_less_than;
