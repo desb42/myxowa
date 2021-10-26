@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.bldrs.filters.dansguardians; import gplx.*; import gplx.xowa.*; import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.filters.*;
+package gplx.xowa.bldrs.filters.dansguardians; import gplx.*; import gplx.xowa.*; import gplx.xowa.bldrs.*;
 class Dg_parser {
 	private Gfo_usr_dlg usr_dlg = Gfo_usr_dlg_.Instance; private final    Bry_bfr key_bldr = Bry_bfr_.Reset(32);
 	private final    List_adp files = List_adp_.New(), lines = List_adp_.New(), words = List_adp_.New();
