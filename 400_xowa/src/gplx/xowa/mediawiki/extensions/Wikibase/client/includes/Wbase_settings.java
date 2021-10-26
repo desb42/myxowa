@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.mediawiki.extensions.Wikibase.client.includes; import gplx.*; import gplx.xowa.*; import gplx.xowa.mediawiki.*; import gplx.xowa.mediawiki.extensions.Wikibase.client.*;
+package gplx.xowa.mediawiki.extensions.Wikibase.client.includes; import gplx.*; import gplx.xowa.*; import gplx.xowa.mediawiki.*;
 public class Wbase_settings {
 	private static final    Hash_adp_bry hash = Hash_adp_bry.cs();
 	public byte[] getSetting(String key) {return getSetting(Bry_.new_u8(key));}
