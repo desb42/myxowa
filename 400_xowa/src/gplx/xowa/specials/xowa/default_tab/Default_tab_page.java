@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.specials.xowa.default_tab; import gplx.*; import gplx.xowa.*; import gplx.xowa.specials.*; import gplx.xowa.specials.xowa.*;
+package gplx.xowa.specials.xowa.default_tab; import gplx.*; import gplx.xowa.*; import gplx.xowa.specials.*;
 public class Default_tab_page implements Xow_special_page {
 	public Xow_special_meta Special__meta() {return Xow_special_meta_.Itm__default_tab;}
 	public void Special__gen(Xow_wiki wiki, Xoa_page pagei, Xoa_url url, Xoa_ttl ttl) {
