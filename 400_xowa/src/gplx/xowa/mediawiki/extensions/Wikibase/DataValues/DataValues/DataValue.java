@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.mediawiki.extensions.Wikibase.DataValues.DataValues; import gplx.*; import gplx.xowa.*; import gplx.xowa.mediawiki.*; import gplx.xowa.mediawiki.extensions.*; import gplx.xowa.mediawiki.extensions.Wikibase.*; import gplx.xowa.mediawiki.extensions.Wikibase.DataValues.*;
+package gplx.xowa.mediawiki.extensions.Wikibase.DataValues.DataValues; import gplx.*; import gplx.xowa.*; import gplx.xowa.mediawiki.*;
 // REF.MW:https://github.com/DataValues/DataValues/blob/master/src/DataValues/DataValue.php
 /**
 * Interface for objects that represent a single data value.
