@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.gfui.kits.core; import gplx.*; import gplx.gfui.*; import gplx.gfui.kits.*;
+package gplx.gfui.kits.core; import gplx.*; import gplx.gfui.*;
 public class Gfui_dlg_msg_ {
 	public static final    Gfui_dlg_msg Noop = new Gfui_dlg_msg_noop();
 	public static final    int Ico_error = 0, Ico_information = 1, Ico_question = 2, Ico_warning = 3, Ico_working = 4;

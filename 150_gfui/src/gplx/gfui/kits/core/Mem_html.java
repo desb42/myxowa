@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.gfui.kits.core; import gplx.*; import gplx.gfui.*; import gplx.gfui.kits.*;
+package gplx.gfui.kits.core; import gplx.*; import gplx.gfui.*;
 import gplx.gfui.draws.*; import gplx.gfui.controls.gxws.*; import gplx.gfui.controls.elems.*; import gplx.gfui.controls.standards.*;
 class Mem_html extends GxwTextMemo_lang implements Gxw_html {		public void Html_invk_src_(Gfo_evt_itm v) {}
 	public void Html_doc_html_load_by_mem(String s) {
