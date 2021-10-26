@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.security.algos.jre; import gplx.*; import gplx.core.*; import gplx.core.security.*; import gplx.core.security.algos.*;
+package gplx.core.security.algos.jre; import gplx.*; import gplx.core.security.*; import gplx.core.security.algos.*;
 import org.junit.*;
 public class Jre_hash_algo__sha1__tst {	// REF: https://www.cosic.esat.kuleuven.be/nessie/testvectors/
 	private final    Hash_algo__fxt fxt = new Hash_algo__fxt(Hash_algo_.New__sha1());

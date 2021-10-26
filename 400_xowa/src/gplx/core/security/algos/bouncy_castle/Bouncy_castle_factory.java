@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.security.algos.bouncy_castle; import gplx.*; import gplx.core.*; import gplx.core.security.*; import gplx.core.security.algos.*;
+package gplx.core.security.algos.bouncy_castle; import gplx.*; import gplx.core.security.*; import gplx.core.security.algos.*;
 public class Bouncy_castle_factory implements Hash_algo_factory {
 	public Hash_algo New_hash_algo(String key) {
 		return new Bouncy_castle_algo(key);

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.lists; import gplx.*; import gplx.core.*;
+package gplx.core.lists; import gplx.*;
 class StatRng_fxt {	// UNUSED:useful for stat processing
 	StatRng rng;
 	public StatRng_fxt ini_(int lo_ary_len, int hi_ary_len, int... slot_hi_ary) {

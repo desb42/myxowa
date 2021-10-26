@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.stores; import gplx.*; import gplx.core.*;
+package gplx.core.stores; import gplx.*;
 public class DbMaprItm {
 	public String TableName() {return tableName;} public DbMaprItm TableName_(String val) {tableName = val; return this;} private String tableName;
 	public Ordered_hash Flds() {return flds;} Ordered_hash flds = Ordered_hash_.New();

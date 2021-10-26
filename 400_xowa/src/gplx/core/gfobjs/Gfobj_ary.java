@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.gfobjs; import gplx.*; import gplx.core.*;
+package gplx.core.gfobjs; import gplx.*;
 public class Gfobj_ary implements Gfobj_grp { // NOTE: items in array can vary in types; EX:['a', 1, false]
 	public Gfobj_ary(Object[] ary) {this.ary = ary;}
 	public byte				Grp_tid() {return Gfobj_grp_.Grp_tid__ary;}

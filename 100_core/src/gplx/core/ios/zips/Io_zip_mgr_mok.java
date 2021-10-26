@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios.zips; import gplx.*; import gplx.core.*; import gplx.core.ios.*;
+package gplx.core.ios.zips; import gplx.*; import gplx.core.ios.*;
 public class Io_zip_mgr_mok implements Io_zip_mgr {
 	public void Zip_fil(Io_url src_fil, Io_url trg_fil) {
 		byte[] src_bry = Io_mgr.Instance.LoadFilBry(src_fil);

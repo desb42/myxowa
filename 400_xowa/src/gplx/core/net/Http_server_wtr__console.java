@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.net; import gplx.*; import gplx.core.*;
+package gplx.core.net; import gplx.*;
 import gplx.core.consoles.*;
 class Http_server_wtr__console implements Http_server_wtr {
 	public void Write_str_w_nl(String s) {Console_adp__sys.Instance.Write_str_w_nl(s);}

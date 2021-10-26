@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.threads; import gplx.*; import gplx.core.*;
+package gplx.core.threads; import gplx.*;
 import gplx.core.brys.fmtrs.*; import gplx.core.envs.*;
 import gplx.gfui.*; import gplx.gfui.kits.core.*; import gplx.xowa.bldrs.cmds.utils.*;
 public class Gfo_thread_cmd_unzip implements Gfo_thread_cmd {

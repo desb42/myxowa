@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.brys; import gplx.*; import gplx.core.*;
+package gplx.core.brys; import gplx.*;
 public class Bry_bfr_able_ {
 	public static byte[][] To_bry_ary(Bry_bfr tmp_bfr, Bry_bfr_able[] ary) {
 		int len = ary.length;

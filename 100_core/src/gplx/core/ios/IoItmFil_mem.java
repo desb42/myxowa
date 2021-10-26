@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios; import gplx.*; import gplx.core.*;
+package gplx.core.ios; import gplx.*;
 import gplx.core.ios.streams.*; /*IoStream_mem*/ import gplx.core.texts.*; /*Encoding_*/
 class IoItmFil_mem extends IoItmFil {		public static IoItmFil_mem as_(Object obj) {return obj instanceof IoItmFil_mem ? (IoItmFil_mem)obj : null;}
 	@gplx.Internal protected IoStream_mem Stream() {return stream;} IoStream_mem stream;	// NOTE: using stream instead of Text, b/c no events for IoStream.Dispose; ex: stream.OpenStreamWrite; stream.Write("hi"); stream.Dispose(); "hi" would not be saved if Text is member variable

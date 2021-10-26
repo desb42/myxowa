@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.intls; import gplx.*; import gplx.core.*;
+package gplx.core.intls; import gplx.*;
 import org.junit.*;
 public class Utf8__tst {
 	private Utf8__fxt fxt = new Utf8__fxt();

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.gfobjs; import gplx.*; import gplx.core.*;
+package gplx.core.gfobjs; import gplx.*;
 public class Gfobj_nde implements Gfobj_grp {
 	private Ordered_hash subs;
 	public byte				Grp_tid()									{return Gfobj_grp_.Grp_tid__nde;}

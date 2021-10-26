@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.stores; import gplx.*; import gplx.core.*;
+package gplx.core.stores; import gplx.*;
 public abstract class DataWtr_base implements SrlMgr {
 	@gplx.Virtual public Hash_adp EnvVars() {return envVars;} Hash_adp envVars = Hash_adp_.New();
 	public boolean Type_rdr() {return false;}

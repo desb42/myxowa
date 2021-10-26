@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.flds; import gplx.*; import gplx.core.*;
+package gplx.core.flds; import gplx.*;
 public class Gfo_fld_base {
 	public byte Row_dlm() {return row_dlm;} public Gfo_fld_base Row_dlm_(byte v) {row_dlm = v; return this;} protected byte row_dlm = Byte_ascii.Nl;
 	public byte Fld_dlm() {return fld_dlm;} public Gfo_fld_base Fld_dlm_(byte v) {fld_dlm = v; return this;} protected byte fld_dlm = Byte_ascii.Pipe;

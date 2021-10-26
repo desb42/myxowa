@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.net; import gplx.*; import gplx.core.*;
+package gplx.core.net; import gplx.*;
 public class Gfo_inet_conn_ {
 	public static final int Tid__http = 1, Tid__mem__hash = 2, Tid__mem__pile = 3;
 	public static Gfo_inet_conn new_http()		{return new Gfo_inet_conn__http();}

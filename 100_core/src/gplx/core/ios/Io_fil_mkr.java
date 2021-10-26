@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios; import gplx.*; import gplx.core.*;
+package gplx.core.ios; import gplx.*;
 public class Io_fil_mkr {
 	private final    List_adp list = List_adp_.New();
 	public Io_fil_mkr Add(String url, String data) {return Add(Io_url_.mem_fil_(url), data);}

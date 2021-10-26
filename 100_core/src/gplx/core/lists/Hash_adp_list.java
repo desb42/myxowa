@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.lists; import gplx.*; import gplx.core.*;
+package gplx.core.lists; import gplx.*;
 public class Hash_adp_list extends Hash_adp_base {
 	@gplx.New public List_adp Get_by(Object key) {return ((List_adp)Fetch_base(key));}
 	public List_adp Get_by_or_new(Object key) {

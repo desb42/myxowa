@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.tests; import gplx.*; import gplx.core.*;
+package gplx.core.tests; import gplx.*;
 public interface Gfo_test_lnr_itm_cbk {
 	void Test_itm(int i, int len, Gfo_test_itm expd_itm, Gfo_test_itm actl_itm);
 }

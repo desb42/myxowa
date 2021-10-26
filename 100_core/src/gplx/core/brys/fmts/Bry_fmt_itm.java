@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.brys.fmts; import gplx.*; import gplx.core.*; import gplx.core.brys.*;
+package gplx.core.brys.fmts; import gplx.*; import gplx.core.brys.*;
 public class Bry_fmt_itm {
 	public Bry_fmt_itm(int tid, int src_bgn, int src_end) {
 		this.Tid = tid;

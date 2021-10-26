@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.security.algos.gplx_crypto; import gplx.*; import gplx.core.*; import gplx.core.security.*; import gplx.core.security.algos.*;
+package gplx.core.security.algos.gplx_crypto; import gplx.*; import gplx.core.security.*; import gplx.core.security.algos.*;
 import org.junit.*; import gplx.core.consoles.*; import gplx.core.ios.*; /*IoStream*/
 public class Hash_algo__tth_192__tst {	// REF: http://open-content.net/specs/draft-jchapweske-thex-02.html; DC++ 0.698
 	private final    Hash_algo__fxt fxt = new Hash_algo__fxt(Hash_algo_.New__tth_192());

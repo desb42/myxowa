@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios.zips; import gplx.*; import gplx.core.*; import gplx.core.ios.*;
+package gplx.core.ios.zips; import gplx.*; import gplx.core.ios.*;
 import gplx.core.progs.*;
 public abstract class Io_zip_decompress_cmd__base implements Io_zip_decompress_cmd {
 	private Io_url checkpoint_url;

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.gfobjs; import gplx.*; import gplx.core.*;
+package gplx.core.gfobjs; import gplx.*;
 import gplx.core.tests.*; import gplx.langs.jsons.*;
 public class Gfobj_wtr__json_fxt {
 	protected final    Gfobj_wtr__json mgr = new Gfobj_wtr__json();

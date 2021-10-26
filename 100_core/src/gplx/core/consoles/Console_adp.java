@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.consoles; import gplx.*; import gplx.core.*;
+package gplx.core.consoles; import gplx.*;
 public interface Console_adp {
 	boolean Enabled();	// optimization; allows Write to be skipped (since Write may Concat strings or generate arrays)
 	boolean Canceled_chk();

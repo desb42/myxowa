@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios; import gplx.*; import gplx.core.*;
+package gplx.core.ios; import gplx.*;
 import gplx.core.type_xtns.*;
 public class IoItmClassXtn extends ClassXtn_base implements ClassXtn {
 	public String Key() {return Key_const;}						public static final    String Key_const = "ioItemType";

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.texts; import gplx.*; import gplx.core.*;
+package gplx.core.texts; import gplx.*;
 public class StringTableCol {
 	public StringTableColAlign Halign() {return halign;} public StringTableCol Halign_(StringTableColAlign val) {halign = val; return this;} StringTableColAlign halign = StringTableColAlign.Left;
 	public int LengthMax() {return lengthMax;} int lengthMax = Int_.Min_value;

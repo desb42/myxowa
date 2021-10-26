@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.caches; import gplx.*; import gplx.core.*;
+package gplx.core.caches; import gplx.*;
 import org.junit.*; import gplx.core.tests.*;
 public class Lru_cache_tst {
 	private final    Lru_cache_fxt fxt = new Lru_cache_fxt();

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.caches; import gplx.*; import gplx.core.*;
+package gplx.core.caches; import gplx.*;
 public class Gfo_cache_mgr_base {
 	private final    Ordered_hash hash = Ordered_hash_.New_bry();
 	public int Compress_max() {return compress_max;} public void Compress_max_(int v) {compress_max = v;} private int compress_max = 16;

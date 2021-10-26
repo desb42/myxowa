@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.security.files; import gplx.*; import gplx.core.*; import gplx.core.security.*;
+package gplx.core.security.files; import gplx.*; import gplx.core.security.*;
 import gplx.core.security.algos.*;
 public class Cksum_list {
 	public Cksum_list(byte type, Cksum_itm[] itms, long itms_size) {

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios.streams.rdrs; import gplx.*; import gplx.core.*; import gplx.core.ios.*; import gplx.core.ios.streams.*;
+package gplx.core.ios.streams.rdrs; import gplx.*; import gplx.core.ios.*; import gplx.core.ios.streams.*;
 public abstract class Io_stream_rdr__base implements Io_stream_rdr {
 	public abstract byte Tid();
 	public Io_url Url() {return url;} protected Io_url url;

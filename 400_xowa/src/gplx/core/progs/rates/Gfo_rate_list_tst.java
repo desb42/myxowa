@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.progs.rates; import gplx.*; import gplx.core.*; import gplx.core.progs.*;
+package gplx.core.progs.rates; import gplx.*; import gplx.core.progs.*;
 import org.junit.*; import gplx.core.tests.*;
 public class Gfo_rate_list_tst {
 	private final    Gfo_rate_list_fxt fxt = new Gfo_rate_list_fxt();

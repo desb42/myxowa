@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.texts; import gplx.*; import gplx.core.*;
+package gplx.core.texts; import gplx.*;
 public class StringTableColAlign {
 	public int Val() {return val;} int val = 0;
 	public static StringTableColAlign new_(int v) {

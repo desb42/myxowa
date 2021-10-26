@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios.streams; import gplx.*; import gplx.core.*; import gplx.core.ios.*;
+package gplx.core.ios.streams; import gplx.*; import gplx.core.ios.*;
 public class Io_stream_tid_ {
 	public static final byte Tid__null = 0, Tid__raw = 1, Tid__zip = 2, Tid__gzip = 3, Tid__bzip2 = 4, Tid__xz = 5;	// SERIALIZED:xo.text_db;xo.html_db
 	public static final String Ext__zip = ".zip", Ext__gz = ".gz", Ext__bz2 = ".bz2", Ext__xz = ".xz";

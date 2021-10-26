@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.encoders; import gplx.*; import gplx.core.*;
+package gplx.core.encoders; import gplx.*;
 public class Base85_ {
 	public static String To_str(int val, int min_len) {return String_.new_u8(Set_bry(val, null, 0, min_len));}
 	public static byte[] To_bry(int val, int min_len) {return Set_bry(val, null, 0, min_len);}

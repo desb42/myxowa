@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.net; import gplx.*; import gplx.core.*;
+package gplx.core.net; import gplx.*;
 public class Http_request_itm {
 	public Http_request_itm(int type, byte[] url, byte[] protocol, byte[] host, byte[] user_agent
 		, byte[] accept, byte[] accept_language, byte[] accept_encoding, boolean dnt, byte[] x_requested_with, byte[] cookie, byte[] referer

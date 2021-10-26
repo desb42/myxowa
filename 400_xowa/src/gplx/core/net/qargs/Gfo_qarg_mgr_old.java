@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.net.qargs; import gplx.*; import gplx.core.*; import gplx.core.net.*;
+package gplx.core.net.qargs; import gplx.*; import gplx.core.net.*;
 import gplx.langs.htmls.encoders.*; import gplx.xowa.*;
 public class Gfo_qarg_mgr_old {
 	private final    List_adp list = List_adp_.New();

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.brys; import gplx.*; import gplx.core.*;
+package gplx.core.brys; import gplx.*;
 public class Bit_heap_wtr {
 	private final    gplx.xowa.htmls.core.hzips.Xoh_hzip_int hzip_int = new gplx.xowa.htmls.core.hzips.Xoh_hzip_int().Mode_is_b256_(true);
 	private final    Bry_bfr hzip_int_bfr = Bry_bfr_.Reset(5);

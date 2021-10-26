@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.security.algos; import gplx.*; import gplx.core.*; import gplx.core.security.*;
+package gplx.core.security.algos; import gplx.*; import gplx.core.security.*;
 public class Hash_algo__fxt {
 	private final    Hash_algo algo;
 	public Hash_algo__fxt(Hash_algo algo) {this.algo = algo;}

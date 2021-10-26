@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.envs; import gplx.*; import gplx.core.*;
+package gplx.core.envs; import gplx.*;
 public class Jar_adp_ {
 	public static DateAdp ModifiedTime_type(Class<?> type) {if (type == null) throw Err_.new_null();
 		Io_url url = Url_type(type);

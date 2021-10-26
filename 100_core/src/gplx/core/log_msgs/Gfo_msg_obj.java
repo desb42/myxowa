@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.log_msgs; import gplx.*; import gplx.core.*;
+package gplx.core.log_msgs; import gplx.*;
 public interface Gfo_msg_obj {
 	String Key_str();
 	Gfo_msg_obj Subs_get_by_key(String sub_key);

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.encoders; import gplx.*; import gplx.core.*;
+package gplx.core.encoders; import gplx.*;
 public class Oct_utl_ {
 	public static int Parse_or(byte[] src, int or) {return Parse_or(src, 0, src.length, or);}
 	public static int Parse_or(byte[] src, int bgn, int end, int or) {

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.consoles; import gplx.*; import gplx.core.*;
+package gplx.core.consoles; import gplx.*;
 public class Gfo_cmd_arg_itm {
 	public Gfo_cmd_arg_itm(int tid, boolean reqd, String key, int val_tid) {this.tid = tid; this.reqd = reqd; this.key = key; this.val_tid = val_tid;}
 	public int		Tid()		{return tid;} private final    int tid;

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios.streams.rdrs; import gplx.*; import gplx.core.*; import gplx.core.ios.*; import gplx.core.ios.streams.*;
+package gplx.core.ios.streams.rdrs; import gplx.*; import gplx.core.ios.*; import gplx.core.ios.streams.*;
 public class Io_stream_rdr__zip extends Io_stream_rdr__base {
 	@Override public byte Tid() {return Io_stream_tid_.Tid__gzip;}
 		public Object Under() {return zip_stream;} private java.util.zip.ZipInputStream zip_stream;

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.flds; import gplx.*; import gplx.core.*;
+package gplx.core.flds; import gplx.*;
 import gplx.core.ios.*; import gplx.core.encoders.*;
 public class Gfo_fld_wtr extends Gfo_fld_base {
 	public Bry_bfr Bfr() {return bfr;} public Gfo_fld_wtr Bfr_(Bry_bfr v) {bfr = v; return this;} Bry_bfr bfr;

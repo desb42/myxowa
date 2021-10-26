@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.stores; import gplx.*; import gplx.core.*;
+package gplx.core.stores; import gplx.*;
 import org.junit.*; import gplx.core.gfo_ndes.*; import gplx.core.type_xtns.*;
 public class GfoNdeRdr_read_tst {
 	@Test  public void ReadInt() {

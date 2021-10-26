@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.security.algos.jre; import gplx.*; import gplx.core.*; import gplx.core.security.*; import gplx.core.security.algos.*;
+package gplx.core.security.algos.jre; import gplx.*; import gplx.core.security.*; import gplx.core.security.algos.*;
 import java.util.zip.Checksum;
 public class Jre_checksum_algo implements Hash_algo {
 	private final Jre_checksum_factory factory;

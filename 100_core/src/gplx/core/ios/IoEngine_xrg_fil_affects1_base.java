@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios; import gplx.*; import gplx.core.*;
+package gplx.core.ios; import gplx.*;
 public class IoEngine_xrg_fil_affects1_base {
 	public Io_url Url() {return url;} public void Url_set(Io_url v) {url = v;} Io_url url;
 	public IoEngine_xrg_fil_affects1_base Url_(Io_url v) {url = v; return this;}

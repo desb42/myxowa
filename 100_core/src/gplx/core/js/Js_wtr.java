@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.js; import gplx.*; import gplx.core.*;
+package gplx.core.js; import gplx.*;
 public class Js_wtr {
 	private final    Bry_bfr bfr = Bry_bfr_.Reset(32);
 	private int arg_idx = 0, ary_idx = 0;

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.progs.rates; import gplx.*; import gplx.core.*; import gplx.core.progs.*;
+package gplx.core.progs.rates; import gplx.*; import gplx.core.progs.*;
 import gplx.core.lists.rings.*;
 public class Gfo_rate_list {
 	private final    Ring__long ring;

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.primitives; import gplx.*; import gplx.core.*;
+package gplx.core.primitives; import gplx.*;
 public class Int_2_val {
 	public Int_2_val(int v0, int v1) {val_0 = v0; val_1 = v1;}
 	public int Val_0() {return val_0;} final    int val_0;

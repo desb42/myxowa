@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.btries; import gplx.*; import gplx.core.*;
+package gplx.core.btries; import gplx.*;
 import org.junit.*;
 public class Btrie_slim_itm_tst {
 	private Btrie_slim_itm itm = new Btrie_slim_itm(Byte_.Zero, null, false);

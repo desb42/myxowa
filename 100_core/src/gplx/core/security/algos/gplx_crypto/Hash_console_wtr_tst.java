@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.security.algos.gplx_crypto; import gplx.*; import gplx.core.*; import gplx.core.security.*; import gplx.core.security.algos.*;
+package gplx.core.security.algos.gplx_crypto; import gplx.*; import gplx.core.security.*; import gplx.core.security.algos.*;
 import org.junit.*; import gplx.core.consoles.*; import gplx.core.ios.streams.*; /*IoStream*/
 public class Hash_console_wtr_tst {
 	private final    Hash_console_wtr_fxt fxt = new Hash_console_wtr_fxt();

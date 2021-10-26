@@ -14,7 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.core.envs;import com.ibm.icu.impl.duration.TimeUnit;
- import gplx.*; import gplx.core.*;
+ import gplx.*;
 import gplx.Bool_;
 import gplx.Bry_;
 import gplx.Bry_bfr;

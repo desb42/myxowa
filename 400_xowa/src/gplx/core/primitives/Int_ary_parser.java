@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.primitives; import gplx.*; import gplx.core.*;
+package gplx.core.primitives; import gplx.*;
 public class Int_ary_parser extends Obj_ary_parser_base {
 	private final    Gfo_number_parser parser = new Gfo_number_parser(); 
 	private int[] ary; private int ary_idx;

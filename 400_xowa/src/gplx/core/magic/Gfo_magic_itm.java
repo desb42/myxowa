@@ -14,7 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.core.magic;
-import gplx.*; import gplx.core.*;
+import gplx.*;
 public class Gfo_magic_itm {
 	public Gfo_magic_itm(byte tid, String text) {
 		this.tid = tid;

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.brys; import gplx.*; import gplx.core.*;
+package gplx.core.brys; import gplx.*;
 public class Bry_diff_ {
 	public static byte[][] Diff_1st_line(byte[] lhs, byte[] rhs) {return Diff_1st(lhs, 0, lhs.length, rhs, 0, rhs.length, Byte_ascii.Nl_bry, Byte_ascii.Angle_bgn_bry, 255);}
 	public static byte[][] Diff_1st(byte[] lhs, int lhs_bgn, int lhs_end, byte[] rhs, int rhs_bgn, int rhs_end, byte[] stop, byte[] show, int diff_max) {

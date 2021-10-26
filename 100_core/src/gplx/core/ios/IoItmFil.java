@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios; import gplx.*; import gplx.core.*;
+package gplx.core.ios; import gplx.*;
 import gplx.langs.gfs.*;
 public class IoItmFil extends IoItm_base {
 	@Override public int TypeId() {return IoItmFil.Type_Fil;} @Override public boolean Type_dir() {return false;} @Override public boolean Type_fil() {return true;} public static final    int Type_Fil = 2;

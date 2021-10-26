@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios; import gplx.*; import gplx.core.*;
+package gplx.core.ios; import gplx.*;
 public class Io_sort_fil_basic implements Io_sort_cmd { // 123|bgn|end|1
 	public Io_sort_fil_basic(Gfo_usr_dlg usr_dlg, Io_url_gen url_gen, int flush_len) {this.usr_dlg = usr_dlg; this.url_gen = url_gen; this.flush_len = flush_len;} Io_url_gen url_gen; Bry_bfr bfr = Bry_bfr_.New(); int flush_len; Gfo_usr_dlg usr_dlg;
 	public void Sort_bgn() {}

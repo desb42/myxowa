@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios.streams; import gplx.*; import gplx.core.*; import gplx.core.ios.*;
+package gplx.core.ios.streams; import gplx.*; import gplx.core.ios.*;
 public class IoStream_mock implements IoStream {
 	public byte[] Data_bry() {return data_bry;} public IoStream_mock Data_bry_(byte[] v) {data_bry = v; data_bry_len = v.length; return this;} private byte[] data_bry; int data_bry_len;
 	public int Data_bry_pos() {return data_bry_pos;} int data_bry_pos;

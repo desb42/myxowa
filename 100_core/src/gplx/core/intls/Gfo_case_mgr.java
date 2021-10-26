@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.intls; import gplx.*; import gplx.core.*;
+package gplx.core.intls; import gplx.*;
 public interface Gfo_case_mgr {
 	byte Tid();
 	Gfo_case_itm Get_or_null(byte bgn_byte, byte[] src, int bgn, int end);

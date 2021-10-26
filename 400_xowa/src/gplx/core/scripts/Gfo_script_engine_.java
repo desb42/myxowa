@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.scripts; import gplx.*; import gplx.core.*;
+package gplx.core.scripts; import gplx.*;
 public class Gfo_script_engine_ {
 	public static Gfo_script_engine New_by_key(String key) {
 		if		(String_.Eq(key, "javascript.java"))	return new Gfo_script_engine__javascript();

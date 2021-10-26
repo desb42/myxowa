@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.texts; import gplx.*; import gplx.core.*;
+package gplx.core.texts; import gplx.*;
 import gplx.langs.regxs.*;
 public class RegxPatn_cls_ioMatch {
 	public String Raw() {return raw;} private String raw;

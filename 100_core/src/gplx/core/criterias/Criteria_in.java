@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.criterias; import gplx.*; import gplx.core.*;
+package gplx.core.criterias; import gplx.*;
 public class Criteria_in implements Criteria {
 	public Criteria_in(boolean neg, Object[] ary) {this.neg = neg; Ary_(ary);}
 	public byte			Tid() {return Criteria_.Tid_in;}

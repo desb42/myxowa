@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios.streams; import gplx.*; import gplx.core.*; import gplx.core.ios.*;
+package gplx.core.ios.streams; import gplx.*; import gplx.core.ios.*;
 public class IoStream_stream_rdr implements IoStream {
 	public int Read(byte[] bfr, int bfr_bgn, int bfr_len) {
 		try {

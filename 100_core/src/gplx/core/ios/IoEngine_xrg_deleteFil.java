@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios; import gplx.*; import gplx.core.*;
+package gplx.core.ios; import gplx.*;
 public class IoEngine_xrg_deleteFil extends IoEngine_xrg_fil_affects1_base {
 	@gplx.New public IoEngine_xrg_deleteFil Url_(Io_url val) {Url_set(val); return this;}
 	public IoEngine_xrg_deleteFil ReadOnlyFails_off() {return ReadOnlyFails_(false);} public IoEngine_xrg_deleteFil ReadOnlyFails_(boolean v) {ReadOnlyFails_set(v); return this;}

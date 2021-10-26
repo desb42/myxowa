@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.criterias; import gplx.*; import gplx.core.*;
+package gplx.core.criterias; import gplx.*;
 import gplx.core.texts.*;
 public class Criteria_ioMatch implements Criteria { // EX: url IOMATCH '*.xml|*.txt'
 	public Criteria_ioMatch(boolean match, RegxPatn_cls_ioMatch pattern) {this.match = match; this.pattern = pattern;}

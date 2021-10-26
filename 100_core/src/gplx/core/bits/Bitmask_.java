@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.bits; import gplx.*; import gplx.core.*;
+package gplx.core.bits; import gplx.*;
 public class Bitmask_ {
 	public static boolean		Has_int(int val, int find)	{return find == (val & find);}
 	public static int		Flip_int(boolean enable, int val, int find) {

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.envs; import gplx.*; import gplx.core.*;
+package gplx.core.envs; import gplx.*;
 public class Op_sys {
 	Op_sys(byte tid, byte sub_tid, String os_name, byte bitness, String nl_str, byte fsys_dir_spr_byte, boolean fsys_case_match) {
 		this.tid = tid; this.sub_tid = sub_tid; this.os_name = os_name; this.bitness = bitness; this.nl_str = nl_str; this.fsys_dir_spr_byte = fsys_dir_spr_byte;  this.fsys_dir_spr_str = Char_.To_str((char)fsys_dir_spr_byte); this.fsys_case_match = fsys_case_match;

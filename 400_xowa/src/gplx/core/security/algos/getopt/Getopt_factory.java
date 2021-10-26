@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.security.algos.getopt; import gplx.*; import gplx.core.*; import gplx.core.security.*; import gplx.core.security.algos.*;
+package gplx.core.security.algos.getopt; import gplx.*; import gplx.core.security.*; import gplx.core.security.algos.*;
 import org.getopt.util.hash.*;
 public class Getopt_factory implements Hash_algo_factory {
 	public Hash_algo New_hash_algo(String key) {

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.ios; import gplx.*; import gplx.core.*;
+package gplx.core.ios; import gplx.*;
 public class IoItm_fxt {
 	public IoItmFil fil_wnt_(String s) {return fil_(Io_url_.wnt_fil_(s));}
 	public IoItmFil fil_(Io_url url) {return IoItmFil_.new_(url, 1, DateAdp_.parse_gplx("2001-01-01"), DateAdp_.parse_gplx("2001-01-01"));}

@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.consoles; import gplx.*; import gplx.core.*;
+package gplx.core.consoles; import gplx.*;
 import org.junit.*; import gplx.core.tests.*; import gplx.core.envs.*;
 public class Gfo_cmd_arg_mgr_tst {		
 	@Before public void init() {fxt.Clear();} private final    Gfo_cmd_arg_mgr_fxt fxt = new Gfo_cmd_arg_mgr_fxt();
