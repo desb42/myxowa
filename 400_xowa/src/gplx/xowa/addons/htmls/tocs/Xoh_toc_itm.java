@@ -13,7 +13,7 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.addons.htmls.tocs; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.htmls.*;
+package gplx.xowa.addons.htmls.tocs; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*;
 public class Xoh_toc_itm {// EX: <li class="toclevel-3 tocsection-3"><a href="#aaa"><span class="tocnumber">1.1.1</span> <span class="toctext">aaa</span></a></li>
 	public int		Uid() {return uid;} private int uid;		// uid of itm; HTML: "tocsection-3"
 	public int		Lvl() {return lvl;} private int lvl;		// indent level; HTML: "toclevel-3"
