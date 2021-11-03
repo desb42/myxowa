@@ -52,7 +52,11 @@ public class Indicator_xnde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		this.xnde = xnde;
 		this.src = src;
 		Xox_xnde_.Xatr__set(wiki, this, xatrs_hash, src, xnde);
-		this.html = Xop_parser_.Parse_text_to_html(wiki, ctx, ctx.Page(), Bry_.Mid(src, xnde.Tag_open_end(), xnde.Tag_close_bgn()), false);
+		this.html = Xop_parser_.Parse_text_to_html(wiki, ctx, ctx.Page(), GetHdumpSrc(), false);
+		// remove <p>...</p> (if there)
+		if (html.length > 6 && html[0] == '<' && html[1] == 'p' && html[2] == '>') {
+			html = Bry_.Mid(html, 3, html.length - 4);
+		}
 		Indicator_html_bldr html_bldr = ctx.Page().Html_data().Indicators();
 		if (this.name != null) html_bldr.Add(this);	// NOTE: must do null-check b/c Add will use Name as key for hashtable
 	}

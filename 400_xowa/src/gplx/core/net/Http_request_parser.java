@@ -50,7 +50,6 @@ public class Http_request_parser {
 	public Http_request_itm Parse(Http_client_rdr rdr) {
 		synchronized (tmp_bfr) {
 			this.Clear();
-			boolean reading_post_data = false; boolean post_nl_seen = false;
 			while (true) {
 				String line_str = rdr.Read_line(); if (line_str == null) break;	// needed for TEST
 				if (log) server_wtr.Write_str_w_nl(line_str);
@@ -58,21 +57,15 @@ public class Http_request_parser {
 				int line_len = line.length;
 				if (line_len == 0) {
 					switch (type) {
-						case Http_request_itm.Type_get:		break;
+						case Http_request_itm.Type_get:
+							break;
 						case Http_request_itm.Type_post:
-							if (reading_post_data || post_nl_seen) throw Err_.new_wo_type("http.request.parser;invalid new line during post", "request", To_str());
-							post_nl_seen = true;	// only allow one \n per POST
-							continue;				// ignore line and get next
-						default:							throw Err_.new_unimplemented(62);
+							Process_post_data(rdr);
+							break;
+						default:
+							throw Err_.new_unimplemented(62);
 					}
-					break;	// only GET will reach this line; GET requests always end with blank line; stop;
-				}
-				if (content_type_boundary != null && Bry_.Has_at_bgn(line, content_type_boundary)) {
-					while (true) {
-						if (Bry_.Has_at_end(line, Tkn_content_type_boundary_end)) break;	// last form_data pair will end with "--"; stop
-						line = Parse_content_type_boundary(rdr);
-					}
-					break;	// assume form_data sends POST request
+					break;
 				}
 				//Object o = trie.Match_at(trv, line, 0, line_len);
 				Object o = trie_http.Match_expand(trv, line, 0, line_len);
@@ -118,6 +111,23 @@ public class Http_request_parser {
 			return Make_request_itm();
 		}
 	}
+	private void Process_post_data(Http_client_rdr rdr) {
+		if (content_length == 0) return; // nothing to do
+		if (post_data_hash == null) post_data_hash = new Http_post_data_hash();
+		String line_str = rdr.Read_line();
+		if (log) server_wtr.Write_str_w_nl(line_str);
+		byte[] line = Bry_.new_u8(line_str);
+		int line_len = line.length;
+		if (content_type_boundary != null && Bry_.Has_at_bgn(line, content_type_boundary)) {
+			while (true) {
+				if (Bry_.Has_at_end(line, Tkn_content_type_boundary_end)) break;	// last form_data pair will end with "--"; stop
+				line = Parse_content_type_boundary(rdr);
+			}
+			return;	// assume form_data sends POST request
+		}
+		// assume all on one line
+		post_data_hash.Add(Bry_.new_a7("data"), line);
+	}
 	private void Parse_type(int tid, int val_bgn, byte[] line, int line_len) {	// EX: "POST /xowa-cmd:exec_as_json HTTP/1.1"
 		int url_end = Bry_find_.Find_bwd(line, Byte_ascii.Space, line_len); if (url_end == Bry_find_.Not_found) throw Err_.new_wo_type("invalid protocol", "line", line, "request", To_str());
 		switch (tid) {
@@ -125,8 +135,8 @@ public class Http_request_parser {
 			case Tid_post	: this.type = Http_request_itm.Type_post; break;
 			default			: throw Err_.new_unimplemented(63);
 		}
-                if (val_bgn + 5 < url_end && line[val_bgn] == '/' && line[val_bgn+1] == 'x' && line[val_bgn+2] == 'o' && line[val_bgn+3] == 'w' && line[val_bgn+4] == 'a')
-                    val_bgn += 5;
+		if (val_bgn + 5 < url_end && line[val_bgn] == '/' && line[val_bgn+1] == 'x' && line[val_bgn+2] == 'o' && line[val_bgn+3] == 'w' && line[val_bgn+4] == 'a')
+			val_bgn += 5;
 		this.url = Bry_.Mid(line, val_bgn, url_end);
 		this.protocol = Bry_.Mid(line, url_end + 1, line_len);
 	}
@@ -141,7 +151,6 @@ public class Http_request_parser {
 		return new Http_request_itm(type, url, protocol, host, user_agent, accept, accept_language, accept_encoding, dnt, x_requested_with, cookie, referer, content_length, content_type, content_type_boundary, connection, pragma, cache_control, origin, post_data_hash);
 	}
 	private byte[] Parse_content_type_boundary(Http_client_rdr rdr) {
-		if (post_data_hash == null) post_data_hash = new Http_post_data_hash();
 		byte[] line = Bry_.new_u8(rdr.Read_line());  // cur line is already known to be content_type_boundary; skip it
 		byte[] key = Parse_post_data_name(line);
 		String line_str = rdr.Read_line();	// blank-line

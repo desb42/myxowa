@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa; import gplx.*;
 import gplx.langs.jsons.*;
 import gplx.core.security.algos.*;
+import gplx.xowa.xtns.graphs.Json_fmtr;
 public class Db_karto_maps {
 	private List_adp lst = List_adp_.New();
 	private Xoa_ttl ttl;
@@ -35,7 +36,7 @@ public class Db_karto_maps {
 			}
 		}
 		byte[] norm = Bry_.new_u8(Buildkey(data));
-                if (norm.length == 0) return null;
+		if (norm.length == 0) return null;
 		byte[] sha1 = Hash_algo_utl.Calc_hash_as_bry(sha1_hash, norm);
 		lst.Add(new Karto_map(key, data, norm, sha1));
 		return sha1;
@@ -381,6 +382,8 @@ public class Db_karto_maps {
 	public String Buildkey(byte[] src) {
 		String txtgeo = "[";
 		Json_parser jdoc_parser = new Json_parser();
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		src = Json_fmtr.clean(tmp_bfr, src);
 		Json_doc jdoc = jdoc_parser.Parse(src);
 		if (jdoc == null) {
 			Xoa_app_.Usr_dlg().Log_many("", "", "karto: bad parse page=~{0}", ttl.Full_db());

@@ -17,6 +17,7 @@ package gplx.xowa.files.bins; import gplx.*; import gplx.xowa.*; import gplx.xow
 import gplx.dbs.*; import gplx.core.ios.*; import gplx.core.ios.streams.*; import gplx.core.caches.*; import gplx.xowa.files.fsdb.*;
 import gplx.fsdb.*; import gplx.fsdb.data.*; import gplx.fsdb.meta.*;
 public class Xof_bin_wkr__fsdb_sql implements Xof_bin_wkr {
+    private final static String syn = "fix";
 	private final    Xof_bin_wkr_ids tmp_ids = new Xof_bin_wkr_ids();
 	private Xof_bin_skip_mgr skip_mgr;
 	Xof_bin_wkr__fsdb_sql(Fsm_mnt_mgr mnt_mgr) {this.mnt_mgr = mnt_mgr;}
@@ -36,10 +37,12 @@ public class Xof_bin_wkr__fsdb_sql implements Xof_bin_wkr {
 	}
 	public boolean Get_to_fsys(Xof_fsdb_itm itm, boolean is_thumb, int w, Io_url bin_url) {return Get_to_fsys(itm.Orig_repo_name(), itm.Orig_ttl(), itm.Orig_ext(), is_thumb, w, itm.Lnki_time(), itm.Lnki_page(), bin_url);}
 	private boolean Get_to_fsys(byte[] orig_repo, byte[] orig_ttl, Xof_ext orig_ext, boolean lnki_is_thumb, int file_w, double lnki_time, int lnki_page, Io_url file_url) {
+            synchronized (syn) {
 		Find_ids(orig_repo, orig_ttl, orig_ext.Id(), lnki_time, lnki_page, lnki_is_thumb, file_w);
 		int bin_db_id = tmp_ids.Bin_db_id(); if (bin_db_id == Fsd_bin_tbl.Bin_db_id_null) return false;
 		Fsm_bin_fil bin_db = mnt_mgr.Bins__at(tmp_ids.Mnt_id(), bin_db_id);
 		return bin_db.Select_to_url(tmp_ids.Itm_id(), file_url);
+            }
 	}
 	public Io_stream_rdr Get_to_fsys_near(Xof_fsdb_itm rv, byte[] orig_repo, byte[] orig_ttl, Xof_ext orig_ext, double lnki_time, int lnki_page) {
 		Fsd_thm_itm thm_itm = Fsd_thm_itm.new_();

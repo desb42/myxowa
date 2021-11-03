@@ -72,12 +72,14 @@ end
 -- @param message The message from PHP
 -- @return A response message to send back to PHP
 function MWServer:handleCall( message )
-	if not self.chunks[message.id] then
-		return {
-			op = 'error',
-			value = 'function id ' .. message.id .. ' does not exist'
-		}
-	end
+
+--	if not self.chunks[message.id] then
+--		return {
+--			op = 'error',
+--			value = 'function id ' .. message.id .. ' does not exist'
+--		}
+--	end
+
 -- print(message.id .. '|' .. message.nargs);
 --  print(self.chunks[message.id]);
 --  print(message.args[1]);
@@ -293,10 +295,10 @@ end
 function MWServer:server_recv( recv_msg )
   local send_msg
   local op = recv_msg.op
-  if op == 'return' or op == 'error' then
-    return recv_msg
-  elseif op == 'call' then
+  if op == 'call' then
     return self:handleCall( recv_msg )
+  elseif op == 'return' or op == 'error' then
+    return recv_msg
   elseif op == 'loadString' then
     return self:handleLoadString( recv_msg )
   elseif op == 'registerLibrary' then

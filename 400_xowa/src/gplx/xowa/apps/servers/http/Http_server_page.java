@@ -77,7 +77,7 @@ public class Http_server_page {
 		page.Make_html(retrieve_mode);
 		return page;
 	}
-	private static final byte[] json_mime = Bry_.new_a7("Content-Type: application/json; charset=utf-8\n");
+	public static final byte[] json_mime = Bry_.new_a7("Content-Type: application/json; charset=utf-8\n");
 	public boolean Make_url(byte[] wiki_domain) {
 
 		// get wiki
@@ -143,7 +143,6 @@ public class Http_server_page {
 	public void Make_html(byte retrieve_mode) {
 // byte retrieve_mode, byte mode, boolean popup_enabled, String popup_mode, String popup_id
 		byte[] page_html;
-		// generate html
 		if (url_parser.Popup()) {
 			String popup_id = url_parser.Popup_id();
 			if (String_.Eq(url_parser.Popup_mode(), "more"))
@@ -176,7 +175,7 @@ public class Http_server_page {
 
 			//Db_readwrite.writeFile(String_.new_u8(page_html), "d:/des/xowa_x/pre_html.htm");
 
-			page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);
+//			page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);
 			byte[] redlinks = null;
 			Bry_bfr tmp_bfr = Bry_bfr_.New();
 			Xopg_redlink_mgr red_mgr = new Xopg_redlink_mgr(page, null);

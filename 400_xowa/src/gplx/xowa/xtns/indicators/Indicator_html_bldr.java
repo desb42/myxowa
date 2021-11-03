@@ -72,8 +72,10 @@ public class Indicator_html_bldr implements gplx.core.brys.Bfr_arg {
 		for (int i = 0; i < len; i++) {
 			Indicator_xnde xnde = (Indicator_xnde)list.Get_at(i);
 			byte[] html = Xop_parser_.Parse_text_to_html(wiki, wiki.Parser_mgr().Ctx(), Xoh_wtr_ctx.Hdump, page, xnde.GetHdumpSrc(), true);
-			// remove <p>...</p>
-			html = Bry_.Mid(html, 3, html.length - 4);
+			// remove <p>...</p> (if there)
+			if (html.length > 6 && html[0] == '<' && html[1] == 'p' && html[2] == '>') {
+				html = Bry_.Mid(html, 3, html.length - 4);
+			}
 			xnde.Html_(html);
 		}
 

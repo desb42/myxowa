@@ -701,7 +701,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 				}
 			}
 			else if (b == Byte_ascii.Percent) {
-				if (cur + 2 < end) {
+				if (cur + 2 <= end) {
 					int b1 = Int_.By_hex_byte(src[cur]);
 					int b2 = Int_.By_hex_byte(src[cur+1]);
 					if (b1 >= 0 && b2 >= 0) {

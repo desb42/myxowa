@@ -161,8 +161,6 @@ public class Db_minerva_skin implements Db_skin {
 //
 //		data.AddKvNde("data-portlets", portlets);
 //
-//		data.AddKvStr("portal_div_footer", portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date));
-//
 //		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikivoyage)
 //			data.AddKvStr("html-after-content", "<div id='mw-data-after-content'>\n	<div class=\"read-more-container\"></div>\n</div>\n");
 //

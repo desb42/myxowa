@@ -31,6 +31,11 @@ class Http_url_parser {
 	public String Err_msg() {return err_msg;} public Http_url_parser Err_msg_(String v) {this.err_msg = v; return this;} private String err_msg;
 	public boolean Is_main_page() {return is_main_page;} public void Is_main_page_set() {is_main_page = true;}  private boolean is_main_page;
 	public String Useskin() {return useskin;} public Http_url_parser Useskin_id_(String v) {this.useskin = v; return this;} private String useskin;
+	public boolean Image_mode() {return image;} private boolean image;
+	public byte[] Image_a() {return image_a;} private byte[] image_a;
+	public String Image_title() {return image_title;} private String image_title;
+	public String Image_xoimg() {return image_xoimg;} private String image_xoimg;
+	public String Image_item() {return image_item;} private String image_item;
 //	public Gfo_qarg_mgr Qarg_mgr() {return qarg_mgr;} private Gfo_qarg_mgr qarg_mgr;
 
 	public String To_str() {
@@ -86,7 +91,7 @@ class Http_url_parser {
 				}
 			}
 
-                        is_main_page = false;
+			is_main_page = false;
 			// get qargs
 			Gfo_qarg_itm[] qargs = url_obj.Qargs();
 			int qargs_len = qargs.length;
@@ -113,6 +118,8 @@ class Http_url_parser {
 							this.display = Xopg_display_mode_.Tid__wikitextver;
 						else if (Bry_.Eq(qarg_val, Xoa_url_.Qarg__action__htmlver))
 							this.display = Xopg_display_mode_.Tid__htmlver;
+						else if (Bry_.Eq(qarg_val, Qarg__action__image))
+							this.image = true;
 						else
 							Add_qarg(qarg_bfr, qarg_key, qarg_val); // pass it on
 						break;
@@ -127,6 +134,18 @@ class Http_url_parser {
 						break;
 					case Tid__useskin:
 						this.useskin = String_.new_u8(qarg_val);
+						break;
+					case Tid__image_title:
+						this.image_title = String_.new_u8(qarg_val);
+						break;
+					case Tid__image_xoimg:
+						this.image_xoimg = String_.new_u8(qarg_val);
+						break;
+					case Tid__image_item:
+						this.image_item = String_.new_u8(qarg_val);
+						break;
+					case Tid__image_a:
+						this.image_a = qarg_val;
 						break;
 					default:
 						Add_qarg(qarg_bfr, qarg_key, qarg_val);
@@ -168,12 +187,21 @@ class Http_url_parser {
 	, Tid__popup_mode = 3
 	, Tid__popup_link = 4
 	, Tid__useskin = 5
+	, Tid__image_title = 6
+	, Tid__image_xoimg = 7
+	, Tid__image_item = 8
+	, Tid__image_a = 9
 	;
 	private static final    byte[]
 	  Qarg__action__popup = Bry_.new_a7("popup")
 	, Qarg__popup_id      = Bry_.new_a7("popup_id")
 	, Qarg__popup_mode    = Bry_.new_a7("popup_mode")
 	, Qarg__popup_link    = Bry_.new_a7("popup_link")
+	, Qarg__action__image = Bry_.new_a7("image")
+	, Qarg__image_title   = Bry_.new_a7("image_title")
+	, Qarg__image_xoimg   = Bry_.new_a7("image_xoimg")
+	, Qarg__image_item    = Bry_.new_a7("image_item")
+	, Qarg__image_a       = Bry_.new_a7("image_a")
 	, wikiname = Bry_.new_a7("wiki")
 	, specialname = Bry_.new_a7("Special:")
 	;
@@ -183,5 +211,9 @@ class Http_url_parser {
 		.Add_bry_int(Qarg__popup_mode      , Tid__popup_mode)
 		.Add_bry_int(Qarg__popup_link      , Tid__popup_link)
 		.Add_bry_int(Xoa_url_.Qarg__useskin, Tid__useskin)
+		.Add_bry_int(Qarg__image_title     , Tid__image_title)
+		.Add_bry_int(Qarg__image_xoimg     , Tid__image_xoimg)
+		.Add_bry_int(Qarg__image_item      , Tid__image_item)
+		.Add_bry_int(Qarg__image_a         , Tid__image_a)
 	;
 }

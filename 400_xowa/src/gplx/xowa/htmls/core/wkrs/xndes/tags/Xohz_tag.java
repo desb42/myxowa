@@ -21,7 +21,6 @@ public class Xohz_tag {
 	private final    byte[] key; private final    int uid;
 	private final    Xohz_atr_itm[] zatr_ary; private final    int zatr_ary_len; private final    Ordered_hash zatr_hash = Ordered_hash_.New_bry();
 	private final    Int_flag_bldr flag_bldr = new Int_flag_bldr(); private final    int flag_len; private int flag__tag_is_inline, flag__unknown_atrs_exist;
-	private static final    List_adp tmp_pow_ary_list = List_adp_.New();
 	public Xohz_tag(int uid, byte[] key, int flag_len, Xohz_atr_itm... zatr_ary) {
 		this.uid = uid; this.key = key;
 		this.flag_len = flag_len;
@@ -30,6 +29,7 @@ public class Xohz_tag {
 	}
 	public int Uid() {return uid;}
 	private void Init_flag_bldr() {
+		List_adp tmp_pow_ary_list = List_adp_.New();
 		for (int i = 0; i < zatr_ary_len; ++i) {
 			Xohz_atr_itm zatr = zatr_ary[i];
 			zatr.Ini_flag(tmp_pow_ary_list.Count(), tmp_pow_ary_list);

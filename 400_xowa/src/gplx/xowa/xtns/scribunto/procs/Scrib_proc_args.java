@@ -28,23 +28,30 @@ public class Scrib_proc_args {
 
 		// find ary_len
 		int v_max = -1;
+		boolean inorder = true;
 		for (int i = 0; i < v_len; ++i) {
 			Keyval kv = v[i];
-			int idx = Int_.Cast(kv.Key_as_obj());
-			if (v_max < idx) v_max = idx;
+			if (kv != null) {
+				int idx = Int_.Cast(kv.Key_as_obj());
+				if (v_max < idx) v_max = idx;
+				if (idx - List_adp_.Base1 != i)
+					inorder = false;
+			}
 		}
 		this.ary_len = v_max;
 
 		// keys are in sequential order; EX: [1:a,2:b,3:c]
-		if (v_max == v_len)
+		if (inorder)
 			this.ary = v;
 		// keys are not in sequential order, or there are gaps; EX: [1:a,3:c]
 		else {
 			ary = new Keyval[ary_len];
 			for (int i = 0; i < v_len; i++) {
 				Keyval kv = v[i];
-				int idx = Int_.Cast(kv.Key_as_obj());
-				ary[idx - List_adp_.Base1] = kv;
+				if (kv != null) {
+					int idx = Int_.Cast(kv.Key_as_obj());
+					ary[idx - List_adp_.Base1] = kv;
+				}
 			}
 		}
 	}

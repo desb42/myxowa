@@ -30,6 +30,11 @@ public class Graph_xnde implements Xox_xnde {
 		byte[] json = Bry_.Mid(src, xnde.Tag_open_end(), xnde.Tag_close_bgn());
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		json = Json_fmtr.clean(tmp_bfr, json);
+		Json_doc jdoc = app.Utl__json_parser().Parse(json);
+		if (jdoc == null) {
+			Gfo_usr_dlg_.Instance.Warn_many("", "", "invalid json; page=~{0}", ctx.Page().Url().To_bry_full_wo_qargs());
+			return;
+		}
 
 		Xoa_app_.Usr_dlg().Log_many("", "", "graph: page=~{0}", ctx.Page().Ttl().Full_db());
 
@@ -44,13 +49,6 @@ public class Graph_xnde implements Xox_xnde {
 		itm_graph.Enabled_y_();
 
 		// get version; NOTE: default is 2; REF: https://noc.wikimedia.org/conf/InitialiseSettings.php.txt and 'wgGraphDefaultVegaVer' => ['default' => 2]; also, extension.json and "GraphDefaultVegaVer": 2
-		Json_doc jdoc = app.Utl__json_parser().Parse(json);
-                //System.out.println(String_.new_u8(json));
-		if (jdoc == null) {
-			Gfo_usr_dlg_.Instance.Warn_many("", "", "invalid json; page=~{0}", ctx.Page().Url().To_bry_full_wo_qargs());
-			return;
-		}
-
 		int version = jdoc.Get_val_as_int_or(Bry_.new_a7("version"), 0); // start with no version
 		itm_graph.Version_(wpg.Url(), version);
 

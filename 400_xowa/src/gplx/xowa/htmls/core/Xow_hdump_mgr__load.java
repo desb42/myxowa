@@ -154,7 +154,7 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		}
 		switch (hzip_tid) {
 			case Xoh_hzip_dict_.Hdb__htxt:
-				src = make_mgr.Parse(src, hpg.Wiki(), hpg);
+//				src = make_mgr.Parse(src, hpg.Wiki(), hpg);
 				break;
 			case Xoh_hzip_dict_.Hdb__page_sync:
 				gplx.xowa.addons.wikis.pages.syncs.core.loaders.Xosync_page_loader page_loader = new gplx.xowa.addons.wikis.pages.syncs.core.loaders.Xosync_page_loader();

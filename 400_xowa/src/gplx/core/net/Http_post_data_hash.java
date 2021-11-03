@@ -17,6 +17,7 @@ package gplx.core.net; import gplx.*;
 public class Http_post_data_hash {
 	private final Ordered_hash hash = Ordered_hash_.New_bry();
 	public int Len() {return hash.Count();}
+        public boolean Has(byte[] k) {return hash.Has(k);}
 	public Http_post_data_itm Get_at(int i)		{return (Http_post_data_itm)hash.Get_at(i);}
 	public Http_post_data_itm Get_by(byte[] k)	{return (Http_post_data_itm)hash.Get_by(k);}
 	public void Add(byte[] key, byte[] val) {

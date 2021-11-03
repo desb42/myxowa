@@ -202,6 +202,13 @@ function init () {
     if (document.querySelectorAll('.switcher-container').length) {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext.gadget.switch.js');
     }
+
+    if (document.querySelectorAll('.mw-header .search-toggle').length) {
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/skins.vector.js/searchToggle.js');
+    }
+
+// always the xoimg stuff
+xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/xowa/getimages/getimages.js');
 /*
 ????? wikibooks
 // Move icons and navigation to top of content area, which should place them right below the page title

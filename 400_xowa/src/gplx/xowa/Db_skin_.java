@@ -32,21 +32,21 @@ import gplx.xowa.wikis.domains.Xow_domain_tid_;
 import gplx.xowa.langs.msgs.Xol_msg_mgr;
 import gplx.xowa.addons.htmls.sidebars.Db_Nav_template;
 public class Db_skin_ {
-	private Xow_portal_mgr portal_mgr;
-	private byte[] page_data;
-	private Xoae_page page;
-	private Xowe_wiki wiki;
-	private Xop_ctx ctx;
-	private Xoh_wtr_ctx hctx;
-	private byte html_gen_tid;
-	private byte[] pagename_for_h1;
-	private byte[] modified_on_msg;
-	private int page_mode;
-	private boolean ispage_in_wikisource;
-	private Wdata_xwiki_link_wtr wdata_lang_wtr;
-	private boolean ctgs_enabled;
-	private Xoh_page_wtr_mgr mgr;
-	private String[] msgs;
+	private final Xow_portal_mgr portal_mgr;
+	private final byte[] page_data;
+	private final Xoae_page page;
+	private final Xowe_wiki wiki;
+	private final Xop_ctx ctx;
+	private final Xoh_wtr_ctx hctx;
+	private final byte html_gen_tid;
+	private final byte[] pagename_for_h1;
+	private final byte[] modified_on_msg;
+	private final int page_mode;
+	private final boolean ispage_in_wikisource;
+	private final Wdata_xwiki_link_wtr wdata_lang_wtr;
+	private final boolean ctgs_enabled;
+	private final Xoh_page_wtr_mgr mgr;
+	private final String[] msgs;
 	public Xoae_page Page() { return page; }
 	public Xowe_wiki Wiki() { return wiki; }
 
@@ -246,37 +246,39 @@ public class Db_skin_ {
 		return tmp_bfr.To_bry_and_clear();
 	}
 	private Json_nde getLogoData() {
-			Json_nde dl = Json_nde.NewByVal();
-			Json_nde wm = Json_nde.NewByVal();
-			Json_nde tl = Json_nde.NewByVal();
+		Json_nde dl = Json_nde.NewByVal();
+		Json_nde wm = Json_nde.NewByVal();
+		Json_nde tl = Json_nde.NewByVal();
 
-			String wikikey = wiki.Domain_itm().Domain_type().Key_str();
-			String wikiimg;
-			if (wikikey.equals("wikipedia"))
-				wikiimg = wikikey + ".png";
-			else
-				wikiimg = wikikey + ".svg";
-			dl.AddKvStr("icon", "/xowa/static/images/mobile/copyright/" + wikiimg);
-	
-			String img = wiki.Skin_mgr().Get_wordmark_img();
-			if (img.equals("*"))
-				dl.AddKvBool("wordmark", false);
-			else {
-				wm.AddKvStr("src", "/xowa" + img);
-				wm.AddKvStr("width", wiki.Skin_mgr().Get_wordmark_width());
-				wm.AddKvStr("height", wiki.Skin_mgr().Get_wordmark_height());
-				dl.AddKvNde("wordmark", wm);
-			}
+		String wikikey = wiki.Domain_itm().Domain_type().Key_str();
+		String wikiimg;
+		if (wikikey.equals("wikipedia"))
+			wikiimg = wikikey + ".png";
+		else
+			wikiimg = wikikey + ".svg";
 
-			img = wiki.Skin_mgr().Get_tagline_img();
-			if (img.equals("*"))
-				dl.AddKvBool("tagline", false);
-			else {
-				tl.AddKvStr("src", "/xowa" + img);
-				tl.AddKvStr("width", wiki.Skin_mgr().Get_tagline_width());
-				tl.AddKvStr("height", wiki.Skin_mgr().Get_tagline_height());
-				dl.AddKvNde("tagline", tl);
-			}
+		String imgroot = wiki.App().Fsys_mgr().Root_dir().To_http_file_str();
+		dl.AddKvStr("icon", imgroot + "static/images/mobile/copyright/" + wikiimg);
+
+		String img = wiki.Skin_mgr().Get_wordmark_img();
+		if (img.equals("*"))
+			dl.AddKvBool("wordmark", false);
+		else {
+			wm.AddKvStr("src", imgroot + img);
+			wm.AddKvStr("width", wiki.Skin_mgr().Get_wordmark_width());
+			wm.AddKvStr("height", wiki.Skin_mgr().Get_wordmark_height());
+			dl.AddKvNde("wordmark", wm);
+		}
+
+		img = wiki.Skin_mgr().Get_tagline_img();
+		if (img.equals("*"))
+			dl.AddKvBool("tagline", false);
+		else {
+			tl.AddKvStr("src", imgroot + img);
+			tl.AddKvStr("width", wiki.Skin_mgr().Get_tagline_width());
+			tl.AddKvStr("height", wiki.Skin_mgr().Get_tagline_height());
+			dl.AddKvNde("tagline", tl);
+		}
 		return dl;
 	}
 	public String msgvalue(String msgkey, Xowe_wiki wiki) {

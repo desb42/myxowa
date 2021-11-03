@@ -850,8 +850,16 @@ public class Db_wikistrip {
 						pos++;
 					}
 					if (nlcount > 1) {
-						pos = src_len; // break out
-						firstpara = true;
+						// check how long the 'first para' is
+						// eg en.wikivoyage.org/wiki/Steam_power
+						if (bfr.Len() < 100) {
+							bfr.Clear(); // start again!
+							startpos = pos;
+						}
+						else {
+							pos = src_len; // break out
+							firstpara = true;
+						}
 					}
 					else
 						startpos = pos;

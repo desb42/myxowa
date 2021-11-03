@@ -128,7 +128,9 @@ public class Bry_rdr {
 				}
 			}
 		}
-		if (bgn == pos) {err_wkr.Fail("int is empty"); return Int_.Min_value;}
+		if (bgn == pos) {
+			err_wkr.Fail("int is empty"); return Int_.Min_value;
+		}
 		return rv * negative;
 	}
 	public int Read_hzip_int(int reqd) {

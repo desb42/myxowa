@@ -31,9 +31,11 @@ public class Xop_hdr_wkr implements Xop_ctx_wkr {
 			ctx.Msg_log().Add_itm_none(Xop_hdr_log.Dangling_hdr, src, bgn.Src_bgn(), bgn_pos);	
 	}
 	private boolean realheader(byte[] src, int src_len, int pos) {
+		boolean trailing = false;
 		while (pos < src_len) {
 			byte b = src[pos];
 			if (b == '=') {
+				trailing = true;
 				int cpos = pos;
 				while (++cpos < src_len) {
 					b = src[cpos];
@@ -47,7 +49,7 @@ public class Xop_hdr_wkr implements Xop_ctx_wkr {
 				break; // not header????
 			pos++;
 		}
-		return false; // not a header
+		return trailing;
 	}
 	public int Make_tkn_bgn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos) {
 		if (bgn_pos == Xop_parser_.Doc_bgn_bos) bgn_pos = 0;	// do not allow -1 pos

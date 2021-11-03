@@ -61,11 +61,11 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 //                    text = wiki.Parser_mgr().Main().Expand_tmpl(text);
 		json_bgn = xnde.Tag_open_end();
 		json_end = xnde.Tag_close_bgn();
-                if (json_end - json_bgn > 0) {
-                byte[] json_txt = Bry_.Mid(src, json_bgn, json_end);
+		if (json_end - json_bgn > 0) {
+			byte[] json_txt = Bry_.Mid(src, json_bgn, json_end);
 		//System.out.println("mapframe " + String_.new_u8(src, xnde.Tag_open_bgn(), xnde.Tag_close_end()));
-                groupsha1 = ctx.Page().Karto_maps().Add(json_txt);
-                }
+			groupsha1 = ctx.Page().Karto_maps().Add(json_txt);
+		}
 //		ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_bgn);
 //		boolean log_wkr_enabled = Log_wkr != Xop_log_basic_wkr.Null; if (log_wkr_enabled) Log_wkr.Log_end_xnde(ctx.Page(), Xop_log_basic_wkr.Tid_mapframe, src, xnde);
 		ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_end);

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -92,21 +92,21 @@ public class Gfo_url_parser {
 					i = src_end;
 					break;
 				case Byte_ascii.Question:		// set qarg to last "?"; EX: A?B?C -> C
-                                        if (qarg_bgn >= 0) {
-                                            if (equal_pos < qarg_bgn) 
-                                                qarg_bgn = i;
-                                        }
-                                        else
+					if (qarg_bgn >= 0) {
+						if (equal_pos < qarg_bgn) 
+							qarg_bgn = i;
+					}
+					else
 //					if (i == src_zth) continue;	// ignore ? at EOS; EX: "A?"
-                                            qarg_bgn = i;
+						qarg_bgn = i;
 					break;
 				case Byte_ascii.Percent:
 					encoded = true;
 					break;
 			}
 		}
-                if (qarg_bgn >= 0 && equal_pos < qarg_bgn)
-                    qarg_bgn = -1; // reset (if not a valid qarg string(must have '=')
+		if (qarg_bgn >= 0 && equal_pos < qarg_bgn)
+			qarg_bgn = -1; // reset (if not a valid qarg string(must have '=')
 		
 		int seg_end = src_end;	// set seg_end to src_end; EX: "https://site/A" -> "A"; seg_end may be overriden if "#" or "?" exists
 
@@ -158,9 +158,11 @@ public class Gfo_url_parser {
 						make_qarg = true;
 					break;
 				case Byte_ascii.Eq:
-					key_bry = Make_bry(encoded, src, key_bgn, qarg_pos);
-					encoded = false;
-					val_bgn = qarg_pos + 1;
+					if (key_bry == null) { // only the first equals counts
+						key_bry = Make_bry(encoded, src, key_bgn, qarg_pos);
+						encoded = false;
+						val_bgn = qarg_pos + 1;
+					}
 					break;
 				case Byte_ascii.Percent:
 					encoded = true;
@@ -183,7 +185,7 @@ public class Gfo_url_parser {
 				val_bgn = -1;
 			}
 			if (b_is_last) break;
-			++qarg_pos;
+				++qarg_pos;
 		}
 		return (Gfo_qarg_itm[])qargs_list.To_ary_and_clear(Gfo_qarg_itm.class);
 	} 
