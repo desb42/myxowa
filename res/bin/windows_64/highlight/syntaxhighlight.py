@@ -4,34 +4,15 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 import logging
-import sys
 import re
 import base64
-##f = open("d:/des/xowa_x/xxxxx", "wb")
-##f.write(repr(sys.argv).encode("utf-8"))
-##f.close()
-
-input = "d:/des/xowa_x/html.htm"
-output = "d:/des/xowa_x/html_syn.htm"
-input = "d:/des/xowa_x/tmp/src.file0"
-output = "d:/des/xowa_x/tmp/trg.file0"
-domain = 'nodom'
-page_name = '*n/a*'
-
-if len(sys.argv) == 5:
-    input = sys.argv[1]
-    output = sys.argv[2]
-    domain = sys.argv[3]
-    page_name = sys.argv[4]
-
-logging.basicConfig(filename=input+'.log', level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
-logging.info("%s/wiki/%s" % (domain, page_name))
 
 def checkval(key, val):
     global dir, lang, showLines, style, klass, htmlAttribs, opts
     #print(key, val)
+    key = key.lower()
     if key == 'lang':
-        lang = val
+        lang = val.lower()
         try:
             lang = compat[lang]
         except:
@@ -41,7 +22,8 @@ def checkval(key, val):
     elif key == 'enclose':
         if val != "none":
             logging.info("not none")
-        opts["nowrap"] = True
+        else:
+            opts["nowrap"] = True
     elif key == 'style':
         htmlAttribs['style'] = val
     elif key == 'id':
@@ -52,7 +34,10 @@ def checkval(key, val):
         opts["linenos"] = 'inline'
         showLines = True
     elif key == 'start':
-        opts["linenostart"] = int(val)
+        try:
+            opts["linenostart"] = int(val) # ignore invalid integers
+        except:
+            pass
     elif key == 'linelinks':
         opts["linespans"] = val
 ##    else:
@@ -125,17 +110,24 @@ def syntaxhighlight(atrs, code):
     if state != state4:
         if state == state0:
             checkval(atrs[ofs:], "")
-        elif state == state2:
+        elif state == state2 or state == state3:
             checkval(key, atrs[ofs:])
         else:
-            zaa()
+            checkval(key, "")
 
-        if lang == 'php' and code.find('<?php') < 0:
-            opts['startinline'] = 1
+    lopts = {"stripall":True}
+    if lang == 'php' and code.find('<?php') < 0:
+        lopts['startinline'] = True
 
-    #print(opts)
+    #print(lang, opts)
 
-    lexer = get_lexer_by_name(lang, stripall=True)
+    try:
+        lexer = get_lexer_by_name(lang, **lopts)
+    except:
+        lexer = None
+    if lexer == None:
+        lang = "text" # not sure what the default is - check
+        lexer = get_lexer_by_name(lang, **lopts)
     formatter = HtmlFormatter(**opts)
     output = highlight(code, lexer, formatter)
 
@@ -267,49 +259,76 @@ compat = {
     'apt_sources' : 'debsources'
 }
 
+sizes = {b'PHN5bnRheGhpZ2hsaWdo':16,
+         b'PHNvdXJjZ':7}
+
+def syntaxlight(data):
+    ofs = 0
+    html = []
+    startre = re.compile(rb"(PHN5bnRheGhpZ2hsaWdo|PHNvdXJjZ)") # <syntaxhighlight | <source
+    while 1:
+        mt = startre.search(data, ofs)
+        if mt == None:
+            break
+        s1 = mt.start()
+        html.append(data[ofs:s1])
+        s3 = data.find(b'$$', s1)
+        s4 = data.find(b'%24%24', s1)
+        if s4 > 0 and s4 < s3:
+            # eg en.wikibooks.org/wiki/Pascal_Programming/Records
+            ofs = s4 + 6
+            continue
+        tag64 = data[s1:s3]
+        if tag64[-2] == 0x2e: # ".."?
+            tag64 = tag64[:-2] + b"=="
+        elif tag64[-1] == 0x2e: # '.'?
+            tag64 = tag64[:-1] + b"="
+        tag = base64.b64decode(tag64)
+        size = sizes[mt.group(1)]
+        s2 = tag.find(b'>')
+        if tag[size] == 32: # ' '
+            atrs = tag[size+1:s2].decode("utf-8")
+        else:
+            atrs = ''
+        code = tag[s2+1:-size - 2].decode("utf-8")
+        code = code.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
+        html.append(syntaxhighlight(atrs, code))
+        ofs = s3 + 2
+        
+    html.append(data[ofs:])
+    
+    return b''.join(html)
+
 ###syntaxhighlight('lang="asm" inline=""', "check")
 ##syntaxhighlight('lang="java" line="" start="1" highlight="24-34"', "check")
 ##syntaxhighlight('lang="asm', "check")
 ##syntaxhighlight('lang="asm', "check")
 ##print(syntaxhighlight('lang="html4strict" line="" start="1"', "check").decode("utf-8"))
 ##zzz()
-f = open(input, "rb")
-data = f.read()
-f.close()
+if __name__ == '__main__':
+    import sys
+    input = "d:/des/xowa_x/html.htm"
+    output = "d:/des/xowa_x/html_syn.htm"
+    input = "d:/des/xowa_x/tmp/src.file0"
+    output = "d:/des/xowa_x/tmp/trg.file0"
+    domain = 'nodom'
+    page_name = '*n/a*'
 
-ofs = 0
-html = []
-##while 1:
-##    s1 = data.find(b'<syntaxhighlight', ofs)
-##    if s1 < 0:
-##        break
-##    html.append(data[ofs:s1])
-##    s2 = data.find(b'>', s1)
-##    s3 = data.find(b'</syntaxhighlight>', s1)
-##    atrs = data[s1+17:s2].decode("utf-8")
-##    code = data[s2+1:s3].decode("utf-8")
-##    code = code.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
-##    html.append(syntaxhighlight(atrs, code))
-##    ofs = s3 + 18
-endre = re.compile(rb"HQ+|D4=|g==")
-while 1:
-    s1 = data.find(b'PHN5bnRheGhpZ2hsaWdo', ofs)
-    if s1 < 0:
-        break
-    html.append(data[ofs:s1])
-    s3 = data.find(b'!!', s1)
-    tag64 = data[s1:s3]
-    tag = base64.b64decode(tag64)
-    s2 = tag.find(b'>')
-    atrs = tag[17:s2].decode("utf-8")
-    code = tag[s2+1:-18].decode("utf-8")
-    code = code.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
-    html.append(syntaxhighlight(atrs, code))
-    ofs = s3 + 2
+    if len(sys.argv) == 5:
+        input = sys.argv[1]
+        output = sys.argv[2]
+        domain = sys.argv[3]
+        page_name = sys.argv[4]
     
-html.append(data[ofs:])
+    logging.basicConfig(filename=input+'.log', level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
+    logging.info("%s/wiki/%s" % (domain, page_name))
 
-f = open(output, "wb")
-f.write(b''.join(html))
-f.close()
-exit(0)
+    f = open(input, "rb")
+    data = f.read()
+    f.close()
+    result = syntaxlight(data)
+    if result.find(b'$$') > 0:
+        logging.info("possible problem")
+    f = open(output, "wb")
+    f.write(result)
+    f.close()

@@ -13,8 +13,8 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.core.envs;import com.ibm.icu.impl.duration.TimeUnit;
- import gplx.*;
+package gplx.core.envs;
+import gplx.*;
 import gplx.Bool_;
 import gplx.Bry_;
 import gplx.Bry_bfr;
