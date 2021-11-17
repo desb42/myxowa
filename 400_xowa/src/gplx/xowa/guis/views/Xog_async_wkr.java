@@ -33,7 +33,7 @@ public class Xog_async_wkr {
 			return;
 		}
 
-		Async_imgs(usr_dlg, app, wiki, page, js_wkr);
+// 20211104 - done via js		Async_imgs(usr_dlg, app, wiki, page, js_wkr);
 		gplx.xowa.xtns.math.Xomath_latex_bldr.Async(app, page, js_wkr);
 		Async_score(usr_dlg, app, page);
 		if (!wiki.App().Mode().Tid_is_http())

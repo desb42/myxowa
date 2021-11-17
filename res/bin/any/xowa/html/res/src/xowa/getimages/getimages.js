@@ -8,9 +8,12 @@ send a request of the form
 	var atitle;
 	var hrefs;
 	var wiki = "/xowa/" + xowa.page.wiki + "/wiki/";
-	function getImages_a() {
-		var len = atitle.length;
-		for (var i = 0; i < len; i++) {
+	function getImages() {
+		var alen = atitle.length;
+		if (alen > 1000)
+			alen = 1000; // limit to 1000 images
+		var images = []
+		for (var i = 0; i < alen; i++) {
 			var at = atitle[i];
 			txt= at.outerHTML.replace(wiki, "/wiki/");
 			var pos = txt.search("data-xoimg=\"");
@@ -19,35 +22,15 @@ send a request of the form
 			if (txt.charAt(pos+12) == "\"")
 				continue;
 			txt= txt.replace("/xowa/", "/site/");
-			txt= txt.replace(/#/g, "%23").replace(/&/g, "%26");
-			//console.log(txt);
-			var path = xowa_global_values.wgPopupsRestGatewayEndpoint + '?action=image&image_a=' + encodeURI(txt) + "&image_item=" + i;
+			var entry = {'txt': txt, 'item': i};
+			images[images.length] = entry;
 			var atj = $(at);
 			atj.children()[0].removeAttribute("data-xoimg")
-			//console.log(path)
-			let req = new XMLHttpRequest();
-			req.open("GET", path, true);
-			req.responseType = 'json';
-			req.onload = function() {
-				if (req.readyState == 4) {
-					let responseObj = req.response;
-					foundImage_a(responseObj);
-				}
-			}
-			req.send();
 		}
-	}
-	function foundImage_a(msg) {
-		//console.log(msg);
-		var img = $('img', atitle[msg.item])
-		img.attr("width", msg.width)
-		img.attr("height", msg.height)
-		img.attr("src", msg.src);
-	}
-
-	function getImages() {
-		var len = elems.length;
-		for (var i = 0; i < len; i++) {
+		var elen = elems.length;
+		if (elen > 1000)
+			elen = 1000; // limit to 1000 images
+		for (var i = 0; i < elen; i++) {
 			var at = elems[i];
 			txt= at.outerHTML.replace(wiki, "/wiki/");
 			var pos = txt.search("data-xoimg=\"");
@@ -55,40 +38,40 @@ send a request of the form
 				continue;
 			if (txt.charAt(pos+12) == "\"")
 				continue;
-			txt= txt.replace("/xowa/", "/site/");
-			txt= txt.replace(/#/g, "%23").replace(/&/g, "%26");
-			//console.log(txt);
-			var path = xowa_global_values.wgPopupsRestGatewayEndpoint + '?action=image&image_a=' + encodeURI(txt) + "&image_item=" + i;
-			//console.log(path);
-/*			var img = $(elems[i]);
-			var title = img.data('xowa-title');
-			var xoimg = img.data('xoimg');
-			if (xoimg === undefined)
-				continue;
-			var path = xowa_global_values.wgPopupsRestGatewayEndpoint + '?action=image&image_title=' + title + '&image_xoimg=' + xoimg + "&image_item=" + i;
-*/
-			let req = new XMLHttpRequest();
-			req.open("GET", path, true);
-			req.responseType = 'json';
-			req.onload = function() {
-				if (req.readyState == 4) {
-					let responseObj = req.response;
-					foundImage(responseObj);
-				}
+			var entry = {'txt': txt, 'item': i + alen};
+			images[images.length] = entry;
+		}
+		if (images.length == 0)
+			return;
+		var path = xowa_global_values.wgPopupsRestGatewayEndpoint + '?action=image';
+		let req = new XMLHttpRequest();
+		req.open("POST", path, true);
+		req.responseType = 'json';
+		req.onload = function() {
+			if (req.readyState == 4) {
+				let responseObj = req.response;
+				foundImages(responseObj);
 			}
-			req.send();
+		}
+		var text = JSON.stringify(images);
+		console.log(images.length, text);
+		req.send(text + "\n");
+	}
+	function foundImages(msg) {
+		var alen = atitle.length;
+		console.log(msg);
+		for (var i = 0; i < msg.length; i++) {
+			var itm = msg[i];
+			if (itm.item >= alen)
+				var img = $('img', elems[itm.item - alen]);
+			else
+				var img = $('img', atitle[itm.item]);
+			img.attr("width", itm.width)
+			img.attr("height", itm.height)
+			img.attr("src", itm.src);
 		}
 	}
 
-	function foundImage(msg) {
-		//console.log(msg);
-		var img = $(elems[msg.item]);
-		img.attr("width", msg.width)
-		img.attr("height", msg.height)
-		img.attr("src", msg.src);
-	}
-
-	var list = [];
 	function getReds() {
 		var len = hrefs.length;
 		var listpos = 0;
@@ -103,23 +86,19 @@ send a request of the form
 					continue;
 				href_wiki = href.substring(6, pos)
 				link = href.substring(pos + 6);
+				if (link.length == 0)
+					continue;
+				if (link.startsWith(xowa_global_values.wgPageName))
+					continue;
 				var entry = {'href': link, 'item': i};
 				//console.log(href_wiki, href)
 				if (wikis[href_wiki])
 					wikis[href_wiki][wikis[href_wiki].length] = entry;
 				else
 					wikis[href_wiki] = [entry];
-				href = href.replace(wiki, "");
-				href = href.replace("/xowa/", "/site/");
-				var entry = {'href': href, 'item': i};
-				list[listpos++] = entry;
 			}
 		}
-		for (const [key, value] of Object.entries(wikis)) {
-			//console.log(key, value);
-			//if (key != "en.wikipedia.org") continue;
-		var path = '/xowa/' + key + '/wiki/?action=redlink';
-		console.log(path, JSON.stringify(value));
+		var path = xowa_global_values.wgPopupsRestGatewayEndpoint + '?action=redlink';
 		let req = new XMLHttpRequest();
 		req.open("POST", path, true);
 		req.responseType = 'json';
@@ -129,15 +108,14 @@ send a request of the form
 				foundReds(responseObj);
 			}
 		}
-		var text = JSON.stringify(value);
-		//console.log(text);
+		var text = JSON.stringify(wikis);
+		console.log(text);
 		req.send(text + "\n");
-		}
 	}
 	function foundReds(msg) {
 		//console.log(msg);
-		for (var i = 0; i < msg.length; i++) {
-			var itm = msg[i];
+		for (var k = 0; k < msg.length; k++) {
+			var itm = msg[k];
 			var lnk = itm[0], klass = itm[1];
 			var aa = $(hrefs[lnk.substring(7)]);
 			var href = aa.attr('href');
@@ -157,7 +135,6 @@ $(document).ready(function() {
 	atitle = $('a[xowa_title]');
 	elems = $('img[data-xowa-title]');
 	hrefs = $('a[href]');
-	getImages_a();
 	getImages();
 	getReds();
 });

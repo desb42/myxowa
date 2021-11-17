@@ -96,7 +96,7 @@ public class Xoh_js_cleaner {
 		Reg_itm("<script");
 		Reg_itm("<iframe");
 		Reg_itm("<style");
-		Reg_itm("<link");
+		//Reg_itm("<link"); // removed 20211106
 		Reg_itm("<meta");
 		Reg_itm("<Object");
 		Reg_itm("<frame");

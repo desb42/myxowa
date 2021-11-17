@@ -26,6 +26,7 @@ store
 */
 package gplx.xowa.xtns.lst;
 import gplx.Bry_;
+import gplx.Byte_ascii;
 import gplx.List_adp;
 import gplx.List_adp_;
 
@@ -303,7 +304,8 @@ class Section {
 		keyend = end - 2;
 		while (keyend > bgn) {
 			b = src[keyend - 1];
-			if (b != ' ' && b != '\t' && b != '\n')
+			if (Bry_.Trim_ary_ws[b & 0xFF] == Byte_ascii.Null)
+			//if (b != ' ' && b != '\t' && b != '\n')
 				break;
 			keyend--;
 		}

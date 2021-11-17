@@ -131,8 +131,24 @@ public class Luaj_engine implements Scrib_engine {
 		}		
 	}
 	public LuaTable Server_recv_call(LuaTable rsp) {
-		String proc_id = Luaj_value_.Get_val_as_str(rsp, "id");
-		Keyval[] args = Luaj_value_.Get_val_as_kv_ary(server, rsp, "args");
+		String proc_id = Luaj_value_.Get_val_as_str(rsp, "i"); // id
+		Keyval[] args = Luaj_value_.Get_val_as_kv_ary_call(server, rsp, "a"); // args
+                core.Ctx().Page().Stat_itm().Scrib().Inc_call_count();
+/*
+                String str_args = "";
+                for (int i = 0; i < args.length; i++) {
+                    if (i > 0)
+                        str_args += ",";
+                    String arg = args[i].To_str();
+                    if (arg.length() > 100)
+                        arg = arg.substring(0, 100) + " ...";
+                    str_args += arg;
+                }
+		System.out.println(proc_id + " " + str_args);
+                if ( (proc_id + " " + str_args).startsWith("mw.ustring|gsub")) {//mw.ustring|match 1=district2,2=^chancellor[%d]*$"
+                    int a= 1;
+                }
+*/
 		Scrib_proc proc = proc_mgr.Get_by_key(proc_id); if (proc == null) throw Scrib_xtn_mgr.err_("could not find proc with id of {0}", proc_id);
 		Scrib_proc_args proc_args = new Scrib_proc_args(args);
 		Scrib_proc_rslt proc_rslt = new Scrib_proc_rslt();
@@ -148,7 +164,7 @@ public class Luaj_engine implements Scrib_engine {
 	}
 	private LuaTable ReturnMessage(Keyval[] values) {
 		LuaTable msg = LuaValue.tableOf();
-		msg.set("op", Val_returnMessage);
+		msg.set("op", Val_rMessage);
 		msg.set("nvalues", LuaValue.valueOf(values.length));
 		msg.set("values", Luaj_value_.Obj_to_lua_val(server, values));
 		return msg;
@@ -164,6 +180,7 @@ public class Luaj_engine implements Scrib_engine {
 	, Val_registerLibrary 	= LuaValue.valueOf("registerLibrary")
 	, Val_callFunction 		= LuaValue.valueOf("call")
 	, Val_returnMessage 	= LuaValue.valueOf("return")
+	, Val_rMessage 	= LuaValue.valueOf("r")
 	, Val_error 			= LuaValue.valueOf("error")
 	, Val_compile 			= LuaValue.valueOf("compile")
 	;

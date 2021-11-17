@@ -24,17 +24,27 @@ public class Imap_shapes_arg implements gplx.core.brys.Bfr_arg {
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		Bry_fmtr fmtr = Imap_html_fmtrs.Area;
+		Bry_fmtr fmtr_notitle = Imap_html_fmtrs.Area_notitle;
 		int len = shapes.length;
 		for (int i = 0; i < len; ++i)
-			Fmt_shape(bfr, fmtr, pts_arg, shapes[i]);
+			Fmt_shape(bfr, fmtr, fmtr_notitle, pts_arg, shapes[i]);
 	}
-	public static void Fmt_shape(Bry_bfr bfr, Bry_fmtr fmtr, Imap_shape_pts_arg pts_arg, Imap_part_shape shape) {
+	public static void Fmt_shape(Bry_bfr bfr, Bry_fmtr fmtr, Bry_fmtr fmtr_notitle, Imap_shape_pts_arg pts_arg, Imap_part_shape shape) {
 		pts_arg.Pts_(shape.Shape_pts());
-		fmtr.Bld_bfr_many(bfr
-		, shape.Link_href()
-		, Imap_part_.To_shape_key(shape.Part_tid())
-		, pts_arg
-		, shape.Link_text()
-		);
+		byte[] linktxt = Db_encode.Title(shape.Link_text());
+		//byte[] linktxt = shape.Link_text();
+		if (linktxt == null)
+			fmtr_notitle.Bld_bfr_many(bfr
+			, shape.Link_href()
+			, Imap_part_.To_shape_key(shape.Part_tid())
+			, pts_arg
+			);
+		else
+			fmtr.Bld_bfr_many(bfr
+			, shape.Link_href()
+			, Imap_part_.To_shape_key(shape.Part_tid())
+			, pts_arg
+			, linktxt
+			);
 	}
 }

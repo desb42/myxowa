@@ -126,6 +126,7 @@ public class Http_server_mgr implements Gfo_invk {
 			Xoh_page_wtr_wkr wkr = wiki.Html_mgr().Page_wtr_mgr().Wkr(Xopg_view_mode_.Tid__read);
 			wkr.Write_body(tmp_bfr, wiki.Parser_mgr().Ctx(), Xoh_wtr_ctx.Basic, new_page);
 			byte[] new_html = tmp_bfr.To_bry_and_rls();
+                        new_html = wiki.Html__hdump_mgr().Load_mgr().Parse(new_html, new_page);
 
 			new_html = Http_server_wkr.Replace_fsys_hack(new_html);
 			String rv = String_.new_u8(new_html);

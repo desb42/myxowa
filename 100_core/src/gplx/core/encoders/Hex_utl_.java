@@ -106,6 +106,14 @@ public class Hex_utl_ {
 			if (val == 0) break;
 		}
 	}
+	public static void Write_lc(byte[] bry, int bgn, int end, int val) {
+		for (int i = end - 1; i > bgn - 1; i--) {
+			int b = val % 16;
+			bry[i] = To_byte_lcase(b);
+			val /= 16;
+			if (val == 0) break;
+		}
+	}
 	public static void Write_bfr(Bry_bfr bfr, boolean lcase, int val) {
 		// count bytes
 		int val_len = 0;

@@ -211,7 +211,8 @@ public class Db_parser {
 			if (!close) {
 				while (m_pos < m_src_end) {
 					byte b = m_src[m_pos];
-					if (b == ' ' || b == '\t' || b == '\n')
+					if (Bry_.Trim_ary_ws[b & 0xFF] != Byte_ascii.Null)
+					//if (b == ' ' || b == '\t' || b == '\n')
 						m_pos++;
 					else
 						break;
@@ -292,20 +293,21 @@ public class Db_parser {
 
 	private boolean match(byte[] element) {
 		int element_end = element.length;
+		byte s = 0;
 		for (int j = 0; j < element_end; j++) {
 		  byte c = element[j];
-		  byte s = m_src[m_pos];
+		  s = m_src[m_pos];
 			if (c != s && (c | 32) != (s | 32))
 				return false;
 			else
 				m_pos++;
 		}
 		// skip whitespace
-		byte s = m_src[m_pos];
 		while (m_pos < m_src_end) {
-			if (s == ' ' || s == '\n' || s == '\t') {
+			s = m_src[m_pos];
+			if (Bry_.Trim_ary_ws[s & 0xFF] != Byte_ascii.Null) {
+			//if (s == ' ' || s == '\n' || s == '\t') {
 				m_pos++;
-				s = m_src[m_pos];
 			}
 			else
 				break;
@@ -356,7 +358,8 @@ public class Db_parser {
 					// skip whitespace
 					byte s = m_src[i];
 					while (i < last_pos) {
-						if (s == ' ' || s == '\n' || s == '\t') {
+						if (Bry_.Trim_ary_ws[s & 0xFF] != Byte_ascii.Null) {
+						//if (s == ' ' || s == '\n' || s == '\t') {
 							i++;
 							s = m_src[i];
 						}
@@ -384,8 +387,9 @@ public class Db_parser {
 					if (b == Byte_ascii.Angle_end)
 						i++;
 					else {
-						if (b != ' ' && b != '\t' && b != '\n') // strictly whitespace
-							continue; // not what we ar looking for
+						if (Bry_.Trim_ary_ws[b & 0xFF] == Byte_ascii.Null)
+						//if (b != ' ' && b != '\t' && b != '\n') // strictly whitespace
+							continue; // not what we are looking for
 						while (i < m_src_end) { // NB whole of src
 							if (m_src[i] != Byte_ascii.Angle_end)
 								i++;
@@ -603,7 +607,8 @@ class Tag_match {
 		// any whitespace beween tag and '>'
 		while (bgn < src_end) {
 			byte b = src[bgn];
-			if (b == ' ' || b == '\t' || b == '\n')
+			if (Bry_.Trim_ary_ws[b & 0xFF] != Byte_ascii.Null)
+			//if (b == ' ' || b == '\t' || b == '\n')
 				bgn++;
 			else
 				break;
@@ -612,7 +617,8 @@ class Tag_match {
 		if (!close) {
 			while (bgn < src_end) {
 				byte b = src[bgn];
-				if (b == ' ' || b == '\t' || b == '\n')
+				if (Bry_.Trim_ary_ws[b & 0xFF] != Byte_ascii.Null)
+				//if (b == ' ' || b == '\t' || b == '\n')
 					bgn++;
 				else
 					break;

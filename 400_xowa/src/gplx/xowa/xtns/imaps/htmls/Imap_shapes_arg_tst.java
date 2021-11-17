@@ -25,7 +25,7 @@ class Imap_shapes_arg_fxt extends Imap_base_fxt {
 	public void Test_shape_html(Imap_part_shape shape, String expd) {
 		Bry_bfr bfr = Bry_bfr_.New();
 		Imap_shape_pts_arg pts_fmtr_arg = new Imap_shape_pts_arg(1);
-		Imap_shapes_arg.Fmt_shape(bfr, Imap_html_fmtrs.Area, pts_fmtr_arg, shape);
+		Imap_shapes_arg.Fmt_shape(bfr, Imap_html_fmtrs.Area, Imap_html_fmtrs.Area_notitle, pts_fmtr_arg, shape);
 		Tfds.Eq(expd, bfr.To_str_and_clear());
 	}
 }

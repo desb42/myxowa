@@ -31,6 +31,9 @@ public class Imap_html_fmtrs {
 	, Area = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( "\n        <area href=\"~{href}\" shape=\"~{shape}\" coords=\"~{coords}\" alt=\"~{title}\" title=\"~{title}\"/>"
 	), "href", "shape", "coords", "title")
+	, Area_notitle = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
+	( "\n        <area href=\"~{href}\" shape=\"~{shape}\" coords=\"~{coords}\"/>"
+	), "href", "shape", "coords")
 	, Img_anchor_none = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
 	, "      <img id=\"xoimg_~{img_elem_id}\" alt=\"~{img_alt}\"~{img_core}~{img_cls}~{imap_um}/>"

@@ -76,6 +76,9 @@ end
 -- @param s string  utf8-encoded string to decode
 -- @return table
 local function utf8_explode( s )
+ error("utf8_explode unimplemented", 1)
+end
+local function xutf8_explode( s )
 	-- xowa:PERF:if s equals previous_string, return previous_table; handles loops such as:
 	--   for idx = 1, mw.ustring.len( from ) do
 	--     if (cp == mw.ustring.codepoint( from, idx)) then
@@ -247,24 +250,26 @@ function ustring.codepoint( s, i, j )
 	checkString( 'codepoint', s )
 	checkType( 'codepoint', 2, i, 'number', true )
 	checkType( 'codepoint', 3, j, 'number', true )
-	local cps = utf8_explode( s )
-	if cps == nil then
+--	local cps = utf8_explode( s )
+	local cps_codepoints = string.codepoints( s )
+	if cps_codepoints == nil then
 		error( "bad argument #1 for 'codepoint' (string is not UTF-8)", 2 )
 	end
+	local cps_len = #cps_codepoints
 	i = i or 1
 	if i < 0 then
-		i = cps.len + i + 1
+		i = cps_len + i + 1
 	end
 	j = j or i
 	if j < 0 then
-		j = cps.len + j + 1
+		j = cps_len + j + 1
 	end
 	if j < i then
 		return -- empty result set
 	end
-	i = math.max( 1, math.min( i, cps.len + 1 ) )
-	j = math.max( 1, math.min( j, cps.len + 1 ) )
-	return unpack( cps.codepoints, i, j )
+	i = math.max( 1, math.min( i, cps_len + 1 ) )
+	j = math.max( 1, math.min( j, cps_len + 1 ) )
+	return unpack( cps_codepoints, i, j )
 end
 
 -- Return an iterator over the codepoint (as integers)
@@ -280,28 +285,31 @@ function ustring.gcodepoint( s, i, j )
 	checkString( 'gcodepoint', s )
 	checkType( 'gcodepoint', 2, i, 'number', true )
 	checkType( 'gcodepoint', 3, j, 'number', true )
-	local cps = utf8_explode( s )
-	if cps == nil then
+--	local cps = utf8_explode( s )
+	local cps_codepoints = string.codepoints( s )
+	if cps_codepoints == nil then
 		error( "bad argument #1 for 'gcodepoint' (string is not UTF-8)", 2 )
 	end
+	local cps_len = #cps_codepoints
 	i = i or 1
 	if i < 0 then
-		i = cps.len + i + 1
+		i = cps_len + i + 1
 	end
 	j = j or -1
 	if j < 0 then
-		j = cps.len + j + 1
+		j = cps_len + j + 1
 	end
 	if j < i then
 		return function ()
 			return nil
 		end
 	end
-	i = math.max( 1, math.min( i, cps.len + 1 ) )
-	j = math.max( 1, math.min( j, cps.len + 1 ) )
+	i = math.max( 1, math.min( i, cps_len + 1 ) )
+	j = math.max( 1, math.min( j, cps_len + 1 ) )
 	return function ()
 		if i <= j then
-			local ret = cps.codepoints[i]
+--			local ret = cps.codepoints[i]
+			local ret = cps_codepoints[i]
 			i = i + 1
 			return ret
 		end
@@ -1069,13 +1077,13 @@ end
 ---- Unicode Normalization ----
 -- These functions load a conversion table when called
 
-local function internalDecompose( cps, decomp )
+local function internalDecompose( cps_codepoints, decomp )
 	local cp = {}
 	local normal = require 'ustring/normalization-data'
 
 	-- Decompose into cp, using the lookup table and logic for hangul
-	for i = 1, cps.len do
-		local c = cps.codepoints[i]
+	for i = 1, #cps_codepoints do
+		local c = cps_codepoints[i]
 		local m = decomp[c]
 		if m then
 			for j = 0, #m do
@@ -1164,16 +1172,17 @@ function ustring.toNFC( s )
 		return s
 	end
 
-	local cps = utf8_explode( s )
-	if cps == nil then
+--	local cps = utf8_explode( s )
+	local cps_codepoints = string.codepoints( s )
+	if cps_codepoints == nil then
 		return nil
 	end
 	local normal = require 'ustring/normalization-data'
 
 	-- First, scan through to see if the string is definitely already NFC
 	local ok = true
-	for i = 1, cps.len do
-		local c = cps.codepoints[i]
+	for i = 1, #cps_codepoints do
+		local c = cps_codepoints[i]
 		if normal.check[c] then
 			ok = false
 			break
@@ -1184,7 +1193,7 @@ function ustring.toNFC( s )
 	end
 
 	-- Next, expand to NFD then recompose
-	return internalChar( internalCompose( internalDecompose( cps, normal.decomp ) ) )
+	return internalChar( internalCompose( internalDecompose( cps_codepoints, normal.decomp ) ) )
 end
 
 -- Normalize a string to NFD
@@ -1202,13 +1211,14 @@ function ustring.toNFD( s )
 		return s
 	end
 
-	local cps = utf8_explode( s )
-	if cps == nil then
+--	local cps = utf8_explode( s )
+	local cps_codepoints = string.codepoints( s )
+	if cps_codepoints == nil then
 		return nil
 	end
 
 	local normal = require 'ustring/normalization-data'
-	return internalChar( internalDecompose( cps, normal.decomp ) )
+	return internalChar( internalDecompose( cps_codepoints, normal.decomp ) )
 end
 
 -- Normalize a string to NFKC
@@ -1226,14 +1236,15 @@ function ustring.toNFKC( s )
 		return s
 	end
 
-	local cps = utf8_explode( s )
-	if cps == nil then
+--	local cps = utf8_explode( s )
+	local cps_codepoints = string.codepoints( s )
+	if cps_codepoints == nil then
 		return nil
 	end
 	local normal = require 'ustring/normalization-data'
 
 	-- Next, expand to NFKD then recompose
-	return internalChar( internalCompose( internalDecompose( cps, normal.decompK ) ) )
+	return internalChar( internalCompose( internalDecompose( cps_codepoints, normal.decompK ) ) )
 end
 
 -- Normalize a string to NFKD
@@ -1251,13 +1262,14 @@ function ustring.toNFKD( s )
 		return s
 	end
 
-	local cps = utf8_explode( s )
-	if cps == nil then
+--	local cps = utf8_explode( s )
+	local cps_codepoints = string.codepoints( s )
+	if cps_codepoints == nil then
 		return nil
 	end
 
 	local normal = require 'ustring/normalization-data'
-	return internalChar( internalDecompose( cps, normal.decompK ) )
+	return internalChar( internalDecompose( cps_codepoints, normal.decompK ) )
 end
 
 return ustring

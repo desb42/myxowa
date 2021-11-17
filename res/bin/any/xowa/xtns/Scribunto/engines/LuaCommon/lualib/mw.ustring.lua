@@ -46,6 +46,8 @@ function ustring.setupInterface( opt )
 		find = 2,
 		match = 2,
 		gsub = 3,
+		len = 1,
+		sub = 3,
 	}
 	for k, v in pairs( mw_interface ) do
 		local n = nargs[k] or 1
@@ -55,9 +57,9 @@ function ustring.setupInterface( opt )
 			-- Avoid PHP warnings for missing arguments by checking before
 			-- calling PHP.
 			ustring[k] = function ( ... )
-				if select( '#', ... ) < n then
-					error( "too few arguments to mw.ustring." .. k, 2 )
-				end
+--				if select( '#', ... ) < n then
+--					error( "too few arguments to mw.ustring." .. k, 2 )
+--				end
 				return v( ... )
 			end
 		end

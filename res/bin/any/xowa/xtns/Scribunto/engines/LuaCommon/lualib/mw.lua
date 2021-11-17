@@ -493,7 +493,7 @@ end
 -- @return boolean Whether the requested value was able to be returned
 -- @return table|function|string The requested value, or if that was unable to be returned, the type of the value returned by the module
 function mw.executeModule( chunk, name )
-	local env = mw.clone( _G )
+	local env = mw.xclone( _G )
 	makePackageModule( env )
 
 	-- These are unsafe

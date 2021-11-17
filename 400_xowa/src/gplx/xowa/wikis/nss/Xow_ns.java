@@ -104,4 +104,38 @@ public class Xow_ns implements Gfo_invk {
 	}	private static final String Invk_subpages_enabled_ = "subpages_enabled_", Invk_id = "id", Invk_name_txt = "name_txt", Invk_name_ui = "name_ui";
 
 	private static final    Xoa_url_encoder url_encoder = new Xoa_url_encoder();
+
+	public int Match_aliases(byte[] src, int bgn, int end) {
+		int len = name_db_w_colon.length;
+		int match = Match_name(src, bgn, name_db_w_colon, 0, len, end);
+		if (match > 0)
+			return match;
+		if (aliases == null)
+                    return -1;
+		int alen = aliases.Count();
+		for (int i = 0; i < alen; i++) {
+			byte[] alias = Bry_.new_u8((String)aliases.Get_at(i));
+			match = Match_name(src, bgn, alias, 0, alias.length + 1, end);
+			if (match > 0)
+				return match;
+		}
+		return -1;
+	}
+	private int Match_name(byte[] src, int src_bgn, byte[] trg, int trg_bgn, int len, int end) {
+		int last = src_bgn + len - 1;
+		if (src_bgn + len < end && src[last] == ':') {
+			if ((src[src_bgn++] | 32) == (trg[trg_bgn++] | 32)) { // should really be UTF lowercase
+				boolean found = true;
+				while (src_bgn < last) {
+					if (src[src_bgn++] != trg[trg_bgn++]) {
+						found = false;
+						break;
+					}
+				}
+				if (found)
+					return last + 1;
+			}
+		}
+		return -1;
+	}
 }

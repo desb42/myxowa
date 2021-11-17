@@ -135,4 +135,6 @@ public class Xoae_page implements Xoa_page {
 	}
 
 	public byte[]		Short_desc() { return short_desc; } public void Short_desc_(byte[] v) {short_desc=v;} private byte[] short_desc;
+        public boolean Done_hdoc_parse() { return done_hdoc_parse;} private boolean done_hdoc_parse = false;
+        public void Done_hdoc_parse_(boolean v) {done_hdoc_parse = v;}
 }

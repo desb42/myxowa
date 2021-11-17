@@ -50,13 +50,40 @@ end
 -- @param args The function arguments
 -- @return The return values from the PHP function
 function MWServer:call( id, nargs, args )
-	local result = self:server_send( {
+	local result = 
+			MWClient.client_recv( {  -- skip a call 20211108
 		op = 'call',
 		id = id,
 		nargs = nargs,
 		args = args
 	} )
 	if result.op == 'return' then
+		return unpack( result.values, 1, result.nvalues )
+	elseif result.op == 'error' then
+		-- Raise an error in the actual user code that called the function
+		-- The level is 3 since our immediate caller is a closure
+		error( result.value, 3 )
+	else
+		self:internalError( 'MWServer:call: unexpected result op' )
+	end
+end
+
+function MWServer:callex( id, ... )
+--	local nargs, args = self:listToCountAndTable( ... )
+	local result = 
+			MWClient.client_recv( {  -- skip a call 20211108
+		op = 'call',
+		i = id,
+		nargs = -1,
+		a = { ... }
+	} )
+--			self:server_send( {
+--		op = 'call',
+--		id = id,
+--		nargs = nargs,
+--		args = args
+--	} )
+	if result.op == 'r' then
 		return unpack( result.values, 1, result.nvalues )
 	elseif result.op == 'error' then
 		-- Raise an error in the actual user code that called the function
@@ -208,7 +235,8 @@ function MWServer:handleRegisterLibrary( message )
 	for name, id in pairs( message.functions ) do
 --  print(name .. '|' .. id);
 		t[name] = function( ... )
-			return self:call( id, self:listToCountAndTable( ... ) )
+--			return self:call( id, self:listToCountAndTable( ... ) )
+			return self:callex( id, ... )
 		end
 		-- Protect the function against setfenv()
 		self.protectedFunctions[t[name]] = true
@@ -230,6 +258,7 @@ function MWServer:handleWrapPhpFunction( message )
 	local id = message.id
 	local func = function( ... )
 		return self:call( id, self:listToCountAndTable( ... ) )
+--		return self:call( id, ... )
 	end
 	-- Protect the function against setfenv()
 	self.protectedFunctions[func] = true

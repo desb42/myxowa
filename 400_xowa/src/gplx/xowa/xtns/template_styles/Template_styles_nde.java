@@ -149,7 +149,17 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 				html_data_mgr.Blob_tbl__insert(Hxtn_blob_tbl.Blob_tid__wtxt, Hxtn_wiki_itm.Tid__self, css_page_id, css_src);
 			}
 		}
+		else {
+			// mark its position <link> needed for css
+			bfr.Add(bry_link);
+			bfr.Add_int_variable(css_page_id);
+			bfr.Add(bry_close);
+		}
 	}
+	private static byte[]
+	  bry_link = Bry_.new_a7("<link rel=\"mw-deduplicated-inline-style\" href=\"mw-data:TemplateStyles:r")
+	, bry_close = Bry_.new_a7("\"/>")
+	;
 	private static String formatTagError(String msg) {
 		// $parser->addTrackingCategory( 'templatestyles-page-error-category' );
 		// + call_user_func_array( 'wfMessage', $msg )->inContentLanguage()->parse()

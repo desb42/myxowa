@@ -63,7 +63,7 @@ public class Xoh_img_data implements Xoh_data_itm {
 			anch_xo_ttl.Val_(xowa_title.Val());
 		}
 		else {
-                    Gfh_tag map_head = tag_rdr.Tag__peek_fwd_head(Gfh_tag_.Id__map);
+			Gfh_tag map_head = tag_rdr.Tag__peek_fwd_head(Gfh_tag_.Id__map);
 			if (anch_head.Name_id() == Gfh_tag_.Id__div) {	// video / audio
 				if (!anch_head.Atrs__cls_eq(gplx.xowa.htmls.core.wkrs.thms.Xoh_thm_data.Atr__id__xowa_media_div)) return false;	// handle fake-thumbs created through en.w:Template:Image_label_begin; PAGE:en.w:Blackburnshire; DATE:2016-01-04
 				img_is_vid = true;

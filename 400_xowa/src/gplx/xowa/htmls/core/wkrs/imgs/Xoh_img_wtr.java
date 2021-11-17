@@ -19,7 +19,7 @@ import gplx.langs.htmls.*; import gplx.langs.htmls.encoders.*;
 import gplx.xowa.htmls.core.hzips.*; import gplx.xowa.htmls.core.wkrs.bfr_args.*; import gplx.xowa.htmls.core.wkrs.imgs.atrs.*;
 import gplx.xowa.files.*; import gplx.xowa.xtns.imaps.*; import gplx.xowa.parsers.lnkis.*;
 public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
-    private boolean exists = false;
+	private boolean exists = false;
 	private final    Bfr_arg_clearable[] arg_ary;
 	private final    Bfr_arg__hatr_arg img_xowa_image = new Bfr_arg__hatr_arg(Xoh_img_xoimg_data.Bry__data_xowa_image); 
 	private final    Bfr_arg__hatr_id img_id = Bfr_arg__hatr_id.New_id(Xoh_img_mgr.Bry__html_uid), vid_play_id = Bfr_arg__hatr_id.New_id("xowa_file_play_"), img_imap_usemap = new Bfr_arg__hatr_id(Imap_xtn_mgr.Bry__usemap__name, Imap_xtn_mgr.Bry__usemap__prefix);
@@ -155,11 +155,11 @@ public class Xoh_img_wtr implements Bfr_arg, Xoh_wtr_itm {
 		img_xowa_image.Set_by_arg(xoimg);
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
-            if (exists) {
-                img_xowa_title.Set_by_bry(null);
-                anch_xowa_title.Set_by_bry(null);
-                img_xowa_image.Set_by_arg_empty();
-            }
+		if (exists) {
+			img_xowa_title.Set_by_bry(null);
+			anch_xowa_title.Set_by_bry(null);
+			img_xowa_image.Set_by_arg_empty();
+		}
 		if (img_wo_anch)
 			img_wo_anch_fmtr.Bld_bfr_many(bfr, img_id, img_xowa_title, img_xowa_image, img_alt, img_src, img_w, img_h, img_cls, img_imap_usemap, img_style);
 		else {

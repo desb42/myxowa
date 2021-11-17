@@ -47,6 +47,7 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 	private String pat_str;
 	private int limit;
 	private byte repl_tid;
+        private String repl_str;
 	private byte[] repl_bry; private Hash_adp repl_hash; private Scrib_lua_proc repl_func;
 	public int repl_count = 0;
 	public Scrib_lib_ustring_gsub_mgr(Scrib_core core) {
@@ -79,6 +80,7 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 		Class<?> repl_type = repl_obj.getClass();
 		if		(Object_.Eq(repl_type, String_.Cls_ref_type)) {
 			repl_tid = Repl_tid_string;
+			repl_str = (String)repl_obj;
 			repl_bry = Bry_.new_u8((String)repl_obj);
 		}
 		else if	(Object_.Eq(repl_type, Int_.Cls_ref_type)) {	// NOTE:@replace sometimes int; PAGE:en.d:λύω; DATE:2014-09-02
@@ -229,6 +231,128 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 	}
 	private static final byte Repl_tid_null = 0, Repl_tid_string = 1, Repl_tid_table = 2, Repl_tid_luacbk = 3;
 	public static final    Scrib_lib_ustring_gsub_mgr[] Ary_empty = new Scrib_lib_ustring_gsub_mgr[0];
+	public boolean Exec_repl_itm(StringBuilder sb, Scrib_regx_converter regx_converter, Regx_match match) {
+		switch (repl_tid) {
+			case Repl_tid_string:
+				int len = repl_str.length();
+                                int start = 0;
+				for (int i = 0; i < len; i++) {
+					char b = repl_str.charAt(i);
+					switch (b) {
+						case Byte_ascii.Percent: {
+							++i;
+							if (i == len)	// % at end of stream; just add %;
+								sb.append("%");
+							else {
+								b = repl_str.charAt(i);
+								switch (b) {
+									case Byte_ascii.Num_0: case Byte_ascii.Num_1: case Byte_ascii.Num_2: case Byte_ascii.Num_3: case Byte_ascii.Num_4:
+									case Byte_ascii.Num_5: case Byte_ascii.Num_6: case Byte_ascii.Num_7: case Byte_ascii.Num_8: case Byte_ascii.Num_9:
+										int idx = b - Byte_ascii.Num_0;
+										// REF.MW: https://github.com/wikimedia/mediawiki-extensions-Scribunto/blob/master/includes/engines/LuaCommon/UstringLibrary.php#L785-L796
+										// NOTE: 0 means take result; REF.MW:if ($x === '0'); return $m[0]; PAGE:Wikipedia:Wikipedia_Signpost/Templates/Voter/testcases; DATE:2015-08-02
+										if (idx == 0)
+											sb.append(String_.Mid(src_str, match.Find_bgn(), match.Find_end()));
+										// NOTE: > 0 means get from groups if it exists; REF.MW:elseif (isset($m["m$x"])) return $m["m$x"]; PAGE:Wikipedia:Wikipedia_Signpost/Templates/Voter/testcases; DATE:2015-08-02
+										else if (idx - 1 < match.Groups().length) {	// retrieve numbered capture; TODO_OLD: support more than 9 captures
+											Regx_group grp = match.Groups()[idx - 1];
+											sb.append(grp.Val());	// NOTE: changed from String_.Mid(src_str, grp.Bgn(), grp.End()); DATE:2020-05-31
+										}
+										// NOTE: 1 per MW "Match undocumented Lua String.gsub behavior"; PAGE:en.d:Wiktionary:Scripts ISSUE#:393; DATE:2019-03-20
+										else if (idx == 1) {
+											sb.append(String_.Mid(src_str, match.Find_bgn(), match.Find_end()));
+										}
+										else {
+											throw Err_.new_wo_type("invalid capture index %" + Char_.To_str(b) + " in replacement String");
+										}
+										break;
+									case Byte_ascii.Percent:
+										sb.append("%");
+										break;
+									default:	// not a number; add literal
+										sb.append("%" + b);
+										break;
+								}
+							}
+							break;
+						}
+						default:
+							sb.append(b);
+							break;
+					}
+				}
+				break;
+			case Repl_tid_table: {
+				Regx_group[] grps = match.Groups();
+				String find_str = null;
+				if (grps.length == 0) {
+					find_str = String_.Mid(src_str, match.Find_bgn(), match.Find_end());	// NOTE: rslt.Bgn() / .End() is for String pos (bry pos will fail for utf8 strings)
+				}
+				else {	// group exists, take first one (logic matches Scribunto); PAGE:en.w:Bannered_routes_of_U.S._Route_60; DATE:2014-08-15
+					Regx_group grp = grps[0];
+					find_str = grp.Val();
+				}
+				Object actl_repl_obj = repl_hash.Get_by(find_str);
+				if (actl_repl_obj == null)			// match found, but no replacement specified; EX:"abc", "[ab]", "a:A"; "b" in regex but not in tbl; EX:d:DVD; DATE:2014-03-31
+					sb.append(find_str);
+				else
+					sb.append(String_.new_u8((byte[])actl_repl_obj));					
+				break;
+			}
+			case Repl_tid_luacbk: {
+				Keyval[] luacbk_args = null;
+				Regx_group[] grps = match.Groups();
+				int grps_len = grps.length;
+				// no grps; pass 1 arg based on @match: EX: ("ace", "[b-d]"); args -> ("c")
+				if (grps_len == 0) {
+					String find_str = String_.Mid(src_str, match.Find_bgn(), match.Find_end());
+					luacbk_args = Scrib_kv_utl_.base1_obj_(find_str);
+				}
+				// grps exist; pass n args based on grp[n].match; EX: ("acfg", "([b-d])([e-g])"); args -> ("c", "f")
+				else {
+					// memoize any_pos args for loop
+					boolean any_pos = regx_converter.Any_pos();
+					Keyval[] capt_ary = regx_converter.Capt_ary();
+					int capt_ary_len = capt_ary == null ? 0 : capt_ary.length; // capt_ary can be null b/c xowa_gsub will always create one group;
+
+					// loop grps; for each grp, create corresponding arg in luacbk
+					luacbk_args = new Keyval[grps_len];
+					for (int i = 0; i < grps_len; i++) {
+						Regx_group grp = grps[i];
+
+						// anypos will create @offset arg; everything else creates a @match arg based on grp; FOOTNOTE:CAPTURES
+						boolean anyposExists = any_pos && i < capt_ary_len && Bool_.Cast(capt_ary[i].Val());
+						Object val = null;
+						if (anyposExists) {
+							// emptyCapture ("anypos" or `()`) must pass integer position; must normalize to base-1 b/c lua callbacks expect base-1 arguments, not base-0; ISSUE#:726; DATE:2020-05-17;
+							val = (Object)(grp.Bgn() + List_adp_.Base1);
+						}
+						else {
+							// standardCapture must pass string match
+							val = grp.Val();
+						}
+						luacbk_args[i] = Keyval_.int_(i + Scrib_core.Base_1, val);
+					}
+				}
+
+				// do callback
+				Keyval[] rslts = core.Interpreter().CallFunction(repl_func.Id(), luacbk_args);
+
+				// eval result
+				if (rslts.length == 0) // will be 0 when gsub_proc returns nil; PAGE:en.d:tracer; DATE:2017-04-22
+					return false;
+				else {									// ArrayIndex check
+					Object rslt_obj = rslts[0].Val();	// 0th idx has result
+					sb.append(Object_.Xto_str_strict_or_empty(rslt_obj));	// NOTE: always convert to String; rslt_obj can be int; PAGE:en.d:seven DATE:2016-04-27
+				}
+				break;
+			}
+			default: throw Err_.new_unhandled(repl_tid);
+		}
+		return true;
+	}
+        public boolean IsReplNull() { return repl_tid == Repl_tid_string && repl_bry.length == 0; }
+
 }
 /*
 == FOOTNOTE:CAPTURES [ISSUE#:726; DATE:2020-05-17] ==

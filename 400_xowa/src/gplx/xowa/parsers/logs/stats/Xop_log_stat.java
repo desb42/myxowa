@@ -63,6 +63,7 @@ public class Xop_log_stat {
 			, scrib.Time()
 			, scrib.Count()
 			, scrib.Depth_max()
+			, scrib.CallCount()
 			, Scrib().PageTime()
 		);
 	}
@@ -91,9 +92,10 @@ public class Xop_log_stat {
 	, " Time: ~{s1}"
 	, " Count: ~{s2}"
 	, " Max_depth: ~{s3}"
+	, " Call Count: ~{s4}"
 	, "Total time:"
 	, "  ~{p1}"
 	, "-->"
 	), "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "t14", "t15", "t16", "t17", 
-	   "s1", "s2", "s3", "p1");
+	   "s1", "s2", "s3", "s4", "p1");
 }

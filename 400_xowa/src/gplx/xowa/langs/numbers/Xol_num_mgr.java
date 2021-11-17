@@ -16,12 +16,13 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.langs.numbers; import gplx.*; import gplx.xowa.*; import gplx.xowa.langs.*;
 public class Xol_num_mgr implements Gfo_invk {
 	private boolean digits_translate;
-	protected Bry_bfr tmp_bfr = Bry_bfr_.Reset(32);
+	//protected Bry_bfr tmp_bfr = Bry_bfr_.Reset(32);
 	private static final    byte[] Comma_bry = Bry_.new_a7(",");
 	public Xol_num_grp_fmtr Num_grp_fmtr() {return num_grp_fmtr;} private Xol_num_grp_fmtr num_grp_fmtr = new Xol_num_grp_fmtr();
 	public Xol_transform_mgr Separators_mgr() {return separators_mgr;} private Xol_transform_mgr separators_mgr = new Xol_transform_mgr();
 	public Xol_transform_mgr Digits_mgr() {return digits_mgr;} private Xol_transform_mgr digits_mgr = new Xol_transform_mgr();		
 	public byte[] Raw(byte[] num) {
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
 		if (digits_translate)
 			num = digits_mgr.Replace(tmp_bfr, num, false);
 		num = separators_mgr.Replace(tmp_bfr, num, false);
@@ -34,6 +35,7 @@ public class Xol_num_mgr implements Gfo_invk {
 	public byte[] Format_num(int val)					{return Format_num(Bry_.new_a7(Int_.To_str(val)));}
 	public byte[] Format_num(byte[] num)				{return Format_num(num, false);}
 	public byte[] Format_num(byte[] num, boolean skip_commafy) {
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
 		if (!skip_commafy) {
 			num = Commafy(num);
 			num = separators_mgr.Replace(tmp_bfr, num, true);
@@ -43,6 +45,7 @@ public class Xol_num_mgr implements Gfo_invk {
 		return num;
 	}
 	@gplx.Virtual public byte[] Commafy(byte[] num_bry) {
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
 		if (num_bry == null) return Bry_.Empty;	// MW: if ( $number === null ) return '';
 		if (num_grp_fmtr.Mode_is_regx())
 			return num_grp_fmtr.Fmt_regx(tmp_bfr, num_bry);

@@ -499,10 +499,11 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 		return null;
 	}
 	public Arg_nde_tkn Args_get_by_key(byte[] src, byte[] key) {
+		int key_len = key.length;
 		for (int i = 0; i < args_len; i++) {
 			Arg_nde_tkn nde = args[i];
 			if (!nde.KeyTkn_exists()) continue;
-			if (Bry_.Match(src, nde.Key_tkn().Dat_bgn(), nde.Key_tkn().Dat_end(), key)) return nde;	// NOTE: dat_ary is guaranteed to exist
+			if (Bry_.Match(src, nde.Key_tkn().Dat_bgn(), nde.Key_tkn().Dat_end(), key, 0, key_len)) return nde;	// NOTE: dat_ary is guaranteed to exist
 		}
 		return null;
 	}

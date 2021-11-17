@@ -65,12 +65,55 @@ public class Scrib_lib_ustring implements Scrib_lib {
 			case Proc_gmatch_init:							return Gmatch_init(args, rslt);
 			case Proc_gmatch_callback:						return Gmatch_callback(args, rslt);
 			case Proc_gsub:									return Gsub(args, rslt);
+			case Proc_len:									return Len(args, rslt);
+			case Proc_sub:									return Sub(args, rslt);
 			default: throw Err_.new_unhandled(key);
 		}
 	}
-	private static final int Proc_find = 0, Proc_match = 1, Proc_gmatch_init = 2, Proc_gmatch_callback = 3, Proc_gsub = 4;
-	public static final String Invk_find = "find", Invk_match = "match", Invk_gmatch_init = "gmatch_init", Invk_gmatch_callback = "gmatch_callback", Invk_gsub = "gsub";
-	private static final String[] Proc_names = String_.Ary(Invk_find, Invk_match, Invk_gmatch_init, Invk_gmatch_callback, Invk_gsub);
+	private static final int Proc_find = 0, Proc_match = 1, Proc_gmatch_init = 2, Proc_gmatch_callback = 3
+	, Proc_gsub = 4, Proc_len = 5, Proc_sub = 6;
+	public static final String Invk_find = "find", Invk_match = "match", Invk_gmatch_init = "gmatch_init"
+	, Invk_gmatch_callback = "gmatch_callback", Invk_gsub = "gsub", Invk_len = "len", Invk_sub = "sub";
+	private static final String[] Proc_names = String_.Ary(
+	  Invk_find, Invk_match, Invk_gmatch_init, Invk_gmatch_callback
+	, Invk_gsub, Invk_len, Invk_sub
+	);
+	public boolean Len(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		// get args
+		String text_str = args.Xstr_str_or_null(0);
+		return rslt.Init_obj(text_str.codePointCount(0, text_str.length()));
+	}
+	public boolean Sub(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		// get args
+		String text_str = args.Xstr_str_or_null(0);
+		String subval = "";
+		int cps_len = text_str.codePointCount(0, text_str.length());
+		int bgn_as_codes_base1 = args.Cast_int_or(1, 1);
+		int end_as_codes_base1 = args.Cast_int_or(2, -1);
+                //System.out.println("t:" + text_str + " l:" + Integer.toString(cps_len) + " b:" + Integer.toString(bgn_as_codes_base1) + " e:" + Integer.toString(end_as_codes_base1));
+		if (cps_len != 0) {
+			if (bgn_as_codes_base1 < 0)
+				bgn_as_codes_base1 = cps_len + bgn_as_codes_base1 + 1;
+			if (end_as_codes_base1 < 0)
+				end_as_codes_base1 = cps_len + end_as_codes_base1 + 1;
+			if (end_as_codes_base1 < bgn_as_codes_base1)
+				subval = "";
+			else {
+                            int bgn = bgn_as_codes_base1 - 1;
+                            int end = end_as_codes_base1;
+				if (bgn > cps_len)
+					bgn = cps_len;
+				else if (bgn < 0)
+					bgn = 0;
+				if (end > cps_len)
+					end = cps_len;
+				else if (end < 0)
+					end = 0;
+				subval = text_str.substring(text_str.offsetByCodePoints(0, bgn), text_str.offsetByCodePoints(0, end));
+			}
+		}
+		return rslt.Init_obj(subval);
+	}
 	public boolean Find(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// get args
 		String text_str	       = args.Xstr_str_or_null(0);

@@ -558,10 +558,11 @@ public class Bry_ {
 		int find_len = find_end - find_bgn;
 		if (find_len != src_end - src_bgn) return false;
 		if (find_len == 0) return src_end - src_bgn == 0;	// "" only matches ""
+		if (src_bgn + find_len > src_end) return false;	// ran out of src; exit; EX: src=ab; find=abc
 		for (int i = 0; i < find_len; i++) {
-			int pos = src_bgn + i;
-			if (pos >= src_end) return false;	// ran out of src; exit; EX: src=ab; find=abc
-			if (src[pos] != find[i + find_bgn]) return false;
+			if (src[src_bgn] != find[find_bgn]) return false;
+                        src_bgn++;
+                        find_bgn++;
 		}
 		return true;
 	}

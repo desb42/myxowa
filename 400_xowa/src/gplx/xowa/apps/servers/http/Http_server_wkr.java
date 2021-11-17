@@ -133,53 +133,6 @@ public class Http_server_wkr implements Gfo_invk {
 		if (!url_parser.Parse(req)) {
 			page_html = url_parser.Err_msg();
 		}
-		else if (url_parser.Image_mode()) {
-			Xowe_wiki wiki = (Xowe_wiki) app.Wiki_mgr().Get_by_or_make_init_y(url_parser.Wiki());
-			Xoh_make_mgr make_mgr = Xoh_make_mgr.New_make();
-			Xoh_page pge = new Xoh_page();
-			pge.Ctor_by_hview(wiki, Xoa_url.Null, Xoa_ttl.Parse(wiki, Bry_.new_a7("Test")), 0);
-			
-			byte[] ttl_bry = wiki.Props().Main_page();
-//		url_parser.Is_main_page_set();
-			Xoa_url url = wiki.Utl__url_parser().Parse(ttl_bry);
-			Xoa_ttl ttl = wiki.Ttl_parse(url.To_bry_page_w_anch());
-			Xog_tab_itm tab = Gxw_html_server.Assert_tab2(app, wiki);
-			Xoae_page page = Xoae_page.New(wiki, ttl);
-			//Xoae_page page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display(), url_parser.Action());
-			
-			int j = 0;
-			byte[] html = null;
-			while (j < 2) {
-				html = make_mgr.Parse(url_parser.Image_a(), wiki, pge);
-				Xoh_img_mgr src_imgs = pge.Img_mgr();
-				int len = src_imgs.Len();
-				page_html = "{\"error\":\"no match\",\"item\":\"" + url_parser.Image_item() + "\"}";
-				if (len == 1) {
-					gplx.xowa.files.Xof_fsdb_itm itm = src_imgs.Get_at(0);
-					if (itm.Orig_ttl() == null) {
-						break;
-					}
-					if (!Io_mgr.Instance.ExistsFil(itm.Html_view_url())) {
-						//System.out.println("nonexist " + String_.new_u8(itm.Html_view_url().To_http_file_bry()));
-						page.File_queue().Add(itm);
-						page.File_queue().Exec(wiki, page);
-						page.File_queue().Clear();
-						pge.Img_mgr().Clear();
-						//page_html = "{\"width\":40,\"height\":\"50\",\"src\":\"/xowa/fsys/file/en.wikipedia.org/orig/1/2/4/3/Power_Up_Turtles_Cover.PNG\",\"item\":\"" + url_parser.Image_item() + "\"}";
-					} else {
-						int root_len = wiki.App().Fsys_mgr().File_dir().Raw().length() + 8; // 'file:///'
-						System.out.println("exist " + String_.new_u8(itm.Html_view_url().To_http_file_bry()));
-						page_html = "{\"width\":" + Integer.toString(itm.Html_w())
-						        + ",\"height\":" + Integer.toString(itm.Html_h())
-						        + ",\"src\":\"/xowa/fsys/file/" + String_.new_u8(Bry_.Mid(itm.Html_view_url().To_http_file_bry(), root_len))
-						        + "\",\"item\":\"" + url_parser.Image_item() + "\"}";
-						break;
-					}
-				}
-				j += 1;
-			}
-			response.Set_content_type(Http_server_page.json_mime);
-		}
 		else {
 			byte[] wikitext = null;
 			Db_wikistrip ws = new Db_wikistrip();
@@ -278,7 +231,12 @@ public class Http_server_wkr implements Gfo_invk {
 			Process_other_post(request, url_bry, question_pos);
 	}
 	private void Process_other_post(Http_request_itm request, byte[] url_bry, int question_pos) {
-		if (request.Post_data_hash().Has(Key__tbox)) {
+		Http_url_parser url_parser = new Http_url_parser();
+		String page_html = "";
+		if (!url_parser.Parse(url_bry)) {
+			page_html = url_parser.Err_msg();
+		}
+                else if (request.Post_data_hash().Has(Key__tbox)) {
 			byte[] msg = request.Post_data_hash().Get_by(Key__tbox).Val();
 			url_encoder.Decode(tmp_bfr, Bool_.N, url_bry, 0, question_pos);
 			byte[] req = tmp_bfr.To_bry_and_clear();
@@ -294,65 +252,132 @@ public class Http_server_wkr implements Gfo_invk {
 				}
 			}
 			server_wtr.Write_str_w_nl(String_.new_u8(request.Host()) + "|POST|" + page_name);
-			String page_html = app.Http_server().Preview_page_to_html(data__client, Bry_.new_u8(wiki_domain), Bry_.new_u8(page_name), msg);
+			page_html = app.Http_server().Preview_page_to_html(data__client, Bry_.new_u8(wiki_domain), Bry_.new_u8(page_name), msg);
 			page_html = Convert_page(page_html, root_dir_http, wiki_domain, "");
 			response.Write_response_as_html(client_wtr, Bool_.N, page_html);
 		}
-		else {
-			url_encoder.Decode(tmp_bfr, Bool_.N, url_bry, 0, question_pos);
-			byte[] req = tmp_bfr.To_bry_and_clear();
-			String wiki_domain = ""; String page_name = "";
-			String[] req_split = String_.Split(String_.new_u8(req), "/");
-			if(req_split.length >= 1){
-				wiki_domain = req_split[1];
+		else if (url_parser.Redlink_mode()) {
+			byte[] msg = request.Post_data_hash().Get_by(Bry_.new_a7("data")).Val();
+			Json_parser jdoc_parser = new Json_parser();
+			Json_doc jdoc = jdoc_parser.Parse(msg);
+			Json_nde root = jdoc.Root_nde();
+			int nlen = root.Len();
+			page_html = "[";
+			int redcount = 0;
+			for (int i = 0; i < nlen; i++) {
+				Json_kv org = root.Get_at_as_kv(i);
+				Xowe_wiki wiki = (Xowe_wiki) app.Wiki_mgr().Get_by_or_make_init_y(org.Key_as_bry());
+				byte[] ttl_bry = wiki.Props().Main_page();
+				Xoa_url url = wiki.Utl__url_parser().Parse(ttl_bry);
+				Xoa_ttl ttl = wiki.Ttl_parse(url.To_bry_page_w_anch());
+				Xoae_page page = Xoae_page.New(wiki, ttl);
+	
+				Json_ary ary = org.Val_as_ary();
+				int alen = ary.Len();
+				for (int j = 0; j < alen; j++) {
+					Json_nde nde = ary.Get_at_as_nde(j);
+					Json_kv kv_name = nde.Get_at_as_kv(0); // "href"
+					Json_kv kv_item = nde.Get_at_as_kv(1); // "item"
+					byte[] itm_ttl_bry = kv_name.Val_as_bry();
+					Xoa_ttl itmttl = Xoa_ttl.Parse(wiki, itm_ttl_bry);
+					if (itmttl == null) {
+						continue;
+					}
+					int itmno = Integer.parseInt(String_.new_a7(kv_item.Val_as_bry())); // ?? find the real way of doing this
+					Xopg_lnki_itm__hdump itm = new Xopg_lnki_itm__hdump(itmttl);
+					itm.Html_uid_(itmno);
+					// repeated from page.Html_data().Redlink_list()
+					Xow_ns ns = itmttl.Ns();
+					if ( ns.Id_is_file_or_media()						// ignore files which will usually not be in local wiki (most are in commons), and whose html is built up separately
+						|| (ns.Id_is_ctg() && !itmttl.ForceLiteralLink())		// ignore ctgs which have their own html builder, unless it is literal; EX: [[:Category:A]]; DATE:2014-02-24
+						|| ns.Id_is_special()								// ignore special, especially Search; EX: Special:Search/Earth
+						|| itmttl.Anch_bgn() == 1			// anchor only link; EX: [[#anchor]]
+						|| itmttl.Wik_itm() != null							// xwiki lnki; EX: simplewiki links in homewiki; [[simplewiki:Earth]]
+						|| itmttl.Qarg_bgn() != -1
+						|| itmttl.Full_db()[0] == '/'
+					) {
+						// nothing
+					}
+					else
+						page.Html_data().Redlink_list().Add_direct(itm);
+				}
+				byte[] redlinks = null;
+				Bry_bfr tmp_bfr = Bry_bfr_.New();
+				Xopg_redlink_mgr red_mgr = new Xopg_redlink_mgr(page, null);
+				red_mgr.Redlink(tmp_bfr);
+				redlinks = tmp_bfr.To_bry_and_clear();
+				int redlen = redlinks.length;
+				if (redlen > 0) {
+					if (redcount > 0)
+						page_html += ",";
+					page_html += String_.new_a7(redlinks, 1, redlen);
+					redcount++;
+				}
 			}
-			Xowe_wiki wiki = (Xowe_wiki) app.Wiki_mgr().Get_by_or_make_init_y(Bry_.new_u8(wiki_domain));
+			page_html += "]";
+			response.Set_content_type(Http_server_page.json_mime);
+			response.Write_response_as_html(client_wtr, Bool_.N, page_html);
+		}
+		else if (url_parser.Image_mode()) {
+			Xowe_wiki wiki = (Xowe_wiki) app.Wiki_mgr().Get_by_or_make_init_y(url_parser.Wiki());
+			Xoh_make_mgr make_mgr = Xoh_make_mgr.New_make();
+			Xoh_page pge = new Xoh_page();
+			pge.Ctor_by_hview(wiki, Xoa_url.Null, Xoa_ttl.Parse(wiki, Bry_.new_a7("Test")), 0);
+			
 			byte[] ttl_bry = wiki.Props().Main_page();
+//		url_parser.Is_main_page_set();
 			Xoa_url url = wiki.Utl__url_parser().Parse(ttl_bry);
 			Xoa_ttl ttl = wiki.Ttl_parse(url.To_bry_page_w_anch());
+			Xog_tab_itm tab = Gxw_html_server.Assert_tab2(app, wiki);
 			Xoae_page page = Xoae_page.New(wiki, ttl);
-			// should check for ?action=redlink
+
 			byte[] msg = request.Post_data_hash().Get_by(Bry_.new_a7("data")).Val();
 			Json_parser jdoc_parser = new Json_parser();
 			Json_doc jdoc = jdoc_parser.Parse(msg);
 			Json_ary ary = jdoc.Root_ary();
 			int len = ary.Len();
+			page_html = "[";
 			for (int i = 0; i < len; i++) {
-				Json_nde nde = ary.Get_at_as_nde(i);
-				Json_kv kv_name = nde.Get_at_as_kv(0);
-				Json_kv kv_item = nde.Get_at_as_kv(1);
-				byte[] itm_ttl_bry = kv_name.Val_as_bry();
-				Xoa_ttl itmttl = Xoa_ttl.Parse(wiki, itm_ttl_bry);
-				if (itmttl == null) {
-					continue;
+				Json_nde nde = ary.Get_as_nde(i);
+				Json_kv kv_txt = nde.Get_at_as_kv(0);
+				Json_kv kv_itm = nde.Get_at_as_kv(1);
+                               
+			//Xoae_page page = wiki.Page_mgr().Load_page(url, ttl, tab, url_parser.Display(), url_parser.Action());
+			
+				int j = 0;
+				byte[] html = null;
+				String page_item = "{\"error\":\"no match\",\"item\":\"" + String_.new_a7(kv_itm.Val_as_bry()) + "\"}";
+
+				while (j < 2) {
+					page.File_queue().Clear();
+					pge.Img_mgr().Clear();
+					html = make_mgr.Parse(kv_txt.Val_as_bry(), wiki, pge);
+					Xoh_img_mgr src_imgs = pge.Img_mgr();
+					int xlen = src_imgs.Len();
+					if (xlen == 1) {
+						gplx.xowa.files.Xof_fsdb_itm itm = src_imgs.Get_at(0);
+						if (itm.Orig_ttl() == null) {
+							break;
+						}
+						if (!Io_mgr.Instance.ExistsFil(itm.Html_view_url())) {
+							page.File_queue().Add(itm);
+							page.File_queue().Exec(wiki, page);
+						} else {
+							int root_len = wiki.App().Fsys_mgr().File_dir().Raw().length() + 8; // 'file:///'
+							System.out.println("exist " + String_.new_u8(itm.Html_view_url().To_http_file_bry()));
+							page_item = "{\"width\":" + Integer.toString(itm.Html_w())
+							        + ",\"height\":" + Integer.toString(itm.Html_h())
+							        + ",\"src\":\"/xowa/fsys/file/" + String_.new_u8(Bry_.Mid(itm.Html_view_url().To_http_file_bry(), root_len))
+							        + "\",\"item\":\"" + String_.new_a7(kv_itm.Val_as_bry()) + "\"}";
+							break;
+						}
+					}
+					j += 1;
 				}
-				int itmno = Integer.parseInt(String_.new_a7(kv_item.Val_as_bry())); // ?? find the real way of doing this
-				Xopg_lnki_itm__hdump itm = new Xopg_lnki_itm__hdump(itmttl);
-				itm.Html_uid_(itmno);
-				// repeated from page.Html_data().Redlink_list()
-				Xow_ns ns = itmttl.Ns();
-				if ( ns.Id_is_file_or_media()						// ignore files which will usually not be in local wiki (most are in commons), and whose html is built up separately
-					|| (ns.Id_is_ctg() && !itmttl.ForceLiteralLink())		// ignore ctgs which have their own html builder, unless it is literal; EX: [[:Category:A]]; DATE:2014-02-24
-					|| ns.Id_is_special()								// ignore special, especially Search; EX: Special:Search/Earth
-					|| itmttl.Anch_bgn() == 1			// anchor only link; EX: [[#anchor]]
-					|| itmttl.Wik_itm() != null							// xwiki lnki; EX: simplewiki links in homewiki; [[simplewiki:Earth]]
-					|| itmttl.Qarg_bgn() != -1
-					|| itmttl.Full_db()[0] == '/'
-				) {
-					// nothing
-				}
-				else
-					page.Html_data().Redlink_list().Add_direct(itm);
+				if (i > 0)
+					page_html += ",";
+				page_html += page_item;
 			}
-			byte[] redlinks = null;
-			Bry_bfr tmp_bfr = Bry_bfr_.New();
-			Xopg_redlink_mgr red_mgr = new Xopg_redlink_mgr(page, null);
-			red_mgr.Redlink(tmp_bfr);
-			redlinks = tmp_bfr.To_bry_and_clear();
-			int redlen = redlinks.length;
-			String page_html = "[";
-			if (redlen > 0)
-				page_html += String_.new_a7(redlinks, 1, redlen);
 			page_html += "]";
 			response.Set_content_type(Http_server_page.json_mime);
 			response.Write_response_as_html(client_wtr, Bool_.N, page_html);

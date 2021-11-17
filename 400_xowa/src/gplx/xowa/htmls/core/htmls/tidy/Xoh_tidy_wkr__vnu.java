@@ -33,8 +33,11 @@ class Xoh_tidy_wkr__vnu implements Xoh_tidy_wkr {
 		while (pos < len) {
 			byte b = input[pos++];
 			if (b == '&') {
-				if (input[pos] == '#' && input[pos+1] == '3' && input[pos+2] == '2' && input[pos+3] == ';') 
+				if (input[pos] == '#') {
+                                    if ((input[pos+1] == '3' && input[pos+2] == '2' && input[pos+3] == ';')
+                                            || (input[pos+1] == 'x'))
 					input[pos-1] = '@'; // replace &#32; with @#32;
+                                }
 			}
 		}
 		InputStream stream = new ByteArrayInputStream(input);
@@ -53,8 +56,11 @@ class Xoh_tidy_wkr__vnu implements Xoh_tidy_wkr {
 		while (pos < len) {
 			byte b = output[pos++];
 			if (b == '@') {
-				if (output[pos] == '#' && output[pos+1] == '3' && output[pos+2] == '2' && output[pos+3] == ';') 
+				if (output[pos] == '#') {
+                                    if ((output[pos+1] == '3' && output[pos+2] == '2' && output[pos+3] == ';')
+                                            || (output[pos+1] == 'x'))
 					output[pos-1] = '&'; // replace @#32; with &#32;
+                                }
 			}
 		}
 		return output;

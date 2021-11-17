@@ -126,4 +126,6 @@ public class Xoh_page implements Xoa_page {
 		rv.Db().Page().Exists_n_();
 		return rv;
 	}
+        public boolean Done_hdoc_parse() { return done_hdoc_parse;} private boolean done_hdoc_parse = false;
+        public void Done_hdoc_parse_(boolean v) {done_hdoc_parse = v;}
 }

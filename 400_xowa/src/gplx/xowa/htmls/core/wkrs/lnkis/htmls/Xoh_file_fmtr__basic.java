@@ -107,7 +107,7 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	public static final    byte[] Bry__xowa_alt_text = Bry_.new_a7("xowa_alt_text");
 
 	public byte[] Bld_thumb_part_magnify(byte[] a_href, byte[] a_title) {
-		return fmtr_thumb_part_magnify.Bld_many_to_bry(tmp_bfr, a_href, a_title);
+		return fmtr_thumb_part_magnify.Bld_many_to_bry(tmp_bfr, a_href, Db_encode.Title(a_title));
 	}
 	private final    Bry_fmt fmtr_thumb_part_magnify = Bry_fmt.Auto("\n<div class=\"magnify\"><a href=\"~{a_href}\" class=\"internal\" title=\"~{a_title}\"></a></div>");
 
@@ -132,7 +132,9 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	("\n<div><a~{id} href=\"~{a_href}\" xowa_title=\"~{a_xowa_title}\" class=\"xowa_media_play\" style=\"width:~{a_width}px;max-width:~{a_max_width}px;\" alt=\"Play sound\"></a></div>");
 
 	public static byte[] Escape_xowa_title(byte[] lnki_ttl) {
-		return Xoa_ttl.Replace_spaces(gplx.langs.htmls.encoders.Gfo_url_encoder_.Href_quotes.Encode(lnki_ttl)); // must encode xowa_title, particularly quotes; EX: xowa_title="A"b.png"; PAGE:en.w:Earth DATE:2015-11-27
+		byte[] title = Xoa_ttl.Replace_spaces(gplx.langs.htmls.encoders.Gfo_url_encoder_.Href_quotes.Encode(lnki_ttl)); // must encode xowa_title, particularly quotes; EX: xowa_title="A"b.png"; PAGE:en.w:Earth DATE:2015-11-27
+		title = Db_encode.Title(title);
+		return title;
 	}
 	public static byte[] Escape_xowa_title_v2(byte[] lnki_ttl) {
 		return Xoa_ttl.Replace_spaces(gplx.langs.htmls.encoders.Gfo_url_encoder_.Href_quotes_v2.Encode(lnki_ttl)); // must encode xowa_title, particularly quotes; EX: xowa_title="A"b.png"; PAGE:en.w:Earth DATE:2015-11-27

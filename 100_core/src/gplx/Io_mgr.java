@@ -153,6 +153,7 @@ public class Io_mgr implements Gfo_evt_mgr_owner {	// exists primarily to gather
 	public IoEngine_xrg_downloadFil DownloadFil_args(String src, Io_url trg) {return IoEngine_xrg_downloadFil.new_(src, trg);}
 	public boolean Query_read_only(Io_url url, int read_only_type) {return IoEngineUtl.Query_read_only(IoEnginePool.Instance.Get_by(url.Info().EngineKey()), url, read_only_type);}
 	public static final    Io_mgr Instance = new Io_mgr();
+        public static Io_mgr New() {return new Io_mgr();}
 	public static final int Len_kb = 1024, Len_mb = 1048576, Len_gb = 1073741824, Len_gb_2 = 2147483647;
 	public static final long Len_mb_long = Len_mb;
 	public static final long Len_null = -1;

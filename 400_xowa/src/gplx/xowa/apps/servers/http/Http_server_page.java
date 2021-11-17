@@ -173,9 +173,11 @@ public class Http_server_page {
 //                        if (page.Db().Page().Html_db_id() == Xopg_db_page.HTML_DB_ID_NULL) // already done if HTML page
 			// NOTE: substitutes xoimg tags for actual file; ISSUE#:686; DATE:2020-06-27
 
-			//Db_readwrite.writeFile(String_.new_u8(page_html), "d:/des/xowa_x/pre_html.htm");
+			Db_readwrite.writeFile(String_.new_u8(page_html), "d:/des/xowa_x/pre_html.htm");
 
-//			page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);
+			if (!this.page.Done_hdoc_parse())
+				page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);
+			/* dont run redlinks - 20211103
 			byte[] redlinks = null;
 			Bry_bfr tmp_bfr = Bry_bfr_.New();
 			Xopg_redlink_mgr red_mgr = new Xopg_redlink_mgr(page, null);
@@ -183,6 +185,7 @@ public class Http_server_page {
 			redlinks = tmp_bfr.To_bry_and_clear();
 			//System.out.println(String_.new_u8(redlinks));
 			this.redlink = String_.new_u8(redlinks);
+			*/
 		}
 		page_html = Http_server_wkr.Replace_fsys_hack(page_html);
 		this.html = String_.new_u8(page_html);

@@ -49,11 +49,13 @@ import gplx.Bry_fmt;
 import gplx.xowa.Db_lua_comp;
 import gplx.xowa.parsers.utils.Xop_redirect_mgr;
 import gplx.Gfo_usr_dlg_;
+import gplx.String_;
 import gplx.xowa.Db_skin;
 import gplx.xowa.Db_vector_skin;
 import gplx.xowa.Db_minerva_skin;
 import gplx.xowa.Db_skin_;
 import gplx.langs.jsons.Json_nde;
+import gplx.xowa.Db_readwrite;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();

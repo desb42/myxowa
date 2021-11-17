@@ -21,10 +21,12 @@ public class Xop_log_time_count {
 	private int depth_max;
 	private long time_bgn;
 	private long page_start;
+	private int call_count;
 	public Xop_log_time_count() {
 		Clear();
 	}
 	public int Count() {return count;}
+	public int CallCount() {return call_count;}
 	public long Time() {return time;}
 	public int Depth_max() {return depth_max;}
 	public void Bgn() {
@@ -51,8 +53,10 @@ public class Xop_log_time_count {
 		time_bgn = 0;
 		depth = 0;
 		depth_max = 0;
+		call_count = 0;
 	}
 	public long PageTime() {
 		return gplx.core.envs.System_.Ticks() - page_start;
 	}
+	public void Inc_call_count() { call_count++; }
 }

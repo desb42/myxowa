@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,11 +13,12 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.cites; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
-import gplx.core.brys.*; import gplx.core.brys.fmtrs.*; import gplx.core.brys.args.*;
-import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*;
+package gplx.xowa.xtns.cites; import gplx.*; import gplx.xowa.*;
+import gplx.core.brys.*; import gplx.core.brys.args.*;
+import gplx.xowa.htmls.core.htmls.*;
 import gplx.xowa.langs.Xol_lang_stub_;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*; import gplx.langs.htmls.*;
+import gplx.langs.htmls.entitys.Gfh_entity_;
 public class Ref_html_wtr {
 	private final    Xoh_ref_list_fmtr grp_list_fmtr = new Xoh_ref_list_fmtr();
 	private final    Bfr_arg__bry_fmtr itm_id_fmtr = Bfr_arg_.New_bry_fmtr__null(), grp_id_fmtr = Bfr_arg_.New_bry_fmtr__null();
@@ -47,19 +48,54 @@ public class Ref_html_wtr {
 		mgr.Clear();
 	}
 	private Bfr_arg Itm_id(Ref_nde itm, boolean caller_is_ref, String pre, String suf) {
-		if (itm.Name() == Bry_.Empty)
+		byte[] id = itm.Name();
+		if (id == Bry_.Empty)
 			return itm_id_fmtr.Set(cfg.Itm_id_uid(), pre, itm.Uid(), suf);
 		else {
+			id = escape(id);
 			if (caller_is_ref)
-				return itm_id_fmtr.Set(cfg.Itm_id_key_one(), pre, itm.Name(), itm.Idx_major(), itm.Idx_minor(), suf);
+				return itm_id_fmtr.Set(cfg.Itm_id_key_one(), pre, id, itm.Idx_major(), itm.Idx_minor(), suf);
 			else
-				return itm_id_fmtr.Set(cfg.Itm_id_key_many(), pre, itm.Name(), itm.Idx_major(), suf);
+				return itm_id_fmtr.Set(cfg.Itm_id_key_many(), pre, id, itm.Idx_major(), suf);
 		}
 	}
+	private byte[] escape(byte[] src) {
+		// convert any '[' to &#91;
+		int len = src.length;
+		int pos = 0;
+		Bry_bfr bfr = null;
+		int start = 0;
+		while (pos < len) {
+			byte b = src[pos++];
+			byte[] rv = null;
+			switch(b) {
+				case '[':
+					rv = Gfh_entity_.Brack_bgn_bry;
+					break;
+				case ']':
+					rv = Gfh_entity_.Brack_end_bry;
+					break;
+			}
+			if (rv != null) {
+				if (bfr == null)
+					bfr = Bry_bfr_.New();
+				bfr.Add_mid(src, start, pos-1);
+				bfr.Add(rv);
+				start = pos;
+			}
+		}
+		if (start > 0) {
+			bfr.Add_mid(src, start, len);
+			return bfr.To_bry();
+		}
+		else
+			return src;
+	}
 	private Bfr_arg Grp_id(Ref_nde itm, String pre, String suf) {
-		return itm.Name() == Bry_.Empty	// name is blank >>> uid 
+		byte[] id = itm.Name();
+		return id == Bry_.Empty	// name is blank >>> uid 
 			? grp_id_fmtr.Set(cfg.Grp_id_uid(), pre, itm.Uid(), suf)
-			: grp_id_fmtr.Set(cfg.Grp_id_key(), pre, itm.Name(), itm.Idx_major(), suf);
+			: grp_id_fmtr.Set(cfg.Grp_id_key(), pre, escape(id), itm.Idx_major(), suf);
 	}
 	private int List_len(Ref_nde itm) {
 		int len = itm.Related_len();

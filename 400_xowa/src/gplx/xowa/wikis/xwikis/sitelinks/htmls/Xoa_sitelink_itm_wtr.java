@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -17,6 +17,8 @@ package gplx.xowa.wikis.xwikis.sitelinks.htmls; import gplx.*; import gplx.xowa.
 import gplx.core.brys.fmtrs.*;
 import gplx.xowa.htmls.hrefs.*;
 import gplx.xowa.wikis.domains.*;
+import gplx.xowa.apps.utls.*;
+import gplx.langs.htmls.encoders.*;
 class Xoa_sitelink_itm_wtr implements gplx.core.brys.Bfr_arg {
 	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(255);
 	private Xoa_app app; private Xoa_sitelink_grp grp;
@@ -38,7 +40,11 @@ class Xoa_sitelink_itm_wtr implements gplx.core.brys.Bfr_arg {
 			byte[] url_protocol = app.Xwiki_mgr__missing(domain_bry) ? Xoh_href_.Bry__https : Xoh_href_.Bry__site;	// if wiki exists, "/site/", else "https://"
 			byte[] url_page = itm.Page_name_is_empty() ? Bry_.Empty : page_name;
 			byte[] url = Bry_.Add(url_protocol, domain_bry, Xoh_href_.Bry__wiki, url_page);
-			td_fmtr.Bld_bfr_many(bfr, domain_itm.Lang_actl_key(), domain_itm.Domain_bry(), itm.Name(), url, page_name, Xoa_sitelink_itm_wtr__badge.Bld_badge_class(tmp_bfr, itm.Page_badges()));
+			Bry_.Replace_reuse(url, Byte_ascii.Space, Byte_ascii.Underline);
+			synchronized (href_encoder) {	// LOCK:static-obj
+				url = href_encoder.Encode(url);
+			}
+			td_fmtr.Bld_bfr_many(bfr, domain_itm.Lang_actl_key(), domain_itm.Domain_bry(), itm.Name(), url, Db_encode.Title(page_name), page_name, Xoa_sitelink_itm_wtr__badge.Bld_badge_class(tmp_bfr, itm.Page_badges()));
 			++td_idx;
 			if (td_idx == td_max) {
 				tr_opened = false;
@@ -58,6 +64,7 @@ class Xoa_sitelink_itm_wtr implements gplx.core.brys.Bfr_arg {
 	private static final    byte[] tr_end = Bry_.new_a7("\n    </tr>");
 	private static final    Bry_fmtr td_fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
-	, "      <td style=\"width:10%;padding-bottom:5px;\">~{lang_name}</td><td style=\"width:20%;padding-bottom:5px;\"><ul><li~{page_badge}><a hreflang=\"~{lang_code}\" title=\"~{pagename_translation}\" href=\"~{lang_href}\">~{pagename_translation}</a></li></ul></td><td style=\"width:3%;padding-bottom:5px;\"></td>"
-	), "lang_code", "lang_domain", "lang_name", "lang_href", "pagename_translation", "page_badge");
+	, "      <td style=\"width:10%;padding-bottom:5px;\">~{lang_name}</td><td style=\"width:20%;padding-bottom:5px;\"><ul><li~{page_badge}><a hreflang=\"~{lang_code}\" title=\"~{pagename_translation_encode}\" href=\"~{lang_href}\">~{pagename_translation}</a></li></ul></td><td style=\"width:3%;padding-bottom:5px;\"></td>"
+	), "lang_code", "lang_domain", "lang_name", "lang_href", "pagename_translation_encode", "pagename_translation", "page_badge");
+	private final static Gfo_url_encoder href_encoder = Gfo_url_encoder_.New__html_href_mw(Bool_.Y).Make();
 }

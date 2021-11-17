@@ -69,7 +69,8 @@ public class Json_fmtr {
 						int pos = idx + 1;
 						while (pos < maxLen) {
 							byte b = json[pos];
-							if (b == '\n' || b == '\r' || b == ' ' || b == '\t')
+							if (Bry_.Trim_ary_ws[b & 0xFF] != Byte_ascii.Null)
+							//if (b == '\n' || b == '\r' || b == ' ' || b == '\t')
 								pos++;
 							else
 								break;

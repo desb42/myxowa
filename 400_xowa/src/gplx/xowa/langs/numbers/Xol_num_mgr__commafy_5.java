@@ -35,6 +35,7 @@ class Xol_num_mgr__commafy_5 extends Xol_num_mgr { 	@Override public byte[] Comm
 				}
 			}
 		}
+                Bry_bfr tmp_bfr = Bry_bfr_.New();
 		return this.Num_grp_fmtr().Fmt_regx(tmp_bfr, num);	// otherwise do default grouping; '/(\d{3})(?=\d)(?!\d*\.)/', '$1,'
 	}
 }
