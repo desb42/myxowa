@@ -69,10 +69,46 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 
 		// get @limit; reset repl_count
 		this.limit = args.Cast_int_or(3, -1);
+                //System.out.println("s:" + src_str + " p:" + pat_str + " r:" + repl_obj);
+                //System.out.println("p:" + escapeChars(pat_str) + " r:" + escapeChars(repl_obj.toString()));
+                //if (src_str.startsWith("mc-<b>")) {
+                //    int a=1;
+                //}
 
 		// do repl
 		String repl = Scrib_pattern_matcher.New(core.Page_url()).Gsub(this, Ustring_.New_codepoints(src_str), pat_str, 0);
 		return rslt.Init_many_objs(repl, repl_count);
+	}
+	public static String escapeChars(String input) {
+		int len = input.length();
+		StringBuilder buffer = new StringBuilder(len);
+		for (int i = 0; i < len; i++) {
+			int chr = input.charAt(i);
+			if (chr > 127) {
+				buffer.append("\\u").append(Integer.toHexString(chr));
+			} else {
+				if (chr == '\n') {
+					buffer.append("\\n");
+				} else if(chr == '\t'){
+					buffer.append("\\t");
+				}else if(chr == '\r'){
+					buffer.append("\\r");
+				}else if(chr == '\b'){
+					buffer.append("\\b");
+				}else if(chr == '\f'){
+					buffer.append("\\f");
+				}else if(chr == '\''){
+					buffer.append("\\'");
+				}else if(chr == '\"'){
+					buffer.append("\\");
+				}else if(chr == '\\'){
+					buffer.append("\\\\");
+				}else {
+					buffer.append(input.charAt(i));
+				}
+			}
+		}
+		return buffer.toString();
 	}
 	private byte Identify_repl(Object repl_obj) {
 		byte repl_tid = Repl_tid_null;
@@ -80,12 +116,13 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 		Class<?> repl_type = repl_obj.getClass();
 		if		(Object_.Eq(repl_type, String_.Cls_ref_type)) {
 			repl_tid = Repl_tid_string;
-			repl_str = (String)repl_obj;
 			repl_bry = Bry_.new_u8((String)repl_obj);
+			repl_str = (String)repl_obj;
 		}
 		else if	(Object_.Eq(repl_type, Int_.Cls_ref_type)) {	// NOTE:@replace sometimes int; PAGE:en.d:λύω; DATE:2014-09-02
 			repl_tid = Repl_tid_string;
 			repl_bry = Bry_.new_u8(Int_.To_str(Int_.Cast(repl_obj)));
+			repl_str = String_.new_u8(repl_bry);
 		}
 		else if	(Object_.Eq(repl_type, Keyval[].class)) {
 			repl_tid = Repl_tid_table;
@@ -104,6 +141,7 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 		else if	(Object_.Eq(repl_type, Double_.Cls_ref_type)) {	// NOTE:@replace sometimes double; PAGE:de.v:Wikivoyage:Wikidata/Test_Modul:Wikidata2; DATE:2016-04-21
 			repl_tid = Repl_tid_string;
 			repl_bry = Bry_.new_u8(Double_.To_str(Double_.cast(repl_obj)));
+			repl_str = String_.new_u8(repl_bry);
 		}
 		else
 			throw Err_.new_unhandled(Type_.Name(repl_type));

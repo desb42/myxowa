@@ -57,21 +57,21 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 		int src_max = src_len + 1;
 		
 		// get pat vars
-		//regx_converter.patternToRegex(pat_str, Scrib_regx_converter.Anchor_G, true);
+		regx_converter.patternToRegex(pat_str, Scrib_regx_converter.Anchor_G, true);
 		Ustring pat = Ustring_.New_codepoints(pat_str);
 		int pat_len = pat.Len_in_data();
 		final boolean pat_is_anchored = pat_len > 0 && pat.Get_data(0) == '^';
-                boolean isreplNull = gsub_mgr.IsReplNull();
-//System.out.println("s:" + src_str + " p:" + pat_str + " r:" + isreplNull);
+		boolean isreplNull = gsub_mgr.IsReplNull();
+//System.out.println("a s:" + src_str + " p:" + pat_str + " r:" + isreplNull);
+//System.out.println("p:" + Scrib_lib_ustring_gsub_mgr.escapeChars(pat_str) );
 //if (src_str.equals("3–28")) {
 //    int a=1;
 //}
 		// get match vars
 		//Bry_bfr tmp_bfr = Bry_bfr_.New();
 		//Bry_bfr tmp_bfr = null;
-                StringBuilder sb = null;
-                int start = 0;
-                int upto = 0;
+		StringBuilder sb = null;
+		int start = 0;
 		Str_find_mgr__xowa match_mgr = new Str_find_mgr__xowa(src_ucs, pat, bgn_as_codes, false, false);
 		Match_state ms = new Match_state(match_mgr);
 		
@@ -80,60 +80,58 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 		while (src_idx < src_max) {
 			ms.reset();
 			int res = ms.match(src_pos, pat_is_anchored ? 1 : 0);
-			
-                                   int stretch = ms.Stretch();
+
+			src_pos = ms.Stretch();
 			// match found
 			if (res != -1) {
 				if (gsub_mgr.Repl_count__done()) break;
 				src_idx++;
 
-                                   if (sb == null)
-                                        sb = new StringBuilder(src_len);
-                                   sb.append(src_ucs.Substring(start, stretch));
-                                   //if (tmp_bfr == null)
-                                   //     tmp_bfr = Bry_bfr_.New();
-                                   // tmp_bfr.Add_str_u8(src_ucs.Substring(start, stretch));
-                                if (!isreplNull) {
-				ms.push_captures(true, stretch, res);
+				if (sb == null)
+					sb = new StringBuilder(src_len);
+				sb.append(src_ucs.Substring(start, src_pos));
+				//if (tmp_bfr == null)
+				//	tmp_bfr = Bry_bfr_.New();
+				//tmp_bfr.Add_str_u8(src_ucs.Substring(start, stretch));
+				if (!isreplNull) {
+					ms.push_captures(true, src_pos, res);
 
-				Regx_group[] groups = Make_groups(src_ucs, match_mgr.Captures_ary());
-				Regx_match match = new Regx_match(true, src_pos, res, groups);
-				if (!gsub_mgr.Exec_repl_itm(sb, regx_converter, match)) {
-                                    sb.append(src_ucs.Substring(match.Find_bgn(), match.Find_end()));
- 					//tmp_bfr.Add_str_u8(src_ucs.Substring(match.Find_bgn(), match.Find_end()));
+					Regx_group[] groups = Make_groups(src_ucs, match_mgr.Captures_ary());
+					Regx_match match = new Regx_match(true, src_pos, res, groups);
+					if (!gsub_mgr.Exec_repl_itm(sb, regx_converter, match)) {
+						sb.append(src_ucs.Substring(match.Find_bgn(), match.Find_end()));
+ 						//tmp_bfr.Add_str_u8(src_ucs.Substring(match.Find_bgn(), match.Find_end()));
+					}
 				}
-                                }
-					
+
 				gsub_mgr.Repl_count__add();
-                                if (res > src_pos) {
-                                    src_pos = res;
-                                    start = src_pos;
-                                }
+				src_pos = res;
+				start = src_pos;
+				if (src_pos >= src_len) // XOWA:assert src_pos is in bounds, else will throw ArrayIndexOutOfBounds exception; DATE:2016-09-20
+					break; 
 			}
 			// no match; add current byte
 			else if (src_pos < src_len) {
-                                src_pos = stretch + 1;
+				src_pos++;
 			}
 			else
 				break;
-			
+
 			if (pat_is_anchored)
 				break;
-			
-			if (src_pos > src_len) // XOWA:assert src_pos is in bounds, else will throw ArrayIndexOutOfBounds exception; DATE:2016-09-20
-				break; 
+
 		}
 
-                if (sb != null) {
-                    sb.append(src_ucs.Substring(start, src_len));
-                    return sb.toString();
-                }
-                //if (tmp_bfr != null) {
-		//tmp_bfr.Add_str_u8(src_ucs.Substring(start, src_len));
-		//return tmp_bfr.To_str_and_clear();
-                //}
-                else
-                    return src_str;
+		if (sb != null) {
+			sb.append(src_ucs.Substring(start, src_len));
+			return sb.toString();
+		}
+		//if (tmp_bfr != null) {
+		//	tmp_bfr.Add_str_u8(src_ucs.Substring(start, src_len));
+		//	return tmp_bfr.To_str_and_clear();
+		//}
+		else
+			return src_str;
 	}
 
 	private Regx_group[] Make_groups(Ustring src_ucs, int[] captures) {
