@@ -15,7 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.scribunto.libs; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.scribunto.*;
 import gplx.langs.regxs.*;
-class Scrib_regx_grp_mgr {
+public class Scrib_regx_grp_mgr {
 	private final    List_adp capt_list = List_adp_.New();
 	private final    List_adp full_list = List_adp_.New();
 	private final    List_adp open_list = List_adp_.New();

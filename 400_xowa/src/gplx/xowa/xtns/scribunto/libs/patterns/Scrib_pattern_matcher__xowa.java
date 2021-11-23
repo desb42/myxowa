@@ -31,7 +31,7 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 	public Scrib_pattern_matcher__xowa(byte[] page_url) {}
 
 	@Override public Regx_match Match_one(Ustring src_ucs, String pat_str, int bgn_as_codes, boolean replace) {
-		regx_converter.patternToRegex(pat_str, Scrib_regx_converter.Anchor_pow, true);
+		//regx_converter.patternToRegex(pat_str, Scrib_regx_converter.Anchor_pow, true);
 		Str_find_mgr__xowa mgr = new Str_find_mgr__xowa(src_ucs, Ustring_.New_codepoints(pat_str), bgn_as_codes, false, false);
 		mgr.Process(false);
 		
@@ -50,14 +50,14 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 
 	@Override public String Gsub(Scrib_lib_ustring_gsub_mgr gsub_mgr, Ustring src_ucs, String pat_str, int bgn_as_codes) {
 		// get src vars
-		String src_str = src_ucs.Src();
+		//String src_str = src_ucs.Src();
 		int src_len = src_ucs.Len_in_data();
 		// TOMBSTONE:do not return early if String.empty; allows `string.gsub('', '$', 'a')` ISSUE#:731; DATE:2020-07-20
 		// if (src_len == 0) return src_str;
 		int src_max = src_len + 1;
 		
 		// get pat vars
-		regx_converter.patternToRegex(pat_str, Scrib_regx_converter.Anchor_G, true);
+		//regx_converter.patternToRegex(pat_str, Scrib_regx_converter.Anchor_G, true);
 		Ustring pat = Ustring_.New_codepoints(pat_str);
 		int pat_len = pat.Len_in_data();
 		final boolean pat_is_anchored = pat_len > 0 && pat.Get_data(0) == '^';
@@ -98,15 +98,21 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 
 					Regx_group[] groups = Make_groups(src_ucs, match_mgr.Captures_ary());
 					Regx_match match = new Regx_match(true, src_pos, res, groups);
-					if (!gsub_mgr.Exec_repl_itm(sb, regx_converter, match)) {
+					if (!gsub_mgr.Exec_repl_itm(sb, match)) {
 						sb.append(src_ucs.Substring(match.Find_bgn(), match.Find_end()));
  						//tmp_bfr.Add_str_u8(src_ucs.Substring(match.Find_bgn(), match.Find_end()));
 					}
 				}
 
 				gsub_mgr.Repl_count__add();
-				src_pos = res;
-				start = src_pos;
+				if (src_pos == res) { // characters but still a match eg "()" or "$"
+					start = src_pos;
+					src_pos++;        // ?? 20211120
+				}
+				else {
+					src_pos = res;
+					start = src_pos;
+				}
 				if (src_pos >= src_len) // XOWA:assert src_pos is in bounds, else will throw ArrayIndexOutOfBounds exception; DATE:2016-09-20
 					break; 
 			}
@@ -131,7 +137,7 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 		//	return tmp_bfr.To_str_and_clear();
 		//}
 		else
-			return src_str;
+			return src_ucs.Src();
 	}
 
 	private Regx_group[] Make_groups(Ustring src_ucs, int[] captures) {
@@ -146,8 +152,16 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 			int capture_end = captures[i + 1];
 			// FOOTNOTE:REGX_GROUP
 			int bgn_in_chars = src_ucs.Map_data_to_char(capture_bgn);
-			int end_in_chars = src_ucs.Map_data_to_char(capture_end);
- 			String val = String_.Mid(src_ucs.Src(), bgn_in_chars, end_in_chars);
+			int end_in_chars;
+ 			String val;
+			if (capture_end < 0) { // for ()
+				end_in_chars = capture_end;
+				val = "";
+			}
+			else {
+				end_in_chars = src_ucs.Map_data_to_char(capture_end);
+ 				val = String_.Mid(src_ucs.Src(), bgn_in_chars, end_in_chars);
+			}
 			groups[i / 2] = new Regx_group(true, capture_bgn, capture_end, val);
 		}
 		return groups;

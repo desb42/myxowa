@@ -40,6 +40,7 @@ import gplx.xowa.xtns.scribunto.procs.Scrib_proc_args;
 import gplx.xowa.xtns.scribunto.procs.Scrib_proc_mgr;
 import gplx.xowa.xtns.scribunto.procs.Scrib_proc_rslt;
 
+import gplx.xowa.Db_regex;
 public class Scrib_lib_ustring implements Scrib_lib {
 	public Scrib_lib_ustring(Scrib_core core) {this.core = core;} private Scrib_core core;
 	public String Key() {return "mw.ustring";}
@@ -204,12 +205,18 @@ public class Scrib_lib_ustring implements Scrib_lib {
 	public boolean Gmatch_init(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// String text = Scrib_kv_utl_.Val_to_str(values, 0);
 		String regx = args.Pull_str(1);
+                Db_regex regx_counter = new Db_regex();
+                regx_counter.patternToRegex(regx);
+/*
 		Scrib_regx_converter regx_converter = new Scrib_regx_converter();
 		if (Scrib_pattern_matcher.Mode_is_xowa())
 			regx_converter.patternToRegex(regx, Scrib_regx_converter.Anchor_null, true);
 		else
 			regx = regx_converter.patternToRegex(regx, Scrib_regx_converter.Anchor_null, true);
+
 		return rslt.Init_many_objs(regx, regx_converter.Capt_ary());
+*/
+		return rslt.Init_many_objs(regx, regx_counter.Capt_ary());
 	}
 	public boolean Gmatch_callback(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		String text = args.Xstr_str_or_null(0); // NOTE: UstringLibrary.php!ustringGmatchCallback calls preg_match directly; $s can be any type, and php casts automatically; 
@@ -247,6 +254,18 @@ public class Scrib_lib_ustring implements Scrib_lib {
 		return bgn_as_codes;
 	}
 	private void AddCapturesFromMatch(List_adp tmp_list, Regx_match rslt, String text, Keyval[] capts, boolean op_is_match) {// NOTE: this matches behavior in UstringLibrary.php!addCapturesFromMatch
+		Regx_group[] grps = rslt.Groups();
+		int grps_len = grps.length;
+		if (grps_len > 0) {
+			for (int j = 0; j < grps_len; j++) {
+				Regx_group grp = grps[j];
+				if (grp.End() == -2)
+					tmp_list.Add(grp.Bgn() + Scrib_lib_ustring.Base1);	// return index only for "()"; NOTE: do not return as String; callers expect int and will fail typed comparisons; DATE:2016-01-21
+				else
+					tmp_list.Add(grp.Val());		// return match
+			}
+		}
+/*
 		int capts_len = capts == null ? 0 : capts.length;
 		if (capts_len > 0) { // NOTE: changed from "grps_len > 0"; PAGE:en.w:Portal:Constructed_languages/Intro DATE:2018-07-02
 			Regx_group[] grps = rslt.Groups();
@@ -261,6 +280,7 @@ public class Scrib_lib_ustring implements Scrib_lib {
 					tmp_list.Add(grp.Val());		// return match
 			}
 		}
+*/
 		else if (	op_is_match				// if op_is_match, and no captures, extract find_txt; note that UstringLibrary.php says "$arr[] = $m[0][0];" which means get the 1st match;
 				&&	tmp_list.Count() == 0)	// only add match once; EX: "aaaa", "a" will have four matches; get 1st; DATE:2014-04-02
 			tmp_list.Add(String_.Mid(text, rslt.Find_bgn(), rslt.Find_end()));

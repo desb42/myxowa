@@ -269,11 +269,10 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 	}
 	private static final byte Repl_tid_null = 0, Repl_tid_string = 1, Repl_tid_table = 2, Repl_tid_luacbk = 3;
 	public static final    Scrib_lib_ustring_gsub_mgr[] Ary_empty = new Scrib_lib_ustring_gsub_mgr[0];
-	public boolean Exec_repl_itm(StringBuilder sb, Scrib_regx_converter regx_converter, Regx_match match) {
+	public boolean Exec_repl_itm(StringBuilder sb, Regx_match match) {
 		switch (repl_tid) {
 			case Repl_tid_string:
 				int len = repl_str.length();
-                                int start = 0;
 				for (int i = 0; i < len; i++) {
 					char b = repl_str.charAt(i);
 					switch (b) {
@@ -294,7 +293,10 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 										// NOTE: > 0 means get from groups if it exists; REF.MW:elseif (isset($m["m$x"])) return $m["m$x"]; PAGE:Wikipedia:Wikipedia_Signpost/Templates/Voter/testcases; DATE:2015-08-02
 										else if (idx - 1 < match.Groups().length) {	// retrieve numbered capture; TODO_OLD: support more than 9 captures
 											Regx_group grp = match.Groups()[idx - 1];
-											sb.append(grp.Val());	// NOTE: changed from String_.Mid(src_str, grp.Bgn(), grp.End()); DATE:2020-05-31
+											if (grp.End() == -2) // ()
+												sb.append(Integer.toString(grp.Bgn() + 1)); // Lua is base1
+											else
+												sb.append(grp.Val());	// NOTE: changed from String_.Mid(src_str, grp.Bgn(), grp.End()); DATE:2020-05-31
 										}
 										// NOTE: 1 per MW "Match undocumented Lua String.gsub behavior"; PAGE:en.d:Wiktionary:Scripts ISSUE#:393; DATE:2019-03-20
 										else if (idx == 1) {
@@ -323,16 +325,23 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 			case Repl_tid_table: {
 				Regx_group[] grps = match.Groups();
 				String find_str = null;
+				String no_find_str = "";
 				if (grps.length == 0) {
 					find_str = String_.Mid(src_str, match.Find_bgn(), match.Find_end());	// NOTE: rslt.Bgn() / .End() is for String pos (bry pos will fail for utf8 strings)
 				}
 				else {	// group exists, take first one (logic matches Scribunto); PAGE:en.w:Bannered_routes_of_U.S._Route_60; DATE:2014-08-15
 					Regx_group grp = grps[0];
-					find_str = grp.Val();
+					if (grp.End() == -2) { // ()
+						find_str = Integer.toString(grp.Bgn() + 1);
+					}
+					else {
+						find_str = grp.Val();
+						no_find_str = find_str;
+					}
 				}
 				Object actl_repl_obj = repl_hash.Get_by(find_str);
 				if (actl_repl_obj == null)			// match found, but no replacement specified; EX:"abc", "[ab]", "a:A"; "b" in regex but not in tbl; EX:d:DVD; DATE:2014-03-31
-					sb.append(find_str);
+					sb.append(no_find_str);
 				else
 					sb.append(String_.new_u8((byte[])actl_repl_obj));					
 				break;
@@ -348,20 +357,13 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 				}
 				// grps exist; pass n args based on grp[n].match; EX: ("acfg", "([b-d])([e-g])"); args -> ("c", "f")
 				else {
-					// memoize any_pos args for loop
-					boolean any_pos = regx_converter.Any_pos();
-					Keyval[] capt_ary = regx_converter.Capt_ary();
-					int capt_ary_len = capt_ary == null ? 0 : capt_ary.length; // capt_ary can be null b/c xowa_gsub will always create one group;
-
 					// loop grps; for each grp, create corresponding arg in luacbk
 					luacbk_args = new Keyval[grps_len];
 					for (int i = 0; i < grps_len; i++) {
 						Regx_group grp = grps[i];
 
-						// anypos will create @offset arg; everything else creates a @match arg based on grp; FOOTNOTE:CAPTURES
-						boolean anyposExists = any_pos && i < capt_ary_len && Bool_.Cast(capt_ary[i].Val());
 						Object val = null;
-						if (anyposExists) {
+						if (grp.End() == -2) {
 							// emptyCapture ("anypos" or `()`) must pass integer position; must normalize to base-1 b/c lua callbacks expect base-1 arguments, not base-0; ISSUE#:726; DATE:2020-05-17;
 							val = (Object)(grp.Bgn() + List_adp_.Base1);
 						}
