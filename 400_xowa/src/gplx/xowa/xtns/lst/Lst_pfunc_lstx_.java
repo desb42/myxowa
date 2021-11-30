@@ -17,7 +17,7 @@ package gplx.xowa.xtns.lst; import gplx.*; import gplx.xowa.*; import gplx.xowa.
 import gplx.xowa.parsers.*; 
 class Lst_pfunc_lstx_ {
 	public static void Sect_exclude(Bry_bfr bfr, Lst_pfunc_itm itm, byte[] sect_exclude, byte[] sect_replace) {
-                Db_Section_list sect = itm.Sect();
+                Db_Section_list sect = itm.Sect_Head();
                 if (sect == null) { // how??
                 	Db_readwrite.writeFile("null? " + String_.new_u8(sect_exclude) + ":" + String_.new_u8(sect_replace), "/null.txt");
                         return;

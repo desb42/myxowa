@@ -135,6 +135,7 @@ public class Db_karto_maps {
 			}
 		}
 		// Clarendon_Park_Congregational_Church needs "marker-color" before "title"
+		// whereas Fox%E2%80%93Watson Theater Building does not (PHP hashing?)
 		int s1 = txt.indexOf("\"title\":");
 		int s2 = txt.indexOf("\"marker-color\":");
 		if (s1 > 0 && s2 > 0 && s1 < s2) {

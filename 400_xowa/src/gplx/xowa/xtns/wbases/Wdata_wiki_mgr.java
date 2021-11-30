@@ -288,7 +288,8 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		if (id == null) id = Bry_.Empty;
 		// if a single letter - ignore
 		if (id.length == 1) return;
-		ctx.Wiki().Appe().Usr_dlg().Log_many("", "", "Unknown id in wikidata; type=~{0} id=~{1} page=~{2}", type, id, ctx.Page().Url_bry_safe());
+		//ctx.Wiki().Appe().Usr_dlg().Log_many("", "", "Unknown id in wikidata; type=~{0} id=~{1} page=~{2}", type, id, ctx.Page().Url_bry_safe());
+		ctx.Wiki().Logger().Log_many("Unknown id in wikidata; type=~{0} id=~{1} page=~{2}", type, id, ctx.Page().Url_bry_safe());
 	}
 	public byte[] Page_display_title() { return page_display_title; }
 	public byte[] Doc_name(Wdata_doc wdoc) {

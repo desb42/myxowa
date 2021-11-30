@@ -593,7 +593,7 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 				Xopg_tmpl_prepend_mgr prepend_mgr = ctx.Page().Tmpl_prepend_mgr().Bgn(full_bfr);
 				Lst_pfunc_itm lst_itm = Lst_pfunc_itm.New_sect_or_null(ctx, ttl.Full_db());
 				// should check for a null sect?
-				if (lst_itm != null) Lst_pfunc_lst_.Sect_include(page_bfr, lst_itm.Sect(), cur_sect_bgn, cur_sect_end);
+				if (lst_itm != null) Lst_pfunc_lst_.Sect_include(page_bfr, lst_itm.Sect_Head(), cur_sect_bgn, cur_sect_end);
 				prepend_mgr.End(ctx, full_bfr, page_bfr.Bfr(), page_bfr.Len(), Bool_.Y);
 				full_bfr.Add_bfr_and_clear(page_bfr);
 				if (last_page && full_bfr.Match_end_byt(Byte_ascii.Gt)) { // ?? 202010715 big HACK see fr.wikisource.org/wiki/Œuvres_poétiques_de_Chénier/Moland,_1889/L’Oaristys

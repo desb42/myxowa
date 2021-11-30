@@ -48,6 +48,7 @@ import gplx.xowa.xtns.lst.Lst_pfunc_itm;
 import gplx.xowa.Xowe_wiki;
 import gplx.xowa.Xoa_ttl;
 import gplx.xowa.Xoae_page;
+import gplx.xowa.Xoa_app_;
 public class Db_Section_list {
 	private List_adp sects;
 	private List_adp heads;
@@ -72,6 +73,7 @@ public class Db_Section_list {
 		int pos = 0;
 		int bgn, end, atr;
 		sects = List_adp_.New();
+		heads = List_adp_.New();
 		begin_end keyword;
 		switch (langid) {
 			case 1: // german!!!
@@ -105,23 +107,27 @@ public class Db_Section_list {
 			}
 			else if (b == '\n') { // check for headers
 				if (pos + 10 < src_len && src[pos] == '=') {
+					int bgn_pos = pos;
 					int count = 1;
 					pos++;
 					while (pos < src_len) {
-						b = src[pos++];
+						b = src[pos];
 						if (b != '=')
 							break;
+						pos++;
 						count++;
 					}
 					// now find the next <nl>
 					if (b != '\n') {
 						int npos = pos;
 						while (npos < src_len) {
-							b = src[npos++];
+							b = src[npos];
 							if (b == '\n')
 								break;
+							npos++;
 						}
 						if (b == '\n') {
+							int end_pos = npos;
 							// now count any '=' backwards
 							int ncount = 0;
 							while (npos > pos) {
@@ -132,7 +138,7 @@ public class Db_Section_list {
 									break;
 							}
 							if (ncount == count) { // we have a header
-								heads.Add(new Header(src, pos, npos, count));
+								heads.Add(new Header(src, pos, npos + 1, count, bgn_pos, end_pos));
 								pos = npos + count;
 							}
 						}
@@ -195,7 +201,7 @@ public class Db_Section_list {
 		return Compile3(bfr.To_bry());
 	}
 	public byte[] Exclude(byte[] sect_exclude, byte[] sect_replace) {
-		if		(Bry_.Len_eq_0(sect_exclude)) {	// no exclude arg; EX: {{#lstx:page}} or {{#lstx:page}}
+		if (Bry_.Len_eq_0(sect_exclude)) {	// no exclude arg; EX: {{#lstx:page}} or {{#lstx:page}}
 			return Compile3(src);							// write all and exit
 		}
 		int sections_len = sects.Count();
@@ -217,10 +223,49 @@ public class Db_Section_list {
 		return Compile3(bfr.To_bry());
 	}
 	public byte[] Header(byte[] lhs_hdr, byte[] rhs_hdr) {
+		Xoa_app_.Usr_dlg().Log_many("", "", "section/lst head ttl:~{0} from:~{1} to=~{2}", ttl_bry, lhs_hdr, rhs_hdr);
+		int headers_len = heads.Count();
+                if (lhs_hdr == null) { // up to the first header
+                    if (headers_len == 0) // all?
+                        return Compile3(Bry_.Mid(src, 0, src.length));
+                    Header head = (Header)heads.Get_at(0);
+                    return Compile3(Bry_.Mid(src, 0, head.bgn_pos));
+                }
+		for (int i = 0; i < headers_len; i++) {
+			Header head = (Header)heads.Get_at(i);
+			if (Matchkey(head, lhs_hdr)) {
+				int level = head.level;
+				int startpos = head.end_pos;
+				int endpos = -1;
+				if (rhs_hdr == null) {
+					while (++i < headers_len) {
+						head = (Header)heads.Get_at(i);
+						if (head.level == level) {
+							endpos = head.bgn_pos;
+							break;
+						}
+					}
+					if (endpos < 0) // fell off the end
+						endpos = src.length;
+					return Compile3(Bry_.Mid(src, startpos, endpos));
+				}
+				else {
+					while (++i < headers_len) {
+						head = (Header)heads.Get_at(i);
+						if (Matchkey(head, rhs_hdr)) {
+							endpos = head.bgn_pos;
+							return Compile3(Bry_.Mid(src, startpos, endpos));
+						}
+					}
+				}
+				//?? what to do here????
+				Xoa_app_.Usr_dlg().Log_many("", "", "section/lst head from:~{0} to=~{1}", lhs_hdr, rhs_hdr);
+			}
+		}
 		return Bry_.Empty;
 	}
 	private boolean Matchkey(Section sect, byte[] find) {
-            if (find == Lst_pfunc_itm.Null_arg) return false;
+		if (find == Lst_pfunc_itm.Null_arg) return false;
 		int pos = sect.keybgn;
 		int keylen = sect.keyend - pos;
 		int find_end = find.length;
@@ -230,9 +275,20 @@ public class Db_Section_list {
 		}
 		return true;
 	}
+	private boolean Matchkey(Header head, byte[] find) {
+		if (find == Lst_pfunc_itm.Null_arg) return false;
+		int pos = head.bgn;
+		int keylen = head.end - pos;
+		int find_end = find.length;
+		if (find_end != keylen) return false;
+		for (int i = 0; i < find_end; i++) {
+			if (src[pos + i] != find[i]) return false;
+		}
+		return true;
+	}
 	// need ctx hence wiki and page
 	private byte[] Compile(byte[] page_bry) {
-            Xop_root_tkn xtn_root = null;
+		Xop_root_tkn xtn_root = null;
 		// set recursing flag
 		Xoae_page page = ctx.Page();
 		Bry_bfr full_bfr = wiki.Utl__bfr_mkr().Get_m001();
@@ -317,9 +373,13 @@ class Section {
 class Header {
 	public int bgn;
 	public int end;
+	public int bgn_pos;
+	public int end_pos;
 	public int level;
-	Header(byte[] src, int bgn, int end, int level) {
+	Header(byte[] src, int bgn, int end, int level, int bgn_pos, int end_pos) {
 		this.level = level;
+		this.bgn_pos = bgn_pos;
+		this.end_pos = end_pos;
 		byte b;
 		while (bgn < end) {
 			b = src[bgn];
@@ -332,11 +392,12 @@ class Header {
 		while (end > bgn) {
 			b = src[end - 1];
 			if (b == ' ' || b == '\t')
-				bgn--;
+				end--;
 			else
 				break;
 		}
 		this.end = end;
+                //System.out.println(String_.new_a7(src, bgn, end));
 	}
 }
 interface begin_end {

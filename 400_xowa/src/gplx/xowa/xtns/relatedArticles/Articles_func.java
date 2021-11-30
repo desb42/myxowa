@@ -30,7 +30,8 @@ public class Articles_func extends Pf_func_base {
 		}
 		Parse(xtn_itm, argx);
 		Xoa_ttl page_ttl = ctx.Page().Ttl();
-		Gfo_usr_dlg_.Instance.Log_many("", "", "#related: ttl=~{0} arg=~{1}", page_ttl.Full_db(), argx);
+		//Gfo_usr_dlg_.Instance.Log_many("", "", "#related: ttl=~{0} arg=~{1}", page_ttl.Full_db(), argx);
+		ctx.Wiki().Logger().Log_many("#related: ttl=~{0} arg=~{1}", page_ttl.Full_db(), argx);
 		ctx.Page().Html_data().Related().Add(argx);
 	}
 	private void Parse(Articles_xtn_skin_itm xtn_itm, byte[] argx) {

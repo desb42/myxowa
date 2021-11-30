@@ -20,12 +20,12 @@ import gplx.xowa.wikis.domains.Xow_domain_tid_;
 public class Lst_pfunc_itm {
 	public Lst_pfunc_itm(byte[] itm_src, Lst_section_nde_mgr sec_mgr, Xopg_toc_mgr toc_mgr, Db_Section_list sect) {
 		this.itm_src = itm_src; this.sec_mgr = sec_mgr; this.toc_mgr = toc_mgr;
-                this.sect = sect;
+		this.sect_head = sect;
 	}
-        public Db_Section_list Sect() { return sect; } private Db_Section_list sect;
-	public byte[]				Itm_src()	{return itm_src;} private final    byte[] itm_src;
-	public Lst_section_nde_mgr	Sec_mgr()	{return sec_mgr;} private final    Lst_section_nde_mgr sec_mgr;
-	public Xopg_toc_mgr			Toc_mgr()	{return toc_mgr;} private final    Xopg_toc_mgr toc_mgr;
+	public Db_Section_list Sect_Head() { return sect_head; } private Db_Section_list sect_head;
+	public byte[] Itm_src()	{return itm_src;} private final    byte[] itm_src;
+	public Lst_section_nde_mgr Sec_mgr()	{return sec_mgr;} private final    Lst_section_nde_mgr sec_mgr;
+	public Xopg_toc_mgr Toc_mgr()	{return toc_mgr;} private final    Xopg_toc_mgr toc_mgr;
 
 	public static Lst_pfunc_itm New_sect_or_null(Xop_ctx ctx, byte[] ttl_bry) {
 		// init wiki, ttl
@@ -46,7 +46,7 @@ public class Lst_pfunc_itm {
 			byte[] sub_src = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, wiki.Domain_str()); 
 			if (sub_src == null) return null; // {{#lst:missing}} -> ""
 			
-                        Db_Section_list sect = new Db_Section_list(sub_src, 0, ctx, sub_ctx, ttl, ttl_bry);
+			Db_Section_list sect = new Db_Section_list(sub_src, 0, ctx, sub_ctx, ttl, ttl_bry);
 /* THIS IS NOT QUITE RIGHT but 
 			// parse page; note adding to stack to prevent circular recursions
 			if (!wiki.Parser_mgr().Tmpl_stack_add(ttl.Full_db())) return null;
@@ -87,11 +87,12 @@ public class Lst_pfunc_itm {
 			// get sub_ctx: note new ctx is needed b/c sub_page objects must not get added to owner_page; for example, references / hdrs / lnki.files
 			Xop_ctx sub_ctx = Xop_ctx.New__top(wiki).Ref_ignore_(true);
 			sub_ctx.Page().Ttl_(ctx.Page().Ttl());	// NOTE: must set ttl on page, else test fails;
-                        sub_ctx.Page().Html_data().Display_ttl_(ctx.Page().Html_data().Display_ttl());
+			sub_ctx.Page().Html_data().Display_ttl_(ctx.Page().Html_data().Display_ttl());
 			byte[] sub_src = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, wiki.Domain_str());
 			if (sub_src == null) return null; // {{#lst:missing}} -> ""
 
-			// parse sub_src; note adding to page's stack to prevent circular recursions
+			Db_Section_list sect = new Db_Section_list(sub_src, 0, ctx, sub_ctx, ttl, ttl_bry);
+/* 20211125 removed			// parse sub_src; note adding to page's stack to prevent circular recursions
 			if (!wiki.Parser_mgr().Tmpl_stack_add(ttl.Full_db())) return null;
 			Xop_root_tkn root = wiki.Parser_mgr().Main().Parse_text_to_wdom(sub_ctx, sub_src, true);	// NOTE: parse as defn will drop <onlyinclude>; PAGE:en.w:10s_BC; DATE:2016-08-13
 			wiki.Parser_mgr().Tmpl_stack_del();
@@ -101,9 +102,9 @@ public class Lst_pfunc_itm {
 			sub_ctx.Page().Wtxt().Toc().Clear();	// HACK: must clear toc hdrs; should probably create a new top sub_ctx; DATE:2016-08-17
 			root = wiki.Parser_mgr().Main().Parse_text_to_wdom(sub_ctx, sub_src, true);
 			sub_src = root.Data_mid();	// NOTE: must call root.Data_mid() again b/c previous src may have nowiki which will get removed in 2nd pass; see TEST:Tmpl_w_nowiki; DATE:2016-08-13
-
+*/
 			// add to cache
-			rv = new Lst_pfunc_itm(sub_src, Clone(sub_ctx.Lst_section_mgr()), Clone(sub_ctx.Page().Wtxt().Toc(), sub_src, ttl_bry), null);
+			rv = new Lst_pfunc_itm(sub_src, Clone(sub_ctx.Lst_section_mgr()), Clone(sub_ctx.Page().Wtxt().Toc(), sub_src, ttl_bry), sect);
 			wiki.Cache_mgr().Lst_cache().Add(ttl_bry, rv);
 		}
 		return rv;

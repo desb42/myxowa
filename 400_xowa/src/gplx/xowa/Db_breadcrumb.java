@@ -80,7 +80,6 @@ public class Db_breadcrumb {
 		stmt.Crt_bry_as_str("parent", parent.Page_txt());
 		stmt.Crt_int("parent_namespace", parent.Ns().Id());
 		stmt.Exec_insert(); // ugh!*/
-		Gfo_usr_dlg_.Instance.Log_many("", "", "#isin: ttl=~{0} parent=~{1}", ttl.Full_db(), isin);
 		// assume somewhere else is committing?!?!
 	}
 	private static String sql = String_.Concat_lines_nl_skip_last

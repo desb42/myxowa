@@ -29,7 +29,12 @@ public class Xomp_stat_tbl implements Rls_able {
 	, fld_lnki_count = flds.Add_int("lnki_count"), fld_lnke_count = flds.Add_int("lnke_count"), fld_hdr_count = flds.Add_int("hdr_count")
 	, fld_math_count = flds.Add_int("math_count"), fld_imap_count = flds.Add_int("imap_count"), fld_hiero_count = flds.Add_int("hiero_count")
 	, fld_gallery_count = flds.Add_int("gallery_count"), fld_gallery_packed_count = flds.Add_int("gallery_packed_count")
-	;		
+	, fld_tmpl_count = flds.Add_int("tmpl_count")
+	, fld_tmpl1_count = flds.Add_int("tmpl1_count")
+	, fld_tmpl2_count = flds.Add_int("tmpl2_count")
+	, fld_tmpl3_count = flds.Add_int("tmpl3_count")
+	, fld_scrib_callcount = flds.Add_int("scrib_callcount")
+;
 	private final    Db_conn conn; private Db_stmt stmt_insert;
 	public Xomp_stat_tbl(Db_conn conn) {
 		this.conn = conn;
@@ -68,6 +73,12 @@ public class Xomp_stat_tbl implements Rls_able {
 			.Val_int (fld_hiero_count           , rdr.Read_int (fld_hiero_count))
 			.Val_int (fld_gallery_count         , rdr.Read_int (fld_gallery_count))
 			.Val_int (fld_gallery_packed_count  , rdr.Read_int (fld_gallery_packed_count))
+
+			.Val_int (fld_tmpl_count            , rdr.Read_int (fld_tmpl_count))
+			.Val_int (fld_tmpl1_count           , rdr.Read_int (fld_tmpl1_count))
+			.Val_int (fld_tmpl2_count           , rdr.Read_int (fld_tmpl2_count))
+			.Val_int (fld_tmpl3_count           , rdr.Read_int (fld_tmpl3_count))
+			.Val_int (fld_scrib_callcount       , rdr.Read_int (fld_scrib_callcount))
 		.Exec_insert();
 	}
 	public void Insert(Xoae_page wpg, Xoh_page hpg, int wkr_uid, long page_time, long fulltext_time) {
@@ -96,6 +107,12 @@ public class Xomp_stat_tbl implements Rls_able {
 			.Val_int (fld_hiero_count           , stat.Hiero_count)
 			.Val_int (fld_gallery_count         , stat.Gallery_count)
 			.Val_int (fld_gallery_packed_count  , stat.Gallery_packed_count)
+
+			.Val_int (fld_tmpl_count            , stat.Tmpl_count)
+			.Val_int (fld_tmpl1_count           , stat.Tmpl1_count)
+			.Val_int (fld_tmpl2_count           , stat.Tmpl2_count)
+			.Val_int (fld_tmpl3_count           , stat.Tmpl3_count)
+			.Val_int (fld_scrib_callcount       , stat.Scrib().CallCount())
 		.Exec_insert();
 	}
 	public void Stmt_rls() {

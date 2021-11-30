@@ -246,7 +246,8 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		Fmt__img.Bld_many(tmp_bfr, server, this.mapstyle, args, staticWidth, this.height);
 		img = tmp_bfr.To_bry_and_clear();
 		//Gfo_usr_dlg_.Instance.Warn_many("", "", "mapping: page=~{0} mapimg=~{1}", ctx.Page().Ttl().Full_db(), Bry_.Mid(img, 66, img.length-44));
-		Xoa_app_.Usr_dlg().Log_many("", "", "mapping: page=~{0} mapimg=~{1} md5=~{2} sha1=~{3}", ctx.Page().Ttl().Full_db(), Bry_.Mid(img, 66, img.length-44), md5hash, groupsha1);
+		//Xoa_app_.Usr_dlg().Log_many("", "", "mapping: page=~{0} mapimg=~{1} md5=~{2} sha1=~{3}", ctx.Page().Ttl().Full_db(), Bry_.Mid(img, 66, img.length-44), md5hash, groupsha1);
+		ctx.Wiki().Logger().Log_many("mapping: page=~{0} mapimg=~{1} md5=~{2} sha1=~{3}", ctx.Page().Ttl().Full_db(), Bry_.Mid(img, 66, img.length-44), md5hash, groupsha1);
 
 		if ( !framed ) {
 			//$attrs['class'] .= " {$containerClass} {$alignClasses[$this->align]}";

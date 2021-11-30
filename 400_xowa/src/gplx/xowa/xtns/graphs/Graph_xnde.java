@@ -36,7 +36,8 @@ public class Graph_xnde implements Xox_xnde {
 			return;
 		}
 
-		Xoa_app_.Usr_dlg().Log_many("", "", "graph: page=~{0}", ctx.Page().Ttl().Full_db());
+		//Xoa_app_.Usr_dlg().Log_many("", "", "graph: page=~{0}", ctx.Page().Ttl().Full_db());
+		ctx.Wiki().Logger().Log_many("graph: page=~{0}", ctx.Page().Ttl().Full_db());
 
 		// swap out fsys_root; ISSUE#:553; DATE:2019-09-25
 		Graph_json_save_mgr json_save_mgr = new Graph_json_save_mgr(app.Fsys_mgr());
