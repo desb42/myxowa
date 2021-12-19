@@ -466,6 +466,9 @@ public class Http_server_wkr implements Gfo_invk {
                 long timestamp = dte.Timestamp_unix();*/
                 //page_html += test_wikistrip();
                 page_html = page_html.replace("redlinks = [\"\"]", "redlinks = [\"\"" + redlink + "]");
+                // 20211214 somehow this is happening?!
+                page_html = page_html.replaceAll(" »(\\s|<|\\))", "&#160;»$1");
+                page_html = page_html.replaceAll("(\\s|>|\\()« ", "$1«&#160;");
 		return page_html;
 	}
         private static String collapser(String html)

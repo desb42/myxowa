@@ -510,8 +510,9 @@ public class Xol_lang_stub_ {	// lists all known stub_ary supported by MW
 , Id_en_us = 486
 , Id_fil = 487
 , Id_tkl = 488
+, Id_tvl = 489 // added 20211208
 	;
-	public static final int Id__max = 489;
+	public static final int Id__max = 490;
 	public static Hash_adp_bry Regy() {
 		if (stub_hash == null) {	// NOTE: any parenthetical String below will have an "unseen" character of "\xE2\x80\xAA" at the begining and "\xE2\x80\xAC" at the end. They are responsible for parentheses-orientation in RTL stub_ary.
 stub_hash = Hash_adp_bry.ci_a7();	// ASCII:lang_code; NOTE: must be ci; EX: {{#languages:FR}}
@@ -1004,6 +1005,7 @@ Regy_add(stub_hash, Id_zu, "zu", "isiZulu");
 Regy_add(stub_hash, Id_en_us, "en-us", "American English");
 Regy_add(stub_hash, Id_fil, "fil", "Filipino");
 Regy_add(stub_hash, Id_tkl, "tkl", "Tokelau");
+Regy_add(stub_hash, Id_tvl, "tvl", "Tuvalu");
 		}
 		return stub_hash;
 	}

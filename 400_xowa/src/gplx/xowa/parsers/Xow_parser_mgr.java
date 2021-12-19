@@ -105,7 +105,7 @@ public class Xow_parser_mgr {
 		Xoa_ttl ttl = page.Ttl();
 //                Thread currentThread = Thread.currentThread();
 //                System.out.println(currentThread.getName()+"-"+String_.new_u8(ttl.Full_db()));
-		if (	Xow_page_tid.Identify(wiki.Domain_tid(), ttl.Ns().Id(), ttl.Page_db()) == Xow_page_tid.Tid_wikitext) {	// only parse page if wikitext; skip .js, .css, Module; DATE:2013-11-10
+		if (	Xow_page_tid.Identify(wiki.Domain_tid(), ttl.Ns().Id(), ttl.Page_db(), page.Db().Page().Model_format()) == Xow_page_tid.Tid_wikitext) {	// only parse page if wikitext; skip .js, .css, Module; DATE:2013-11-10
 			byte[] data_raw = page.Db().Text().Text_bry();
 			data_raw = dbp.stripcomments(data_raw);
 //			data_raw = Bry_.Add(data_raw, Bry_.new_a7("<references/>\n")); //- causes problems in en.wikisource.org/wiki/The_New_Student%27s_Reference_Work/Cumberland,_Md.

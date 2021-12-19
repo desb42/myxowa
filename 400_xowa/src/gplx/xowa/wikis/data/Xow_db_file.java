@@ -50,7 +50,7 @@ public class Xow_db_file {
 			this.tbl__cat_core = null;
 			this.tbl__cat_link = null;
 			this.tbl__wbase_prop = null;
-			this.tbl__maxpage = null;
+			this.tbl__pr_index = null;
 			this.tbl__parent = null;
 			this.info_session = info_session;
 			this.info_file = info_file;
@@ -71,7 +71,7 @@ public class Xow_db_file {
 		this.tbl__cat_core = new Xowd_cat_core_tbl(conn, schema_is_1);
 		this.tbl__cat_link = new Xowd_cat_link_tbl(conn, schema_is_1);
 		this.tbl__wbase_prop = new Xowb_prop_tbl(conn);
-		this.tbl__maxpage = new Xowd_maxpage_tbl(conn); // only ??source
+		this.tbl__pr_index = new Xowd_pr_index_tbl(conn); // only ??source
 		this.tbl__parent = new Xowd_parent_tbl(conn); // only ??voyage
 		this.info_session = info_session;
 		this.info_file = info_file;
@@ -102,7 +102,7 @@ public class Xow_db_file {
 	public Xowd_cat_link_tbl			Tbl__cat_link()		{return tbl__cat_link;}		private final    Xowd_cat_link_tbl tbl__cat_link;
 	public Xowd_site_stats_tbl			Tbl__site_stats()	{return tbl__site_stats;}	private final    Xowd_site_stats_tbl tbl__site_stats;
 	public Xowb_prop_tbl				Tbl__wbase_prop()	{return tbl__wbase_prop;}	private final    Xowb_prop_tbl tbl__wbase_prop;
-	public Xowd_maxpage_tbl 			Tbl__maxpage()  	{return tbl__maxpage;}  	private final    Xowd_maxpage_tbl tbl__maxpage;
+	public Xowd_pr_index_tbl 			Tbl__pr_index()  	{return tbl__pr_index;}  	private final    Xowd_pr_index_tbl tbl__pr_index;
 	public Xowd_parent_tbl   			Tbl__parent()     	{return tbl__parent;}     	private final    Xowd_parent_tbl tbl__parent;
 	public Xob_info_session				Info_session() {
 		if (info_session == null)	// NOTE: null when load; !null when make

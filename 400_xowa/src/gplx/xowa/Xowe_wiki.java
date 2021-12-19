@@ -145,7 +145,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public byte[]					Wdata_wiki_abrv() {return wdata_wiki_abrv;} private byte[] wdata_wiki_abrv;
 	public Pp_quality				Quality() {return quality;} private Pp_quality quality;
 	public Db_breadcrumb				Bread() {return bread;} private Db_breadcrumb bread;
-	public Db_maxpage				Maxpage() {return maxpage;} private Db_maxpage maxpage;
+	public Db_pr_index				Pr_index() {return pr_index;} private Db_pr_index pr_index;
 	public Db_index_page			Index_page() {return index_page;} private Db_index_page index_page;
 	public Db_tz_mgr				Tz_mgr() {return tz_mgr;} private Db_tz_mgr tz_mgr;
 	public Db_page_image			Page_image() {return page_image;} private Db_page_image page_image;
@@ -247,7 +247,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 			this.ctg_catpage_mgr = new Xoctg_catpage_mgr(this);
 			this.quality = new Pp_quality(domain_itm.Domain_type_id() == Xow_domain_tid_.Tid__wikisource);
 			this.bread = new Db_breadcrumb(this);
-			this.maxpage = new Db_maxpage(this);
+			this.pr_index = new Db_pr_index(this);
 			this.index_page = new Db_index_page(this);
 			this.tz_mgr = new Db_tz_mgr(this);
 			this.page_image = new Db_page_image(this);

@@ -213,18 +213,11 @@ public class Xomp_parse_wkr implements Gfo_invk {
 		// cleanup
 		try {
 			if (logger != null) logger.End();
-		Thread currentThread = Thread.currentThread();
-		System.out.println(currentThread.getName() + ":Txn_end");
 			wkr_db.Conn().Txn_end();
-		System.out.println(currentThread.getName() + ":Rls_conn");
 			wkr_db.Conn().Rls_conn();
-		System.out.println(currentThread.getName() + ":Stmt_rls");
 			stat_tbl.Stmt_rls();
-		System.out.println(currentThread.getName() + ":Insert_end");
 			hxtn_mgr.Insert_end(false);
-		System.out.println(currentThread.getName() + ":Close");
 			html_body.Close();
-		System.out.println(currentThread.getName() + ":Wkrs_done_add_1");
 			mgr.Wkrs_done_add_1();		// NOTE: must release latch last else thread errors
 		}
 		catch (Exception e) {

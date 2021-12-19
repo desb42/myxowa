@@ -34,7 +34,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		boolean restrict = wiki.Cfg_parser().Display_title_restrict();
 		Xoh_wtr_ctx hctx = restrict ? Xoh_wtr_ctx.Display_title : Xoh_wtr_ctx.Basic;	// restrict removes certain HTML (display:none)
 		wiki.Html_mgr().Html_wtr().Write_tkn_to_html(tmp_bfr, display_ttl_ctx, hctx, display_ttl_root.Data_mid(), display_ttl_root, 0, display_ttl_root);
-		byte[] val_html = tmp_bfr.To_bry_and_clear();
+		byte[] val_html = removesupref(tmp_bfr.To_bry_and_clear());
 		if (restrict) {	// restrict only allows displayTitles which have text similar to the pageTitle; PAGE:de.b:Kochbuch/_Druckversion; DATE:2014-08-18
 			Xoae_page page = ctx.Page();
 			wiki.Html_mgr().Html_wtr().Write_tkn_to_html(tmp_bfr, display_ttl_ctx, Xoh_wtr_ctx.Alt, display_ttl_root.Data_mid(), display_ttl_root, 0, display_ttl_root);
@@ -53,6 +53,10 @@ public class Pfunc_displaytitle extends Pf_func_base {
 	private static byte[] Standardize_displaytitle_text(Xol_case_mgr case_mgr, byte[] val, boolean change_underscore, Xop_amp_mgr amp_mgr) {
 		byte[] rv = Replaceamp(val, change_underscore, amp_mgr);
 		rv = case_mgr.Case_build_lower(rv);							// lower-case
+		if (rv.length > 1 && rv[0] == -50 && rv[1] == -68) { // U+03BC	µ	ce bc	GREEK SMALL LETTER MU
+			rv[0] = -62; // U+00B5	µ	c2 b5	MICRO SIGN
+			rv[1] = -75; // change from GREEK SMALL LETTER MU to MICRO SIGN
+		}
 		return Bry_.Replace(rv, Byte_ascii.Space, Byte_ascii.Underline);	// force underline; PAGE:de.w:Mod_qos DATE:2014-11-06
 	}
 	// replace &quot; and &amp;
@@ -171,10 +175,18 @@ public class Pfunc_displaytitle extends Pf_func_base {
 					}
 					if (pos == 1 || spacepos == len) { // ignore leading space(s)/ trailing
 						size = spacepos - pos;
+						break;
 					}
-					else if (spacepos > pos) {
-						size = spacepos - pos;
-						rb = Byte_ascii.Space;
+					else {
+						// could have got here with a previous space (ie %c2%a0)
+						if (bfr != null && bfr.Len() > 1 && bfr.Bfr()[bfr.Len()-1] == ' ') {
+							sofar = spacepos;
+							break;
+						}
+						if (spacepos > pos) {
+							size = spacepos - pos;
+							rb = Byte_ascii.Space;
+						}
 					}
 					break;
 				case ':': // remove excess colons?
@@ -188,7 +200,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 				case '/': // remove excess slash
 					size = 0;
 					break;
-				case '<': // tags
+				case '<': // tags - strip tag (or if <ref> find the close </ref>
  					int close = pos;
 					while (close < len) {
 						byte c = src[close++];
@@ -196,9 +208,39 @@ public class Pfunc_displaytitle extends Pf_func_base {
 							break;
 						}
 					}
-					if (close < len)
+					if (close < len) {
 						size = close - pos;
+						if (size > 5) {
+							if (src[pos] == 'r' && src[pos+1] == 'e' && src[pos+2] == 'f') {
+								byte c = src[pos+3];
+								if ((c == ' ' && src[close-2] != '/') || c == '>') {
+									// find </ref>
+									while (close < len) {
+										c = src[close++];
+										if (c != '<') {
+											if (src[close] == '/' && src[close+1] == 'r' && src[close+2] == 'e' && src[close+3] == 'f' && src[close+4] == '>') {
+												size = close + 5 - pos;
+												break;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 					break;
+				case '{':
+					if (src[pos] == '{') {
+	 					close = pos;
+						while (close < len) {
+							byte c = src[close++];
+							if (c == '}' && src[close] == '}') {
+								close++;
+								break;
+							}
+						}
+						size = close - pos;
+					}
 				case -30: // \xE2
 					if (pos + 1 < len && src[pos] == -128 && src[pos+1] == -109) { // \xE2\x80\x93 &ndash;
 						size = 2;
@@ -323,4 +365,38 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		return b_ary;
 	}
 	public static final    Pfunc_displaytitle Instance = new Pfunc_displaytitle(); Pfunc_displaytitle() {}
-}	
+
+	private static byte[] removesupref(byte[] src) {
+		int len = src.length;
+		int pos = 0;
+		int sofar = 0;
+		Bry_bfr bfr = null;
+		while (pos < len) {
+			byte b = src[pos++];
+			if (b == '<') {
+				if (pos + 5 < len && src[pos] == 's' && src[pos+1] == 'u' && src[pos+2] == 'p' && src[pos+3] == ' ') {
+					if (bfr == null)
+						bfr = Bry_bfr_.New();
+					bfr.Add_mid(src, sofar, pos - 1);
+					// find </sub>
+					while (pos < len) {
+						b = src[pos++];
+						if (b == '<') {
+							if (src[pos] == '/' && src[pos+1] == 's' && src[pos+2] == 'u' && src[pos+3] == 'p' && src[pos+4] == '>') {
+								pos += 5;
+								sofar = pos;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		if (bfr != null) {
+			bfr.Add_mid(src, sofar, len);
+			return bfr.To_bry();
+		}
+		else
+			return src;
+	}
+}

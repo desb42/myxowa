@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -19,13 +19,30 @@ class Jscfg_localizer {
 	public Keyval[] Localize(Xol_lang_itm lang, byte[] page, Keyval[] root) {
 		if (lang == null) return root; // if no lang, return original
 
+//			Db_readwrite.writeFile(String_.new_u8(page), "d:/des/xowa_x/localize.json");
 		int len = root.length;
+		// check to see which type (Map or Table)
+		// map has zoom/latitude/longitude/data
+		// table has schema/data (and others)
 		for (int i = 0; i < len; i++) {
 			Keyval nde = root[i];
 			String nde_key = nde.Key();
 			if      (String_.Eq(nde_key, Id__root__license)) {
+				// should construct a proper license array
 			}
-			else if (String_.Eq(nde_key, Id__root__description)) {
+			else if (String_.Eq(nde_key, Id__root__schema))
+				return Localize_table(lang, page,  root);
+			else if (String_.Eq(nde_key, Id__root__zoom))
+				return Localize_map(lang, page,  root);
+		}
+		return root;
+	}
+	public Keyval[] Localize_table(Xol_lang_itm lang, byte[] page, Keyval[] root) {
+		int len = root.length;
+		for (int i = 0; i < len; i++) {
+			Keyval nde = root[i];
+			String nde_key = nde.Key();
+			if (String_.Eq(nde_key, Id__root__description)) {
 				root[i] = pickLocalizedString(lang, page, nde);
 			}
 			else if (String_.Eq(nde_key, Id__root__schema)) {
@@ -38,13 +55,25 @@ class Jscfg_localizer {
 
 		return root;
 	}
+	public Keyval[] Localize_map(Xol_lang_itm lang, byte[] page, Keyval[] root) {
+		int len = root.length;
+		for (int i = 0; i < len; i++) {
+			Keyval nde = root[i];
+			String nde_key = nde.Key();
+			if (String_.Eq(nde_key, Id__root__data)) {
+				root[i] = Localize_recursive_data(lang, nde);
+			}
+		}
+
+		return root;
+	}
 	private Keyval Localize_schema(Xol_lang_itm lang, byte[] page, Keyval schema) {
 		Keyval[] schemas = Cast_to_kvary_or_null(page, schema) ; if (schemas == null) return schema;
 		Keyval[] fields  = Cast_to_kvary_or_null(page, schemas[0]); if (fields == null) return schema;
 		for (Keyval field : fields) {
 			Keyval[] atrs = (Keyval[])field.Val();
 			int atrs_len = atrs.length;
-                for (int i = 0; i < atrs_len; i++) {
+			for (int i = 0; i < atrs_len; i++) {
 				Keyval atr = atrs[i];
 				if (String_.Eq(atr.Key(), Id__fld__title)) {
 					atrs[i] = pickLocalizedString(lang, page, atr);
@@ -53,12 +82,34 @@ class Jscfg_localizer {
 		}
 		return schema;
 	}
+	private Keyval Localize_recursive_data(Xol_lang_itm lang, Keyval data) {
+		Object val = data.Val();
+		if (Type_.Eq_by_obj(val, Keyval[].class)) { // instanceof?
+			Keyval[] rows = (Keyval[]) val;
+			int len = rows.length;
+			for (int i = 0; i < len; i++) {
+				Keyval row = rows[i];
+				String row_key = row.Key();
+				if (String_.Eq(row_key, Id__root__description)
+						|| String_.Eq(row_key, Id__fld__title)) {
+					Object rval = row.Val();
+					if (Type_.Eq_by_obj(rval, Keyval[].class)) {
+						Keyval val_as_kv = pickLocalizedString(lang, Int_.To_str(i), (Keyval[]) row.Val());
+						rows[i].Val_(val_as_kv.Val());
+					}
+				} else {
+					rows[i] = Localize_recursive_data(lang, row);
+				}
+			}
+		}
+		return data;
+	}
 	private Keyval Localize_data(Xol_lang_itm lang, byte[] page, Keyval data) {
 		Keyval[] rows = Cast_to_kvary_or_null(page, data); if (rows == null) return data;
 		for (Keyval row : rows) {
 			Object[] vals = (Object[])row.Val();
 			int len = vals.length;
-                for (int i = 0; i < len; i++) {
+			for (int i = 0; i < len; i++) {
 				Object val = vals[i];
 				if (Type_.Eq_by_obj(val, Keyval[].class)) {
 					Keyval val_as_kv = pickLocalizedString(lang, Int_.To_str(i), (Keyval[])val);
@@ -146,6 +197,8 @@ class Jscfg_localizer {
 	, Id__root__data          = "data"
 	, Id__root__description   = "description"
 	, Id__root__license       = "license"
+	, Id__root__zoom          = "zoom"
 	, Id__fld__title          = "title"
+	, Id__fld__properties     = "properties"
 	;
 }

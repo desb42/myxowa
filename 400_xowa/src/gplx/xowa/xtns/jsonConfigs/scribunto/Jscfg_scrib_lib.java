@@ -73,6 +73,9 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 		}
 		else if (!Bry_.Eq(langCode, Byte_ascii.Underline_bry)) {
 			language = this.core.Wiki().App().Lang_mgr().Get_by_or_null(langCode);
+			if (language == null) { // if not a real language default to "en" 20211209
+				language = this.core.Wiki().Lang();
+			}
 		}
 		else {
 			language = null;

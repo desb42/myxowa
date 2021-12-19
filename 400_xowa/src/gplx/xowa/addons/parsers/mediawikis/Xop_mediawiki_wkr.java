@@ -57,7 +57,7 @@ public class Xop_mediawiki_wkr {
 		parser_mgr.Parse(wpg, true);
 
 		// write to html
-		boolean is_wikitext = Xow_page_tid.Identify(wpg.Wiki().Domain_tid(), ttl.Ns().Id(), ttl.Page_db()) == Xow_page_tid.Tid_wikitext;
+		boolean is_wikitext = Xow_page_tid.Identify(wpg.Wiki().Domain_tid(), ttl.Ns().Id(), ttl.Page_db(), wpg.Db().Page().Model_format()) == Xow_page_tid.Tid_wikitext;
 		byte[] orig_bry = Bry_.Empty;
 		if (is_wikitext) {
 			wiki.Html_mgr().Page_wtr_mgr().Wkr(Xopg_view_mode_.Tid__read).Write_hdump(tmp_bfr, pctx, Xoh_wtr_ctx.Embeddable, wpg);

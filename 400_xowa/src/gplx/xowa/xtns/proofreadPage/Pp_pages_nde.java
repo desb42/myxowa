@@ -420,6 +420,12 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			)
 			return list;
 
+		if( index_ttl_ext == Xof_ext_.Id_png) {// possibly others?
+			// should check that from == to eg en.s The_New_York_Times/1873/07/27/A_National_Song_for_Canada
+			list.Add(new Int_obj_val(-1));
+			return list;
+		}
+
 		bgn_page_int = 0;	// NOTE: default to 0 (1st page)
 		if (Bry_.Len_gt_0(bgn_page_bry)) {
 			num_parser.Parse(bgn_page_bry);

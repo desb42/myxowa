@@ -88,8 +88,8 @@ send a request of the form
 				link = href.substring(pos + 6);
 				if (link.length == 0)
 					continue;
-				if (link.startsWith(xowa_global_values.wgPageName))
-					continue;
+				//if (link.startsWith(xowa_global_values.wgPageName)) //?why 20211206
+				//	continue;
 				var entry = {'href': link, 'item': i};
 				//console.log(href_wiki, href)
 				if (wikis[href_wiki])

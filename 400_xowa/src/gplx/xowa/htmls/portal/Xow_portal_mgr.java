@@ -247,7 +247,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 				}
 			}
 			else {
-				int maxpagecount = wiki.Maxpage().Get_maxpage(idx_page.Db().Page().Id());
+				int maxpagecount = wiki.Pr_index().Get_maxpage(idx_page.Db().Page().Id());
 	
 				lnk_txt = msg_mgr.Val_by_key_obj("proofreadpage_image");
 			//lnk = ??

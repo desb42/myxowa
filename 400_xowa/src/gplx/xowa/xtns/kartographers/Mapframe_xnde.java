@@ -54,8 +54,11 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		if (this.lang == null) {
 			this.lang = wiki.Lang().Key_bry();
 		}
-		if (this.mapstyle == null) {
-			this.mapstyle = Bry_.new_a7("osm-intl"); // osm-intl or osm
+		if (this.mapstyle == null) { // osm-intl or osm or osm-tegola
+			if ("fr".equals(wiki.Lang().Key_str())) // 20211215
+				this.mapstyle = Bry_.new_a7("osm-tegola");
+			else
+				this.mapstyle = Bry_.new_a7("osm-intl");
 		}
 //                if (this.text != null)
 //                    text = wiki.Parser_mgr().Main().Expand_tmpl(text);

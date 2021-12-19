@@ -109,12 +109,11 @@ class Wdata_fmtr__claim_tbl implements gplx.core.brys.Bfr_arg {
 	private Bry_fmtr fmtr = Bry_fmtr.new_(String_.Concat_lines_nl_skip_last
 	( ""
 	, "<div class=\"wikibase-statementgroupview\" id=\"P~{pid}\" data-property-id=\"P~{pid}\">"
-	, "  <div class=\"wikibase-statementgroupview-property\">"
-	, "    <div class=\"wikibase-statementgroupview-property-label\" dir=\"auto\">"
-	, "      P~{pid}&nbsp;-&nbsp;<a href=\"/wiki/Property:P~{pid}\" title=\"Property:P~{pid}\">~{pid_lbl}</a>"
-	, "    </div>"
-	, "  </div>"
-	, "  ~{itms}"
+	, "<div class=\"wikibase-statementgroupview-property\">"
+	, "<div class=\"wikibase-statementgroupview-property-label\" dir=\"auto\">"
+	, "P~{pid}&nbsp;-&nbsp;<a href=\"/wiki/Property:P~{pid}\" title=\"Property:P~{pid}\">~{pid_lbl}</a></div>"
+	, "</div>"
+	, "~{itms}"
 	, "</div>"
 	), "pid", "pid_lbl", "itms");
 }

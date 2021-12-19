@@ -87,7 +87,7 @@ public class Xobldr__page__page_score extends Xob_cmd__base implements Xob_cmd {
 			, "         ,       Sum((Cast(pr2.page_rank AS double) / Cast(pr2.page_rank AS double))) * {0} AS page_rank"
 			, "         FROM    page_rank_temp pr2"
 			, "                 JOIN page_link lnk ON pr2.page_id = lnk.src_id"
-			, "                         JOIN <page_db>page p ON lnk.src_id = p.page_id"
+			// , "                         JOIN <page_db>page p ON lnk.src_id = p.page_id"
 			// , "         WHERE   p.page_namespace = 0"
 			, "         GROUP BY lnk.trg_id"
 			, "         )       AS w ON w.trg_id = pr.page_id"

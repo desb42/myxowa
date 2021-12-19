@@ -363,4 +363,35 @@ public class Gfh_tag_rdr {
 	private static final    byte[] Bry__comment__mid = Bry_.new_a7("--"); 
 	public static Gfh_tag_rdr New__html()	{return new Gfh_tag_rdr(Gfh_tag_.Hash);}
 	public static Gfh_tag_rdr New__custom()	{return new Gfh_tag_rdr(Hash_adp_bry.cs());}
+	public Gfh_tag Tag__peek_fwd_within(int within) {
+		// pos, src_end
+		int tmp = pos;
+		tmp_depth.Val_zero_();
+		Gfh_tag rv = null;
+		while (tmp != src_end) {
+			if (src[tmp] == Byte_ascii.Angle_bgn) {
+				rv = Tag__extract(Bool_.N, Bool_.N, Gfh_tag_.Id__any, tmp);
+				if (rv.Name_id() == Gfh_tag_.Id__comment) {	// ignore comments DATE:2016-06-25
+					tmp = rv.Src_end();
+					rv = null;	// null rv, else rv will still be comment and may get returned to caller
+					continue;
+				}
+				else if (rv.Tag_is_tail()) {
+					if (within == 'a' && rv.Name_id() == Gfh_tag_.Id__a)
+						return rv;
+					if (within == 'h' && (rv.Name_id() >= Gfh_tag_.Id__h1 && rv.Name_id() <= Gfh_tag_.Id__h6))
+						return rv;
+				}
+				if (Tag__match(Bool_.N, Bool_.N, Bool_.N, Gfh_tag_.Id__any, tmp_depth, rv))
+					break;
+				else {
+					tmp = rv.Src_end();
+					rv = null;
+				}
+			}
+			else
+				tmp++;
+		}
+		return rv;
+	}
 }

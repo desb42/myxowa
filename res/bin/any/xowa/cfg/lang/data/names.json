@@ -2530,4 +2530,10 @@
   , "name":"isiZulu"
   , "note":"Zulu"
   }
+,
+  {
+    "code":"tvl"
+  , "name":"tuvalu"
+  , "note":"Tuvalu"
+  }
 ]

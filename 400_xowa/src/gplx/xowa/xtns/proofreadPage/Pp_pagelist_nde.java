@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2021 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -30,7 +30,7 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
 		//?boolean log_wkr_enabled = Log_wkr != Xop_log_basic_wkr.Null; if (log_wkr_enabled) Log_wkr.Log_end_xnde(ctx.Page(), Xop_log_basic_wkr.Tid_hiero, src, xnde);
 		Xoae_page page = ctx.Page();
-		maxpagecount = wiki.Maxpage().Get_maxpage(page.Db().Page().Id());
+		maxpagecount = wiki.Pr_index().Get_maxpage(page.Db().Page().Id());
 		rangefrom = -1;
 		rangeto = -1;
 		lst = Parse(xnde);
@@ -49,7 +49,7 @@ public class Pp_pagelist_nde implements Xox_xnde {	// TODO_OLD:
 				if (lst_page_regy == null) lst_page_regy = Hash_adp_bry.cs();	// SEE:NOTE:page_regy; DATE:2014-01-01
 				byte[] base_txt = page.Ttl().Base_txt();
 				int base_txt_len = base_txt.length;
-				if (maxpagecount < 0) { // assume any negative is a one oage item // && base_txt_len > 4 && base_txt[base_txt_len-4] == '.' && base_txt[base_txt_len-3] == 'j' && base_txt[base_txt_len-2] == 'p' && base_txt[base_txt_len-1] == 'g') {
+				if (maxpagecount < 0) { // assume any negative is a one page item // && base_txt_len > 4 && base_txt[base_txt_len-4] == '.' && base_txt[base_txt_len-3] == 'j' && base_txt[base_txt_len-2] == 'p' && base_txt[base_txt_len-1] == 'g') {
 					full_bfr.Add_str_a7("[[Page:");
 					full_bfr.Add(base_txt).Add_byte_pipe();
 					full_bfr.Add_byte(Byte_ascii.Num_1);

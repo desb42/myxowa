@@ -176,8 +176,13 @@ public class Xow_page_mgr implements Gfo_invk {
 					}
 				}
 				else {
-					page.Db().Page().Exists_n_();
-					return page;
+					// try to be a bit more helpful 20211212
+					Xoa_ttl noart = Xoa_ttl.Parse(wiki, Bry_.new_a7("MediaWiki:Noarticletext"));
+					Xow_ns ns = noart.Ns();
+					Load_from_db(page, ns, noart, false);
+					page.Db().Page().Exists_y_();
+//					page.Db().Page().Exists_n_();
+//					return page;
 				}
 			}
 		}

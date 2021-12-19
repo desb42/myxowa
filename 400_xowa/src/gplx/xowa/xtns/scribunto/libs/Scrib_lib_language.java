@@ -299,9 +299,13 @@ public class Scrib_lib_language implements Scrib_lib {
 		return rslt.Init_obj(!lang.Dir_ltr());
 	}
 	private Xol_lang_itm lang_(Scrib_proc_args args) {
+		// 20211209 rearranged (if not valid fall back to core language)
 		byte[] lang_code = args.Cast_bry_or_null(0);
-		Xol_lang_itm lang = lang_code == null ? null : core.App().Lang_mgr().Get_by_or_load(lang_code);
-		if (lang == null) throw Err_.new_wo_type("lang_code is not valid", "lang_code", String_.new_u8(lang_code));
+		Xol_lang_itm lang = core.App().Lang_mgr().Get_by_or_load(lang_code);
+		if (lang == null)
+			lang = core.Wiki().Lang();
+//		Xol_lang_itm lang = lang_code == null ? null : core.App().Lang_mgr().Get_by_or_load(lang_code);
+//		if (lang == null) throw Err_.new_wo_type("lang_code is not valid", "lang_code", String_.new_u8(lang_code));
 		return lang;
 	}
 }

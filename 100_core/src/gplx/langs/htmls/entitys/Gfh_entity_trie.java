@@ -124,6 +124,7 @@ public class Gfh_entity_trie {	// TS
 		Add_name(rv, Bool_.N,  947, "&gamma;");
 		Add_name(rv, Bool_.N, 8805, "&ge;");
 		Add_name(rv, Bool_.N,   62, "&gt;");
+		Add_name(rv, Bool_.N, 8202, "&hairsp;");
 		Add_name(rv, Bool_.N, 8596, "&harr;");
 		Add_name(rv, Bool_.N, 8660, "&hArr;");
 		Add_name(rv, Bool_.N, 9829, "&hearts;");

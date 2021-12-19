@@ -104,9 +104,9 @@ public class Xobldr__lnki_temp__create extends Xob_dump_mgr_base implements gplx
 	@Override public void Exec_pg_itm_hook(int ns_ord, Xow_ns ns, Xowd_page_itm db_page, byte[] page_src) {
 		Xoa_ttl ttl = Xoa_ttl.Parse(wiki, ns.Gen_ttl(db_page.Ttl_page_db()));
 		byte[] ttl_bry = ttl.Page_db();
-		byte page_tid = Xow_page_tid.Identify(wiki.Domain_tid(), ns.Id(), ttl_bry);
-		if (page_tid != Xow_page_tid.Tid_wikitext) return; // ignore js, css, lua, json
 		Xoae_page page = ctx.Page();
+		byte page_tid = Xow_page_tid.Identify(wiki.Domain_tid(), ns.Id(), ttl_bry, page.Db().Page().Model_format());
+		if (page_tid != Xow_page_tid.Tid_wikitext) return; // ignore js, css, lua, json
 		page.Clear_all();
 		page.Bldr__ns_ord_(ns_ord);
 		page.Ttl_(ttl);

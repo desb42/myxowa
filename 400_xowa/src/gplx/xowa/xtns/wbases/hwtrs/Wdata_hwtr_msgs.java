@@ -67,20 +67,8 @@ public class Wdata_hwtr_msgs {
 		time_month_11							= brys[offset + 10];
 		time_month_12							= brys[offset + 11]; offset += 12;
 		time_year_idx = offset;
-		time_year_1e10_00						= brys[offset +  0];
-		time_year_1e10_01						= brys[offset +  1];
-		time_year_1e10_02						= brys[offset +  2];
-		time_year_1e10_03						= brys[offset +  3];
-		time_year_1e10_04						= brys[offset +  4];
-		time_year_1e10_05						= brys[offset +  5];
-		time_year_1e10_06						= brys[offset +  6];
-		time_year_1e10_07						= brys[offset +  7];
-		time_year_1e10_08						= brys[offset +  8];
-		time_year_1e10_09						= brys[offset +  9]; offset += 10;
-		time_relative_bc						= brys[offset +  0];
-		time_relative_ago						= brys[offset +  1];
-		time_relative_in						= brys[offset +  2];
-		time_julian								= brys[offset +  3]; offset += 4;
+		offset += 15;
+		time_julian								= brys[offset +  0]; offset += 1;
 		geo_dir_n								= brys[offset +  0];
 		geo_dir_s								= brys[offset +  1];
 		geo_dir_e								= brys[offset +  2];
@@ -158,7 +146,7 @@ public class Wdata_hwtr_msgs {
 	public byte[] Time_month_11() {return time_month_11;} private final    byte[] time_month_11;
 	public byte[] Time_month_12() {return time_month_12;} private final    byte[] time_month_12;
 	public int Time_year_idx() {return time_year_idx;} private final    int time_year_idx;
-	public byte[] Time_year_1e10_00() {return time_year_1e10_00;} private final    byte[] time_year_1e10_00;
+/*	public byte[] Time_year_1e10_00() {return time_year_1e10_00;} private final    byte[] time_year_1e10_00;
 	public byte[] Time_year_1e10_01() {return time_year_1e10_01;} private final    byte[] time_year_1e10_01;
 	public byte[] Time_year_1e10_02() {return time_year_1e10_02;} private final    byte[] time_year_1e10_02;
 	public byte[] Time_year_1e10_03() {return time_year_1e10_03;} private final    byte[] time_year_1e10_03;
@@ -170,7 +158,7 @@ public class Wdata_hwtr_msgs {
 	public byte[] Time_year_1e10_09() {return time_year_1e10_09;} private final    byte[] time_year_1e10_09;
 	public byte[] Time_relative_bc() {return time_relative_bc;} private final    byte[] time_relative_bc;
 	public byte[] Time_relative_ago() {return time_relative_ago;} private final    byte[] time_relative_ago;
-	public byte[] Time_relative_in() {return time_relative_in;} private final    byte[] time_relative_in;
+	public byte[] Time_relative_in() {return time_relative_in;} private final    byte[] time_relative_in;*/
 	public byte[] Time_julian() {return time_julian;} private final    byte[] time_julian;
 	public byte[] Geo_dir_n() {return geo_dir_n;} private final    byte[] geo_dir_n;
 	public byte[] Geo_dir_s() {return geo_dir_s;} private final    byte[] geo_dir_s;
@@ -197,8 +185,15 @@ public class Wdata_hwtr_msgs {
 		, "+", "-", "±", "(~{0})"
 		, "—", "?"
 		, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-		, "~{0}", "~{0}0s", "~{0}. century", "~{0}. millenium", "~{0}0,000 years", "~{0}00,000 years", "~{0} million years", "~{0}0 million years", "~{0}00 million years", "~{0} billion years"
-		, "~{0} BC", "~{0} ago", "in ~{0}", "<sup>jul</sup>"
+		, "~{0} billion years CE", "~{0} billion years BCE"
+		, "~{0} million years CE", "~{0} million years BCE"
+		, "{{PLURAL:~{0}|~{0} year|~{0} years}} CE", "{{PLURAL:~{0}|~{0} year|~{0} years}} BCE"
+		, "~{0}. millennium", "~{0}. millennium BCE"
+		, "~{0}. century", "~{0}. century BCE"
+		, "~{0}s", "~{0}s BCE"
+		, "~{0} CE", "~{0} BCE"
+		, "~{0}"
+		, "<sup>jul</sup>"
 		, "N", "S", "E", "W"
 		, "°", "′", "″"
 		, "&nbsp;m"
@@ -223,8 +218,14 @@ public class Wdata_hwtr_msgs {
 		, "parentheses"
 		, "wikibase-snakview-variations-novalue-label", "wikibase-snakview-variations-somevalue-label"
 		, "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"
-		, "xowa-wikidata-year", "xowa-wikidata-decade", "xowa-wikidata-century", "xowa-wikidata-millenium", "xowa-wikidata-years1e4", "xowa-wikidata-years1e5", "xowa-wikidata-years1e6", "xowa-wikidata-years1e7", "xowa-wikidata-years1e8", "xowa-wikidata-years1e9"
-		, "ago", "xowa-wikidata-bc", "xowa-wikidata-inTime"
+		, "wikibase-time-precision-Gannum", "wikibase-time-precision-BCE-Gannum"
+		, "wikibase-time-precision-Mannum", "wikibase-time-precision-BCE-Mannum"
+		, "wikibase-time-precision-annum", "wikibase-time-precision-BCE-annum"
+		, "wikibase-time-precision-millennium", "wikibase-time-precision-BCE-millennium"
+		, "wikibase-time-precision-century", "wikibase-time-precision-BCE-century"
+		, "wikibase-time-precision-10annum", "wikibase-time-precision-BCE-10annum"
+		, "wikibase-time-precision-CE", "wikibase-time-precision-BCE"
+		, "xowa-wikidata-year"
 		, "xowa-wikidata-julian"
 		, "xowa-wikidata-north", "xowa-wikidata-south", "xowa-wikidata-east", "xowa-wikidata-west"
 		, "xowa-wikidata-degree", "xowa-wikidata-minute", "xowa-wikidata-second"

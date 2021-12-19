@@ -61,28 +61,36 @@ public class Scrib_lib_ustring implements Scrib_lib {
 	public Scrib_proc_mgr Procs() {return procs;} private Scrib_proc_mgr procs = new Scrib_proc_mgr();
 	public boolean Procs_exec(int key, Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		switch (key) {
-			case Proc_find:									return Find(args, rslt);
-			case Proc_match:								return Match(args, rslt);
-			case Proc_gmatch_init:							return Gmatch_init(args, rslt);
-			case Proc_gmatch_callback:						return Gmatch_callback(args, rslt);
-			case Proc_gsub:									return Gsub(args, rslt);
-			case Proc_len:									return Len(args, rslt);
-			case Proc_sub:									return Sub(args, rslt);
+			case Proc_find:             return Find(args, rslt);
+			case Proc_match:            return Match(args, rslt);
+			case Proc_gmatch_init:      return Gmatch_init(args, rslt);
+			case Proc_gmatch_callback:  return Gmatch_callback(args, rslt);
+			case Proc_gsub:             return Gsub(args, rslt);
+			case Proc_len:              return Len(args, rslt);
+			case Proc_sub:              return Sub(args, rslt);
+			case Proc_isutf8:           return Isutf8(args, rslt);
 			default: throw Err_.new_unhandled(key);
 		}
 	}
 	private static final int Proc_find = 0, Proc_match = 1, Proc_gmatch_init = 2, Proc_gmatch_callback = 3
-	, Proc_gsub = 4, Proc_len = 5, Proc_sub = 6;
+	, Proc_gsub = 4, Proc_len = 5, Proc_sub = 6, Proc_isutf8 = 7;
 	public static final String Invk_find = "find", Invk_match = "match", Invk_gmatch_init = "gmatch_init"
-	, Invk_gmatch_callback = "gmatch_callback", Invk_gsub = "gsub", Invk_len = "len", Invk_sub = "sub";
+	, Invk_gmatch_callback = "gmatch_callback", Invk_gsub = "gsub", Invk_len = "len"
+        , Invk_sub = "sub", Invk_isutf8 = "isutf8";
 	private static final String[] Proc_names = String_.Ary(
 	  Invk_find, Invk_match, Invk_gmatch_init, Invk_gmatch_callback
-	, Invk_gsub, Invk_len, Invk_sub
+	, Invk_gsub, Invk_len, Invk_sub, Invk_isutf8
 	);
 	public boolean Len(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// get args
 		String text_str = args.Xstr_str_or_null(0);
 		return rslt.Init_obj(text_str.codePointCount(0, text_str.length()));
+	}
+	public boolean Isutf8(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		String text_str = args.Xstr_str_or_null(0);
+                int blen = text_str.getBytes().length;
+                int ulen = text_str.length();
+		return rslt.Init_obj(ulen != blen);
 	}
 	public boolean Sub(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// get args
@@ -100,8 +108,8 @@ public class Scrib_lib_ustring implements Scrib_lib {
 			if (end_as_codes_base1 < bgn_as_codes_base1)
 				subval = "";
 			else {
-                            int bgn = bgn_as_codes_base1 - 1;
-                            int end = end_as_codes_base1;
+				int bgn = bgn_as_codes_base1 - 1;
+				int end = end_as_codes_base1;
 				if (bgn > cps_len)
 					bgn = cps_len;
 				else if (bgn < 0)
@@ -117,7 +125,7 @@ public class Scrib_lib_ustring implements Scrib_lib {
 	}
 	public boolean Find(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// get args
-		String text_str	       = args.Xstr_str_or_null(0);
+		String text_str        = args.Xstr_str_or_null(0);
 		String find_str        = args.Pull_str(1);
 		int bgn_as_codes_base1 = args.Cast_int_or(2, 1);
 		boolean plain             = args.Cast_bool_or_n(3);

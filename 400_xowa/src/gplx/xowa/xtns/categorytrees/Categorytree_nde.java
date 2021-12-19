@@ -41,7 +41,7 @@ public class Categorytree_nde implements Xox_xnde {
 		int bgn = xnde.Tag_open_end(), end = xnde.Tag_close_bgn();
 		if (bgn >= end) return; //nothing to do
 		// if it starts with category: (or language dependent values) remove
-                int match = ctx.Wiki().Ns_mgr().Ns_category().Match_aliases(src, bgn, end);
+		int match = ctx.Wiki().Ns_mgr().Ns_category().Match_aliases(src, bgn, end);
 		if (match > 0)
 			bgn = match;
 		cat_mgr.Renderchild(bfr, src, bgn, end, params);

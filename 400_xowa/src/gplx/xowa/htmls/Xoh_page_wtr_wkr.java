@@ -63,9 +63,9 @@ public class Xoh_page_wtr_wkr {
 	private final	Xoh_page_wtr_mgr mgr; private final	byte page_mode;
 	private final	Wdata_xwiki_link_wtr wdata_lang_wtr = new Wdata_xwiki_link_wtr();	// In other languages
 	private final	gplx.xowa.addons.apps.scripts.Xoscript_mgr scripting_mgr = new gplx.xowa.addons.apps.scripts.Xoscript_mgr();
-        private final   Db_skin skin_vector = new Db_vector_skin();
-        private final   Db_skin skin_minerva = new Db_minerva_skin();
-        private Db_skin skin_choice = null;
+	private final   Db_skin skin_vector = new Db_vector_skin();
+	private final   Db_skin skin_minerva = new Db_minerva_skin();
+	private Db_skin skin_choice = null;
 	private Xoae_app app; private Xowe_wiki wiki; private Xoae_page page; private byte[] root_dir_bry;
 	public Xoh_page_wtr_wkr(Xoh_page_wtr_mgr mgr, byte page_mode) {this.mgr = mgr; this.page_mode = page_mode;}		
 	public Xoh_page_wtr_wkr Ctgs_enabled_(boolean v) {ctgs_enabled = v; return this;} private boolean ctgs_enabled = true;
@@ -117,7 +117,7 @@ public class Xoh_page_wtr_wkr {
 		// temp variables
 		if (root_dir_bry == null) this.root_dir_bry = app.Fsys_mgr().Root_dir().To_http_file_bry();
 		Xoa_ttl page_ttl = page.Ttl(); int page_ns_id = page_ttl.Ns().Id();
-		byte page_tid = Xow_page_tid.Identify(wiki.Domain_tid(), page_ns_id, page_ttl.Page_db());
+		byte page_tid = Xow_page_tid.Identify(wiki.Domain_tid(), page_ns_id, page_ttl.Page_db(), page.Db().Page().Model_format());
 
 		// write modified_on; handle invalid dates
 		DateAdp modified_on = page.Db().Page().Modified_on();
@@ -279,7 +279,7 @@ public class Xoh_page_wtr_wkr {
 		synchronized (thread_lock_2) {
 			this.page = page; this.wiki = page.Wikie(); this.app = wiki.Appe();
 			Xoa_ttl page_ttl = page.Ttl(); int page_ns_id = page_ttl.Ns().Id();
-			byte page_tid = Xow_page_tid.Identify(wiki.Domain_tid(), page_ns_id, page_ttl.Page_db());	// NOTE: can't cache page_tid b/c Write_body is called directly; DATE:2014-10-02
+			byte page_tid = Xow_page_tid.Identify(wiki.Domain_tid(), page_ns_id, page_ttl.Page_db(), page.Db().Page().Model_format());	// NOTE: can't cache page_tid b/c Write_body is called directly; DATE:2014-10-02
 			byte[] data_raw = page.Db().Text().Text_bry();
 			int bfr_page_bgn = bfr.Len();
 			boolean page_tid_uses_pre = false;
@@ -297,12 +297,12 @@ public class Xoh_page_wtr_wkr {
 						page_tid_uses_pre = true;
 						break;
 					case Xow_page_tid.Tid_json:
-						if (page_ns_id != Xow_ns_.Tid__data)
-							app.Wiki_mgr().Wdata_mgr().Write_json_as_html(bfr, page_ttl, data_raw);
-						else {
-							if (data_raw[0] == '\'') // is it ''''page not found'''
-								bfr.Add(data_raw);
-							else {
+						//if (page_ns_id != Xow_ns_.Tid__data)
+							if (!app.Wiki_mgr().Wdata_mgr().Write_json_as_html(bfr, page_ttl, data_raw)) {
+						//else {
+							//if (data_raw[0] == '\'') // is it ''''page not found'''
+							//	bfr.Add(data_raw);
+							//else {
 								Json_doc jdoc = app.Utl__json_parser().Parse(data_raw);
 								Jdoc_data_writer(bfr, jdoc);
 								bfr.Add_str_a7("<pre>\n");
@@ -311,7 +311,7 @@ public class Xoh_page_wtr_wkr {
 							//Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
 							//page_tid_uses_pre = true;
 								//Write_body_wikitext(bfr, app, wiki, wikitext, ctx, hctx, page, page_tid, page_ns_id);
-							}
+							//}
 						}
 						break;
 					case Xow_page_tid.Tid_wikitext:
@@ -394,11 +394,13 @@ public class Xoh_page_wtr_wkr {
 			// if (ns_id == Xow_ns_.Tid__category) wiki.Ctg__catpage_mgr().Write_catpage(tidy_bfr, page, hctx);
 
 			// tidy html
+			//Db_readwrite.writeFile(String_.new_u8(tidy_bfr.Bfr(), 0, tidy_bfr.Len()), "d:/des/xowa_x/pre_tidy.htm");
 			if (ns_id != Xow_ns_.Tid__special) { // skip Special b/c
 				long tidy_time = gplx.core.envs.System_.Ticks();
 				wiki.Html_mgr().Tidy_mgr().Exec_tidy(tidy_bfr, !hctx.Mode_is_hdump(), page.Url_bry_safe());
 				page.Stat_itm().Tidy_time = gplx.core.envs.System_.Ticks__elapsed_in_frac(tidy_time);
 			}
+			//Db_readwrite.writeFile(String_.new_u8(tidy_bfr.Bfr(), 0, tidy_bfr.Len()), "d:/des/xowa_x/post_tidy.htm");
 
 			// add back to main bfr
 			bfr.Add_bfr_and_clear(tidy_bfr);
@@ -475,10 +477,10 @@ public class Xoh_page_wtr_wkr {
 	}
 // logic from https://github.com/wikimedia/mediawiki-extensions-JsonConfig/includes/JCTabularContentView.php
 	public void Jdoc_data_writer(Bry_bfr bfr, Json_doc jdoc) {
-		Json_nde desc_nde = Json_nde.Cast(jdoc.Get_grp(Bry_.new_a7("description")));
-		if (desc_nde == null)
+		Json_itm desc_itm = jdoc.Find_nde(Bry_.new_a7("description"));
+		if (desc_itm == null)
 			return;
-		Json_nde list_nde = Json_nde.Cast(jdoc.Get_grp(Bry_.new_a7("schema")));
+ 		Json_nde list_nde = Json_nde.Cast(jdoc.Get_grp(Bry_.new_a7("schema")));
 		if (list_nde == null)
 			return;
 		Json_ary data_ary = Json_ary.cast(jdoc.Get_grp(Bry_.new_a7("data")));
@@ -538,7 +540,10 @@ public class Xoh_page_wtr_wkr {
 			//System.out.print(jtxt);
 		}
 		bfr.Add_str_a7("<p class=\"mw-jsonconfig-description\">");
-		bfr.Add(Get_text(desc_nde));
+		if (desc_itm instanceof Json_nde)
+			bfr.Add(Get_text(Json_nde.Cast(desc_itm)));
+		else
+			bfr.Add(desc_itm.Data_bry());
 		bfr.Add_str_a7("</p>\n<table class=\"mw-tabular sortable\">\n");
 		bfr.Add_str_a7("<tr class=\"mw-tabular-row-key\">");
 		for (int i = 0; i < fields_itms_len; ++i) {

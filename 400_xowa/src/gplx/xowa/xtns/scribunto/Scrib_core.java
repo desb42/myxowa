@@ -50,6 +50,7 @@ import gplx.xowa.xtns.scribunto.libs.Scrib_lib_uri;
 import gplx.xowa.xtns.scribunto.libs.Scrib_lib_ustring;
 import gplx.xowa.xtns.scribunto.libs.Scrib_lib_wikibase;
 import gplx.xowa.xtns.scribunto.libs.Scrib_lib_wikibase_entity;
+import gplx.xowa.xtns.scribunto.libs.Scrib_lib_proofread;
 import gplx.xowa.xtns.scribunto.procs.Scrib_proc;
 import gplx.xowa.xtns.scribunto.procs.Scrib_proc_mgr;
 
@@ -77,6 +78,7 @@ public class Scrib_core {
 		lib_hash = new Scrib_lib_hash(this);
 		lib_wikibase = new Scrib_lib_wikibase(this);
 		lib_wikibase_entity = new Scrib_lib_wikibase_entity(this);
+		lib_proofread = new Scrib_lib_proofread(this);
 	}
 	public Scrib_core_mgr Core_mgr() {return core_mgr;} private Scrib_core_mgr core_mgr;
 	public Xoae_app App() {return app;} private Xoae_app app;
@@ -108,6 +110,7 @@ public class Scrib_core {
 	public Scrib_lib_hash Lib_hash() {return lib_hash;} private Scrib_lib_hash lib_hash;
 	public Scrib_lib_wikibase Lib_wikibase() {return lib_wikibase;} private Scrib_lib_wikibase lib_wikibase;
 	public Scrib_lib_wikibase_entity Lib_wikibase_entity() {return lib_wikibase_entity;} private Scrib_lib_wikibase_entity lib_wikibase_entity;
+	public Scrib_lib_proofread Lib_proofread() {return lib_proofread;} private Scrib_lib_proofread lib_proofread;
 	public Scrib_core Init() {	// REF:LuaCommon.php!Load
 		Scrib_xtn_mgr xtn_mgr = (Scrib_xtn_mgr)wiki.Xtn_mgr().Get_or_fail(Scrib_xtn_mgr.XTN_KEY);
 		Engine_(xtn_mgr.Engine_type(), xtn_mgr.Luaj_debug_enabled());
@@ -120,7 +123,7 @@ public class Scrib_core {
 		,	root_dir.Raw()
 		);
 		Init_register(script_dir, lib_mw, lib_uri, lib_ustring, lib_language, lib_site, lib_title, lib_text, lib_html, lib_message, lib_hash
-			, lib_wikibase, lib_wikibase_entity);
+			, lib_wikibase, lib_wikibase_entity, lib_proofread);
 		xtn_mgr.Lib_mgr().Init_for_core(this, script_dir);
 		luaid_ExecuteModule = lib_mw.Mod().Fncs_get_id("executeModule");
 		luaid_ExecuteFunction = lib_mw.Mod().Fncs_get_id("executeFunction");

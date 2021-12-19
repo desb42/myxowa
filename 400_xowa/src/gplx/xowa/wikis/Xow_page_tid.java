@@ -16,8 +16,29 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.wikis; import gplx.*; import gplx.xowa.*;
 import gplx.xowa.wikis.nss.*;
 import gplx.xowa.xtns.wbases.*;
+import gplx.xowa.bldrs.xmls.Xob_xml_parser;
 public class Xow_page_tid {
-	public static byte Identify(int wiki_tid, int ns_id, byte[] ttl) {
+	public static byte Identify(int wiki_tid, int ns_id, byte[] ttl, int model_format) {
+		if (model_format > 0) {
+		switch(model_format) {
+				case Xob_xml_parser.Model_wikitext * 16 + Xob_xml_parser.Format_wiki:
+					return Tid_wikitext;
+				case Xob_xml_parser.Model_scribunto * 16 + Xob_xml_parser.Format_plain:
+					return Tid_lua;
+				case Xob_xml_parser.Model_css * 16 + Xob_xml_parser.Format_css:
+					return Tid_css;
+				case Xob_xml_parser.Model_js * 16 + Xob_xml_parser.Format_js:
+					return Tid_js;
+				case Xob_xml_parser.Model_wikitext * 16 + Xob_xml_parser.Format_css: // wikidata json
+					return Tid_json;
+				case Xob_xml_parser.Model_js * 16 + Xob_xml_parser.Format_css: // commons json
+					return Tid_json;
+				case Xob_xml_parser.Model_mmlc * 16 + Xob_xml_parser.Format_css: // commons json
+					return Tid_json;
+				case Xob_xml_parser.Model_tabjson * 16 + Xob_xml_parser.Format_css: // commons json
+					return Tid_json;
+			}
+		}
 		switch (ns_id) {
 			case Xow_ns_.Tid__mediawiki:
 				byte rv = Identify_by_ttl(ttl);

@@ -304,13 +304,13 @@ mw.hook( 'wikipage.content' ).add( BoiteDeroulante );
  * Fonctionnement du [[Modèle:Animation]]
  * Le JavaScript principal se situe dans [[MediaWiki:Gadget-Diaporama.js]]
  */
-mw.hook( 'wikipage.content' ).add( function ( $content ) {
-	if ( $content.find( '.diaporama' ).length ) {
-		mw.loader.using( 'ext.gadget.Diaporama', function () {
-			Diaporama_Init( $content );
-		} );
-	}
-} );
+//mw.hook( 'wikipage.content' ).add( function ( $content ) {
+//	if ( $content.find( '.diaporama' ).length ) {
+//		mw.loader.using( 'ext.gadget.Diaporama', function () {
+//			Diaporama_Init( $content );
+//		} );
+//	}
+//} );
 
 
 /**

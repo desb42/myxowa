@@ -6515,26 +6515,16 @@ xowa-portal-version|version
 xowa-portal-view_html|View HTML
 xowa-wikidata-aliases-col|Aliases
 xowa-wikidata-aliases-hdr|Aliases
-xowa-wikidata-bc|~{0} BCE
-xowa-wikidata-century|~{0}. century
-xowa-wikidata-decade|~{0}0s
 xowa-wikidata-descriptions-col|Description
 xowa-wikidata-descriptions-hdr|Descriptions
 xowa-wikidata-json|JSON
 xowa-wikidata-julian|<sup>jul</sup>
 xowa-wikidata-labels-col|Label
 xowa-wikidata-labels-hdr|Labels
-xowa-wikidata-millenium|~{0}. millenium
 xowa-wikidata-sitelinks-hdr-special|Other sites
 xowa-wikidata-sitelinks-hdr|~{0}
 xowa-wikidata-time-spr|:
 xowa-wikidata-toc|Contents
-xowa-wikidata-years1e4|~{0}0,000 years
-xowa-wikidata-years1e5|~{0}00,000 years
-xowa-wikidata-years1e6|~{0} million years
-xowa-wikidata-years1e7|~{0}0 million years
-xowa-wikidata-years1e8|~{0}00 million years
-xowa-wikidata-years1e9|~{0} billion years
 xowa-wikidata-year|~{0}
 xowa-window-allpages_box-tooltip|List pages in wiki
 xowa-window-allpages_btn-tooltip|List pages
@@ -6704,6 +6694,21 @@ minerva.js|/* All JavaScript here will be loaded for users of the MinervaNeue sk
 vector-main-menu-tooltip|Main menu
 vector-menu-checkbox-expanded|expanded
 vector-menu-checkbox-collapsed|collapsed
+wikibase-time-calendar-gregorian|Gregorian
+wikibase-time-calendar-julian|Julian
+wikibase-time-precision-Gannum|~{0} billion years CE
+wikibase-time-precision-Mannum|~{0} million years CE
+wikibase-time-precision-annum|{{PLURAL:~{0}|~{0} year|~{0} years}} CE
+wikibase-time-precision-millennium|~{0}. millennium
+wikibase-time-precision-century|~{0}. century
+wikibase-time-precision-10annum|~{0}s
+wikibase-time-precision-BCE|~{0} BCE
+wikibase-time-precision-BCE-Gannum|~{0} billion years BCE
+wikibase-time-precision-BCE-Mannum|~{0} million years BCE
+wikibase-time-precision-BCE-annum|{{PLURAL:~{0}|~{0} year|~{0} years}} BCE
+wikibase-time-precision-BCE-millennium|~{0}. millennium BCE
+wikibase-time-precision-BCE-century|~{0}. century BCE
+wikibase-time-precision-BCE-10annum|~{0}s BCE
 ']:>
 ).lang
 .time_formats

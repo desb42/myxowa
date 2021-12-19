@@ -48,6 +48,7 @@ function ustring.setupInterface( opt )
 		gsub = 3,
 		len = 1,
 		sub = 3,
+		isutf8 = 1,
 	}
 	for k, v in pairs( mw_interface ) do
 		local n = nargs[k] or 1

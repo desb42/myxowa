@@ -134,7 +134,7 @@ public class Xob_xml_parser {
 	}	boolean gt_was_inline = false;
 	static final String GRP_KEY = "xowa.bldrs.xmls.xml_parser";
 
-	public static int Model_unknown = 0
+	public static final int Model_unknown = 0
 	, Model_wikitext = 1      // <model>wikitext</model>
 	, Model_scribunto = 2     // <model>Scribunto</model>
 	, Model_css = 3           // <model>css</model>

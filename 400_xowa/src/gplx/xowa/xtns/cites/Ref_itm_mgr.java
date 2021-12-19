@@ -48,7 +48,7 @@ public class Ref_itm_mgr {
 		else
 			return (Ref_itm_grp)o;
 	}
-        public boolean Extra_refs() {
-            return grp_default.Lsts_len() > 0;
-        }
+	public boolean Extra_refs() {
+		return grp_default.Lsts_len() > 0;
+	}
 }

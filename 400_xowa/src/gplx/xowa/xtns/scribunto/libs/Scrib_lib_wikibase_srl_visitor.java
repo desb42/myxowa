@@ -103,7 +103,7 @@ public class Scrib_lib_wikibase_srl_visitor implements Wbase_claim_visitor {
 		rv[2] = Keyval_.new_(Wbase_claim_time_.Itm__before.Key_str()			, itm.Before_int());
 		rv[3] = Keyval_.new_(Wbase_claim_time_.Itm__after.Key_str()				, itm.After_int());
 		rv[4] = Keyval_.new_(Wbase_claim_time_.Itm__timezone.Key_str()			, Wbase_claim_time_.Dflt__timezone.Val_int());	// ASSUME: always 0 b/c UTC?; DATE:2015-09-21
-		rv[5] = Keyval_.new_(Wbase_claim_time_.Itm__calendarmodel.Key_str()		, Wbase_claim_time_.Dflt__calendarmodel.Val_str());
+		rv[5] = Keyval_.new_(Wbase_claim_time_.Itm__calendarmodel.Key_str()		, itm.Calendar()); // 20211216 was Wbase_claim_time_.Dflt__calendarmodel.Val_str());
 		return rv;
 	}
 	public void Visit_globecoordinate(Wbase_claim_globecoordinate itm, boolean rich_wikitext) {

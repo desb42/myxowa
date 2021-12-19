@@ -36,6 +36,7 @@ import gplx.xowa.xtns.Xox_xnde;
 import gplx.xowa.xtns.Xox_xnde_;
 
 import gplx.core.texts.Base64Converter;
+import gplx.xowa.parsers.xndes.Xop_xnde_tag_;
 public class Synh_xtn_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	private byte[] lang = Bry_.Empty;
 	private byte[] style = null;
@@ -72,10 +73,20 @@ public class Synh_xtn_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
                 ctx.Page().Html_data().Syntaxhighlight_(true);
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
-		bfr.Add(Bry_.new_a7(Base64Converter.Encode(Bry_.Mid(src, xnde.Tag_open_bgn(), xnde.Tag_close_end()))));
-                bfr.Add_str_a7("$$");
+		byte[] tag;
+		if (xnde.Tag().Id() == Xop_xnde_tag_.Tid__source)
+			tag = Bry_source;
+		else
+			tag = Bry_syntaxhighlight;
+		byte[] sh = Bry_.Add(tag, Bry_.Mid(src, xnde.Atrs_bgn(), xnde.Tag_close_end()));
+		bfr.Add(Bry_.new_a7(Base64Converter.Encode(sh)));
+		bfr.Add_str_a7("$$");
 //		Synh_xtn_nde_.Make(bfr, app, src, xnde.Tag_open_end(), xnde.Tag_close_bgn(), lang, inline, style, line_enabled, start, highlight_idxs, klass, id, dir);
 	}
+	private final byte[]
+	  Bry_source = Bry_.new_a7("<source ")
+	, Bry_syntaxhighlight = Bry_.new_a7("<syntaxhighlight ")
+	;
 	private static final byte
 	  Xatr_enclose = 1
 	, Xatr_lang = 2

@@ -173,7 +173,7 @@ public class Http_server_page {
 //                        if (page.Db().Page().Html_db_id() == Xopg_db_page.HTML_DB_ID_NULL) // already done if HTML page
 			// NOTE: substitutes xoimg tags for actual file; ISSUE#:686; DATE:2020-06-27
 
-			Db_readwrite.writeFile(String_.new_u8(page_html), "d:/des/xowa_x/pre_html.htm");
+//			Db_readwrite.writeFile(String_.new_u8(page_html), "d:/des/xowa_x/pre_html.htm");
 
 			if (!this.page.Done_hdoc_parse())
 				page_html = wiki.Html__hdump_mgr().Load_mgr().Parse(page_html, this.page);

@@ -19,6 +19,7 @@ public class Xoh_lnke_dict_ {
 	  Type__free					= 0
 	, Type__auto					= 1
 	, Type__text					= 2
+	, Type__external				= 3
 	;
 	public static final byte[]
 	  Html__atr__0					= Bry_.new_a7("\" rel=\"nofollow\" class=\"external ")
@@ -35,13 +36,15 @@ public class Xoh_lnke_dict_ {
 	.Add_bry_byte(Html__class__free, Type__free)
 	.Add_bry_byte(Html__class__auto, Type__auto)
 	.Add_bry_byte(Html__class__text, Type__text)
+	.Add_bry_byte(Html__cls__external, Type__external)
 	;
 	public static byte[] To_html_class(byte tid) {
 		switch (tid) {
 			case Xoh_lnke_dict_.Type__free:	return Xoh_lnke_dict_.Html__class__free;
 			case Xoh_lnke_dict_.Type__auto:	return Xoh_lnke_dict_.Html__class__auto;
 			case Xoh_lnke_dict_.Type__text:	return Xoh_lnke_dict_.Html__class__text;
-			default:						throw Err_.new_unhandled(tid);
+			case Xoh_lnke_dict_.Type__external:	return Xoh_lnke_dict_.Html__cls__external;
+			default:					throw Err_.new_unhandled(tid);
 		}
 	}
 }

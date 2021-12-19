@@ -205,18 +205,15 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		if (wdoc == null) return Bry_.Empty;
 		return hwtr_mgr.Popup(wdoc);
 	}
-	public void Write_json_as_html(Bry_bfr bfr, Xoa_ttl page_ttl, byte[] data_raw) {
-		if (data_raw[0] == Byte_ascii.Apos)
-			bfr.Add(data_raw);
-		else {
+	public boolean Write_json_as_html(Bry_bfr bfr, Xoa_ttl page_ttl, byte[] data_raw) {
 			Hwtr_mgr_assert();
 			Wdata_doc wdoc = Doc_mgr.Get_by_exact_id_or_null(page_ttl.Full_db());
-			if (wdoc == null) return;
+			if (wdoc == null) return false;
 			hwtr_mgr.Init_by_wdoc(wdoc);
 			bfr.Add(hwtr_mgr.Write(wdoc));
 			// build page_display title for later
 			page_display_title = Wdata_display_title(wdoc);
-		}
+                        return true;
 	}
 	private void Hwtr_mgr_assert() {
 		if (hwtr_mgr != null) return;

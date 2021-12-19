@@ -71,17 +71,19 @@ public class Xoh_tag_parser implements Gfh_doc_wkr {
 //                                    System.out.println(String_.new_u8(Bry_.Mid(src, cur.Src_bgn(), cur.Src_end())));
 			switch (cur_name_id) {
 				case Gfh_tag_.Id__h1: case Gfh_tag_.Id__h2: case Gfh_tag_.Id__h3: case Gfh_tag_.Id__h4: case Gfh_tag_.Id__h5: case Gfh_tag_.Id__h6:
-					nxt = tag_rdr.Tag__peek_fwd_head();
+					nxt = tag_rdr.Tag__peek_fwd_within('h');
 					if (	nxt.Name_id() == Gfh_tag_.Id__span
 						&&	nxt.Atrs__match_pair(Gfh_atr_.Bry__class, Xoh_hdr_data.Bry__class__mw_headline)) {
 						rv = Parse_by_data(hdoc_wkr, hctx, tag_rdr, src, cur, nxt, Xoh_hzip_dict_.Tid__hdr);
 					}
 					break;
 				case Gfh_tag_.Id__a:
-//                                    System.out.println(String_.new_u8(Bry_.Mid(src, cur.Src_bgn(), cur.Src_end())));
-					nxt = tag_rdr.Tag__peek_fwd_head();
+//                                    System.out.println(String_.new_u8(src, cur.Src_bgn(), cur.Src_end()));
+					nxt = tag_rdr.Tag__peek_fwd_within('a');
 					if		(nxt.Name_id() == Gfh_tag_.Id__img)													// lnki.img; EX: [[File:A.png]]
 						rv = Parse_by_data(hdoc_wkr, hctx, tag_rdr, src, cur, null, Xoh_hzip_dict_.Tid__img);
+					else if (nxt.Name_id() == Gfh_tag_.Id__table)
+						rv = cur.Src_end(); // process the table?
 					else if	(cur.Atrs__match_pair(Gfh_atr_.Bry__rel, Xoh_lnke_dict_.Html__rel__nofollow))		// lnke; EX: [http://a.org]
 						rv = Parse_by_data(hdoc_wkr, hctx, tag_rdr, src, cur, null, Xoh_hzip_dict_.Tid__lnke);
 					else if	(cur.Atrs__get_by_or_empty(Xoh_img_data.Bry__atr__xowa_title).Val_dat_exists()) {}	// lnki.aud; EX: [[File:A.oga]]; ignore for now

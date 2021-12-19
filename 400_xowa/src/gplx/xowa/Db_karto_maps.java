@@ -136,14 +136,16 @@ public class Db_karto_maps {
 		}
 		// Clarendon_Park_Congregational_Church needs "marker-color" before "title"
 		// whereas Fox%E2%80%93Watson Theater Building does not (PHP hashing?)
-		int s1 = txt.indexOf("\"title\":");
-		int s2 = txt.indexOf("\"marker-color\":");
-		if (s1 > 0 && s2 > 0 && s1 < s2) {
-			int s3 = txt.indexOf(",", s1);
-			int s4 = txt.indexOf(",", s2);
-			if (s4 < 0)
-				s4 = txt.indexOf("}", s2);
-			txt = txt.substring(0, s1) + txt.substring(s2, s4) + "," + txt.substring(s1, s2-1) + txt.substring(s4);
+		if (len > 2) { // at least two properties
+			int s1 = txt.indexOf("\"title\":");
+			int s2 = txt.indexOf("\"marker-color\":");
+			if (s1 > 0 && s2 > 0 && s1 < s2) {
+				int s3 = txt.indexOf(",", s1);
+				int s4 = txt.indexOf(",", s2);
+				if (s4 < 0)
+					s4 = txt.indexOf("}", s2);
+				txt = txt.substring(0, s1) + txt.substring(s2, s4) + "," + txt.substring(s1, s2-1) + txt.substring(s4);
+			}
 		}
 		return txt;
 	}
@@ -184,13 +186,25 @@ public class Db_karto_maps {
 		else if (gtype.equals("LineString")) {
 			Json_kv kv = geometry.Get_kv("coordinates");
 			Json_itm itm = kv.Val();
-			Json_ary points = Json_ary.cast(itm);
-			int plen = points.Len();
-			for (int k = 0; k < plen; k++) {
-				if (k > 0)
-					coords += ",";
-				Json_itm pitm = points.Get_at(k);
-				coords += "[" + coordinates(pitm) + "]";
+			if (itm instanceof Json_nde) {
+				Json_nde points_nde = Json_nde.Cast(itm);
+				int plen = points_nde.Len();
+				for (int k = 0; k < plen; k++) {
+					if (k > 0)
+						coords += ",";
+					Json_itm pitm = points_nde.Get_at(k);
+					coords += "[" + coordinates(pitm) + "]";
+				}
+			}
+			else {
+				Json_ary points = Json_ary.cast(itm);
+				int plen = points.Len();
+				for (int k = 0; k < plen; k++) {
+					if (k > 0)
+						coords += ",";
+					Json_itm pitm = points.Get_at(k);
+					coords += "[" + coordinates(pitm) + "]";
+				}
 			}
 			geotxt = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"LineString\",\"coordinates\":[" + coords + "]}" + Genproperties(nde, "") + "}";
 		}
