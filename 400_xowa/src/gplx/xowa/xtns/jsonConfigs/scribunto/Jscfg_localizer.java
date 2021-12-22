@@ -13,10 +13,11 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.jsonConfigs.scribunto; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
+package gplx.xowa.xtns.jsonConfigs.scribunto;
+import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import gplx.xowa.langs.*;
 class Jscfg_localizer {
-	public Keyval[] Localize(Xol_lang_itm lang, byte[] page, Keyval[] root) {
+	public Keyval[] Localize(Xol_lang_itm lang, byte[] page, Keyval[] root, Xowe_wiki wiki) {
 		if (lang == null) return root; // if no lang, return original
 
 //			Db_readwrite.writeFile(String_.new_u8(page), "d:/des/xowa_x/localize.json");
@@ -28,7 +29,13 @@ class Jscfg_localizer {
 			Keyval nde = root[i];
 			String nde_key = nde.Key();
 			if      (String_.Eq(nde_key, Id__root__license)) {
-				// should construct a proper license array
+				byte[] code = nde.Val_to_bry();
+				Keyval[] kva = Keyval_.Ary(
+				   Keyval_.new_("code", code)
+				 , Keyval_.new_("text", wiki.Msg_mgr().Val_by_key_obj("jsonconfig-license-name-" + String_.new_a7(code)))
+				 , Keyval_.new_("url", wiki.Msg_mgr().Val_by_key_obj("jsonconfig-license-url-" + String_.new_a7(code)))
+				 );
+				root[i] = Keyval_.new_("license", kva);
 			}
 			else if (String_.Eq(nde_key, Id__root__schema))
 				return Localize_table(lang, page,  root);

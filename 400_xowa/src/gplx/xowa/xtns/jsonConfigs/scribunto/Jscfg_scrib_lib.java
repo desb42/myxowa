@@ -93,7 +93,9 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 		byte[] ttl_in_data_ns = Bry_.Add(gplx.xowa.wikis.nss.Xow_ns_.Bry__data, Byte_ascii.Colon_bry, ttl_bry);
 		byte[] page = Scrib_lib_title.GetContentInternal(core, commons_wiki, ttl_in_data_ns);
 		if (page == null) {
-			throw Err_.new_wo_type("bad argument #1 to 'get' (not a valid title) " + String_.new_u8(ttl_bry));
+			// should not be catastrophic
+			return rslt.Init_obj(false);
+			//throw Err_.new_wo_type("bad argument #1 to 'get' (not a valid title) " + String_.new_u8(ttl_bry));
 		}
 
 		// get content
@@ -106,7 +108,7 @@ public class Jscfg_scrib_lib implements Scrib_lib {
 			if (language == null) { // "_" passed in; return entire document
 			}
 			else {// COMMENT:desb42@: sometime should not be called (dewiki) BUT...
-				rv = localizer.Localize(language, page, rv);
+				rv = localizer.Localize(language, page, rv, core.Wiki());
 			}
 		}
 
