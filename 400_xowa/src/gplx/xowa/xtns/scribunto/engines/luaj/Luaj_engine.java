@@ -35,32 +35,49 @@ import org.luaj.vm2.LuaValue;
 
 public class Luaj_engine implements Scrib_engine {
 	private final Luaj_server_func_recv func_recv;
+	private final Luaj_server_func_recv_x func_recv_x;
 	private final Luaj_server_func_dbg func_dbg;
 	private final Scrib_proc_mgr proc_mgr;
 	private final Scrib_core core;	
 	private Luaj_server server;
+        private LuaTable goodmsg;
+        private LuaTable callmsg;
+        private LuaTable compilemsg;
+        private LuaTable loadmsg;
 	public Luaj_engine(Xoae_app app, Scrib_core core, boolean debug_enabled) {
 		this.core = core;
 		this.proc_mgr = core.Proc_mgr();
 		this.func_recv = new Luaj_server_func_recv(this);
+		this.func_recv_x = new Luaj_server_func_recv_x(this);
 		this.func_dbg = new Luaj_server_func_dbg(core);
-		this.server = new Luaj_server(func_recv, func_dbg);
+		this.server = new Luaj_server(func_recv, func_dbg, func_recv_x);
+		this.goodmsg = LuaValue.tableOf();
+		goodmsg.set("op", Val_rMessage);
+		this.callmsg = LuaValue.tableOf();
+		callmsg.set("op", Val_callFunction);
+		this.compilemsg = LuaValue.tableOf();
+		compilemsg.set("op", Val_compile);
+		this.loadmsg = LuaValue.tableOf();
+		loadmsg.set("op", Val_loadString);
 	}
 	public Scrib_server Server() {return server;} public void Server_(Scrib_server v) {server = (Luaj_server)v;} 
 	public boolean Dbg_print() {return dbg_print;} public void Dbg_print_(boolean v) {dbg_print = v;} private boolean dbg_print;
 	public Scrib_lua_proc LoadString(String name, String text) {
+/*
 		LuaTable msg = LuaValue.tableOf();
 		msg.set("op", Val_loadString);
 		msg.set("text", LuaValue.valueOf(text));
 		msg.set("chunkName", LuaValue.valueOf(name));
 		return load_dispatch(name, msg);
+*/
+		loadmsg.set("text", LuaValue.valueOf(text));
+		loadmsg.set("chunkName", LuaValue.valueOf(name));
+		return load_dispatch(name, loadmsg);
 	}
 	public Scrib_lua_proc LoadString(String name, byte[] text) {
-		LuaTable msg = LuaValue.tableOf();
-		msg.set("op", Val_loadString);
-		msg.set("text", LuaValue.valueOf(text));
-		msg.set("chunkName", LuaValue.valueOf(name));
-		return load_dispatch(name, msg);
+		loadmsg.set("text", LuaValue.valueOf(text));
+		loadmsg.set("chunkName", LuaValue.valueOf(name));
+		return load_dispatch(name, loadmsg);
 	}
 	private Scrib_lua_proc load_dispatch(String name, LuaTable msg) {
 		LuaTable rsp = server.Dispatch(msg);
@@ -87,18 +104,28 @@ public class Luaj_engine implements Scrib_engine {
 	}
 	public Keyval[] CallFunction(int id, Keyval[] args) {
 		int args_len = args.length;
+/*
 		LuaTable msg = LuaValue.tableOf();
 		msg.set("op", Val_callFunction);
 		msg.set("id", LuaValue.valueOf(id));
 		msg.set("nargs", LuaValue.valueOf(args_len));
 		msg.set("args", Luaj_value_.Obj_to_lua_val(server, args));
 		return this.Dispatch_as_kv_ary(msg);
+*/
+		callmsg.set("id", LuaValue.valueOf(id));
+		callmsg.set("nargs", LuaValue.valueOf(args_len));
+		callmsg.set("args", Luaj_value_.Obj_to_lua_val(server, args));
+		return this.Dispatch_as_kv_ary(callmsg);
 	}
 	public Keyval[] CompileFunction(String name) {
+/*
 		LuaTable msg = LuaValue.tableOf();
 		msg.set("op", Val_compile);
 		msg.set("text", LuaValue.valueOf(name));
 		return this.Dispatch_as_kv_ary(msg);
+*/
+		compilemsg.set("text", LuaValue.valueOf(name));
+		return this.Dispatch_as_kv_ary(compilemsg);
 	}
 	public Keyval[] ExecuteModule(int mod_id) {
 		return this.CallFunction(core.Lib_mw().Mod().Fncs_get_id("executeModule"), Scrib_kv_utl_.base1_obj_(new Scrib_lua_proc("", mod_id)));
@@ -162,12 +189,34 @@ public class Luaj_engine implements Scrib_engine {
 			return ReturnFail(fail_msg);			
 		}
 	}
+	public LuaTable Server_recv_call_x(LuaTable rsp) {
+		String proc_id = rsp.get(1).tojstring(); //Luaj_value_.Get_val_as_str(rsp, "i"); // id
+		Keyval[] args = Luaj_value_.Lua_tbl_to_kv_ary_x(server, rsp);
+                core.Ctx().Page().Stat_itm().Scrib().Inc_call_count();
+		Scrib_proc proc = proc_mgr.Get_by_key(proc_id); if (proc == null) throw Scrib_xtn_mgr.err_("could not find proc with id of {0}", proc_id);
+		Scrib_proc_args proc_args = new Scrib_proc_args(args, args.length);
+		Scrib_proc_rslt proc_rslt = new Scrib_proc_rslt();
+		proc.Proc_exec(proc_args, proc_rslt);
+		String fail_msg = proc_rslt.Fail_msg();
+		if (fail_msg == null) { 
+			Keyval[] cbk_rslts = proc_rslt.Ary();
+			return ReturnMessage(cbk_rslts);
+		}
+		else {
+			return ReturnFail(fail_msg);			
+		}
+	}
 	private LuaTable ReturnMessage(Keyval[] values) {
+/*
 		LuaTable msg = LuaValue.tableOf();
 		msg.set("op", Val_rMessage);
 		msg.set("nvalues", LuaValue.valueOf(values.length));
 		msg.set("values", Luaj_value_.Obj_to_lua_val(server, values));
 		return msg;
+*/
+		goodmsg.set("nvalues", LuaValue.valueOf(values.length));
+		goodmsg.set("values", Luaj_value_.Obj_to_lua_val(server, values));
+		return goodmsg;
 	}
 	private LuaTable ReturnFail(String fail_msg) {
 		LuaTable msg = LuaValue.tableOf();

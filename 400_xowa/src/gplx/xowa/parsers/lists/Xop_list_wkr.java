@@ -23,6 +23,7 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 	public boolean Dd_chk() {return dd_chk;} public Xop_list_wkr Dd_chk_(boolean v) {dd_chk = v; return this;} private boolean dd_chk;
 	public void AutoClose(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos, Xop_tkn_itm tkn) {}
 	public int MakeTkn_bgn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos) {// REF.MW: Parser|doBlockLevels
+            int pos_bgn = bgn_pos; // need to remember this even if changed by next line!
 		if (bgn_pos == Xop_parser_.Doc_bgn_bos) bgn_pos = 0;	// do not allow -1 pos
 
 		// pop hdr if exists; EX: \n== a ==\n*b; \n* needs to close hdr
@@ -63,7 +64,7 @@ public class Xop_list_wkr implements Xop_ctx_wkr {
 		}
 		//Xop_list_tkn_new itm = tkn_mkr.List_bgn(bgn_pos, cur_pos, curSymAry[curSymLen - 1], curSymLen).List_path_(posBldr.XtoIntAry()).List_uid_(listId);
 		// bgn_pos + 1 skips the nl char
-		Xop_list_tkn_new itm = new Xop_list_tkn_new(bgn_pos + 1, cur_pos, ctx.Page().Prev_list_tkn());
+		Xop_list_tkn_new itm = new Xop_list_tkn_new(pos_bgn + 1, cur_pos, ctx.Page().Prev_list_tkn());
 		ctx.Subs_add_and_stack(root, itm);
 		ctx.Page().Prev_list_tkn_(itm);
 		// peek ahead for a table eg :{|

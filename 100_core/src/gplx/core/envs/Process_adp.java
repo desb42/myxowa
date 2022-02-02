@@ -173,11 +173,11 @@ public class Process_adp implements Gfo_invk, Rls_able {
 		thread.start();
 		return this;
 	}
-			public Process_adp Run_wait() {
-			if (Env_.Mode_testing()) return Test_runs_add();
-			int notify_interval = 100; int notify_checkpoint = notify_interval;
-			int elapsed = 0;
-			try {
+	public Process_adp Run_wait() {
+		if (Env_.Mode_testing()) return Test_runs_add();
+		int notify_interval = 100; int notify_checkpoint = notify_interval;
+		int elapsed = 0;
+		try {
 			Process_bgn();
 			Thread_ProcessAdp_sync thread = new Thread_ProcessAdp_sync(this);
 			thread.start();
@@ -216,6 +216,9 @@ public class Process_adp implements Gfo_invk, Rls_able {
 			}
 		} catch (Exception exc) {
 			Tfds.Write(Err_.Message_gplx_full(exc));
+		}
+		finally {
+			Process_term();
 		}
 		if (elapsed != notify_checkpoint) {
 			notify_fmtr.Bld_bfr_many(notify_bfr, exe_url.NameAndExt(), args_str, elapsed / 1000);
@@ -347,7 +350,7 @@ class Thread_ProcessAdp_async extends Thread {
 	public Thread_ProcessAdp_async(Process_adp process_adp) {this.process_adp = process_adp;} Process_adp process_adp;
 	public boolean Done() {return done;} boolean done = false;
 	public void Cancel() {process_adp.UnderProcess().destroy();}
-	public void run() {
+	@Override public void run() {
 		process_adp.Run_wait();
 	}
 }
@@ -357,7 +360,7 @@ class Thread_ProcessAdp_sync extends Thread {
 	public void Cancel() {
 		process_adp.UnderProcess().destroy();
 	}
-	public synchronized void run() {
+	@Override public /*synchronized*/ void run() {
 		done = false;
 		try {
 			Process process = process_adp.Process_start();
@@ -394,7 +397,7 @@ class StreamGobbler extends Thread {
 	private final String name; private final InputStream stream;
 	public StreamGobbler (String name, InputStream stream) {this.name = name; this.stream = stream;}
 	public String Rslt() {return rslt;} private String rslt;
-	public void run () {
+	@Override public void run () {
 		try {
 			String_bldr sb = String_bldr_.new_();
 			InputStreamReader isr = new InputStreamReader(stream);
@@ -402,7 +405,7 @@ class StreamGobbler extends Thread {
 			while (true) {
 				String s = br.readLine();
 				if (s == null) break;
-				sb.Add(s);
+				sb.Add(s + "\n");
 			}
 			stream.close();
 			rslt = sb.To_str_and_clear();

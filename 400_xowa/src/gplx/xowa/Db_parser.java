@@ -114,6 +114,8 @@ public class Db_parser {
 						start_text = newpos;
 						m_pos = newpos - 1;
 					}
+                                        else
+                                            start_text = checkpos;
 				}
 				else {
 					newpos = tvar_tag.Match_all(m_src, m_pos, m_src_end);
@@ -122,6 +124,14 @@ public class Db_parser {
 						// skip the tag
 						start_text = newpos;
 						m_pos = newpos - 1;
+					}
+					else {
+						if (m_pos + 2 < m_src_end && m_src[m_pos+1] == '/' && m_src[m_pos+2] == '>') {
+							addtext(start_text, m_pos);
+							// skip the tag
+							start_text = m_pos + 3;
+							m_pos = m_pos + 3 - 1;
+						}
 					}
 				}
 			}

@@ -15,8 +15,13 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.scribunto.procs; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.scribunto.*;
 import gplx.langs.htmls.encoders.*;
+import org.luaj.vm2.LuaTable;
 public class Scrib_proc_args {		
 	private Keyval[] ary; private int ary_len;
+	public Scrib_proc_args(Keyval[] v, int len) {
+            ary = v;
+            ary_len = len;
+        }
 	public Scrib_proc_args(Keyval[] v) {
 		// if 0 members, standardize to Keyval_.Ary_empty; could possibly find all callers of new Scrib_arg() and make sure that 0 == empty, but this is easier
 		int v_len = v.length;

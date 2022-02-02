@@ -26,8 +26,10 @@ class Xoa_sitelink_itm_wtr__badge {
 				if (i != 0) bfr.Add_byte_comma();
 				byte[] badge_itm = badge_ary[i];
 				byte[] badge_cls = (byte[])badges_hash.Get_by_bry(badge_itm);
-				if (badge_cls == null)
-					Gfo_usr_dlg_.Instance.Warn_many("", "", "unknown badge: badge=~{0}", String_.new_u8(badge_itm));
+				if (badge_cls == null) {
+					Gfo_usr_dlg_.Instance.Warn_many("", "", "strange badge: badge=~{0}", String_.new_u8(badge_itm));
+					bfr.Add(Badge_hyphen_cls).Add(badge_itm); // eg en.wikipedia.org/wiki/Extreme_poverty
+				}
 				else
 					bfr.Add(badge_cls);
 			}
@@ -37,6 +39,7 @@ class Xoa_sitelink_itm_wtr__badge {
 	}
 	private static final byte[]
 	  Badge_none_cls	= Bry_.new_a7("badge-none")
+	, Badge_hyphen_cls	= Bry_.new_a7("badge-")
 	, Cls_bgn			= Bry_.new_a7(" class=\"")
 	;
 	private static final Hash_adp_bry badges_hash = Hash_adp_bry.ci_a7()

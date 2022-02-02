@@ -242,8 +242,9 @@ public static final int
 , Id_shortdesc = 222
 , Id_related = 223
 , Id_expectedunconnectedpage = 224
+, Id_rev_user2 = 225
 ;
-public static final int Id__max = 225;
+public static final int Id__max = 226;
 
 	private static byte[] ary_itm_(int id) {
 		switch (id) {
@@ -365,6 +366,7 @@ case Xol_kwd_grp_.Id_rev_month_int: return Bry_.new_a7("revisionmonth1");
 case Xol_kwd_grp_.Id_rev_year: return Bry_.new_a7("revisionyear");
 case Xol_kwd_grp_.Id_rev_timestamp: return Bry_.new_a7("revisiontimestamp");
 case Xol_kwd_grp_.Id_rev_user: return Bry_.new_a7("revisionuser");
+case Xol_kwd_grp_.Id_rev_user2: return Bry_.new_a7("revisionuser2");
 case Xol_kwd_grp_.Id_i18n_plural: return Bry_.new_a7("plural");
 case Xol_kwd_grp_.Id_url_fullurl: return Bry_.new_a7("fullurl");
 case Xol_kwd_grp_.Id_url_fullurle: return Bry_.new_a7("fullurle");

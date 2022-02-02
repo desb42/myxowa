@@ -23,6 +23,29 @@ class Luaj_value_ {
 	public static LuaTable Get_val_as_lua_table(LuaTable owner, String key) {
 		return (LuaTable)owner.get(key);
 	}
+	public static Keyval[] Lua_tbl_to_kv_ary_x(Luaj_server server, LuaTable tbl) {
+		// init
+		int tbl_len = tbl.arg_length();
+		Keyval[] rv_ary = tbl_len == 1 ? Keyval_.Ary_empty : new Keyval[tbl_len - 1];
+
+		for (int i = 1; i < tbl_len; i++) {
+			// get next itm
+			LuaValue itm_val = tbl.get(i + 1); // lua is 1 based
+			Object itm_val_obj = Lua_val_to_obj(server, itm_val);
+
+			// transform to xowa kv
+			Keyval kv = null;
+			if (itm_val.type() == LuaValue.TFUNCTION) {
+				int func_id = Int_.Cast(itm_val_obj);
+				Scrib_lua_proc lua_func = new Scrib_lua_proc(Integer.toString(i + 1), func_id);
+				itm_val_obj = lua_func;
+			}
+			kv = Keyval_.int_(i, itm_val_obj);
+
+			rv_ary[i - 1] = kv;
+		}
+		return rv_ary;
+	}
 	public static Keyval[] Get_val_as_kv_ary_call(Luaj_server server, LuaTable owner, String key) {
 /*		LuaValue o = owner.get(key);
                 if (o instanceof LuaString) {

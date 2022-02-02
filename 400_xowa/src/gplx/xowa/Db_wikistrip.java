@@ -728,14 +728,15 @@ public class Db_wikistrip {
 				case '\'':
 					int apos_count = 1;
 					while (pos < src_len) {
-						if (src[pos++] == '\'') {
+						if (src[pos] == '\'') {
 							apos_count++;
+                                                        pos++;
 						}
 						else
 							break;
 					}
-					if (apos_count > 1 && startpos <= pos - apos_count - 1) {
-						bfr.Add_mid(src, startpos, pos - apos_count - 1);
+					if (apos_count > 1 && startpos <= pos - apos_count) {
+						bfr.Add_mid(src, startpos, pos - apos_count);
 						if (apos_count == 2) {
 							if (initalic) {
 								bfr.Add(Gfh_tag_.I_rhs);
@@ -775,10 +776,8 @@ public class Db_wikistrip {
 							}
 							// there are other combos!!
 						}
-						startpos = pos - 1;
+						startpos = pos;
 					}
-					if (pos < src_len)
-						pos--; // because we looked ahead
 					break;
 				case '(':
 					int epos = findclosingbracket(src, src_len, pos);

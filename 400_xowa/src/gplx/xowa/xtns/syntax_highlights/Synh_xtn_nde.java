@@ -70,7 +70,7 @@ public class Synh_xtn_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		ctx.Para().Process_block__xnde(tag, tag.Block_open());	// deactivate pre; pre; PAGE:en.w:Comment_(computer_programming); DATE:2014-06-24
 		Xox_xnde_.Xatr__set(wiki, this, xatrs_hash, src, xnde);
 		ctx.Para().Process_block__xnde(tag, tag.Block_close());	// deactivate pre; pre; PAGE:en.w:Comment_(computer_programming); DATE:2014-06-24
-                ctx.Page().Html_data().Syntaxhighlight_(true);
+		ctx.Page().Html_data().Syntaxhighlight_(true);
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		byte[] tag;

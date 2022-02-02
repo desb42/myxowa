@@ -19,6 +19,7 @@ import gplx.xowa.parsers.*; import gplx.xowa.parsers.logs.*; import gplx.xowa.pa
 import gplx.xowa.xtns.proofreadPage.*;
 import gplx.core.security.algos.Hash_algo;
 import gplx.core.security.algos.Hash_algo_;
+import gplx.xowa.wikis.domains.Xow_domain_tid_;
 public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	private byte[] lat, lon, zoom, show, group, mapstyle, width, height, align, lang, text, frameless;
 	private int json_bgn, json_end;
@@ -54,12 +55,12 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		if (this.lang == null) {
 			this.lang = wiki.Lang().Key_bry();
 		}
-		if (this.mapstyle == null) { // osm-intl or osm or osm-tegola
-			if ("fr".equals(wiki.Lang().Key_str())) // 20211215
-				this.mapstyle = Bry_.new_a7("osm-tegola");
-			else
-				this.mapstyle = Bry_.new_a7("osm-intl");
-		}
+		// as of 20211229 seems to be only tegola (was intl)
+		// but as of 20220116 en.wikivoyage still uses intl
+		if (wiki.Domain_tid() == Xow_domain_tid_.Tid__wikivoyage)
+			this.mapstyle = Bry_.new_a7("osm-intl");
+		else
+			this.mapstyle = Bry_.new_a7("osm-tegola");
 //                if (this.text != null)
 //                    text = wiki.Parser_mgr().Main().Expand_tmpl(text);
 		json_bgn = xnde.Tag_open_end();
@@ -244,7 +245,7 @@ public class Mapframe_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			Hash_algo md5_algo = Hash_algo_.New__md5();
 			md5_algo.Update_digest(args, 0, args.length);
 			md5hash = md5_algo.To_hash_bry();
-			args = Bry_.Add(args, Bry_.new_a7("&amp;md5="), md5hash);
+			args = Bry_.Add(args, Bry_.new_a7("&amp;md5="), md5hash, Bry_.new_a7("&amp;sha1="), groupsha1);
 //		}
 		Fmt__img.Bld_many(tmp_bfr, server, this.mapstyle, args, staticWidth, this.height);
 		img = tmp_bfr.To_bry_and_clear();

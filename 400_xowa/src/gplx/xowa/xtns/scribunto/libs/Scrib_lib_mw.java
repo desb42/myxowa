@@ -121,13 +121,20 @@ public class Scrib_lib_mw implements Scrib_lib {
 		int idx_int = Int_.Parse_or(idx_str, Int_.Min_value);	// NOTE: should not receive int value < -1; idx >= 0
 		Bry_bfr tmp_bfr = Bry_bfr_.New();	// NOTE: do not make modular level variable, else random failures; DATE:2013-10-14
 		if (idx_int != Int_.Min_value) {	// idx is integer
-			Arg_nde_tkn nde = Get_arg(frame, idx_int, frame_arg_adj);
+                    int len = frame.Args_len() - frame_arg_adj;
+                    if (idx_int - List_adp_.Base1 >= len) {
+                            //System.out.println("nkix " + idx_str);
+                        return rslt.Init_obj(null);
+                    }
+			Arg_nde_tkn nde = Get_arg(frame, idx_int, frame_arg_adj, len);
 			//frame.Args_eval_by_idx(core.Ctx().Src(), idx_int); // NOTE: arg[0] is always MW function name; EX: {{#invoke:Mod_0|Func_0|Arg_1}}; arg_x = "Mod_0"; args[0] = "Func_0"; args[1] = "Arg_1"
-			if (nde == null)
+			if (nde == null) {
+                            //System.out.println("nki " + idx_str);
 				return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
+                        }
 			nde.Val_tkn().Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
                         //ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(tmp_bfr);
-                        //System.out.println(idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));
+                        //System.out.println("tki " + idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));
 			if (nde.Eq_tkn() != Xop_tkn_null.Null_tkn)
 				return rslt.Init_obj(tmp_bfr.To_str_and_clear_and_trim());
 			else
@@ -135,8 +142,10 @@ public class Scrib_lib_mw implements Scrib_lib {
 		}
 		else {
 			Arg_nde_tkn nde = frame.Args_get_by_key(src, Bry_.new_u8(idx_str));
-			if (nde == null)
+			if (nde == null) {
+                            //System.out.println("nk " + idx_str);
 				return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
+                        }
 			nde.Val_tkn().Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
 
 // frwikisource seems to need this                        // empty string? - do not add to array 20210618
@@ -144,12 +153,12 @@ public class Scrib_lib_mw implements Scrib_lib {
 // frwikisource seems to need this				return rslt.Init_obj(null);
 
                         //ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(tmp_bfr);
-                        //System.out.println(idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));
+                        //System.out.println("tk " + idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));
 			return rslt.Init_obj(tmp_bfr.To_str_and_clear_and_trim());	// NOTE: must trim if key_exists; DUPE:TRIM_IF_KEY
 		}
 	}
-	private Arg_nde_tkn Get_arg(Xot_invk invk, int idx, int frame_arg_adj) {	// DUPE:MW_ARG_RETRIEVE
-		int cur = List_adp_.Base1, len = invk.Args_len() - frame_arg_adj; 
+	private Arg_nde_tkn Get_arg(Xot_invk invk, int idx, int frame_arg_adj, int len) {	// DUPE:MW_ARG_RETRIEVE
+		int cur = List_adp_.Base1; 
 		for (int i = 0; i < len; i++) {	// iterate over list to find nth *non-keyd* arg; SEE:NOTE_1
 			Arg_nde_tkn nde = (Arg_nde_tkn)invk.Args_get_by_idx(i + frame_arg_adj);
 			if (nde.KeyTkn_exists()) {	// BLOCK:ignore_args_with_empty_keys;

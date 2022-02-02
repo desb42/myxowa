@@ -37,6 +37,16 @@ public class Xob_page_wkr_cmd implements Xob_cmd {
 			if (src_rdr.Tid() == gplx.core.ios.streams.Io_stream_tid_.Tid__bzip2) fil_len = (fil_len * 100) / 18;	// HACK: no way to get actual file progress; assume 18% compression
 			// fil.Seek(bldr.Opts().ResumeAt());
 			int prv_pos = 0;
+                        // assume first <page is in the first buffer load
+                        byte[] page_buf = fil.Bfr();
+                        int buf_len = page_buf.length;
+                        while (prv_pos < buf_len) {
+                            if (page_buf[prv_pos] == '<') {
+                                if (page_buf[prv_pos+1] == 'p')
+                                    break;
+                            }
+                            prv_pos++;
+                        }
 			while (true) {
 				int cur_pos = parser.Parse_page(page, usr_dlg, fil, fil.Bfr(), prv_pos, ns_mgr); if (cur_pos == Bry_find_.Not_found) break;
 				if (cur_pos < prv_pos)
@@ -87,7 +97,7 @@ public class Xob_page_wkr_cmd implements Xob_cmd {
 		int fil_ary_len = fil_ary.length;
 		return fil_ary_len == 0 ? null : fil_ary[fil_ary_len - 1];	// return last
 	}
-	int optRdrBfrSize = 8 * Io_mgr.Len_mb;
+	int optRdrBfrSize = 64 * Io_mgr.Len_mb;
 	String optRdrFillFmt = "reading ~{0} MB: ~{1} ~{2}";
 	static final String GRP_KEY = "xowa.bldr.rdr";
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

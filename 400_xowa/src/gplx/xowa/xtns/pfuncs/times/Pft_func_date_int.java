@@ -25,12 +25,12 @@ public class Pft_func_date_int extends Pf_func_base {
 		DateAdp date = DateAdp_.MinValue;
 		Xowe_wiki wiki = ctx.Wiki(); Xol_lang_itm lang = ctx.Lang();
 		Pft_func_formatdate_bldr date_fmt_bldr = wiki.Parser_mgr().Date_fmt_bldr();
-	    switch (date_tid) {
-	        case Date_tid_lcl: date = Datetime_now.Get(ctx.Wiki().Tz_mgr().Get_zoneid()); break;
-	        case Date_tid_utc: date = Datetime_now.Get().XtoUtc(); break;
-	        case Date_tid_rev: date = ctx.Page().Db().Page().Modified_on(); break;
+		switch (date_tid) {
+			case Date_tid_lcl: date = Datetime_now.Get(ctx.Wiki().Tz_mgr().Get_zoneid()); break;
+			case Date_tid_utc: date = Datetime_now.Get().XtoUtc(); break;
+			case Date_tid_rev: date = ctx.Page().Db().Page().Modified_on(); break;
 			default: throw Err_.new_unhandled(date_tid);
-	    }
+		}
 		switch (id) {
 			case Xol_kwd_grp_.Id_utc_year:
 			case Xol_kwd_grp_.Id_lcl_year:

@@ -21,22 +21,26 @@ import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.luajc.LuaJC;
 public class Luaj_server implements Scrib_server {
 	private final Luaj_server_func_recv func_recv;
+	private final Luaj_server_func_recv_x func_recv_x;
 	private final Luaj_server_func_dbg func_dbg;
-	private String[] init_args;
+        private LuaValue xchunks;
+        private LuaValue chunks;
+	//private String[] init_args;
 	private LuaTable server;
-	public Luaj_server(Luaj_server_func_recv func_recv, Luaj_server_func_dbg func_dbg) {
+	public Luaj_server(Luaj_server_func_recv func_recv, Luaj_server_func_dbg func_dbg, Luaj_server_func_recv_x func_recv_x) {
 		this.func_recv = func_recv;
+		this.func_recv_x = func_recv_x;
 		this.func_dbg = func_dbg;
 	}
 	public Globals Luaj_globals() {return luaj_globals;} private Globals luaj_globals;
 	public DebugLib Luaj_dbg() {return luaj_dbg;} private DebugLib luaj_dbg;
 	private LuaValue main_fil_val;
 	public void Init(String... init_args) {
-		this.init_args = init_args;
+		//this.init_args = init_args;
 		luaj_dbg = new DebugLib();	// NOTE: needed for getfenv
 		luaj_globals = JsePlatform.standardGlobals();
 		luaj_globals.load(luaj_dbg);
-		luaj_globals.load(new MWClient(luaj_globals, func_recv));
+		luaj_globals.load(new MWClient(luaj_globals, func_recv, func_recv_x));
 		//LuaJC.install(luaj_globals);
 		luaj_globals.set("dbg", func_dbg);
 		String root_str = init_args[2];
@@ -46,13 +50,15 @@ public class Luaj_server implements Scrib_server {
 		LuaValue package_val = luaj_globals.get("package");
 		package_val.rawset("path", LuaValue.valueOf(root_str + "engines/Luaj/?.lua;" + root_str + "engines/LuaCommon/lualib/?.lua"));
 		server = (LuaTable)luaj_globals.get("dofile").call(main_fil_val);
+		xchunks = server.get(Val_xchunks);
+		chunks = server.get(Val_chunks);
 		LuaC.install(luaj_globals);
 	}
 	public LuaTable Dispatch(LuaTable msg) {
 		return (LuaTable)server.method(Val_server_recv, msg);
 	}
 	public int Get_id_by_closure(LuaValue closure) {
-		LuaValue xchunks = server.get(Val_xchunks);
+		//LuaValue xchunks = server.get(Val_xchunks);
 		LuaValue closure_id = xchunks.get(closure);
 		int rv = -1;
 		if (closure_id == LuaValue.NIL)		// new closure; add it to chunks table via addChunk (which will return new id)
@@ -62,7 +68,7 @@ public class Luaj_server implements Scrib_server {
 		return rv;		
 	}
 	public LuaValue Get_closure_by_id(int id) {
-		LuaValue chunks = server.get(Val_chunks);
+		//LuaValue chunks = server.get(Val_chunks);
 		return chunks.get(LuaValue.valueOf(id));
 	}
 	public int Server_timeout() {return server_timeout;} public Scrib_server Server_timeout_(int v) {server_timeout = v; return this;} private int server_timeout;
@@ -71,7 +77,13 @@ public class Luaj_server implements Scrib_server {
 	public byte[] Server_comm(byte[] cmd, Object[] cmd_objs) {return Bry_.Empty;}
 	public void Server_send(byte[] cmd, Object[] cmd_objs) {}
 	public byte[] Server_recv() {return Bry_.Empty;}
-	public void Term() {this.Init(init_args);}
+	//public void Term() {this.Init(init_args);}
+	public void Term() {
+            luaj_globals = null;
+            xchunks = null;
+            chunks = null;
+            server = null;
+        }
 	private static final LuaValue
 	  Val_server_recv 		= LuaValue.valueOf("server_recv")
 	, Val_xchunks			= LuaValue.valueOf("xchunks")
@@ -86,13 +98,16 @@ public class Luaj_server implements Scrib_server {
 		 */
 		private final Globals luaj_globals;
 		private final Luaj_server_func_recv func_recv;
-		public MWClient(Globals luaj_globals, Luaj_server_func_recv func_recv) {
+		private final Luaj_server_func_recv_x func_recv_x;
+		public MWClient(Globals luaj_globals, Luaj_server_func_recv func_recv, Luaj_server_func_recv_x func_recv_x) {
 			this.luaj_globals = luaj_globals;
 			this.func_recv = func_recv;
+			this.func_recv_x = func_recv_x;
 		}
 		public LuaValue call(LuaValue libname) {
 			LuaValue library = tableOf();
 			library.set("client_recv", func_recv);
+			library.set("client_recv_x", func_recv_x);
 			LuaValue env = luaj_globals; 
 			env.set( "MWClient", library );
 			return library;

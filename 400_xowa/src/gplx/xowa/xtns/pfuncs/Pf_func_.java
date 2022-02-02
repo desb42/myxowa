@@ -219,6 +219,7 @@ public class Pf_func_ {
 	, Xol_kwd_grp_.Id_rev_id
 	, Xol_kwd_grp_.Id_rev_pagesize
 	, Xol_kwd_grp_.Id_rev_user
+	, Xol_kwd_grp_.Id_rev_user2
 	, Xol_kwd_grp_.Id_rev_protectionlevel
 	, Xol_kwd_grp_.Id_page_displaytitle
 	, Xol_kwd_grp_.Id_page_defaultsort
@@ -384,6 +385,7 @@ public class Pf_func_ {
 			case Xol_kwd_grp_.Id_rev_pagesize:
 			case Xol_kwd_grp_.Id_rev_revisionsize:
 			case Xol_kwd_grp_.Id_rev_user:
+			case Xol_kwd_grp_.Id_rev_user2:
 			case Xol_kwd_grp_.Id_rev_protectionexpiry:
 			case Xol_kwd_grp_.Id_rev_protectionlevel:			return Pfunc_rev_props.Instance;
 			case Xol_kwd_grp_.Id_page_displaytitle:				return Pfunc_displaytitle.Instance;

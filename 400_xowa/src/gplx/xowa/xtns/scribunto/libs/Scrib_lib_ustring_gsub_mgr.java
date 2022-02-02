@@ -75,6 +75,11 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
                 //    int a=1;
                 //}
 
+                // special case!!!
+                if (limit == -1 && pat_str.length() == 12 && repl_tid == 1 && repl_obj.equals("%1") && pat_str.equals("^%s*(.-)%s*$")) {
+                    return rslt.Init_many_objs(src_str.trim(), 1);
+                }
+
 		// do repl
 		String repl = Scrib_pattern_matcher.New(core.Page_url()).Gsub(this, Ustring_.New_codepoints(src_str), pat_str, 0);
 		return rslt.Init_many_objs(repl, repl_count);

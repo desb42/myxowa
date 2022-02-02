@@ -33,9 +33,9 @@ public class Pfunc_wiki_stats extends Pf_func_base {
 			case Xol_kwd_grp_.Id_num_files:		v = stats.Num_files(); break;
 			case Xol_kwd_grp_.Id_num_edits:		v = stats.Num_edits(); break;
 			case Xol_kwd_grp_.Id_num_views:		v = stats.Num_views(); break;
-			case Xol_kwd_grp_.Id_num_users:		v = stats.Num_users(); break;
-			case Xol_kwd_grp_.Id_num_users_active: v = stats.Num_active(); break;
-			case Xol_kwd_grp_.Id_num_admins:	v = stats.Num_admins(); break;
+			case Xol_kwd_grp_.Id_num_users:		v = 1 /*stats.Num_users()*/; break; //fake
+			case Xol_kwd_grp_.Id_num_users_active: v = 1 /*stats.Num_active()*/; break; //fake
+			case Xol_kwd_grp_.Id_num_admins:	v = 1 /*stats.Num_admins()*/; break; //fake
 			default: throw Err_.new_unhandled(id);
 		}
 		if (raw)

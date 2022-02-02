@@ -17,6 +17,7 @@ package gplx.xowa.xtns.scribunto.procs; import gplx.*; import gplx.xowa.*; impor
 public class Scrib_proc_mgr {
 	private final    Ordered_hash hash = Ordered_hash_.New();
 	public void Clear() {hash.Clear();}
+	//public Scrib_proc Get_by_key(String key) {return (Scrib_proc)hash.Get_by(key);} // experiment 20220117
 	public Scrib_proc Get_by_key(String key) {synchronized (hash) {return (Scrib_proc)hash.Get_by(key);}}
 	public Scrib_proc Get_at(int i) {synchronized (hash) {return (Scrib_proc)hash.Get_at(i);}}
 	public void Set(String key, Scrib_proc proc) {

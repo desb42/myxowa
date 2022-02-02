@@ -21,7 +21,7 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 	private int found;
 	private int offset;
 	public Db_btrie_cs_trie_en2(Object[] objs) {this.objs = objs; }
-	public static byte[] Hash() { return Bry_.new_a7("66c5bb80a95fd4589366a6754f371ca7"); }
+	public static byte[] Hash() { return Bry_.new_a7("822db3a2313766b8506dd259d2c4ce59"); }
 	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
 		found = -1;
 		offset = -1;
@@ -29,7 +29,7 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 		switch (b) {
 			case '!':
 				found = ofs + 1;
-				offset = 87; // ('!', 87)
+				offset = 88; // ('!', 88)
 				break;
 			case 'A':
 				if (ofs+6 < src_len && src[ofs+1] == 'R' && src[ofs+2] == 'T' && src[ofs+3] == 'I' && src[ofs+4] == 'C' && src[ofs+5] == 'L' && src[ofs+6] == 'E') {
@@ -90,7 +90,7 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 					case 'A':
 						if (ofs+15 < src_len && src[ofs+2] == 'S' && src[ofs+3] == 'C' && src[ofs+4] == 'A' && src[ofs+5] == 'D' && src[ofs+6] == 'I' && src[ofs+7] == 'N' && src[ofs+8] == 'G' && src[ofs+9] == 'S' && src[ofs+10] == 'O' && src[ofs+11] == 'U' && src[ofs+12] == 'R' && src[ofs+13] == 'C' && src[ofs+14] == 'E' && src[ofs+15] == 'S') {
 							found = ofs + 16;
-							offset = 94; // ('CASCADINGSOURCES', 94)
+							offset = 95; // ('CASCADINGSOURCES', 95)
 						}
 						break;
 					case 'O':
@@ -223,18 +223,18 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 								case 'C':
 									if (ofs+18 < src_len && src[ofs+8] == 'A' && src[ofs+9] == 'T' && src[ofs+10] == 'E' && src[ofs+11] == 'G' && src[ofs+12] == 'O' && src[ofs+13] == 'R' && src[ofs+14] == 'Y' && src[ofs+15] == 'S' && src[ofs+16] == 'O' && src[ofs+17] == 'R' && src[ofs+18] == 'T') {
 										found = ofs + 19;
-										offset = 84; // ('DEFAULTCATEGORYSORT', 84)
+										offset = 85; // ('DEFAULTCATEGORYSORT', 85)
 									}
 									break;
 								case 'S':
 									if (ofs+10 < src_len && src[ofs+8] == 'O' && src[ofs+9] == 'R' && src[ofs+10] == 'T') {
 										if (ofs+13 < src_len && src[ofs+11] == 'K' && src[ofs+12] == 'E' && src[ofs+13] == 'Y') {
 											found = ofs + 14;
-											offset = 83; // ('DEFAULTSORTKEY', 83)
+											offset = 84; // ('DEFAULTSORTKEY', 84)
 										}
 										if (found == -1) {
 											found = ofs + 11;
-											offset = 82; // ('DEFAULTSORT', 82)
+											offset = 83; // ('DEFAULTSORT', 83)
 										}
 									}
 									break;
@@ -262,7 +262,7 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 							case 'S':
 								if (ofs+11 < src_len && src[ofs+3] == 'P' && src[ofs+4] == 'L' && src[ofs+5] == 'A' && src[ofs+6] == 'Y' && src[ofs+7] == 'T' && src[ofs+8] == 'I' && src[ofs+9] == 'T' && src[ofs+10] == 'L' && src[ofs+11] == 'E') {
 									found = ofs + 12;
-									offset = 81; // ('DISPLAYTITLE', 81)
+									offset = 82; // ('DISPLAYTITLE', 82)
 								}
 								break;
 						}
@@ -395,7 +395,7 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 								case 'N':
 									if (ofs+14 < src_len && src[ofs+10] == 'U' && src[ofs+11] == 'M' && src[ofs+12] == 'B' && src[ofs+13] == 'E' && src[ofs+14] == 'R') {
 										found = ofs + 15;
-										offset = 93; // ('NAMESPACENUMBER', 93)
+										offset = 94; // ('NAMESPACENUMBER', 94)
 									}
 									break;
 							}
@@ -473,13 +473,13 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 								case 'B':
 									if (ofs+9 < src_len && src[ofs+5] == 'A' && src[ofs+6] == 'N' && src[ofs+7] == 'N' && src[ofs+8] == 'E' && src[ofs+9] == 'R') {
 										found = ofs + 10;
-										offset = 89; // ('PAGEBANNER', 89)
+										offset = 90; // ('PAGEBANNER', 90)
 									}
 									break;
 								case 'L':
 									if (ofs+11 < src_len && src[ofs+5] == 'A' && src[ofs+6] == 'N' && src[ofs+7] == 'G' && src[ofs+8] == 'U' && src[ofs+9] == 'A' && src[ofs+10] == 'G' && src[ofs+11] == 'E') {
 										found = ofs + 12;
-										offset = 91; // ('PAGELANGUAGE', 91)
+										offset = 92; // ('PAGELANGUAGE', 92)
 									}
 									break;
 								case 'N':
@@ -501,11 +501,11 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 												if (ofs+9 < src_len && src[ofs+7] == 'C' && src[ofs+8] == 'A' && src[ofs+9] == 'T') {
 													if (ofs+14 < src_len && src[ofs+10] == 'E' && src[ofs+11] == 'G' && src[ofs+12] == 'O' && src[ofs+13] == 'R' && src[ofs+14] == 'Y') {
 														found = ofs + 15;
-														offset = 85; // ('PAGESINCATEGORY', 85)
+														offset = 86; // ('PAGESINCATEGORY', 86)
 													}
 													if (found == -1) {
 														found = ofs + 10;
-														offset = 86; // ('PAGESINCAT', 86)
+														offset = 87; // ('PAGESINCAT', 87)
 													}
 												}
 												break;
@@ -527,13 +527,13 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 								case 'E':
 									if (ofs+15 < src_len && src[ofs+11] == 'X' && src[ofs+12] == 'P' && src[ofs+13] == 'I' && src[ofs+14] == 'R' && src[ofs+15] == 'Y') {
 										found = ofs + 16;
-										offset = 90; // ('PROTECTIONEXPIRY', 90)
+										offset = 91; // ('PROTECTIONEXPIRY', 91)
 									}
 									break;
 								case 'L':
 									if (ofs+14 < src_len && src[ofs+11] == 'E' && src[ofs+12] == 'V' && src[ofs+13] == 'E' && src[ofs+14] == 'L') {
 										found = ofs + 15;
-										offset = 80; // ('PROTECTIONLEVEL', 80)
+										offset = 81; // ('PROTECTIONLEVEL', 81)
 									}
 									break;
 							}
@@ -577,7 +577,7 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 						case 'S':
 							if (ofs+11 < src_len && src[ofs+9] == 'I' && src[ofs+10] == 'Z' && src[ofs+11] == 'E') {
 								found = ofs + 12;
-								offset = 88; // ('REVISIONSIZE', 88)
+								offset = 89; // ('REVISIONSIZE', 89)
 							}
 							break;
 						case 'T':
@@ -588,8 +588,14 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 							break;
 						case 'U':
 							if (ofs+11 < src_len && src[ofs+9] == 'S' && src[ofs+10] == 'E' && src[ofs+11] == 'R') {
-								found = ofs + 12;
-								offset = 79; // ('REVISIONUSER', 79)
+								if (ofs+12 < src_len && src[ofs+12] == '2') {
+									found = ofs + 13;
+									offset = 80; // ('REVISIONUSER2', 80)
+								}
+								if (found == -1) {
+									found = ofs + 12;
+									offset = 79; // ('REVISIONUSER', 79)
+								}
 							}
 							break;
 						case 'Y':
@@ -624,7 +630,7 @@ public class Db_btrie_cs_trie_en2 implements Db_btrie {
 					case 'H':
 						if (ofs+8 < src_len && src[ofs+2] == 'O' && src[ofs+3] == 'R' && src[ofs+4] == 'T' && src[ofs+5] == 'D' && src[ofs+6] == 'E' && src[ofs+7] == 'S' && src[ofs+8] == 'C') {
 							found = ofs + 9;
-							offset = 92; // ('SHORTDESC', 92)
+							offset = 93; // ('SHORTDESC', 93)
 						}
 						break;
 					case 'I':

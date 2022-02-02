@@ -208,7 +208,11 @@ public class Http_server_wkr implements Gfo_invk {
                 //Db_Nav_template nt = new Db_Nav_template();
                 //nt.Init(page.Wiki());
 
-				if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // change some more things
+					page.Wiki().Cache_mgr().Free_mem__page();
+					page.Wiki().Parser_mgr().Scrib().Core_term();
+					page.Wiki().Appe().Wiki_mgr().Wdata_mgr().Clear();
+
+                if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // change some more things
 					//page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
 					page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\">");
 					page_html = String_.Replace(page_html, "<a href=\"/exec/app.gui.main_win.page_edit_preview;\""	, "<input type='submit' tabindex='4' title='Preview your changes. Please use this before saving.' name='wpPreview' id='wpPreview' value='Show preview' class='oo-ui-inputWidget-input oo-ui-buttonElement-button' /><a href=\"/exec/app.gui.main_win.page_edit_preview;\"");

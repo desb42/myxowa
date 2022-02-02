@@ -26,6 +26,7 @@ public class Pfunc_rev_props extends Pf_func_base {
 		switch (id) {
 			case Xol_kwd_grp_.Id_page_id:
 			case Xol_kwd_grp_.Id_rev_id:				bfr.Add_int_variable(ctx.Page().Db().Page().Id()); break;	// NOTE: making rev_id and page_id interchangeable; XOWA does not store rev_id
+			case Xol_kwd_grp_.Id_rev_user2:
 			case Xol_kwd_grp_.Id_rev_user:				bfr.Add(rev_data.User()); break;
 			case Xol_kwd_grp_.Id_rev_protectionlevel:	bfr.Add(rev_data.Protection_level()); break;
 			case Xol_kwd_grp_.Id_rev_protectionexpiry:	bfr.Add(rev_data.Protection_expiry()); break;

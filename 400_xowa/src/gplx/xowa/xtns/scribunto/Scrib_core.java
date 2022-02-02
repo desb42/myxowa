@@ -134,7 +134,8 @@ public class Scrib_core {
 		for (int i = 0; i < len; i++)
 			ary[i].Register(this, script_dir);
 	}
-	public void Term() {engine.Server().Term(); mods.Clear();}
+	//public void Term() {engine.Server().Term(); mods.Clear();}
+	public void Term() {engine.Server().Term(); engine = null; mods.Clear();}
 	public void When_page_changed(Xoae_page page) {
 		mods.Clear();	// clear any loaded modules
 		Xow_wiki wiki = page.Wiki();

@@ -173,6 +173,7 @@ kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_rev_month_int, "REVISIONMONTH1");
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_rev_year, "REVISIONYEAR");
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_rev_timestamp, "REVISIONTIMESTAMP");
 kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_rev_user, "REVISIONUSER");
+kwd_mgr.New(Bool_.Y, Xol_kwd_grp_.Id_rev_user2, "REVISIONUSER2");
 kwd_mgr.New(Bool_.N, Xol_kwd_grp_.Id_i18n_plural, "plural");
 kwd_mgr.New(Bool_.N, Xol_kwd_grp_.Id_url_fullurl, "fullurl");
 kwd_mgr.New(Bool_.N, Xol_kwd_grp_.Id_url_fullurle, "fullurle");

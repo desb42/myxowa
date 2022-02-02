@@ -58,7 +58,11 @@ public class Score_xnde implements Xox_xnde, Mwh_atr_itm_owner1, Xoh_cmd_itm {
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		Xowe_wiki wiki = ctx.Wiki(); Xoae_page page = ctx.Page();
 		Score_xtn_mgr score_xtn = (Score_xtn_mgr)wiki.Xtn_mgr().Get_or_fail(Score_xtn_mgr.XTN_KEY);
-		if (!score_xtn.Enabled()) {Html_write_code_as_pre(bfr, app); return;}
+		if (!score_xtn.Enabled()) {
+			Html_write_code_as_pre(bfr, app);
+			ctx.Wiki().Logger().Log_many("#score: ttl=~{0}", wpg.Ttl().Full_db());
+			return;
+		}
 		Process_adp ly_process = app.Prog_mgr().App_lilypond();
 		if (ly_process.Exe_exists() == Bool_.__byte && ly_process.Exe_url() != null) {	// TEST: ly_process.Exe_url() is null
 			boolean exists = Io_mgr.Instance.ExistsFil(ly_process.Exe_url());
@@ -139,8 +143,10 @@ public class Score_xnde implements Xox_xnde, Mwh_atr_itm_owner1, Xoh_cmd_itm {
 			Io_mgr.Instance.SaveFilBry(ly_file, ly_text);
 		}
 		ly_process.Working_dir_(ly_file.OwnerDir());	// NOTE: must change working_dir, else file will be dumped into same dir as lilypond.exe
-		if (!ly_process.Run(ly_file).Exit_code_pass()) {
-			fail_msg = ly_process.Rslt_out();
+                ly_process.Run(ly_file);
+		fail_msg = ly_process.Rslt_out();
+                int fatal_pos = Bry_find_.Find_fwd(Bry_.new_u8(fail_msg), Fatal_error_find);
+		if (!ly_process.Exit_code_pass() || fatal_pos != Bry_find_.Not_found) {
 			app.Usr_dlg().Warn_many("", "", "lilypond failed: ~{0}", fail_msg);
 			return;
 		}
@@ -154,10 +160,10 @@ public class Score_xnde implements Xox_xnde, Mwh_atr_itm_owner1, Xoh_cmd_itm {
 				html_a_href = ogg_file.To_http_file_str();
 		}
 		//Io_mgr.Instance.DeleteFil(ly_file);
-		Io_url png_file_untrimmed = png_file.GenNewNameOnly("untrimmed");
-		Io_mgr.Instance.MoveFil(png_file, png_file_untrimmed);
-		app.Prog_mgr().App_trim_img().Run(png_file_untrimmed, png_file);
-		Io_mgr.Instance.DeleteFil(png_file_untrimmed);
+//		Io_url png_file_untrimmed = png_file.GenNewNameOnly("untrimmed");
+//		Io_mgr.Instance.MoveFil(png_file, png_file_untrimmed);
+//		app.Prog_mgr().App_trim_img().Run(png_file_untrimmed, png_file);
+//		Io_mgr.Instance.DeleteFil(png_file_untrimmed);
 		fail_msg = null;		
 	}
 	private String fail_msg = null;
@@ -201,7 +207,9 @@ public class Score_xnde implements Xox_xnde, Mwh_atr_itm_owner1, Xoh_cmd_itm {
 	private static final    byte[] 
 	  Lang_abc = Bry_.new_a7("ABC")
 	, Abc_tagline_bgn = Bry_.new_a7("tagline ="), Abc_tagline_end = new byte[] {Byte_ascii.Nl}, Abc_tagline_repl = Bry_.new_a7("tagline = \"\"\n")
-	, Version_unknown = Bry_.new_a7("unknown"), Version_find_bgn = Bry_.new_a7("GNU LilyPond")
+	, Version_unknown = Bry_.new_a7("unknown")
+                , Version_find_bgn = Bry_.new_a7("GNU LilyPond")
+                , Fatal_error_find = Bry_.new_a7("fatal error:")
 	;
 	static final String GRP_KEY = "xowa.xtns.scores.itm";
 }
