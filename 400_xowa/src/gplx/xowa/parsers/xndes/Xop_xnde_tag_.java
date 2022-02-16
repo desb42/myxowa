@@ -209,7 +209,7 @@ public class Xop_xnde_tag_ {
 , Tag__dd = New(Tid__dd, "dd").Repeat_mids_()
 , Tag__ol = New(Tid__ol, "ol").No_inline_().Block_open_bgn_().Block_close_end_()
 , Tag__ul = New(Tid__ul, "ul").No_inline_().Block_open_bgn_().Block_close_end_()
-, Tag__dl = New(Tid__dl, "dl").No_inline_()
+, Tag__dl = New(Tid__dl, "dl").No_inline_().Block_open_bgn_().Block_open_end_()
 , Tag__table = New(Tid__table, "table").No_inline_().Block_open_bgn_().Block_close_end_()
 , Tag__tr = New(Tid__tr, "tr").Tbl_sub_().Block_open_bgn_().Block_open_end_()
 , Tag__td = New(Tid__td, "td").Tbl_sub_().Block_open_end_().Block_close_bgn_()

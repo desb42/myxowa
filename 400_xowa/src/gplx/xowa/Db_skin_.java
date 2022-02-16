@@ -31,6 +31,7 @@ import gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx;
 import gplx.xowa.wikis.domains.Xow_domain_tid_;
 import gplx.xowa.langs.msgs.Xol_msg_mgr;
 import gplx.xowa.addons.htmls.sidebars.Db_Nav_template;
+import gplx.core.brys.fmtrs.Bry_fmtr;
 public class Db_skin_ {
 	private final Xow_portal_mgr portal_mgr;
 	private final byte[] page_data;
@@ -95,6 +96,19 @@ public class Db_skin_ {
 		// HTML strings
 		//data.AddKvStr("html-site-notice", null);
 		//data.AddKvStr("html-user-message", null);
+/*			'html-title-heading' => Html::rawElement(
+				'h1',
+				[
+					'id' => 'firstHeading',
+					'class' => 'firstHeading mw-first-heading',
+					'style' => $blankedHeading ? 'display: none' : null
+				] + $this->getUserLanguageAttributes(),
+				$htmlTitle
+			),*/
+		Bry_fmtr tmp_fmtr = Bry_fmtr.New__tmp().Fail_when_invalid_escapes_(false);
+		tmp_fmtr.Fmt_("<h1 id=\"firstHeading\" class=\"firstHeading mw-first-heading\">~{0}</h1>").Bld_bfr_many(tmp_bfr, ph.getPageTitle());
+		data.AddKvStr("html-title-heading", tmp_bfr.To_str_and_clear());
+			
 		data.AddKvStr("html-title", ph.getPageTitle());
 		data.AddKvStr("html-subtitle", Xoh_page_wtr_wkr_.Bld_page_content_sub(app, wiki, page, tmp_bfr, isnoredirect));
 		data.AddKvStr("html-body-content", Pagebody(portal_mgr, page_data, page, page_mode, wiki, mgr));

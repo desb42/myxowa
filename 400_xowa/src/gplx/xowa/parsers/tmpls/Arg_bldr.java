@@ -26,7 +26,7 @@ public class Arg_bldr {	// TS
 		for (int i = loop_bgn; i < loop_end; i++) {	// loop over subs between bookends; if lnki, all tkns between [[ and ]]; if tmpl, {{ and }}
 			Xop_tkn_itm sub = root.Subs_get(i);
 			int sub_pos_bgn = sub.Src_bgn_grp(root, i);
-			sub_pos_end = sub.Src_end_grp(root, i);// remeber the end
+			sub_pos_end = sub.Src_end_grp(root, i);// remember the end
 			if (cur_nde == null) {
 				cur_nde = tkn_mkr.ArgNde(++cur_nde_idx, sub_pos_bgn);
 				brack_count = 0; key_exists = false;

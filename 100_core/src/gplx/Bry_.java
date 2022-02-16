@@ -442,7 +442,7 @@ public class Bry_ {
 		}
 		return rv;
 	}
-	public static final    byte[] Trim_ary_ws = mask_(256, Byte_ascii.Tab, Byte_ascii.Nl, Byte_ascii.Cr, Byte_ascii.Space);
+	public static final    byte[] Trim_ary_ws = mask_(256, Byte_ascii.Tab, Byte_ascii.Nl, Byte_ascii.Cr, Byte_ascii.Space, (byte)-62);
 	public static byte[] Trim(byte[] src) {return Trim(src, 0, src.length, true, true, Trim_ary_ws, true);}
 	public static byte[] Trim(byte[] src, int bgn, int end) {return Trim(src, bgn, end, true, true, Trim_ary_ws, true);}
 	public static byte[] Trim(byte[] src, int bgn, int end, boolean trim_bgn, boolean trim_end, byte[] trim_ary, boolean reuse_bry_if_noop) {
@@ -451,11 +451,14 @@ public class Bry_ {
 		if (trim_bgn) {
 			for (int i = bgn; i < end; i++) {
 				byte b = src[i];
-				if (trim_ary[b & 0xFF] == Byte_ascii.Null) {
+				byte tr = trim_ary[b & 0xFF];
+				if (tr == Byte_ascii.Null) {
 					txt_bgn = i;
 					i = end;
 					all_ws = false;
 				}
+				else if (tr == -62 && i+1 < end && src[i+1] == -96) // eg en.wikipedia.org/wiki/Lagunilla_del_Jubera
+					i++;
 			}
 			if (all_ws) return Bry_.Empty;
 		}

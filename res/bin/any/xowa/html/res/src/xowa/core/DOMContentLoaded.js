@@ -164,7 +164,7 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/google-code-prettify/run_prettify.js?lang=lua&lang=css');
     }
     if (document.querySelectorAll('.mw-highlight').length) {
-      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/mediawiki/pygments.generated.css');
+      //xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/mediawiki/pygments.generated.css');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/mediawiki/pygments.linenumbers.js');
     }
 

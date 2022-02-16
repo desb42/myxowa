@@ -1,24 +1,26 @@
 .prp-page-container {
-	width: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row
 }
 
 .prp-page-content {
-	float: left;
-	width: 50%;
+    flex: 1;
+    padding-right: 12px
 }
 
 .prp-page-content .pagetext {
-	margin-bottom: 0.5em;
+    margin-bottom: 0.5em
 }
 
 .prp-page-image {
-	float: right;
-	width: 49%;
+    flex: 1;
+    padding-left: 12px
 }
 
 .prp-page-image img {
-	width: 100%;
-	height: auto;
+    width: 100%;
+    height: auto
 }
 
 /* TODO: Don't use IDs */

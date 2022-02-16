@@ -29,11 +29,11 @@ public class Xtn_inputbox_nde implements Xox_xnde {
 		if (itm_bgn == src.length)	return;  // NOTE: handle inline where there is no content to parse; EX: <inputbox/>
 		if (itm_bgn >= itm_end)		return;  // NOTE: handle inline where there is no content to parse; EX: a<inputbox/>b
 		Parse_lines(src, itm_bgn, itm_end);
-		}
+	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
 		if (mFound == -1) return;	// inline inputbox; write nothing; EX: <inputbox/>
-		render(bfr, src);
-		}
+		render(bfr, src, ctx.Wiki());
+	}
 
 	private void Lowercase(byte[] src, int src_bgn, int src_end) {
 		for (int i = src_bgn; i < src_end; i++) {
@@ -170,7 +170,7 @@ public class Xtn_inputbox_nde implements Xox_xnde {
 
 	}
 
-	private void render(Bry_bfr bfr, byte[] src) {
+	private void render(Bry_bfr bfr, byte[] src, Xowe_wiki wiki) {
 		if (mType_bgn != -1) {
 			if (Bry_.Has_at_bgn(src, type_create, mType_bgn, mType_end)) {
 				//$this->mParser->getOutput()->addModules( 'ext.inputBox' );
@@ -195,11 +195,11 @@ public class Xtn_inputbox_nde implements Xox_xnde {
 				return;
 			}
 			else if (Bry_.Has_at_bgn(src, type_search, mType_bgn, mType_end)) {
-				getSearchForm( bfr, src, 0 /*'search'*/ );
+				getSearchForm( bfr, src, 0 /*'search'*/, wiki );
 				return;
 			}
 			else if (Bry_.Has_at_bgn(src, type_fulltext, mType_bgn, mType_end)) {
-				getSearchForm( bfr, src, 1 /*'fulltext'*/ );
+				getSearchForm( bfr, src, 1 /*'fulltext'*/, wiki );
 				return;
 			}
 		}
@@ -379,7 +379,7 @@ public class Xtn_inputbox_nde implements Xox_xnde {
 	}
 	private void getCommentForm(Bry_bfr bfr, byte[] src) {
 	}
-	private void getSearchForm(Bry_bfr bfr, byte[] src, int ftype) {
+	private void getSearchForm(Bry_bfr bfr, byte[] src, int ftype, Xowe_wiki wiki) {
 		// Build HTML
 		bfr.Add_bry_many(Div_bgn);
 		bgColorStyle(bfr, src);
@@ -432,8 +432,11 @@ public class Xtn_inputbox_nde implements Xox_xnde {
 		}
 		// Search button
 		bfr.Add(Search_bgn); // "<input type=\"submit\" name=\"fulltext\" class=\"mw-ui-button\" value=\""
-		if ( mSearchbuttonlabel_bgn != -1)
-			bfr.Add_mid(src, mSearchbuttonlabel_bgn, mSearchbuttonlabel_end);
+		if ( mSearchbuttonlabel_bgn != -1) {
+			// this can contain wikitext
+			byte[] txt = wiki.Parser_mgr().Main().Expand_tmpl(Bry_.Mid(src, mSearchbuttonlabel_bgn, mSearchbuttonlabel_end));
+			bfr.Add(txt);
+		}
 		else
 			bfr.Add(inputbox_searchfulltext);
 		bfr.Add(Inp_end); // "\" />"

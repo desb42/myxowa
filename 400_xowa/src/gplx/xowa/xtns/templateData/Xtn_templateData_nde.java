@@ -37,6 +37,7 @@ public class Xtn_templateData_nde implements Xox_xnde {
 		if (itm_bgn >= itm_end) return;  // NOTE: handle inline where there is no content to parse; EX: a<templatedata/>b
 		//jdoc = wiki.App().Utl__json_parser().Parse(Bry_.Mid(src, xnde.Tag_open_end(), xnde.Tag_close_bgn()));
 		jdoc = wiki.App().Utl__json_parser().Parse(src, xnde.Tag_open_end(), xnde.Tag_close_bgn());
+		//System.out.println(String_.new_u8(Bry_.Mid(src, xnde.Tag_open_end(), xnde.Tag_close_bgn())));
 		// do some field parsing now (due to 'inherits' keyword
 		if (jdoc != null) {
 			Json_nde params = Json_nde.Cast(jdoc.Get_grp(Bry_.new_a7("params")));

@@ -34,6 +34,7 @@ public class Xomp_stat_tbl implements Rls_able {
 	, fld_tmpl2_count = flds.Add_int("tmpl2_count")
 	, fld_tmpl3_count = flds.Add_int("tmpl3_count")
 	, fld_scrib_callcount = flds.Add_int("scrib_callcount")
+	, fld_page_start = flds.Add_long("page_start")
 ;
 	private final    Db_conn conn; private Db_stmt stmt_insert;
 	public Xomp_stat_tbl(Db_conn conn) {
@@ -79,6 +80,7 @@ public class Xomp_stat_tbl implements Rls_able {
 			.Val_int (fld_tmpl2_count           , rdr.Read_int (fld_tmpl2_count))
 			.Val_int (fld_tmpl3_count           , rdr.Read_int (fld_tmpl3_count))
 			.Val_int (fld_scrib_callcount       , rdr.Read_int (fld_scrib_callcount))
+			.Val_long(fld_page_start            , rdr.Read_long(fld_page_start))
 		.Exec_insert();
 	}
 	public void Insert(Xoae_page wpg, Xoh_page hpg, int wkr_uid, long page_time, long fulltext_time) {
@@ -113,6 +115,7 @@ public class Xomp_stat_tbl implements Rls_able {
 			.Val_int (fld_tmpl2_count           , stat.Tmpl2_count)
 			.Val_int (fld_tmpl3_count           , stat.Tmpl3_count)
 			.Val_int (fld_scrib_callcount       , stat.Scrib().CallCount())
+			.Val_long(fld_page_start            , stat.Scrib().Page_start())
 		.Exec_insert();
 	}
 	public void Stmt_rls() {

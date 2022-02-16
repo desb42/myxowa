@@ -223,7 +223,7 @@ public class Xoh_head_wtr {
 	public Xoh_head_wtr Indent_del() {indent -= 2; return this;}
 	private static final    byte[]
 	  Css_include_bgn			= Bry_.new_a7("<link rel=\"stylesheet\" href=\"")
-	, Css_include_end			= Bry_.new_a7("\" type=\"text/css\">")
+	, Css_include_end			= Bry_.new_a7("\" type=\"text/css\" />")
 	, Js_include_bgn			= Bry_.new_a7("<script src=\"")
 	, Js_include_end			= Bry_.new_a7("\" type=\"text/javascript\"></script>")
 	, Js_globals_ini_var_bgn	= Bry_.new_a7("var xowa_global_values = {")

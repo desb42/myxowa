@@ -37,7 +37,8 @@ public class Maplink_xnde implements Xox_xnde, Mwh_atr_itm_owner2 {
 	public void Xtn_parse(Xowe_wiki wiki, Xop_ctx ctx, Xop_root_tkn root, byte[] src, Xop_xnde_tkn xnde) {
 		Xox_xnde_.Parse_xatrs(wiki, this, Map_atrs.Key_hash, src, xnde);
 		if (this.mapstyle == null) {
-			this.mapstyle = Bry_.new_a7("osm-intl"); // osm-intl or osm
+			//this.mapstyle = Bry_.new_a7("osm-intl"); // osm-intl or osm
+			this.mapstyle = Bry_.new_a7("osm-tegola"); // ~2022 different mapper
 		}
 		json_bgn = xnde.Tag_open_end();
 		json_end = xnde.Tag_close_bgn();

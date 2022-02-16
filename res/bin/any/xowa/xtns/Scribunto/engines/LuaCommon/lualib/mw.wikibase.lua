@@ -176,11 +176,12 @@ function wikibase.setupInterface()
 	-- @param {string} funcName for error logging
 	-- @param {string} rank Which statements to include. Either "best" or "all".
 	local function getEntityStatements( entityId, propertyId, funcName, rank )
-		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.getEntityStatements.call' )
+--		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.getEntityStatements.call' )
 
-		if not php.getSetting( 'allowArbitraryDataAccess' ) and entityId ~= wikibase.getEntityIdForCurrentPage() then
-			error( 'Access to arbitrary entities has been disabled.', 2 )
-		end
+-- db disabled 20220215
+--		if not php.getSetting( 'allowArbitraryDataAccess' ) and entityId ~= wikibase.getEntityIdForCurrentPage() then
+--			error( 'Access to arbitrary entities has been disabled.', 2 )
+--		end
 
 		checkType( funcName, 1, entityId, 'string' )
 		checkType( funcName, 2, propertyId, 'string' )
@@ -188,7 +189,7 @@ function wikibase.setupInterface()
 		local cacheKey = entityId .. '-' .. propertyId .. '-' .. rank
 		local statements = getFromCache( statementCache, cacheKey )
 		if statements == nil then
-			php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.getEntityStatements.cache_miss' )
+--20220215			php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.getEntityStatements.cache_miss' )
 
 			statements = php.getEntityStatements( entityId, propertyId, rank )
 			addToCache( statementCache, cacheKey, statements )
@@ -245,7 +246,7 @@ function wikibase.setupInterface()
 	--
 	-- @param {string} [id]
 	function wikibase.getLabelWithLang( id )
-		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.getLabelWithLang.call' )
+--20220215		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.getLabelWithLang.call' )
 
 		checkTypeMulti( 'getLabelWithLang', 1, id, { 'string', 'nil' } )
 
@@ -361,7 +362,7 @@ function wikibase.setupInterface()
 	--
 	-- @param {table} snakSerialization
 	function wikibase.renderSnak( snakSerialization )
-		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.renderSnak.call' )
+--20220215		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.renderSnak.call' )
 
 		checkType( 'renderSnak', 1, snakSerialization, 'table' )
 
@@ -372,7 +373,7 @@ function wikibase.setupInterface()
 	--
 	-- @param {table} snakSerialization
 	function wikibase.formatValue( snakSerialization )
-		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.formatValue.call' )
+--20220215		php.incrementStatsKey( 'wikibase.client.scribunto.wikibase.formatValue.call' )
 
 		checkType( 'formatValue', 1, snakSerialization, 'table' )
 

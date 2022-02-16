@@ -22,8 +22,13 @@ function mwtext.setupInterface( opts )
 end
 
 function mwtext.trim( s, charset )
-	charset = charset or '\t\r\n\f '
-	s = mw.ustring.gsub( s, '^[' .. charset .. ']*(.-)[' .. charset .. ']*$', '%1' )
+	if #s > 0 then --20220215
+		if charset then
+			s = mw.ustring.gsub( s, '^[' .. charset .. ']*(.-)[' .. charset .. ']*$', '%1' )
+		else
+			s = mw.ustring.gsub( s, '^%s*(.-)%s*$', '%1' )
+		end
+	end
 	return s
 end
 

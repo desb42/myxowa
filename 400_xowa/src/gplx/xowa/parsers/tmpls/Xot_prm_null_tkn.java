@@ -14,9 +14,9 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.parsers.tmpls; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
-public class Xot_prm_tkn extends Xop_tkn_itm_base {
+public class Xot_prm_null_tkn extends Xop_tkn_itm_base {
 	@Override public byte Tkn_tid() {return Xop_tkn_itm_.Tid_tmpl_prm;}
-	@Override public void Tmpl_fmt(Xop_ctx ctx, byte[] src, Xot_fmtr fmtr) {fmtr.Reg_prm(ctx, src, this, prm_idx, prm_key, dflt_tkn);}
+	//@Override public void Tmpl_fmt(Xop_ctx ctx, byte[] src, Xot_fmtr fmtr) {fmtr.Reg_prm(ctx, src, this, prm_idx, prm_key, dflt_tkn);}
 	@Override public void Tmpl_compile(Xop_ctx ctx, byte[] src, Xot_compile_data prep_data) {
 		if (find_tkn != null) {	// NOTE: find_tkn defaults to null
 			int subs_len = find_tkn.Subs_len();
@@ -38,26 +38,10 @@ public class Xot_prm_tkn extends Xop_tkn_itm_base {
 				}
 			}
 		}
-		if (dflt_tkn != null) {
-			dflt_tkn.Tmpl_compile(ctx, src, prep_data);
-			int subs_len = dflt_tkn.Subs_len();
-			if (subs_len == 0)
-				dflt_is_null = true;
-			else if (subs_len == 1 && dflt_tkn.Subs_get(0) instanceof Xop_txt_tkn) {
-				dflt_tkn.Dat_ary_(Bry_.Mid(src, dflt_tkn.Dat_bgn(), dflt_tkn.Dat_end()));
-			}
-		}
+		if (dflt_tkn != null) dflt_tkn.Tmpl_compile(ctx, src, prep_data);
 	}
 	@Override public boolean Tmpl_evaluate(Xop_ctx ctx, byte[] src, Xot_invk caller, Bry_bfr bfr) {
-		if (!find_tkn_static) {
-			int subs_len = find_tkn.Subs_len();
-			Bry_bfr find_bfr = Bry_bfr_.New();
-			for (int i = 0; i < subs_len; i++)
-				find_tkn.Subs_get(i).Tmpl_evaluate(ctx, src, caller, find_bfr);
-			prm_idx = Bry_.To_int_or__trim_ws(find_bfr.Bfr(), 0, find_bfr.Len(), -1);	// parse as number first; NOTE: trim needed to transform "{{{ 1 }}}" to "1"; it.w:Portale:Giochi_da_tavolo; DATE:2014-02-09
-			if (prm_idx == -1)
-				prm_key = find_bfr.To_bry_and_clear_and_trim();									// not a number; parse as key; NOTE: must trim; PAGE:en.w:William Shakespeare; {{Relatebardtree}}
-		}
+		// this must be static
 		Arg_nde_tkn arg_nde = null;
 		if (prm_idx == -1) {	// prm is key; EX: "{{{key1}}}"
 			if (prm_key != Bry_.Empty)	// NOTE: handles empty find_tkns; EX: {{{|safesubst:}}}
@@ -66,9 +50,8 @@ public class Xot_prm_tkn extends Xop_tkn_itm_base {
 		else {					// prm is idx; EX: "{{{1}}}"
 			arg_nde = caller.Args_eval_by_idx(src, prm_idx - List_adp_.Base1);	// MW args are Base1; EX: {{test|a|b}}; a is {{{1}}}; b is {{{2}}}
 		}
-		if (arg_nde == null) {
-			if (!dflt_is_null)
-				Tmpl_write_missing(ctx, src, caller, bfr);
+		if (arg_nde == null) {	// EX: handles "{{{1}}}{{{2}}}" "{{test|a|keyd=b}}" -> "a{{{2}}}"
+			bfr.Add(text);
 			return true;
 		}
 		Arg_itm_tkn arg_val = arg_nde.Val_tkn();
@@ -81,22 +64,13 @@ public class Xot_prm_tkn extends Xop_tkn_itm_base {
 		}
 		return true;
 	}
-	private void Tmpl_write_missing(Xop_ctx ctx, byte[] src, Xot_invk caller, Bry_bfr bfr) {
-		if (dflt_tkn == null) {							// dflt absent; write orig; {{{1}}} or {{{key}}};
-			bfr.Add(Xop_curly_wkr.Hook_prm_bgn);
-			int subs_len = find_tkn.Subs_len();
-			for (int i = 0; i < subs_len; i++)
-				find_tkn.Subs_get(i).Tmpl_evaluate(ctx, src, caller, bfr);
-			bfr.Add(Xop_curly_wkr.Hook_prm_end);
-		}
-		else
-			dflt_tkn.Tmpl_evaluate(ctx, src, caller, bfr);	// dflt exists; write it
-	}
-	int prm_idx = -1; byte[] prm_key = Bry_.Empty; boolean find_tkn_static = true;
-        boolean dflt_is_null = false;
-	public Arg_itm_tkn Find_tkn() {return find_tkn;} public Xot_prm_tkn Find_tkn_(Arg_itm_tkn v) {
-		find_tkn = v; return this;} Arg_itm_tkn find_tkn;
-	public Xot_prm_tkn Dflt_tkn_(Arg_itm_tkn v) {
-		dflt_tkn = v; return this;} Arg_itm_tkn dflt_tkn;
-	public Xot_prm_tkn(int bgn, int end) {this.Tkn_ini_pos(false, bgn, end);}
+	private byte[] text = Bry_.Empty;
+	int prm_idx = -1;
+	byte[] prm_key = Bry_.Empty;
+	boolean find_tkn_static = true;
+        Arg_itm_tkn dflt_tkn;
+        Arg_itm_tkn find_tkn;
+//	public Arg_itm_tkn Find_tkn() {return find_tkn;} public Xot_prm_tkn Find_tkn_(Arg_itm_tkn v) {find_tkn = v; return this;} Arg_itm_tkn find_tkn;
+//	public Xot_prm_tkn Dflt_tkn_(Arg_itm_tkn v) {dflt_tkn = v; return this;} Arg_itm_tkn dflt_tkn;		
+//	public Xot_prm_tkn(int bgn, int end) {this.Tkn_ini_pos(false, bgn, end);}
 }

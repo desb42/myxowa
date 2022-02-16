@@ -41,7 +41,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 			byte[] val_html_lc = tmp_bfr.To_bry_and_clear();
 			Xol_case_mgr case_mgr = wiki.Lang().Case_mgr();
 			val_html_lc = Standardize_displaytitle_text(case_mgr, val_html_lc, Bool_.Y, amp_mgr);
-			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_txt(), Bool_.N, amp_mgr);
+			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_txt(), Bool_.Y, amp_mgr);
 			if (!Bry_.Eq(val_html_lc, page_ttl_lc)) {
 				Xoa_app_.Usr_dlg().Warn_many("", "", "DISPLAYTITLE fail:~{0} not ~{1}", val_html_lc, page_ttl_lc);
 				val_html = null;
@@ -179,7 +179,7 @@ public class Pfunc_displaytitle extends Pf_func_base {
 					}
 					else {
 						// could have got here with a previous space (ie %c2%a0)
-						if (bfr != null && bfr.Len() > 1 && bfr.Bfr()[bfr.Len()-1] == ' ') {
+						if (sofar == pos-1 && bfr != null && bfr.Len() > 1 && bfr.Bfr()[bfr.Len()-1] == ' ') {
 							sofar = spacepos;
 							break;
 						}

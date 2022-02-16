@@ -43,7 +43,7 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 
 		// xowa_night.css;
 		Io_url css_night_url = app.Fsys_mgr().Url_finder().Find_by_css_or(wiki_domain, "xowa_night.css", String_.Ary("bin", "any", "xowa", "html", "css", "nightmode"), true);
-		this.css_night_bry = Bry_.new_u8("<link rel=\"stylesheet\" href=\"" + css_night_url.To_http_file_str() + "\" type=\"text/css\">");
+		this.css_night_bry = Bry_.new_u8("<link rel=\"stylesheet\" href=\"" + css_night_url.To_http_file_str() + "\" type=\"text/css\" />");
 	}
 	public void Init_(boolean v) {init = v;} private boolean init = true;
 	public void Init_by_wiki(Xow_wiki wiki) {

@@ -97,7 +97,7 @@ public class Xob_page_wkr_cmd implements Xob_cmd {
 		int fil_ary_len = fil_ary.length;
 		return fil_ary_len == 0 ? null : fil_ary[fil_ary_len - 1];	// return last
 	}
-	int optRdrBfrSize = 64 * Io_mgr.Len_mb;
+	int optRdrBfrSize = 8 * Io_mgr.Len_mb; // was 8
 	String optRdrFillFmt = "reading ~{0} MB: ~{1} ~{2}";
 	static final String GRP_KEY = "xowa.bldr.rdr";
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {

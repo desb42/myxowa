@@ -34,6 +34,7 @@ public class Pp_pagequality_nde implements Xox_xnde {
 			byte[] page_bry = Bld_wikitext(full_bfr, ctx);
 			if (page_bry.length > 0)
 				xtn_root = Bld_root_nde(full_bfr, lst_page_regy, ctx, wiki, page_bry);	// NOTE: this effectively reparses page twice; needed b/c of "if {| : ; # *, auto add new_line" which can build different tokens
+			ctx.Para().Process_block__bgn_n__end_y(xnde.Tag());
 		} finally {
 			full_bfr.Mkr_rls();
 		}
@@ -68,7 +69,8 @@ public class Pp_pagequality_nde implements Xox_xnde {
 					bfr.Add_str_a7("|page=");
 					bfr.Add(ttl.Leaf_txt());
 				}
-				bfr.Add_str_a7("|frameless|440px|class=ws-cover]]</div>");
+				//bfr.Add_str_a7("|frameless|440px|class=ws-cover]]</div>");
+				bfr.Add_str_a7("|frameless|440px]]</div>");
 			//}
 		}
 		return bfr.To_bry_and_clear();
@@ -99,8 +101,8 @@ public class Pp_pagequality_nde implements Xox_xnde {
 		int atrs_len = atrs_ary.length;
 		for (int i = 0; i < atrs_len; i++) {
 			Mwh_atr_itm atr = atrs_ary[i];
-						if (atr.Eql_pos()< 0)
-							continue;
+			if (atr.Eql_pos()< 0)
+				continue;
 			byte[] key = atr.Key_bry();
 			byte[] val = atr.Val_as_bry();
 			if (Bry_.Eq(key, attr_level)) {
@@ -108,7 +110,7 @@ public class Pp_pagequality_nde implements Xox_xnde {
 					if (val[0] >= '0' && val[0] <= '9') // constants!! (true or yes or on)
 						level = val[0];
 				}
-                        }
+			}
 		}
 	}
 	private static byte[]
@@ -118,9 +120,9 @@ public class Pp_pagequality_nde implements Xox_xnde {
 	, divclose = Bry_.new_a7("</div>")
 	, qualitystart = Bry_.new_a7("proofreadpage_quality")
 	, qualityend = Bry_.new_a7("_message")
-                , attr_level = Bry_.new_a7("level")
-                , catopen = Bry_.new_a7("[[Category:")
-                , catclose = Bry_.new_a7("]]")
-                , catpr = Bry_.new_a7("Proofread")
+	, attr_level = Bry_.new_a7("level")
+	, catopen = Bry_.new_a7("[[Category:")
+	, catclose = Bry_.new_a7("]]")
+	, catpr = Bry_.new_a7("Proofread")
 	;
 }

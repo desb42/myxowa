@@ -68,15 +68,17 @@ function MWServer:call( id, nargs, args )
 	end
 end
 
-function MWServer:callex( id, ... )
+--function MWServer:callex( id, ... )
+function MWServer:callex( ... )
 --	local nargs, args = self:listToCountAndTable( ... )
 	local result = 
-			MWClient.client_recv( {  -- skip a call 20211108
-		op = 'call',
-		i = id,
-		nargs = -1,
-		a = { ... }
-	} )
+			MWClient.client_recv_x( { ... } )
+--			MWClient.client_recv( {  -- skip a call 20211108
+--		op = 'call',
+--		i = id,
+--		nargs = -1,
+--		a = { ... }
+--	} )
 --			self:server_send( {
 --		op = 'call',
 --		id = id,

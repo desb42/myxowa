@@ -429,7 +429,7 @@ public class Db_parser {
 	, bry_noinclude = Bry_.new_a7("noinclude")
 	, bry_includeonly = Bry_.new_a7("includeonly")
 	, bry_onlyinclude = Bry_.new_a7("onlyinclude")
-        ;
+	;
 	private boolean match_it(byte[] element) {
 		int savedpos = m_pos;
 		m_pos++; // skip '<'
@@ -607,11 +607,10 @@ class Tag_match {
 			bgn++;
 		}
 		if (bgn + tag_len >= src_end) return 0;
-		// probably should be case insensitive
 		for (int i = 0; i < tag_len; i++) {
 			byte s = src[bgn++];
 			byte c = tag[i];
-			if ((c | 32) != (s | 32)) // case insensitive
+			if (c != (s | 32)) // case insensitive
 				return 0;
 		}
 		// any whitespace beween tag and '>'
@@ -624,7 +623,9 @@ class Tag_match {
 				break;
 		}
 		if (bgn < src_end && src[bgn++] != '>') return 0;
-		if (!close) {
+		if (!close && tag[0] != 'n') { // excluding <noinclude>!!!!!
+			// any whitespace after open tag?
+			// <noinclude> en.wikisource.org/wiki/Page:Rusk2.jpg needs the \n (20220204)
 			while (bgn < src_end) {
 				byte b = src[bgn];
 				if (Bry_.Trim_ary_ws[b & 0xFF] != Byte_ascii.Null)
@@ -648,7 +649,7 @@ class Tag_match {
 		for (int i = 0; i < tag_len; i++) {
 			byte s = src[bgn++];
 			byte c = tag[i];
-			if ((c | 32) != (s | 32)) // case insensitive
+			if (c != (s | 32)) // case insensitive
 				return 0;
 		}
 		// find close '>'

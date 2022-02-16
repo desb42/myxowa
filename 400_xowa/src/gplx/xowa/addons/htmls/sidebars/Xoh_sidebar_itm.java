@@ -14,17 +14,20 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.addons.htmls.sidebars; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*;
+import gplx.xowa.apps.utls.Xoa_url_encoder;
 public class Xoh_sidebar_itm {
+	private final static Xoa_url_encoder url_encoder = new Xoa_url_encoder();
 	public Xoh_sidebar_itm(boolean tid_is_itm, byte[] text_key, byte[] text_val, byte[] href) {
 		this.tid_is_itm = tid_is_itm;
 		this.id = gplx.langs.htmls.encoders.Gfo_url_encoder_.Id.Encode(Bry_.Add(tid_is_itm ? CONST_id_prefix_n : CONST_id_prefix_p, text_key));	// build id; EX:"n-encoded_id"
 		this.text = text_val;
-		this.href = href;
+                if (href != null)
+		this.href = url_encoder.Encode(href);
 	}
 	public boolean					Tid_is_itm() {return tid_is_itm;} private final    boolean tid_is_itm;
 	public byte[]				Id() {return id;} private final    byte[] id;
 	public byte[]				Text() {return text;} private final    byte[] text;
-	public byte[]				Href() {return href;} private final    byte[] href;
+	public byte[]				Href() {return href;} private byte[] href = null;
 	public byte[]				Title() {return title;} private byte[] title;
 	public byte[]				Accesskey() {return accesskey;} private byte[] accesskey;
 	public byte[]				Atr_accesskey_and_title() {return atr_accesskey_and_title;} private byte[] atr_accesskey_and_title;

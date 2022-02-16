@@ -208,9 +208,9 @@ public class Http_server_wkr implements Gfo_invk {
                 //Db_Nav_template nt = new Db_Nav_template();
                 //nt.Init(page.Wiki());
 
-					page.Wiki().Cache_mgr().Free_mem__page();
-					page.Wiki().Parser_mgr().Scrib().Core_term();
-					page.Wiki().Appe().Wiki_mgr().Wdata_mgr().Clear();
+//20220214					page.Wiki().Cache_mgr().Free_mem__page();
+//					page.Wiki().Parser_mgr().Scrib().Core_term();
+//					page.Wiki().Appe().Wiki_mgr().Wdata_mgr().Clear();
 
                 if (url_parser.Action() == Xopg_view_mode_.Tid__edit) { // change some more things
 					//page_html = String_.Replace(page_html, "name=\"editform\">"	, "name=\"editform\" method=\"post\" enctype=\"multipart/form-data\" action=\"/" + String_.new_u8(url_parser.Wiki()) + "/wiki/" + String_.new_u8(url_parser.Page()) + "?action=submit\">");
@@ -426,7 +426,7 @@ public class Http_server_wkr implements Gfo_invk {
 		//page_html = String_.Replace(page_html, "action=\"/wiki/"	, "action=\"/xowa/" + wiki_domain + "/wiki/");
 		page_html = String_.Replace(page_html, "/site"				, "/xowa");
 		// big HACK to remove a page break at the beginning (20210522)
-		page_html = String_.Replace(page_html, "<div class=\"mw-parser-output\">\n\n<p><br />\n</p>", "<div class=\"mw-parser-output\">");
+//20220207		page_html = String_.Replace(page_html, "<div class=\"mw-parser-output\">\n\n<p><br />\n</p>", "<div class=\"mw-parser-output\">");
 		// should check to see if these have been downloaded somehow
 		//page_html = page_html.replaceAll("https?://(commons\\.wikimedia|de\\.wikipedia|en\\.wikibooks|en\\.wikinews|en\\.wikipedia|en\\.wikiquote|en\\.wikisource|en\\.wikiversity|en\\.wikivoyage|en\\.wiktionary|fr\\.wikipedia|fr\\.wikisource|he\\.wikipedia|it\\.wikipedia|it\\.wikisource|ja\\.wikipedia|simple\\.wikipedia|species\\.wikimedia|www\\.wikidata)\\.org" , "/xowa/$1.org");
 		//page_html = mwiki.reset(page_html).replaceAll("/xowa/$1.org");

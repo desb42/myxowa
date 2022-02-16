@@ -25,6 +25,7 @@ public class Xop_log_time_count {
 	public Xop_log_time_count() {
 		Clear();
 	}
+	public long Page_start() {return page_start;}
 	public int Count() {return count;}
 	public int CallCount() {return call_count;}
 	public long Time() {return time;}

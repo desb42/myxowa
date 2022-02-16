@@ -27,13 +27,13 @@ public class Xob_xml_parser {
 		int src_len = fil.Bfr_len(), data_bgn = -1, page_bgn = -1;
 		boolean data_bfr_add = false, page_id_needed = true, title_needed = true, reading = true;
 		int[] modified_on_ary = new int[7];
-                int start = 0;
+		int start = 0;
 		while (reading) {
 			if (	pos + tag_len_max > src_len			// near end of src
 				&&	!fil.Fil_eof())	 {					// not at fil end
 				int refill_pos = 0;
 				if (data_bfr_add)
-                                    data_bfr.Add_mid(src, start, pos);		// add to src if data_bfr_add is on (only happens for <title>, <text>)
+					data_bfr.Add_mid(src, start, pos);		// add to src if data_bfr_add is on (only happens for <title>, <text>)
 				if (data_bgn == -1) {					// keep page in same data_bfr; NOTE: needed else timestamp/id may fail
 					refill_pos = pos;
 					pos = 0;
@@ -45,7 +45,7 @@ public class Xob_xml_parser {
 				}
 				fil.Bfr_load_from(refill_pos);		// refill src from pos; 
 				src_len = fil.Bfr_len();
-                                start = pos;
+				start = pos;
 			}
 			if (pos >= src_len) return Bry_find_.Not_found;	// no more src left; should only happen at end of file
 			byte b = src[pos];
@@ -58,7 +58,7 @@ public class Xob_xml_parser {
 				Xob_xml_parser_itm itm = (Xob_xml_parser_itm)o;
 				int hook_bgn = pos;							// mark old pos
 				pos += itm.Hook_len();						// calc new pos
-                                start = pos;
+				start = pos;
 				switch (itm.Tid()) {
 					case Xob_xml_parser_.Id_page_bgn:		page_bgn = hook_bgn; break;
 					case Xob_xml_parser_.Id_id_bgn:			if (page_id_needed) data_bgn = pos; break;	// only flag if first <id>; note that 1st <id> always belongs to <page>;
@@ -67,24 +67,24 @@ public class Xob_xml_parser {
 							int page_id = Bry_.To_int_or(src, data_bgn, hook_bgn, -1); if (page_id == -1) usr_dlg.Warn_many(GRP_KEY, "page_id_invalid", "page_id_is_invalid: ~{0}", String_.new_u8(src, data_bgn, hook_bgn));
 							rv.Id_(page_id);
 							page_id_needed = false;		// turn off for other <id> tags (<contributor>; <revision>)
-                                                        data_bgn = -1;
+							data_bgn = -1;
 						}
 						break;
 					case Xob_xml_parser_.Id_timestamp_bgn:  data_bgn = pos; break;
 					case Xob_xml_parser_.Id_timestamp_end:
 						date_parser.Parse_iso8651_like(modified_on_ary, src, data_bgn, hook_bgn);
 						rv.Modified_on_(DateAdp_.seg_(modified_on_ary));
-                                                data_bgn = -1;
+						data_bgn = -1;
 						break;
 					case Xob_xml_parser_.Id_model_bgn:  data_bgn = pos; break;
 					case Xob_xml_parser_.Id_model_end:
 						rv.Model_( model_format.Parse_model(src, data_bgn, hook_bgn, rv.Ttl_full_db()) );
-                                                data_bgn = -1;
+						data_bgn = -1;
 						break;
 					case Xob_xml_parser_.Id_format_bgn:  data_bgn = pos; break;
 					case Xob_xml_parser_.Id_format_end:
 						rv.Format_( model_format.Parse_format(src, data_bgn, hook_bgn, rv.Ttl_full_db()) );
-                                                data_bgn = -1;
+						data_bgn = -1;
 						break;
 					case Xob_xml_parser_.Id_title_bgn:		if (title_needed) data_bfr_add = true; break;
 					case Xob_xml_parser_.Id_text_bgn:		data_bfr_add = true; break;

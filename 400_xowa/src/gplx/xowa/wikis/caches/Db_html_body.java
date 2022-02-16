@@ -28,8 +28,8 @@ public class Db_html_body /*implements Xowd_text_bry_owner*/ {
 		Io_url filename = app.Fsys_mgr().Wiki_dir().GenSubFil_nest(domain, domain + "-hdump-" + Integer.toString(wkr_id) + ".dat");
                 
 		try {
-                    File file = new File(filename.Raw());
-                    boolean v = file.createNewFile();
+			File file = new File(filename.Raw());
+			boolean v = file.createNewFile();
 			//tempFile = File.createTempFile("hdump-", "-" + Integer.toString(wkr_id));
 			//raf = new RandomAccessFile(tempFile, "rw");
 			raf = new RandomAccessFile(file, "rw");
@@ -38,13 +38,12 @@ public class Db_html_body /*implements Xowd_text_bry_owner*/ {
 		}
 	}
 	public void Close() {
-            try {
-            raf.close();
+		try {
+			raf.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-            
-        }
+	}
 	public byte[] Read(long page_id, long ofs, int page_size) {
 		if (page_size == 0) return Bry_.Empty;
 		byte[] data = new byte[page_size];
@@ -135,6 +134,6 @@ public class Db_html_body /*implements Xowd_text_bry_owner*/ {
 		        }
 		        return v;
 	}
-        public void Set_text_bry_by_db(byte[] b) {}
-        public int Page_id() {return -1;}
+	public void Set_text_bry_by_db(byte[] b) {}
+	public int Page_id() {return -1;}
 }

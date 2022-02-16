@@ -37,7 +37,7 @@ public class Xop_redirect_mgr {
 		if (src == null) return Redirect_null_ttl;
 		return Extract_redirect(src, src.length);
 	}
-	private int ttl_bgn, ttl_end; // used by Adjust_redirect
+	private int ttl_bgn, ttl_end, ttl_end_lnki; // used by Adjust_redirect
 	private final Json_parser jsonParser = new Json_parser();
 	private static final byte[] Bry__redirect = Bry_.new_a7("redirect"); // repeated from Wbase_doc_mgr
 	public Xoa_ttl Extract_redirect(byte[] src, int src_len) {	// NOTE: this proc is called by every page. be careful of changes; DATE:2014-07-05
@@ -77,6 +77,7 @@ public class Xop_redirect_mgr {
 		if (ttl_bgn == Bry_find_.Not_found)	return Redirect_null_ttl;
 		ttl_bgn += Xop_tkn_.Lnki_bgn.length;
 		ttl_end = Bry_find_.Find_fwd(src, Xop_tkn_.Lnki_end, ttl_bgn); if (ttl_end == Bry_find_.Not_found)	return Redirect_null_ttl;
+                ttl_end_lnki = ttl_end;
 		int pipe_pos = Bry_find_.Find_fwd(src, Byte_ascii.Pipe, ttl_bgn); 
 		if (	pipe_pos != Bry_find_.Not_found	// if pipe exists; PAGE:da.w:Middelaldercentret; DATE:2015-11-06
 			&&	pipe_pos < ttl_end)				// and pipe is before ]]; do not take pipe from next lnki; PAGE:en.w:Template:pp-semi; DATE:2015-11-14
@@ -96,7 +97,17 @@ public class Xop_redirect_mgr {
 
 		byte[] redir = Bld_redirect_msg_to(wiki, html);
 
-		src = Bry_.Add( redir, Bry_.Mid(src, ttl_end + 2, src.length)); // should check the +2
+		// consume white space after redirect
+		ttl_end_lnki += 2;
+		while (ttl_end_lnki < src.length) {
+			byte b = src[ttl_end_lnki];
+			if (b == ' ' || b == '\t' || b == '\n')
+				ttl_end_lnki++;
+			else
+				break;
+		}
+
+		src = Bry_.Add( redir, Bry_.Mid(src, ttl_end_lnki, src.length));
 		page.Db().Text().Text_bry_(src);
 		// need to add $out->addModuleStyles( 'mediawiki.action.view.redirectPage' );
 	}

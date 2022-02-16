@@ -78,6 +78,9 @@ public class Xot_invk_temp implements Xot_invk {
 	public static Xot_invk_temp New(byte defn_tid, byte[] frame_ttl, Arg_nde_tkn name_tkn, byte[] src, int src_bgn, int src_end) {
 		return new Xot_invk_temp(false, defn_tid, frame_ttl, name_tkn, src, src_bgn, src_end);
 	}
+	public String toString() {
+		return String_.new_u8(frame_ttl);
+	}
 }
 /*
 NOTE_1:

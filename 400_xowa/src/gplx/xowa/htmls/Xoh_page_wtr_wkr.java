@@ -375,8 +375,8 @@ public class Xoh_page_wtr_wkr {
 						tidy_bfr.Add_str_a7("<div class=\"mw-parser-output\">");
 					}
 					wiki.Html_mgr().Html_wtr().Write_doc(tidy_bfr, ctx, hctx, page.Root().Data_mid(), page.Root());
-                                        // any rogue refs?
-                                        wiki.Html_mgr().Html_wtr().Ref_wtr().Xnde_references(wiki.Html_mgr().Html_wtr(), ctx, hctx, page, tidy_bfr, page.Root().Data_mid(), null);
+					// any rogue refs?
+					wiki.Html_mgr().Html_wtr().Ref_wtr().Xnde_references(wiki.Html_mgr().Html_wtr(), ctx, hctx, page, tidy_bfr, page.Root().Data_mid(), null);
 					if (wiki.Html_mgr().Html_wtr().Cfg().Toc__show()
 						&& (page.Html_data().Pagebanner().Show_toc_in_html())) // do not write TOC in HTML body if pageBanner is enabled
 						gplx.xowa.htmls.core.wkrs.tocs.Xoh_toc_wtr.Write_toc(tidy_bfr, page, hctx);

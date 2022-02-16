@@ -645,70 +645,81 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 			byte b = src[cur++];
 			byte[] b_ary = null;
 			Btrie_rv trv = null;
-			if (b == Byte_ascii.Amp) {
-				if (whitespace) {
-					buf.Add_byte(Byte_ascii.Space);
-					whitespace = false;
-				}
-				if (cur == end) {}	// guards against terminating &; EX: [[Bisc &]]; NOTE: needed b/c Match_bgn does not do bounds checking for cur in src; src[src.length] will be called when & is last character;
-				else {
-					if (trv == null) trv = new Btrie_rv();
-					Object html_ent_obj = amp_trie.Match_at(trv, src, cur, end);
-					if (html_ent_obj != null) {
-						Gfh_entity_itm amp_itm = (Gfh_entity_itm)html_ent_obj;
-						match_pos = trv.Pos();
-						if (amp_itm.Tid() == Gfh_entity_itm.Tid_name_std) {
-							switch (amp_itm.Char_int()) {
-								case 160:	// NOTE: &nbsp must convert to space; EX:w:United States [[Image:Dust Bowl&nbsp;- Dallas, South Dakota 1936.jpg|220px|alt=]]
-									b = Byte_ascii.Space; // apply same ws rules as Space, NewLine; needed for converting multiple ws into one; EX:" &nbsp; " -> " " x> "   "; PAGEen.w:Greek_government-debt_crisis; DATE:2014-09-25
-									cur = match_pos; // set cur after ";"
-									break;
-								case Byte_ascii.Amp:
-									b_ary = Byte_ascii.Amp_bry;		// NOTE: if &amp; convert to &; PAGE:en.w:Amadou Bagayoko?redirect=n; DATE:2014-09-23
-									break;
-								case Byte_ascii.Quote:
-								case Byte_ascii.Lt:
-								case Byte_ascii.Gt:
-									b_ary = amp_itm.Xml_name_bry();
-									break;
-								case Gfh_entity_itm.Char_int_null:	// &#xx;
-									int end_pos = Bry_find_.Find_fwd(src, Byte_ascii.Semic, match_pos, end);
-									if (end_pos == Bry_find_.Not_found) {} // &# but no terminating ";" noop: defaults to current_byte which will be added below;
-									else {
+			switch (b) {
+				case Byte_ascii.Amp:
+					if (whitespace) {
+						buf.Add_byte(Byte_ascii.Space);
+						whitespace = false;
+					}
+					if (cur == end) {}	// guards against terminating &; EX: [[Bisc &]]; NOTE: needed b/c Match_bgn does not do bounds checking for cur in src; src[src.length] will be called when & is last character;
+					else {
+						if (trv == null) trv = new Btrie_rv();
+						Object html_ent_obj = amp_trie.Match_at(trv, src, cur, end);
+						if (html_ent_obj != null) {
+							Gfh_entity_itm amp_itm = (Gfh_entity_itm)html_ent_obj;
+							match_pos = trv.Pos();
+							if (amp_itm.Tid() == Gfh_entity_itm.Tid_name_std) {
+								switch (amp_itm.Char_int()) {
+									case 160:	// NOTE: &nbsp must convert to space; EX:w:United States [[Image:Dust Bowl&nbsp;- Dallas, South Dakota 1936.jpg|220px|alt=]]
+										b = Byte_ascii.Space; // apply same ws rules as Space, NewLine; needed for converting multiple ws into one; EX:" &nbsp; " -> " " x> "   "; PAGEen.w:Greek_government-debt_crisis; DATE:2014-09-25
+										cur = match_pos; // set cur after ";"
+										break;
+									case Byte_ascii.Amp:
+										b_ary = Byte_ascii.Amp_bry;		// NOTE: if &amp; convert to &; PAGE:en.w:Amadou Bagayoko?redirect=n; DATE:2014-09-23
+										break;
+									case Byte_ascii.Quote:
+									case Byte_ascii.Lt:
+									case Byte_ascii.Gt:
 										b_ary = amp_itm.Xml_name_bry();
-										match_pos = end_pos + 1;
-									}
-									break;
-								default:
-									b_ary = amp_itm.U8_bry();
-									break;
+										break;
+									case Gfh_entity_itm.Char_int_null:	// &#xx;
+										int end_pos = Bry_find_.Find_fwd(src, Byte_ascii.Semic, match_pos, end);
+										if (end_pos == Bry_find_.Not_found) {} // &# but no terminating ";" noop: defaults to current_byte which will be added below;
+										else {
+											b_ary = amp_itm.Xml_name_bry();
+											match_pos = end_pos + 1;
+										}
+										break;
+									default:
+										b_ary = amp_itm.U8_bry();
+										break;
+								}
 							}
-						}
-						else {
-							Xop_amp_mgr_rslt amp_rv = new Xop_amp_mgr_rslt();
-							amp_mgr.Parse_ncr(amp_rv, amp_itm.Tid() == Gfh_entity_itm.Tid_num_hex, src, end, cur, match_pos);
-							if (amp_rv.Pass()) {
-								match_pos = amp_rv.Pos();
-								b_ary = gplx.core.intls.Utf16_.Encode_int_to_bry(amp_rv.Val());
-								if (b_ary.length == 1 && (b_ary[0] == Byte_ascii.Space || b_ary[0] == 160)) {
-									b = Byte_ascii.Space;
-									b_ary = null;
-									cur = match_pos;
+							else {
+								Xop_amp_mgr_rslt amp_rv = new Xop_amp_mgr_rslt();
+								amp_mgr.Parse_ncr(amp_rv, amp_itm.Tid() == Gfh_entity_itm.Tid_num_hex, src, end, cur, match_pos);
+								if (amp_rv.Pass()) {
+									match_pos = amp_rv.Pos();
+									b_ary = gplx.core.intls.Utf16_.Encode_int_to_bry(amp_rv.Val());
+									if (b_ary.length == 1 && (b_ary[0] == Byte_ascii.Space || b_ary[0] == 160)) {
+										b = Byte_ascii.Space;
+										b_ary = null;
+										cur = match_pos;
+									}
 								}
 							}
 						}
 					}
-				}
-			}
-			else if (b == Byte_ascii.Percent) {
-				if (cur + 2 <= end) {
-					int b1 = Int_.By_hex_byte(src[cur]);
-					int b2 = Int_.By_hex_byte(src[cur+1]);
-					if (b1 >= 0 && b2 >= 0) {
-						b = (byte)(b1*16 + b2);
-						cur += 2;
+					break;
+
+				case Byte_ascii.Percent:
+					if (cur + 2 <= end) {
+						int b1 = Int_.By_hex_byte(src[cur]);
+						int b2 = Int_.By_hex_byte(src[cur+1]);
+						if (b1 >= 0 && b2 >= 0) {
+							b = (byte)(b1*16 + b2);
+							cur += 2;
+						}
 					}
-				}
+					break;
+/*
+				case -62: // %c0%a0 - nbsp?
+					if (cur + 1 <= end && src[cur] == -96) {
+						b = Byte_ascii.Space;
+						cur++;
+					}
+					break;
+*/
 			}
 
 			if (b_ary != null) {

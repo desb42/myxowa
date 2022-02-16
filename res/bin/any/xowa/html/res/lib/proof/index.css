@@ -1,0 +1,26 @@
+.prp-pagelist-input-preview-button {
+	margin-top: 0.5em;
+}
+
+.prp-pagelist-input-preview-output {
+	margin-top: 0.5em;
+}
+
+.prp-pagelist-preview {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.prp-pagelist-preview > .oo-ui-widget {
+	flex-grow: 1;
+}
+
+.prp-pagelist-preview > .oo-ui-widget > .oo-ui-buttonElement-button {
+	width: 100%;
+}
+
+.oo-ui-fieldLayout.oo-ui-fieldLayout-align-inline.prp-pagelist-input-visual-toggle {
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 0.5em;
+}

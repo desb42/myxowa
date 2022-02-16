@@ -253,6 +253,9 @@ public class Scrib_core {
 			if (!Env_.Mode_testing())
 				engine.CleanupChunks(Keyval_.Ary(Keyval_.int_(proc.Id(), "")));										// cleanup chunk immediately; needed for heavy pages like en.d:water; DATE:2014-08-07
 		}
+//                catch (Exception e)	{
+//                    int a=1;
+//                }
 		finally {
 			lib_mw.Invoke_end();
                 //System.out.println("unset p " + String_.new_u8(parent_frame.Frame_ttl()) + " c " + String_.new_u8(current_frame.Frame_ttl()));
