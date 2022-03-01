@@ -113,6 +113,8 @@ public class Xoh_page_wtr_wkr {
 		// if custom_html, use it and exit; needed for Default_tab
 		byte[] custom_html = page.Html_data().Custom_html();
 		boolean isnoredirect = page.Url().Qargs_mgr().IsNoRedirect();
+		if (isnoredirect)
+			page.Html_data().Head_mgr().Itm__redirect_css().Enabled_y_();
 		if (custom_html != null) {bfr.Add(custom_html); return;}
 		// temp variables
 		if (root_dir_bry == null) this.root_dir_bry = app.Fsys_mgr().Root_dir().To_http_file_bry();
@@ -319,10 +321,13 @@ public class Xoh_page_wtr_wkr {
 						if (page.Karto_maps().Count() > 1)
 							//Gfo_usr_dlg_.Instance.Log_many("", "", "multiple karto_maps: ttl=~{0}", page_ttl.Full_db());
 							ctx.Wiki().Logger().Log_many("multiple karto_maps: ttl=~{0}", page_ttl.Full_db());
-						if (page.Html_data().Syntaxhighlight())
+						if (page.Html_data().Syntaxhighlight()) {
 							//Gfo_usr_dlg_.Instance.Log_many("", "", "#syntax_highlight: ttl=~{0}", page_ttl.Full_db());
 							ctx.Wiki().Logger().Log_many("#syntax_highlight: ttl=~{0}", page_ttl.Full_db());
+							page.Html_data().Head_mgr().Itm__syntax_highlight_css().Enabled_y_();
+
 //							app.SyntaxHighlighter().Highlight_bfr(bfr, wiki.Wrk_id(), wiki.Domain_bry(), page.Ttl());
+                                                }
 						break;
 				}
 			}

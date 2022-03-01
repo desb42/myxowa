@@ -41,5 +41,8 @@ public class Xoh_head_itm_ {
 	, Key__page_cfg			= Bry_.new_a7("page_cfg")
 	, Key__css_dynamic      = Bry_.new_a7("css_dynamic")
 	, Key__categorytree      = Bry_.new_a7("categorytree")
+                , Key__common_styles = Bry_.new_a7("common")
+                , Key__syntax_highlight = Bry_.new_a7("syntax_highlight")
+                , Key__redirect = Bry_.new_a7("redirect")
 	;
 }

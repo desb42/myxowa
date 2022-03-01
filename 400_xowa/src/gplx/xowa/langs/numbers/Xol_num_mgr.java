@@ -33,6 +33,7 @@ public class Xol_num_mgr implements Gfo_invk {
 	public byte[] Format_num_by_long(long val)			{return Format_num(Bry_.new_a7(Long_.To_str(val)));}
 	public byte[] Format_num_by_decimal(Decimal_adp val){return Format_num(Bry_.new_a7(val.To_str()));}
 	public byte[] Format_num(int val)					{return Format_num(Bry_.new_a7(Int_.To_str(val)));}
+	public byte[] Format_num(int val, boolean skip_commafy)			{return Format_num(Bry_.new_a7(Int_.To_str(val)), skip_commafy);}
 	public byte[] Format_num(byte[] num)				{return Format_num(num, false);}
 	public byte[] Format_num(byte[] num, boolean skip_commafy) {
             Bry_bfr tmp_bfr = Bry_bfr_.New();

@@ -142,6 +142,7 @@ public class Http_server_wkr implements Gfo_invk {
 				return;
 			}
 			else if (url_parser.Action() == Xopg_view_mode_.Tid__firstpara) {
+		synchronized (this) {
 				if (page.Page() != null) {
 					wikitext = page.Page().Db().Text().Text_bry();
 					page.Wiki().Parser_mgr().Ctx().Page().Ttl_(page.Ttl());	// NOTE: must set cur_page, else page-dependent templates won't work; EX: {{FULLPAGENAME}};
@@ -180,7 +181,7 @@ public class Http_server_wkr implements Gfo_invk {
                                 page.Wiki().Lang().Key_bry(), page.Wiki().Lang().Dir_ltr_bry());
 
 				page_html = String_.new_u8(bfr.To_bry());
-
+		}
 			}
 			else {
 				page_html = page.Html();

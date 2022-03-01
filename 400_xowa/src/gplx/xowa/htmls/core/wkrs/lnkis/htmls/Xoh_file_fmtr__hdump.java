@@ -25,7 +25,7 @@ public class Xoh_file_fmtr__hdump extends Xoh_file_fmtr__basic {		private final 
 
 		// init data_xowa_title / data_xowa_image; EX: "xowa_title='A.png'"; "xowa_image='1|220|440|-1|-1|-1'"
 		byte[] data_xowa_title = Gfh_atr_.Make(tmp_bfr, Xoh_img_xoimg_data.Bry__data_xowa_title, a_xowa_title);
-		byte[] data_xowa_image = Bld_xowa_image_data(tmp_bfr, xfer_itm.Lnki_type(), xfer_itm.Lnki_w(), xfer_itm.Lnki_h(), xfer_itm.Lnki_upright(), xfer_itm.Lnki_time(), xfer_itm.Lnki_page());
+		byte[] data_xowa_image = Bld_xowa_image_data(tmp_bfr, xfer_itm.Lnki_type(), xfer_itm.Lnki_w(), xfer_itm.Lnki_h(), xfer_itm.Lnki_upright(), xfer_itm.Lnki_time(), xfer_itm.Lnki_page(), img_w, img_h);
 
 		// always null out w, h, src; Hdb__hzip and Hdb__htxt should never write src; Hdb__page_sync will never come here; ISSUE#:553; DATE:2019-09-25
 		img_w = img_h = 0;
@@ -45,14 +45,16 @@ public class Xoh_file_fmtr__hdump extends Xoh_file_fmtr__basic {		private final 
 	public static void Add_anch_n(Bry_bfr bfr, byte[] data_xowa_title, byte[] data_xowa_image, byte[] img_src, int img_w, int img_h, byte img_cls, byte[] img_cls_other, byte[] img_alt, byte[] img_xtra_atrs) {
 		fmt__anch_n.Bld_many(bfr, data_xowa_title, data_xowa_image, Gfh_utl.Escape_html_as_bry(img_alt), img_src, img_w, img_h, Xoh_img_cls_.To_html(img_cls, img_cls_other), img_xtra_atrs);
 	} 
-	public static byte[] Bld_xowa_image_data(Bry_bfr bfr, byte tid, int w, int h, double upright, double time, int page) {
+	public static byte[] Bld_xowa_image_data(Bry_bfr bfr, byte tid, int w, int h, double upright, double time, int page, int img_w, int img_h) {
 		bfr.Add_byte_space().Add(Xoh_img_xoimg_data.Bry__data_xowa_image).Add_byte_eq().Add_byte_quote();
 		bfr.Add_int_digits(1, Xop_lnki_type.To_tid(tid)).Add_byte_pipe();
 		bfr.Add_int_variable(w).Add_byte_pipe();
 		bfr.Add_int_variable(h).Add_byte_pipe();
 		bfr.Add_double(upright).Add_byte_pipe();
 		bfr.Add_double(time).Add_byte_pipe();
-		bfr.Add_int_variable(page).Add_byte_quote();
+		bfr.Add_int_variable(page).Add_byte_pipe();
+		bfr.Add_int_variable(img_w).Add_byte_pipe();
+		bfr.Add_int_variable(img_h).Add_byte_quote();
 		return bfr.To_bry_and_clear();
 	}
 	private static final    Bry_fmt

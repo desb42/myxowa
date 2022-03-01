@@ -41,7 +41,7 @@ class Cite_mgr { // REF.MW:/extensions/Cite/includes/Cite.php
 
 		// if linkLabels group missing, just concat; EX: "custom-group 1"
 		if (linkLabels.Len() == 0) {
-			return Bry_.Add((group.length == 0 ? Bry_.Empty : Bry_.Add(group, Byte_ascii.Space)), wiki.Lang().Num_mgr().Format_num(offset));  
+			return Bry_.Add((group.length == 0 ? Bry_.Empty : Bry_.Add(group, Byte_ascii.Space)), wiki.Lang().Num_mgr().Format_num(offset, true));  
 		}
 
 		// linkLabels group exists; pull corresponding offset; EX: "5" in lower-roman -> "v"

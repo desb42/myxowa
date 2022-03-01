@@ -73,6 +73,7 @@ public class Pp_qualitytot_html_bldr implements gplx.core.brys.Bfr_arg {
 		bfr.Add_str_a7("%;\"></td>\n<td class=\"quality2\" style=\"width:").Add_long_variable(q2);
 		bfr.Add_str_a7("%;\"></td>\n<td class=\"quality1\" style=\"width:").Add_long_variable(q1);
 		bfr.Add_str_a7("%;\"></td>\n<td class=\"quality0\" style=\"width:").Add_long_variable(q0);
+		bfr.Add_str_a7("%;\"></td>\n<td class=\"qualitye\" style=\"width:").Add_long_variable(qe);
 		bfr.Add_str_a7("%;\"></td>\n");
 		if (qe > 0)
 			bfr.Add_str_a7("<td class=\"qualitye\" style=\"width:").Add_long_variable(qe).Add_str_a7("%;\"></td>\n");

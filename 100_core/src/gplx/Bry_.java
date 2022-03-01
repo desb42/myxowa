@@ -442,36 +442,43 @@ public class Bry_ {
 		}
 		return rv;
 	}
-	public static final    byte[] Trim_ary_ws = mask_(256, Byte_ascii.Tab, Byte_ascii.Nl, Byte_ascii.Cr, Byte_ascii.Space, (byte)-62);
+	public static final    byte[] Trim_ary_ws = mask_(256, Byte_ascii.Tab, Byte_ascii.Nl, Byte_ascii.Cr, Byte_ascii.Space);
 	public static byte[] Trim(byte[] src) {return Trim(src, 0, src.length, true, true, Trim_ary_ws, true);}
 	public static byte[] Trim(byte[] src, int bgn, int end) {return Trim(src, bgn, end, true, true, Trim_ary_ws, true);}
 	public static byte[] Trim(byte[] src, int bgn, int end, boolean trim_bgn, boolean trim_end, byte[] trim_ary, boolean reuse_bry_if_noop) {
 		int txt_bgn = bgn, txt_end = end;
-		boolean all_ws = true;
 		if (trim_bgn) {
-			for (int i = bgn; i < end; i++) {
-				byte b = src[i];
+			while (txt_bgn < end) {
+				byte b = src[txt_bgn];
+				if (b == -62) { // check for \xc2\xa0 &nbsp;
+					if (txt_bgn+1 < end && src[txt_bgn+1] == -96) { // eg en.wikipedia.org/wiki/Lagunilla_del_Jubera
+						txt_bgn += 2;
+						continue;
+					}
+				}
 				byte tr = trim_ary[b & 0xFF];
 				if (tr == Byte_ascii.Null) {
-					txt_bgn = i;
-					i = end;
-					all_ws = false;
+					break;
 				}
-				else if (tr == -62 && i+1 < end && src[i+1] == -96) // eg en.wikipedia.org/wiki/Lagunilla_del_Jubera
-					i++;
+				txt_bgn++;
 			}
-			if (all_ws) return Bry_.Empty;
+			if (txt_bgn == end) return Bry_.Empty;
 		}
 		if (trim_end) {
-			for (int i = end - 1; i > -1; i--) {
-				byte b = src[i];
-				if (trim_ary[b & 0xFF] == Byte_ascii.Null) {
-					txt_end = i + 1;
-					i = -1;
-					all_ws = false;
+			while (txt_end - 1 >= 0) {
+				byte b = src[txt_end - 1];
+				if (b == -96) { // check for \xc2\xa0 &nbsp; (but backwards)
+					if (txt_end - 2 >= 0 && src[txt_end - 2] == -62) {
+						txt_end -= 2;
+						continue;
+					}
 				}
+				if (trim_ary[b & 0xFF] == Byte_ascii.Null) {
+					break;
+				}
+				txt_end--;
 			}
-			if (all_ws) return Bry_.Empty;
+			if (txt_end == 0) return Bry_.Empty;
 		}
 
 		if (	reuse_bry_if_noop

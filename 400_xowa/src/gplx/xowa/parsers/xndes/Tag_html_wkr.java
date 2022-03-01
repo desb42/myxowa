@@ -51,7 +51,10 @@ class Tag_html_wkr_basic implements Tag_html_wkr {
 		// write key
 		tmp_bfr.Add_byte(Byte_ascii.Space);	// write space between html_args
 		int key_len = Bry_.Len(key);
+		boolean isclass = false; // to over come #tag  gallery enwiki:Flag_of_Greenland
 		if (key_len > 0) {
+			if (key_len == 5 && key[0] == 'c' && key[1] == 'l' && key[2] == 'a' && key[3] == 's' && key[4] == 's')
+				isclass = true;
 			if (atrs_encode)
 				Gfo_url_encoder_.Id.Encode(tmp_bfr, key, 0, key_len);
 			else
@@ -61,11 +64,11 @@ class Tag_html_wkr_basic implements Tag_html_wkr {
 
 		// write val
 		tmp_bfr.Add_byte(Byte_ascii.Quote);
-		if (atrs_encode) {
+		if (atrs_encode && !isclass) {
 			// BIG HACK - convert '"' to .22
 			val = convert22(val);
 			Gfo_url_encoder_.Id.Encode(tmp_bfr, val, 0, val.length);
-                }
+  	}
 		else
 			tmp_bfr.Add(val);
 		tmp_bfr.Add_byte(Byte_ascii.Quote);

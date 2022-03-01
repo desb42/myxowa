@@ -41,11 +41,29 @@ public class Xot_prm_tkn extends Xop_tkn_itm_base {
 		if (dflt_tkn != null) {
 			dflt_tkn.Tmpl_compile(ctx, src, prep_data);
 			int subs_len = dflt_tkn.Subs_len();
-			if (subs_len == 0)
+                        Xot_prm_tkn nt;
+			if (subs_len == 0) {
 				dflt_is_null = true;
+/*
+                                if (find_tkn_static) {
+					if (prm_idx == -1)
+                                            nt = new Xot_prm_index_text_tkn(prm_idx, Bry_.Empty);
+                                        else
+                                            nt = new Xot_prm_keyword_text_tkn(prm_key, Bry_.Empty);
+                                }
+*/
+                        }
 			else if (subs_len == 1 && dflt_tkn.Subs_get(0) instanceof Xop_txt_tkn) {
 				dflt_tkn.Dat_ary_(Bry_.Mid(src, dflt_tkn.Dat_bgn(), dflt_tkn.Dat_end()));
-			}
+/*
+                               if (find_tkn_static) {
+					if (prm_idx == -1)
+                                            nt = new Xot_prm_index_text_tkn(prm_idx, Bry_.Mid(src, dflt_tkn.Dat_bgn(), dflt_tkn.Dat_end()));
+                                        else
+                                            nt = new Xot_prm_keyword_text_tkn(prm_key, Bry_.Mid(src, dflt_tkn.Dat_bgn(), dflt_tkn.Dat_end()));
+                                }
+*/
+ 			}
 		}
 	}
 	@Override public boolean Tmpl_evaluate(Xop_ctx ctx, byte[] src, Xot_invk caller, Bry_bfr bfr) {
@@ -68,20 +86,23 @@ public class Xot_prm_tkn extends Xop_tkn_itm_base {
 		}
 		if (arg_nde == null) {
 			if (!dflt_is_null)
-				Tmpl_write_missing(ctx, src, caller, bfr);
-			return true;
+			Tmpl_write_missing(ctx, src, caller, bfr, dflt_tkn, find_tkn);
+				//Tmpl_write_missing(ctx, src, caller, bfr);
 		}
-		Arg_itm_tkn arg_val = arg_nde.Val_tkn();
-		if (arg_val.Itm_static() == Bool_.Y_byte)
-			bfr.Add_mid(src, arg_val.Dat_bgn(), arg_val.Dat_end());
-		else {// compile arg if dynamic; EX: [[MESSENGER]] "{{About|the NASA space mission||Messenger (disambiguation){{!}}Messenger}}"; {{!}} causes {{{2}}} to be dynamic and its dat_ary will be an empty-String ("")
-			Bry_bfr arg_val_bfr = Bry_bfr_.New();
-			arg_val.Tmpl_evaluate(ctx, src, caller, arg_val_bfr);
-			bfr.Add_bfr_and_clear(arg_val_bfr);
+		else {
+			Tmpl_expand_args(ctx, src, caller, bfr, arg_nde);
 		}
 		return true;
 	}
-	private void Tmpl_write_missing(Xop_ctx ctx, byte[] src, Xot_invk caller, Bry_bfr bfr) {
+	int prm_idx = -1; byte[] prm_key = Bry_.Empty; boolean find_tkn_static = true;
+        boolean dflt_is_null = false;
+	public Arg_itm_tkn Find_tkn() {return find_tkn;} public Xot_prm_tkn Find_tkn_(Arg_itm_tkn v) {
+		find_tkn = v; return this;} Arg_itm_tkn find_tkn;
+	public Xot_prm_tkn Dflt_tkn_(Arg_itm_tkn v) {
+		dflt_tkn = v; return this;} Arg_itm_tkn dflt_tkn;
+	public Xot_prm_tkn(int bgn, int end) {this.Tkn_ini_pos(false, bgn, end);}
+
+	public static void Tmpl_write_missing(Xop_ctx ctx, byte[] src, Xot_invk caller, Bry_bfr bfr, Arg_itm_tkn dflt_tkn, Arg_itm_tkn find_tkn) {
 		if (dflt_tkn == null) {							// dflt absent; write orig; {{{1}}} or {{{key}}};
 			bfr.Add(Xop_curly_wkr.Hook_prm_bgn);
 			int subs_len = find_tkn.Subs_len();
@@ -92,11 +113,14 @@ public class Xot_prm_tkn extends Xop_tkn_itm_base {
 		else
 			dflt_tkn.Tmpl_evaluate(ctx, src, caller, bfr);	// dflt exists; write it
 	}
-	int prm_idx = -1; byte[] prm_key = Bry_.Empty; boolean find_tkn_static = true;
-        boolean dflt_is_null = false;
-	public Arg_itm_tkn Find_tkn() {return find_tkn;} public Xot_prm_tkn Find_tkn_(Arg_itm_tkn v) {
-		find_tkn = v; return this;} Arg_itm_tkn find_tkn;
-	public Xot_prm_tkn Dflt_tkn_(Arg_itm_tkn v) {
-		dflt_tkn = v; return this;} Arg_itm_tkn dflt_tkn;
-	public Xot_prm_tkn(int bgn, int end) {this.Tkn_ini_pos(false, bgn, end);}
+	public static void Tmpl_expand_args(Xop_ctx ctx, byte[] src, Xot_invk caller, Bry_bfr bfr, Arg_nde_tkn arg_nde) {
+		Arg_itm_tkn arg_val = arg_nde.Val_tkn();
+		if (arg_val.Itm_static() == Bool_.Y_byte)
+			bfr.Add_mid(src, arg_val.Dat_bgn(), arg_val.Dat_end());
+		else {// compile arg if dynamic; EX: [[MESSENGER]] "{{About|the NASA space mission||Messenger (disambiguation){{!}}Messenger}}"; {{!}} causes {{{2}}} to be dynamic and its dat_ary will be an empty-String ("")
+			Bry_bfr arg_val_bfr = Bry_bfr_.New();
+			arg_val.Tmpl_evaluate(ctx, src, caller, arg_val_bfr);
+			bfr.Add_bfr_and_clear(arg_val_bfr);
+		}
+	}
 }

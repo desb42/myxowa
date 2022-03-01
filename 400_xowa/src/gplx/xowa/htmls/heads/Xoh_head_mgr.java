@@ -31,11 +31,20 @@ public class Xoh_head_mgr implements gplx.core.brys.Bfr_arg {
 	, list__js_window_onload	= new Xoh_head_wkr()
 	;
 	public Xoh_head_mgr() {
-		Itms_add(itm__css, itm__globals, itm__xo_elem, itm__server, itm__popups, itm__toc, itm__collapsible, itm__navframe, itm__gallery, itm__gallery_styles
-		, itm__mathjax, itm__graph, itm__hiero, itm__top_icon, itm__title_rewrite, itm__search_suggest, itm__timeline
-		, itm__dbui, itm__pgbnr, itm__tabber, itm__page_cfg, itm__css_dynamic, itm__gallery_slideshow, itm__categorytree
+		Itms_add( // NB order of these is very important
+		  itm__redirect_css
+		, itm__syntax_highlight_css
+		, itm__gallery_styles
+		, itm__common_styles
+		, itm__css, itm__globals, itm__xo_elem, itm__server, itm__popups, itm__toc, itm__collapsible, itm__navframe, itm__gallery
+		, itm__mathjax, itm__graph, itm__hiero, itm__top_icon, itm__title_rewrite, itm__search_suggest, itm__timeline, itm__gallery_slideshow
+		, itm__dbui, itm__pgbnr, itm__tabber, itm__page_cfg, itm__css_dynamic, itm__categorytree
 		);
+		itm__common_styles.Enabled_y_();
 	}
+	private final Xoh_head_itm__common_styles itm__common_styles = new Xoh_head_itm__common_styles();
+	public Xoh_head_itm__redirect_css Itm__redirect_css() {return itm__redirect_css;} private final Xoh_head_itm__redirect_css itm__redirect_css = new Xoh_head_itm__redirect_css();
+	public Xoh_head_itm__syntax_highlight_css Itm__syntax_highlight_css() {return itm__syntax_highlight_css;} private final Xoh_head_itm__syntax_highlight_css itm__syntax_highlight_css = new Xoh_head_itm__syntax_highlight_css();
 	public Xoh_head_itm__css					Itm__css() {return itm__css;} private final    Xoh_head_itm__css itm__css = new Xoh_head_itm__css();
 	public Xoh_head_itm__globals				Itm__globals() {return itm__globals;} private final    Xoh_head_itm__globals itm__globals = new Xoh_head_itm__globals();
 	public Xoh_head_itm__xo_elem				Itm__xo_elem() {return itm__xo_elem;} private final    Xoh_head_itm__xo_elem itm__xo_elem = new Xoh_head_itm__xo_elem();

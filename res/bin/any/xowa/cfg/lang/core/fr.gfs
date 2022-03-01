@@ -6487,7 +6487,7 @@ zip-bad|Le fichier est une archive ZIP corrompue ou illisible.\nIl ne peut pas �
 zip-file-open-error|Une erreur s'est produite lors de l'ouverture du fichier ZIP pour contrôle.
 zip-unsupported|Le fichier est une archive ZIP qui utilise des caractéristiques non prises en charge par MediaWiki.\nSa sécurité ne peut pas être correctement vérifiée.
 zip-wrong-format|Le fichier spécifié n'est pas une archive ZIP.
-proofreadpage-indexquality-alt|~{0} {{PLURAL:~{0}\u007Cpage validée\u007Cpages validées}}, ~{1} {{PLURAL:~{1}\u007Cpage seulement corrigée\u007Cpages seulement corrigées}} et ~{2} {{PLURAL:~{2}\u007Cpage non corrigée\u007Cpages non corrigées}}
+proofreadpage-indexquality-alt|~{0} {{PLURAL:~{0}\u007Cpage validée\u007Cpages validées}}, ~{1} {{PLURAL:~{1}\u007Cpage corrigée\u007Cpages corrigées}} et ~{2} {{PLURAL:~{2}\u007Cpage non corrigée\u007Cpages non corrigées}}
 code-rev-purge-link|purge
 group-checkuser|Check users
 group-oversight|Oversighters

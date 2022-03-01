@@ -51,7 +51,7 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	+ "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} class=\"thumbimage\" decoding=\"async\"/></a>"
 	);
 	private final    Bry_fmt fmtr_full_img__anch_n = Bry_fmt.Auto
-	( "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} decoding=\"async\"/>");
+	( "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} class=\"thumbimage\" decoding=\"async\"/>");
 
 	public byte[] Bld_thumb_part_img(Xoh_wtr_ctx hctx, Xoae_page page, byte[] src, Xof_file_itm xfer_itm, int uid, byte[] lnki_ttl, byte[] a_href, byte[] img_src, byte[] img_alt) {
 		byte[] a_title_atr = Gfh_atr_.Make(tmp_bfr, Gfh_atr_.Bry__title, xfer_itm.Lnki_ttl());
