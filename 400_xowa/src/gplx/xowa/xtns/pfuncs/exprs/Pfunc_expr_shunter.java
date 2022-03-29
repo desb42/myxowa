@@ -26,6 +26,7 @@ public class Pfunc_expr_shunter {
 	public Decimal_adp Err_set(Xop_ctx ctx, int msgId) {return Err_set(ctx, msgId, Bry_.Empty);}
 	public Decimal_adp Err_set(Xop_ctx ctx, int msg_id, byte[] arg) {
 		byte[] msg_val = ctx.Wiki().Msg_mgr().Val_by_id(msg_id);
+                err_bfr.SetThreadId();
 		err_bfr.Clear().Add(Err_bgn_ary);
 		tmp_fmtr.Fmt_(msg_val).Bld_bfr_one(err_bfr, arg);
 		err_bfr.Add(Err_end_ary);

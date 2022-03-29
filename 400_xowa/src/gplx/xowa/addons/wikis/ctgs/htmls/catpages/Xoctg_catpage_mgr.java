@@ -30,7 +30,7 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	private final Xoctg_fmt_grp fmt_subcs = Xoctg_fmt_grp.New__subc(), fmt_pages = Xoctg_fmt_grp.New__page(), fmt_files = Xoctg_fmt_grp.New__file();
 	private final Uca_ltr_extractor ltr_extractor = new Uca_ltr_extractor(true);
 	private String missing_cls = Str__missing_cls__red;
-	private final	Bry_bfr tmp_bfr = Bry_bfr_.New();
+	//private final	Bry_bfr tmp_bfr = Bry_bfr_.New();
 	public int Grp_max() {return grp_max;} private int grp_max = Grp_max_dflt;
 	public Xoctg_catpage_mgr(Xow_wiki wiki) {
 		this.wiki = wiki;
@@ -86,7 +86,8 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 //		}
 		return ctg;
 	}
-	public void Write_catpage(Bry_bfr bfr, Xoa_page page) {
+	public byte[] Write_catpage(Xoa_page page) {
+            Bry_bfr bfr = Bry_bfr_.New();
 		try	{
 			// get catpage_url
 			Xoctg_catpage_url catpage_url = Xoctg_catpage_url_parser.Parse(page.Url());
@@ -121,6 +122,7 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 		catch (Exception e) {
 			Xoa_app_.Usr_dlg().Warn_many("", "", "failed to generate category: title=~{0} err=~{1}", page.Url_bry_safe(), Err_.Message_gplx_log(e));
 		}
+                return bfr.To_bry_and_clear();
 	}
 	public void Cache__add(byte[] ttl, Xoctg_catpage_ctg ctg) {
 		cache.Del(ttl);
@@ -201,6 +203,7 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 					link_data = datact_expanded;
 				}
 				//Fmt__bullet.Bld_many(tmp_bfr, ttl.Page_db(), ttl_page, link_data, txt);
+                                Bry_bfr tmp_bfr = Bry_bfr_.New();
 				Fmt__bullet.Bld_many(tmp_bfr, ttl.Page_db(), link_data);
 				bullet = tmp_bfr.To_bry_and_clear();
 			}
@@ -233,9 +236,10 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	}
 	//see CategoryTree createCountString()
 	private byte[] Create_count_string(Xow_msg_mgr msg_mgr, int count_subcs, int count_pages, int count_files) {
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		int allcount = count_subcs + count_pages + count_files;
 		byte[] contains_title = msg_mgr.Val_by_id_args(Xol_msg_itm_.Id_ctgtree_subc_counts, count_subcs, count_pages, count_files, allcount);
-		byte[] members = Member_nums(msg_mgr, count_subcs, count_pages, count_files, allcount);
+		byte[] members = Member_nums(tmp_bfr, msg_mgr, count_subcs, count_pages, count_files, allcount);
 		// Only ~{4} is actually used in the default message.
 		// Other arguments can be used in a customized message.
 		byte[] msg = msg_mgr.Val_by_key_args(key_cmn,  count_subcs, count_pages, count_files, allcount, members);
@@ -243,7 +247,7 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 		Fmt__count_string.Bld_many(tmp_bfr, contains_title, dir, msg);
 		return tmp_bfr.To_bry_and_clear();
 	}
-	private byte[] Member_nums(Xow_msg_mgr msg_mgr, int count_subcs, int count_pages, int count_files, int allcount) {
+	private byte[] Member_nums(Bry_bfr tmp_bfr, Xow_msg_mgr msg_mgr, int count_subcs, int count_pages, int count_files, int allcount) {
 		if (allcount == 0) {
 			return msg_mgr.Val_by_key_obj("categorytree-num-empty");
 		}

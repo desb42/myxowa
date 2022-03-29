@@ -27,6 +27,22 @@ import org.xml.sax.ContentHandler;
 import gplx.core.envs.*;
 class Xoh_tidy_wkr__vnu implements Xoh_tidy_wkr {
 		private byte[] depurate(Bry_bfr tidy_bfr, boolean compat) throws SAXException, IOException {
+/*
+                    private byte[] depurate(Bry_bfr tidy_bfr, byte[] prefix, byte[] suffix, boolean compat) throws SAXException, IOException {
+                    int tidy_bfr_len = tidy_bfr.Len();
+                    int prefix_len = prefix.length;
+                    int suffix_len = suffix.length;
+                    int size = prefix_len + tidy_bfr_len + suffix_len;
+                    byte[] input = new byte[size];
+                    int i;
+                    for (i = 0; i < prefix_len; i++)
+                        input[i] = prefix[i];
+                    for (i = 0; i < tidy_bfr_len; i++)
+                        input[prefix_len++] = tidy_bfr.Bfr()[i];
+                    for (i = 0; i < suffix_len; i++)
+                        input[prefix_len++] = suffix[i];
+                    tidy_bfr.Clear();
+*/                    
 		byte[] input = tidy_bfr.To_bry_and_clear();
 		int pos = 0;
 		int len = input.length;

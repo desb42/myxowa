@@ -17,7 +17,7 @@ package gplx.xowa.parsers.uniqs; import gplx.*; import gplx.xowa.*; import gplx.
 import gplx.core.btries.*;
 public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 	private final	Btrie_slim_mgr general_trie = Btrie_slim_mgr.cs(); private final	Btrie_rv trv = new Btrie_rv();
-	private final	Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
+	//private final	Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
         private boolean partial = false;
         private boolean onlynowiki = false;
 	private int nxt_idx = -1;
@@ -33,6 +33,7 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 	}
 	public byte[] Add(boolean expand_after_template_parsing, byte[] type, byte[] val) {// "<b>" -> "\u007fUNIQ-item-1-QINU\u007f"
 		int idx = ++nxt_idx;
+                Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
 		byte[] key = tmp_bfr	
 			.Add(Bry__uniq__bgn_w_dash)		  // "\u007f'\"`UNIQ-"
 			.Add(type).Add_byte(Byte_ascii.Dash) // "ref-"
@@ -48,12 +49,14 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 	public void Parse(Bry_bfr bfr) {
 		if (general_trie.Count() == 0) return;
 		//byte[] rv = Parse_recurse(Bool_.Y, tmp_bfr, bfr.To_bry_and_clear());
+                Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
 		byte[] rv = Parse_recurse(Bool_.N, tmp_bfr, bfr.To_bry_and_clear());
 		bfr.Add(rv);
 	}
 	public byte[] Parse(boolean template_parsing, byte[] src) {
 		if (nxt_idx < 0) // nothing to do
 			return src;
+                Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
 		return Parse_recurse(template_parsing, tmp_bfr, src);
 	}
 	public byte[] Partial_Parse(byte[] src, boolean onlynowiki) {
@@ -61,6 +64,7 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 			return src;
                 this.partial = true;
                 this.onlynowiki = onlynowiki;
+                Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
 		byte[] res = Parse_recurse(false, tmp_bfr, src);
                 this.onlynowiki = false;
                 this.partial = false;
@@ -69,6 +73,7 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 	public byte[] Parse(byte[] src) {
 		if (general_trie.Count() == 0) // nothing to do
 			return src;
+                Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
 		return Parse_recurse(Bool_.Y, tmp_bfr, src);
 	}
 	private byte[] Parse_recurse(boolean template_parsing, Bry_bfr bfr, byte[] src) {

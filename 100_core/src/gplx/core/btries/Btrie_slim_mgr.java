@@ -20,7 +20,7 @@ import gplx.core.security.algos.*;
 public class Btrie_slim_mgr implements Btrie_mgr {
 	public Btrie_slim_mgr(boolean case_match) {root = new Btrie_slim_itm(Byte_.Zero, null, !case_match);}	private Btrie_slim_itm root;
 	public int Count() {return count;} private int count;
-	public int Match_pos() {return match_pos;} private int match_pos;
+	//public int Match_pos() {return match_pos;} private int match_pos;
 
 	public Object Match_at(Btrie_rv rv, byte[] src, int bgn_pos, int end_pos) {
 		if (bgn_pos < end_pos)
@@ -124,27 +124,39 @@ public class Btrie_slim_mgr implements Btrie_mgr {
 	public Object Match_exact(byte[] src) {return src == null ? null : Match_exact(src, 0, src.length);}
 	public Object Match_exact(byte[] src, int bgn_pos, int end_pos) {
 		if (bgn_pos == end_pos) return null;	// NOTE:handle empty String; DATE:2016-04-21
-		Object rv = Match_bgn_w_byte(src[bgn_pos], src, bgn_pos, end_pos);
-		return rv == null ? null : match_pos - bgn_pos == end_pos - bgn_pos ? rv : null;
+		Btrie_result rv = Match_bgn_w_byte(src[bgn_pos], src, bgn_pos, end_pos);
+		return rv.o == null ? null : rv.match_pos - bgn_pos == end_pos - bgn_pos ? rv.o : null;
 	}
-	public Object Match_bgn(byte[] src, int bgn_pos, int end_pos) {return bgn_pos < end_pos ? Match_bgn_w_byte(src[bgn_pos], src, bgn_pos, end_pos) : null;} // handle out of bounds gracefully; EX: Match_bgn("abc", 3, 3) should return null not fail
-	public Object Match_bgn_w_byte(byte b, byte[] src, int bgn_pos, int src_end) {
-		Object rv = null; int cur_pos = match_pos = bgn_pos;
+	public Object Match_bgn(byte[] src, int bgn_pos, int end_pos) {
+	if (bgn_pos < end_pos) { // handle out of bounds gracefully; EX: Match_bgn("abc", 3, 3) should return null not fail
+		Btrie_result r = Match_bgn_w_byte(src[bgn_pos], src, bgn_pos, end_pos);
+		return r.o;
+	}
+	else
+		return null;
+	}
+	public Btrie_result Match_bgn_w_byte(byte b, byte[] src, int bgn_pos, int src_end) {
+		Object rv = null;
+		int cur_pos = bgn_pos;
+		int match_pos = bgn_pos;
 		Btrie_slim_itm cur = root;
 		while (true) {
-			Btrie_slim_itm nxt = cur.Ary_find(b); if (nxt == null) return rv;	// nxt does not hav b; return rv;
+			Btrie_slim_itm nxt = cur.Ary_find(b);
+			if (nxt == null) return new Btrie_result(rv, match_pos);	// nxt does not have b; return rv and pos;
 			++cur_pos;
-			if (nxt.Ary_is_empty()) {match_pos = cur_pos; return nxt.Val();}	// nxt is leaf; return nxt.Val() (which should be non-null)
+			if (nxt.Ary_is_empty()) {
+				return new Btrie_result(nxt.Val(), cur_pos);	// nxt is leaf; return nxt.Val() (which should be non-null)
+			}
 			Object nxt_val = nxt.Val();
 			if (nxt_val != null) {match_pos = cur_pos; rv = nxt_val;}			// nxt is node; cache rv (in case of false match)
-			if (cur_pos == src_end) return rv;									// increment cur_pos and exit if src_end
+			if (cur_pos == src_end) return new Btrie_result(rv, match_pos);									// increment cur_pos and exit if src_end
 			b = src[cur_pos];
 			cur = nxt;
 		}
 	}
 	public byte Match_byte_or(byte b, byte[] src, int bgn, int end, byte or) {
-		Object rv_obj = Match_bgn_w_byte(b, src, bgn, end);
-		return rv_obj == null ? or : ((Byte_obj_val)rv_obj).Val();
+		Btrie_result rv_obj = Match_bgn_w_byte(b, src, bgn, end);
+		return rv_obj.o == null ? or : ((Byte_obj_val)rv_obj.o).Val();
 	}
 	public byte Match_byte_or(byte[] src, int bgn, int end, byte or) {
 		Object rv_obj = Match_bgn(src, bgn, end);
@@ -269,8 +281,8 @@ public class Btrie_slim_mgr implements Btrie_mgr {
 		boolean dirty = false;
 		while (pos < end) {
 			byte b = src[pos];
-			Object o = this.Match_bgn_w_byte(b, src, pos, end);
-			if (o == null) {
+			Btrie_result r = this.Match_bgn_w_byte(b, src, pos, end);
+			if (r.o == null) {
 				if (dirty)
 					tmp_bfr.Add_byte(b);
 				pos++;
@@ -280,8 +292,8 @@ public class Btrie_slim_mgr implements Btrie_mgr {
 					tmp_bfr.Add_mid(src, bgn, pos);
 					dirty = true;
 				}
-				tmp_bfr.Add((byte[])o);
-				pos = match_pos;
+				tmp_bfr.Add((byte[])r.o);
+				pos = r.match_pos;
 			}
 		}
 		return dirty ? tmp_bfr.To_bry_and_clear() : src;

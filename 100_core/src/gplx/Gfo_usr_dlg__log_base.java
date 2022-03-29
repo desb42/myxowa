@@ -63,11 +63,15 @@ public class Gfo_usr_dlg__log_base implements Gfo_usr_dlg__log {
 	public void Log_info(boolean warn, String s) {if (warn) Log_to_err(s); else Log_to_session(s);}
 	public void Log_msg_to_url_fmt(Io_url url, String fmt, Object... args) {
 		if (!enabled) return;
+                tmp_bfr.SetThreadId();
 		String msg = Bld_msg(String_.new_u8(fmtr.Fmt_(fmt).Bld_bry_many(tmp_bfr, args)));
 		Log_msg(url, msg);
 		Log_msg(session_fil, msg);
 	}
-	public void Log_to_session_fmt(String fmt, Object... args) {Log_to_session(String_.new_u8(fmtr.Fmt_(fmt).Bld_bry_many(tmp_bfr, args)));}
+	public void Log_to_session_fmt(String fmt, Object... args) {
+                tmp_bfr.SetThreadId();
+            Log_to_session(String_.new_u8(fmtr.Fmt_(fmt).Bld_bry_many(tmp_bfr, args)));
+        }
 	public void Log_to_session(String s) {
 		if (!enabled) return;
 		String line = Bld_msg(s);

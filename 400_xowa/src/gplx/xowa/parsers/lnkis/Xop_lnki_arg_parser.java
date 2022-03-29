@@ -18,12 +18,12 @@ import gplx.core.primitives.*; import gplx.core.btries.*; import gplx.core.envs.
 import gplx.xowa.langs.*; import gplx.xowa.langs.kwds.*; import gplx.xowa.langs.numbers.*;
 public class Xop_lnki_arg_parser {
 	private final    Btrie_fast_mgr key_trie = Btrie_fast_mgr.cs();
-	private final    Bry_bfr int_bfr = Bry_bfr_.Reset(16);
+	//private final    Bry_bfr int_bfr = Bry_bfr_.Reset(16);
 	private final    Btrie_bwd_mgr px_trie = Btrie_bwd_mgr.cs_(); private final    Btrie_fast_mgr size_trie = Btrie_fast_mgr.cs();
 	private final    Btrie_rv key_trie_rv = new Btrie_rv(), px_trie_rv = new Btrie_rv(), size_trie_rv = new Btrie_rv();
 	private int lnki_w, lnki_h;
 	public void Evt_lang_changed(Xol_lang_itm lang) {
-		Bry_bfr tmp_bfr = int_bfr;
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		Byte_obj_ref rslt = Byte_obj_ref.zero_();
 		Xol_kwd_mgr mgr = lang.Kwd_mgr();
 		key_trie.Clear();
@@ -66,8 +66,8 @@ public class Xop_lnki_arg_parser {
 		if (val != null && len == key_trie_rv.Pos() - bgn)		// check for false matches; EX: alternate= should not match alt=
 			return val.Val();									// match; return val;
 		Object bwd_obj = px_trie.Match_at(px_trie_rv, src, end - 1, bgn - 1);
+                Bry_bfr int_bfr = Bry_bfr_.New();
 		if (bwd_obj != null && ((Byte_obj_val)bwd_obj).Val() == Tid_dim) { // ends with "px"; try to parse size
-			int_bfr.Clear();
 			int match_len = end -1 - px_trie_rv.Pos();
 			boolean mode_width = true;
 			int itm_end = bgn + (len - match_len);	// remove trailing px

@@ -31,8 +31,13 @@ public class Gfo_evt_mgr {
 	void AddInList(Ordered_hash regy, String key, GfoEvLnk lnk) {
 		GfoEvLnkList list = (GfoEvLnkList)regy.Get_by(key);
 		if (list == null) {
+                    synchronized (regy) {
+                        list = (GfoEvLnkList)regy.Get_by(key);
+                        if (list == null) {
 			list = new GfoEvLnkList(key);
 			regy.Add(key, list);
+                        }
+                    }
 		}
 		list.Add(lnk);
 	}

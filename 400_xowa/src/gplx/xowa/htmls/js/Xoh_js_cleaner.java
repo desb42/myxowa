@@ -37,14 +37,14 @@ public class Xoh_js_cleaner {
 			int pos = bgn;
 			while (pos < end) {
 				byte b = src[pos];
-				Object o = trie.Match_bgn_w_byte(b, src, pos, end);
-				if (o == null) {
+				Btrie_result r = trie.Match_bgn_w_byte(b, src, pos, end);
+				if (r.o == null) {
 					if (dirty)
 						bfr.Add_byte(b);
 					++pos;
 				}
 				else {					
-					byte[] frag = (byte[])o;
+					byte[] frag = (byte[])r.o;
 					int frag_len = frag.length;
 					if (frag[0] == Byte_ascii.Lt) {	// jscript node; EX: <script
 						if (!dirty) {bfr.Add_mid(src, bgn, pos); dirty = true;}

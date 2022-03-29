@@ -42,9 +42,7 @@ public class Gfo_url_encoder_tst {
 	}
 	@Test  public void Id__err()  {
 		byte[] raw = Bry_.new_a7("0%.jpg");
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		fxt.Encoder_id().Encoder().Decode(tmp_bfr, Bool_.N, raw, 0, raw.length);
-		Tfds.Eq("0%.jpg", tmp_bfr.To_str_and_clear()); 
+		Tfds.Eq("0%.jpg", String_.new_u8(fxt.Encoder_id().Encoder().Decode(Bool_.N, raw, 0, raw.length))); 
 	}
 	@Test  public void Ttl__syms__diff() 	{fxt.Encoder_ttl().Test__encode(" &'=+", "_%26%27%3D%2B");}
 	@Test  public void Ttl__syms__same() 	{fxt.Encoder_ttl().Test__encode("!\"#$%()*,-./:;<>?@[\\]^_`{|}~", "!\"#$%()*,-./:;<>?@[\\]^_`{|}~");}

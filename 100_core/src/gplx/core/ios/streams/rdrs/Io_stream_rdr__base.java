@@ -39,7 +39,12 @@ public abstract class Io_stream_rdr__base implements Io_stream_rdr {
 		catch (Exception e) {throw Err_.new_exc(e, "io", "skip failed", "len", len);}
 	}
 	public void Rls() {
-		try {stream.close();}
+		try {
+                    if (stream != null) {
+                    stream.close();
+                    stream = null;
+                    }
+                }
 		catch (Exception e) {throw Err_.new_exc(e, "io", "close failed", "url", url.Xto_api());}
 	}
 	public abstract java.io.InputStream Wrap_stream(java.io.InputStream stream);

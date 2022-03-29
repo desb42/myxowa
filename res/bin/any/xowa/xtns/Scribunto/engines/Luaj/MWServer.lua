@@ -220,6 +220,29 @@ function MWServer:handleCleanupChunks( message )
 	}
 end
 
+--- Handle a "clearChunks" message from PHP.
+-- clear the chunks/xchunks
+function MWServer:handleClearChunks( message )
+    local count = #self.chunks
+--     dbg('here', count);
+--	for id = 1, count do
+--    local chunk_key = self.chunks[id];
+--    if chunk_key then
+--     dbg(id .. ':' .. tostring(chunk_key));
+--    self.chunks[id] = nil
+--    self.xchunks[chunk_key] = nil
+--    end
+--	end
+    self.chunks = {}
+    self.xchunks = {}
+
+	return {
+		op = 'return',
+		nvalues = 0,
+		values = {}
+	}
+end
+
 --- Handle a "registerLibrary" message from PHP.
 -- Add the relevant functions to the base environment.
 --
@@ -338,6 +361,8 @@ function MWServer:server_recv( recv_msg )
     return self:handleWrapPhpFunction( recv_msg )
   elseif op == 'cleanupChunks' then
 		return self:handleCleanupChunks( recv_msg )
+  elseif op == 'clearChunks' then
+		return self:handleClearChunks( recv_msg )
   elseif op == 'getStatus' then
     return self:handleGetStatus( recv_msg )
   elseif op == 'quit' then

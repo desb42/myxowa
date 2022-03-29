@@ -15,10 +15,11 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.apps.utls; import gplx.*; import gplx.xowa.*; import gplx.xowa.apps.*;
 public class Xoa_url_encoder {	// NOTE: redundant with Gfo_url_encoder, but is simpler; DATE:2016-09-15
-	private final    Bry_bfr bfr = Bry_bfr_.New();
+	//private final    Bry_bfr bfr = Bry_bfr_.New();
 	public byte[] Encode(byte[] src) {
 		int src_len = src.length;
 		boolean dirty = false;
+                Bry_bfr bfr = Bry_bfr_.New();
 		for (int i = 0; i < src_len; ++i) {
 			byte b = src[i];
 			byte[] repl = null;

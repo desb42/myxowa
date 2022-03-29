@@ -25,7 +25,6 @@ public class Xow_popup_parser {
 	private Xop_ctx tmpl_ctx; private Xop_root_tkn tmpl_root, wtxt_root; private Xot_compile_data tmpl_props = new Xot_compile_data();		
 	private Xoh_wtr_ctx hctx = Xoh_wtr_ctx.Popup;
 	private Xow_popup_anchor_finder hdr_finder = new Xow_popup_anchor_finder();
-	private final    Bry_bfr hdr_html_bfr = Bry_bfr_.New();
 	public Xow_popup_cfg Cfg() {return cfg;} private Xow_popup_cfg cfg = new Xow_popup_cfg();
 	public Xow_popup_wrdx_mkr Wrdx_mkr() {return wrdx_mkr;} private Xow_popup_wrdx_mkr wrdx_mkr = new Xow_popup_wrdx_mkr();
 	public Xow_popup_html_mkr Html_mkr() {return html_mkr;} private Xow_popup_html_mkr html_mkr = new Xow_popup_html_mkr();
@@ -69,6 +68,7 @@ public class Xow_popup_parser {
 		wtxt_ctx.Page().Ttl_(ttl);	// NOTE: must set cur_page, or rel lnkis won't work; EX: [[../A]]
 	}
 	public byte[] Parse(Xowe_wiki cur_wiki, Xoae_page page, Xog_tab_itm cur_tab, Xow_popup_itm popup_itm) {	// NOTE: must pass cur_wiki for xwiki label; DATE:2014-07-02
+            data.Wrdx_bfr().SetThreadId(); // ugh!
 		if (Bry_.Eq(popup_itm.Wiki_domain(), Xow_domain_itm_.Bry__wikidata) && page.Db().Page().Model_format() != 17) {
 			data.Wrdx_bfr().Add(app.Wiki_mgr().Wdata_mgr().Popup_text(page));
 		}
@@ -194,6 +194,7 @@ public class Xow_popup_parser {
 			Xop_root_tkn hdr_root = wtxt_ctx.Tkn_mkr().Root(hdr_src);
 			wiki.Parser_mgr().Main().Parse_wtxt_to_wdom(hdr_root, wtxt_ctx, wtxt_ctx.Tkn_mkr(), hdr_src, 0);
 			byte[] last_hdr_bry = Bry_.Empty;
+                        Bry_bfr hdr_html_bfr = Bry_bfr_.New();
 			for (int i = 0; i < hdr_root.Subs_len(); ++i) {
 				Xop_tkn_itm sub = hdr_root.Subs_get(i);
 				if (sub.Tkn_tid() == Xop_tkn_itm_.Tid_hdr) {

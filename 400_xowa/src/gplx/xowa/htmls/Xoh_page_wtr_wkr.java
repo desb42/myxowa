@@ -72,6 +72,7 @@ public class Xoh_page_wtr_wkr {
 	private String vectortags = "";
 	public void Write_page(Bry_bfr rv, Xoae_page page, Xop_ctx ctx, Xoh_page_html_source page_html_source) {
 		synchronized (thread_lock_1) {
+                    tmp_bfr.SetThreadId();
 			this.page = page; this.wiki = page.Wikie(); this.app = wiki.Appe();
 			ctx.Page_(page); // HACK: must update page for toc_mgr; WHEN: Xoae_page rewrite
 			Bry_fmtr fmtr = mgr.Page_read_fmtr();
@@ -349,6 +350,7 @@ public class Xoh_page_wtr_wkr {
 			wiki.Html_mgr().Tidy_mgr().Exec_tidy(tidy_bfr, !hctx.Mode_is_hdump(), page.Url_bry_safe());
 			page.Stat_itm().Tidy_time = gplx.core.envs.System_.Ticks__elapsed_in_frac(tidy_time);
 			bfr.Add_bfr_and_clear(tidy_bfr);
+			tidy_bfr.Mkr_rls();
 			return;
 		}
 

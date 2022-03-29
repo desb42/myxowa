@@ -22,7 +22,7 @@ import gplx.xowa.wikis.domains.*; import gplx.xowa.wikis.xwikis.*; import gplx.x
 public class Xow_url_parser {
 	private final    Object thread_lock = new Object();
 	private final    Gfo_url_encoder encoder;
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
+	//private final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
 	private final    Gfo_url_parser url_parser = new Gfo_url_parser();
 	private final    Gfo_url_encoder gfs_encoder = Gfo_url_encoder_.New__gfs().Make();
 	private final    Xoa_app app; private final    Xow_wiki wiki; private final    byte[] domain_bry;
@@ -161,6 +161,7 @@ public class Xow_url_parser {
 		byte[] lang = tmp_segs[2];								// seg[1] = lang; EX: "en", "fr"; "commons"
 		if (Bry_.Eq(lang, Xow_domain_tid_.Bry__commons))	// commons links will have fmt of "/wikipedia/commons"; must change to wikimedia
 			domain_type = Xow_domain_tid_.Bry__wikimedia;
+                Bry_bfr tmp_bfr = Bry_bfr_.New();
 		tmp_wiki = tmp_bfr.Clear()
 			.Add(lang).Add_byte(Byte_ascii.Dot)					// add lang/type + .;	EX: "en."; "fr."; "commons."
 			.Add(domain_type).Add(Bry_dot_org)					// add type + .org;		EX: "wikipedia.org"; "wikimedia.org";
@@ -269,6 +270,7 @@ public class Xow_url_parser {
 	}
 	private byte[] Make_page_from_segs(int bgn) {
 		if (tmp_segs_len - bgn == 1) return tmp_segs[tmp_segs_len - 1];	// only 1 item; just return it; don't build bry
+                Bry_bfr tmp_bfr = Bry_bfr_.New();
 		for (int i = bgn; i < tmp_segs_len; i++) {
 			if (i != bgn) tmp_bfr.Add_byte(Byte_ascii.Slash);
 			tmp_bfr.Add(tmp_segs[i]);
@@ -276,6 +278,7 @@ public class Xow_url_parser {
 		return tmp_bfr.To_bry_and_clear();
 	}
 	public String Build_str(Xoa_url url) {									// transform to "canonical" form that fits url box for both XOWA and Mozilla Firefox
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
 		tmp_bfr.Add(url.Wiki_bry());										// add wiki;		EX: "en.wikipedia.org"
 		tmp_bfr.Add(Xoh_href_.Bry__wiki);									// add "/wiki/"		EX: "/wiki/"
 		tmp_bfr.Add(encoder.Decode(url.Page_bry()));						// add page;		EX: "A"

@@ -82,9 +82,15 @@ public class Scrib_lib_ustring implements Scrib_lib {
 	, Invk_gsub, Invk_len, Invk_sub, Invk_isutf8
 	);
 	public boolean Len(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+            try {
 		// get args
 		String text_str = args.Xstr_str_or_null(0);
 		return rslt.Init_obj(text_str.codePointCount(0, text_str.length()));
+            }
+		catch (Exception e) {
+			int a=1;
+		}
+                return rslt.Init_null();
 	}
 	public boolean Isutf8(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		String text_str = args.Xstr_str_or_null(0);
@@ -94,6 +100,7 @@ public class Scrib_lib_ustring implements Scrib_lib {
 	}
 	public boolean Sub(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// get args
+		try {
 		String text_str = args.Xstr_str_or_null(0);
 		String subval = "";
 		int cps_len = text_str.codePointCount(0, text_str.length());
@@ -122,8 +129,14 @@ public class Scrib_lib_ustring implements Scrib_lib {
 			}
 		}
 		return rslt.Init_obj(subval);
+		}
+		catch (Exception e) {
+			int a=1;
+		}
+                return rslt.Init_null();
 	}
 	public boolean Find(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		try {
 		// get args
 		String text_str        = args.Xstr_str_or_null(0);
 		String find_str        = args.Pull_str(1);
@@ -183,6 +196,11 @@ public class Scrib_lib_ustring implements Scrib_lib {
 		tmp_list.Add(text_ucs.Map_char_to_data(match.Find_end()) + Scrib_lib_ustring.Base1 - Scrib_lib_ustring.End_adj);
 		AddCapturesFromMatch(tmp_list, match, text_str, matcher.Capt_ary(), false);
 		return rslt.Init_many_list(tmp_list);
+		}
+		catch (Exception e) {
+			int a=1;
+		}
+                return rslt.Init_null();
 	}
 	public boolean Match(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// get args

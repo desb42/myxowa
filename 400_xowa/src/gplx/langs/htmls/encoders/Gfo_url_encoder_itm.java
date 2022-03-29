@@ -88,8 +88,8 @@ class Gfo_url_encoder_itm_html_ent implements Gfo_url_encoder_itm {
 			return 0;
 		}
 		b = src[idx];
-		Object o = amp_trie.Match_bgn_w_byte(b, src, idx, end);
-		if (o == null) {	// unknown entity (EX:&unknown;); return &;
+		Btrie_result r = amp_trie.Match_bgn_w_byte(b, src, idx, end);
+		if (r.o == null) {	// unknown entity (EX:&unknown;); return &;
 			if (encode_unknown_amp)
 				Gfo_url_encoder_itm_hex.Encode_byte(Byte_ascii.Amp, bfr, Byte_ascii.Dot);
 			else
@@ -97,7 +97,7 @@ class Gfo_url_encoder_itm_html_ent implements Gfo_url_encoder_itm {
 			return 0;
 		}
 		else {
-			Gfh_entity_itm itm = (Gfh_entity_itm)o;
+			Gfh_entity_itm itm = (Gfh_entity_itm)r.o;
 			byte[] bry_u8 = itm.U8_bry();	// NOTE: must utf8 encode val; EX: &nbsp; is 160 but must become 192,160
 			for (int i = 0; i < bry_u8.length; i++)
 				Gfo_url_encoder_itm_hex.Encode_byte(bry_u8[i], bfr, Byte_ascii.Dot);

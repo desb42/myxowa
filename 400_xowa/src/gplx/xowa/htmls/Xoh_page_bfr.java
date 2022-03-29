@@ -18,10 +18,10 @@ import gplx.xowa.htmls.core.wkrs.tocs.*;
 public class Xoh_page_bfr {
 	private byte toc_mode;
 	private Bry_bfr head_bfr; private final    Bry_bfr body_bfr = Bry_bfr_.New();
-	public void Init(Bry_bfr head_bfr) {
+	public Xoh_page_bfr(Bry_bfr head_bfr) {
 		this.toc_mode = Xoh_toc_data.Toc_mode__none;
 		this.head_bfr = head_bfr;
-		body_bfr.Clear();
+		//body_bfr.Clear();
 	}
 	public Bry_bfr Split_by_toc(byte toc_mode) {
 		if (this.toc_mode != Xoh_toc_data.Toc_mode__pgbnr)// NOTE: "none" and "pgbnr" can exist on same page (especially in en.v); must make sure that "none" does not overwrite "pgbnr" else wide images; PAGE:en.v:UNESCO_World_Heritage_List DATE:2016-11-03

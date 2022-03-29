@@ -71,6 +71,7 @@ public class Xoapi_orig_wmf extends Xoapi_orig_base {
 	}
 	public static String Bld_api_url(byte[] wiki_key, byte[] ttl, int width, int height) {
 		synchronized (tmp_bfr) {
+                    tmp_bfr.SetThreadId();
 			tmp_bfr.Add(Xoh_href_.Bry__https)						// "https://"
 				.Add(wiki_key)										// "commons.wikimedia.org"
 				.Add(Bry_api)										// "/w/api.php?action=query&format=xml&prop=imageinfo&iiprop=size|url&titles=File:"

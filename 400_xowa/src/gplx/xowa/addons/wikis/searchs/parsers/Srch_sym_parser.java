@@ -34,7 +34,9 @@ class Srch_sym_parser__terminal implements Srch_sym_parser {
 			int word_end = hook_bgn;
 			for (int i = hook_bgn - 1; i >= word_bgn; --i) {	// loop bwd to gobble up streams of terminals; EX: "?!"
 				byte b = src[i];
-				if (mgr.word_end_trie.Match_bgn_w_byte(b, src, i, hook_bgn) == null) break;
+                                Btrie_result r = mgr.word_end_trie.Match_bgn_w_byte(b, src, i, hook_bgn);
+				if (r.o == null)
+                                    break;
 				word_end = i;
 			}
 			mgr.Words__add_if_pending_and_clear(word_end);	// make word; note that " , " will not make word b/c word_bgn == -1
@@ -68,9 +70,9 @@ class Srch_sym_parser__split implements Srch_sym_parser {
 		int rv = hook_end;
 		while (rv < src_end) {		// loop to skip multiple syms in same group; EX: "a \n\t\r b"
 			byte b = src[rv];
-			Object o = trie.Match_bgn_w_byte(b, src, rv, src_end);
-			if (o == null) break;	// current sequence is not in grp; stop
-			Int_obj_val itm_len = (Int_obj_val)o;
+			Btrie_result r = trie.Match_bgn_w_byte(b, src, rv, src_end);
+			if (r.o == null) break;	// current sequence is not in grp; stop
+			Int_obj_val itm_len = (Int_obj_val)r.o;
 			rv += itm_len.Val();	// add len of sym to pos
 		}
 		return rv;
@@ -78,16 +80,16 @@ class Srch_sym_parser__split implements Srch_sym_parser {
 	public int Find_fwd(byte[] src, int src_bgn, int src_end) {
 		for (int i = src_bgn; i < src_end; ++i) {
 			byte b = src[i];
-			Object o = trie.Match_bgn_w_byte(b, src, i, src_end);
-			if (o != null) return i;
+			Btrie_result r = trie.Match_bgn_w_byte(b, src, i, src_end);
+			if (r.o != null) return i;
 		}
 		return src_end;
 	}
 	public boolean Is_next(byte[] src, int pos, int end) {
 		if (pos >= end) return handle_eos;
 		byte b = src[pos];
-		Object o = trie.Match_bgn_w_byte(b, src, pos, end);
-		return o != null;
+		Btrie_result r = trie.Match_bgn_w_byte(b, src, pos, end);
+		return r.o != null;
 	}
 }
 class Srch_sym_parser__paren_bgn implements Srch_sym_parser {

@@ -21,7 +21,7 @@ public class Xou_cache_tbl_tst {
 	@Test  public void Orig_ttl__redirect()		{fxt.Test_save_orig_ttl("A.png", "B.png", "B.png");}
 }
 class Xou_cache_tbl_fxt {
-	private final    Bry_bfr lnki_key_bfr = Bry_bfr_.New_w_size(255);
+	//private final    Bry_bfr lnki_key_bfr = Bry_bfr_.New_w_size(255);
 	private Xou_cache_tbl tbl;
 	public void Clear() {
 		Io_mgr.Instance.InitEngine_mem();
@@ -35,7 +35,7 @@ class Xou_cache_tbl_fxt {
 	, int html_w, int html_h, double html_time, int html_page
 	, boolean file_is_orig, int file_w, double file_time, int file_page, long file_size
 	, int view_count, long view_date) {
-		return new Xou_cache_itm(lnki_key_bfr, Db_cmd_mode.Tid_create
+		return new Xou_cache_itm(Db_cmd_mode.Tid_create
 		, Bry_.new_u8(lnki_wiki_abrv_xo), Bry_.new_u8(lnki_ttl), lnki_type, lnki_upright, lnki_w, lnki_h, lnki_time, lnki_page, user_thumb_w
 		, orig_repo_id, Bry_.new_u8(orig_ttl), orig_ext_id, orig_w, orig_h
 		, html_w, html_h, html_time, html_page

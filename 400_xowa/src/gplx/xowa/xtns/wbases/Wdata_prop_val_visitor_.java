@@ -46,6 +46,7 @@ public class Wdata_prop_val_visitor_ {
 		return rv;
 	}
 	private static void Render_snak(Bry_bfr bfr, Wdata_wiki_mgr wdata_mgr, Xowe_wiki wiki, Xol_lang_itm lang, byte[] page_url, Keyval[] props, int sub_idx, int sub_len, boolean format) {
+            try {
 		// loop props to get (a) snaktype; (b) property; (c) datavalue
 		byte snak_tid = Byte_.Max_value_127;
 		int pid = -1;
@@ -107,6 +108,10 @@ public class Wdata_prop_val_visitor_ {
 				throw Err_.new_unhandled_default(tid);
 		}
 		lang.Comma_wkr().Comma__itm(bfr, sub_idx, sub_len);
+            }
+            catch (Exception e) {
+                int a=1;
+            }
 	}
 	private static void Write_entity(Bry_bfr bfr, Wdata_wiki_mgr wdata_mgr, Xol_lang_itm lang, byte[] page_url, Keyval[] kvs) {
 		byte entity_tid = Byte_.Max_value_127;

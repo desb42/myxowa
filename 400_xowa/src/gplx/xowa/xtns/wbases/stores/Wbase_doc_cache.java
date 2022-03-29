@@ -48,6 +48,68 @@ class Wbase_doc_cache__mru implements Wbase_doc_cache {
 		cache.Print();
 	}
 }
+class Wbase_doc_cache__sliding implements Wbase_doc_cache {
+	private static int SLIDER_SIZE = 40;
+	private final int[] obs_int = new int[SLIDER_SIZE];
+	private final Wdata_doc[] obs_wdd = new Wdata_doc[SLIDER_SIZE];
+	private int position = 0;
+	private long hit = 0;
+	private long miss = 0;
+	public void Add(byte[] qid, Wdata_doc doc) {
+		if (position >= SLIDER_SIZE)
+			position = 0;
+		obs_int[position] = Parse(qid, 1, qid.length);
+		obs_wdd[position] = doc;
+		position++;
+	}
+	public Wdata_doc Get_or_null(byte[] qid) {
+		int key = Parse(qid, 1, qid.length);
+		for (int i = 0; i < SLIDER_SIZE; i++) {
+			if (obs_int[i] == key) {
+				hit++;
+				return obs_wdd[i];
+			}
+		}
+		miss++;
+		return null;
+	}
+	public void Clear() {
+	// no point!
+	}
+	public void Term() {
+		Clear();
+		Gfo_usr_dlg_.Instance.Log_many("", "", "siliding_cache hits:~{0} misses:~{1}", hit, miss);
+	}
+	private int Parse(byte[] raw, int bgn, int end) {
+		// process args
+		if (raw == null) return 0;
+		int raw_len = end - bgn;
+		if (raw_len == 0) return 0;
+
+		// check neg once
+		byte cur = raw[bgn];
+		boolean neg = false;
+		if (cur == '-') {
+			neg = true;
+			cur = raw[++bgn];
+		}
+		int rv = 0;
+		while (true) {
+			if (cur >= '0' && cur <= '9')
+				rv = rv*10 + (cur - '0');
+			else
+				return 0;
+			if (++bgn < end)
+				cur = raw[bgn];
+			else
+				break;
+		}
+		if (neg)
+			rv *= -1;
+		return rv;
+	}
+}
+/*
 class Slider {
 	public byte[] key;
 	public int len;
@@ -98,3 +160,4 @@ class Wbase_doc_cache__sliding implements Wbase_doc_cache {
 		Gfo_usr_dlg_.Instance.Log_many("", "", "siliding_cache hits:~{0} misses:~{1}", hit, miss);
 	}
 }
+*/

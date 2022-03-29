@@ -83,7 +83,8 @@ public class Xop_lnki_wkr_ {
 		Btrie_slim_mgr lnki_trail = lang.Lnki_trail_mgr().Trie();
 		while (true) {	// loop b/c there can be multiple consecutive lnki_trail_chars; EX: [[A]]bcde
 			if (cur_pos == src_len) break;
-			byte[] lnki_trail_bry = (byte[])lnki_trail.Match_bgn_w_byte(src[cur_pos], src, cur_pos, src_len);
+                        Btrie_result r = lnki_trail.Match_bgn_w_byte(src[cur_pos], src, cur_pos, src_len);
+			byte[] lnki_trail_bry = (byte[])r.o;
 			if (lnki_trail_bry == null) break;	// no longer a lnki_trail char; stop
 			cur_pos += lnki_trail_bry.length;	// lnki_trail char; add
 		}

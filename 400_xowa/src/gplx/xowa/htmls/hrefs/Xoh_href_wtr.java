@@ -34,10 +34,12 @@ public class Xoh_href_wtr {	// TS:do not move to app-level
 	private final    Bry_bfr encoder_bfr = Bry_bfr_.Reset(255), tmp_bfr = Bry_bfr_.Reset(255);
 	public byte[] Build_to_bry(Xow_wiki wiki, byte[] ttl_bry) {
 		Xoa_ttl ttl = wiki.Ttl_parse(ttl_bry);
+                tmp_bfr.SetThreadId();
 		Build_to_bfr(tmp_bfr, wiki.App(), Xoh_wtr_ctx.Basic, wiki.Domain_bry(), ttl);
 		return tmp_bfr.To_bry_and_clear();
 	}
 	public byte[] Build_to_bry(Xow_wiki wiki, Xoa_ttl ttl) {
+                tmp_bfr.SetThreadId();
 		Build_to_bfr(tmp_bfr, wiki.App(), Xoh_wtr_ctx.Basic, wiki.Domain_bry(), ttl);
 		return tmp_bfr.To_bry_and_clear();
 	}
@@ -110,6 +112,7 @@ public class Xoh_href_wtr {	// TS:do not move to app-level
 		bfr.Add_bfr_and_clear(encoder_bfr);
 	}
 	private void Build_to_bfr_page(Xoa_ttl ttl, Xoh_wtr_ctx hctx, byte[] ttl_full, int page_bgn) {
+            encoder_bfr.SetThreadId();
 /*		int anch_bgn = Bry_find_.Find_fwd(ttl_full, Byte_ascii.Hash);	// NOTE: cannot use Anch_bgn b/c Anch_bgn has bug with whitespace
 		if (anch_bgn == Bry_find_.Not_found){	// no anchor; just add page
                     encoder_bfr.Add(ttl_full);

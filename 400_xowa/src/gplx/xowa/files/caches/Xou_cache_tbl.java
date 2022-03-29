@@ -27,7 +27,7 @@ public class Xou_cache_tbl implements Rls_able {
 	public String Tbl_name() {return tbl_name;}
 	public String Fld_orig_ttl() {return fld_orig_ttl;}
 	private final    Db_conn conn; private final    Db_stmt_bldr stmt_bldr = new Db_stmt_bldr(); private Db_stmt select_stmt;
-	private final    Bry_bfr lnki_key_bfr = Bry_bfr_.Reset(255);
+	//private final    Bry_bfr lnki_key_bfr = Bry_bfr_.Reset(255);
 	public Db_conn Conn() {return conn;}
 	public Xou_cache_tbl(Db_conn conn) {
 		this.conn = conn;
@@ -86,7 +86,7 @@ public class Xou_cache_tbl implements Rls_able {
 		try {return rdr.Move_next() ? new_itm(rdr) : Xou_cache_itm.Null;}
 		finally {rdr.Rls();}
 	}
-	public void Select_all(Bry_bfr fil_key_bldr, Ordered_hash hash) {
+	public void Select_all(Ordered_hash hash) {
 		hash.Clear();
 		Db_rdr rdr = conn.Stmt_select(tbl_name, flds, Dbmeta_fld_itm.Str_ary_empty).Exec_select__rls_auto();
 		try {
@@ -169,8 +169,7 @@ public class Xou_cache_tbl implements Rls_able {
 		byte[] orig_ttl = rdr.Read_bry_by_str			(fld_orig_ttl);
 		if (orig_ttl.length == 0) orig_ttl = lnki_ttl;	// PERF:only store redirects in orig_ttl; DATE:2015-05-14
 		return new Xou_cache_itm
-		( lnki_key_bfr
-		, Db_cmd_mode.Tid_ignore
+		( Db_cmd_mode.Tid_ignore
 		, rdr.Read_bry_by_str			(fld_lnki_wiki_abrv)
 		, lnki_ttl
 		, rdr.Read_int					(fld_lnki_type)

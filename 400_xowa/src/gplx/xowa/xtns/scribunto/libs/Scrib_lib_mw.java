@@ -37,7 +37,10 @@ public class Scrib_lib_mw implements Scrib_lib {
 		return mod;
 	}
 	private Scrib_lua_proc notify_page_changed_fnc;
-	public void Notify_page_changed() {if (notify_page_changed_fnc != null) core.Interpreter().CallFunction(notify_page_changed_fnc.Id(), Keyval_.Ary_empty);}
+	public void Notify_page_changed(boolean flag) {
+		if (notify_page_changed_fnc != null)
+			core.Interpreter().CallFunction(notify_page_changed_fnc.Id(), Scrib_kv_utl_.base1_many_(flag));
+	}
 
 	public void Invoke_bgn(Xowe_wiki wiki, Xop_ctx ctx, byte[] new_src) {
 		if (src != null)	// src exists; indicates that Invoke being called recursively; push existing src onto stack
@@ -119,20 +122,31 @@ public class Scrib_lib_mw implements Scrib_lib {
 		int frame_arg_adj = Scrib_frame_.Get_arg_adj(frame.Frame_tid());
 		String idx_str = args.Pull_str(1);
 		int idx_int = Int_.Parse_or(idx_str, Int_.Min_value);	// NOTE: should not receive int value < -1; idx >= 0
+                boolean wc = false;
+                if (idx_int == 1) {
+                    byte[] ttl = core.Frame_current().Frame_ttl();
+                if (Bry_.Eq(ttl, Bry_.new_a7("Module:WikidataCoord")))
+                    wc = true;
+                    }
 		Bry_bfr tmp_bfr = Bry_bfr_.New();	// NOTE: do not make modular level variable, else random failures; DATE:2013-10-14
 		if (idx_int != Int_.Min_value) {	// idx is integer
 			int len = frame.Args_len() - frame_arg_adj;
 			if (idx_int - List_adp_.Base1 >= len) {
-                            //System.out.println("nkix " + idx_str);
+                            //System.out.println("nkix " + String_.new_a7(frame.Frame_ttl()) + ":" + idx_str);
 				return rslt.Init_obj(null);
 			}
 			Arg_nde_tkn nde = Get_arg(frame, idx_int, frame_arg_adj, len);
 			//frame.Args_eval_by_idx(core.Ctx().Src(), idx_int); // NOTE: arg[0] is always MW function name; EX: {{#invoke:Mod_0|Func_0|Arg_1}}; arg_x = "Mod_0"; args[0] = "Func_0"; args[1] = "Arg_1"
 			if (nde == null) {
-                            //System.out.println("nki " + idx_str);
+                            //System.out.println("nki " + String_.new_a7(frame.Frame_ttl()) + ":" + idx_str);
 				return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
 			}
-			nde.Val_tkn().Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
+			nde.Val_tkn(wc).Tmpl_evaluate(ctx, src, core.Frame_parent(), tmp_bfr);
+                        if (wc) {
+                            if (tmp_bfr.Len_eq_0()) {
+                                int a=1;
+                            }
+                        }
                         //ctx.Wiki().Parser_mgr().Uniq_mgr().Parse(tmp_bfr);
                         //System.out.println("tki " + idx_str + " " + String_.new_u8(tmp_bfr.Bfr(), 0, tmp_bfr.Len()));
 			if (nde.Eq_tkn() != Xop_tkn_null.Null_tkn)
@@ -280,6 +294,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 			String val = tmp_bfr.To_str_and_clear();
 			kv_args[i] = Keyval_.new_(key, val);
 		}
+		tmp_bfr.Mkr_rls();
 		Xot_invk_mock mock_frame = Xot_invk_mock.preprocess_(Bry_.new_u8(frame_id), kv_args);	// use frame_id for Frame_ttl; in lieu of a better candidate; DATE:2014-09-21
 		tmp_ctx.Parse_tid_(Xop_parser_tid_.Tid__tmpl);	// default xnde names to template; needed for test, but should be in place; DATE:2014-06-27
 		byte[] result = cur_wiki.Parser_mgr().Main().Expand_tmpl(tmp_root, tmp_ctx, mock_frame, tmp_ctx.Tkn_mkr(), text_bry);
@@ -376,7 +391,15 @@ public class Scrib_lib_mw implements Scrib_lib {
 		Xot_defn_tmpl transclude_tmpl = ctx.Wiki().Parser_mgr().Main().Parse_text_to_defn_obj(ctx, ctx.Tkn_mkr(), ttl.Ns(), ttl.Page_db(), sub_src);
 		Bry_bfr sub_bfr = cur_wiki.Utl__bfr_mkr().Get_k004();
 		transclude_tmpl.Tmpl_evaluate(ctx, sub_frame, sub_bfr);
-		return rslt.Init_obj(sub_bfr.To_str_and_rls());
+		String rv = sub_bfr.To_str_and_rls();
+//                if (rv == null || rv.length() ==0) {
+//                    int a=1;
+//                }
+//                if (rv.substring(0, 23).equals("<span class=\"plainlinks")) {
+//                    int a=1;
+//                }
+//                System.out.println("a:" + rv);
+		return rslt.Init_obj(rv);
 	}
 
 	public boolean IncrementExpensiveFunctionCount(Scrib_proc_args args, Scrib_proc_rslt rslt) {return rslt.Init_obj(Keyval_.Ary_empty);}	// NOTE: for now, always return null (XOWA does not care about expensive parser functions)

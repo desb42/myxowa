@@ -39,6 +39,18 @@ public class Arg_itm_tkn_base extends Xop_tkn_itm_base implements Arg_itm_tkn {
 		}
 	}
 	@Override public boolean Tmpl_evaluate(Xop_ctx ctx, byte[] src, Xot_invk caller, Bry_bfr bfr) {
+		if (this.Subs_len() == 1) {
+			if ((dat_bgn == 88 && dat_end == 107) || (dat_bgn == 223 && dat_end == 241)) {
+                            Xop_tkn_itm itm = this.Subs_get(0);
+                            //System.out.println(Thread.currentThread().getName()+"-itm-" + itm.Tkn_tid());
+				itm.Tmpl_evaluate(ctx, src, caller, bfr);
+				if (bfr.Len() == 0) {
+                    int a=1;
+				this.Subs_get(0).Tmpl_evaluate(ctx, src, caller, bfr);
+                                }
+                                return true;
+			}
+		}
 		if	(dat_ary == Bry_.Empty) {
 			int subs_len = this.Subs_len();
 			for (int i = 0; i < subs_len; i++)

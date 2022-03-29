@@ -76,10 +76,10 @@ public class Xoh_img_xoimg_data implements Bfr_arg_clearable {
 			this.lnki_page = rdr.Read_int_to();
 			if (!rdr.Pos_is_eos()) {
 				int tmp = rdr.Read_int_to();
-				if (tmp != -1)
+				if (tmp > 0) //!= -1)
 					this.lnki_w = tmp; // NB overwrite!!!!! 20220220
 				tmp = rdr.Read_int_to();
-				if (tmp != -1)
+				if (tmp > 0) //!= -1)
 					this.lnki_h = tmp;
 			}
 			this.val_dat_exists = true;

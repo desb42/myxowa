@@ -24,7 +24,7 @@ public class Xob_hdump_bldr implements Gfo_invk {
 	private boolean enabled, hzip_enabled, hzip_diff, hzip_b256; private byte zip_tid = Byte_.Max_value_127;
 	private Xowe_wiki wiki; private Xob_hdump_tbl_retriever html_tbl_retriever;
 	private int prv_row_len = 0;
-	private final    Xoh_page tmp_hpg = new Xoh_page(); private final    Bry_bfr tmp_bfr = Bry_bfr_.New();
+	private final    Xoh_page tmp_hpg = new Xoh_page(); //private final    Bry_bfr tmp_bfr = Bry_bfr_.New();
 	private boolean op_sys_is_wnt;
 	private byte[] toc_label = Bry_.Empty;
 	public Xoh_page Tmp_hpg() {return tmp_hpg;}
@@ -52,6 +52,7 @@ public class Xob_hdump_bldr implements Gfo_invk {
 		Xoa_ttl ttl = wpg.Ttl();
 		boolean is_wikitext = Xow_page_tid.Identify(wpg.Wiki().Domain_tid(), ttl.Ns().Id(), ttl.Page_db(), wpg.Db().Page().Model_format()) == Xow_page_tid.Tid_wikitext;
 		byte[] orig_bry = Bry_.Empty;
+                Bry_bfr tmp_bfr = Bry_bfr_.New();
 		if (is_wikitext) {
 			wiki.Html_mgr().Page_wtr_mgr().Wkr(Xopg_view_mode_.Tid__read).Write_hdump(tmp_bfr, ctx, hctx, wpg);
 			orig_bry = tmp_bfr.To_bry_and_clear();

@@ -75,7 +75,7 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 		this.site_cfg_mgr = new Xoa_site_cfg_mgr(this);
 
 		Xol_lang_stub_.Set_local_name(this);
-
+                
 		usr_dlg.Log_wkr().Log_to_session_fmt("app.ctor.end");
 	}
 	public Io_url   Pages_articles_file()  { return pages_articles_file; } Io_url pages_articles_file;

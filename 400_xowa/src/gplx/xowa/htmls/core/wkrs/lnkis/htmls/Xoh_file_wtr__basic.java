@@ -24,7 +24,7 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 	private final    Xoh_file_fmtr__basic fmtr__basic = new Xoh_file_fmtr__basic(), fmtr__hdump = new Xoh_file_fmtr__hdump();
 	private final    Xoh_lnki_text_fmtr alt_fmtr, caption_fmtr;
 	private final    Xop_link_parser tmp_link_parser = new Xop_link_parser(); private Xoa_url tmp_url = Xoa_url.blank();
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(32);
+	//private final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(32);
 	private Xoae_page page; private byte[] msg_file_enlarge;
 	private Xoh_file_fmtr__basic html_fmtr;		
 	private boolean alt_in_caption = true, alt_defaults_to_caption = true;
@@ -180,6 +180,7 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 	}
 	private void Write_file_image(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_lnki_tkn lnki, byte[] img_orig_src, int uid, int div_width, byte[] lnki_halign_bry, byte[] lnki_href, byte[] alt, byte[] lnki_ttl, byte[] img_view_src, Xof_file_itm xfer_itm
 		, boolean lnki_is_thumbable, int lnki_halign, Xof_ext orig_ext) {
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
 		// if centered, add <div class="center">; applies to both thumb and full
 		if (lnki_halign == Xop_lnki_align_h_.Center) bfr.Add(Div_center_bgn);
 

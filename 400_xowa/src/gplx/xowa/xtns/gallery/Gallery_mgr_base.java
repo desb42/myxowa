@@ -47,7 +47,8 @@ public abstract class Gallery_mgr_base {
 		this.itm_default_h = itm_default_h;
 		this.itms_per_row = itms_per_row;
 	}
-	@gplx.Virtual public void Adjust_image_parameters(Xof_file_itm xfer_itm) {}	// REF.MW: Adjust the image parameters for a thumbnail. Used by a subclass to insert extra high resolution images.		
+	@gplx.Virtual public void Adjust_image_parameters(Xof_file_itm xfer_itm) {}	// REF.MW: Adjust the image parameters for a thumbnail. Used by a subclass to insert extra high resolution images.
+	@gplx.Virtual public void Adjust_lnki_parameters(Xop_lnki_tkn lnki) {}	// REF.MW: Adjust the image parameters for a thumbnail. Used by a subclass to insert extra high resolution images.
 	@gplx.Virtual public void Wrap_gallery_text(Bry_bfr bfr, byte[] gallery_text, int thm_w, int thm_h) {
 		bfr	.Add_str_a7("\n      <div class=\"gallerytext\">")	// NOTE: The newline after <div class="gallerytext"> is needed to accommodate htmltidy
 			.Add(gallery_text)

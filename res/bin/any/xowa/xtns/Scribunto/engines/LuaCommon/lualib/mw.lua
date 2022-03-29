@@ -493,7 +493,7 @@ end
 -- @return boolean Whether the requested value was able to be returned
 -- @return table|function|string The requested value, or if that was unable to be returned, the type of the value returned by the module
 function mw.executeModule( chunk, name )
-	local env = mw.xclone( _G )
+	local env = mw.clone( _G )
 	makePackageModule( env )
 
 	-- These are unsafe
@@ -820,9 +820,12 @@ function mw.loadData( module )
 end
 
 -- xowa:bgn
-function mw.notify_page_changed()
+function mw.notify_page_changed(flag)
   -- reset cache everytime page changes
   loadedData = {}
+  if flag then
+	  packageCache = {}
+	end
 end
 -- xowa:end
 

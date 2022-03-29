@@ -64,23 +64,24 @@ public class Map_dd2dms_func extends Pf_func_base {
 		byte[] lat_dir = null;
 		byte[] lon = null;
 		byte[] lon_dir = null;
-		Map_math map_math = Map_math.Instance;
+		//Map_math map_math = Map_math.Instance;
+		Map_math map_math = new Map_math();
 		if (map_math.Ctor(coord_lat, prec, Bry_.Empty, 2, glb_ttl)) {
 			lat = map_math.Get_dms(wikibase, Bry_.Empty, Bry_.Empty);
 			lat_dir = map_math.Coord_dir_ns();
 		}
-                else {
-                    System.out.println("Bad latitude " + Integer.toString(map_math.Error()));
-                    return; // should repor an error!
-                }
+		else {
+			System.out.println("Bad latitude " + Integer.toString(map_math.Error()) + " " + String_.new_u8(coord_lat));
+			return; // should repor an error!
+		}
 		if (map_math.Ctor(coord_lon, prec, Bry_.Empty, 2, glb_ttl)) {
 			lon = map_math.Get_dms(wikibase, Bry_.Empty, Bry_.Empty);
 			lon_dir = map_math.Coord_dir_ew();
 		}
-                else {
-                    System.out.println("Bad longitude " + Integer.toString(map_math.Error()));
-                    return; // should repor an error!
-                }
+		else {
+			System.out.println("Bad longitude " + Integer.toString(map_math.Error()) + " " + String_.new_u8(coord_lon));
+			return; // should repor an error!
+		}
 		// make sure they are the same 'length' ie DMS or DM
 		byte lat_dms = lat[lat.length - 2];
 		byte lon_dms = lon[lon.length - 2];

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -16,8 +16,6 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.wikis.pages;
 
 import gplx.Bry_;
-import gplx.Bry_bfr;
-import gplx.Bry_bfr_;
 import gplx.Err_;
 import gplx.Gfo_usr_dlg_;
 import gplx.core.net.qargs.Gfo_qarg_itm;
@@ -37,7 +35,6 @@ import gplx.xowa.wikis.pages.dbs.Xopg_db_page;
 
 public class Xowe_page_mgr {
 	private final Xowe_wiki wiki;
-	private final Bry_bfr tmp_bfr = Bry_bfr_.New();
 	private final Gfo_qarg_mgr tmp_qarg_mgr = new Gfo_qarg_mgr();
 	public Xowe_page_mgr(Xowe_wiki wiki) {this.wiki = wiki;}
 	public Xosync_read_mgr Sync_mgr() {return read_mgr;} private final Xosync_read_mgr read_mgr = new Xosync_read_mgr();
@@ -135,11 +132,11 @@ public class Xowe_page_mgr {
 
 		// if [[Category]], generate catlinks (subc; page; file)
 		if (ttl.Ns().Id_is_ctg()) {
-			wiki.Ctg__catpage_mgr().Write_catpage(tmp_bfr, page);
+			byte[] cats = wiki.Ctg__catpage_mgr().Write_catpage(page);
 			if (from_html_db)
-				page.Db().Html().Html_bry_(Bry_.Add(page.Db().Html().Html_bry(), tmp_bfr.To_bry_and_clear()));
+				page.Db().Html().Html_bry_(Bry_.Add(page.Db().Html().Html_bry(), cats));
 			else
-				page.Html_data().Catpage_data_(tmp_bfr.To_bry_and_clear());
+				page.Html_data().Catpage_data_(cats);
 		}
 
 		return page;

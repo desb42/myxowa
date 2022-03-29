@@ -31,6 +31,7 @@ public class Scrib_core_mgr {
 		if (core != null) {
 			core.Term();
 			core = null;
+                        //core.Reset();
 		}
 	}
 	public void When_page_changed(Xoae_page page) {

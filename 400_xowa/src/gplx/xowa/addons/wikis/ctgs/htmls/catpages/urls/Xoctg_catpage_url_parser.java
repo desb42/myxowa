@@ -31,7 +31,6 @@ public class Xoctg_catpage_url_parser {
 			fwds[i] = Bool_.Y;
 			keys[i] = Bry_.Empty;
 		}
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
 
 		// loop qargs; EX: "?subcatfrom=B&filefrom=C&pagefrom=D"
 		for (int i = 0; i < len; ++i) {
@@ -47,8 +46,7 @@ public class Xoctg_catpage_url_parser {
 
 			// set val
 			byte[] val = arg.Val_bry();
-			Gfo_url_encoder_.Http_url.Decode(tmp_bfr, Bool_.N, val, 0, val.length);
-			val = tmp_bfr.To_bry_and_clear();
+			val = Gfo_url_encoder_.Http_url.Decode(Bool_.N, val, 0, val.length);
 
 			// set struct
 			switch (tid) {

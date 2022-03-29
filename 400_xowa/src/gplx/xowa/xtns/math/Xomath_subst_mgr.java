@@ -27,11 +27,11 @@ class Xomath_subst_mgr {
 		// loop each byte
 		for (int i = 0; i < src_len; i++) {
 			byte b = src[i];
-			Object o = trie.Match_bgn_w_byte(b, src, i, src_len);
-			if (o == null)	// regular char; add to bfr
+			Btrie_result r = trie.Match_bgn_w_byte(b, src, i, src_len);
+			if (r.o == null)	// regular char; add to bfr
 				tmp.Add_byte(b);
 			else {			// subst itm's trg for src
-				Xomath_subst_itm itm = (Xomath_subst_itm)o;
+				Xomath_subst_itm itm = (Xomath_subst_itm)r.o;
 				int itm_src_len = itm.Src_len();
 
 				// if whole_word, check last_char for exact match; exit if not

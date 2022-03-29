@@ -46,6 +46,9 @@ public class Xomp_parse_mgr {
 		if (cfg.Load_ifexists_ns() != null) Load_ifexists_ns(wiki, ifexist_cache, cfg.Load_ifexists_ns());
 
 		Xof_orig_wkr__img_links file_orig_wkr = new Xof_orig_wkr__img_links(wiki);
+
+		Db_redis.Init();
+
 		if (cfg.Load_all_imglinks()) Xof_orig_wkr__img_links_.Load_all(file_orig_wkr);
 
 		wiki.Appe().Wiki_mgr().Wdata_mgr().Doc_mgr.Cache__init(cfg.Wbase_cache_mru_type(), cfg.Wbase_cache_mru_size(), cfg.Wbase_cache_mru_compress_size(), cfg.Wbase_cache_mru_weight());
@@ -53,7 +56,7 @@ public class Xomp_parse_mgr {
 		// load_wkr: init and start
 		// Xomp_load_wkr load_wkr = new Xomp_load_wkr(wiki, db_mgr.Mgr_db().Conn(), cfg.Num_pages_in_pool(), cfg.Num_wkrs());
 		// Thread_adp_.Start_by_key("xomp.load", Cancelable_.Never, load_wkr, Xomp_load_wkr.Invk__exec);
- 
+
 		// assert wkr_tbl
 		Gfo_usr_dlg_.Instance.Prog_many("", "", "initing wkrs");
 		int wkr_len = cfg.Num_wkrs();

@@ -147,6 +147,9 @@ public class DepurateSerializer implements ContentHandler, LexicalHandler {
 						case '\u00A0':
 							writer.write("&#160;");
 							break;
+						case '\ufeff':
+							writer.write("&#xfeff;");
+							break;
 						default:
 							writer.write(c);
 							break;

@@ -24,8 +24,8 @@ public class Nowiki_escape_itm {
 		boolean dirty = false;
 		for (int i = bgn; i < end; i++) {
 			byte b = src[i];
-			Object o = trie.Match_bgn_w_byte(b, src, i, end);
-			if (o == null) {
+			Btrie_result r = trie.Match_bgn_w_byte(b, src, i, end);
+			if (r.o == null) {
 				if (dirty)
 					tmp_bfr.Add_byte(b);
 			}
@@ -34,7 +34,7 @@ public class Nowiki_escape_itm {
 					tmp_bfr.Add_mid(src, bgn, i);
 					dirty = true;
 				}
-				Nowiki_escape_itm itm = (Nowiki_escape_itm)o;
+				Nowiki_escape_itm itm = (Nowiki_escape_itm)r.o;
 				tmp_bfr.Add(itm.Trg());
 				i += itm.src_adj;
 			}

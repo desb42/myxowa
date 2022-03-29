@@ -173,6 +173,8 @@ public class Xomp_parse_wkr implements Gfo_invk {
 				Xop_ctx pctx = parser_mgr.Ctx();
 				pctx.Clear_all();
 				parser_mgr.Parse(wpg, true);
+                                if (wpg.Wiki().Utl__bfr_mkr().Check())
+                                    System.out.println("nonzero " + wpg.Ttl());
 
 				// gen_html
 				hdump_bldr.Insert(pctx, wpg, hctx, html_body);

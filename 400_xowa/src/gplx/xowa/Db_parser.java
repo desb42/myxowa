@@ -19,7 +19,7 @@ import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
 public class Db_parser {
 	private byte[] m_src;
 	private int m_src_end, m_pos, m_start, m_tail;
-	private Bry_bfr m_newsrc = Bry_bfr_.New();
+	private Bry_bfr m_newsrc = null;
 	private Xop_ctx ctx;
 	private Tag_match translate_tag = new Tag_match("translate");
 	private Tag_match tvar_tag = new Tag_match("tvar");
@@ -30,7 +30,7 @@ public class Db_parser {
 		byte[] nsrc;
 		m_src = src;
 		m_src_end = src.length;
-		m_newsrc.Clear();
+		m_newsrc = Bry_bfr_.New();
 		m_pos = 0;
 		/*nsrc = removecomments();
 		m_src = nsrc;

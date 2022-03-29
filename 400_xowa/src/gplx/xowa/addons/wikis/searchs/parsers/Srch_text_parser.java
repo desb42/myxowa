@@ -105,8 +105,8 @@ public class Srch_text_parser {
 	public int	Cur__end__find__text_only(int pos) {	// primarily for parens and finding word_end after ")"; EX: "(city), " vs "(a)b "
 		while (pos < end) {
 			byte b = src[pos];
-			Object parser_obj = parser_trie.Match_bgn_w_byte(b, src, pos, end);
-			if (parser_obj == null)	// b is text; increment by 1 and continue searching
+			Btrie_result parser_obj = parser_trie.Match_bgn_w_byte(b, src, pos, end);
+			if (parser_obj.o == null)	// b is text; increment by 1 and continue searching
 				++pos;
 			else					// b is some sort of symbol; end word here; EX: "a," should produce "a", not "a,"
 				return pos;

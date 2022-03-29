@@ -15,19 +15,33 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.files.repos; import gplx.*; import gplx.xowa.*; import gplx.xowa.files.*;
 public class Xof_itm_ttl_ {
-	public static byte[] Remove_invalid(Bry_bfr bfr, byte[] ttl) {
+	public static byte[] Remove_invalid(byte[] ttl) {
+            Bry_bfr bfr = null;
 		int ttl_len = ttl.length;
-		for (int i = 0; i < ttl_len; i++) {
-			byte b = ttl[i];
-			if (gplx.core.envs.Op_sys_.Wnt_invalid_char(b)) b = Byte_ascii.Underline;
-			bfr.Add_byte(b);
+                int start = 0;
+                int i = 0;
+                while (i < ttl_len) {
+			byte b = ttl[i++];
+			if (gplx.core.envs.Op_sys_.Wnt_invalid_char(b)) {
+                            if (bfr == null)
+                                bfr = Bry_bfr_.New();
+                            bfr.Add_mid(ttl, start, i - 1);
+                            bfr.Add_byte(Byte_ascii.Underline);
+                            start = i;
+                        }
 		}
-		return bfr.To_bry_and_clear();
+                if (start > 0) {
+                    bfr.Add_mid(ttl, start, ttl_len);
+                    return bfr.To_bry_and_clear();
+                }
+                else
+                    return ttl;
 	}
-	public static byte[] Shorten(Bry_bfr bfr, byte[] ttl, int ttl_max, byte[] md5, byte[] ext_bry) {
+	public static byte[] Shorten(byte[] ttl, int ttl_max, byte[] md5, byte[] ext_bry) {
 		byte[] rv = ttl;
 		int exceed_len = rv.length - ttl_max;               // calc exceed_len;        EX: 21 = 201 - 180
 		if (exceed_len > 0) {
+            Bry_bfr bfr = Bry_bfr_.New();
 			if (ttl_max > 33) {
 				bfr.Add_mid(rv, 0, ttl_max - 33);           // add truncated title;    33=_.length + md5.length; EX: 180 - 33
 			    bfr.Add_byte(Byte_ascii.Underline);         // add underline;          EX: "_"

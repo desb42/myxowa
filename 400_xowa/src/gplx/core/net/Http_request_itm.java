@@ -47,7 +47,8 @@ public class Http_request_itm {
 	public byte[] Cache_control() {return cache_control;} private final byte[] cache_control;
 	public byte[] Origin() {return origin;} private final byte[] origin;
 	public Http_post_data_hash Post_data_hash() {return post_data_hash;} private final Http_post_data_hash post_data_hash;
-	public String To_str(Bry_bfr bfr, boolean line) {
+	public String To_str(boolean line) {
+            Bry_bfr bfr = Bry_bfr_.New();
 		bfr	.Add_kv_dlm(line, "type"					, type == Type_get ? "GET" : "POST")
 			.Add_kv_dlm(line, "url"						, url)
 			.Add_kv_dlm(line, "protocol"				, protocol)

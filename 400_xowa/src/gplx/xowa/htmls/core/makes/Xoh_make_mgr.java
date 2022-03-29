@@ -27,6 +27,7 @@ public class Xoh_make_mgr {
 		make_parser.Init_by_wiki(wiki);
 	}
 	public byte[] Parse(byte[] src, Xow_wiki wiki, Xoh_page hpg) {
+            bfr.SetThreadId();
 		hctx.Init_by_page(wiki, hpg);
 		hpg.Section_mgr().Add(0, 2, Bry_.Empty, Bry_.Empty).Content_bgn_(0);	// +1 to skip \n
 		make_parser.Parse(bfr, hpg, hctx, src);

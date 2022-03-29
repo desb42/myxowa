@@ -30,11 +30,17 @@ public class Xow_defn_cache {				// stores compiled Xot_defn
 	public Xow_defn_cache(Xol_lang_itm lang) {this.lang = lang;}
 	public Xot_defn Get_by_key(byte[] name) {return (Xot_defn)cache.Get_by_key(name);}
 	public Xot_defn Get_by_key(byte[] name, byte case_match) {
-		if (case_match == Xow_ns_case_.Tid__1st) 
+		if (case_match == Xow_ns_case_.Tid__1st) {
+                    upper_1st_bfr.SetThreadId();
 			name = lang.Case_mgr().Case_build_1st_upper(upper_1st_bfr, name, 0, name.length);
-		return (Xot_defn)cache.Get_by_key(name);
+                }
+		Xot_defn defn = (Xot_defn)cache.Get_by_key(name);
+                //System.out.println(Thread.currentThread().getName()+"-defn_cache-" + String_.new_a7(name) + " " + defn);
+		return defn;
 	}
-	public void Free_mem_all()	{cache.Clear();}
+	public void Free_mem_all()	{
+		cache.Clear();
+	}
 	public void Add(Xot_defn defn, byte case_match) {
 		byte[] name = defn.Name();
 		if (case_match == Xow_ns_case_.Tid__1st) 

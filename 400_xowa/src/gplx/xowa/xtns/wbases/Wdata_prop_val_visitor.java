@@ -59,7 +59,8 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 	private Wdata_hwtr_msgs msgs;
 	private boolean mode_is_statements;
 	public Wdata_prop_val_visitor(Xoae_app app, Wdata_wiki_mgr wdata_mgr, Bry_bfr bfr, Wdata_hwtr_msgs msgs, byte[] lang_key, boolean mode_is_statements) {
-		this.app = app; this.wdata_mgr = wdata_mgr;
+		this.app = app;
+                this.wdata_mgr = wdata_mgr;
 //	}
 //	public void xInit(Bry_bfr bfr, Wdata_hwtr_msgs msgs, byte[] lang_key, boolean mode_is_statements) {
 		// init some member variables; 

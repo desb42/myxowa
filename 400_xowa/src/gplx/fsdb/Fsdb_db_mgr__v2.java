@@ -27,7 +27,7 @@ public class Fsdb_db_mgr__v2 implements Fsdb_db_mgr {
 		this.orig_tbl_ary	= new Xof_orig_tbl[] 
 		{ new Xof_orig_tbl(file_main_core.Conn(), this.File__schema_is_1())
 		, new Xof_orig_tbl(file_user_core.Conn(), this.File__schema_is_1())
-//		, this.invalidtab
+		, this.invalidtab
 		};
 	}
 	public Xof_orig_tbl Invalidtab() {return invalidtab;}

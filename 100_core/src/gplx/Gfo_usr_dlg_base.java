@@ -49,6 +49,7 @@ public class Gfo_usr_dlg_base implements Gfo_usr_dlg {
 			rwl.writeLock().lock(); // one at a time
 //		synchronized (tmp_fmtr) {
 			try {
+                            tmp_bfr.SetThreadId();
 				tmp_fmtr.Fmt_(fmt).Bld_bfr_many(tmp_bfr, args);
 				return tmp_bfr.To_str_and_clear();
 			}

@@ -45,6 +45,8 @@ public class Process_engine implements Scrib_engine {
 	public void CleanupChunks(Keyval[] ids) {
 		this.Dispatch("op", "cleanupChunks", "ids", ids);
 	}
+	public void ClearChunks() {
+	}
 	public Keyval[] ExecuteModule(int mod_id) {
 		return this.CallFunction(core.Lib_mw().Mod().Fncs_get_id("executeModule"), Scrib_kv_utl_.base1_obj_(new Scrib_lua_proc("", mod_id)));
 	}
@@ -107,4 +109,5 @@ public class Process_engine implements Scrib_engine {
 		Hex_utl_.Write(bfr.Bfr(), 0,  8, msg_len);
 		Hex_utl_.Write(bfr.Bfr(), 9, 16, chk_len);
 	}
+        public void Term() {}
 }

@@ -27,10 +27,10 @@ do
 end
 
 --- Do a "deep copy" of a table or other value.
-function mw.xclone( val )
+function mw.clone( val )
 	return table.deepcopy(val)
 end
-function mw.clone( val )
+function mw.xxx_clone( val )
 	local tableRefs = {}
 	local function recursiveClone( val )
 		if type( val ) == 'table' then

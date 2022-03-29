@@ -238,6 +238,7 @@ public class Gallery_parser {
 		Xol_kwd_itm[] itms = grp.Itms();
 		int len = itms.length;
 		Byte_obj_val trie_ref = Byte_obj_val.new_(trie_key);
+                caption_bfr.SetThreadId();
 		for (int i = 0; i < len; i++) {
 			Xol_kwd_itm itm = itms[i];
 			byte[] itm_bry = Xol_kwd_parse_data.Strip(caption_bfr, itm.Val(), tmp_bref);	// strip off =$1 for "alt=$1"

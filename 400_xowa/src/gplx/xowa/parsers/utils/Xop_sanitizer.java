@@ -19,7 +19,7 @@ import gplx.langs.htmls.entitys.*;
 public class Xop_sanitizer {
 	private Btrie_slim_mgr trie = Btrie_slim_mgr.cs(), amp_trie;
 	private Xop_amp_mgr amp_mgr;
-	private Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
+	//private Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
 	public Xop_sanitizer(Xop_amp_mgr amp_mgr, Gfo_msg_log msg_log) {
 		this.amp_mgr = amp_mgr; this.amp_trie = amp_mgr.Amp_trie();
 		trie_add("&"	, Tid_amp);
@@ -30,6 +30,7 @@ public class Xop_sanitizer {
 	}
 	private void trie_add(String hook, byte tid) {trie.Add_stub(hook, tid);}
 	public byte[] Escape_id(byte[] src) {
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
 		boolean dirty = Escape_id(src, 0, src.length, tmp_bfr);
 		return dirty ? tmp_bfr.To_bry_and_clear() : src;
 	}
@@ -40,8 +41,8 @@ public class Xop_sanitizer {
 		while (loop) {
 			if (pos == end) break;
 			byte b = src[pos];
-			Object o = trie.Match_bgn_w_byte(b, src, pos, end);
-			if (o == null) {
+			Btrie_result r = trie.Match_bgn_w_byte(b, src, pos, end);
+			if (r.o == null) {
 				if (dirty) bfr.Add_byte(b);
 				++pos;
 			}
@@ -50,7 +51,7 @@ public class Xop_sanitizer {
 					bfr.Add_mid(src, bgn, pos);
 					dirty = true;
 				}
-				Btrie_itm_stub stub = (Btrie_itm_stub)o;
+				Btrie_itm_stub stub = (Btrie_itm_stub)r.o;
 				switch (stub.Tid()) {
 					case Tid_space:		bfr.Add_byte(Byte_ascii.Underline)	; ++pos		; break;
 					case Tid_percent:	bfr.Add_byte(Byte_ascii.Percent)	; ++pos		; break;
@@ -63,14 +64,14 @@ public class Xop_sanitizer {
 							continue;
 						}
 						b = src[pos];
-						Object amp_obj = amp_trie.Match_bgn_w_byte(b, src, pos, end);
-						if (amp_obj == null) {
+						Btrie_result r_amp_obj = amp_trie.Match_bgn_w_byte(b, src, pos, end);
+						if (r_amp_obj.o == null) {
 							bfr.Add_byte(Byte_ascii.Amp);
 							bfr.Add_byte(b);
 							++pos;
 						}
 						else {
-							Gfh_entity_itm itm = (Gfh_entity_itm)amp_obj;
+							Gfh_entity_itm itm = (Gfh_entity_itm)r_amp_obj.o;
 							byte itm_tid = itm.Tid();
 							switch (itm_tid) {
 								case Gfh_entity_itm.Tid_name_std:

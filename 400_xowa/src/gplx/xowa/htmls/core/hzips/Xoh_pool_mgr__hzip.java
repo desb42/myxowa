@@ -39,8 +39,9 @@ public class Xoh_pool_mgr__hzip {
 		this.Reg_all(false, Hook__core, Hook__html, Hook__mw);
 	}
 	public Xoh_hzip_wkr Get(byte b, byte[] src, int src_bgn, int src_end) {
-		Object mgr_obj = trie.Match_bgn_w_byte(b, src, src_bgn, src_end); if (mgr_obj == null) return null;
-		Gfo_poolable_mgr mgr = (Gfo_poolable_mgr)mgr_obj;
+		Btrie_result r = trie.Match_bgn_w_byte(b, src, src_bgn, src_end);
+                if (r.o == null) return null;
+		Gfo_poolable_mgr mgr = (Gfo_poolable_mgr)r.o;
 		return (Xoh_hzip_wkr)mgr.Get_fast();
 	}
 	private void Reg_all(boolean mode_is_b256, int hook__core, int hook__html, int hook__mw) {	// SERIALIZED

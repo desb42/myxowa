@@ -33,7 +33,7 @@ class Insider_xtn_skin_itm implements Xopg_xtn_skin_itm {
 }
 public class Insider_html_bldr implements gplx.core.brys.Bfr_arg {
 	private Insider_xtn_mgr xtn_mgr;
-	private Bry_bfr tmp_ttl = Bry_bfr_.Reset(255);
+	//private Bry_bfr tmp_ttl = Bry_bfr_.Reset(255);
 	private List_adp list; private int list_len;
 	private Hash_adp_bry hash = Hash_adp_bry.cs();
 	public Insider_html_bldr(Insider_xtn_mgr xtn_mgr) {this.xtn_mgr = xtn_mgr;}
@@ -52,6 +52,7 @@ public class Insider_html_bldr implements gplx.core.brys.Bfr_arg {
 			byte[] user_ttl_bry = user_ttl.Full_db();
 			if (hash.Has(user_ttl_bry)) continue;
 			hash.Add(user_ttl_bry, user_ttl_bry);
+                        Bry_bfr tmp_ttl = Bry_bfr_.Get();
 			href_encoder.Encode(tmp_ttl, user_ttl_bry);
 			user_ttl_bry = tmp_ttl.To_bry_and_clear();
 			fmtr_itm.Bld_bfr(bfr, user_ttl_bry, user_ttl.Page_txt());

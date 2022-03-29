@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -34,16 +34,16 @@ import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
 public class Luaj_engine implements Scrib_engine {
-	private final Luaj_server_func_recv func_recv;
-	private final Luaj_server_func_recv_x func_recv_x;
+	private Luaj_server_func_recv func_recv;
+	private Luaj_server_func_recv_x func_recv_x;
 	private final Luaj_server_func_dbg func_dbg;
 	private final Scrib_proc_mgr proc_mgr;
 	private final Scrib_core core;	
 	private Luaj_server server;
-        private LuaTable goodmsg;
-        private LuaTable callmsg;
-        private LuaTable compilemsg;
-        private LuaTable loadmsg;
+	private final LuaTable goodmsg;
+	private final LuaTable callmsg;
+	private final LuaTable compilemsg;
+	private final LuaTable loadmsg;
 	public Luaj_engine(Xoae_app app, Scrib_core core, boolean debug_enabled) {
 		this.core = core;
 		this.proc_mgr = core.Proc_mgr();
@@ -136,6 +136,11 @@ public class Luaj_engine implements Scrib_engine {
 		msg.set("ids", Luaj_value_.Obj_to_lua_val(server, ids));
 		this.Dispatch_as_kv_ary(msg);		
 	}
+	public void ClearChunks() {
+		LuaTable msg = LuaValue.tableOf();
+		msg.set("op", "clearChunks");
+		this.Dispatch_as_kv_ary(msg);		
+	}
 	public Keyval[] Dispatch_as_kv_ary(LuaTable msg) {
 		while (true) {
 			LuaTable rsp = server.Dispatch(msg);
@@ -155,6 +160,21 @@ public class Luaj_engine implements Scrib_engine {
 			}
 			else
 				return Keyval_.Ary_empty;
+/*
+			switch (firstchr) {
+				case 'r':
+					return Luaj_value_.Get_val_as_kv_ary(server, rsp, "values");
+				case 'c':
+					msg = Server_recv_call(rsp);
+					break;
+				case 'e':
+					String err = Luaj_value_.Get_val_as_str(rsp, "value");
+					core.Handle_error(err);
+					return Keyval_.Ary_empty;
+				default:
+					return Keyval_.Ary_empty;
+			}
+*/
 		}		
 	}
 	public LuaTable Server_recv_call(LuaTable rsp) {
@@ -223,6 +243,10 @@ public class Luaj_engine implements Scrib_engine {
 		msg.set("op", Val_error);
 		msg.set("value", LuaValue.valueOf(fail_msg));
 		return msg;
+	}
+	public void Term() {
+		this.func_recv = null;
+		this.func_recv_x = null;
 	}
 	private static final LuaValue 
 	  Val_loadString 		= LuaValue.valueOf("loadString")

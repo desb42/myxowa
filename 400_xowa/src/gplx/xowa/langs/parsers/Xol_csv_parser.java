@@ -29,7 +29,11 @@ public class Xol_csv_parser {
 			}
 		}
 	}
-	public byte[] Load(byte[] src, int bgn, int end) {Load(tmp_bfr, src, bgn, end); return tmp_bfr.To_bry_and_clear();}
+	public byte[] Load(byte[] src, int bgn, int end) {
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
+            Load(tmp_bfr, src, bgn, end);
+            return tmp_bfr.To_bry_and_clear();
+        }
 	public void Load(Bry_bfr bfr, byte[] src) {Load(bfr, src, 0, src.length);}
 	public void Load(Bry_bfr bfr, byte[] src, int bgn, int end) {
 		for (int i = bgn; i < end; i++) {
@@ -75,6 +79,6 @@ public class Xol_csv_parser {
 		}
 	}
 	private static final    byte[] Bry_pipe = Bry_.new_a7("\\u007C");
-	private static final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
+	//private static final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
 	public static final    Xol_csv_parser Instance = new Xol_csv_parser(); Xol_csv_parser() {}
 }

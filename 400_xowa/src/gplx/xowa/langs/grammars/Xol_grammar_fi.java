@@ -22,9 +22,9 @@ public class Xol_grammar_fi implements Xol_grammar {
 		boolean aou_found = false;
 		for (int i = 0; i < word_len; i++) {
 			byte b = word[i];
-			Object o = trie_vh.Match_bgn_w_byte(b, word, i, word_len);
-			if (o != null) {
-				byte vh_type = ((Byte_obj_val)o).Val();
+			Btrie_result r = trie_vh.Match_bgn_w_byte(b, word, i, word_len);
+			if (r.o != null) {
+				byte vh_type = ((Byte_obj_val)r.o).Val();
 				if (vh_type == Trie_vh_back)
 					aou_found = true;
 				else

@@ -170,20 +170,21 @@ public class Xodb_load_mgr_txt implements Xodb_load_mgr {
 		synchronized (thread_lock) {
 			if (cancelable.Canceled()) return false;
 			Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_m001();
-			byte[] tmp_bry = tmp_bfr.Bfr();
-			if (cancelable.Canceled()) return false;
-			tmp_bry = Io_mgr.Instance.LoadFilBry_reuse(url, tmp_bry, tmp_len);
-			if (cancelable.Canceled()) return false;
-			if (tmp_bry.length == 0)
-				wiki.Appe().Usr_dlg().Warn_many("", "file.empty", "hive file is empty: ~{0}", url.Raw());
-			else {
-				int src_len = tmp_len.Val();
-				xdat_file.Clear().Parse(tmp_bry, src_len, url);
-				xdat_file.Src_len_(src_len);
-				rv = true;
-			}
-			if (cancelable.Canceled()) return false;
-			tmp_bfr.Clear_and_rls();
+			try {
+				byte[] tmp_bry = tmp_bfr.Bfr();
+				if (cancelable.Canceled()) return false;
+				tmp_bry = Io_mgr.Instance.LoadFilBry_reuse(url, tmp_bry, tmp_len);
+				if (cancelable.Canceled()) return false;
+				if (tmp_bry.length == 0)
+					wiki.Appe().Usr_dlg().Warn_many("", "file.empty", "hive file is empty: ~{0}", url.Raw());
+				else {
+					int src_len = tmp_len.Val();
+					xdat_file.Clear().Parse(tmp_bry, src_len, url);
+					xdat_file.Src_len_(src_len);
+					rv = true;
+				}
+				if (cancelable.Canceled()) return false;
+			} finally {tmp_bfr.Mkr_rls();}
 		}
 		return rv;
 	}

@@ -20,6 +20,7 @@ import gplx.Bry_;
 import gplx.Bry_bfr;
 import gplx.Bry_bfr_;
 import gplx.Byte_ascii;
+import gplx.String_;
 import gplx.xowa.Xoa_ttl;
 import gplx.xowa.Xowe_wiki;
 import gplx.xowa.langs.kwds.Xol_kwd_grp_;
@@ -30,13 +31,14 @@ import gplx.xowa.wikis.nss.Xow_ns_;
 import gplx.xowa.wikis.nss.Xow_ns_mgr;
 import gplx.xowa.xtns.pfuncs.Pf_func_base;
 
+import java.util.concurrent.locks.*;
 public class Xot_invk_tkn_ {
 	public static void Eval_func(Xop_ctx ctx, byte[] src, Xot_invk caller, Xot_invk invk, Bry_bfr bfr, Xot_defn defn, byte[] argx_ary) {
 		Pf_func_base defn_func = (Pf_func_base)defn;
 		int defn_func_id = defn_func.Id();
 		defn_func = (Pf_func_base)defn_func.New(defn_func_id, defn_func.Name());	// NOTE: always make copy b/c argx_ary may be dynamic
 		if (argx_ary != Bry_.Empty) defn_func.Argx_dat_(argx_ary);
-		defn_func.Eval_argx(ctx, src, caller, invk);
+		byte[] arg = defn_func.Eval_argx(ctx, src, caller, invk);
 		if (defn_func_id == Xol_kwd_grp_.Id_invoke)	// NOTE: if #invoke, set frame_ttl to argx, not name; EX:{{#invoke:A}}
 			invk.Frame_ttl_(Bry_.Add(Xow_ns_.Bry__module_w_colon, Xoa_ttl.Replace_unders(defn_func.Argx_dat())));	// NOTE: always prepend "Module:" to frame_ttl; DATE:2014-06-13; NOTE: always use spaces; DATE:2014-08-14; always use canonical English "Module"; DATE:2015-11-09
 		Bry_bfr bfr_func = Bry_bfr_.New();
@@ -45,9 +47,16 @@ public class Xot_invk_tkn_ {
 			caller.Rslt_is_redirect_(false);	// reset flag; needed for TEST; kludgy, but Rslt_is_redirect is intended for single use
 		else
 			ctx.Page().Tmpl_prepend_mgr().End(ctx, bfr, bfr_func.Bfr(), bfr_func.Len(), Bool_.N);
+//                if (defn_func_id == Xol_kwd_grp_.Id_property) {
+//                    if (Bry_.Eq(arg, Bry_.new_a7("P625")) && bfr_func.Len() == 0) {
+//                        int a=1;
+//                    }
+//                Thread currentThread = Thread.currentThread();
+//                System.out.println(currentThread.getName()+"-x-"+String_.new_u8(arg)+" "+String_.new_u8(bfr_func.Bfr(), 0 , bfr_func.Len()));
+//                }
 		bfr.Add_bfr_and_clear(bfr_func);
 	}
-	public static Xot_defn_tmpl Load_defn(Xowe_wiki wiki, Xop_ctx ctx, Xot_invk_tkn invk_tkn, Xoa_ttl ttl, byte[] name_ary) {	// recursive loading of templates
+	public static Xot_defn_tmpl Build_defn(Xowe_wiki wiki, Xop_ctx ctx, Xot_invk_tkn invk_tkn, Xoa_ttl ttl, byte[] name_ary) {	// recursive loading of templates
 		Xow_page_cache_itm tmpl_page_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(ttl, wiki.Domain_str());
 		byte[] tmpl_page_bry = tmpl_page_itm == null ? null : tmpl_page_itm.Wtxt__direct();
 		Xot_defn_tmpl rv = null;
@@ -59,7 +68,6 @@ public class Xot_invk_tkn_ {
 			byte[] frame_ttl = Bry_.Add(tmpl_page_ttl.Ns().Name_db(), Byte_ascii.Colon_bry, tmpl_page_ttl.Page_txt());	// NOTE: (1) must have ns (Full); (2) must be txt (space, not underscore); EX:Template:Location map+; DATE:2014-08-22; (3) must be local language; Russian "Шаблон" not English "Template"; PAGE:ru.w:Королевство_Нидерландов DATE:2016-11-23
 			rv.Frame_ttl_(frame_ttl);								// set defn's frame_ttl; needed for redirect_trg; PAGE:en.w:Statutory_city; DATE:2014-08-22
 			ctx.Parse_tid_(old_parse_tid);
-			wiki.Cache_mgr().Defn_cache().Add(rv, ns_tmpl.Case_match());
 		}
 		return rv;
 	}
@@ -74,5 +82,25 @@ public class Xot_invk_tkn_ {
 		bfr.Add(Xop_tkn_.Lnki_bgn).Add_byte(Byte_ascii.Colon);
 		bfr.Add(ns_mgr.Ns_template().Name_db()).Add_byte(Byte_ascii.Colon);
 		bfr.Add(name_ary).Add(Xop_tkn_.Lnki_end);
+	}
+        private static Object syn = new Object();
+	private static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+        public static Xot_defn Get_or_build_defn(Xowe_wiki wiki, Xop_ctx ctx, Xot_invk_tkn invk_tkn, Xoa_ttl ttl, byte[] name_ary, byte tmpl_case_match) {
+		//synchronized (syn) {
+		//try {
+		//	rwl.writeLock().lock(); // one at a time
+			Xot_defn defn = wiki.Cache_mgr().Defn_cache().Get_by_key(name_ary, tmpl_case_match);
+			if (defn == null && ctx.Tmpl_load_enabled()) {
+				defn = Xot_invk_tkn_.Build_defn(wiki, ctx, invk_tkn, ttl, name_ary);
+				if (defn != null)
+					wiki.Cache_mgr().Defn_cache().Add(defn, wiki.Ns_mgr().Ns_template().Case_match());
+				else
+					defn = Xot_defn_.Null;
+			}
+			return defn;
+		//}
+		//finally {
+		//	rwl.writeLock().unlock();
+		//}
 	}
 }

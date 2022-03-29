@@ -59,6 +59,9 @@ public class Luaj_server implements Scrib_server {
 	}
 	public int Get_id_by_closure(LuaValue closure) {
 		//LuaValue xchunks = server.get(Val_xchunks);
+                if (xchunks == null) {
+                    int a=1;
+                }
 		LuaValue closure_id = xchunks.get(closure);
 		int rv = -1;
 		if (closure_id == LuaValue.NIL)		// new closure; add it to chunks table via addChunk (which will return new id)
@@ -79,10 +82,14 @@ public class Luaj_server implements Scrib_server {
 	public byte[] Server_recv() {return Bry_.Empty;}
 	//public void Term() {this.Init(init_args);}
 	public void Term() {
+/*
             luaj_globals = null;
             xchunks = null;
             chunks = null;
             server = null;
+            luaj_dbg = null;
+            main_fil_val = null;
+*/
         }
 	private static final LuaValue
 	  Val_server_recv 		= LuaValue.valueOf("server_recv")
@@ -96,7 +103,7 @@ public class Luaj_server implements Scrib_server {
 		 * @return Value that will be returned in the require() call.  In this case, 
 		 * it is the library itself.
 		 */
-		private final Globals luaj_globals;
+		private Globals luaj_globals;
 		private final Luaj_server_func_recv func_recv;
 		private final Luaj_server_func_recv_x func_recv_x;
 		public MWClient(Globals luaj_globals, Luaj_server_func_recv func_recv, Luaj_server_func_recv_x func_recv_x) {

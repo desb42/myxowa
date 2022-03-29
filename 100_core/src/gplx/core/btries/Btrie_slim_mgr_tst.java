@@ -80,13 +80,13 @@ public class Btrie_slim_mgr_tst {
 	private void run_Add(String k, int val) {trie.Add_obj(Bry_.new_a7(k), val);}
 	private void tst_Match(String srcStr, byte b, int bgn_pos, int expd) {
 		byte[] src = Bry_.new_a7(srcStr);
-		Object actl = trie.Match_bgn_w_byte(b, src, bgn_pos, src.length);
-		Tfds.Eq(expd, actl);
+		Btrie_result r_actl = trie.Match_bgn_w_byte(b, src, bgn_pos, src.length);
+		Tfds.Eq(expd, r_actl.o);
 	}
 	private void tst_MatchAtCur(String srcStr, Object expd) {
 		byte[] src = Bry_.new_a7(srcStr);
-		Object actl = trie.Match_bgn_w_byte(src[0], src, 0, src.length);
-		Tfds.Eq(expd, actl);
+		Btrie_result r_actl = trie.Match_bgn_w_byte(src[0], src, 0, src.length);
+		Tfds.Eq(expd, r_actl.o);
 	}
 	private void tst_MatchAtCurExact(String srcStr, Object expd) {
 		byte[] src = Bry_.new_a7(srcStr);

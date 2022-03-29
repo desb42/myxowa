@@ -147,7 +147,10 @@ public class Xop_redirect_mgr {
 				.Add(display_ttl)							// 'PageA'
 				.Add(Gfh_bldr_.Bry__a_rhs);					// </a>
 		}
-		if (!dirty) return Bry_.Empty; // ignore Special:Redirects else Special:Random will always show "redirected from"; DATE:2016-07-05
+		if (!dirty) {
+			redirect_bfr.Mkr_rls();
+			return Bry_.Empty; // ignore Special:Redirects else Special:Random will always show "redirected from"; DATE:2016-07-05
+		}
 
 		// build redirectedfrom span; NOTE: same implementation as MW; ISSUE#:642; DATE:2020-01-14; REF.MW:https://github.com/wikimedia/mediawiki/blob/master/includes/page/Article.php#L1115-L1117
 		Bry_bfr fmt_bfr = wiki.Utl__bfr_mkr().Get_b512();

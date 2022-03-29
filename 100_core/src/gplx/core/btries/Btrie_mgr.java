@@ -15,7 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.core.btries; import gplx.*;
 public interface Btrie_mgr {
-	int Match_pos();
+	//int Match_pos();
 	Object Match_at(Btrie_rv rv, byte[] src, int bgn_pos, int end_pos);
 	Object Match_bgn(byte[] src, int bgn_pos, int end_pos);
 	Btrie_mgr Add_obj(String key, Object val);

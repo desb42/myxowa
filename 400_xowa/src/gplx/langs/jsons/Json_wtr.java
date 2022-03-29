@@ -31,6 +31,7 @@ public class Json_wtr {
 		indent = -1;
 		idx_stack.Clear();
 		idx = 0;
+                bfr.SetThreadId();
 		return this;
 	}
 	public Json_wtr Doc_nde_bgn() {return Write_grp_bgn(Sym_nde_bgn);}

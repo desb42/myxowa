@@ -33,7 +33,7 @@ public class Xof_url_bldr {
 	}
 	public Xof_url_bldr Init_by_itm(byte mode, byte[] ttl, byte[] md5, Xof_ext ext, int file_w, double time, int page) {
 		this.ttl = ttl; this.md5 = md5;	this.ext = ext; this.file_w = file_w; this.time = time; this.page = page;
-		if (wmf_protocol_is_file && fsys_is_wnt) this.ttl = Xof_itm_ttl_.Remove_invalid(tmp_bfr, ttl); // NOTE: changed ttl does not change md5
+		if (wmf_protocol_is_file && fsys_is_wnt) this.ttl = Xof_itm_ttl_.Remove_invalid(ttl); // NOTE: changed ttl does not change md5
 		this.file_is_thumb = mode == Xof_img_mode_.Tid__thumb;
 		this.area = Xof_img_mode_.Names_ary[mode];
 		return this;
@@ -42,17 +42,17 @@ public class Xof_url_bldr {
 		this.repo_tid = repo.Tid();
 		this.wmf_dir_hive = Bool_.Y; this.wmf_protocol_is_file = repo.Tarball();
 		this.dir_spr = repo.Dir_spr(); this.root = repo.Root_bry(); this.area = repo.Mode_names()[mode];
-		this.ttl = repo.Gen_name_src(tmp_bfr, ttl); this.md5 = md5; this.ext = ext;
+		this.ttl = repo.Gen_name_src(ttl); this.md5 = md5; this.ext = ext;
 		this.file_is_thumb = mode == Xof_img_mode_.Tid__thumb; this.file_w = file_w; this.time = time; this.page = page;
 		return this;
 	}
 	public Xof_url_bldr Init_for_trg_file(Xof_repo_itm repo, byte mode, byte[] ttl, byte[] md5, Xof_ext ext, int file_w, double time, int page) {
 		return Init(repo.Tid(), Bool_.N, Bool_.N, repo.Dir_spr(), repo.Root_bry()
-			, repo.Mode_names()[mode], repo.Dir_depth(), repo.Gen_name_trg(tmp_bfr, ttl, md5, ext), md5, ext, mode, file_w, time, page);
+			, repo.Mode_names()[mode], repo.Dir_depth(), repo.Gen_name_trg(ttl, md5, ext), md5, ext, mode, file_w, time, page);
 	}
 	public Xof_url_bldr Init_for_trg_html(Xof_repo_itm repo, byte mode, byte[] ttl, byte[] md5, Xof_ext ext, int file_w, double time, int page) {
 		return Init(repo.Tid(), Bool_.N, Bool_.N, Byte_ascii.Slash, repo.Root_http()
-			, repo.Mode_names()[mode], repo.Dir_depth(), repo.Gen_name_trg(tmp_bfr, ttl, md5, ext), md5, ext, mode, file_w, time, page);
+			, repo.Mode_names()[mode], repo.Dir_depth(), repo.Gen_name_trg(ttl, md5, ext), md5, ext, mode, file_w, time, page);
 	}
 	private Xof_url_bldr Init(byte repo_tid, boolean wmf_dir_hive, boolean wmf_protocol_is_file, byte dir_spr
 		, byte[] root, byte[] area, int md5_dir_depth
@@ -85,6 +85,7 @@ public class Xof_url_bldr {
 	private static final    byte[] Bry__http = Bry_.new_a7("http");
 	private void Bld() {
 		if (repo_tid == Xof_repo_tid_.Tid__math) {
+                    tmp_bfr.SetThreadId();
 			tmp_bfr.Add(root);																// add root;				EX: "C:\xowa\file\"; assume trailing dir_spr
 			boolean root_is_http = Bry_.Has_at_bgn(root, Bry__http);
 			if (root_is_http)
@@ -104,6 +105,7 @@ public class Xof_url_bldr {
             if (root == null) {
                 root = Xoae_app.Root_dir().RawBry(); // HACK - dont know how this get set otherwise - 20210726 DB
             }
+                    tmp_bfr.SetThreadId();
 		tmp_bfr.Add(root);																	// add root;				EX: "C:\xowa\file\"; assume trailing dir_spr
 		if (area != null && !(wmf_dir_hive && !file_is_thumb))								// !(wmf_dir_hive && !thumb) means never add if wmf_dir_hive and orig
 			tmp_bfr.Add(area).Add_byte(dir_spr);											// add area;				EX: "thumb\"
@@ -127,6 +129,7 @@ public class Xof_url_bldr {
 		return this;
 	}
 	private Xof_url_bldr Add_thumb_xowa() {
+                    tmp_bfr.SetThreadId();
 		tmp_bfr.Add_byte(dir_spr);															// add dir_spr;				EX: "\"
 		tmp_bfr.Add_int_variable(file_w).Add(Bry_px);										// add file_w;				EX: "220px"
 		if (Xof_lnki_time.Null_n(time))
@@ -141,6 +144,7 @@ public class Xof_url_bldr {
 		return this;
 	}
 	private Xof_url_bldr Add_thumb_wmf() {
+                    tmp_bfr.SetThreadId();
 		tmp_bfr.Add_byte(dir_spr);															// add dir_spr;				EX: "\"
 		int file_ext_id = ext.Id();
 		switch (file_ext_id) {
@@ -195,6 +199,7 @@ public class Xof_url_bldr {
 		return this;
 	}
 	private void Add_thumb_wmf_page(byte[] bry_page_1, byte[] bry_page) {
+                    tmp_bfr.SetThreadId();
 		if (Xof_lnki_time.Null_y(page))
 			tmp_bfr.Add(bry_page_1);														// add "lossy-page1-"		EX: "lossy-page1-"
 		else {

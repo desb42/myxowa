@@ -36,6 +36,8 @@ public class Mwh_atr_parser {	// REF.MW:Sanitizer.php|decodeTagAttributes;MW_ATT
 		area = Area__atr_limbo;
 		boolean prv_is_ws = false;
 		int pos = src_bgn;
+                key_bfr.SetThreadId();
+                val_bfr.SetThreadId();
 		boolean loop = true;
 		while (loop) {
 			if (pos >= src_end) {

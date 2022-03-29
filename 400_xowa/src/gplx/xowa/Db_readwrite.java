@@ -35,5 +35,20 @@ public class Db_readwrite {
 			}
 		}
 	}
+	public static void writeFile(byte[] db, String filename) {
+		OutputStream os = null;
+		try {
+			os = new FileOutputStream(new File(filename));
+			os.write(db, 0, db.length);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				os.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 }

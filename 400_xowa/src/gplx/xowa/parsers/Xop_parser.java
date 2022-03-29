@@ -178,11 +178,14 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 					if (txt_bgn != pos)		// chars exist between pos and txt_bgn; make txt_tkn; see NOTE_1
 						txt_tkn = Txt_add(ctx, tkn_mkr, root, txt_tkn, txt_bgn, pos);
 					ctx.Lxr_make_(true);
+					pos = lxr.Make_tkn(ctx, tkn_mkr, root, src, len, pos, trv.Pos());
+/*
 					int npos = lxr.Make_tkn(ctx, tkn_mkr, root, src, len, pos, trv.Pos());
                                         if (npos < pos) {
                                             int a=1;
                                         }
                                         pos = npos;
+*/
 					if (ctx.Lxr_make()) {txt_bgn = pos; txt_tkn = null;}	// reset txt_tkn
 				}
 				if (pos == len) break;

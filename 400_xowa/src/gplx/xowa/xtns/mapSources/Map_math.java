@@ -126,6 +126,7 @@ class Map_math {// REF.MW:MapSources_math.php
 		step = 2;
 	}
 	public byte[] Get_dms(boolean wikibase, byte[] plus, byte[] minus) { // REF.MW: getDMSString
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
 		if (step < 2) Set_coord();
 		double deg = coord_deg;
 		if (	dec < 0 
@@ -165,6 +166,7 @@ class Map_math {// REF.MW:MapSources_math.php
 		return tmp_bfr.To_bry_and_clear();
 	}
 	private void Parse_input(byte[] src) {	// REF.MW: toDec
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
 		src = Parse_input_normalize(tmp_bfr, src);
 		if (src == null) {error = -1; return;}
 		int src_len = src.length;
@@ -270,7 +272,7 @@ class Map_math {// REF.MW:MapSources_math.php
 		else if	(val == -1)					return 9;
 		else								return 4;
 	}
-	private Bry_bfr tmp_bfr = Bry_bfr_.Reset(32);
+	//private Bry_bfr tmp_bfr = Bry_bfr_.Reset(32);
 	public static byte[] Parse_input_normalize(Bry_bfr bfr, byte[] src) {
 		/*
 		$w = str_replace( array( '‘', '’', '′' ), "'", $input );

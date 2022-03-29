@@ -92,15 +92,14 @@ public class Xodb_save_mgr_txt implements Xodb_save_mgr {
 		page_rdr.Update(tmp_bfr, page_itm, tmp_bfr.To_bry_and_clear());
 		Io_url page_rdr_url = fsys_mgr.Url_ns_fil(Xotdb_dir_info_.Tid_page, ttl.Ns().Id(), db_page.Text_db_id());
 		this.Data_save(Xotdb_dir_info_.Tid_page, page_rdr, page_rdr_url, tmp_bfr);
-		tmp_bfr.Mkr_rls();
 		// update ttl
 		Xoa_ttl redirect_ttl = redirect_mgr.Extract_redirect(text, text_len);
 		db_page.Text_len_(text_len);
 		db_page.Redirected_(redirect_ttl != null);
-		Bry_bfr tmp = wiki.Utl__bfr_mkr().Get_b512();
-		Xotdb_page_itm_.Txt_ttl_save(tmp, db_page);
-		byte[] ttl_row_bry = tmp.To_bry_and_clear();
-		tmp.Mkr_rls();
+		tmp_bfr.Clear(); // reuse buffer
+		Xotdb_page_itm_.Txt_ttl_save(tmp_bfr, db_page);
+		byte[] ttl_row_bry = tmp_bfr.To_bry();
+		tmp_bfr.Mkr_rls();
 		Xowd_hive_mgr ttl_hive = new Xowd_hive_mgr(wiki, Xotdb_dir_info_.Tid_ttl);
 		ttl_hive.Update(ns, old_ttl, new_ttl, ttl_row_bry, Xotdb_page_itm_.Txt_ttl_pos, Byte_ascii.Pipe, true, true);
 	}

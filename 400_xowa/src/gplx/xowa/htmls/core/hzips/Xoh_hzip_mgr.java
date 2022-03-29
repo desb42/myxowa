@@ -21,7 +21,7 @@ public class Xoh_hzip_mgr implements Xoh_hzip_wkr {
 	private final    Xoh_hdoc_wkr hdoc_wkr = new Xoh_hdoc_wkr__hzip();
 	private final    Xoh_hdoc_parser hdoc_parser;
 	private final    Bry_rdr rdr = new Bry_rdr().Dflt_dlm_(Xoh_hzip_dict_.Escape);
-	private final    Xoh_page_bfr bfr_mgr = new Xoh_page_bfr();
+	private Xoh_page_bfr bfr_mgr = null;
 	public Xoh_hzip_mgr() {this.hdoc_parser = new Xoh_hdoc_parser(hdoc_wkr);}
 	public int Tid() {return Xoh_hzip_dict_.Tid__lnke;}
 	public String Key() {return "root";}
@@ -44,7 +44,7 @@ public class Xoh_hzip_mgr implements Xoh_hzip_wkr {
 		boolean toc_enabled = !gplx.core.envs.Op_sys.Cur().Tid_is_drd() && !hctx.Mode_is_diff();
 		Bry_bfr bfr = html_bfr;
 		if (toc_enabled)
-			bfr_mgr.Init(html_bfr);
+			bfr_mgr = new Xoh_page_bfr(html_bfr);
 		while (true) {
 			if (pos == src_end) break;			
 			byte b = src[pos];

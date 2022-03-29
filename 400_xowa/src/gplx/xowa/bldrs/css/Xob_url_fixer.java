@@ -39,8 +39,8 @@ class Xob_url_fixer {
 		int[] seg_ary = new int[gplx.xowa.xtns.pfuncs.ttls.Pfunc_rel2abs.Ttl_max];
 		while (pos < src_len) {
 			byte b = src[pos];
-			o = mid_trie.Match_bgn_w_byte(b, src, pos, src_len);
-			if (o != null) {
+			Btrie_result r = mid_trie.Match_bgn_w_byte(b, src, pos, src_len);
+			if (r.o != null) {
 				Xob_url_fixer_tkn tkn = (Xob_url_fixer_tkn)o;
 				switch (tkn.Tid()) {
 					case Xob_url_fixer_tkn.Tid_mid_slash:				if (no_slashes) no_slashes = false; break;

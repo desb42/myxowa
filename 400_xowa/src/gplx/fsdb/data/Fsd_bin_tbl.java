@@ -19,7 +19,8 @@ import gplx.dbs.*; import gplx.core.ios.*; import gplx.core.ios.streams.*;
 import gplx.dbs.engines.sqlite.*;
 public class Fsd_bin_tbl implements Rls_able {		
 	public final    String fld__owner_id, fld__owner_tid, fld__part_id, fld__data_url, fld__data;
-	private Db_conn conn; private Db_stmt stmt_insert, stmt_select, stmt_select_itm; private Bry_bfr tmp_bfr;
+	private Db_conn conn; private Db_stmt stmt_insert, stmt_select, stmt_select_itm;
+        private Bry_bfr tmp_bfr;
 	private final    Bool_obj_ref saved_in_parts = Bool_obj_ref.n_();
 	public Fsd_bin_tbl(Db_conn conn, boolean schema_is_1) {
 		this.conn = conn;
@@ -46,6 +47,7 @@ public class Fsd_bin_tbl implements Rls_able {
 			stmt_insert = conn.Stmt_insert(tbl_name, flds);
 			tmp_bfr = Bry_bfr_.Reset(Io_mgr.Len_kb);
 		}
+                tmp_bfr.SetThreadId();
 		byte[] bin_ary = Io_stream_rdr_.Load_all_as_bry(tmp_bfr, bin_rdr);
 		stmt_insert.Clear()
 		.Val_int(fld__owner_id, id)

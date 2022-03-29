@@ -40,6 +40,7 @@ public class Thread_adp implements Runnable {
 	public void		Thread__stop()          {thread.stop();}
 	public void run() {
 		try	 {
+                    System.out.println("Thread:" + Thread.currentThread().getName() + "-" + Long.toString(Thread.currentThread().getId()));
 			Gfo_invk_.Invk_by_msg(invk_itm, invk_cmd, invk_msg);
 		}
 		catch (Exception e) {	// catch exception

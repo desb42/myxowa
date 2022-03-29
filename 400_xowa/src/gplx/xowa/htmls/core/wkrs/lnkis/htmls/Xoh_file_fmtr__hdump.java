@@ -18,12 +18,14 @@ import gplx.core.brys.fmtrs.*;
 import gplx.xowa.files.*;
 import gplx.langs.htmls.*; import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.htmls.core.makes.*; import gplx.xowa.htmls.core.wkrs.imgs.atrs.*;
 import gplx.xowa.parsers.lnkis.*;
-public class Xoh_file_fmtr__hdump extends Xoh_file_fmtr__basic {		private final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(128);
+public class Xoh_file_fmtr__hdump extends Xoh_file_fmtr__basic {
+    private final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(128);
 	@Override public void Add_full_img(Bry_bfr bfr, Xoh_wtr_ctx hctx, Xoae_page page, byte[] src, Xof_file_itm xfer_itm
 		, int uid, byte[] a_href, boolean a_href_is_file, byte a_cls, byte a_rel, byte[] a_title, byte[] a_xowa_title
 		, int img_w, int img_h, byte[] img_src, byte[] img_alt, byte img_cls, byte[] img_cls_other, byte[] img_style) {
 
 		// init data_xowa_title / data_xowa_image; EX: "xowa_title='A.png'"; "xowa_image='1|220|440|-1|-1|-1'"
+                tmp_bfr.SetThreadId();
 		byte[] data_xowa_title = Gfh_atr_.Make(tmp_bfr, Xoh_img_xoimg_data.Bry__data_xowa_title, a_xowa_title);
 		byte[] data_xowa_image = Bld_xowa_image_data(tmp_bfr, xfer_itm.Lnki_type(), xfer_itm.Lnki_w(), xfer_itm.Lnki_h(), xfer_itm.Lnki_upright(), xfer_itm.Lnki_time(), xfer_itm.Lnki_page(), img_w, img_h);
 

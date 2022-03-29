@@ -17,7 +17,7 @@ package gplx.core.brys; import gplx.*;
 public class Bry_bfr_mkr_mgr {
 	private final    Object thread_lock = new Object();
 	private final    byte mgr_id; private final    int reset;
-	private Bry_bfr[] used = Bry_bfr_.Ary_empty; private int used_len = 0, used_max = 0;
+	private Bry_bfr[] used = Bry_bfr_.Ary_empty; private int used_len = 0, used_max = 0, inuse = 0;
 	private int[] free; private int free_len;
 	public Bry_bfr_mkr_mgr(byte mgr_id, int reset) {// NOTE: random IndexOutOfBounds errors in Get around free[--free_len] with free_len being -1; put member variable initialization within thread_lock to try to avoid; DATE:2014-09-21
 		this.mgr_id = mgr_id;
@@ -41,8 +41,15 @@ public class Bry_bfr_mkr_mgr {
 					used[rv_idx] = rv;
 				}
 			}
-			rv.Mkr_init(this, rv_idx);
-			return rv.Clear();	// NOTE: ALWAYS call Clear when doing Get. caller may forget to call Clear, and reused bfr may have leftover bytes. unit tests will not catch, and difficult to spot in app
+			inuse++;
+                        if (inuse > 10) {
+                            int a=1;
+                        }
+                        if (mgr_id == 2) {
+                            int a=1;
+                        }
+                        rv.Clear();	// NOTE: ALWAYS call Clear when doing Get. caller may forget to call Clear, and reused bfr may have leftover bytes. unit tests will not catch, and difficult to spot in app
+			return rv.Mkr_init(this, rv_idx); // this must happen afgter the Clear
 		}
 	}
 	public void Rls(int idx) {
@@ -54,6 +61,7 @@ public class Bry_bfr_mkr_mgr {
 			else
 				free[free_len++] = idx;
 		}
+		inuse--;
 	}
 	public void Clear_fail_check() {
 		synchronized (thread_lock) {
@@ -67,7 +75,7 @@ public class Bry_bfr_mkr_mgr {
 			}
 			used = Bry_bfr_.Ary_empty;
 			free = Int_ary_.Empty;
-			free_len = used_len = used_max = 0;
+			free_len = used_len = used_max = inuse = 0;
 		}
 	}
 	public void Clear() {
@@ -80,7 +88,7 @@ public class Bry_bfr_mkr_mgr {
 			used = Bry_bfr_.Ary_empty;
 			free = Int_ary_.Empty;
 			free_len = 0;
-			used_len = used_max = 0;
+			used_len = used_max = inuse = 0;
 		}
 	}
 	@gplx.Internal protected Bry_bfr[] Used() {return used;}
@@ -94,5 +102,8 @@ public class Bry_bfr_mkr_mgr {
 		int[] new_free = new int[used_max];
 		Array_.Copy_to(free, 0, new_free, 0, free_len);
 		free = new_free;
+	}
+	public boolean Check() {
+		return inuse > 0;
 	}
 }

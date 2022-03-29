@@ -81,12 +81,12 @@ public class Xof_repo_itm implements Gfo_invk {
 		this.root_str = root_str;
 		return this;
 	}
-	public byte[] Gen_name_src(Bry_bfr tmp_bfr, byte[] name) {
+	public byte[] Gen_name_src(byte[] name) {
 		if (!fsys_is_wnt || wmf_fsys) return name;
-		return Xof_itm_ttl_.Remove_invalid(tmp_bfr, name);
+		return Xof_itm_ttl_.Remove_invalid(name);
 	}
-	public byte[] Gen_name_trg(Bry_bfr tmp_bfr, byte[] bry, byte[] md5, Xof_ext ext) {
-		byte[] rv = Gen_name_src(tmp_bfr, bry);
+	public byte[] Gen_name_trg(byte[] bry, byte[] md5, Xof_ext ext) {
+		byte[] rv = Gen_name_src(bry);
 		if (shorten_ttl) {
 			int max = url_max_len;
 			if (fsys_is_wnt) {
@@ -102,7 +102,7 @@ public class Xof_repo_itm implements Gfo_invk {
 			else {
 				max = 180; // legacy val of max title; can probably be higher
 			}
-			return Xof_itm_ttl_.Shorten(tmp_bfr, rv, max, md5, ext.Ext());
+			return Xof_itm_ttl_.Shorten(rv, max, md5, ext.Ext());
 		}
 		else {
 			return rv;

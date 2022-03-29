@@ -32,10 +32,12 @@ public class Db_special_api {
 		byte[] options = Bry_.new_u8(soptions);
 
 		Bry_bfr bfr = wiki.Utl__bfr_mkr().Get_m001();
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		bfr.Add_str_a7("{\"categorytree\":{\"html\":\"");
-		Categorytree(wiki, tmp_bfr, category, options);
-		return tidyup(bfr, tmp_bfr, "\"}}");
+		try {
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			bfr.Add_str_a7("{\"categorytree\":{\"html\":\"");
+			Categorytree(wiki, tmp_bfr, category, options);
+			return tidyup(bfr, tmp_bfr, "\"}}");
+		} finally {bfr.Mkr_rls();}
 	}
 
 	public byte[] Gen_json(Xowe_wiki wiki, Xoae_page page, Xoa_url url, Xoa_ttl ttl, Xowe_wiki wdata_wiki) {
@@ -51,23 +53,25 @@ public class Db_special_api {
 			return Bry_.Empty;
 		}
 		Bry_bfr bfr = wiki.Utl__bfr_mkr().Get_m001();
-		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		switch (cmd_type_val.Val()) {
-			case Type_categorytree:
-				bfr.Add_str_a7("{\"categorytree\":{\"html\":\"");
-				byte[] category = arg_hash.Get_val_bry_or(Arg_category, null);
-				byte[] options = arg_hash.Get_val_bry_or(Arg_options, null);
-				Categorytree(wiki, tmp_bfr, category, options);
-				return tidyup(bfr, tmp_bfr, "\"}}");
-
-			case Type_query:
-				bfr.Add_str_a7("{\"batchcomplete\":true,\"query\":{");
-				byte[] titles = arg_hash.Get_val_bry_or(Arg_titles, null);
-				Related(wiki, bfr, titles, wdata_wiki);
-				bfr.Add_str_a7("}}");
-				return bfr.To_bry_and_clear();
-		}
-		return Bry_.Empty;
+		try {
+			Bry_bfr tmp_bfr = Bry_bfr_.New();
+			switch (cmd_type_val.Val()) {
+				case Type_categorytree:
+					bfr.Add_str_a7("{\"categorytree\":{\"html\":\"");
+					byte[] category = arg_hash.Get_val_bry_or(Arg_category, null);
+					byte[] options = arg_hash.Get_val_bry_or(Arg_options, null);
+					Categorytree(wiki, tmp_bfr, category, options);
+					return tidyup(bfr, tmp_bfr, "\"}}");
+	
+				case Type_query:
+					bfr.Add_str_a7("{\"batchcomplete\":true,\"query\":{");
+					byte[] titles = arg_hash.Get_val_bry_or(Arg_titles, null);
+					Related(wiki, bfr, titles, wdata_wiki);
+					bfr.Add_str_a7("}}");
+					return bfr.To_bry_and_clear();
+			}
+			return Bry_.Empty;
+		} finally {bfr.Mkr_rls();}
 	}
 
 	private byte[] tidyup(Bry_bfr bfr, Bry_bfr tmp_bfr, String end) {
@@ -89,7 +93,7 @@ public class Db_special_api {
 		bfr.Add_bfr_and_clear(tmp_bfr);
 
 		bfr.Add_str_a7(end);
-		return bfr.To_bry_and_clear();
+		return bfr.To_bry_and_rls();
 	}
 	private void Related(Xowe_wiki wiki, Bry_bfr bfr, byte[] titles, Xowe_wiki wdata_wiki) {
 		int len = titles.length;

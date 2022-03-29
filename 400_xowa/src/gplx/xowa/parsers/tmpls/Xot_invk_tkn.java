@@ -292,9 +292,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 							}
 						}
 						else {	// some templates produce null ttls; EX: "Citation needed{{subst"
-							defn = wiki.Cache_mgr().Defn_cache().Get_by_key(name_ary, tmpl_case_match);
-							if (defn == null && ctx.Tmpl_load_enabled())
-								defn = Xot_invk_tkn_.Load_defn(wiki, ctx, this, ttl, name_ary);
+							defn = Xot_invk_tkn_.Get_or_build_defn(wiki, ctx, this, ttl, name_ary, tmpl_case_match);
 						}
 					}
 				}
@@ -311,10 +309,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 					bfr.Add(Xop_curly_bgn_lxr.Hook).Add(name_ary).Add(Xop_curly_end_lxr.Hook);
 					return false;
 				}
-				defn = wiki.Cache_mgr().Defn_cache().Get_by_key(name_ary, tmpl_case_match);
-				if (defn == null && ctx.Tmpl_load_enabled())
-					defn = Xot_invk_tkn_.Load_defn(wiki, ctx, this, ttl, name_ary);
-				if (defn == null) defn = Xot_defn_.Null;
+				defn = Xot_invk_tkn_.Get_or_build_defn(wiki, ctx, this, ttl, name_ary, tmpl_case_match);
 			}
 		}
 		Xot_defn_trace trace = ctx.Defn_trace(); int trg_bgn = bfr.Len();

@@ -18,9 +18,15 @@ import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.langs.kwds.*; import gplx.xowa.xtns.pfuncs.*;
 public class Wdata_pf_property extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_property;}
-	@Override public Pf_func New(int id, byte[] name) {return new Wdata_pf_property().Name_(name);}
+	@Override public Pf_func New(int id, byte[] name) {
+		return new Wdata_pf_property().Name_(name);
+	}
 	@Override public void Func_evaluate(Bry_bfr bfr, Xop_ctx ctx, Xot_invk caller, Xot_invk self, byte[] src) {// EX: {{#property:p123|}}
 		//synchronized (this) { // LOCK: must synchronized b/c bfr will later be set as member variable in .Resolve_to_bfr; DATE:2016-07-06
+//                if (src.length == 507){
+//                Thread currentThread = Thread.currentThread();
+//                System.out.println(currentThread.getName()+Integer.toString(src.length));
+//                }
 			Wbase_statement_mgr_.Get_wbase_data(bfr, ctx, caller, self, src, this, Bool_.N);
 		//}
 	}

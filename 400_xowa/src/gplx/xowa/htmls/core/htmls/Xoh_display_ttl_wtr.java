@@ -26,8 +26,8 @@ class Xoh_display_ttl_wtr {
 			int atr_pos = 0;
 			while (atr_pos < atr_val_len) {
 				byte b = atr_val[atr_pos];
-				Object o = style_trie.Match_bgn_w_byte(b, atr_val, atr_pos, atr_val_len);
-				if (o != null) {
+				Btrie_result r = style_trie.Match_bgn_w_byte(b, atr_val, atr_pos, atr_val_len);
+				if (r.o != null) {
 					bfr.Add(Msg_style_restricted);
 					return true;
 				}

@@ -20,7 +20,7 @@ import gplx.xowa.wikis.nss.*;
 import gplx.langs.htmls.encoders.*;
 import gplx.xowa.htmls.core.htmls.*;
 public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
-	private final    Bry_bfr html_bfr = Bry_bfr_.Reset(255), path_bfr = Bry_bfr_.Reset(255), subpage_caption_bfr = Bry_bfr_.Reset(255);
+	//private final    Bry_bfr html_bfr = Bry_bfr_.Reset(255), path_bfr = Bry_bfr_.Reset(255), subpage_caption_bfr = Bry_bfr_.Reset(255);
 	private Xowe_wiki wiki;
 	private byte[][] segs;
 	public byte[] Bld(Xowe_wiki wiki, Xoa_ttl ttl) {
@@ -40,12 +40,16 @@ public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
 
 		// build html
 		this.wiki = wiki;
+		Bry_bfr html_bfr = wiki.Utl__bfr_mkr().Get_m001();
 		fmtr_grp.Bld_bfr(html_bfr, this);
-		return html_bfr.To_bry_and_clear();
+		return html_bfr.To_bry_and_rls();
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		int segs_len = segs.length - 1;	// skip last seg which is current page and should not be printed
 
+		Bry_bfr path_bfr = wiki.Utl__bfr_mkr().Get_b512();
+		Bry_bfr subpage_caption_bfr = wiki.Utl__bfr_mkr().Get_b512();
+                try {
 		byte[] delimiter = Delimiter__1st;
 		for (int i = 0; i < segs_len; i++) {
 			// if not first, add "/" to path bfr
@@ -93,7 +97,10 @@ public class Xoh_subpages_bldr implements gplx.core.brys.Bfr_arg {
 
 			delimiter = Delimiter__nth; // now change the delimiter
 		}
-		path_bfr.Clear();
+                } finally {
+		path_bfr.Mkr_rls();
+                subpage_caption_bfr.Mkr_rls();
+                }
 	}
 	private static final    byte[] Delimiter__1st = Bry_.new_a7("&lt; "), Delimiter__nth = Bry_.new_a7("&lrm; | ");
 	private static final    Bry_fmtr

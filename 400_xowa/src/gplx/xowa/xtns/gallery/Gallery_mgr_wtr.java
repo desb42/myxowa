@@ -18,6 +18,7 @@ import gplx.core.brys.fmtrs.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.xndes.*; import gplx.xowa.parsers.lnkis.*;
 import gplx.langs.htmls.*; import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.parsers.htmls.*;
 import gplx.xowa.files.*;
+import gplx.xowa.files.origs.Xof_orig_itm;
 public class Gallery_mgr_wtr {
 	public static void Write_mgr(Bry_bfr bfr, Gallery_mgr_base mgr, Xowe_wiki wiki, Xoae_page page, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Gallery_xnde xnde) {
 		// init
@@ -46,6 +47,7 @@ public class Gallery_mgr_wtr {
 		// write <li> items
 		Xoae_app app = wiki.Appe(); Xoh_html_wtr html_wtr = wiki.Html_mgr().Html_wtr();
 		int itm_len = xnde.Itms_len();
+                Xof_img_size img_size = new Xof_img_size();
 		for (int i = 0; i < itm_len; i++)
 			Write_itm(bfr, tmp_bfr, app, wiki, page, ctx, html_wtr, hctx, src, mgr, xnde, i, null);
 		bfr.Add_byte_nl().Add(Gfh_tag_.Ul_rhs);	// "\n</ul>"
@@ -63,8 +65,15 @@ public class Gallery_mgr_wtr {
 
 		// get lnki, xfer, html_w_expand, html_h_expand
 		Xop_lnki_tkn lnki = itm.Lnki_tkn();
-		int lnki_w_orig = lnki.W(), lnki_h_orig = lnki.H(); // capture orig lnki_w / lnki_h for later
 		mgr.Get_thumb_size(lnki, itm.Ext());				// noop if traditional; expand by 1.5 if packed
+		int lnki_w_orig = lnki.W(), lnki_h_orig = lnki.H(); // capture orig lnki_w / lnki_h for later
+		//mgr.Adjust_lnki_parameters(lnki);
+		Xof_orig_itm orig = wiki.File__orig_mgr().Find_by_ttl_or_null(lnki.Ttl().Page_txt(), i, 0);
+		//img_size.Html_size_calc(0/*??*/, lnki.W(), lnki.H(), (byte)0/*??*/, 0/*??*/, lnki.Upright(), orig.Ext_id(), orig.W(), orig.H(), Xof_img_size.Thumb_width_img);
+		if (orig != null) {
+			lnki_w_orig = (int)Math_.Ceil((double)lnki.H()/(double)orig.H()*(double)orig.W());
+			lnki.W_(lnki_w_orig);
+		}
 		if (xfer_itm == null) {								// will be null on 1st pass
 			xfer_itm = html_wtr.Lnki_wtr().File_wtr().Lnki_eval(Xof_exec_tid.Tid_wiki_page, ctx, page, lnki);
 			xfer_itm.Html_gallery_mgr_h_(xnde.Itm_h_actl());
@@ -72,6 +81,7 @@ public class Gallery_mgr_wtr {
 		}
 		int html_w_expand = xfer_itm.Html_w();
 		int html_h_expand = xfer_itm.Html_h();
+		int gbwidth = mgr.Get_gb_width(lnki_w_orig, lnki_h_orig);
 
 		// get id
 		int img_uid = xfer_itm.Html_uid();
@@ -113,17 +123,21 @@ public class Gallery_mgr_wtr {
 			if (href_ttl == null) href_ttl = itm_ttl;	// occurs when link is invalid; EX: A.png|link=<invalid>
 
 			// get w, h
-			mgr.Adjust_image_parameters(xfer_itm);		// noop if traditional; reduce by 1.5 if packed
-			int html_w_normal = xfer_itm.Html_w();
-			int html_h_normal = xfer_itm.Html_h();
-			xfer_itm.Init_at_gallery_bgn(html_w_normal, html_h_normal, html_w_expand);// NOTE: file_w should be set to expanded width so js can resize if gallery
+			//mgr.Adjust_image_parameters(xfer_itm);		// noop if traditional; reduce by 1.5 if packed
+			//int html_w_normal = xfer_itm.Html_w();
+			//int html_h_normal = xfer_itm.Html_h();
+			//xfer_itm.Init_at_gallery_bgn(html_w_normal, html_h_normal, html_w_expand);// NOTE: file_w should be set to expanded width so js can resize if gallery
+			mgr.Adjust_lnki_parameters(lnki);		// noop if traditional; reduce by 1.5 if packed
+			int html_w_normal = lnki.W();
+			int html_h_normal = lnki.H();
+			xfer_itm.Init_at_gallery_bgn(html_w_normal, html_h_normal, lnki_h_orig);// NOTE: file_w should be set to expanded width so js can resize if gallery
 
 			// write div_2
-			div_2_w = mgr.Get_thumb_div_width(html_w_expand);
+			div_2_w = mgr.Get_thumb_div_width(lnki_w_orig);
 			Gallery_mgr_wtr_.Fmtr__div1__img.Bld_bfr_many(tmp_bfr, div_2_w);
 
 			// write div_3
-			div_3_margin = mgr.Get_vpad(mgr.Itm_default_h(), html_h_expand);
+			div_3_margin = mgr.Get_vpad(mgr.Itm_default_h(), lnki_h_orig/*html_h_expand*/);
 			Gallery_mgr_wtr_.Fmtr__div1__vpad.Bld_bfr_many(tmp_bfr, new Gallery_img_pad_fmtr_arg(div_3_margin));	// <div style="margin:~{vpad}px auto;">
 
 			// write <img>
@@ -133,8 +147,7 @@ public class Gallery_mgr_wtr {
 		}
 
 		// write <li>
-		int div_1_w = mgr.Get_gb_width(html_w_expand, html_h_expand);
-		Gallery_mgr_wtr_.Fmtr__li__lhs.Bld_bfr_many(bfr, li_id_atr, new Gallery_box_w_fmtr_arg(div_1_w));
+		Gallery_mgr_wtr_.Fmtr__li__lhs.Bld_bfr_many(bfr, li_id_atr, new Gallery_box_w_fmtr_arg(gbwidth));
 		bfr.Add(itm_html);
 
 		// get show_filenames_link

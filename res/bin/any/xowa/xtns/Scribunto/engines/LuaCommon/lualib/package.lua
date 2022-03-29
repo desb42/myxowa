@@ -31,6 +31,12 @@ local format = string.format
 -- avoid overwriting the package table if it's already there
 --
 package = package or {}
+
+-- release resources!??!!
+function package.release ()
+	_LOADED = nil
+end
+
 local _PACKAGE = package
 
 package.loaded = package.loaded or {}
@@ -110,7 +116,6 @@ function _G.require (modname)
 	end
 	return _LOADED[modname]
 end
-
 
 --
 -- package.seeall function

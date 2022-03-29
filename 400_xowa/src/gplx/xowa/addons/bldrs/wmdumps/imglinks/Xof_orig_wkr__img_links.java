@@ -24,7 +24,8 @@ public class Xof_orig_wkr__img_links implements Xof_orig_wkr {
 	}
 	public byte			Tid() {return Xof_orig_wkr_.Tid_xowa_img_links;}
 	public Xof_orig_itm	Find_as_itm(byte[] ttl, int list_idx, int list_len) {
-		Xof_orig_itm rv = (Xof_orig_itm)hash.Get_by(ttl);
+		//Xof_orig_itm rv = (Xof_orig_itm)hash.Get_by(ttl);
+		Xof_orig_itm rv = Xof_orig_itm.Get_by(ttl);
 		if		(rv == Missing) return Xof_orig_itm.Null;
 		else if (rv == null)	rv = Load_from_db(ttl);
 		return rv == Missing ? Xof_orig_itm.Null : rv;
@@ -57,7 +58,8 @@ public class Xof_orig_wkr__img_links implements Xof_orig_wkr {
 		);
 	}
 	public void Add_by_db(Xof_orig_itm itm) {
-		hash.Add(itm.Ttl(), itm);
+		//hash.Add(itm.Ttl(), itm);
+		itm.Add();
 	}
 	private Xof_orig_itm Load_from_db(byte[] ttl) {
 		synchronized (hash) {	// LOCK:orig_wkr is shared by multiple threads; NullPointerException on statement sometimes when concurrent; DATE:2016-09-03
@@ -66,7 +68,8 @@ public class Xof_orig_wkr__img_links implements Xof_orig_wkr {
 			Xof_orig_itm rv = Xof_orig_wkr__img_links_.Load_itm(this, imglnk_conn, wiki, ttl);
 			if (rv == Xof_orig_itm.Null)
 				rv = Missing;
-			hash.Add(ttl, rv);
+			//hash.Add(ttl, rv);
+			rv.Add();
 			return rv;
 		}
 	}

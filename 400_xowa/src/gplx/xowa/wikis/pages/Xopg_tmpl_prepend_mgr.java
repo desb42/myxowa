@@ -35,6 +35,9 @@ public class Xopg_tmpl_prepend_mgr {
 		return this;
 	}
 	public void End(Xop_ctx ctx, Bry_bfr bfr, byte[] val, int val_len, boolean called_from_tmpl) {
+            if (called_from_tmpl == false) {
+                int a=1;
+            }
 		if (	val_len > 0														// val is not empty
 			&&	tmpl_prepend_nl_trie.Match_bgn(val, 0, val_len) != null			// val starts with {| : ; # *; REF.MW:Parser.php|braceSubstitution
 			) {
@@ -54,7 +57,10 @@ public class Xopg_tmpl_prepend_mgr {
 			if (add)
 				bfr.Add_byte(Byte_ascii.Nl);
 		}
-		if (called_from_tmpl) --stack_len;
+		if (called_from_tmpl) {
+			--stack_len;
+			stack[stack_len] = null; // reset this link
+		}
 	}
 	private static final Btrie_fast_mgr tmpl_prepend_nl_trie = Xop_curly_bgn_lxr.tmpl_bgn_trie_();
 }

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -58,9 +58,11 @@ import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v1;
 import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v2;
 import gplx.xowa.xtns.wbases.stores.Wbase_doc_mgr;
 import gplx.xowa.xtns.wbases.stores.Wbase_pid_mgr;
+import gplx.xowa.xtns.wbases.stores.Wbase_pid_mgr_redis;
 import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr;
 import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr_loader_;
 import gplx.xowa.xtns.wbases.stores.Wbase_qid_mgr;
+import gplx.xowa.xtns.wbases.stores.Wbase_qid_mgr_redis;
 
 import gplx.core.brys.fmtrs.Bry_fmtr;
 import gplx.Byte_ascii;
@@ -83,8 +85,14 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	public Wdata_wiki_mgr(Xoae_app app) {
 		this.app = app;
 		this.evt_mgr = new Gfo_evt_mgr(this);
-		this.Qid_mgr = new Wbase_qid_mgr(this);
-		this.Pid_mgr = new Wbase_pid_mgr(this);	
+		if (app.Mode().Tid_is_cmd()) {
+			this.Qid_mgr = new Wbase_qid_mgr_redis(this);
+			this.Pid_mgr = new Wbase_pid_mgr_redis(this);	
+		}
+		else {
+			this.Qid_mgr = new Wbase_qid_mgr(this);
+			this.Pid_mgr = new Wbase_pid_mgr(this);	
+		}
 		this.Doc_mgr = new Wbase_doc_mgr(this, this.Qid_mgr);
 		this.prop_mgr = new Wbase_prop_mgr(Wbase_prop_mgr_loader_.New_db(this));
 //		this.prop_val_visitor = new Wdata_prop_val_visitor(app, this);
@@ -164,13 +172,17 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		}
 	}
 	public void Resolve_to_bfr(Bry_bfr bfr, Xowe_wiki wiki, Wbase_claim_grp prop_grp, byte[] lang_key, boolean mode_is_statements) {
-		synchronized (thread_lock) {	// LOCK:must synchronized b/c prop_val_visitor has member bfr which can get overwritten; DATE:2016-07-06
+//		synchronized (thread_lock) {	// LOCK:must synchronized b/c prop_val_visitor has member bfr which can get overwritten; DATE:2016-07-06
 			if (hwtr_mgr == null) Hwtr_mgr_assert();
 			int len = prop_grp.Len();
 			Wbase_claim_base selected = null;
 			// this does two things
 			// finds the first non deprecated prop
 			// and overrides it with the first preferred prop (if there is one)
+//                        if (prop_grp.Id() == 625) {
+//                Thread currentThread = Thread.currentThread();
+//                System.out.println(currentThread.getName()+"-res-"+Integer.toString(len));
+//                        }
 			for (int i = 0; i < len; i++) {								// NOTE: multiple props possible; EX: {{#property:P1082}}; PAGE:en.w:Earth DATE:2015-08-02
 				Wbase_claim_base prop = prop_grp.Get_at(i);
 				int rank = prop.Rank_tid();
@@ -197,7 +209,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 					break;
 				}
 			}
-		}
+//		}
 	}
 	public byte[] Popup_text(Xoae_page page) {
 		Hwtr_mgr_assert();
@@ -217,12 +229,14 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	}
 	private void Hwtr_mgr_assert() {
 		if (hwtr_mgr != null) return;
+		synchronized (thread_lock) {
 		Xoapi_toggle_mgr toggle_mgr = app.Api_root().Html().Page().Toggle_mgr();
 		Xoapi_wikibase wikibase_api = app.Api_root().Xtns().Wikibase();
 		hwtr_mgr = new Wdata_hwtr_mgr();
 		hwtr_mgr.Init_by_ctor(wikibase_api, this, new Wdata_lbl_wkr_wiki(wikibase_api, this), gplx.langs.htmls.encoders.Gfo_url_encoder_.Href, toggle_mgr, app.Usere().Wiki().Xwiki_mgr());
 		this.Hwtr_msgs_make();
 		Gfo_evt_mgr_.Sub_same_many(app.Usere(), this, Xoue_user.Evt_lang_changed);
+                }
 	}
 	private void Hwtr_msgs_make() {
 		// if (!app.Wiki_mgr().Wiki_regy().Has(Xow_domain_itm_.Bry__wikidata)) return; // DELETE: don't know why guard is needed; breaks test; DATE:2016-10-20

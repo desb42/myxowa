@@ -28,7 +28,8 @@ public class Io_stream_zip_mgr {
 		if (type == Io_stream_tid_.Tid__raw) return val;
 		Io_stream_rdr rdr = Rdr(type);
 		rdr.Open_mem(val);
-		return Io_stream_rdr_.Load_all_as_bry(Bry_bfr_.New(), rdr);
+		byte[] rv = Io_stream_rdr_.Load_all_as_bry(Bry_bfr_.New(), rdr);
+		return rv;
 	}
 	private Io_stream_wtr Wtr(byte type) {
 		Bry_bfr bfr = Bry_bfr_.New();

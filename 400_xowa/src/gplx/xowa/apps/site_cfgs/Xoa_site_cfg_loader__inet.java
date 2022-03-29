@@ -20,12 +20,13 @@ import gplx.xowa.wikis.domains.*;
 public class Xoa_site_cfg_loader__inet implements Xoa_site_cfg_loader {
 	private final    Gfo_inet_conn inet_conn; private final    Json_parser json_parser;
 	private String api_url; private boolean call_api = true; private Json_doc jdoc;
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.New();
+	//private final    Bry_bfr tmp_bfr = Bry_bfr_.New();
 	public Xoa_site_cfg_loader__inet(Gfo_inet_conn inet_conn, Json_parser json_parser) {this.inet_conn = inet_conn; this.json_parser = json_parser;}
 	public int Tid() {return Xoa_site_cfg_loader_.Tid__inet;}
 	public void Load_csv__bgn(Xoa_site_cfg_mgr mgr, Xow_wiki wiki) {
 		this.call_api = true;
 		this.jdoc = null;
+                Bry_bfr tmp_bfr = Bry_bfr_.New();
 		this.api_url = Bld_url(tmp_bfr, wiki.Domain_str(), mgr.Data_hash(), mgr.Itm_ary());
 	}
 	public String Api_url() {return api_url;}

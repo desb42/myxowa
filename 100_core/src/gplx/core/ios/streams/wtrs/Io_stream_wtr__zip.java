@@ -48,13 +48,20 @@ public class Io_stream_wtr__zip extends Io_stream_wtr__base {
 			if (trg_bfr != null)
 				trg_bfr.Add(mem_stream.toByteArray());
 			zip_stream.flush();
+                        zip_stream = null;
 		}
 		catch (Exception e) {throw Err_.new_exc(e, "io", "flush failed", "url", url.Raw());}
 	}
 	public void Rls() {
 		try {
-			if (zip_stream != null) zip_stream.close();
-			if (mem_stream != null) mem_stream.close();
+			if (zip_stream != null) {
+                            zip_stream.close();
+                            zip_stream = null;
+                        }
+			if (mem_stream != null) {
+                            mem_stream.close();
+                            mem_stream = null;
+                        }
 		}
 		catch (Exception e) {throw Err_.new_exc(e, "io", "close failed", "url", url.Raw());}
 	}

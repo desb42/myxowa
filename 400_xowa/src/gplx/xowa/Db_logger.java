@@ -24,7 +24,7 @@ public class Db_logger {
 	private FileChannel fc;
 	private FileOutputStream fos;
 	private Io_url url;
-	private final Bry_bfr tmp_bfr = Bry_bfr_.New();
+	//private final Bry_bfr tmp_bfr = Bry_bfr_.New();
 	private final Bry_fmtr tmp_fmtr = Bry_fmtr.New__tmp().Fail_when_invalid_escapes_(false);	// do not fail b/c msgs may contain excerpt of random text; EX:[[User:A|~A~]] DATE:2014-11-28
 
 	protected void finalize() {
@@ -63,6 +63,7 @@ public class Db_logger {
 	}
 	private byte[] Bld_msg_many(String fmt, Object[] args) {
 		try {
+                    Bry_bfr tmp_bfr = Bry_bfr_.New();
 			tmp_bfr.Add_str_u8(Datetime_now.Get_force().XtoUtc().XtoStr_fmt_yyyyMMdd_HHmmss_fff());
 			tmp_bfr.Add_byte(Byte_ascii.Space);
 			tmp_fmtr.Fmt_(fmt).Bld_bfr_many(tmp_bfr, args);

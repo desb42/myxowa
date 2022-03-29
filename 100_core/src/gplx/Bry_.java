@@ -87,12 +87,15 @@ public class Bry_ {
 		return rv;
 	}
 	public static byte[] New_u8_nl_apos(String... lines) {
-		Bry_bfr bfr = Bry_bfr_.Get();
-		try {
-			New_u8_nl_apos(bfr, lines);
-			return bfr.To_bry_and_clear();
-		}
-		finally {bfr.Mkr_rls();}
+//		Bry_bfr bfr = Bry_bfr_.Get();
+//		try {
+//			New_u8_nl_apos(bfr, lines);
+//			return bfr.To_bry_and_clear();
+//		}
+//		finally {bfr.Mkr_rls();}
+		Bry_bfr bfr = Bry_bfr_.New();
+		New_u8_nl_apos(bfr, lines);
+		return bfr.To_bry_and_clear();
 	}
 	public static void New_u8_nl_apos(Bry_bfr bfr, String... lines) {
 		int lines_len = lines.length;

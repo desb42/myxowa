@@ -37,4 +37,11 @@ public class Bry_bfr_mkr {
 		}
 	}
 	public static final byte Tid_b128 = 0, Tid_b512 = 1, Tid_k004 = 2, Tid_m001 = 3;
+
+        public boolean Check() { // any currently in use?
+		for (byte i = Tid_b128; i <= Tid_m001; i++)
+			if (mkr(i).Check())
+                            return true;
+                return false;
+	}
 }

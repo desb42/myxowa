@@ -15,10 +15,10 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.apps.utls; import gplx.*; import gplx.xowa.*; import gplx.xowa.apps.*;
 public class Xoa_pagename_encoder {	// see:https://www.mediawiki.org/wiki/Manual:PAGENAMEE_encoding
-	private final Bry_bfr bfr = Bry_bfr_.New();
+	//private final Bry_bfr bfr = Bry_bfr_.New();
 	public byte[] Encode(byte[] src) {
+		Bry_bfr bfr = null;
 		int src_len = src.length;
-		int pos = 0;
 		int sofar = 0;
 		for (int i = 0; i < src_len; ++i) {
 			byte b = src[i];
@@ -29,6 +29,8 @@ public class Xoa_pagename_encoder {	// see:https://www.mediawiki.org/wiki/Manual
 				case Byte_ascii.Quote: repl = Bry__quot; break;
 			}
 			if (repl != null) {
+				if (bfr == null)
+					bfr = Bry_bfr_.New();
 				bfr.Add_mid(src, sofar, i);
 				bfr.Add(repl);
 				sofar = i + 1;

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,21 +13,30 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.scribunto.engines.luaj; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.scribunto.*; import gplx.xowa.xtns.scribunto.engines.*;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaThread;
-import org.luaj.vm2.LuaValue;
+package gplx.xowa.xtns.scribunto.engines.luaj;
+import gplx.*;
+import gplx.xowa.xtns.scribunto.*;
 import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.VarArgFunction;
+import gplx.xowa.parsers.tmpls.Xot_invk;
 public class Luaj_server_func_dbg extends VarArgFunction {
 	private final Scrib_core core;
 	public Luaj_server_func_dbg(Scrib_core v) {this.core = v;}	
-	public Varargs invoke(Varargs args) {
+	@Override public Varargs invoke(Varargs args) {
 		// init bfrs
 		byte dbg_separator = Byte_ascii.Tab; 
 		Bry_bfr dbg_bfr = Bry_bfr_.New();
 		Bry_bfr html_bfr = Bry_bfr_.New();
-		dbg_bfr.Add(core.Frame_current().Frame_ttl()).Add_byte(dbg_separator);
+                Xot_invk cf = core.Frame_current();
+		byte[] ttl;
+                if (cf == null)
+                    ttl = Bry_.new_a7("<outside>");
+                else
+                    ttl = core.Frame_current().Frame_ttl();
+//                if (Bry_.Eq(ttl, Bry_.new_a7("Module:CountryData")))
+//                    return NONE;Thread.currentThread().getName()+"-defn_cache-" + 
+		dbg_bfr.Add_str_a7(Thread.currentThread().getName()+"-dbg-").Add_byte(dbg_separator);
+		dbg_bfr.Add(ttl).Add_byte(dbg_separator);
 		html_bfr.Add_str_a7("<span class='xowa_dbg' style='color:red'>");
 		
 		// loop args and add to bfrs

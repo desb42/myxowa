@@ -308,9 +308,11 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 	public static Xoa_ttl Parse(Xow_wiki wiki, byte[] src, int bgn, int end){return Parse(wiki.App().Parser_amp_mgr(), wiki.Lang().Case_mgr(), wiki.Xwiki_mgr(), wiki.Ns_mgr(), src, bgn, end);}
 	public static Xoa_ttl Parse(Xop_amp_mgr amp_mgr, Xol_case_mgr case_mgr, Xow_xwiki_mgr xwiki_mgr, Xow_ns_mgr ns_mgr, byte[] src, int bgn, int end) {
 		Xoa_ttl rv = new Xoa_ttl();
-		Bry_bfr bfr = Bry_bfr_.Get();	// changed from bry_mkr.Get_b512(); DATE:2016-07-06
-		try		{return rv.Parse(bfr, amp_mgr, case_mgr, xwiki_mgr, ns_mgr, src, bgn, end) ? rv : null;}
-		finally {bfr.Mkr_rls();}
+		//Bry_bfr bfr = Bry_bfr_.Get();	// changed from bry_mkr.Get_b512(); DATE:2016-07-06
+		//try		{return rv.Parse(bfr, amp_mgr, case_mgr, xwiki_mgr, ns_mgr, src, bgn, end) ? rv : null;}
+		//finally {bfr.Mkr_rls();}
+		Bry_bfr bfr = Bry_bfr_.New(); // changed again DATE:2022-03-24
+		return rv.Parse(bfr, amp_mgr, case_mgr, xwiki_mgr, ns_mgr, src, bgn, end) ? rv : null;
 	}
 	private int stripwhitespace(Bry_bfr bfr, int txt_bb_len) {
 		byte[] buf = bfr.Bfr();

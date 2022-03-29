@@ -50,8 +50,13 @@ public class Xoapi_toggle_mgr implements Gfo_invk {
 		byte[] key_bry = Bry_.new_u8(key_str);
 		Xoapi_toggle_itm rv = (Xoapi_toggle_itm)hash.Get_by(key_bry);
 		if (rv == null) {
+                    synchronized (hash) {
+                        rv = (Xoapi_toggle_itm)hash.Get_by(key_bry);
+                        if (rv == null) {
 			rv = new Xoapi_toggle_itm(app, key_bry);
 			hash.Add(key_bry, rv);
+                        }
+                    }
 		}
 		return rv;
 	}

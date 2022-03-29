@@ -19,7 +19,7 @@ import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.core.intls.
 import gplx.xowa.users.history.*;
 import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*;
 public abstract class Xoctg_fmt_itm_base implements gplx.core.brys.Bfr_arg {
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.New();
+	//private final    Bry_bfr tmp_bfr = Bry_bfr_.New();
 	private Xow_wiki wiki;
 	private Xoctg_catpage_grp grp;
 	private Uca_ltr_extractor ltr_extractor;
@@ -64,6 +64,7 @@ public abstract class Xoctg_fmt_itm_base implements gplx.core.brys.Bfr_arg {
 		loop_end_idx = grp_end;
 	}
 	@gplx.Virtual public void Bld_html(Bry_bfr bfr, Xow_wiki wiki, Xou_history_mgr history_mgr, Xoh_href_parser href_parser, Xoctg_catpage_itm itm, Xoa_ttl ttl) {
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
 		byte[] itm_full_ttl = Gfh_utl.Escape_html_as_bry(tmp_bfr, ttl.Full_txt());// NOTE: ttl.Full_txt() to get full ns; EX: Template:A instead of just "A"
 		byte[] itm_href = wiki.Html__href_wtr().Build_to_bry(wiki, ttl);
 		byte[] itm_atr_cls = Xoh_lnki_wtr.Lnki_cls_visited(history_mgr, wiki.Domain_bry(), ttl.Page_txt());	// NOTE: must be ttl.Page_txt() in order to match Xou_history_mgr.Add

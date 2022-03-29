@@ -15,7 +15,8 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.wikis.xwikis.sitelinks.htmls; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*; import gplx.xowa.wikis.xwikis.*; import gplx.xowa.wikis.xwikis.sitelinks.*;
 class Xoa_sitelink_itm_wtr__badge {
-	public static byte[] Bld_badge_class(Bry_bfr bfr, byte[][] badge_ary) {	// EX: "Q17437798", "Q17437796" -> "class='badge-goodarticle,badge-featuredarticle'"
+	public static byte[] Bld_badge_class(byte[][] badge_ary) {	// EX: "Q17437798", "Q17437796" -> "class='badge-goodarticle,badge-featuredarticle'"
+            Bry_bfr bfr = Bry_bfr_.New();
 		if (badge_ary == null) badge_ary = Bry_.Ary_empty;
 		bfr.Add(Cls_bgn);
 		int badges_len = badge_ary.length;

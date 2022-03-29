@@ -60,9 +60,11 @@ public class Scrib_invoke_func extends Pf_func_base {
 			return;
 		}
                 //if (Bry_.Eq(mod_name, Bry_.new_a7("TemplateBox")) && Bry_.Eq(fnc_name, Bry_.new_a7("templatedata"))) {
+/*
                 if (Bry_.Eq(mod_name, Bry_.new_a7("Languages")) && Bry_.Eq(fnc_name, Bry_.new_a7("autolang"))) {
                     int a=1;
                 }
+*/
 		Xop_log_invoke_wkr invoke_wkr = ctx.Xtn__scribunto__invoke_wkr();
 		long log_time_bgn = 0;
 		if (invoke_wkr != null) {

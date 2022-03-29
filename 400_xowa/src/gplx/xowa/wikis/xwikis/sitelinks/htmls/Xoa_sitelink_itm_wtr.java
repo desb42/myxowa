@@ -20,7 +20,7 @@ import gplx.xowa.wikis.domains.*;
 import gplx.xowa.apps.utls.*;
 import gplx.langs.htmls.encoders.*;
 class Xoa_sitelink_itm_wtr implements gplx.core.brys.Bfr_arg {
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(255);
+	//private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(255);
 	private Xoa_app app; private Xoa_sitelink_grp grp;
 	public void Init_by_app(Xoa_app app) {this.app = app;}
 	public Xoa_sitelink_itm_wtr Fmt__init(Xoa_sitelink_grp grp) {this.grp = grp; return this;}
@@ -44,7 +44,7 @@ class Xoa_sitelink_itm_wtr implements gplx.core.brys.Bfr_arg {
 			synchronized (href_encoder) {	// LOCK:static-obj
 				url = href_encoder.Encode(url);
 			}
-			td_fmtr.Bld_bfr_many(bfr, domain_itm.Lang_actl_key(), domain_itm.Domain_bry(), itm.Name(), url, Db_encode.Title(page_name), page_name, Xoa_sitelink_itm_wtr__badge.Bld_badge_class(tmp_bfr, itm.Page_badges()));
+			td_fmtr.Bld_bfr_many(bfr, domain_itm.Lang_actl_key(), domain_itm.Domain_bry(), itm.Name(), url, Db_encode.Title(page_name), page_name, Xoa_sitelink_itm_wtr__badge.Bld_badge_class(itm.Page_badges()));
 			++td_idx;
 			if (td_idx == td_max) {
 				tr_opened = false;

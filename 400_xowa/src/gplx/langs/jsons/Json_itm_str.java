@@ -100,6 +100,7 @@ public class Json_itm_str extends Json_itm_base {
 		}
 		else { // PERF:reuse bfr / bry on jdoc itself
 			bfr = doc.Bfr();
+                        bfr.SetThreadId();
 			utf8_bry = doc.Tmp_u8_bry();
 		}
 

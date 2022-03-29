@@ -17,7 +17,7 @@ package gplx.xowa.htmls; import gplx.*; import gplx.xowa.*;
 import gplx.core.brys.fmtrs.*;
 import gplx.xowa.wikis.pages.*;
 public class Xoh_page_wtr_mgr implements Gfo_invk {
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(255), html_bfr = Bry_bfr_.Reset(Io_mgr.Len_mb);
+	//private final    Bry_bfr html_bfr = Bry_bfr_.Reset(Io_mgr.Len_mb);
 	private Xoh_page_wtr_wkr edit_wtr, html_wtr, read_wtr;
 	public Xoh_page_wtr_mgr(boolean html_capable) {
 		this.html_capable = html_capable;
@@ -33,7 +33,10 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	public Bry_fmtr Page_read_fmtr() {return page_read_fmtr;} private Bry_fmtr page_read_fmtr = Bry_fmtr.new_("", Fmtr_keys);
 	public Bry_fmtr Page_edit_fmtr() {return page_edit_fmtr;} private Bry_fmtr page_edit_fmtr = Bry_fmtr.new_("", Fmtr_keys);
 	public Bry_fmtr Page_html_fmtr() {return page_html_fmtr;} private Bry_fmtr page_html_fmtr = Bry_fmtr.new_("", Fmtr_keys);
-	public byte[] Edit_rename_div_bry(Xoa_ttl ttl) {return div_edit_rename_fmtr.Bld_bry_many(tmp_bfr, ttl.Full_db_href());}
+	public byte[] Edit_rename_div_bry(Xoa_ttl ttl) {
+            Bry_bfr tmp_bfr = Bry_bfr_.New();
+            return div_edit_rename_fmtr.Bld_bry_many(tmp_bfr, ttl.Full_db_href());
+        }
 	private byte[] base_common_bry, base_wiki_bry;
 	public void Init_css_urls(Xoa_app app, String wiki_domain, Io_url css_common_url, Io_url css_wiki_url) {
 		this.css_common_bry = css_common_url.To_http_file_bry();
@@ -67,8 +70,9 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 			page_edit_fmtr.Eval_mgr_(wiki.Eval_mgr());
 			page_html_fmtr.Eval_mgr_(wiki.Eval_mgr());
 		}
+		Bry_bfr html_bfr = wiki.Utl__bfr_mkr().Get_m001();
 		wtr.Write_page(html_bfr, page, wiki.Parser_mgr().Ctx(), page_html_source);
-		return html_bfr.To_bry_and_clear_and_rls();
+		return html_bfr.To_bry_and_rls();
 	}
 	public Xoh_page_wtr_wkr Wkr(byte output_tid) {
 		switch (output_tid) {

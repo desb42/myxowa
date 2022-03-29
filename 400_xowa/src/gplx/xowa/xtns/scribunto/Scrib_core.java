@@ -135,7 +135,21 @@ public class Scrib_core {
 			ary[i].Register(this, script_dir);
 	}
 	//public void Term() {engine.Server().Term(); mods.Clear();}
-	public void Term() {engine.Server().Term(); engine = null; mods.Clear();}
+	public void Term() {
+		lib_mw.Notify_page_changed(true);
+		//lib_uri.Notify_page_changed();
+		//lib_title.Notify_page_changed();
+		//lib_wikibase.Notify_page_changed();
+		engine.ClearChunks();
+		engine.Server().Term();
+		engine.Term();
+                engine.Server_(null); // should be the same as the line below!
+		engine = null;
+                mods.Clear();
+	}
+        public void Reset() {
+            engine.ClearChunks();
+        }
 	public void When_page_changed(Xoae_page page) {
 		mods.Clear();	// clear any loaded modules
 		Xow_wiki wiki = page.Wiki();
@@ -153,7 +167,7 @@ public class Scrib_core {
 			lib_message.Notify_lang_changed();
 			lib_language.Notify_lang_changed();
 		}
-		lib_mw.Notify_page_changed();
+		lib_mw.Notify_page_changed(false);
 		lib_uri.Notify_page_changed();
 		lib_title.Notify_page_changed();
 		lib_wikibase.Notify_page_changed();
@@ -232,9 +246,11 @@ public class Scrib_core {
 		try {
 			Scrib_lua_mod mod = Mods_get_or_new(mod_name, mod_text);
 			String fnc_name_str = String_.new_u8(fnc_name);
+/*
                         if (fnc_name_str.equals("coord2text")) {
                             int a=1;
                         }
+*/
 			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), fnc_name_str);
 			Keyval[] func_rslt = engine.CallFunction(luaid_ExecuteModule, func_args);			// call init_chunk to get proc dynamically; DATE:2014-07-12
 			if (func_rslt == null || func_rslt.length < 2) {
@@ -252,6 +268,7 @@ public class Scrib_core {
 			//bfr.Add(rslt_bry);
 			if (!Env_.Mode_testing())
 				engine.CleanupChunks(Keyval_.Ary(Keyval_.int_(proc.Id(), "")));										// cleanup chunk immediately; needed for heavy pages like en.d:water; DATE:2014-08-07
+                        //engine.ClearChunks();
 		}
 //                catch (Exception e)	{
 //                    int a=1;

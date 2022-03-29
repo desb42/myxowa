@@ -15,15 +15,13 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa; import gplx.*;
 import gplx.dbs.*; import gplx.dbs.engines.sqlite.*;
-import gplx.xowa.parsers.Xop_ctx;
-import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.wikis.data.Xow_db_mgr;
 import gplx.xowa.wikis.data.tbls.Xowd_page_tbl;
 public class Db_breadcrumb {
 	private Db_conn conn;
-	private Xow_wiki wiki;
+	private final Xow_wiki wiki;
 	private boolean initialised = false;
-	private boolean hasdata = true;
+	private final boolean hasdata = true;
 	public Db_breadcrumb(Xow_wiki wiki) {
 		this.wiki = wiki;
 	}
@@ -82,7 +80,7 @@ public class Db_breadcrumb {
 		stmt.Exec_insert(); // ugh!*/
 		// assume somewhere else is committing?!?!
 	}
-	private static String sql = String_.Concat_lines_nl_skip_last
+	private static final String sql = String_.Concat_lines_nl_skip_last
 	( "WITH RECURSIVE bread(count, parent, parent_namespace) AS ("
 	, "  SELECT 1, parent, parent_namespace FROM parent WHERE ttl=? and ttl_namespace=?"
 	, "  UNION ALL"

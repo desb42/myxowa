@@ -19,7 +19,7 @@ import gplx.langs.htmls.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.hdrs.*;
 import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.addons.htmls.tocs.*;
 public class Xoh_hdr_html {
-	private final    Bry_bfr hdr_text_bfr = Bry_bfr_.New();
+	//private final    Bry_bfr hdr_text_bfr = Bry_bfr_.New();
 	private final    Xoh_toc_itm invalid_toc_itm = new Xoh_toc_itm().Set__txt(Bry_.Empty, Bry_.Empty);
 
 	public void Write_html(Bry_bfr bfr, Xoh_html_wtr wtr, Xowe_wiki wiki, Xoae_page page, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoh_html_wtr_cfg cfg, Xop_tkn_grp grp, int sub_idx, byte[] src, Xop_hdr_tkn hdr) {
@@ -29,6 +29,7 @@ public class Xoh_hdr_html {
 		page.Stat_itm().Hdr_count++;
 
 		// register hdr with TOC
+                Bry_bfr hdr_text_bfr = Bry_bfr_.New();
 		byte[] hdr_text_bry = Bld_hdr_html(hdr_text_bfr, wtr, page, ctx, hctx, src, hdr);
 		hdr_text_bry = wiki.Parser_mgr().Uniq_mgr().Parse(hdr_text_bry);	// need for math; DATE:2016-12-09
 		Xoh_toc_itm toc_itm = hdr_is_valid && hdr_text_bry.length > 0

@@ -49,6 +49,10 @@ public class Gallery_mgr_packed_base extends Gallery_mgr_base {
 		int h = (int)Math_.Ceil(xfer_itm.Html_h() / Scale_factor);
 		xfer_itm.Html_size_(w, h);
 	}
+	@Override public void Adjust_lnki_parameters(Xop_lnki_tkn lnki) {
+		lnki.W_((int)Math_.Ceil(lnki.W() / Scale_factor));
+		lnki.H_((int)Math_.Ceil(lnki.H() / Scale_factor));
+	}
 	public static final double Scale_factor = 1.5d;	// We artificially have 1.5 the resolution neccessary so that we can scale it up by that much on the client side, without worrying about requesting a new image.
 	private static final int Scale_factor_x_60 = (int)(Scale_factor * 60);
 	public static void Get_thumb_size_static(Xop_lnki_tkn lnki, Xof_ext ext, int itm_default_w, int itm_default_h) {

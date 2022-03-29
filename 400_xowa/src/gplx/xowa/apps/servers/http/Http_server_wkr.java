@@ -43,6 +43,12 @@ import gplx.xowa.htmls.core.wkrs.lnkis.*;
 import gplx.xowa.wikis.nss.Xow_ns;
 import gplx.xowa.wikis.pages.lnkis.Xopg_redlink_mgr;
 import gplx.core.encoders.Hex_utl_;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.exceptions.JedisConnectionException;
+
 public class Http_server_wkr implements Gfo_invk {
 	private static String rootdir;
 	private final    int uid;
@@ -89,7 +95,7 @@ public class Http_server_wkr implements Gfo_invk {
 				client_wtr.Rls(); // client_rdr.Rls(); socket.Rls();
 			}
 			catch (Exception e) {
-				String request_str = request == null ? "<<NULL>>" : request.To_str(tmp_bfr, Bool_.N);
+				String request_str = request == null ? "<<NULL>>" : request.To_str(Bool_.N);
 				server_wtr.Write_str_w_nl(String_.Format("failed to process request;\nrequest={0}\nerr_msg={1}", request_str, Err_.Message_gplx_full(e)));
 			}
 			finally {
@@ -112,8 +118,7 @@ public class Http_server_wkr implements Gfo_invk {
 		int question_pos = Bry_find_.Find_fwd(url, Byte_ascii.Question);
 		int url_bgn = Bry_.Has_at_bgn(url, Url__fsys) ? Url__fsys_len : 0;	// most files will have "/fsys/" at start, but Mathjax will not
 		int url_end = question_pos == Bry_find_.Not_found ? url.length : question_pos;	// ignore files with query params; EX: /file/A.png?key=val
-		url_encoder.Decode(tmp_bfr, Bool_.N, url, url_bgn, url_end);		// decode url to actual chars; note that XOWA stores on fsys in UTF-8 chars; "�" not "%C3"
-		byte[] path = tmp_bfr.To_bry_and_clear();
+		byte[] path = url_encoder.Decode(Bool_.N, url, url_bgn, url_end);		// decode url to actual chars; note that XOWA stores on fsys in UTF-8 chars; "�" not "%C3"
 		if (gplx.core.envs.Op_sys.Cur().Tid_is_wnt()) path = Bry_.Replace(path, Byte_ascii.Backslash, Byte_ascii.Slash);
 		client_wtr.Write_bry(Xosrv_http_wkr_.Rsp__http_ok);
 		// 	client_wtr.Write_str("Expires: Sun, 17-Jan-2038 19:14:07 GMT\n");
@@ -203,6 +208,7 @@ public class Http_server_wkr implements Gfo_invk {
 			if (page_html == null) {
 				page_html = "Strange! no data";
 			} else {
+                //test_redis();
 
 				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()), page.Redlink());
                                 
@@ -222,8 +228,11 @@ public class Http_server_wkr implements Gfo_invk {
 			}
 			response.Set_content_type(page.Content_type());
 			response.Set_content_lang(page.Wiki().Lang());
-//testing                        page.Wiki().Cache_mgr().Page_cache().Cleanup();
-//testing		Xowe_wiki_.Rls_mem(page.Wiki(), true);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!test
+                        if (page.Wiki().Utl__bfr_mkr().Check()) {
+                            int a=1;
+                        }
+/*//testing*/                        page.Wiki().Cache_mgr().Page_cache().Cleanup();
+/*//testing*/		Xowe_wiki_.Rls_mem(page.Wiki(), true);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!test
 		}
 		Db_readwrite.writeFile(page_html, rootdir + "html.htm");
 		response.Write_response_as_html(client_wtr, Bool_.N, page_html);
@@ -241,10 +250,10 @@ public class Http_server_wkr implements Gfo_invk {
 		if (!url_parser.Parse(url_bry)) {
 			page_html = url_parser.Err_msg();
 		}
-                else if (request.Post_data_hash().Has(Key__tbox)) {
+		else if (request.Post_data_hash().Has(Key__tbox)) {
 			byte[] msg = request.Post_data_hash().Get_by(Key__tbox).Val();
-			url_encoder.Decode(tmp_bfr, Bool_.N, url_bry, 0, question_pos);
-			byte[] req = tmp_bfr.To_bry_and_clear();
+			
+			byte[] req = url_encoder.Decode(Bool_.N, url_bry, 0, question_pos);
 			String wiki_domain = ""; String page_name = "";
 			String[] req_split = String_.Split(String_.new_u8(req), "/");
 			if(req_split.length >= 1){
@@ -364,6 +373,11 @@ public class Http_server_wkr implements Gfo_invk {
 						if (itm.Orig_ttl() == null) {
 							break;
 						}
+                                                //else if (itm.Html_w() <= 0) {
+                                                //    // report as bad!
+                                                //    System.out.println("width 0- " + String_.new_u8(itm.Lnki_ttl()));
+                                                //    break;
+                                                //}
 						if (!Io_mgr.Instance.ExistsFil(itm.Html_view_url())) {
 							page.File_queue().Add(itm);
 							page.File_queue().Exec(wiki, page);
@@ -394,7 +408,9 @@ public class Http_server_wkr implements Gfo_invk {
 		byte[] app_mode = request.Post_data_hash().Get_by(Key__app_mode).Val();
 		Xoa_app_mode app_mode_itm = Xoa_app_mode.parse(String_.new_u8(app_mode));
 		server_wtr.Write_str_w_nl(String_.new_u8(request.Host()) + "|POST|" + String_.new_u8(msg));
-		Object url_tid_obj = post_url_hash.Get_by_bry(request.Url()); if (url_tid_obj == null) throw Err_.new_wo_type("unknown url", "url", request.Url(), "request", request.To_str(tmp_bfr, Bool_.N));
+		Object url_tid_obj = post_url_hash.Get_by_bry(request.Url());
+                if (url_tid_obj == null)
+                    throw Err_.new_wo_type("unknown url", "url", request.Url(), "request", request.To_str(Bool_.N));
 		String rv = null;
 		switch (((Int_obj_val)url_tid_obj).Val()) {
 			case Tid_post_url_json:
@@ -618,7 +634,66 @@ public class Http_server_wkr implements Gfo_invk {
             jdoc.Root_nde().Print_as_json(tmp_bfr, 0);
             return tmp_bfr.To_str();
 	}*/
-	private static String test_wikistrip() {
+        private JedisPool redisPool;
+	private void test_redis() {
+       //Connecting to Redis server on localhost 
+       if (redisPool == null) {
+       redisPool = new JedisPool(new JedisPoolConfig());
+       }
+/*
+      Jedis jedis = new Jedis(); 
+      System.out.println("Connection to server sucessfully"); 
+      //check whether server is running or not 
+      System.out.println("Server is running: "+jedis.ping()); 
+      //set the data in redis string 
+      jedis.set("tutorial-name", "Redis tutorial"); 
+      // Get the stored data and print it 
+      System.out.println("Stored string in redis:: "+ jedis.get("tutorial-name")); 
+ */
+        setfrompool(Bry_.new_a7("fredkey"), Bry_.new_a7("teststring"));
+        System.out.println(String_.new_u8(getfrompool(Bry_.new_a7("fredkey"))));
+        }
+	private void setfrompool(byte[] key, byte[] value) {
+		Jedis redis = null;
+		try {
+			redis = redisPool.getResource();
+			redis.set(key, value);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redisPool.returnBrokenResource(redis);
+				redis = null;
+			}
+                        System.out.println("no connection SET");
+			//throw e;
+                        return;
+		} finally {
+			if (redis != null) {
+				redisPool.returnResource(redis);
+			}
+		}
+	}
+
+	private byte[] getfrompool(byte[] key) {
+		Jedis redis = null;
+		try {
+			redis = redisPool.getResource();
+			return redis.get(key);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redisPool.returnBrokenResource(redis);
+				redis = null;
+			}
+                        System.out.println("no connection GET");
+			//throw e;
+                        return null;
+		} finally {
+			if (redis != null) {
+				redisPool.returnResource(redis);
+			}
+		}
+	}
+
+        private static String test_wikistrip() {
             byte[] wiki = Load_from_file_as_bry(rootdir + "wiki_test.txt");
             Db_wikistrip ws = new Db_wikistrip();
             byte[] stripped = ws.Strip_wiki(wiki, false, null);

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -20,15 +20,17 @@ public class Bry_bfr {
 	private Bry_bfr_mkr_mgr mkr_mgr; private int reset;
 	public byte[] Bfr() {return bfr;} private byte[] bfr;
 	public int Len() {return bfr_len - bfr_bgn;} private int bfr_len;
-        public int Start() {return bfr_bgn;} private int bfr_bgn;
+	public int Start() {return bfr_bgn;} private int bfr_bgn;
 	public boolean Len_eq_0() {return bfr_len - bfr_bgn == 0;}
 	public boolean Len_gt_0() {return bfr_len - bfr_bgn > 0;}
+	private long thread_id;
 	public void Bfr_init(byte[] bfr, int bfr_len) {
 		synchronized (this) {
 			this.bfr = bfr;
 			this.bfr_len = bfr_len;
 			this.bfr_bgn = 0;
 			this.bfr_max = bfr.length;	// NOTE: must sync bfr_max, else will fail later during add; bfr will think bfr has .length of bfr_max, when it actually has .length of bfr_len; DATE:2014-03-09
+//                this.thread_id = Thread.currentThread().getId();
 		}
 	}
 	public Bry_bfr Mkr_rls() {
@@ -62,6 +64,7 @@ public class Bry_bfr {
 	}
 	public Bry_bfr Reset_(int v) {reset = v; return this;}
 	public Bry_bfr Reset_if_gt(int limit) {
+//            this.thread_id = Thread.currentThread().getId();
 		if (bfr_max > limit) {
 			this.bfr_max = limit;
 			this.bfr = new byte[limit];
@@ -78,14 +81,21 @@ public class Bry_bfr {
 		return this;
 	}
 	public Bry_bfr ClearAndReset() {
-            bfr_len = 0;
-            bfr_bgn = 0;
-            if (reset > 0) Reset_if_gt(reset);
-            return this;
-        }
+		bfr_len = 0;
+		bfr_bgn = 0;
+		if (reset > 0) Reset_if_gt(reset);
+		return this;
+	}
+//        private void checkthread() {
+//            if (bfr_len > 0 && this.thread_id != Thread.currentThread().getId()) {
+//                int a=1;
+//            }
+//        }
 	public byte Get_at_last_or_nil_if_empty() {return bfr_len - bfr_bgn == 0 ? Byte_ascii.Null : bfr[bfr_len - 1];}
 	public Bry_bfr Add_safe(byte[] val) {return val == null ? this : Add(val);}
 	public Bry_bfr Add(byte[] val) {
+//            checkthread();
+
 		int val_len = val.length;
 		if (bfr_len + val_len > bfr_max) Resize((bfr_max + val_len) * 2);
 		Bry_.Copy_to(val, 0, val_len, bfr, bfr_len);
@@ -101,6 +111,7 @@ public class Bry_bfr {
 		return this;
 	}
 	public Bry_bfr Add_mid(byte[] val, int bgn, int end) {
+//            checkthread();
 		int len = end - bgn;
 		if (len < 0) throw Err_.new_wo_type("negative len", "bgn", bgn, "end", end, "excerpt", String_.new_u8__by_len(val, bgn, bgn + 16));	// NOTE: check for invalid end < bgn, else difficult to debug errors later; DATE:2014-05-11
 		if (bfr_len + len > bfr_max) Resize((bfr_max + len) * 2);
@@ -199,6 +210,7 @@ public class Bry_bfr {
 	public Bry_bfr Add_byte_dot()			{return Add_byte(Byte_ascii.Dot);}
 	public Bry_bfr Add_byte_colon()			{return Add_byte(Byte_ascii.Colon);}
 	public Bry_bfr Add_byte(byte val) {
+//            checkthread();
 		int new_pos = bfr_len + 1;
 		if (new_pos > bfr_max) Resize(bfr_len * 2);
 		bfr[bfr_len] = val;
@@ -247,6 +259,7 @@ public class Bry_bfr {
 	public Bry_bfr Add_int_digits(int digits, int val)	{return Add_int(val, Int_.Log10(val), digits);}
 	public Bry_bfr Add_int_fixed(int val, int digits) {return Add_int(val, Int_.Log10(val), digits);}
 	public Bry_bfr Add_int(int val, int valLog, int arySlots) {
+//            checkthread();
 		int aryBgn = bfr_len, aryEnd = bfr_len + arySlots;
 		if (aryEnd > bfr_max) Resize((aryEnd) * 2);
 		if (val < 0) {
@@ -291,6 +304,7 @@ public class Bry_bfr {
 	}
 	public Bry_bfr Add_bry_comma(byte[] v) {return Add_bry(Byte_ascii.Comma, v);}
 	public Bry_bfr Add_bry(byte dlm, byte[] v) {
+//            checkthread();
 		if (v == null) return this;
 		int v_len = v.length;
 		for (int i = 0; i < v_len; i++) {
@@ -739,6 +753,7 @@ public class Bry_bfr {
 	public Bry_bfr Mkr_init(Bry_bfr_mkr_mgr mkr_mgr, int itm) {
 		synchronized (this) {
 			this.mkr_mgr = mkr_mgr; this.mkr_idx = itm;
+//                this.thread_id = Thread.currentThread().getId();
 		}
 		return this;
 	} 
@@ -776,5 +791,10 @@ public class Bry_bfr {
 	protected void Init(int bfr_max) {
 		this.bfr_max = bfr_max;
 		this.bfr = new byte[bfr_max];
+//                this.thread_id = Thread.currentThread().getId();
 	}
+
+        public void SetThreadId() {
+//            this.thread_id = Thread.currentThread().getId();
+        }
 }

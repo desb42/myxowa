@@ -49,7 +49,7 @@ public class Xof_xfer_itm implements Xof_file_itm {
 	public Xof_ext				Orig_ext()					{return orig_ext;} private Xof_ext orig_ext;
 	public int					Orig_w()					{return orig_w;} private int orig_w;
 	public int					Orig_h()					{return orig_h;} private int orig_h;
-	public byte[]				Orig_redirect()				{return orig_redirect;} private byte[] orig_redirect;
+	public byte[]				Orig_redirect()				{return orig_redirect == null ? orig_ttl : orig_redirect;} private byte[] orig_redirect;
 	public long					Orig_file_len()				{return orig_file_len;} private long orig_file_len;	// used for filtering downloads by file_max
 	public boolean				File_is_orig()				{return file_is_orig;} private boolean file_is_orig; // SEE:NOTE_1:Lnki_thumbable
 	public int					File_w()					{return file_w == -1 ? html_w : file_w;} private int file_w = -1;	// NOTE: for itm_meta, file_w == html_w
@@ -86,12 +86,20 @@ public class Xof_xfer_itm implements Xof_file_itm {
 		this.orig_repo_id = orig_repo_id; this.orig_repo_name = orig_repo_name;
 		this.orig_ttl = orig_ttl; this.orig_ttl_md5 = Xof_file_wkr_.Md5(orig_ttl);
 		this.orig_w = orig_w; this.orig_h = orig_h; this.orig_redirect = orig_redirect;
+/*
 		if		(Bry_.Len_gt_0(orig_redirect))				// redirect exists; EX: A.png redirected to B.png
 			this.Orig_ttl_(orig_redirect);					// update fsdb with atrs of B.png
 		else if	(!Bry_.Eq(lnki_ttl, orig_ttl))				// ttls differ; EX: "A_.png" vs "A.png"
 			this.Orig_ttl_(orig_ttl);
 		else
 			this.Orig_ttl_(orig_ttl);
+*/
+		if		(Bry_.Len_gt_0(orig_redirect))				// redirect exists; EX: A.png redirected to B.png
+			this.Orig_ttl_(orig_redirect);					// update fsdb with atrs of B.png
+		else
+			this.Orig_ttl_(orig_ttl);
+		if (Bry_.Eq(orig_redirect, orig_ttl))
+			this.orig_redirect = null;
 		this.orig_ext = orig_ext;							// overwrite ext with whatever's in file_orig; needed for ogg -> oga / ogv
 		this.orig_exists = true;
 	}

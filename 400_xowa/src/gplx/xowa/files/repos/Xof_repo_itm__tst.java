@@ -51,6 +51,6 @@ class Xof_repo_itm__fxt {
 	public void Test__gen_name_trg(Xof_repo_itm repo, String ttl_str, String expd) {
 		byte[] ttl_bry = Bry_.new_u8(ttl_str);
 		byte[] md5 = Xof_file_wkr_.Md5(ttl_bry);
-		Gftest.Eq__str(expd, repo.Gen_name_trg(tmp_bfr, ttl_bry, md5, Xof_ext_.new_by_ttl_(ttl_bry)));
+		Gftest.Eq__str(expd, repo.Gen_name_trg(ttl_bry, md5, Xof_ext_.new_by_ttl_(ttl_bry)));
 	}
 }

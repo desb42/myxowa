@@ -17,7 +17,7 @@ package gplx.xowa.files.caches; import gplx.*; import gplx.xowa.*; import gplx.x
 import gplx.dbs.*;
 public class Xou_cache_itm {
 	public Xou_cache_itm
-	( Bry_bfr lnki_key_bfr, byte db_state
+	( byte db_state
 	, byte[] lnki_wiki_abrv, byte[] lnki_ttl, int lnki_type, double lnki_upright, int lnki_w, int lnki_h, double lnki_time, int lnki_page, int user_thumb_w
 	, int orig_repo_id, byte[] orig_ttl, int orig_ext_id, int orig_w, int orig_h
 	, int html_w, int html_h, double html_time, int html_page
@@ -30,7 +30,7 @@ public class Xou_cache_itm {
 		this.file_is_orig = file_is_orig; this.html_w = html_w; this.html_h = html_h; this.html_time = html_time; this.html_page = html_page;
 		this.file_w = file_w; this.file_time = file_time; this.file_page = file_page; this.file_size = file_size;
 		this.view_count = view_count; this.view_date = view_date;
-		this.lnki_key = Key_gen(lnki_key_bfr, lnki_wiki_abrv, lnki_ttl, lnki_type, lnki_upright, lnki_w, lnki_h, lnki_time, lnki_page, user_thumb_w);
+		this.lnki_key = Key_gen(lnki_wiki_abrv, lnki_ttl, lnki_type, lnki_upright, lnki_w, lnki_h, lnki_time, lnki_page, user_thumb_w);
 	}
 	public byte Db_state() {return db_state;} public void Db_state_(byte v) {db_state = v;} private byte db_state;
 	public byte[]		Lnki_wiki_abrv() {return lnki_wiki_abrv;} private final    byte[] lnki_wiki_abrv;	// differentiate commonwiki rows inserted by one wiki vs another
@@ -68,7 +68,8 @@ public class Xou_cache_itm {
 		db_state = Db_cmd_mode.To_update(db_state);
 	}
 	public static final    Xou_cache_itm Null = null;
-	public static byte[] Key_gen(Bry_bfr key_bfr, byte[] lnki_wiki_abrv, byte[] ttl, int type, double upright, int w, int h, double time, int page, int user_thumb_w) {
+	public static byte[] Key_gen(byte[] lnki_wiki_abrv, byte[] ttl, int type, double upright, int w, int h, double time, int page, int user_thumb_w) {
+		Bry_bfr key_bfr = Bry_bfr_.New();
 		key_bfr.Add(lnki_wiki_abrv)
 		       .Add_byte_pipe().Add(ttl)
 		       .Add_byte_pipe().Add_int_variable(type)

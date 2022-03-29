@@ -352,6 +352,7 @@ local system_globals =
 	, ["math"] = true
 	, ["ipairs"] = true
 	, ["require"] = true
+	, ["xxrelease"] = true
 	, ["mw"] = true
 	, ["tostring"] = true
 	, ["type"] = true

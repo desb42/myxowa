@@ -13,13 +13,12 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.wbases.stores; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.wbases.*;
+package gplx.xowa.xtns.wbases.stores;
+import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.wbases.*;
 import gplx.core.primitives.*;
 import gplx.xowa.wikis.domains.*;
-import gplx.xowa.wikis.data.*;
-import gplx.xowa.xtns.wbases.dbs.*;
 public class Wbase_qid_mgr {// EX: "enwiki|0|Earth" -> "Q2"
-	private final    Wdata_wiki_mgr wbase_mgr;
+	protected final    Wdata_wiki_mgr wbase_mgr;
 	private final    Hash_adp_bry cache = Hash_adp_bry.cs();
 	public Wbase_qid_mgr(Wdata_wiki_mgr wbase_mgr) {
 		this.wbase_mgr = wbase_mgr;

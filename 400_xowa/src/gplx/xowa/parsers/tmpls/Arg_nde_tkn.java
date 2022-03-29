@@ -28,6 +28,17 @@ public class Arg_nde_tkn extends Xop_tkn_itm_base {
 		}
 		return val_tkn;
 	}
+	public Arg_itm_tkn Val_tkn(boolean print) {
+//            if (print) {
+//                Thread currentThread = Thread.currentThread();
+//                System.out.println(currentThread.getName()+"-arg-" + val_tkn + " " + (val_tkn.Dat_ary() == Bry_.Empty));
+//            }
+		if (tkn_mkr != null) {
+			val_tkn = Xot_defn_tmpl_.Eval_now(ctx, this, caller, src);
+			tkn_mkr = null;
+		}
+		return val_tkn;
+	}
 	public Arg_nde_tkn Val_tkn_(Arg_itm_tkn v) {val_tkn = v; return this;} Arg_itm_tkn val_tkn = Arg_itm_tkn_null.Null_arg_itm;
 	@gplx.Virtual public boolean KeyTkn_exists() {return key_tkn != Arg_itm_tkn_null.Null_arg_itm;}
 	public Xop_tkn_itm Eq_tkn() {return eq_tkn;} public Arg_nde_tkn Eq_tkn_(Xop_tkn_itm v) {eq_tkn = v; return this;} private Xop_tkn_itm eq_tkn = Xop_tkn_null.Null_tkn;

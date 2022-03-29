@@ -23,4 +23,6 @@ public interface Scrib_engine {
 	void			RegisterLibrary(Keyval[] functions_ary);
 	Keyval[]		ExecuteModule(int mod_id);
 	void			CleanupChunks(Keyval[] ids);
+	void			ClearChunks();
+	void			Term();
 }

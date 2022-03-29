@@ -23,7 +23,8 @@ public class Http_request_parser {
 				accept_encoding, x_requested_with, cookie, referer, content_type, 
 				content_type_boundary, connection, pragma, cache_control, origin;
 	private Http_post_data_hash post_data_hash;
-	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(255); private final    Btrie_rv trv = new Btrie_rv();
+	private final    Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(255);
+        private final    Btrie_rv trv = new Btrie_rv();
 	private final    Http_server_wtr server_wtr; private final    boolean log;
 	public Http_request_parser(Http_server_wtr server_wtr, boolean log) {
 		this.server_wtr = server_wtr;
@@ -187,7 +188,7 @@ public class Http_request_parser {
 		int rv = src_pos += tkn_len;
 		return Bry_find_.Find_fwd_while_ws(src, rv, src_len);
 	}
-	private String To_str() {return Make_request_itm().To_str(tmp_bfr, Bool_.N);}
+	private String To_str() {return Make_request_itm().To_str(Bool_.N);}
 	private static final int Tid_get = 1, Tid_post = 2, Tid_host = 3, Tid_user_agent = 4, Tid_accept = 5, Tid_accept_language = 6, Tid_accept_encoding = 7, Tid_dnt = 8
 	, Tid_x_requested_with = 9, Tid_cookie = 10, Tid_referer = 11, Tid_content_length = 12, Tid_content_type = 13, Tid_connection = 14, Tid_pragma = 15, Tid_cache_control = 16
 	, Tid_origin = 17, Tid_accept_charset = 188, Tid_upgrade_request = 19, Tid_x_host = 20, Tid_x_real_ip = 21

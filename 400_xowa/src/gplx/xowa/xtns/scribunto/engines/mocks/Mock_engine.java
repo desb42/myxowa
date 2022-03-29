@@ -37,6 +37,7 @@ public class Mock_engine implements Scrib_engine {
 	public void RegisterLibrary(Keyval[] functions_ary) {}
 	public Keyval[] ExecuteModule(int mod_id) {throw Err_.new_unimplemented(106);}
 	public void CleanupChunks(Keyval[] ids) {}
+	public void ClearChunks() {}
 	public void	Clear() {fnc_hash.Clear();}
 
 	public void	InitFunctionForTest(Mock_proc_stub proc) {
@@ -59,6 +60,7 @@ public class Mock_engine implements Scrib_engine {
 		Hash_adp funcs = (Hash_adp)mod_fnc_hash.Get_by_or_fail(mod_id);
 		return (Scrib_lua_proc)funcs.Get_by_or_fail(fnc_name);
 	}
+        public void Term() {}
 }
 class Mock_server implements Scrib_server {
 	public void		Init(String... process_args) {}

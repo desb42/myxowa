@@ -54,6 +54,7 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	( "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} class=\"thumbimage\" decoding=\"async\"/>");
 
 	public byte[] Bld_thumb_part_img(Xoh_wtr_ctx hctx, Xoae_page page, byte[] src, Xof_file_itm xfer_itm, int uid, byte[] lnki_ttl, byte[] a_href, byte[] img_src, byte[] img_alt) {
+            tmp_bfr.SetThreadId();
 		byte[] a_title_atr = Gfh_atr_.Make(tmp_bfr, Gfh_atr_.Bry__title, xfer_itm.Lnki_ttl());
 		Add_full_img(tmp_bfr, hctx, page, src, xfer_itm, uid, a_href, Bool_.N, Xoh_lnki_consts.Tid_a_cls_image
 			, Xoh_lnki_consts.Tid_a_rel_none, a_title_atr
@@ -72,22 +73,34 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	,   "</div>"
 	, "</div>"
 	));
-	public byte[] Bld_thumb_part_caption(byte[] magnify_btn, byte[] caption) {return fmtr_thumb_part_caption.Bld_many_to_bry(tmp_bfr, magnify_btn, caption);}
+	public byte[] Bld_thumb_part_caption(byte[] magnify_btn, byte[] caption) {
+            tmp_bfr.SetThreadId();
+            return fmtr_thumb_part_caption.Bld_many_to_bry(tmp_bfr, magnify_btn, caption);
+        }
 	private final    Bry_fmt fmtr_thumb_part_caption = Bry_fmt.Auto(String_.Concat_lines_nl_skip_last
 	( "<div class=\"thumbcaption\">~{magnify_btn}~{caption}"
 	, "</div>"
 	));
 
-	public byte[] Bld_thumb_file_image(byte[] thumb_image, byte[] caption, byte[] alt) {return fmtr_thumb_file_image.Bld_many_to_bry(tmp_bfr, thumb_image, caption, alt);}
+	public byte[] Bld_thumb_file_image(byte[] thumb_image, byte[] caption, byte[] alt) {
+            tmp_bfr.SetThreadId();
+            return fmtr_thumb_file_image.Bld_many_to_bry(tmp_bfr, thumb_image, caption, alt);
+        }
 	private final    Bry_fmt fmtr_thumb_file_image = Bry_fmt.Auto("    ~{thumb_image}~{caption}~{alt}");
 
-	@gplx.Virtual public byte[] Bld_thumb_file_audio(int width, byte[] caption, byte[] alt, byte[] play_btn, byte[] info_btn) {return fmtr_thumb_file_audio.Bld_many_to_bry(tmp_bfr, width, play_btn, info_btn, caption, alt);}
+	@gplx.Virtual public byte[] Bld_thumb_file_audio(int width, byte[] caption, byte[] alt, byte[] play_btn, byte[] info_btn) {
+            tmp_bfr.SetThreadId();
+            return fmtr_thumb_file_audio.Bld_many_to_bry(tmp_bfr, width, play_btn, info_btn, caption, alt);
+        }
 	private Bry_fmt fmtr_thumb_file_audio = Bry_fmt.Auto(String_.Concat
 	( "<div class=\"mediaContainer xowa_media_div\" style=\"width:~{width}px\">~{play_btn}~{info_btn}"
 	, "</div>~{caption}~{alt}"
 	));
 
-	@gplx.Virtual public byte[] Bld_thumb_file_video(byte[] caption, byte[] alt, byte[] play_btn, byte[] vid_img) {return fmtr_thumb_file_video.Bld_many_to_bry(tmp_bfr, vid_img, play_btn, caption, alt);}
+	@gplx.Virtual public byte[] Bld_thumb_file_video(byte[] caption, byte[] alt, byte[] play_btn, byte[] vid_img) {
+            tmp_bfr.SetThreadId();
+            return fmtr_thumb_file_video.Bld_many_to_bry(tmp_bfr, vid_img, play_btn, caption, alt);
+        }
 	private final    Bry_fmt fmtr_thumb_file_video = Bry_fmt.Auto(String_.Concat_lines_nl_skip_last
 	( "    <div class=\"xowa_media_div\">"
 	, "      <div>~{vid_img}"
@@ -107,11 +120,13 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	public static final    byte[] Bry__xowa_alt_text = Bry_.new_a7("xowa_alt_text");
 
 	public byte[] Bld_thumb_part_magnify(byte[] a_href, byte[] a_title) {
+            tmp_bfr.SetThreadId();
 		return fmtr_thumb_part_magnify.Bld_many_to_bry(tmp_bfr, a_href, Db_encode.Title(a_title));
 	}
 	private final    Bry_fmt fmtr_thumb_part_magnify = Bry_fmt.Auto("\n<div class=\"magnify\"><a href=\"~{a_href}\" class=\"internal\" title=\"~{a_title}\"></a></div>");
 
 	public byte[] Bld_thumb_part_info(byte[] a_href) {
+            tmp_bfr.SetThreadId();
 		return fmtr_thumb_part_info.Bld_many_to_bry(tmp_bfr, a_href);
 	}
 	private final    Bry_fmt fmtr_thumb_part_info = Bry_fmt.Auto("\n<div><a href=\"~{a_href}\" class=\"xowa_media_info\" title=\"About this file\"></a></div>");
@@ -126,6 +141,7 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 		}
 		else
 			play_id_atr.Set(uid);
+            tmp_bfr.SetThreadId();
 		return fmtr_thumb_part_play.Bld_many_to_bry(tmp_bfr, play_id_atr, a_href, a_xowa_title, a_width, a_max_width);
 	}
 	private final    Bry_fmt fmtr_thumb_part_play = Bry_fmt.Auto
