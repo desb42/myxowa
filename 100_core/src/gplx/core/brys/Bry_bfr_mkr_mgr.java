@@ -42,7 +42,7 @@ public class Bry_bfr_mkr_mgr {
 				}
 			}
 			inuse++;
-                        if (inuse > 10) {
+                        if (inuse > 15) {
                             int a=1;
                         }
                         if (mgr_id == 2) {

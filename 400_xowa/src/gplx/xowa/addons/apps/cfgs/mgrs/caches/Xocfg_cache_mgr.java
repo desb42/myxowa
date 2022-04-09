@@ -94,7 +94,7 @@ public class Xocfg_cache_mgr {
 		Xocfg_cache_grp rv = new Xocfg_cache_grp(key, meta_itm.Dflt(), meta_itm.Type());
 		int len = itms.length;
 		for (int i = 0; i < len; i++) {
-			Xocfg_val_row itm = itms[0];
+			Xocfg_val_row itm = itms[i];
 			String itm_ctx = itm.Ctx();
 			rv.Add(itm_ctx, new Xocfg_cache_itm(itm_ctx, key, itm.Val()));
 		}

@@ -51,7 +51,7 @@ class Xoh_ref_list_fmtr implements gplx.core.brys.Bfr_arg {
 		if (itm_idx_minor < 0) return;	// HACK: <ref follow created a negative index; ignore these references for now; de.wikisource.org/wiki/Seite:Die Trunksucht.pdf/63; DATE:2013-06-22
 		byte[] backlabel 
 			= itm_idx_minor < cfg.Backlabels_len()
-			? cfg.Backlabels()[itm.Idx_minor()]
+			? cfg.Backlabels(itm.Idx_minor())
 			: wiki.Parser_mgr().Main().Parse_text_to_html(wiki.Parser_mgr().Ctx(), wiki.Msg_mgr().Val_by_key_args(Ref_html_wtr_cfg.Msg_backlabels_err, itm.Idx_minor()))
 			;
 		byte[] backref = referencesFormatEntryNumericBacklinkLabel(itm.Idx_major() + 1, i + 1, count);

@@ -68,7 +68,7 @@ public class Xow_db_mkr {
 
 		// insert data: wiki
 		Xowd_xowa_db_tbl.Get_by_key(core_db).Upsert(0, Xow_db_file_.Tid__core, core_db.Url().NameAndExt(), "", -1, Guid_adp_.New_str());
-		Xowd_site_ns_tbl.Get_by_key(core_db).Insert(Xow_ns_mgr_.default_(Xol_case_mgr_.U8()));
+		Xowd_site_ns_tbl.Get_by_key(core_db).Insert(Xow_ns_mgr_.default_(Xol_case_mgr_.U8(), DB_case_mgr_.U8()));
 		Xowd_site_stats_tbl.Get_by_key(core_db).Update(0, 0, 0);
 
 		// insert data: cfg

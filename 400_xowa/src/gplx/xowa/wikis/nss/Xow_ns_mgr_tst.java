@@ -33,7 +33,7 @@ public class Xow_ns_mgr_tst {
 		Tfds.Eq(10, fxt.Ns_mgr().Tmpls_get_w_colon(name, 0, name.length));
 	}
 	@Test  public void Utf8() {// PURPOSE: handle different casings for ns_names; PAGE:ru.w:Портрет_итальянского_Ренессанса DATE:2014-07-04
-		Xow_ns_mgr ns_mgr = new Xow_ns_mgr(Xol_case_mgr_.U8());
+		Xow_ns_mgr ns_mgr = new Xow_ns_mgr(Xol_case_mgr_.U8(), gplx.xowa.DB_case_mgr_.U8());
 		ns_mgr.Add_new(1234, "Test");
 		ns_mgr.Add_new(1235, "файл");
 		fxt.Ns_mgr_(ns_mgr);
@@ -42,7 +42,7 @@ public class Xow_ns_mgr_tst {
 	}
 }
 class Xow_ns_mgr_fxt {
-	private Xow_ns_mgr ns_mgr = new Xow_ns_mgr(Xol_case_mgr_.A7());
+	private Xow_ns_mgr ns_mgr = new Xow_ns_mgr(Xol_case_mgr_.A7(), gplx.xowa.DB_case_mgr_.U8());
 	public Xow_ns_mgr Ns_mgr() {return ns_mgr;}
 	public void Ns_mgr_(Xow_ns_mgr v) {this.ns_mgr = v;}
 	public void Clear() {ns_mgr.Clear();}

@@ -147,6 +147,7 @@ class Hash_adp_bry_itm_ci_u8 extends Hash_adp_bry_itm_base {
 	private byte[] src; int src_bgn, src_end;
 	@Override public Hash_adp_bry_itm_base New() {return new Hash_adp_bry_itm_ci_u8(case_mgr);}
 	@Override public Hash_adp_bry_itm_base Init(byte[] src, int src_bgn, int src_end) {this.src = src; this.src_bgn = src_bgn; this.src_end = src_end; return this;}
+/*
 	@Override public int hashCode() {
 		int rv = 0;
 		for (int i = src_bgn; i < src_end; i++) {
@@ -164,6 +165,25 @@ class Hash_adp_bry_itm_ci_u8 extends Hash_adp_bry_itm_base {
 		}
 		return rv;	
 	}
+*/
+	@Override public int hashCode() {
+		int rv = 0;
+		int i = src_bgn;
+		int b_int;
+		while (i < src_end) {
+			Gfo_case_itm itm = case_mgr.Get_or_null(src, i, src_end);
+			if (itm == null) {				// unknown itm; byte is a number, symbol, or unknown; just use the existing byte
+				b_int = src[i++] & 0xFF;
+			}
+			else {							// known itm; use its hash_code
+				b_int = itm.Hashcode_lo();
+				i += itm.Len_lo();
+			}
+			rv = (31 * rv) + b_int;
+		}
+		return rv;	
+	}
+/*
 	@Override public boolean equals(Object obj) {
 		if (obj == null) return false;
 		Hash_adp_bry_itm_ci_u8 trg_itm = (Hash_adp_bry_itm_ci_u8)obj;
@@ -193,13 +213,43 @@ class Hash_adp_bry_itm_ci_u8 extends Hash_adp_bry_itm_base {
 		}
 		return src_c_bgn == src_end && trg_c_bgn == trg_end;										// only return true if both src and trg read to end of their brys, otherwise "a","ab" will match
 	}
+*/
+        	@Override public boolean equals(Object obj) {
+		if (obj == null) return false;
+		Hash_adp_bry_itm_ci_u8 trg_itm = (Hash_adp_bry_itm_ci_u8)obj;
+		byte[] trg = trg_itm.src; int trg_bgn = trg_itm.src_bgn, trg_end = trg_itm.src_end;
+		int src_c_bgn = src_bgn;
+		int trg_c_bgn = trg_bgn;
+		while	(	src_c_bgn < src_end
+				&&	trg_c_bgn < trg_end) {			// exit once one goes out of bounds
+			Gfo_case_itm src_c_itm = case_mgr.Get_or_null(src, src_c_bgn, src_end);
+			Gfo_case_itm trg_c_itm = case_mgr.Get_or_null(trg, trg_c_bgn, trg_end);
+			if		(src_c_itm != null && trg_c_itm == null)	return false;						// src == ltr; trg != ltr; EX: a, 1
+			else if (src_c_itm == null && trg_c_itm != null)	return false;						// src != ltr; trg == ltr; EX: 1, a
+			else if (src_c_itm == null && trg_c_itm == null) {										// src != ltr; trg != ltr; EX: 1, 2; _, ?
+				if (src[src_c_bgn++] != trg[trg_c_bgn++])
+					return false;
+			}
+			else {
+				if (src_c_itm.Utf8_id_lo() != trg_c_itm.Utf8_id_lo()) return false;					// lower-case utf8-ids don't match; return false; NOTE: using utf8-ids instead of hash-code to handle asymmetric brys; DATE:2015-09-07
+				src_c_bgn += src_c_itm.Len_lo();
+				trg_c_bgn += trg_c_itm.Len_lo();
+			}
+		}
+		return src_c_bgn == src_end && trg_c_bgn == trg_end;										// only return true if both src and trg read to end of their brys, otherwise "a","ab" will match
+	}
+
         public static Hash_adp_bry_itm_ci_u8 get_or_new(Gfo_case_mgr case_mgr) {
 		switch (case_mgr.Tid()) {
 			case Gfo_case_mgr_.Tid_a7:			if (Itm_a7 == null) Itm_a7 = new Hash_adp_bry_itm_ci_u8(case_mgr); return Itm_a7;
-			case Gfo_case_mgr_.Tid_u8:			if (Itm_u8 == null) Itm_u8 = new Hash_adp_bry_itm_ci_u8(case_mgr); return Itm_u8;
+			case Gfo_case_mgr_.Tid_u8:
+                            if (case_mgr instanceof gplx.xowa.DB_case_mgr) {
+                            if (Itm_u8_db == null) Itm_u8_db = new Hash_adp_bry_itm_ci_u8(case_mgr); return Itm_u8_db;
+                            }
+                            if (Itm_u8 == null) Itm_u8 = new Hash_adp_bry_itm_ci_u8(case_mgr); return Itm_u8;
 			case Gfo_case_mgr_.Tid_custom:		return new Hash_adp_bry_itm_ci_u8(case_mgr);
 			default:							throw Err_.new_unhandled(case_mgr.Tid());
 		}
 	}
-	private static Hash_adp_bry_itm_ci_u8 Itm_a7, Itm_u8;
+	private static Hash_adp_bry_itm_ci_u8 Itm_a7, Itm_u8, Itm_u8_db;
 }

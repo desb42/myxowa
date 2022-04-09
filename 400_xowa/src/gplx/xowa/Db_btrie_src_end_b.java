@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -25,6 +25,7 @@ public class Db_btrie_src_end_b implements Db_btrie {
 	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
 		found = -1;
 		offset = -1;
+		int c = b;
 
 		switch (b) {
 			case 9:
@@ -39,30 +40,30 @@ public class Db_btrie_src_end_b implements Db_btrie {
 				found = ofs + 1;
 				offset = 14; // ('\r', 14)
 				break;
-			case ' ':
+			case 32:
 				found = ofs + 1;
 				offset = 3; // (' ', 3)
 				break;
-			case '&':
+			case 38:
 				if (ofs+4 < src_len && src[ofs+1] == '#' && src[ofs+2] == '0' && src[ofs+3] == '9' && src[ofs+4] == ';') {
 					found = ofs + 5;
 					offset = 5; // ('&#09;', 5)
 				}
 				break;
-			case ':':
+			case 58:
 				found = ofs + 1;
 				offset = 2; // (':', 2)
 				break;
-			case '<':
+			case 60:
 				if (ofs+1 < src_len) switch (src[ofs+1]) {
-					case '!':
+					case 33:
 						if (ofs+3 < src_len && src[ofs+2] == '-' && src[ofs+3] == '-') {
 							found = ofs + 4;
 							offset = 11; // ('<!--', 11)
 						}
 						break;
-					case 't':
-					case 'T':
+					case 116:
+					case 84:
 						if (ofs+5 < src_len && (src[ofs+2] | 32) == 'v' && (src[ofs+3] | 32) == 'a' && (src[ofs+4] | 32) == 'r' && src[ofs+5] == '|') {
 							found = ofs + 6;
 							offset = 13; // ('<tvar|', 13)
@@ -74,39 +75,39 @@ public class Db_btrie_src_end_b implements Db_btrie {
 					offset = 12; // ('<', 12)
 				}
 				break;
-			case '=':
+			case 61:
 				found = ofs + 1;
 				offset = 1; // ('=', 1)
 				break;
-			case '[':
+			case 91:
 				if (ofs+1 < src_len && src[ofs+1] == '[') {
 					found = ofs + 2;
 					offset = 9; // ('[[', 9)
 				}
 				break;
-			case ']':
+			case 93:
 				if (ofs+1 < src_len && src[ofs+1] == ']') {
 					found = ofs + 2;
 					offset = 10; // (']]', 10)
 				}
 				break;
-			case '_':
+			case 95:
 				if (ofs+1 < src_len && src[ofs+1] == '_') {
 					found = ofs + 2;
 					offset = 15; // ('__', 15)
 				}
 				break;
-			case '{':
+			case 123:
 				if (ofs+1 < src_len && src[ofs+1] == '{') {
 					found = ofs + 2;
 					offset = 7; // ('{{', 7)
 				}
 				break;
-			case '|':
+			case 124:
 				found = ofs + 1;
 				offset = 0; // ('|', 0)
 				break;
-			case '}':
+			case 125:
 				if (ofs+1 < src_len && src[ofs+1] == '}') {
 					found = ofs + 2;
 					offset = 8; // ('}}', 8)

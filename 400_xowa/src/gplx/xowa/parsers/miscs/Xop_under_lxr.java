@@ -29,7 +29,8 @@ public class Xop_under_lxr implements Xop_lxr {
 			int under_kwds_len = under_kwds.length;
 			Xop_under_lxr lxr = new Xop_under_lxr();
 			lxr.words_trie_cs = Btrie_slim_mgr.cs();
-			lxr.words_trie_ci = Btrie_u8_mgr.new_(lang.Case_mgr());
+			//lxr.words_trie_ci = Btrie_u8_mgr.new_(lang.Case_mgr());
+			lxr.words_trie_ci = Btrie_u8_mgr.new_(lang.Case_mgr2());
 			core_trie.Add(Xop_under_hook.Key_std, lxr);
 
                         boolean hook_alt_null = true;

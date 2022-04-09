@@ -275,6 +275,9 @@ public class Scrib_lib_mw implements Scrib_lib {
 	public boolean Preprocess(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		String frame_id = args.Pull_str(0);
 		Xot_invk frame = Scrib_frame_.Get_frame(core, frame_id);
+                if (frame == null) {
+                    int a=1;
+                }
 		byte frame_tid = frame.Frame_tid();
 		Xot_invk parent_frame = Scrib_frame_.Get_parent(core, frame_tid);
 		String text_str = args.Pull_str(1);

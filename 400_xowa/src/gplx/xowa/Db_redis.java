@@ -20,8 +20,9 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 public class Db_redis {
-	private static JedisPool redisPool;
+	private static JedisPool redisPool = null;
 	public static void Init() {
+		if (redisPool != null) return;
 		redisPool = new JedisPool(new JedisPoolConfig());
 		Jedis redis = null;
 		try {
@@ -29,6 +30,10 @@ public class Db_redis {
 			redis.select(1);
 			redis.flushDB();
 			redis.select(2);
+			redis.flushDB();
+			redis.select(3);
+			redis.flushDB();
+			redis.select(4);
 			redis.flushDB();
 		} catch (JedisConnectionException e) {
 			if (redis != null) {
@@ -67,6 +72,7 @@ public class Db_redis {
 		}
 	}
         private static byte[] byte1 = Bry_.new_a7("1");
+        private static byte[] byte0 = Bry_.new_a7("0");
 
 	public static byte[] Getfrompool(byte[] key) {
 		Jedis redis = null;
@@ -78,6 +84,91 @@ public class Db_redis {
 				redis.select(1);
 				redis.incr(key);
 			}
+			return ret;
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redisPool.returnBrokenResource(redis);
+				redis = null;
+			}
+			System.out.println("no connection GET");
+			//throw e;
+			return null;
+		} finally {
+			if (redis != null) {
+				redisPool.returnResource(redis);
+			}
+		}
+	}
+	public static void Set_filecache(byte[] key, boolean value) {
+		Jedis redis = null;
+		try {
+			redis = redisPool.getResource();
+			redis.select(3);
+			redis.set(key, value ? byte1 : byte0);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redisPool.returnBrokenResource(redis);
+				redis = null;
+			}
+			System.out.println("no connection SET");
+			//throw e;
+			return;
+		} finally {
+			if (redis != null) {
+				redisPool.returnResource(redis);
+			}
+		}
+	}
+
+	public static byte[] Get_filecache(byte[] key) {
+		Jedis redis = null;
+		try {
+			redis = redisPool.getResource();
+			redis.select(3);
+			byte[] ret = redis.get(key);
+			return ret;
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redisPool.returnBrokenResource(redis);
+				redis = null;
+			}
+			System.out.println("no connection GET");
+			//throw e;
+			return null;
+		} finally {
+			if (redis != null) {
+				redisPool.returnResource(redis);
+			}
+		}
+	}
+
+	// cache converted templatestyles
+	public static void Set_templatestyles(byte[] key, byte[] value) {
+		Jedis redis = null;
+		try {
+			redis = redisPool.getResource();
+			redis.select(4);
+			redis.set(key, value);
+		} catch (JedisConnectionException e) {
+			if (redis != null) {
+				redisPool.returnBrokenResource(redis);
+				redis = null;
+			}
+			System.out.println("no connection SET");
+			//throw e;
+			return;
+		} finally {
+			if (redis != null) {
+				redisPool.returnResource(redis);
+			}
+		}
+	}
+	public static byte[] Get_templatestyles(byte[] key) {
+		Jedis redis = null;
+		try {
+			redis = redisPool.getResource();
+			redis.select(4);
+			byte[] ret = redis.get(key);
 			return ret;
 		} catch (JedisConnectionException e) {
 			if (redis != null) {

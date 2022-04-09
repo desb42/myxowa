@@ -22,7 +22,7 @@ public class Xow_wiki_utl_ {
 		byte[] lang_key = wiki.Lang().Key_bry();
 		Xol_lang_itm lang = Xol_lang_itm.New(app.Lang_mgr(), lang_key);
 		Xol_lang_itm_.Lang_init(lang);
-		Xowe_wiki rv = new Xowe_wiki(wiki.Appe(), lang, gplx.xowa.wikis.nss.Xow_ns_mgr_.default_(lang.Case_mgr()), wiki.Domain_itm(), wiki_dir);
+		Xowe_wiki rv = new Xowe_wiki(wiki.Appe(), lang, gplx.xowa.wikis.nss.Xow_ns_mgr_.default_(lang.Case_mgr(), lang.Case_mgr2()), wiki.Domain_itm(), wiki_dir);
 		rv.Init_by_wiki(wrk_id);
 		rv.File_mgr().Repo_mgr().Clone(wiki.File_mgr().Repo_mgr());
 		rv.File__fsdb_mode().Tid__v2__bld__y_();

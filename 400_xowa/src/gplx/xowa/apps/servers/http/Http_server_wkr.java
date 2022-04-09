@@ -486,6 +486,16 @@ public class Http_server_wkr implements Gfo_invk {
                 DateAdp dte = DateAdp_.parse_fmt("2016-02-01 18:34:08", "yyyy-MM-dd HH:mm:ss");
                 long timestamp = dte.Timestamp_unix();*/
                 //page_html += test_wikistrip();
+                
+                // TEST case insensitivity
+                //Db_btrie_ci_trie_de de = new Db_btrie_ci_trie_de(null);
+                //byte[] bb = Bry_.new_u8("füllenrechts");
+                //byte[] bb = Bry_.new_u8("FÜLLENRECHTS");
+                //byte[] bb = Bry_.new_u8("dateipfad");
+                //byte[] bb = Bry_.new_u8("vollständige_url");
+                //byte[] bb = Bry_.new_u8("VOLLSTÄNDIGE_URL");
+                //de.Match_bgn(bb, 0, bb.length);
+
                 page_html = page_html.replace("redlinks = [\"\"]", "redlinks = [\"\"" + redlink + "]");
                 // 20211214 somehow this is happening?!
                 page_html = page_html.replaceAll(" »(\\s|<|\\))", "&#160;»$1");

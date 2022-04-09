@@ -34,8 +34,10 @@ public class References_nde_rare_tst {
 	}
 	@Test  public void Backlabel_out_of_range() {	// PURPOSE: handle more backlabels than expected; PAGE:en.w:List_of_Russula_species; DATE:2014-06-07
 		Ref_html_wtr_cfg cfg = fxt.Wiki().Html_mgr().Html_wtr().Ref_wtr().Cfg();
-		byte[][] old = cfg.Backlabels();
-		cfg.Backlabels_(Bry_.Ary("a"));
+		//byte[][] old = cfg.Backlabels();
+		//cfg.Backlabels_(Bry_.Ary("a"));
+		//byte[][] old = cfg.Backlabels();
+		cfg.Backlabels_(Bry_.new_a7("a"));
 		fxt.Wiki().Msg_mgr().Get_or_make(Ref_html_wtr_cfg.Msg_backlabels_err).Atrs_set(Bry_.new_a7("Ran out of custom link labels for group ~{0}."), true, false);
 		fxt.Test_parse_page_wiki_str(String_.Concat_lines_nl_skip_last
 		(	"<ref name='ref_1'>a</ref><ref name='ref_1'>b</ref>"
@@ -47,7 +49,7 @@ public class References_nde_rare_tst {
 		,	"</ol>"
 		,	""
 		));
-		cfg.Backlabels_(old);
+		//cfg.Backlabels_(old);
 	}
 	@Test  public void Tag() { // PURPOSE: #tag can create nested refs; PAGE:en.w:Battle_of_Midway DATE:2014-06-27
 		fxt.Test_parse_page_all_str(String_.Concat_lines_nl_skip_last

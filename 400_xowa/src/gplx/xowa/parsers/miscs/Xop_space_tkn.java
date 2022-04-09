@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,10 +13,11 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.parsers.miscs; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
-import gplx.core.btries.*; import gplx.xowa.parsers.tmpls.*;
-import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*;
-public class Xop_space_tkn extends Xop_tkn_itm_base {
+package gplx.xowa.parsers.miscs;
+import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
+import gplx.xowa.parsers.tmpls.*;
+import gplx.xowa.htmls.core.htmls.*;
+public class Xop_space_tkn extends Xop_tkn_itm_base_nosubs {
 	public Xop_space_tkn(boolean immutable, int bgn, int end)					{this.Tkn_ini_pos(immutable, bgn, end);}
 	@Override public byte Tkn_tid()											{return Xop_tkn_itm_.Tid_space;}
 	@Override public Xop_tkn_itm Tkn_clone(Xop_ctx ctx, int bgn, int end)	{return ctx.Tkn_mkr().Space_mutable(bgn, end);}

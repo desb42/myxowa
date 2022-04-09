@@ -438,6 +438,7 @@ public class Xoh_html_wtr {
 					if (nxt_tkn.Tkn_tid() == Xop_tkn_itm_.Tid_space) {
 						nxt_tkn.Ignore_y_();
 					}
+                                        break; // once a list_new found, no point in going further
 				}
 			}
 	}
@@ -526,7 +527,7 @@ public class Xoh_html_wtr {
 			}
 		}
 		// do some trimming
-		Trimspace(grp, sub_idx);
+		//Trimspace(grp, sub_idx); -// removed 20220405 (could trim by looking back?)
 	}
 // -------------------------------
 	private void List(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xop_list_tkn list) {

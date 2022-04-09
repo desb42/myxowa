@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -25,37 +25,38 @@ public class Db_btrie_whitelist_style implements Db_btrie {
 	private void Match_with_b(byte b, byte[] src, int ofs, int src_len) {
 		found = -1;
 		offset = -1;
+		int c = b;
 
 		switch (b) {
-			case '/':
+			case 47:
 				if (ofs+1 < src_len && src[ofs+1] == '*') {
 					found = ofs + 2;
 					offset = 7; // ('/*', 7)
 				}
 				break;
-			case 'a':
-			case 'A':
+			case 97:
+			case 65:
 				if (ofs+10 < src_len && (src[ofs+1] | 32) == 'c' && (src[ofs+2] | 32) == 'c' && (src[ofs+3] | 32) == 'e' && (src[ofs+4] | 32) == 'l' && (src[ofs+5] | 32) == 'e' && (src[ofs+6] | 32) == 'r' && (src[ofs+7] | 32) == 'a' && (src[ofs+8] | 32) == 't' && (src[ofs+9] | 32) == 'o' && (src[ofs+10] | 32) == 'r') {
 					found = ofs + 11;
 					offset = 2; // ('accelerator', 2)
 				}
 				break;
-			case 'e':
-			case 'E':
+			case 101:
+			case 69:
 				if (ofs+9 < src_len && (src[ofs+1] | 32) == 'x' && (src[ofs+2] | 32) == 'p' && (src[ofs+3] | 32) == 'r' && (src[ofs+4] | 32) == 'e' && (src[ofs+5] | 32) == 's' && (src[ofs+6] | 32) == 's' && (src[ofs+7] | 32) == 'i' && (src[ofs+8] | 32) == 'o' && (src[ofs+9] | 32) == 'n') {
 					found = ofs + 10;
 					offset = 0; // ('expression', 0)
 				}
 				break;
-			case 'f':
-			case 'F':
+			case 102:
+			case 70:
 				if (ofs+5 < src_len && (src[ofs+1] | 32) == 'i' && (src[ofs+2] | 32) == 'l' && (src[ofs+3] | 32) == 't' && (src[ofs+4] | 32) == 'e' && (src[ofs+5] | 32) == 'r') {
 					found = ofs + 6;
 					offset = 1; // ('filter', 1)
 				}
 				break;
-			case 'i':
-			case 'I':
+			case 105:
+			case 73:
 				if (ofs+4 < src_len && (src[ofs+1] | 32) == 'm' && (src[ofs+2] | 32) == 'a' && (src[ofs+3] | 32) == 'g' && (src[ofs+4] | 32) == 'e') {
 					if (ofs+8 < src_len && src[ofs+5] == '-' && (src[ofs+6] | 32) == 's' && (src[ofs+7] | 32) == 'e' && (src[ofs+8] | 32) == 't') {
 						found = ofs + 9;
@@ -67,8 +68,8 @@ public class Db_btrie_whitelist_style implements Db_btrie {
 					}
 				}
 				break;
-			case 'u':
-			case 'U':
+			case 117:
+			case 85:
 				if (ofs+2 < src_len && (src[ofs+1] | 32) == 'r' && (src[ofs+2] | 32) == 'l') {
 					if (ofs+3 < src_len && (src[ofs+3] | 32) == 's') {
 						found = ofs + 4;

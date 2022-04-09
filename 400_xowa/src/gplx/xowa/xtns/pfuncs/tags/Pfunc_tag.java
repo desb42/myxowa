@@ -54,7 +54,7 @@ public class Pfunc_tag extends Pf_func_base {// REF:/includes/parser/CoreParserF
 			html_wkr.Tag__process_body(body);
 
 			// add to UNIQ hash; DATE:2017-03-31
-			byte[] val = html_wkr.Tag__build(ctx.Wiki(), ctx);
+			byte[] val = html_wkr.Tag__build(wiki, ctx);
 			byte[] key = wiki.Parser_mgr().Uniq_mgr().Add(Bool_.Y, tag_name, val);
 			bfr.Add(key);
 		}

@@ -91,6 +91,7 @@ public class Xoav_app implements Xoa_app, Gfo_invk {
 	public boolean						Bldr__running()				{return bldr__running;} public void Bldr__running_(boolean v) {this.bldr__running = v;} private boolean bldr__running;
 	public Xop_amp_mgr Utl_amp_mgr() {return utl_amp_mgr;} private Xop_amp_mgr utl_amp_mgr = Xop_amp_mgr.Instance;
 	public Xol_case_mgr Utl_case_mgr() {return utl_case_mgr;} private Xol_case_mgr utl_case_mgr = Xol_case_mgr_.U8();
+	public DB_case_mgr Utl_case_mgr2() {return utl_case_mgr2;} private DB_case_mgr utl_case_mgr2 = DB_case_mgr_.U8();
 //		public Gfo_url_encoder Utl_encoder_fsys() {return utl_encoder_fsys;} private Gfo_url_encoder utl_encoder_fsys = Gfo_url_encoder.New_fsys_lnx();
 	public Gfo_msg_log Utl_msg_log() {return utl_msg_log;} private Gfo_msg_log utl_msg_log;
 	public Xoav_url_parser Utl_url_parser_xo() {return utl_url_parser_xo;} private Xoav_url_parser utl_url_parser_xo = new Xoav_url_parser();

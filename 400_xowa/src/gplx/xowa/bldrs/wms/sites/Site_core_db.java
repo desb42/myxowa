@@ -106,7 +106,7 @@ public class Site_core_db {
 		tbl__language.Select(site_abrv, site_meta.Language_list());
 	}
 	public Xow_ns_mgr Load_namespace(byte[] domain_bry) {
-		Xow_ns_mgr rv = new Xow_ns_mgr(gplx.xowa.langs.cases.Xol_case_mgr_.U8());
+		Xow_ns_mgr rv = new Xow_ns_mgr(gplx.xowa.langs.cases.Xol_case_mgr_.U8(), gplx.xowa.DB_case_mgr_.U8());
 		Ordered_hash hash = Ordered_hash_.New();
 		tbl__namespace.Select(Xow_abrv_xo_.To_bry(domain_bry), hash);
 		Ns_mgr__load(rv, hash);

@@ -41,7 +41,7 @@ class Xob_url_fixer {
 			byte b = src[pos];
 			Btrie_result r = mid_trie.Match_bgn_w_byte(b, src, pos, src_len);
 			if (r.o != null) {
-				Xob_url_fixer_tkn tkn = (Xob_url_fixer_tkn)o;
+				Xob_url_fixer_tkn tkn = (Xob_url_fixer_tkn)r.o;
 				switch (tkn.Tid()) {
 					case Xob_url_fixer_tkn.Tid_mid_slash:				if (no_slashes) no_slashes = false; break;
 					case Xob_url_fixer_tkn.Tid_mid_question:			end = pos; pos = src_len; break;

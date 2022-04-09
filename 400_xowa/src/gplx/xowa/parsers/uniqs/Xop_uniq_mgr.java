@@ -18,8 +18,8 @@ import gplx.core.btries.*;
 public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 	private final	Btrie_slim_mgr general_trie = Btrie_slim_mgr.cs(); private final	Btrie_rv trv = new Btrie_rv();
 	//private final	Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
-        private boolean partial = false;
-        private boolean onlynowiki = false;
+	private boolean partial = false;
+	private boolean onlynowiki = false;
 	private int nxt_idx = -1;
 	public void Clear() {
 		nxt_idx = -1;
@@ -27,13 +27,13 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 	}
 	public byte[] Get(byte[] key) {
 		Xop_uniq_itm itm = (Xop_uniq_itm)general_trie.Match_exact(key, 0, key.length);
-                if (itm == null)
-                    return Bry_.Empty;
+		if (itm == null)
+			return Bry_.Empty;
 		return itm.Val();
 	}
 	public byte[] Add(boolean expand_after_template_parsing, byte[] type, byte[] val) {// "<b>" -> "\u007fUNIQ-item-1-QINU\u007f"
 		int idx = ++nxt_idx;
-                Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
+		Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(32);
 		byte[] key = tmp_bfr	
 			.Add(Bry__uniq__bgn_w_dash)		  // "\u007f'\"`UNIQ-"
 			.Add(type).Add_byte(Byte_ascii.Dash) // "ref-"
@@ -42,7 +42,7 @@ public class Xop_uniq_mgr {	// REF.MW:/parser/StripState.php
 			.Add(Bry__uniq__add__end)			// "-QINU`\"'\u007f"
 			.To_bry_and_clear();
 //		System.out.println(String_.new_u8(key)+":"+String_.new_u8(val));
-		Xop_uniq_itm itm = new Xop_uniq_itm(expand_after_template_parsing, type, idx, key, val);
+		Xop_uniq_itm itm = new Xop_uniq_itm(expand_after_template_parsing, type.length, idx, key, val);
 		general_trie.Add_obj(key, itm);
 		return key;
 	}

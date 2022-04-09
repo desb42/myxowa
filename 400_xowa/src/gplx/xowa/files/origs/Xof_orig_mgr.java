@@ -55,9 +55,9 @@ public class Xof_orig_mgr {
 			if (orig.Insert_new()) this.Insert(orig.Repo(), ttl, orig.Ext_id(), orig.W(), orig.H(), orig.Redirect()); // NOTE: orig_page must be same as find_arg not orig.Page() else will not be found for next call; DATE:2015-04-14
 			return orig;
 		}
-		if (invalid_wkr != null) {
-			invalid_wkr.Add_orig((byte)-1, ttl, -1,  0, 0, Bry_.Empty); // make sure this is 'cached'
-		}
+//		if (invalid_wkr != null) {
+//			invalid_wkr.Add_orig((byte)-1, ttl, -1,  0, 0, Bry_.Empty); // make sure this is 'cached'
+//		}
 		return Xof_orig_itm.Null;
 	}
 	public void Find_by_list(Ordered_hash rv, List_adp itms, int exec_tid) {

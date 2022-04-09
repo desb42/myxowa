@@ -370,6 +370,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 				Xot_invk invk_tmpl = Xot_defn_tmpl_.CopyNew(ctx, defn_tmpl, this, caller, src, Xow_ns_.Tid__template, name_ary);
 				invk_tmpl.Frame_ttl_(defn_tmpl.Frame_ttl());	// set frame_ttl; needed for redirects; PAGE:en.w:Statutory_city; DATE:2014-08-22
 				trace.Trace_bgn(ctx, src, name_ary, caller, invk_tmpl, defn);
+                                //System.out.println("start:" + caller + " i:" + invk_tmpl);
 
 				Bry_bfr rslt_bfr = wiki.Utl__bfr_mkr().Get_k004();
 				try {
@@ -385,6 +386,7 @@ public class Xot_invk_tkn extends Xop_tkn_itm_base implements Xot_invk {
 					bfr.Add_bfr_and_clear(rslt_bfr);
 					trace.Trace_end(trg_bgn, bfr);
 				} finally {rslt_bfr.Mkr_rls();}
+                                //System.out.println("end:" + caller + " i:" + invk_tmpl);
 				break;
 		}
 		return rv;

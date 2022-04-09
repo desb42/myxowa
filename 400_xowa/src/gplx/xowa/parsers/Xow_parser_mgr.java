@@ -117,5 +117,6 @@ public class Xow_parser_mgr {
 		root.Data_htm_(root.Root_src());
 
 		ctx.Page_data().Copy_to(page); // copy __TOC__ from ctx to page; needed to prevent template from affecting page output; DATE:2017-06-17
+		uniq_mgr.Clear(); // extra tidyup 20220401
 	}
 }

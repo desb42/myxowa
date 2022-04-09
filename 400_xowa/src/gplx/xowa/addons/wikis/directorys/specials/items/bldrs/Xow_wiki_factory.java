@@ -24,7 +24,7 @@ public class Xow_wiki_factory {
 		Xowe_wiki rv = new Xowe_wiki
 		( app
 		, gplx.xowa.langs.Xol_lang_itm_.Lang_en_make(app.Lang_mgr())
-		, gplx.xowa.wikis.nss.Xow_ns_mgr_.default_(gplx.xowa.langs.cases.Xol_case_mgr_.U8())
+		, gplx.xowa.wikis.nss.Xow_ns_mgr_.default_(gplx.xowa.langs.cases.Xol_case_mgr_.U8(), DB_case_mgr_.U8())
 		, gplx.xowa.wikis.domains.Xow_domain_itm_.parse(domain)
 		, dir_url);
 

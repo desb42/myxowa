@@ -98,7 +98,7 @@ public class Xob_siteinfo_parser__tst {
 	}
 }
 class Xob_siteinfo_parser__fxt {
-	private final    Xow_ns_mgr ns_mgr = new Xow_ns_mgr(gplx.xowa.langs.cases.Xol_case_mgr_.U8());
+	private final    Xow_ns_mgr ns_mgr = new Xow_ns_mgr(gplx.xowa.langs.cases.Xol_case_mgr_.U8(), gplx.xowa.DB_case_mgr_.U8());
 	private final    Bry_bfr bfr = Bry_bfr_.New();
 	public void Test__parse(String src_str, String expd) {
 		Xob_siteinfo_nde nde = Xob_siteinfo_parser_.Parse(src_str, ns_mgr);

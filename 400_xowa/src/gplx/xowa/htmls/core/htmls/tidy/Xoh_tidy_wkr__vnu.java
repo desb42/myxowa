@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,7 +13,8 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.htmls.core.htmls.tidy; import gplx.*; import gplx.xowa.*; import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.*; import gplx.xowa.htmls.core.htmls.*;
+package gplx.xowa.htmls.core.htmls.tidy;
+import gplx.*; import gplx.xowa.*;
 import gplx.xowa.htmls.core.htmls.tidy.vnus.*;
 import nu.validator.htmlparser.common.XmlViolationPolicy;
 import nu.validator.htmlparser.sax.HtmlParser;
@@ -24,7 +25,6 @@ import java.io.IOException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.ContentHandler;
-import gplx.core.envs.*;
 class Xoh_tidy_wkr__vnu implements Xoh_tidy_wkr {
 		private byte[] depurate(Bry_bfr tidy_bfr, boolean compat) throws SAXException, IOException {
 /*
@@ -50,10 +50,10 @@ class Xoh_tidy_wkr__vnu implements Xoh_tidy_wkr {
 			byte b = input[pos++];
 			if (b == '&') {
 				if (input[pos] == '#') {
-                                    if ((input[pos+1] == '3' && input[pos+2] == '2' && input[pos+3] == ';')
-                                            || (input[pos+1] == 'x'))
+					if ((input[pos+1] == '3' && input[pos+2] == '2' && input[pos+3] == ';')
+					    || (input[pos+1] == 'x'))
 					input[pos-1] = '@'; // replace &#32; with @#32;
-                                }
+				}
 			}
 		}
 		InputStream stream = new ByteArrayInputStream(input);
@@ -73,20 +73,20 @@ class Xoh_tidy_wkr__vnu implements Xoh_tidy_wkr {
 			byte b = output[pos++];
 			if (b == '@') {
 				if (output[pos] == '#') {
-                                    if ((output[pos+1] == '3' && output[pos+2] == '2' && output[pos+3] == ';')
-                                            || (output[pos+1] == 'x'))
+					if ((output[pos+1] == '3' && output[pos+2] == '2' && output[pos+3] == ';')
+					    || (output[pos+1] == 'x'))
 					output[pos-1] = '&'; // replace @#32; with &#32;
-                                }
+				}
 			}
 		}
 		return output;
 	}
-	public byte Tid() {return Xoh_tidy_wkr_.Tid_vnu;}
-	public void Init_by_app(Xoae_app app) {
+	@Override public byte Tid() {return Xoh_tidy_wkr_.Tid_vnu;}
+	@Override public void Init_by_app(Xoae_app app) {
 	}
-	public void Indent_(boolean v) {
+	@Override public void Indent_(boolean v) {
 	}
-	public void Exec_tidy(Bry_bfr bfr, byte[] page_url) {
+	@Override public void Exec_tidy(Bry_bfr bfr, byte[] page_url) {
 		try {
 			bfr.Add(depurate(bfr, true));
 		} 

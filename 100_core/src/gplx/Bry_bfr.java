@@ -14,6 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx;
+import static gplx.Bry_.Copy_to;
 import gplx.core.primitives.*; import gplx.core.brys.*; import gplx.core.encoders.*;
 import gplx.langs.htmls.entitys.*;
 public class Bry_bfr {
@@ -545,6 +546,40 @@ public class Bry_bfr {
 		bfr_max = new_max;
 		return this;
 	}
+        public Bry_bfr Wrap(byte[] prefix, byte[] suffix) {
+            int plen = prefix.length;
+            int slen = suffix.length;
+            int blen = bfr_len - bfr_bgn;
+            int size = plen + blen + slen;
+            if (size > bfr_max) {
+ 		byte[] trg = new byte[size];
+                Bry_.Copy_to(prefix, 0, plen, trg, 0);
+                Bry_.Copy_to(bfr, bfr_bgn, bfr_len, trg, plen);
+                Bry_.Copy_to(suffix, 0, slen, trg, plen + blen);
+                bfr_max = size;
+            }
+            else {
+                //take bfr_bgn into account
+                // need to move the bfr first
+                if (bfr_bgn > plen) {
+                    // move down (right to left)
+                    int ofs = plen;
+                    for (int i = bfr_bgn; i < bfr_len; i++)
+                        bfr[ofs++] = bfr[i];
+                }
+                else if (bfr_bgn < plen) {
+                    // move up (left to right
+                    int ofs = plen + blen;
+                    for (int i = bfr_len - 1; i >= bfr_bgn; i--)
+                        bfr[--ofs] = bfr[i];
+                }
+                Bry_.Copy_to(prefix, 0, plen, bfr, 0);
+                Bry_.Copy_to(suffix, 0, slen, bfr, plen + blen);
+            }
+            bfr_bgn = 0;
+            bfr_len = size;
+            return this;
+        }
 	public Bry_bfr Delete_rng_to_bgn(int pos) {
 		bfr_bgn += pos;
 		return this;

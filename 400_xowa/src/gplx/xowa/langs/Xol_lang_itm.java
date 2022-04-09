@@ -37,6 +37,7 @@ public class Xol_lang_itm implements Gfo_invk {
 		this.msg_mgr = new Xol_msg_mgr(this, true);
 		this.specials_mgr = new Xol_specials_mgr(this);
 		this.case_mgr = Env_.Mode_testing() ? Xol_case_mgr_.A7() : Xol_case_mgr_.U8(); // NOTE: if test load ascii b/c utf8 is large; NOTE: placed here b/c tests do not call load; DATE:2014-07-04
+		this.case_mgr2 = DB_case_mgr_.U8();
 		this.num_mgr = Xol_num_mgr_.new_by_lang_id(lang_id);
 		this.vnt_mgr = new Xol_vnt_mgr(this);			
 		this.grammar = Xol_grammar_.new_by_lang_id(lang_id);
@@ -58,6 +59,7 @@ public class Xol_lang_itm implements Gfo_invk {
 	public Xol_msg_mgr			Msg_mgr() {return msg_mgr;} private final    Xol_msg_mgr msg_mgr;
 	public Xol_specials_mgr		Specials_mgr() {return specials_mgr;} private final    Xol_specials_mgr specials_mgr;
 	public Xol_case_mgr			Case_mgr() {return case_mgr;} private Xol_case_mgr case_mgr;
+	public DB_case_mgr			Case_mgr2() {return case_mgr2;} private DB_case_mgr case_mgr2;
 	public void					Case_mgr_u8_() {case_mgr = Xol_case_mgr_.U8();}		// TEST:
 	public Xol_lang_itm			Case_mgr_(Xol_case_mgr v) {this.case_mgr = v; return this;}		// TEST:
 	public Xol_comma_wkr		Comma_wkr() {return comma_wkr;} private final    Xol_comma_wkr comma_wkr = new Xol_comma_wkr__add();

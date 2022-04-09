@@ -56,9 +56,10 @@ public class Pfunc_filepath extends Pf_func_base {
 	}
 	public static Pfunc_filepath_itm Load_page(Xowe_wiki wiki, Xoa_ttl ttl) {
 		// try to get from cache
-		Gfo_cache_mgr cache_mgr = wiki.Cache_mgr().Commons_cache();
 		byte[] cache_key = ttl.Page_url();
-		Pfunc_filepath_itm cache_itm = (Pfunc_filepath_itm)cache_mgr.Get_by_key(cache_key);
+		//Gfo_cache_mgr cache_mgr = wiki.Cache_mgr().Commons_cache();
+		//Pfunc_filepath_itm cache_itm = (Pfunc_filepath_itm)cache_mgr.Get_by_key(cache_key);
+		Pfunc_filepath_itm cache_itm = Get_by(cache_key);
 		if (cache_itm != null) return cache_itm;
 
 		// do db retrieval
@@ -82,8 +83,19 @@ public class Pfunc_filepath extends Pf_func_base {
 		}
 
 		// add to cache
-		cache_itm = new Pfunc_filepath_itm(page.Db().Page().Exists(), cache_key);
-		cache_mgr.Add_replace(cache_key, cache_itm, 1);
+		cache_itm = Addx(cache_key, page.Db().Page().Exists());
+		//cache_itm = new Pfunc_filepath_itm(page.Db().Page().Exists(), cache_key);
+		//cache_mgr.Add_replace(cache_key, cache_itm, 1);
 		return cache_itm;
+	}
+	private static Pfunc_filepath_itm Get_by(byte[] ttl) {
+		byte[] serial = Db_redis.Get_filecache(ttl);
+		if (serial == null)
+			return null;
+		return new Pfunc_filepath_itm(serial, ttl);
+	}
+	private static Pfunc_filepath_itm Addx(byte[] ttl, boolean exists) {
+		Db_redis.Set_filecache(ttl, exists);
+		return new Pfunc_filepath_itm(exists, ttl);
 	}
 }

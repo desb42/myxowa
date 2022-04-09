@@ -16,10 +16,18 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.langs.cases; import gplx.*; import gplx.xowa.*; import gplx.xowa.langs.*;
 import gplx.core.btries.*; import gplx.core.intls.*;
 public class Xol_case_mgr implements Gfo_invk, Gfo_case_mgr {
-	private final    Btrie_fast_mgr upper_trie = Btrie_fast_mgr.cs(), lower_trie = Btrie_fast_mgr.cs(); private Xol_case_itm[] itms;
+	private final Btrie_fast_mgr upper_trie = Btrie_fast_mgr.cs(), lower_trie = Btrie_fast_mgr.cs();
+        private Xol_case_itm[] itms;
 	public Xol_case_mgr(byte tid) {this.tid = tid;}
 	public byte Tid() {return tid;} private byte tid;
 	public Gfo_case_itm Get_or_null(byte bgn_byte, byte[] src, int bgn, int end) {
+		Object rv = lower_trie.Match_bgn_w_byte(bgn_byte, src, bgn, end);
+		return rv == null
+			? (Gfo_case_itm)upper_trie.Match_bgn_w_byte(bgn_byte, src, bgn, end)
+			: (Gfo_case_itm)rv;
+	}
+	public Gfo_case_itm Get_or_null(byte[] src, int bgn, int end) {
+            byte bgn_byte = src[bgn];
 		Object rv = lower_trie.Match_bgn_w_byte(bgn_byte, src, bgn, end);
 		return rv == null
 			? (Gfo_case_itm)upper_trie.Match_bgn_w_byte(bgn_byte, src, bgn, end)
@@ -31,7 +39,9 @@ public class Xol_case_mgr implements Gfo_invk, Gfo_case_mgr {
 			|| lower_trie.Match_bgn_w_byte(b, src, bgn_pos, end_pos) != null
 			;
 	}
-	public Object Match_upper(byte b, byte[] src, int bgn_pos, int end_pos) {return upper_trie.Match_bgn_w_byte(b, src, bgn_pos, end_pos);}
+	public Object Match_upper(byte b, byte[] src, int bgn_pos, int end_pos) {
+            return upper_trie.Match_bgn_w_byte(b, src, bgn_pos, end_pos);
+        }
 	public void Add_bulk(byte[] raw) {Add_bulk(Xol_case_itm_.parse_xo_(raw));}
 	public Xol_case_mgr Add_bulk(Xol_case_itm[] ary) {
 		itms = ary;
@@ -105,17 +115,29 @@ public class Xol_case_mgr implements Gfo_invk, Gfo_case_mgr {
 			if (pos >= end) break;
 			byte b = src[pos];
 			int b_len = gplx.core.intls.Utf8_.Len_of_char_by_1st_byte(b);
-
-			Object o = trie.Match_at_w_b0(trv, b, src, pos, end);	// NOTE: used to be (b, src, bgn, end) which would never case correctly; DATE:2013-12-25;
-			if (o != null && pos < end) {	// pos < end used for casing 1st letter only; upper_1st will pass end of 1
-				Xol_case_itm itm = (Xol_case_itm)o;
-				if (upper)
-					itm.Case_build_upper(tmp_bfr);
-				else
-					itm.Case_build_lower(tmp_bfr);
+			if (b_len == 1) { // must be ascii
+				if (upper) {
+					if (b >= 'a' && b <= 'z')
+						b -= 32;
+				}
+				else {
+					if (b >= 'A' && b <= 'Z')
+						b += 32;
+				}
+				tmp_bfr.Add_byte(b);
 			}
 			else {
-				tmp_bfr.Add_mid(src, pos, pos + b_len);
+				Object o = trie.Match_at_w_b0(trv, b, src, pos, end);	// NOTE: used to be (b, src, bgn, end) which would never case correctly; DATE:2013-12-25;
+				if (o != null && pos < end) {	// pos < end used for casing 1st letter only; upper_1st will pass end of 1
+					Xol_case_itm itm = (Xol_case_itm)o;
+					if (upper)
+						itm.Case_build_upper(tmp_bfr);
+					else
+						itm.Case_build_lower(tmp_bfr);
+				}
+				else {
+					tmp_bfr.Add_mid(src, pos, pos + b_len);
+				}
 			}
 			pos += b_len;
 		}

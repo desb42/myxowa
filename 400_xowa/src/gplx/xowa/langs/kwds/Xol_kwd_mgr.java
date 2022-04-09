@@ -84,7 +84,8 @@ public class Xol_kwd_mgr implements Gfo_invk {
 	}
 	public static Hash_adp_bry hash_(Xol_kwd_mgr mgr, int id) {
 		Xol_kwd_grp grp = mgr.Get_at(id);
-		Hash_adp_bry rv = Hash_adp_bry.c__u8(grp.Case_match(), mgr.lang.Case_mgr());
+		//Hash_adp_bry rv = Hash_adp_bry.c__u8(grp.Case_match(), mgr.lang.Case_mgr());
+		Hash_adp_bry rv = Hash_adp_bry.c__u8(grp.Case_match(), mgr.lang.Case_mgr2());
 		int len = grp.Itms().length;
 		for (int i = 0; i < len; i++) {
 			Xol_kwd_itm itm = grp.Itms()[i];

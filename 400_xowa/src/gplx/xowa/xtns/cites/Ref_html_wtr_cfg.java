@@ -36,8 +36,14 @@ public class Ref_html_wtr_cfg {
 	public String Itm_crslp() 		{return itm_refs_prefix;} 		private String itm_refs_prefix; 		public void Itm_crslp_(String v) {itm_refs_prefix = v;}
 	public String Itm_crsls() 		{return itm_refs_suffix;} 		private String itm_refs_suffix; 		public void Itm_crsls_(String v) {itm_refs_suffix = v;}
 	public String Itm_accessibility_label() 		{return itm_accessibility_label;} 		private String itm_accessibility_label; 		public void Itm_accessibility_label_(String v) {itm_accessibility_label = v;}
-	public byte[][] Backlabels() {return backlabels;} private byte[][] backlabels;
-	public int Backlabels_len() {return backlabels_len;} private int backlabels_len;
+        private Backrefs backlabels;
+	public byte[] Backlabels(int i) {return backlabels.Get_at(i);}
+	public int Backlabels_len() {return backlabels.Length();} 
+	//public byte[][] Backlabels() {return backlabels;} private byte[][] backlabels;
+	//public byte[] Backlabels(int i) {return backlabels[i];}
+        //private byte[][] backlabels;
+	//public int Backlabels_len() {return backlabels_len;} 
+        private int backlabels_len;
 	public byte[] Grp_bgn() {return grp_bgn;} private byte[] grp_bgn;
 	public byte[] Grp_end() {return grp_end;} private byte[] grp_end;
 	public void Init_by_wiki(Xowe_wiki wiki) {
@@ -48,7 +54,7 @@ public class Ref_html_wtr_cfg {
 		Backlabels_err_(cvt(String_.new_u8(ref1_bry)));
 
 		ref1_bry = wiki.Msg_mgr().Val_by_key_obj(Msg_backlabels);
-		Backlabels_(Ref_backlabels_xby_bry(ref1_bry));
+		Backlabels_(ref1_bry);
 
 		ref1_bry = wiki.Msg_mgr().Val_by_key_obj(Msg_crlp);
 		//System.out.println("crlp" + String_.new_u8(ref1_bry));
@@ -124,9 +130,12 @@ public class Ref_html_wtr_cfg {
 		byte[] ref = wiki.Msg_mgr().Val_by_key_args(Msg_crl, bitm, bgrp, txt);
 	}
 
-	public void Backlabels_(byte[][] v) {
-		backlabels		= v;
-		backlabels_len	= v.length;
+//	public void Backlabels_(byte[] v) {
+//		backlabels = Ref_backlabels_xby_bry(v);
+//		backlabels_len = v.length;
+//	}
+	public void Backlabels_(byte[] v) {
+		backlabels = new Backrefs(v);
 	}
 	public static final byte[]
 	  Msg_backlabels_err = Bry_.new_a7("cite_error_no_link_label_group")
@@ -238,4 +247,77 @@ public class Ref_html_wtr_cfg {
 		str = str.replaceAll("''([^']*)''", "<i>$1</i>");
 		return str;
 	}
+}
+class Backrefs {
+	private int count;
+	private int len;
+	private final int[] links;
+	private final byte[] data;
+        private byte[] key0;
+        private byte[] key1;
+        private byte[] key2;
+
+	// first pass count and adjust to one space
+	private void count_and_check() {
+		int pos = 0, bgn = -1;
+		while (pos < len) {
+			byte b = data[pos];
+			switch (b) {
+				case Byte_ascii.Space: case Byte_ascii.Nl: case Byte_ascii.Tab:
+					if (bgn == -1) {
+						// eliminate this whitespace
+						for (int i = pos; i < len; i++) {
+							data[i] = data[i+1];
+						}
+						pos--;
+						len--;
+					}
+					else {
+						bgn = -1;
+						data[pos] = Byte_ascii.Space;
+					}
+					break;
+				default:
+					if (bgn == -1) {
+						bgn = pos;
+						count++;
+					}
+					break;
+			}
+                        pos++;
+		}
+		count++;
+	}
+	private void setup() {
+		int pos = 0;
+		count = 0;
+		links[count++] = 0;
+		while (pos < len) {
+			byte b = data[pos++];
+			if (b == Byte_ascii.Space)
+					links[count++] = pos - 1;
+		}
+		links[count] = len;
+	}
+	public Backrefs(byte[] raw) {
+		data = raw;
+		len = data.length;
+		count = 0;
+		count_and_check();
+		links = new int[count];
+		setup();
+		// Note - count changes!!
+                key0 = Get_at(0);
+                key1 = Get_at(1);
+                key2 = Get_at(2);
+	}
+	public byte[] Get_at(int i) {
+            if (i == 0) return key0;
+            if (i == 1) return key1;
+            if (i == 2) return key2;
+		return Bry_.Mid(data, links[i], links[i+1]);
+	}
+        public int Length() {
+            return count;
+        }
 }

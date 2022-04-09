@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -17,26 +17,29 @@ package gplx.xowa.wikis.caches; import gplx.*; import gplx.xowa.*; import gplx.x
 import gplx.core.caches.*;
 import gplx.xowa.wikis.data.tbls.*;
 public class Xow_ifexist_cache {
+	// use Redis instead of internal cache 20220406
 	//private final    Xowe_wiki wiki;
 	private final    Xow_page_cache page_cache;
-	private final    Gfo_cache_mgr cache_mgr = new Gfo_cache_mgr().Max_size_(64 * Io_mgr.Len_mb).Reduce_by_(32 * Io_mgr.Len_mb);
+//	private final    Gfo_cache_mgr cache_mgr = new Gfo_cache_mgr().Max_size_(64 * Io_mgr.Len_mb).Reduce_by_(32 * Io_mgr.Len_mb);
 	private final    Hash_adp ns_loaded_hash = Hash_adp_.New();		
 	public Xow_ifexist_cache(Xowe_wiki wiki, Xow_page_cache page_cache) {
 		//this.wiki = wiki;
 		this.page_cache = page_cache;
+		Db_redis.Init();
 	}
 	public Xow_ifexist_cache Cache_sizes_(int max, int reduce) {
-		cache_mgr.Max_size_(max).Reduce_by_(reduce);
+//		cache_mgr.Max_size_(max).Reduce_by_(reduce);
 		return this;
 	}
 	public void Load_wkr_(Xow_page_cache_wkr v) {this.load_wkr = v;} private Xow_page_cache_wkr load_wkr;
 	public void Clear() {
-		cache_mgr.Clear();
+//		cache_mgr.Clear();
 		ns_loaded_hash.Clear();
 	}
 	public void Add(Xoa_ttl ttl, boolean exists) {
 		byte[] key = ttl.Full_db();
-		cache_mgr.Add_replace(key, Xow_ifexist_itm.Get(exists), key.length);
+//		cache_mgr.Add_replace(key, Xow_ifexist_itm.Get(exists), key.length);
+		Addx(key, exists);
 	}
 	public void Mark_ns_loaded(int... ns_ids) {
 		for (int ns_id : ns_ids)
@@ -46,7 +49,8 @@ public class Xow_ifexist_cache {
 		byte[] key = ttl.Full_db();
 
 		// check cache_mgr
-		Xow_ifexist_itm found = (Xow_ifexist_itm)cache_mgr.Get_by_key(key);
+//		Xow_ifexist_itm found = (Xow_ifexist_itm)cache_mgr.Get_by_key(key);
+		Xow_ifexist_itm found = Get_by(key);
 		if (found != null) return found.Exists() ? Bool_.Y_byte : Bool_.N_byte;
 
 		// check ns_loaded cache (xomp only); if ns_exists, return false, since all pages in ns are loaded, and still not found
@@ -79,8 +83,19 @@ public class Xow_ifexist_cache {
 		}
 
 		// add
-		cache_mgr.Add_replace(key, itm, key.length);
+//		cache_mgr.Add_replace(key, itm, key.length);
+		Addx(key, itm.Exists());
 		return itm.Exists();
+	}
+	private static Xow_ifexist_itm Get_by(byte[] ttl) {
+		byte[] serial = Db_redis.Get_filecache(ttl);
+		if (serial == null)
+			return null;
+                // 49 => '1'
+		return serial[0] == 49 ? Xow_ifexist_itm.Itm__exists : Xow_ifexist_itm.Itm__missing;
+	}
+	private static void Addx(byte[] ttl, boolean exists) {
+		Db_redis.Set_filecache(ttl, exists);
 	}
 }
 class Xow_ifexist_itm implements Rls_able {		
@@ -88,6 +103,6 @@ class Xow_ifexist_itm implements Rls_able {
 	public boolean Exists() {return exists;} private final    boolean exists;
 	public void Rls() {}
 
-	private static final    Xow_ifexist_itm Itm__exists = new Xow_ifexist_itm(Bool_.Y), Itm__missing = new Xow_ifexist_itm(Bool_.N);
+	public static final    Xow_ifexist_itm Itm__exists = new Xow_ifexist_itm(Bool_.Y), Itm__missing = new Xow_ifexist_itm(Bool_.N);
 	public static Xow_ifexist_itm Get(boolean exists) {return exists ? Itm__exists : Itm__missing;}
 }

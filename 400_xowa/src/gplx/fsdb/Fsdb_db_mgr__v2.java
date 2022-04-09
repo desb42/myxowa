@@ -23,11 +23,11 @@ public class Fsdb_db_mgr__v2 implements Fsdb_db_mgr {
 	public Fsdb_db_mgr__v2(Xow_db_layout layout, Io_url wiki_dir, Fsdb_db_file file_main_core, Fsdb_db_file file_user_core) {
 		this.layout = layout; this.wiki_dir = wiki_dir;
 		this.file_main_core = file_main_core; this.file_user_core = file_user_core;
-		this.invalidtab = new Xof_orig_tbl(file_user_core.Conn(), this.File__schema_is_1(), true);
+//		this.invalidtab = new Xof_orig_tbl(file_user_core.Conn(), this.File__schema_is_1(), true);
 		this.orig_tbl_ary	= new Xof_orig_tbl[] 
 		{ new Xof_orig_tbl(file_main_core.Conn(), this.File__schema_is_1())
 		, new Xof_orig_tbl(file_user_core.Conn(), this.File__schema_is_1())
-		, this.invalidtab
+//		, this.invalidtab
 		};
 	}
 	public Xof_orig_tbl Invalidtab() {return invalidtab;}

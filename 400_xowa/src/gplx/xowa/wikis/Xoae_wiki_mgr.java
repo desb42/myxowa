@@ -79,7 +79,9 @@ public class Xoae_wiki_mgr implements Xoa_wiki_mgr, Gfo_invk {
 	}
 	public Xow_wiki		Get_by_or_make_init_n(byte[] key) {return Get_by_or_make(key);}
 	public Xowe_wiki	Get_by_or_make(byte[] key) {
-		Xowe_wiki rv = (Xowe_wiki)this.Get_by_or_null(key); if (rv == null) rv = Make_and_add(key);
+		Xowe_wiki rv = (Xowe_wiki)this.Get_by_or_null(key);
+                if (rv == null)
+                    rv = Make_and_add(key);
                 if (rv != null)
                     rv.Init_assert(0);
 		return rv;
@@ -120,7 +122,7 @@ public class Xoae_wiki_mgr implements Xoa_wiki_mgr, Gfo_invk {
 
 		// load ns from site_meta
 		Xow_ns_mgr ns_mgr = app.Dbmeta_mgr().Ns__get_or_load(domain_bry);
-		if (ns_mgr.Ids_len() == 0) ns_mgr = Xow_ns_mgr_.default_(lang.Case_mgr());	// non-wmf wikis will use default ns_mgr
+		if (ns_mgr.Ids_len() == 0) ns_mgr = Xow_ns_mgr_.default_(lang.Case_mgr(), lang.Case_mgr2());	// non-wmf wikis will use default ns_mgr
 
 		return new Xowe_wiki(app, lang, ns_mgr, domain_itm, wiki_root_dir);
 	}

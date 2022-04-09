@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,9 +13,9 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.htmls.core.htmls.tidy; import gplx.*; import gplx.xowa.*; import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.*; import gplx.xowa.htmls.core.htmls.*;
+package gplx.xowa.htmls.core.htmls.tidy;
+import gplx.*; import gplx.xowa.*;
 import gplx.core.envs.*;
-import gplx.langs.htmls.*;
 public class Xow_tidy_mgr implements Gfo_invk, Xow_tidy_mgr_interface {
 	private Xoae_app app;
 	private final    Xoh_tidy_wkr_tidy	wkr__tidy = new Xoh_tidy_wkr_tidy();	// NOTE: app-level; not thread-safe; needed b/c of Options and exe/args DATE:2016-07-12
@@ -31,7 +31,8 @@ public class Xow_tidy_mgr implements Gfo_invk, Xow_tidy_mgr_interface {
 	public void Exec_tidy(Bry_bfr bfr, boolean indent, byte[] page_url) {
 		if (!enabled) return;
 		if (bfr.Len_eq_0()) return;	// document is empty; do not exec b/c tidy will never generate files for 0 len files, and previous file will remain; DATE:2014-06-04
-		Tidy_wrap(bfr);
+		//Tidy_wrap(bfr);
+		bfr.Wrap(Wrap_bgn, Wrap_end);
 		wkr.Indent_(indent);
 		wkr.Exec_tidy(bfr, page_url);
 		Tidy_unwrap(bfr);
@@ -63,8 +64,8 @@ public class Xow_tidy_mgr implements Gfo_invk, Xow_tidy_mgr_interface {
 		bfr.Delete_rng_to_end(bfr.Len() - tail_len);
 		return true;
 	}
-        private static String
-          Wrap_start = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+	private static String
+		Wrap_start = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
 	private static final    byte[]	// MW:includes/parser/Tidy.php|getWrapped
 	  Wrap_bgn = Bry_.new_a7
 	( Wrap_start

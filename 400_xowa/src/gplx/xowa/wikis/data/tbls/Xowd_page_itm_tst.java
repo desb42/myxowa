@@ -26,7 +26,7 @@ class Xowd_page_itm_fxt {
 	private Xow_ns_mgr ns_mgr; Xowd_page_itm tmp_page;
 	public void Init() {
 		if (ns_mgr == null) {
-			ns_mgr = new Xow_ns_mgr(gplx.xowa.langs.cases.Xol_case_mgr_.A7());
+			ns_mgr = new Xow_ns_mgr(gplx.xowa.langs.cases.Xol_case_mgr_.A7(), gplx.xowa.DB_case_mgr_.U8());
 			ns_mgr.Add_new(Xow_ns_.Tid__main, "");
 			ns_mgr.Add_new(Xow_ns_.Tid__user_talk, "User talk");
 			ns_mgr.Init_w_defaults();

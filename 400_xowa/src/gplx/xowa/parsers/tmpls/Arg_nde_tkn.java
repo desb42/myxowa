@@ -14,7 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.parsers.tmpls; import gplx.*; import gplx.xowa.*; import gplx.xowa.parsers.*;
-public class Arg_nde_tkn extends Xop_tkn_itm_base {
+public class Arg_nde_tkn extends Xop_tkn_itm_base_nosubs {
 	public Arg_nde_tkn() {}	// for mock
 	public Arg_nde_tkn(int arg_idx, int bgn) {this.arg_idx = arg_idx; this.Tkn_ini_pos(false, bgn, -1);} private int arg_idx;
 	@Override public byte Tkn_tid() {return Xop_tkn_itm_.Tid_arg_nde;}

@@ -266,7 +266,11 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		app.Gfs_mgr().Run_url_for(this, tdb_fsys_mgr.Cfg_wiki_stats_fil());
 		this.wrk_id = wrk_id;
 		Init_db_mgr();
-		if (!app.Bldr().Import_marker().Chk(this)) {app.Wiki_mgr().Del(domain_bry); init_needed = false; return;}	// NOTE: must call after Db_mgr_create_as_sql(); also, must delete wiki from mgr; DATE:2014-08-24
+		if (!app.Bldr().Import_marker().Chk(this)) {
+                    app.Wiki_mgr().Del(domain_bry);	// NOTE: must call after Db_mgr_create_as_sql(); also, must delete wiki from mgr; DATE:2014-08-24
+                     init_needed = false;
+                     return;
+                }
 		db_mgr.Load_mgr().Init_by_wiki(this);
 		app.Gfs_mgr().Run_url_for(this, tdb_fsys_mgr.Cfg_wiki_core_fil());
 		parser_mgr.Init_by_wiki();

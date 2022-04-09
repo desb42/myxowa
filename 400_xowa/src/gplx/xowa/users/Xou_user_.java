@@ -21,7 +21,8 @@ class Xou_user_ {
 	public static Xowe_wiki new_or_create_(Xoue_user user, Xoae_app app) {
 		Io_url wiki_dir = app.Fsys_mgr().Home_wiki_dir();
 		Xol_lang_itm lang = app.Lang_mgr().Get_by_or_load(Xol_lang_itm_.Key_en); // NOTE: lang.Load() must occur before Xowe_wiki.new() b/c wiki will create parsers based on lang
-		Xowe_wiki rv = new Xowe_wiki(app, lang, ns_home_(lang.Case_mgr()), Xow_domain_uid_.To_domain(Xow_domain_uid_.Tid_xowa), wiki_dir);
+		//Xowe_wiki rv = new Xowe_wiki(app, lang, ns_home_(lang.Case_mgr()), Xow_domain_uid_.To_domain(Xow_domain_uid_.Tid_xowa), wiki_dir);
+		Xowe_wiki rv = new Xowe_wiki(app, lang, ns_home_(lang.Case_mgr(), lang.Case_mgr2()), Xow_domain_uid_.To_domain(Xow_domain_uid_.Tid_xowa), wiki_dir);
 		app.Wiki_mgr().Add(rv);
 		rv.Sys_cfg().Xowa_cmd_enabled_(true);
 		rv.Sys_cfg().Xowa_proto_enabled_(true);
@@ -47,8 +48,9 @@ class Xou_user_ {
 	, ""
 	, "Please delete bookmarks by editing this page."
 	);
-	private static Xow_ns_mgr ns_home_(Xol_case_mgr case_mgr) {
-		Xow_ns_mgr rv = new Xow_ns_mgr(case_mgr);
+	//private static Xow_ns_mgr ns_home_(Xol_case_mgr case_mgr) {
+	private static Xow_ns_mgr ns_home_(Xol_case_mgr case_mgr, DB_case_mgr case_mgr2) {
+		Xow_ns_mgr rv = new Xow_ns_mgr(case_mgr, case_mgr2);
 		rv = rv.Add_new(-2, "Media").Add_new(-1, "Special").Add_new(0, "").Add_new(1, "Talk").Add_new(2, "User").Add_new(3, "User talk").Add_new(4, "Wikipedia").Add_new(5, "Wikipedia talk")
 			.Add_new(6, "File").Add_new(7, "File talk").Add_new(8, "MediaWiki").Add_new(9, "MediaWiki talk").Add_new(10, "Template").Add_new(11, "Template talk")
 			.Add_new(12, "Help").Add_new(13, "Help talk").Add_new(14, "Category").Add_new(15, "Category talk").Add_new(100, "Portal").Add_new(101, "Portal talk")

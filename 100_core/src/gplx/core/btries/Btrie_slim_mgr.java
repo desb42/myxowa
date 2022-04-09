@@ -78,6 +78,7 @@ public class Btrie_slim_mgr implements Btrie_mgr {
 				return;
 			}
 		}
+//                System.out.println("slim " + this + "-" + String_.new_u8(itm));
 		md5_algo.Update_digest(itm, 0, itm.length);
 		int new_len = subs_len + 1;
 		if (new_len > subs_max) {	// ary too small >>> expand
@@ -257,7 +258,7 @@ public class Btrie_slim_mgr implements Btrie_mgr {
 			cur = nxt;
 		}
 		count++; // FUTURE: do not increment if replacing value
-                Add_val(key, val);
+                Add_val(key, val); // db code
 		return this;
 	}
 	public void Del(byte[] key) {
@@ -298,7 +299,27 @@ public class Btrie_slim_mgr implements Btrie_mgr {
 		}
 		return dirty ? tmp_bfr.To_bry_and_clear() : src;
 	}
-	public void Clear() {root.Clear(); count = 0;}
+	public void Clear() {
+		root.Clear();
+		count = 0;
+
+                once = true;
+		subs_max = 0;
+		subs_len = 0;
+		subs = new byte[1][];
+		objs = new Object[1];
+		md5_algo = Hash_algo_.New__md5();
+		md5 = null;
+	}
+	public void Clear_root() { // removes excess if using hardcode
+//		root.Clear();
+//		count = 0;
+//		subs = new byte[1][];
+	}
+	public void Clear_subs() { // removes excess if using btrie
+//		subs = new byte[1][];
+//		objs = new Object[1];
+	}
 	public static Btrie_slim_mgr cs()				{return new Btrie_slim_mgr(Bool_.Y);}
 	public static Btrie_slim_mgr ci_a7()			{return new Btrie_slim_mgr(Bool_.N);}
 	public static Btrie_slim_mgr ci_u8()			{return new Btrie_slim_mgr(Bool_.N);}

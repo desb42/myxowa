@@ -279,7 +279,7 @@ public class Xoh_page_wtr_wkr {
 		}
 	}
 	public void Write_body(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page) {
-		synchronized (thread_lock_2) {
+// removed 20220407		synchronized (thread_lock_2) {
 			this.page = page; this.wiki = page.Wikie(); this.app = wiki.Appe();
 			Xoa_ttl page_ttl = page.Ttl(); int page_ns_id = page_ttl.Ns().Id();
 			byte page_tid = Xow_page_tid.Identify(wiki.Domain_tid(), page_ns_id, page_ttl.Page_db(), page.Db().Page().Model_format());	// NOTE: can't cache page_tid b/c Write_body is called directly; DATE:2014-10-02
@@ -337,7 +337,7 @@ public class Xoh_page_wtr_wkr {
 				&&  !page_tid_uses_pre) {							// if .js, .css or .lua, skip test; may have js fragments, but entire text is escaped and put in pre; don't show spurious warning; DATE:2013-11-21
 				wiki.Html_mgr().Js_cleaner().Clean_bfr(wiki, page_ttl, bfr, bfr_page_bgn);
 			}
-		}
+//		}
 	}
 	private void Write_body_wikitext(Bry_bfr bfr, Xoae_app app, Xowe_wiki wiki, byte[] data_raw, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page, byte page_tid, int ns_id) {
 		// dump and exit if pre-generated html from html dumps
@@ -364,10 +364,11 @@ public class Xoh_page_wtr_wkr {
 		if (ns_id == Xow_ns_.Tid__file) app.Ns_file_page_mgr().Bld_html(wiki, ctx, page, bfr, page.Ttl(), wiki.Cfg_file_page(), page.File_queue());
 
 		// get separate bfr; note that bfr already has <html> and <head> written to it, so this can't be passed to tidy; DATE:2014-06-11
-		Bry_bfr tidy_bfr = wiki.Utl__bfr_mkr().Get_m001();
+		//Bry_bfr tidy_bfr = wiki.Utl__bfr_mkr().Get_m001();
+                Bry_bfr tidy_bfr = Bry_bfr_.New_w_size(1024*1024); // 1Mb
 		//tidy_bfr.Add_str_a7("<body>");
 
-		try {
+//		try {
 			// write wikitext
 			if (page.Html_data().Skip_parse()) {
 				tidy_bfr.Add(page.Html_data().Custom_body());
@@ -411,9 +412,9 @@ public class Xoh_page_wtr_wkr {
 
 			// add back to main bfr
 			bfr.Add_bfr_and_clear(tidy_bfr);
-		} finally {
-			tidy_bfr.Mkr_rls();
-		}
+//		} finally {
+//			tidy_bfr.Mkr_rls();
+//		}
 				
 		// translate if variants are enabled
 		Xol_vnt_mgr vnt_mgr = wiki.Lang().Vnt_mgr();

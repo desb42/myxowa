@@ -21,6 +21,7 @@ import gplx.xowa.Xoa_ttl;
 import gplx.xowa.Xoae_app;
 import gplx.xowa.Xoae_page;
 import gplx.xowa.Xowe_wiki;
+import gplx.xowa.Db_redis;
 import gplx.xowa.htmls.core.htmls.Xoh_html_wtr;
 import gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx;
 import gplx.xowa.htmls.heads.Xoh_head_itm__css_dynamic;
@@ -93,7 +94,6 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		// get page
 		Xow_page_cache_itm page_itm = wiki.Cache_mgr().Page_cache().Get_itm_else_load_or_null(css_ttl, wiki.Domain_str());
 		if (page_itm != null) {
-			css_src = page_itm.Wtxt__direct();
 			css_page_id = page_itm.Page_id();
 
 			// update css_page_ids
@@ -101,13 +101,23 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			if (css_page_ids.Get_by_or_null(css_page_id) == null) {
 				//System.out.println(String_.new_u8(css_ttl.Full_db()) + " " + Integer.toString(css_page_id));
 				css_page_ids.Add(css_page_id, "");
+				// try redis cache
+				css_src = Db_redis.Get_templatestyles(css_ttl.Full_db());
+				if (css_src == null) {
+					css_src = new XoCssTransformer(String_.new_u8(page_itm.Wtxt__direct()))
+						.Minify()
+						.Prepend(prepend)
+//						.Url("upload.wikimedia.org", "www.xowa.org/xowa/fsys/bin/any/xowa/upload.wikimedia.org")
+						.Url("upload.wikimedia.org", "www.xowa.com/xowa/fsys/bin/any/xowa/upload.wikimedia.org")
+						.ToBry();
+						Db_redis.Set_templatestyles(css_ttl.Full_db(), css_src);
+				}
 			}
 			else {
 				css_ignore = true;
 			}
-
 		}
-		if (css_src == null) {
+		if (css_page_id == 0) {
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "Template_styles_nde.page_not_found: wiki=~{0} page=~{1} css_ttl=~{2}", wiki.Domain_bry(), ctx.Page().Url_bry_safe(), css_ttl_bry);
 		}
 		ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_end);
@@ -117,7 +127,7 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 			bfr.Add_str_a7(formatTagError("Invalid title for TemplateStyles src attribute."));
 			return;
 		}
-		if (css_src == null) {
+		if (css_page_id == 0) {
 			bfr.Add_str_a7(formatTagError("Page " + String_.new_u8(css_ttl_bry) + " has no content."));
 			return;
 		}
@@ -125,17 +135,11 @@ public class Template_styles_nde implements Xox_xnde, Mwh_atr_itm_owner2 {
 		// ignore css_ignore and use the presence in css_page_ids
 		//if (!css_ignore) {
 		Hash_adp__int css_page_ids = (Hash_adp__int)ctx.Page().Kv_data().Get_or_make(Template_styles_kv_itm.Instance);
-		if (css_page_ids.Get_by_or_null(css_page_id) != null) {
+		if (css_page_ids.Get_by_or_null(css_page_id) != null && css_src != null) {
 			css_page_ids.Del(css_page_id);
 
 			Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
 			try {
-				css_src = new XoCssTransformer(String_.new_u8(css_src))
-					.Minify()
-					.Prepend(prepend)
-//					.Url("upload.wikimedia.org", "www.xowa.org/xowa/fsys/bin/any/xowa/upload.wikimedia.org")
-					.Url("upload.wikimedia.org", "www.xowa.com/xowa/fsys/bin/any/xowa/upload.wikimedia.org")
-					.ToBry();
 				html_head.Bld_many(tmp_bfr, css_page_id, css_src);
 				Xoh_head_itm__css_dynamic css_dynamic = ctx.Page().Html_data().Head_mgr().Itm__css_dynamic();
 				css_dynamic.Enabled_y_();

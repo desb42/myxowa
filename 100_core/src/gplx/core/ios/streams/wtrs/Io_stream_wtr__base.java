@@ -20,8 +20,8 @@ public abstract class Io_stream_wtr__base implements Io_stream_wtr {
 	public Io_stream_wtr Url_(Io_url v) {url = v; return this;} 
 	public void Trg_bfr_(Bry_bfr v) {this.trg_bfr = v;} private Bry_bfr trg_bfr;
 	public byte[] To_ary_and_clear() {return trg_bfr.To_bry_and_clear();}
-	
-		private java.io.OutputStream zip_stream;
+
+	private java.io.OutputStream zip_stream;
 	private java.io.ByteArrayOutputStream mem_stream;
 	@Virtual public Io_stream_wtr Open() {
 		java.io.OutputStream bry_stream = null;

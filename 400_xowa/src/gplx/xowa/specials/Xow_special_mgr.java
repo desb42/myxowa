@@ -28,7 +28,8 @@ public class Xow_special_mgr {
 	private Xoa_app app;
 	public Xow_special_mgr(Xowe_wiki wiki, Xol_lang_itm lang) {
 		this.app = wiki.App();
-		hash = Hash_adp_bry.ci_u8(lang.Case_mgr());
+		//hash = Hash_adp_bry.ci_u8(lang.Case_mgr());
+		hash = Hash_adp_bry.ci_u8(lang.Case_mgr2());
 		page_allpages = new Xows_page_allpages(wiki);
 		Evt_lang_changed(wiki.Lang());
 	}
