@@ -53,7 +53,8 @@ public class Xow_page_mgr implements Gfo_invk {
 						Xol_lang_itm lang = wiki.Lang();
 						byte[] msg_key = ttl.Page_db();
 						Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
-						msg_key = lang.Case_mgr().Case_build_1st_lower(tmp_bfr, msg_key, 0, msg_key.length);
+//						msg_key = lang.Case_mgr().Case_build_1st_lower(tmp_bfr, msg_key, 0, msg_key.length);
+						msg_key = DB_case_mgr.Case_build_1st_reuse(false, msg_key);
 						byte[] msg_val = Xol_msg_mgr_.Get_msg_itm(tmp_bfr, wiki, wiki.Lang(), msg_key).Val();	// NOTE: do not change to Get_msg_val; Get_msg_val, also replaces $1 with values, and $1 needs to be preserved for callers;
 						rv.Db().Text().Text_bry_(msg_val);
 						tmp_bfr.Mkr_rls();

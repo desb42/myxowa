@@ -297,8 +297,7 @@ end
 -- Check for stuff that can't even be passed to PHP properly and other stuff
 -- that gives different error messages in different versions of PHP
 local function checkForJsonEncode( t, seen, lvl )
-	local tp = type( t )
-	if tp == 'table' then
+	if type(t) == 'table' then
 		if seen[t] then
 			error( "mw.text.jsonEncode: Cannot use recursive tables", lvl )
 		end
@@ -314,12 +313,17 @@ local function checkForJsonEncode( t, seen, lvl )
 			checkForJsonEncode( v, seen, lvl + 1 )
 		end
 		seen[t] = nil
-	elseif tp == 'number' then
+	elseif type( t ) == 'number' then
 		if t ~= t or t >= math.huge or t <= -math.huge then
 			error( "mw.text.jsonEncode: Cannot encode non-finite numbers", lvl )
 		end
-	elseif tp ~= 'boolean' and tp ~= 'string' and tp ~= 'nil' then
-		error( string.format( "mw.text.jsonEncode: Cannot encode type '%s'", tp ), lvl )
+	else
+		if type( t ) == 'string' then return end
+		local tp = type( t )
+		local a = 1
+		if tp ~= 'boolean' and tp ~= 'string' and tp ~= 'nil' then
+			error( string.format( "mw.text.jsonEncode: Cannot encode type '%s'", tp ), lvl )
+		end
 	end
 end
 

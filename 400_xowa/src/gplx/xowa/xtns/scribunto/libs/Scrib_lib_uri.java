@@ -26,7 +26,8 @@ public class Scrib_lib_uri implements Scrib_lib {
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_uri(core);}
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();
-		mod = core.RegisterInterface(this, "mw.uri.lua", core.Core_mgr().Get_text(script_dir, "mw.uri.lua"));
+		//mod = core.RegisterInterface(this, "mw.uri.lua", core.Core_mgr().Get_text(script_dir, "mw.uri.lua"));
+		mod = core.RegisterInterface(this, "mw.uri.lua", core.Fsys_mgr().Get_or_null("mw.uri"));
 		//mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.uri.lua"));	// NOTE: defaultUrl handled by Init_lib_url
 		notify_page_changed_fnc = mod.Fncs_get_by_key("notify_page_changed");
 		return mod;

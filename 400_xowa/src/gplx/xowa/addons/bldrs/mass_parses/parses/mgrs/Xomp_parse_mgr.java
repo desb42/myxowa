@@ -80,7 +80,8 @@ public class Xomp_parse_mgr {
 
 
 			// make wkr
-			Xomp_parse_wkr wkr = new Xomp_parse_wkr(this, cfg, mgr_db, page_pool, prog_mgr, file_orig_wkr, ns_ord_mgr, wkr_wiki, indexer, i + wkr_uid_bgn);
+//			Xomp_parse_wkr wkr = new Xomp_parse_wkr(this, cfg, mgr_db, page_pool, prog_mgr, file_orig_wkr, ns_ord_mgr, wkr_wiki, indexer, i + wkr_uid_bgn);
+			Xomp_parse_wkr wkr = new Xomp_parse_wkr(this, cfg, mgr_db, page_pool, prog_mgr, new Xof_orig_wkr__img_links(wiki), ns_ord_mgr, wkr_wiki, indexer, i + wkr_uid_bgn);
 			wkrs[i] = wkr;
 		}
 

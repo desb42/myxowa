@@ -90,7 +90,7 @@ public class Xof_xfer_queue_base_fxt {
 		if (src_fils != null) {
 			for (int i = 0; i < src_fils.length; i++) {
 				Io_fil src_fil = src_fils[i];
-				Io_mgr.Instance.SaveFilStr(src_fil.Url(), src_fil.Data());
+				Io_mgr.Instance.SaveFilStr(src_fil.Url(), String_.new_u8(src_fil.Data()));
 			}
 		}
 	}
@@ -98,16 +98,16 @@ public class Xof_xfer_queue_base_fxt {
 		for (int i = 0; i < trg_fils.length; i++) {
 			Io_fil trg_fil = trg_fils[i];
 			String data = Io_mgr.Instance.LoadFilStr(trg_fil.Url());
-			Tfds.Eq_str_lines(trg_fil.Data(), data, trg_fil.Url().Raw());
+			Tfds.Eq_str_lines(String_.new_u8(trg_fil.Data()), data, trg_fil.Url().Raw());
 		}		
 	}
-	public void	 save_(Io_fil v)						{Io_mgr.Instance.SaveFilStr(v.Url(), v.Data());}
-	public Io_fil reg_(String url, String... v)	{return new Io_fil(Io_url_.mem_fil_(url), String_.Concat_lines_nl(v));}
+	public void	 save_(Io_fil v)						{Io_mgr.Instance.SaveFilStr(v.Url(), String_.new_u8(v.Data()));}
+	public Io_fil reg_(String url, String... v)	{return new Io_fil(Io_url_.mem_fil_(url), Bry_.new_u8(String_.Concat_lines_nl(v)));}
 	public Io_fil img_(String url_str, int w, int h)	{return file_(url_str, file_img(w, h));}
 	public Io_fil svg_(String url_str, int w, int h)	{return file_(url_str, file_svg(w, h));}
 	public Io_fil ogg_(String url_str)					{return file_(url_str, "");}
 	public void fil_absent(String url)					{Tfds.Eq_false(Io_mgr.Instance.ExistsFil(Io_url_.mem_fil_(url)), "fil should not exist: {0}", url);}
-	Io_fil file_(String url_str, String data)			{return new Io_fil(Io_url_.mem_fil_(url_str), data);}
+	Io_fil file_(String url_str, String data)			{return new Io_fil(Io_url_.mem_fil_(url_str), Bry_.new_u8(data));}
 	String file_img(int w, int h) {return String_.Format("{0},{1}", w, h);}
 	String file_svg(int w, int h) {return String_.Format("<svg width=\"{0}\" height=\"{1}\" />", w, h);}
 }

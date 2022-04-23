@@ -30,7 +30,8 @@ public class Scrib_lib_title implements Scrib_lib {
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_title(core);}
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();
-		mod = core.RegisterInterface(this, "mw.title.lua", core.Core_mgr().Get_text(script_dir, "mw.title.lua")
+		//mod = core.RegisterInterface(this, "mw.title.lua", core.Core_mgr().Get_text(script_dir, "mw.title.lua")
+		mod = core.RegisterInterface(this, "mw.title.lua", core.Fsys_mgr().Get_or_null("mw.title")
 		//mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.title.lua")
 			, Keyval_.new_("thisTitle", "")					// NOTE: pass blank; will be updated by GetCurrentTitle
 			, Keyval_.new_("NS_MEDIA", Xow_ns_.Tid__media)	// NOTE: MW passes down NS_MEDIA; this should be -2 on all wikis...

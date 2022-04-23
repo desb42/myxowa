@@ -31,7 +31,8 @@ public class Scrib_lib_proofread implements Scrib_lib { // REF.MW:https://github
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_proofread(core);}
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();
-		mod = core.RegisterInterface(this, "ProofreadPage.lua", core.Core_mgr().Get_text(script_dir, "ProofreadPage.lua")
+		//mod = core.RegisterInterface(this, "ProofreadPage.lua", core.Core_mgr().Get_text(script_dir, "ProofreadPage.lua")
+		mod = core.RegisterInterface(this, "ProofreadPage.lua", core.Fsys_mgr().Get_or_null("ProofreadPage")
 			, Keyval_.new_("NS_INDEX", core.Wiki().Ns_mgr().Ns_index_id())
 			, Keyval_.new_("NS_PAGE", core.Wiki().Ns_mgr().Ns_page_id())
 

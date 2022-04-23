@@ -16,7 +16,8 @@
 local HtmlBuilder = {}
 
 local util = require 'libraryUtil'
-local checkType = util.checkType
+local checkType_table = util.checkType_table
+local checkType_string = util.checkType_string
 local checkTypeMulti = util.checkTypeMulti
 
 local metatable = {}
@@ -222,8 +223,8 @@ end
 -- @param tagName
 -- @param args
 methodtable.tag = function( t, tagName, args )
-	checkType( 'tag', 1, tagName, 'string' )
-	checkType( 'tag', 2, args, 'table', true )
+	checkType_string( 'tag', 1, tagName)
+	checkType_table( 'tag', 2, args, true )
 	args = args or {}
 
 	args.parent = t
@@ -236,7 +237,7 @@ end
 --
 -- @param name
 methodtable.getAttr = function( t, name )
-	checkType( 'getAttr', 1, name, 'string' )
+	checkType_string( 'getAttr', 1, name)
 
 	local attr = getAttr( t, name )
 	if attr then
@@ -276,7 +277,7 @@ methodtable.attr = function( t, name, val )
 		return t
 	end
 
-	checkType( 'attr', 1, name, 'string' )
+	checkType_string( 'attr', 1, name)
 	checkTypeMulti( 'attr', 2, val, { 'string', 'number', 'nil' } )
 
 	-- if caller sets the style attribute explicitly, then replace all styles
@@ -413,8 +414,8 @@ end
 -- @param tagName
 -- @param args
 function HtmlBuilder.create( tagName, args )
-	checkType( 'mw.html.create', 1, tagName, 'string', true )
-	checkType( 'mw.html.create', 2, args, 'table', true )
+	checkType_string( 'mw.html.create', 1, tagName, true )
+	checkType_table( 'mw.html.create', 2, args, true )
 	return createBuilder( tagName, args )
 end
 

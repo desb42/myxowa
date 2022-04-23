@@ -27,9 +27,12 @@ public class Xop_keeplist_wiki_srl extends Dsv_wkr_base {
 	@Override public Dsv_fld_parser[] Fld_parsers() {return new Dsv_fld_parser[] {Dsv_fld_parser_.Bry_parser, Dsv_fld_parser_.Bry_parser, Dsv_fld_parser_.Bry_parser};}
 	@Override public boolean Write_bry(Dsv_tbl_parser parser, int fld_idx, byte[] src, int bgn, int end) {
 		switch (fld_idx) {
-			case 0: wiki_bry  = Xoa_ttl.Replace_spaces(case_mgr.Case_build_lower(Bry_.Mid(src, bgn, end))); return true;
-			case 1: keeps_bry = Xoa_ttl.Replace_spaces(case_mgr.Case_build_lower(Bry_.Mid(src, bgn, end))); return true;
-			case 2: skips_bry = Xoa_ttl.Replace_spaces(case_mgr.Case_build_lower(Bry_.Mid(src, bgn, end))); return true;
+//			case 0: wiki_bry  = Xoa_ttl.Replace_spaces(case_mgr.Case_build_lower(Bry_.Mid(src, bgn, end))); return true;
+//			case 1: keeps_bry = Xoa_ttl.Replace_spaces(case_mgr.Case_build_lower(Bry_.Mid(src, bgn, end))); return true;
+//			case 2: skips_bry = Xoa_ttl.Replace_spaces(case_mgr.Case_build_lower(Bry_.Mid(src, bgn, end))); return true;
+			case 0: wiki_bry  = Xoa_ttl.Replace_spaces(DB_case_mgr.Case_build_reuse(false, Bry_.Mid(src, bgn, end))); return true;
+			case 1: keeps_bry = Xoa_ttl.Replace_spaces(DB_case_mgr.Case_build_reuse(false, Bry_.Mid(src, bgn, end))); return true;
+			case 2: skips_bry = Xoa_ttl.Replace_spaces(DB_case_mgr.Case_build_reuse(false, Bry_.Mid(src, bgn, end))); return true;
 			default: return false;
 		}
 	}

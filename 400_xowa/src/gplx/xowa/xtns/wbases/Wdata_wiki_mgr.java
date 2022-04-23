@@ -173,7 +173,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	}
 	public void Resolve_to_bfr(Bry_bfr bfr, Xowe_wiki wiki, Wbase_claim_grp prop_grp, byte[] lang_key, boolean mode_is_statements) {
 //		synchronized (thread_lock) {	// LOCK:must synchronized b/c prop_val_visitor has member bfr which can get overwritten; DATE:2016-07-06
-			if (hwtr_mgr == null) Hwtr_mgr_assert();
+			Hwtr_mgr_assert();
 			int len = prop_grp.Len();
 			Wbase_claim_base selected = null;
 			// this does two things
@@ -228,8 +228,8 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
                         return true;
 	}
 	private void Hwtr_mgr_assert() {
-		if (hwtr_mgr != null) return;
 		synchronized (thread_lock) {
+		if (hwtr_mgr != null) return;
 		Xoapi_toggle_mgr toggle_mgr = app.Api_root().Html().Page().Toggle_mgr();
 		Xoapi_wikibase wikibase_api = app.Api_root().Xtns().Wikibase();
 		hwtr_mgr = new Wdata_hwtr_mgr();

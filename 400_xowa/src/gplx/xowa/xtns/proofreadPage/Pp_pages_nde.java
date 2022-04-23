@@ -369,7 +369,8 @@ public class Pp_pages_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			Pp_index_arg arg = (Pp_index_arg)invk_args.Get_at(i);
 			full_bfr
 				.Add_byte_pipe()		// |
-				.Add(wiki.Lang().Case_mgr().Case_build_lower(arg.Key()))	// per MW, always lowercase key
+//				.Add(wiki.Lang().Case_mgr().Case_build_lower(arg.Key()))	// per MW, always lowercase key
+				.Add(DB_case_mgr.Case_build_reuse(false, arg.Key()))	// per MW, always lowercase key
 				.Add_byte_eq()			// =
 				.Add(arg.Val())
 				;

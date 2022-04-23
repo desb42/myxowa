@@ -557,6 +557,7 @@ public class Bry_bfr {
                 Bry_.Copy_to(bfr, bfr_bgn, bfr_len, trg, plen);
                 Bry_.Copy_to(suffix, 0, slen, trg, plen + blen);
                 bfr_max = size;
+                bfr = trg;
             }
             else {
                 //take bfr_bgn into account

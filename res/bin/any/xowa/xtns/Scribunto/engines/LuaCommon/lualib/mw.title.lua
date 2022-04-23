@@ -379,8 +379,9 @@ function title.notify_page_changed()
   end
   local delete_list = {}
   for k,v in pairs(_G) do
-    local type_name = type(v)
-    if not system_globals[k] and type_name ~= 'function' and type_name ~= 'table' then
+--    local type_name = type(v)
+--    if not system_globals[k] and type_name ~= 'function' and type_name ~= 'table' then
+    if not system_globals[k] and type(v) ~= 'function' and type(v) ~= 'table' then
       delete_list[k] = k
     end
   end

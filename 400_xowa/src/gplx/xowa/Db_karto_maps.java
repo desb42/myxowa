@@ -185,55 +185,67 @@ public class Db_karto_maps {
 		}
 		else if (gtype.equals("LineString")) {
 			Json_kv kv = geometry.Get_kv("coordinates");
-			Json_itm itm = kv.Val();
-			if (itm instanceof Json_nde) {
-				Json_nde points_nde = Json_nde.Cast(itm);
-				int plen = points_nde.Len();
-				for (int k = 0; k < plen; k++) {
-					if (k > 0)
-						coords += ",";
-					Json_itm pitm = points_nde.Get_at(k);
-					coords += "[" + coordinates(pitm) + "]";
-				}
-			}
-			else {
-				Json_ary points = Json_ary.cast(itm);
-				int plen = points.Len();
-				for (int k = 0; k < plen; k++) {
-					if (k > 0)
-						coords += ",";
-					Json_itm pitm = points.Get_at(k);
-					coords += "[" + coordinates(pitm) + "]";
-				}
-			}
+			coords = getcoordinates(kv.Val());
 			geotxt = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"LineString\",\"coordinates\":[" + coords + "]}" + Genproperties(nde, "") + "}";
 		}
 		else if (gtype.equals("Polygon")) {
 			Json_kv kv = geometry.Get_kv("coordinates");
 			Json_itm itm = kv.Val();
-			Json_ary gons = Json_ary.cast(itm);
-			int glen = gons.Len();
-                        coords = "[";
-			for (int k = 0; k < glen; k++) {
-				if (k > 0)
-					coords += ",";
-				Json_itm poitm = gons.Get_at(k);
-                                Json_ary points = Json_ary.cast(poitm);
-                                int plen = points.Len();
-                                for (int j = 0; j < plen; j++) {
-                                        if (j > 0)
-                                                coords += ",";
-                                        Json_itm pitm = points.Get_at(j);
-                                        coords += "[" + coordinates(pitm) + "]";
-                                }
-                                coords += "]";
-                        }
+			coords = "[";
+			if (itm instanceof Json_nde) {
+				Json_nde gons_nde = Json_nde.Cast(itm);
+				int glen = gons_nde.Len();
+				coords = "[";
+				for (int k = 0; k < glen; k++) {
+					if (k > 0)
+						coords += ",";
+					Json_kv kvgon = (Json_kv)gons_nde.Get_at(k);
+					coords += getcoordinates(kvgon.Val());
+					coords += "]";
+				}
+			}
+			else {
+				Json_ary gons = Json_ary.cast(itm);
+				int glen = gons.Len();
+				coords = "[";
+				for (int k = 0; k < glen; k++) {
+					if (k > 0)
+						coords += ",";
+					Json_itm poitm = gons.Get_at(k);
+					coords += getcoordinates(poitm);
+					coords += "]";
+				}
+			}
 			geotxt = "{\"type\":\"Feature\"" + Genproperties(nde, "") + ",\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[" + coords + "]}}";
-                }
+		}
 		else {
 			Xoa_app_.Usr_dlg().Log_many("", "", "karto: bad feature page=~{0} type=~{1}", ttl.Full_db(), gtype);
 		}
 		return geotxt;
+	}
+	private String getcoordinates(Json_itm itm) {
+		String coords = "";
+		if (itm instanceof Json_nde) {
+			Json_nde points_nde = Json_nde.Cast(itm);
+			int plen = points_nde.Len();
+			for (int k = 0; k < plen; k++) {
+				if (k > 0)
+					coords += ",";
+				Json_kv pkv = (Json_kv)points_nde.Get_at(k);
+				coords += "[" + coordinates(pkv.Val()) + "]";
+			}
+		}
+		else {
+			Json_ary points = Json_ary.cast(itm);
+			int plen = points.Len();
+			for (int k = 0; k < plen; k++) {
+				if (k > 0)
+					coords += ",";
+				Json_itm pitm = points.Get_at(k);
+				coords += "[" + coordinates(pitm) + "]";
+			}
+		}
+		return coords;
 	}
 	private byte[] Encode(byte[] src) {
 		int src_len = src.length;

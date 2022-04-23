@@ -107,9 +107,12 @@ public class Xol_case_mgr implements Gfo_invk, Gfo_case_mgr {
 	public byte[] Case_build_lower(byte[] src) {return Case_build_lower(src, 0, src.length);}
 	public byte[] Case_build_lower(byte[] src, int bgn, int end) {return Case_build(Bool_.N, src, bgn, end);}
 	public byte[] Case_build(boolean upper, byte[] src, int bgn, int end) {
+            if (bgn == 0) {
+                int a=1;
+            }
 		Btrie_fast_mgr trie = upper ? upper_trie : lower_trie;
 		Btrie_rv trv = new Btrie_rv();		// TS.MEM: DATE:2016-07-12
-		Bry_bfr tmp_bfr = Bry_bfr_.New();	// TS.MEM: DATE:2016-07-12
+		Bry_bfr tmp_bfr = Bry_bfr_.New_w_size(end - bgn);	// TS.MEM: DATE:2016-07-12
 		int pos = bgn;
 		while (true) {
 			if (pos >= end) break;

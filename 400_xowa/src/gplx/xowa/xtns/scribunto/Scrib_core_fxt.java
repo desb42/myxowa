@@ -87,7 +87,7 @@ public class Scrib_core_fxt {
 		Tfds.Eq_ary_str(expd_keys, actl_keys);
 		return this;
 	}
-	public Scrib_core_fxt Test_LoadLibraryFromFile(String name, String text, Keyval... expd) {
+	public Scrib_core_fxt Test_LoadLibraryFromFile(String name, byte[] text, Keyval... expd) {
 		Scrib_lua_mod actl_lib = core.LoadLibraryFromFile(name, text);
 		int actl_len = actl_lib.Fncs_len();
 		Keyval[] actl = new Keyval[actl_len];

@@ -684,13 +684,20 @@ function MWServer:tostring(val)
 	if mt and mt.__tostring then
 		return mt.__tostring(val)
 	end
-	local typeName = type(val)
-	local nonPointerTypes = {number = true, string = true, boolean = true, ['nil'] = true}
-	if nonPointerTypes[typeName] then
-		return tostring(val)
-	else
-		return typeName
-	end
+
+	if type( val ) == 'string' then return tostring(val) end
+	if type( val ) == 'number' then return tostring(val) end
+	if type( val ) == 'boolean' then return tostring(val) end
+	if type( val ) == 'nil' then return tostring(val) end
+	return type(val)
+
+--	local typeName = type(val)
+--	local nonPointerTypes = {number = true, string = true, boolean = true, ['nil'] = true}
+--	if nonPointerTypes[typeName] then
+--		return tostring(val)
+--	else
+--		return typeName
+--	end
 end
 
 return MWServer

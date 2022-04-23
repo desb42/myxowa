@@ -45,13 +45,13 @@ public class Scrib_core_tst {
 	@Test  public void LoadLibraryFromFile() {
 		fxt	.Init_server_prep_add("a:3:{s:2:\"op\";s:6:\"return\";s:7:\"nvalues\";i:1;s:6:\"values\";a:1:{i:1;i:15;}}")
 			.Init_server_prep_add("a:3:{s:2:\"op\";s:6:\"return\";s:7:\"nvalues\";i:1;s:6:\"values\";a:1:{i:1;a:2:{s:5:\"prc_2\";O:42:\"Scribunto_LuaStandaloneInterpreterFunction\":1:{s:2:\"id\";i:2;}s:5:\"prc_3\";O:42:\"Scribunto_LuaStandaloneInterpreterFunction\":1:{s:2:\"id\";i:3;}}}}")
-			.Test_LoadLibraryFromFile("lib_name", "doesn't matter", fxt.kv_("prc_2", 2), fxt.kv_("prc_3", 3));
+			.Test_LoadLibraryFromFile("lib_name", Bry_.new_a7("doesn't matter"), fxt.kv_("prc_2", 2), fxt.kv_("prc_3", 3));
 			;
 	}
 	@Test  public void LoadLibraryFromFile__rv_has_no_values() {	// PURPOSE: "package.lua" does not return any prc_ids
 		fxt	.Init_server_prep_add("a:3:{s:2:\"op\";s:6:\"return\";s:7:\"nvalues\";i:1;s:6:\"values\";a:1:{i:1;i:15;}}")
 			.Init_server_prep_add("a:3:{s:2:\"op\";s:6:\"return\";s:7:\"nvalues\";i:0;s:6:\"values\";a:0:{}}")
-			.Test_LoadLibraryFromFile("lib_name", "doesn't matter");
+			.Test_LoadLibraryFromFile("lib_name", Bry_.new_a7("doesn't matter"));
 			;
 	}
 	@Test  public void CallFunction_cbk() {	// PURPOSE: 'simulates interpreter.CallFunction(mw_lib.Fncs_get_by_key("setup").Id(), "allowEnvFuncs", allow_env_funcs);'

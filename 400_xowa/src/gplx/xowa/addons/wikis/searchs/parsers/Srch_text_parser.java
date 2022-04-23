@@ -74,7 +74,8 @@ public class Srch_text_parser {
 		}
 	}
 	public void Parse(boolean lcase, byte[] src_orig, int bgn, int end_orig) {
-		this.src = lcase ? case_mgr.Case_build_lower(src_orig) : src_orig;
+//		this.src = lcase ? case_mgr.Case_build_lower(src_orig) : src_orig;
+		this.src = lcase ? DB_case_mgr.Case_build_reuse(false, src_orig) : src_orig;
 		this.end = end_orig + (src.length - src_orig.length);
 		this.cur_bgn = dash_bgn = Srch_text_parser.None;
 		int pos = bgn;

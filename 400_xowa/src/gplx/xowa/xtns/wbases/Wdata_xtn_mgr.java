@@ -36,6 +36,7 @@ public class Wdata_xtn_mgr extends Xox_mgr_base {
 	private static void Xtn_load_i18n(Xowe_wiki wiki, String... nest_paths) {
 		Xoae_app app = wiki.Appe();
 		Io_url url = app.Fsys_mgr().Bin_xtns_dir().GenSubFil_nest(nest_paths);
+                //System.out.println(url);
 		Xob_i18n_parser.Load_msgs(false, wiki.Lang(), url);
 	}
 	private static final String XTN_KEY_STR = "Wikibase"; public static final    byte[] XTN_KEY = Bry_.new_a7(XTN_KEY_STR);

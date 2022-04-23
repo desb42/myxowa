@@ -26,13 +26,17 @@ public class Scrib_fsys_mgr {
 		lib_dirs[1] = script_dir.GenSubDir("luabit");
 		lib_dirs[2] = script_dir.GenSubDir("ustring");
 	}
-	public String Get_or_null(String name) {
+	public byte[] Get_or_null(String name) {
 		if (libs == null) libs = libs_init(script_dir);
 		Object lib_fil_obj = libs.Get_by(name); if (lib_fil_obj == null) return null;
 		gplx.core.ios.Io_fil lib_fil = (gplx.core.ios.Io_fil)lib_fil_obj;
-		String lib_data = lib_fil.Data();
+		byte[] lib_data = lib_fil.Data();
 		if (lib_data == null) {
-			lib_data = Io_mgr.Instance.LoadFilStr(lib_fil.Url());
+			Io_url url = lib_fil.Url().GenNewExt(".lua.dump");
+			java.io.File fle = new java.io.File(url.Raw());
+			if (!fle.exists())
+				url = lib_fil.Url();
+			lib_data = Io_mgr.Instance.LoadFilBry(url);
 			lib_fil.Data_(lib_data);
 		}
 		return lib_data;

@@ -15,9 +15,9 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.core.ios; import gplx.*;
 public class Io_fil implements gplx.CompareAble {
-	public Io_fil(Io_url url, String data) {this.url = url; this.data = data;}
+	public Io_fil(Io_url url, byte[] data) {this.url = url; this.data = data;}
 	public Io_url Url() {return url;} public Io_fil Url_(Io_url v) {url = v; return this;} Io_url url;
-	public String Data() {return data;} public Io_fil Data_(String v) {data = v; return this;} private String data;
+	public  byte[] Data() {return data;} public Io_fil Data_(byte[] v) {data = v; return this;} private byte[] data;
 	public int compareTo(Object obj) {
 		return gplx.CompareAble_.Compare(url.Raw(), ((Io_fil)obj).Url().Raw());
 	}
@@ -26,7 +26,7 @@ public class Io_fil implements gplx.CompareAble {
 		Io_fil[] rv = new Io_fil[url_ary_len];
 		for (int i = 0; i < url_ary_len; i++) {
 			Io_url url = url_ary[i];
-			String data = Io_mgr.Instance.LoadFilStr(url);
+			byte[] data = Io_mgr.Instance.LoadFilBry(url);
 			Io_fil fil = new Io_fil(url, data);
 			rv[i] = fil;
 		}

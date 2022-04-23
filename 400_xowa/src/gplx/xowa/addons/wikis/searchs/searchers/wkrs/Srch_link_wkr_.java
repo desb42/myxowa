@@ -84,7 +84,8 @@ class Srch_link_wkr_ {
 		return rv;
 	}
 	public static boolean Matches(Srch_crt_itm node, Srch_text_parser text_parser, Xol_case_mgr case_mgr, byte[] ttl) {
-		byte[] ttl_lower = case_mgr.Case_build_lower(Xoa_ttl.Replace_unders(ttl));
+//		byte[] ttl_lower = case_mgr.Case_build_lower(Xoa_ttl.Replace_unders(ttl));
+		byte[] ttl_lower = DB_case_mgr.Case_build_reuse(false, Xoa_ttl.Replace_unders(ttl));
 		byte[][] ttl_words = text_parser.Parse_to_bry_ary(Bool_.Y, ttl);
 		return Matches(node, ttl_lower, ttl_words);
 	}

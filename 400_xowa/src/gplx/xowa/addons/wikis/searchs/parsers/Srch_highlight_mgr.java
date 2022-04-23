@@ -25,7 +25,8 @@ public class Srch_highlight_mgr {
 	public Srch_highlight_mgr Search_(byte[] srch_mc_bry) {
 		synchronized (tmp_bfr) {
 			// build array of search_words
-			byte[] srch_lc_bry = case_mgr.Case_build_lower(srch_mc_bry);
+//			byte[] srch_lc_bry = case_mgr.Case_build_lower(srch_mc_bry);
+			byte[] srch_lc_bry = DB_case_mgr.Case_build_reuse(false, srch_mc_bry);
 			byte[][] srch_lc_ary = Bry_split_.Split(srch_lc_bry, Byte_ascii.Space, Bool_.Y);
 			this.srch_words_len = srch_lc_ary.length;
 			this.srch_lc_itms = new Srch_highlight_itm[srch_words_len];
@@ -42,7 +43,8 @@ public class Srch_highlight_mgr {
 	public byte[] Highlight(byte[] page_mc_bry) {
 		synchronized (tmp_bfr) {
 			byte[][]	page_mc_words = Bry_split_.Split(page_mc_bry, Byte_ascii.Space, Bool_.Y);
-			byte[][]	page_lc_words = Bry_split_.Split(case_mgr.Case_build_lower(page_mc_bry), Byte_ascii.Space, Bool_.Y);
+//			byte[][]	page_lc_words = Bry_split_.Split(case_mgr.Case_build_lower(page_mc_bry), Byte_ascii.Space, Bool_.Y);
+			byte[][]	page_lc_words = Bry_split_.Split(DB_case_mgr.Case_build_reuse(false, Bry_.Mid(page_mc_bry, 0)), Byte_ascii.Space, Bool_.Y);
 			int			page_words_len = page_lc_words.length;
 			boolean[]		page_words_done = new boolean[page_words_len];
 

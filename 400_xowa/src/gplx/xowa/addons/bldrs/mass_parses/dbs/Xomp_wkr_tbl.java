@@ -69,11 +69,13 @@ public class Xomp_wkr_tbl implements Db_tbl {
 					break;
 				}
 				try {
-					conn.Stmt_update(tbl_name, String_.Ary(fld_wkr_uid), fld_wkr_status, fld_wkr_status_time, fld_wkr_exec_count, fld_wkr_exec_time).Clear()
+					Db_stmt stmt = conn.Stmt_update(tbl_name, String_.Ary(fld_wkr_uid), fld_wkr_status, fld_wkr_status_time, fld_wkr_exec_count, fld_wkr_exec_time);
+					stmt.Clear()
 						.Val_int(fld_wkr_status, Status__running).Val_str(fld_wkr_status_time, Datetime_now.Get_force().XtoStr_fmt_yyyyMMdd_HHmmss())
 						.Val_int(fld_wkr_exec_count, wkr_exec_count).Val_int(fld_wkr_exec_time, (int)(wkr_exec_time / 1000))
 						.Crt_int(fld_wkr_uid, wkr_uid)
 						.Exec_update();
+					stmt.Rls();
 					break;	// exit loop
 				} catch (Exception e) {
 					Gfo_usr_dlg_.Instance.Warn_many("", "", "unable to update status; try=~{0} err=~{1}", attempts, Err_.Message_gplx_log(e));
@@ -85,10 +87,12 @@ public class Xomp_wkr_tbl implements Db_tbl {
 	}
 	public void Update_status(int wkr_uid, int status) {
 		synchronized (thread_lock) {	// LOCK:wkr_tbl is shared by multiple threads
-			conn.Stmt_update(tbl_name, String_.Ary(fld_wkr_uid), fld_wkr_status, fld_wkr_status_time).Clear()
+			Db_stmt stmt = conn.Stmt_update(tbl_name, String_.Ary(fld_wkr_uid), fld_wkr_status, fld_wkr_status_time);
+			stmt.Clear()
 				.Val_int(fld_wkr_status, status).Val_str(fld_wkr_status_time, Datetime_now.Get_force().XtoStr_fmt_yyyyMMdd_HHmmss())
 				.Crt_int(fld_wkr_uid, wkr_uid)
 				.Exec_update();
+			stmt.Rls();
 		}
 	}
 	public void Rls() {}

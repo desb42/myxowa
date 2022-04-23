@@ -35,7 +35,8 @@ public class Srch_search_phrase {
 			orig = Bry_.Mid(orig, 0, orig_len - 1);
 			auto_wildcard = true;
 		}
-		byte[] lcase = case_mgr.Case_build_lower(orig);
+		//byte[] lcase = case_mgr.Case_build_lower(orig);
+		byte[] lcase = DB_case_mgr.Case_build_reuse(false, orig);
 		lcase = Auto_wildcard(lcase, auto_wildcard, syms);
 		return new Srch_search_phrase(auto_wildcard, orig, lcase, syms);
 	}

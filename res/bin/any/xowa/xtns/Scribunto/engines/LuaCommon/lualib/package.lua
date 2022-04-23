@@ -61,9 +61,16 @@ local _PRELOAD = package.preload
 -- check whether library is already loaded
 --
 local function loader_preload (name)
-	assert (type(name) == "string", format (
-		"bad argument #1 to `require' (string expected, got %s)", type(name)))
-	assert (type(_PRELOAD) == "table", "`package.preload' must be a table")
+--	assert (type(name) == "string", format (
+--		"bad argument #1 to `require' (string expected, got %s)", type(name)))
+--	assert (type(_PRELOAD) == "table", "`package.preload' must be a table")
+	if type(name) ~= "string" then
+		assert (false, format (
+			"bad argument #1 to `require' (string expected, got %s)", type(name)))
+	end
+	if type(_PRELOAD) ~= "table" then
+		assert (false, "`package.preload' must be a table")
+	end
 	return _PRELOAD[name]
 end
 
@@ -76,7 +83,10 @@ local _LOADERS = package.loaders
 --
 local function load (name, loaders)
 	-- iterate over available loaders
-	assert (type (loaders) == "table", "`package.loaders' must be a table")
+--	assert (type (loaders) == "table", "`package.loaders' must be a table")
+	if type (loaders) ~= "table" then
+		assert (false, "`package.loaders' must be a table")
+	end
 	for i, loader in ipairs (loaders) do
 		local f = loader (name)
 		if f then
@@ -93,8 +103,13 @@ local sentinel = function () end
 -- require
 --
 function _G.require (modname)
-	assert (type(modname) == "string", format (
-		"bad argument #1 to `require' (string expected, got %s)", type(modname)))
+-- this always evaluates the arguments!!!
+--		assert (type(modname) == "string", format (
+--			"bad argument #1 to `require' (string expected, got %s)", type(modname)))
+	if type(modname) ~= "string" then
+		assert (false, format (
+			"bad argument #1 to `require' (string expected, got %s)", type(modname)))
+	end
 	local p = _LOADED[modname]
 	if p then -- is it there?
 		if p == sentinel then
@@ -121,8 +136,11 @@ end
 -- package.seeall function
 --
 function _PACKAGE.seeall (module)
-	local t = type(module)
-	assert (t == "table", "bad argument #1 to package.seeall (table expected, got "..t..")")
+--	local t = type(module)
+--	assert (t == "table", "bad argument #1 to package.seeall (table expected, got "..t..")")
+	if type( module ) ~= 'table' then
+		assert (false, "bad argument #1 to package.seeall (table expected, got ".. type( module ) ..")")
+	end
 	local meta = getmetatable (module)
 	if not meta then
 		meta = {}

@@ -54,7 +54,7 @@ public class Io_mgr implements Gfo_evt_mgr_owner {	// exists primarily to gather
 	}
 	public void Create_fil_ary(Io_fil[] fil_ary) {
 		for (Io_fil fil : fil_ary)
-			SaveFilStr(fil.Url(), fil.Data());
+			SaveFilStr(fil.Url(), String_.new_u8(fil.Data()));
 	}
 	public Io_url[]						QueryDir_fils(Io_url dir) {return QueryDir_args(dir).ExecAsUrlAry();}
 	public IoEngine_xrg_queryDir		QueryDir_args(Io_url dir) {return IoEngine_xrg_queryDir.new_(dir);}

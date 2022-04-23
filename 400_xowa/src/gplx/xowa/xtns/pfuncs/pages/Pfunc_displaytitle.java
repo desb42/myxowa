@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,8 +13,9 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.pfuncs.pages; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.pfuncs.*;
-import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.*;
+package gplx.xowa.xtns.pfuncs.pages;
+import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.pfuncs.*;
+import gplx.xowa.htmls.core.htmls.*;
 import gplx.xowa.langs.kwds.*; import gplx.xowa.langs.cases.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.parsers.amps.*;
@@ -40,8 +41,8 @@ public class Pfunc_displaytitle extends Pf_func_base {
 			wiki.Html_mgr().Html_wtr().Write_tkn_to_html(tmp_bfr, display_ttl_ctx, Xoh_wtr_ctx.Alt, display_ttl_root.Data_mid(), display_ttl_root, 0, display_ttl_root);
 			byte[] val_html_lc = tmp_bfr.To_bry_and_clear();
 			Xol_case_mgr case_mgr = wiki.Lang().Case_mgr();
-			val_html_lc = Standardize_displaytitle_text(case_mgr, val_html_lc, Bool_.Y, amp_mgr);
-			byte[] page_ttl_lc = Standardize_displaytitle_text(case_mgr, page.Ttl().Full_txt(), Bool_.Y, amp_mgr);
+			val_html_lc = Standardize_displaytitle_text(val_html_lc, Bool_.Y, amp_mgr);
+			byte[] page_ttl_lc = Standardize_displaytitle_text(page.Ttl().Full_txt(), Bool_.Y, amp_mgr);
 			if (!Bry_.Eq(val_html_lc, page_ttl_lc)) {
 				Xoa_app_.Usr_dlg().Warn_many("", "", "DISPLAYTITLE fail:~{0} not ~{1}", val_html_lc, page_ttl_lc);
 				val_html = null;
@@ -50,9 +51,10 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		ctx.Page().Html_data().Display_ttl_(val_html);
 		tmp_bfr.Mkr_rls();
 	}
-	private static byte[] Standardize_displaytitle_text(Xol_case_mgr case_mgr, byte[] val, boolean change_underscore, Xop_amp_mgr amp_mgr) {
+	private static byte[] Standardize_displaytitle_text(byte[] val, boolean change_underscore, Xop_amp_mgr amp_mgr) {
 		byte[] rv = Replaceamp(val, change_underscore, amp_mgr);
-		rv = case_mgr.Case_build_lower(rv);							// lower-case
+//		rv = case_mgr.Case_build_lower(rv);							// lower-case
+		rv = DB_case_mgr.Case_build_reuse(false, rv);							// lower-case
 		if (rv.length > 1 && rv[0] == -50 && rv[1] == -68) { // U+03BC	µ	ce bc	GREEK SMALL LETTER MU
 			rv[0] = -62; // U+00B5	µ	c2 b5	MICRO SIGN
 			rv[1] = -75; // change from GREEK SMALL LETTER MU to MICRO SIGN
@@ -159,6 +161,8 @@ public class Pfunc_displaytitle extends Pf_func_base {
 */
 				case ' ':
 				case '\t':
+				case '\n':
+				case '\r':
 				case '_':
 					if (b == '_' && !change_underscore)
 						break;
@@ -208,8 +212,8 @@ public class Pfunc_displaytitle extends Pf_func_base {
 							break;
 						}
 					}
+					size = close - pos;
 					if (close < len) {
-						size = close - pos;
 						if (size > 5) {
 							if (src[pos] == 'r' && src[pos+1] == 'e' && src[pos+2] == 'f') {
 								byte c = src[pos+3];
@@ -242,9 +246,20 @@ public class Pfunc_displaytitle extends Pf_func_base {
 						size = close - pos;
 					}
 				case -30: // \xE2
-					if (pos + 1 < len && src[pos] == -128 && src[pos+1] == -109) { // \xE2\x80\x93 &ndash;
-						size = 2;
-						rb = Byte_ascii.Dash;
+					if (pos + 1 < len && src[pos] == -128) {
+						switch (src[pos+1]) {
+							case -109:  // \xE2\x80\x93 &ndash;
+								size = 2;
+								rb = Byte_ascii.Dash;
+								break;
+							case -103:  // \xE2\x80\x99 8217 \u2019 Right Single Quotation Mark (ignore)
+								size = 2;
+								break;
+							case -81: // \xE2\x80\x81 8239 \u202f Narrow No-Break Space
+								size = 2;
+								rb = Byte_ascii.Space;
+								break;
+						}
 					}
 					else if (pos + 1 < len && src[pos] == -120 && src[pos+1] == -110) { // \xE2\x88\x92
 						size = 2;
@@ -286,6 +301,17 @@ public class Pfunc_displaytitle extends Pf_func_base {
 		}
 		if (bfr != null) {
 			bfr.Add_mid(src, sofar, len);
+			// final trim just in case
+			len = bfr.Len();
+			while (len > 0) {
+				byte b = bfr.Bfr()[len-1];
+				if (b == ' ' || b == '\t' || b == '\n') {
+					len--;
+					bfr.Del_by_1();
+				}
+				else
+					break;
+			}
 			return bfr.To_bry();
 		}
 		else

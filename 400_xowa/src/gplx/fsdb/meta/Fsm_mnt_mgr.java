@@ -28,6 +28,7 @@ public class Fsm_mnt_mgr implements Gfo_invk {
 			mnt_ary[i].Ctor_by_load(db_core);
 		}
 		this.insert_idx = cfg_tbl.Select_int(Cfg_grp_core, Cfg_key_mnt_insert_idx);
+                cfg_tbl.Rls();
 		Db_cfg_hash cfg_hash = this.Mnts__get_main().Cfg_mgr().Grps_get_or_load(Xof_fsdb_mgr_cfg.Grp_xowa);
 		boolean use_thumb_w	= cfg_hash.Get_by(Xof_fsdb_mgr_cfg.Key_upright_use_thumb_w).To_yn_or_n();
 		boolean fix_default	= cfg_hash.Get_by(Xof_fsdb_mgr_cfg.Key_upright_fix_default).To_yn_or_n();
@@ -53,11 +54,13 @@ public class Fsm_mnt_mgr implements Gfo_invk {
 		cfg_tbl.Upsert_str(Xof_fsdb_mgr_cfg.Grp_xowa, Xof_fsdb_mgr_cfg.Key_gallery_packed			, "y");
 		cfg_tbl.Upsert_str(Xof_fsdb_mgr_cfg.Grp_xowa, Xof_fsdb_mgr_cfg.Key_upright_use_thumb_w		, "y");
 		cfg_tbl.Upsert_str(Xof_fsdb_mgr_cfg.Grp_xowa, Xof_fsdb_mgr_cfg.Key_upright_fix_default		, "y");
+                cfg_tbl.Rls();
 	}
 	public static void Patch_core(Db_cfg_tbl cfg_tbl) {	// NOTE: thes need to be upserts else upgrading will fail; DATE:2015-05-23
 		cfg_tbl.Upsert_int	(Fsm_cfg_mgr.Grp_core, Fsm_cfg_mgr.Key_next_id					, 1);		// start next_id at 1
 		cfg_tbl.Upsert_yn	(Fsm_cfg_mgr.Grp_core, Fsm_cfg_mgr.Key_schema_thm_page			, Bool_.Y);	// new dbs automatically have page and time in fsdb_xtn_tm
 		cfg_tbl.Upsert_yn	(Fsm_cfg_mgr.Grp_core, Fsm_cfg_mgr.Key_patch__next_id			, Bool_.Y);	// new dbs automatically have correct next_id
+                cfg_tbl.Rls();
 	}
 	public static final String Cfg_grp_core = "core", Cfg_key_mnt_insert_idx = "mnt.insert_idx";	// SERIALIZED
 }

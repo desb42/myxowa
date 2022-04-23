@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2021-2020 gnosygnu@gmail.com
+Copyright (C) 2021-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -21,8 +21,9 @@ import gplx.xowa.Xoae_page;
 import gplx.xowa.Xowe_wiki;
 import gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx;
 
-import gplx.xowa.Db_readwrite;
-import gplx.String_;
+//import gplx.xowa.Db_readwrite;
+//import gplx.String_;
+import gplx.xowa.DB_case_mgr;
 
 public class Xop_parser_ {
 	public static final int Doc_bgn_bos = -1, Doc_bgn_char_0 = 0;
@@ -70,8 +71,9 @@ public class Xop_parser_ {
 		}
 		if (prv_byte >= Byte_ascii.Ascii_min && prv_byte <= Byte_ascii.Ascii_max) return true;	// consider all other ASCII chars as true; EX: \t\n !, etc; 
 		prv_pos = gplx.core.intls.Utf8_.Get_prv_char_pos0_old(src, prv_pos);
-		prv_byte = src[prv_pos];
-		boolean prv_char_is_letter = ctx.Lang().Case_mgr().Match_any_exists(prv_byte, src, prv_pos, bgn_pos);
+//		prv_byte = src[prv_pos];
+//		boolean prv_char_is_letter = ctx.Lang().Case_mgr().Match_any_exists(prv_byte, src, prv_pos, bgn_pos);
+		boolean prv_char_is_letter = DB_case_mgr.Match_any_exists(src, bgn_pos, prv_pos);
 		return !prv_char_is_letter;
 	}
 }

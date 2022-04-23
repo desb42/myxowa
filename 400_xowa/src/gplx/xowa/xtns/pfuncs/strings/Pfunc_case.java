@@ -28,12 +28,13 @@ public class Pfunc_case extends Pf_func_base {	// EX: {{lc:A}} -> a
 		Xol_lang_itm lang = ctx.Wiki().Lang();
 		boolean upper = case_type == Xol_lang_itm.Tid_upper;
 		if (first) {
-			Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
-			argx = lang.Case_mgr().Case_build_1st(tmp_bfr, upper, argx, 0, argx_len);
-			tmp_bfr.Mkr_rls();
+//			Bry_bfr tmp_bfr = ctx.Wiki().Utl__bfr_mkr().Get_b512();
+//			argx = lang.Case_mgr().Case_build_1st(tmp_bfr, upper, argx, 0, argx_len);
+//			tmp_bfr.Mkr_rls();
+			argx = DB_case_mgr.Case_build_1st_reuse(upper, argx);
 		}
 		else
-			argx = lang.Case_mgr().Case_build(upper, argx, 0, argx_len);
+			argx = DB_case_mgr.Case_build_reuse(upper, argx);
 		bfr.Add(argx);
 	}
 }	

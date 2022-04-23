@@ -205,6 +205,7 @@ public class Xomp_parse_wkr implements Gfo_invk {
 					wiki.Cache_mgr().Free_mem__page();
 					wiki.Parser_mgr().Scrib().Core_term();
 					wiki.Appe().Wiki_mgr().Wdata_mgr().Clear();
+//					System.out.println(Thread.currentThread().getName() + "-" + Integer.toString(done_count));
 				}
 				if (done_count % commit_interval == 0) {
 					wkr_db.Conn().Txn_sav();

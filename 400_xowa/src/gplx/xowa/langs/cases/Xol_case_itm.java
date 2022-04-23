@@ -20,6 +20,8 @@ public interface Xol_case_itm extends Gfo_case_itm {
 	byte Tid();
 	byte[] Src_ary();
 	byte[] Trg_ary();
+	byte[] Upper();
+	byte[] Lower();
 	void Case_build_upper(Bry_bfr bfr);
 	void Case_build_lower(Bry_bfr bfr);
 	void Case_reuse_upper(byte[] ary, int bgn, int len);
@@ -42,7 +44,9 @@ class Xol_case_itm_byt implements Xol_case_itm {
 	public byte Src_byte() {return src_byte;} private byte src_byte;
 	public byte Trg_byte() {return trg_byte;} private byte trg_byte;
 	public void Case_build_upper(Bry_bfr bfr) {bfr.Add_byte(upper_byte);} private byte upper_byte;
+	public byte[] Upper() { return Bry_.Empty; }
 	public void Case_build_lower(Bry_bfr bfr) {bfr.Add_byte(lower_byte);} private byte lower_byte;
+	public byte[] Lower() { return Bry_.Empty; }
 	public void Case_reuse_upper(byte[] ary, int bgn, int len) {ary[bgn] = upper_byte;}
 	public void Case_reuse_lower(byte[] ary, int bgn, int len) {ary[bgn] = lower_byte;}
 	public Xol_case_itm Clone() {return new Xol_case_itm_byt(tid, src_byte, trg_byte);}
@@ -68,7 +72,9 @@ class Xol_case_itm_bry implements Xol_case_itm {
 	public byte[] Src_ary() {return src_ary;} private byte[] src_ary;
 	public byte[] Trg_ary() {return trg_ary;} private byte[] trg_ary;
 	public void Case_build_upper(Bry_bfr bfr) {bfr.Add(upper_ary);} private byte[] upper_ary;
+	public byte[] Upper() { return upper_ary; }
 	public void Case_build_lower(Bry_bfr bfr) {bfr.Add(lower_ary);} private byte[] lower_ary;
+	public byte[] Lower() { return lower_ary; }
 	public void Case_reuse_upper(byte[] ary, int bgn, int len) {	// ASSUME: upper/lower have same width; i.e.: upper'ing a character doesn't go from a 2-width byte to a 3-width byte
 		for (int i = 0; i < len; i++)
 			ary[i + bgn] = upper_ary[i];

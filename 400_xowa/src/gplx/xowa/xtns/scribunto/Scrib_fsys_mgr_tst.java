@@ -55,7 +55,7 @@ class Scrib_fsys_mgr_fxt {
 		int keys_len = keys.length;
 		for (int i = 0; i < keys_len; i++) {
 			String key = keys[i];
-			String code = fsys_mgr.Get_or_null(key);
+			byte[] code = fsys_mgr.Get_or_null(key);
 			Tfds.Eq(expd, code != null, key);
 		}
 	}

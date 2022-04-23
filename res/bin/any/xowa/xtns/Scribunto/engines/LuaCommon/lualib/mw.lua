@@ -291,19 +291,21 @@ local function newFrame( frameId, ... )
 	end
 
 	local function checkArgs( name, args )
+--dbg(name, args)
 		local ret = {}
 		for k, v in pairs( args ) do
-			local tp = type( k )
-			if tp ~= 'string' and tp ~= 'number' then
-				error( name .. ": arg keys must be strings or numbers, " .. tp .. " given", 3 )
+--dbg(k, v)
+--			local tp = type( k )
+--			if tp ~= 'string' and tp ~= 'number' then
+			if type( k ) ~= 'string' and type( k ) ~= 'number' then
+				error( name .. ": arg keys must be strings or numbers, " .. type( k ) .. " given (" .. k .. ")", 3 )
 			end
-			tp = type( v )
-			if tp == 'boolean' then
-				ret[k] = v and '1' or ''
-			elseif tp == 'string' or tp == 'number' then
+			if type( v ) == 'string' or type( v ) == 'number' then
 				ret[k] = tostring( v )
+			elseif type( v ) == 'boolean' then
+				ret[k] = v and '1' or ''
 			else
-				error( name .. ": invalid type " .. tp .. " for arg '" .. k .. "'", 3 )
+				error( name .. ": invalid type " .. type( v ) .. " for arg '" .. k .. "'", 3 )
 			end
 		end
 		return ret
@@ -755,10 +757,12 @@ end
 -- @return string|nil Error message, if any
 local function validateData( d, seen )
 	seen = seen or {}
-	local tp = type( d )
-	if tp == 'nil' or tp == 'boolean' or tp == 'number' or tp == 'string' then
-		return nil
-	elseif tp == 'table' then
+--	local tp = type( d )
+--	if tp == 'nil' or tp == 'boolean' or tp == 'number' or tp == 'string' then
+	if type( d ) == 'string' then return nil end
+	if type( d ) == 'number' then return nil end
+--	elseif tp == 'table' then
+	if type( d ) == 'table' then
 		if seen[d] then
 			return nil
 		end
@@ -776,8 +780,10 @@ local function validateData( d, seen )
 			end
 		end
 		return nil
+	elseif type( d ) == 'boolean' or type( d ) == 'nil' then
+		return nil
 	else
-		return "data for mw.loadData contains unsupported data type '" .. tp .. "'"
+		return "data for mw.loadData contains unsupported data type '" .. type(d) .. "'"
 	end
 end
 

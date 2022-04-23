@@ -47,7 +47,12 @@ public class Xowd_core_db_props {
 		tbl.Conn().Txn_end();
 	}
 
-	public static Xowd_core_db_props Cfg_load(Db_conn conn) {return Cfg_load(conn, gplx.xowa.wikis.data.Xowd_cfg_tbl_.New(conn));}
+	public static Xowd_core_db_props Cfg_load(Db_conn conn) {
+		Db_cfg_tbl cfg_tbl = gplx.xowa.wikis.data.Xowd_cfg_tbl_.New(conn);
+		Xowd_core_db_props rv = Cfg_load(conn, cfg_tbl);
+		cfg_tbl.Rls();
+		return rv;
+	}
 	public static Xowd_core_db_props Cfg_load(Db_conn conn, Db_cfg_tbl cfg_tbl) {			
 		return cfg_tbl.Select_int_or(Cfg_grp, Cfg_key__schema_version, 1) == 1
 			? new Xowd_core_db_props

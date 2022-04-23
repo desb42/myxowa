@@ -56,7 +56,8 @@ public class Xol_func_regy {
 		if (case_match)
 			cs_trie.Add_obj(ary, func);
 		else {
-			byte[] lower_ary = lang.Case_mgr().Case_build_lower(ary, 0, ary.length);
+//			byte[] lower_ary = lang.Case_mgr().Case_build_lower(ary, 0, ary.length);
+			byte[] lower_ary = DB_case_mgr.Case_build_reuse(false, ary);
 			ci_trie.Add_obj(lower_ary, func);
 		}
 	}

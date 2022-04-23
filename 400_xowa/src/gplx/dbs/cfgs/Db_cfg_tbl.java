@@ -107,6 +107,7 @@ public class Db_cfg_tbl implements Db_tbl {
 		return rv;
 	}
 	public String		Select_str_or	(String grp, String key, String or) {
+//            System.out.println("str_or " + grp + " " + key + ":" + or);
 		if (stmt_select == null) stmt_select = conn.Stmt_select(tbl_name, String_.Ary(fld_val), fld_grp, fld_key);
 		Db_rdr rdr = stmt_select.Clear().Crt_str(fld_grp, grp).Crt_str(fld_key, key).Exec_select__rls_manual();
 		try {return rdr.Move_next() ? rdr.Read_str(fld_val) : or;} finally {rdr.Rls();}
@@ -114,6 +115,7 @@ public class Db_cfg_tbl implements Db_tbl {
 
 	public int			Select_int_or	(String key, int or)		     {String val = Select_str_or(key, null)	; return val == null ? or : Parse_int	("", key, val);}
 	public String		Select_str_or	(String key, String or) {
+            System.out.println("str " + " " + key + ":" + or);
 		if (stmt_select == null) stmt_select = conn.Stmt_select(tbl_name, String_.Ary(fld_val), fld_grp, fld_key);
 		Db_rdr rdr = stmt_select.Clear().Crt_str(fld_grp, "").Crt_str(fld_key, key).Exec_select__rls_manual();
 		try {return rdr.Move_next() ? rdr.Read_str(fld_val) : or;} finally {rdr.Rls();}

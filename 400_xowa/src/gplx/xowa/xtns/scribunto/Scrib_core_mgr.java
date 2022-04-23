@@ -55,10 +55,15 @@ public class Scrib_core_mgr {
 		}
 	}
 	private Hash_adp hash = Hash_adp_.New();
-	public String Get_text(Io_url script_dir, String name) {
-		String text = (String)hash.Get_by(name);
+	public byte[] Get_text(Io_url script_dir, String name) {
+		byte[] text = (byte[])hash.Get_by(name);
 		if (text == null) {
-			text = Io_mgr.Instance.LoadFilStr(script_dir.GenSubFil(name));
+			Io_url url = script_dir.GenSubFil(name + ".dump");
+			String fname = url.Raw();
+			java.io.File fle = new java.io.File(fname);
+			if (!fle.exists())
+				url = script_dir.GenSubFil(name);
+			text = Io_mgr.Instance.LoadFilBry(url);
 			hash.Add(name, text);
 		}
 		return text;

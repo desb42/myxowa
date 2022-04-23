@@ -179,13 +179,13 @@ public class Scrib_core {
 		++expensive_function_count;
 		if (expensive_function_count > 255) {}
 	}
-	public Scrib_lua_mod RegisterInterface(Scrib_lib lib, String name, String text, Keyval... args) {
+	public Scrib_lua_mod RegisterInterface(Scrib_lib lib, String name, byte[] text, Keyval... args) {
 		return RegisterInterface_text(lib, name, text, args);
 	}
 	public Scrib_lua_mod RegisterInterface(Scrib_lib lib, Io_url url, Keyval... args) {
-		return RegisterInterface_text(lib, url.NameAndExt(), Io_mgr.Instance.LoadFilStr(url), args);
+		return RegisterInterface_text(lib, url.NameAndExt(), Io_mgr.Instance.LoadFilBry(url), args);
 	}
-	private Scrib_lua_mod RegisterInterface_text(Scrib_lib lib, String name, String text, Keyval... args) {
+	private Scrib_lua_mod RegisterInterface_text(Scrib_lib lib, String name, byte[] text, Keyval... args) {
 		this.RegisterLibrary(lib.Procs());
 		Scrib_lua_mod rv = this.LoadLibraryFromFile(name, text);
 		Scrib_lua_proc setupInterface_func = rv.Fncs_get_by_key("setupInterface");
@@ -204,7 +204,7 @@ public class Scrib_core {
 		}
 		engine.RegisterLibrary(functions_ary);
 	}
-	@gplx.Internal protected Scrib_lua_mod LoadLibraryFromFile(String name, String text) {
+	@gplx.Internal protected Scrib_lua_mod LoadLibraryFromFile(String name, byte[] text) {
 		int lib_id = engine.LoadString("@" + name, text).Id();	// NOTE: 'Prepending an "@" to the chunk name makes Lua think it is a filename'
 		Keyval[] values = engine.CallFunction(lib_id, Keyval_.Ary_empty);
 		Scrib_lua_mod rv = new Scrib_lua_mod(this, name);

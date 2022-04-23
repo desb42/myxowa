@@ -259,6 +259,9 @@ public class Pf_func_ {
 	, Xol_kwd_grp_.Id_xtn_time
 	, Xol_kwd_grp_.Id_xtn_timel
 	, Xol_kwd_grp_.Id_xtn_titleparts
+//	, Xol_kwd_grp_.Id_yesno
+//	, Xol_kwd_grp_.Id_yesno_no
+//	, Xol_kwd_grp_.Id_yesno_yes
 	, Xol_kwd_grp_.Id_subst
 	, Xol_kwd_grp_.Id_safesubst
 	, Xol_kwd_grp_.Id_raw
@@ -440,6 +443,10 @@ public class Pf_func_ {
 			case Xol_kwd_grp_.Id_xtn_time:						return Pft_func_time._Utc;
 			case Xol_kwd_grp_.Id_xtn_timel:						return Pft_func_time._Lcl;
 			case Xol_kwd_grp_.Id_xtn_titleparts:				return new Pfunc_titleparts();
+
+			case Xol_kwd_grp_.Id_yesno:				return new Pfunc_yesno();
+			case Xol_kwd_grp_.Id_yesno_no:			return new Pfunc_yesno_no();
+			case Xol_kwd_grp_.Id_yesno_yes:			return new Pfunc_yesno_yes();
 
 			case Xol_kwd_grp_.Id_subst:
 			case Xol_kwd_grp_.Id_safesubst:

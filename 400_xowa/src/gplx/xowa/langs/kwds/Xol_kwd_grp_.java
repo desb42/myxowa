@@ -243,8 +243,11 @@ public static final int
 , Id_related = 223
 , Id_expectedunconnectedpage = 224
 , Id_rev_user2 = 225
+, Id_yesno = 226
+, Id_yesno_no = 227
+, Id_yesno_yes = 228
 ;
-public static final int Id__max = 226;
+public static final int Id__max = 229;
 
 	private static byte[] ary_itm_(int id) {
 		switch (id) {
@@ -474,6 +477,9 @@ case Xol_kwd_grp_.Id_expectunusedcategory: return Bry_.new_u8("expectunusedcateg
 case Xol_kwd_grp_.Id_shortdesc: return Bry_.new_u8("shortdesc");
 case Xol_kwd_grp_.Id_related: return Bry_.new_u8("related");
 case Xol_kwd_grp_.Id_expectedunconnectedpage: return Bry_.new_u8("expectedunconnectedpage");
+case Xol_kwd_grp_.Id_yesno: return Bry_.new_u8("yesno");
+case Xol_kwd_grp_.Id_yesno_no: return Bry_.new_u8("yesno-no");
+case Xol_kwd_grp_.Id_yesno_yes: return Bry_.new_u8("yesno-yes");
 default: throw Err_.new_unhandled(id);
 		}
 	}

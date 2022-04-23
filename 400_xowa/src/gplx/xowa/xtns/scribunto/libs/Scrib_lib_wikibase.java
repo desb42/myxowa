@@ -92,7 +92,8 @@ public class Scrib_lib_wikibase implements Scrib_lib {
 	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_wikibase(core);}
 	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();
-		mod = core.RegisterInterface(this, "mw.wikibase.lua", core.Core_mgr().Get_text(script_dir, "mw.wikibase.lua"));
+		//mod = core.RegisterInterface(this, "mw.wikibase.lua", core.Core_mgr().Get_text(script_dir, "mw.wikibase.lua"));
+		mod = core.RegisterInterface(this, "mw.wikibase.lua", core.Fsys_mgr().Get_or_null("mw.wikibase"));
 		//mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.wikibase.lua"));
 		notify_page_changed_fnc = mod.Fncs_get_by_key("notify_page_changed");
 		return mod;
@@ -455,6 +456,8 @@ public function formatValues( $snaksSerialization ) {
 		// get wdoc
 		Wdata_doc wdoc = entity_mgr.Get_by_xid_or_null(xid_bry); // NOTE: by_xid b/c Module passes just "p1" not "Property:P1"
 		if (wdoc == null && logMissing) Wdata_wiki_mgr.Log_missing_qid(core.Ctx(), type, xid_bry);
+//                if (Bry_.Eq(xid_bry, Bry_.new_a7("P2002")))
+//                    System.out.println("P2002 " + wdoc);
 		return wdoc;
 	}
 	private static Keyval[] Deserialize_snaks(Scrib_proc_args args, int idx) {

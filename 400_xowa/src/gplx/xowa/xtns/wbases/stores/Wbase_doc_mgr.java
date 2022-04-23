@@ -45,7 +45,8 @@ public class Wbase_doc_mgr {
 	public Wbase_doc_mgr(Wdata_wiki_mgr wbase_mgr, Wbase_qid_mgr qid_mgr) {
 		this.wbase_mgr = wbase_mgr;
 		this.qid_mgr = qid_mgr;
-		this.doc_cache = new Wbase_doc_cache__hash();
+		//this.doc_cache = new Wbase_doc_cache__hash();
+		this.doc_cache = new Wbase_doc_cache__per_thread();
 		this.wbase_db_log = Gfo_log_wtr.New_dflt("wbase", "db_log_{0}.csv");
 	}
 	public void Enabled_(boolean v) {this.enabled = v;} private boolean enabled;
@@ -53,6 +54,7 @@ public class Wbase_doc_mgr {
 		if		(String_.Eq(cache_type, "null")) doc_cache = new Wbase_doc_cache__null();
 		else if (String_.Eq(cache_type, "hash")) doc_cache = new Wbase_doc_cache__hash();
 		else if (String_.Eq(cache_type, "sliding")) doc_cache = new Wbase_doc_cache__sliding();
+		else if (String_.Eq(cache_type, "perthread")) doc_cache = new Wbase_doc_cache__per_thread();
 		else if (String_.Eq(cache_type, "mru" )) doc_cache = new Wbase_doc_cache__mru(cache_max, compress_size, used_weight);
 		else throw Err_.new_unhandled_default(cache_type);
 	}
@@ -90,9 +92,10 @@ public class Wbase_doc_mgr {
 	public Wdata_doc Get_by_exact_id_or_null(byte[] ttl_bry) {// must correct case and ns; EX:"Q2" or "Property:P1"; not "q2" or "P2"
 		// load from cache
                 // try not synched
-		Wdata_doc rv = doc_cache.Get_or_null(ttl_bry);
-		if (rv == null) {
+//		Wdata_doc rv = doc_cache.Get_or_null(ttl_bry);
+//		if (rv == null) {
 			// go the synched route
+                        Wdata_doc rv;
 			synchronized (thread_lock) {
 				rv = doc_cache.Get_or_null(ttl_bry);
 				if (rv == null) {
@@ -102,7 +105,7 @@ public class Wbase_doc_mgr {
 					Add(ttl_bry, rv);// NOTE: use ttl_bry, not rv.Qid; allows subsequent lookups to skip this redirect cycle
 				}
 			}
-		}
+//		}
 		return rv;
 	}
 	private Wdata_doc Load_wdoc_or_null(byte[] ttl_bry) { // EX:"Q2" or "Property:P1"

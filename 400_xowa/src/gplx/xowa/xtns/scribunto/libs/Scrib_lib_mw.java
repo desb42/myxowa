@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,24 +13,30 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.scribunto.libs; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.scribunto.*;
-import gplx.core.primitives.*; import gplx.core.envs.*; import gplx.core.errs.*;
-import gplx.xowa.langs.*; import gplx.xowa.langs.funcs.*;
-import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
+package gplx.xowa.xtns.scribunto.libs;
+import gplx.*; import gplx.xowa.*;
+import gplx.xowa.xtns.scribunto.*;
+import gplx.core.primitives.*;
+import gplx.core.envs.*;
+import gplx.xowa.langs.funcs.*;
+import gplx.xowa.parsers.*;
+import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.xtns.scribunto.procs.*;
 public class Scrib_lib_mw implements Scrib_lib {
-	private Scrib_core core; private Scrib_fsys_mgr fsys_mgr;
+	private final Scrib_core core; private final Scrib_fsys_mgr fsys_mgr;
 	public Scrib_lib_mw(Scrib_core core) {this.core = core; this.fsys_mgr = core.Fsys_mgr();}
-	public String Key() {return "mwInit";}
+	@Override public String Key() {return "mwInit";}
 	public Scrib_lua_mod Mod() {return mod;} public void Mod_(Scrib_lua_mod v) {this.mod = v;} private Scrib_lua_mod mod;
-	public boolean Allow_env_funcs() {return allow_env_funcs;} private boolean allow_env_funcs = true;
-	public Scrib_lib Init() {procs.Init_by_lib(this, Proc_names); return this;}
-	public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_mw(core);}
-	public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
+	public boolean Allow_env_funcs() {return allow_env_funcs;} private final boolean allow_env_funcs = true;
+	@Override public Scrib_lib Init() {procs.Init_by_lib(this, Proc_names); return this;}
+	@Override public Scrib_lib Clone_lib(Scrib_core core) {return new Scrib_lib_mw(core);}
+	@Override public Scrib_lua_mod Register(Scrib_core core, Io_url script_dir) {
 		Init();
-		core.RegisterInterface(this, "mwInit.lua", core.Core_mgr().Get_text(script_dir, "mwInit.lua"));	// DATE:2014-07-12
+		//core.RegisterInterface(this, "mwInit.lua", core.Core_mgr().Get_text(script_dir, "mwInit.lua"));	// DATE:2014-07-12
+                core.RegisterInterface(this, "mwInit.lua", fsys_mgr.Get_or_null("mwInit"));
 		//core.RegisterInterface(this, script_dir.GenSubFil("mwInit.lua"));	// DATE:2014-07-12
-		mod = core.RegisterInterface(this, "mw.lua", core.Core_mgr().Get_text(script_dir, "mw.lua")
+		//mod = core.RegisterInterface(this, "mw.lua", core.Core_mgr().Get_text(script_dir, "mw.lua")
+		mod = core.RegisterInterface(this, "mw.lua", fsys_mgr.Get_or_null("mw")
 		//mod = core.RegisterInterface(this, script_dir.GenSubFil("mw.lua")
 			, Keyval_.new_("allowEnvFuncs", allow_env_funcs));
 		notify_page_changed_fnc = mod.Fncs_get_by_key("notify_page_changed");
@@ -46,15 +52,18 @@ public class Scrib_lib_mw implements Scrib_lib {
 		if (src != null)	// src exists; indicates that Invoke being called recursively; push existing src onto stack
 			src_stack.Add(src);
 		this.cur_wiki = wiki; this.ctx = ctx; this.src = new_src;
-	}	private Xowe_wiki cur_wiki; private byte[] src; private Xop_ctx ctx; private List_adp src_stack = List_adp_.New();
+	}
+	private Xowe_wiki cur_wiki; private byte[] src; private Xop_ctx ctx;
+	private final List_adp src_stack = List_adp_.New();
 	public void Invoke_end() {
 		if (src_stack.Count() > 0)	// src_stack item exists; pop
 			src = (byte[])List_adp_.Pop(src_stack);
 		else						// entry point; set to null
 			src = null;
 	}
-	public Scrib_proc_mgr Procs() {return procs;} private Scrib_proc_mgr procs = new Scrib_proc_mgr();
-	public boolean Procs_exec(int key, Scrib_proc_args args, Scrib_proc_rslt rslt) {
+	@Override public Scrib_proc_mgr Procs() {return procs;}
+        private final Scrib_proc_mgr procs = new Scrib_proc_mgr();
+	@Override public boolean Procs_exec(int key, Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		switch (key) {
 			case Proc_loadPackage:							return LoadPackage(args, rslt);
 			case Proc_loadPHPLibrary:						return LoadPHPLibrary(args, rslt);
@@ -102,16 +111,17 @@ public class Scrib_lib_mw implements Scrib_lib {
 	);
 	public boolean LoadPackage(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		String mod_name = args.Pull_str(0);
-		String mod_code = fsys_mgr.Get_or_null(mod_name);	// check if mod_name a file in /lualib/ directoryScribunto .lua file (in /lualib/)
+		byte[] mod_code = fsys_mgr.Get_or_null(mod_name);	// check if mod_name a file in /lualib/ directoryScribunto .lua file (in /lualib/)
+                //byte[] mod_code = core.Core_mgr().Get_text(fsys_mgr.Script_dir(), mod_name + ".lua");
 		if (mod_code != null)
 			return rslt.Init_obj(core.Interpreter().LoadString("@" + mod_name + ".lua", mod_code));
 		Xoa_ttl ttl = Xoa_ttl.Parse(cur_wiki, Bry_.new_u8(mod_name));// NOTE: should have Module: prefix
 		if (ttl == null) return rslt.Init_ary_empty();
 		byte[] page_db = cur_wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, cur_wiki.Domain_str());
 		if (page_db == null) return rslt.Init_ary_empty();
-		Scrib_lua_mod mod = new Scrib_lua_mod(core, mod_name);
-                page_db = Db_lua_comp.Check(page_db);
-		return rslt.Init_obj(mod.LoadString(page_db));
+		Scrib_lua_mod xmod = new Scrib_lua_mod(core, mod_name);
+		page_db = Db_lua_comp.Check(page_db);
+		return rslt.Init_obj(xmod.LoadString(page_db));
 	}
 	public boolean LoadPHPLibrary(Scrib_proc_args args, Scrib_proc_rslt rslt) { // NOTE: noop; Scribunto uses this to load the Scribunto_*Library classses (EX: Scribunto_TitleLibrary); DATE:2015-01-21
 		return rslt.Init_obj(null);
@@ -127,14 +137,10 @@ public class Scrib_lib_mw implements Scrib_lib {
                     byte[] ttl = core.Frame_current().Frame_ttl();
                 if (Bry_.Eq(ttl, Bry_.new_a7("Module:WikidataCoord")))
                     wc = true;
-                    }
+                }
 		Bry_bfr tmp_bfr = Bry_bfr_.New();	// NOTE: do not make modular level variable, else random failures; DATE:2013-10-14
 		if (idx_int != Int_.Min_value) {	// idx is integer
 			int len = frame.Args_len() - frame_arg_adj;
-			if (idx_int - List_adp_.Base1 >= len) {
-                            //System.out.println("nkix " + String_.new_a7(frame.Frame_ttl()) + ":" + idx_str);
-				return rslt.Init_obj(null);
-			}
 			Arg_nde_tkn nde = Get_arg(frame, idx_int, frame_arg_adj, len);
 			//frame.Args_eval_by_idx(core.Ctx().Src(), idx_int); // NOTE: arg[0] is always MW function name; EX: {{#invoke:Mod_0|Func_0|Arg_1}}; arg_x = "Mod_0"; args[0] = "Func_0"; args[1] = "Arg_1"
 			if (nde == null) {
@@ -188,7 +194,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 	}
 	private static boolean Verify_arg_key(byte[] src, int idx, Arg_nde_tkn nde) {
 		// NOTE: key must trim ws; EX: "1 =val_1"; PAGE:c:File:Torsåker_kyrka01.JPG; DATE:2017-10-23
-		int key_int = Bry_find_.Not_found;
+		int key_int;
 		byte[] key_dat_ary = nde.Key_tkn().Dat_ary();
 		if (Env_.Mode_testing() && src == null)	// some tests will always pass a null src;
 			key_int = Bry_.To_int_or__trim_ws(key_dat_ary, 0, key_dat_ary.length, Bry_find_.Not_found);
@@ -425,7 +431,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 		String frame_id = args.Pull_str(0);
 		Xot_invk frame = Scrib_frame_.Get_frame(core, frame_id);
 		Object ttl_obj = args.Cast_obj_or_null(1);	// NOTE: callers must pass named title else title will be false; EX: frame:newChild{'current', 'title0'} -> false; frame:newChild{'current', title='title0'} -> 'title0'; DATE:2014-05-20
-		Xoa_ttl ttl = null;
+		Xoa_ttl ttl;
 		if (Type_.Type_by_obj(ttl_obj) != String.class) {	 // title = false
 			byte[] ttl_bry = frame.Frame_ttl();
 			ttl = Xoa_ttl.Parse(core.Wiki(), ttl_bry);
@@ -453,7 +459,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 	}
 }
 class Scrib_lib_mw_callParserFunction_sorter implements gplx.core.lists.ComparerAble {
-	public int compare(Object lhsObj, Object rhsObj) {
+	@Override public int compare(Object lhsObj, Object rhsObj) {
 		Keyval lhs = (Keyval)lhsObj;
 		Keyval rhs = (Keyval)rhsObj;
 

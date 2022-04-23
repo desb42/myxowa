@@ -15,8 +15,10 @@ local Entity = {}
 local metatable = {}
 local methodtable = {}
 local util = require 'libraryUtil'
-local checkType = util.checkType
+--local checkType = util.checkType
 local checkTypeMulti = util.checkTypeMulti
+local checkType_table = util.checkType_table
+local checkType_string = util.checkType_string
 
 metatable.__index = methodtable
 
@@ -129,7 +131,8 @@ Entity.create = function( data )
 	if data.schemaVersion < 2 then
 		error( 'mw.wikibase.entity must not be constructed using legacy data' )
 	end
-	if type( data.id ) ~= 'string' then
+	local id = data.id
+	if type( id ) ~= 'string' then
 		error( 'data.id must be a string, got ' .. type( data.id ) .. ' instead' )
 	end
 
@@ -252,7 +255,7 @@ end
 local getEntityStatements = function( entity, propertyLabelOrId, funcName )
 	php.incrementStatsKey( 'wikibase.client.scribunto.entity.getEntityStatements.call' )
 
-	checkType( funcName, 1, propertyLabelOrId, 'string' )
+	checkType_string( funcName, 1, propertyLabelOrId )
 
 	if not entity.claims then
 		return {}
@@ -356,8 +359,8 @@ end
 methodtable.formatPropertyValues = function( entity, propertyLabelOrId, acceptableRanks )
 	php.incrementStatsKey( 'wikibase.client.scribunto.entity.formatPropertyValues.call' )
 
-	checkType( 'formatPropertyValues', 1, propertyLabelOrId, 'string' )
-	checkTypeMulti( 'formatPropertyValues', 2, acceptableRanks, { 'table', 'nil' } )
+	checkType_string( 'formatPropertyValues', 1, propertyLabelOrId)
+	checkType_table( 'formatPropertyValues', 2, acceptableRanks, true )
 
 	return formatValuesByPropertyId(
 		entity,
@@ -375,8 +378,8 @@ end
 methodtable.formatStatements = function( entity, propertyLabelOrId, acceptableRanks )
 	php.incrementStatsKey( 'wikibase.client.scribunto.entity.formatStatements.call' )
 
-	checkType( 'formatStatements', 1, propertyLabelOrId, 'string' )
-	checkTypeMulti( 'formatStatements', 2, acceptableRanks, { 'table', 'nil' } )
+	checkType_string( 'formatStatements', 1, propertyLabelOrId)
+	checkType_table( 'formatStatements', 2, acceptableRanks, true )
 
 	return formatValuesByPropertyId(
 		entity,

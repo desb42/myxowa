@@ -12,6 +12,30 @@ function libraryUtil.checkType( name, argIdx, arg, expectType, nilOk )
 	end
 end
 
+function libraryUtil.checkType_string( name, argIdx, arg, nilOk )
+	if arg == nil and nilOk then
+		return
+	end
+	if type( arg ) ~= 'string' then
+		local msg = string.format( "bad argument #%d to '%s' (string expected, got %s)",
+			argIdx, name, type( arg )
+		)
+		error( msg, 3 )
+	end
+end
+
+function libraryUtil.checkType_table( name, argIdx, arg, nilOk )
+	if arg == nil and nilOk then
+		return
+	end
+	if type( arg ) ~= 'table' then
+		local msg = string.format( "bad argument #%d to '%s' (table expected, got %s)",
+			argIdx, name, type( arg )
+		)
+		error( msg, 3 )
+	end
+end
+
 function libraryUtil.checkTypeMulti( name, argIdx, arg, expectTypes )
 	local argType = type( arg )
 	for _, expectType in ipairs( expectTypes ) do

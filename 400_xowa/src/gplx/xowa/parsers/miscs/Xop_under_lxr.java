@@ -61,8 +61,10 @@ public class Xop_under_lxr implements Xop_lxr {
 							core_trie.Add(kwd_bry, word_lxr);
 						else {								// NOTE: next part is imprecise; XOWA parser is cs, but kwd is ci; for now, just add all upper and all lower
 							Gfo_usr_dlg_.Instance.Warn_many("", "", "under keyword does not start with __; id=~{0} key=~{1} word=~{2}", kwd_id, String_.new_u8(kwd_grp.Key()), String_.new_u8(kwd_bry));
-							core_trie.Add(lang.Case_mgr().Case_build_lower(kwd_bry), word_lxr);
-							core_trie.Add(lang.Case_mgr().Case_build_upper(kwd_bry), word_lxr);	
+//							core_trie.Add(lang.Case_mgr().Case_build_lower(kwd_bry), word_lxr);
+//							core_trie.Add(lang.Case_mgr().Case_build_upper(kwd_bry), word_lxr);	
+							core_trie.Add(DB_case_mgr.Case_build_reuse(false, kwd_bry), word_lxr);
+							core_trie.Add(DB_case_mgr.Case_build_reuse(true, kwd_bry), word_lxr);	
 						}
 					}
 				}
