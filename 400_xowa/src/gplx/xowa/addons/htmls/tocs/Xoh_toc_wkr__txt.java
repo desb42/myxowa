@@ -22,7 +22,7 @@ class Xoh_toc_wkr__txt {
 	private final    Gfo_url_encoder anch_encoder = Gfo_url_encoder_.New__html_id().Make();
 	private final    Xop_amp_mgr amp_mgr = Xop_amp_mgr.Instance;
 	//private final    Hash_adp anch_hash = Hash_adp_bry.ci_u8(gplx.xowa.langs.cases.Xol_case_mgr_.U8());
-	private final    Hash_adp anch_hash = Hash_adp_bry.ci_u8(DB_case_mgr_.U8());
+	private final    Hash_adp anch_hash = Hash_adp_bry.ci_u8_db(DB_case_mgr_.U8());
 	private Xow_tidy_mgr_interface tidy_mgr;
 	private byte[] page_url_bry;
 	public void Clear() {

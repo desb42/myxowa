@@ -38,7 +38,7 @@ public class Xol_grammar_he implements Xol_grammar {
 	}
 	private static final int Tid__prefixed = 1;
 	//private static final    Hash_adp_bry hash = Hash_adp_bry.ci_u8(gplx.xowa.langs.cases.Xol_case_mgr_.U8())
-	private static final    Hash_adp_bry hash = Hash_adp_bry.ci_u8(DB_case_mgr_.U8())
+	private static final    Hash_adp_bry hash = Hash_adp_bry.ci_u8_db(DB_case_mgr_.U8())
 	.Add_str_int("prefixed"	, Tid__prefixed)
 	.Add_str_int("תחילית"	, Tid__prefixed)
 	;

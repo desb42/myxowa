@@ -110,7 +110,7 @@ public class Lst_section_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	public static final byte Xatr_name = 0, Xatr_bgn = 1, Xatr_end = 2;
 	public static Hash_adp_bry new_xatrs_(Xol_lang_itm lang) {
 		//Hash_adp_bry rv = Hash_adp_bry.ci_u8(lang.Case_mgr());	// UTF8:see xatrs below
-		Hash_adp_bry rv = Hash_adp_bry.ci_u8(lang.Case_mgr2());	// UTF8:see xatrs below
+		Hash_adp_bry rv = Hash_adp_bry.ci_u8_db(lang.Case_mgr2());	// UTF8:see xatrs below
 		rv.Add_str_byte("name", Lst_section_nde.Xatr_name);
 		Xatrs_add(rv, "begin", "end");
 		switch (lang.Lang_id()) {	// NOTE: as of v315572b, i18n is done directly in code, not in magic.php; am wary of adding keywords for general words like begin/end, so adding them manually per language; DATE:2013-02-09

@@ -74,7 +74,8 @@ public class Hash_adp_bry extends gplx.core.lists.Hash_adp_base implements Hash_
 	public static Hash_adp_bry cs()												{return new Hash_adp_bry(Hash_adp_bry_itm_cs.Instance);}
 	public static Hash_adp_bry ci_a7()											{return new Hash_adp_bry(Hash_adp_bry_itm_ci_a7.Instance);}
 	public static Hash_adp_bry ci_u8(Gfo_case_mgr case_mgr)						{return new Hash_adp_bry(Hash_adp_bry_itm_ci_u8.get_or_new(case_mgr));}
-	public static Hash_adp_bry c__u8(boolean case_match, Gfo_case_mgr case_mgr)	{return case_match ? cs() : ci_u8(case_mgr);}
+	public static Hash_adp_bry ci_u8_db(Gfo_case_mgr case_mgr)						{return new Hash_adp_bry(Hash_adp_bry_itm_ci_u8.get_or_new_db(case_mgr));}
+	public static Hash_adp_bry c__u8(boolean case_match, Gfo_case_mgr case_mgr)	{return case_match ? cs() : ci_u8_db(case_mgr);}
 }
 abstract class Hash_adp_bry_itm_base {
 	public abstract Hash_adp_bry_itm_base New();
@@ -243,10 +244,16 @@ class Hash_adp_bry_itm_ci_u8 extends Hash_adp_bry_itm_base {
 		switch (case_mgr.Tid()) {
 			case Gfo_case_mgr_.Tid_a7:			if (Itm_a7 == null) Itm_a7 = new Hash_adp_bry_itm_ci_u8(case_mgr); return Itm_a7;
 			case Gfo_case_mgr_.Tid_u8:
-                            if (case_mgr instanceof gplx.xowa.DB_case_mgr) {
-                            if (Itm_u8_db == null) Itm_u8_db = new Hash_adp_bry_itm_ci_u8(case_mgr); return Itm_u8_db;
-                            }
                             if (Itm_u8 == null) Itm_u8 = new Hash_adp_bry_itm_ci_u8(case_mgr); return Itm_u8;
+			case Gfo_case_mgr_.Tid_custom:		return new Hash_adp_bry_itm_ci_u8(case_mgr);
+			default:							throw Err_.new_unhandled(case_mgr.Tid());
+		}
+	}
+        public static Hash_adp_bry_itm_ci_u8 get_or_new_db(Gfo_case_mgr case_mgr) {
+		switch (case_mgr.Tid()) {
+			case Gfo_case_mgr_.Tid_a7:			if (Itm_a7 == null) Itm_a7 = new Hash_adp_bry_itm_ci_u8(case_mgr); return Itm_a7;
+			case Gfo_case_mgr_.Tid_u8:
+                            if (Itm_u8_db == null) Itm_u8_db = new Hash_adp_bry_itm_ci_u8(case_mgr); return Itm_u8_db;
 			case Gfo_case_mgr_.Tid_custom:		return new Hash_adp_bry_itm_ci_u8(case_mgr);
 			default:							throw Err_.new_unhandled(case_mgr.Tid());
 		}

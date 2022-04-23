@@ -51,7 +51,7 @@ class Btrie_u8_itm {
 	}
 	public Btrie_u8_itm Nxts_add(Gfo_case_mgr case_mgr, byte[] key, Object val) {
 		Btrie_u8_itm rv = new Btrie_u8_itm(key, val);
-		if (nxts == null) nxts = Hash_adp_bry.ci_u8(case_mgr);
+		if (nxts == null) nxts = Hash_adp_bry.ci_u8_db(case_mgr);
 		nxts.Add_bry_obj(key, rv);
 		Gfo_case_itm case_itm = case_mgr.Get_or_null(key, 0, key.length);	// get case_item
 		if (case_itm != null) {														// note that case_itm may be null; EX: "__TOC__" and "_"

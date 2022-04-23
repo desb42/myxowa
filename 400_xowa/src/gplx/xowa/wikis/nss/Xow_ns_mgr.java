@@ -24,8 +24,8 @@ public class Xow_ns_mgr implements Gfo_invk, gplx.core.lists.ComparerAble {
 	private Ordered_hash aliases = Ordered_hash_.New();		// hash to store aliases; used to populate name_hash;
 	private final    Int_obj_ref id_hash_ref = Int_obj_ref.New_zero();
 	public Xow_ns_mgr(Xol_case_mgr case_mgr, DB_case_mgr case_mgr2) {
-		name_hash = Hash_adp_bry.ci_u8(case_mgr2);
-		tmpl_hash = Hash_adp_bry.ci_u8(case_mgr2);
+		name_hash = Hash_adp_bry.ci_u8_db(case_mgr2);
+		tmpl_hash = Hash_adp_bry.ci_u8_db(case_mgr2);
 	}
 	public Xow_ns_mgr Clear() {
 		name_hash.Clear();
