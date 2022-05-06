@@ -71,6 +71,9 @@ public class Process_server implements Scrib_server {
 	   if (stream_read != null) stream_read.Term();
 	   if (process != null) process.destroy();
    }
+   public int Highwater() {
+       return 0; // To be implemented 20220427
+   }
 }
 class Process_server_gobbler_error extends Thread {
 	private byte[] bfr;

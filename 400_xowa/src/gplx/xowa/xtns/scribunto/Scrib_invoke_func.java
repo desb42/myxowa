@@ -43,7 +43,8 @@ import gplx.xowa.xtns.pfuncs.Pf_func_base;
 import gplx.xowa.xtns.scribunto.cfgs.ScribCfg;
 import gplx.xowa.xtns.scribunto.cfgs.ScribCfgResolver;
 
-import gplx.xowa.parsers.tmpls.Arg_nde_tkn;
+import gplx.xowa.wikis.nss.Xow_ns_case_;
+import gplx.xowa.langs.cases.Xol_case_cvt;
 public class Scrib_invoke_func extends Pf_func_base {
 	@Override public int Id() {return Xol_kwd_grp_.Id_invoke;}
 	@Override public Pf_func New(int id, byte[] name) {return new Scrib_invoke_func().Name_(name);}
@@ -80,9 +81,16 @@ public class Scrib_invoke_func extends Pf_func_base {
 			}
 		}
 		byte[] mod_raw = null;
+			Xow_ns module_ns = wiki.Ns_mgr().Ids_get_or_null(Xow_ns_.Tid__module);
+		if (module_ns.Case_match() == Xow_ns_case_.Tid__1st) {
+			byte char_1st = mod_name[0];
+			int char_1st_len = gplx.core.intls.Utf8_.Len_of_char_by_1st_byte(char_1st);
+			int len = mod_name.length;
+			if (char_1st_len < len)	// ttl is too too short ignore!!
+				mod_name = Xol_case_cvt.Upper_1st(mod_name, 0, len, char_1st_len);
+		}
 		Scrib_lua_mod mod = core.Mods_get(mod_name);
 		if (mod == null) {
-			Xow_ns module_ns = wiki.Ns_mgr().Ids_get_or_null(Xow_ns_.Tid__module);
 			Xoa_ttl mod_ttl = Xoa_ttl.Parse(wiki, Bry_.Add(module_ns.Name_db_w_colon(), mod_name));
 			mod_raw = wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(mod_ttl, wiki.Domain_str());
 			if (mod_raw == null) {

@@ -145,9 +145,7 @@ app.wikis.get('~{wiki_key}').html.portal {
 ;
   txt_ns =
 <:["
-  <li id="ca-nstab-~{portal_ca}" class="~{portal_ns_subj_cls}"><span><a href="~{portal_ns_subj_href}" id="ca-nstab-main-href" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-nstab-main');<>}>~{portal_main}</a></span></li>
-  <li id="ca-talk" class="~{portal_ns_talk_cls}"><span><a href="~{portal_ns_talk_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-talk');<>}>~{<>msgs.get('talk');<>}</a></span></li>
-  ~{portal_extra}
+<li id="ca-nstab-~{portal_ca}" class="~{portal_ns_subj_cls} mw-list-item"><a href="~{portal_ns_subj_href}" class="xowa-hover-off"~{portal_akat}><span>~{portal_main}</span></a></li><li id="ca-talk" class="~{xportal_ns_talk_cls} mw-list-item"><a href="~{portal_ns_talk_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-talk');<>}><span>~{<>msgs.get('talk');<>}</span></a></li>~{portal_extra}
 "]:>
 ;
   txt_view =

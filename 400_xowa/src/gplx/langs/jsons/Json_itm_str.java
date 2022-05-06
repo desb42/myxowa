@@ -105,24 +105,38 @@ public class Json_itm_str extends Json_itm_base {
 		}
 
 		// loop and unescape
-		for (int i = bgn; i < end; i++) {
-			byte b = src[i];
+		int i = bgn;
+		int start = bgn;
+		int size = 0;
+		while (i < end) {
+			int r = -1;
+			byte b = src[i++];
 			switch (b) {
 				case Byte_ascii.Backslash:
-					b = src[++i];
+					b = src[i];
+					size = 1;
 					switch (b) {	// NOTE: must properly unescape chars; EX:wd.q:2; DATE:2014-04-23
-						case Byte_ascii.Ltr_t:				bfr.Add_byte(Byte_ascii.Tab); break;
-						case Byte_ascii.Ltr_n:				bfr.Add_byte(Byte_ascii.Nl); break;
-						case Byte_ascii.Ltr_r:				bfr.Add_byte(Byte_ascii.Cr); break;
-						case Byte_ascii.Ltr_b:				bfr.Add_byte(Byte_ascii.Backfeed); break;
-						case Byte_ascii.Ltr_f:				bfr.Add_byte(Byte_ascii.Formfeed); break;
+						case Byte_ascii.Ltr_t:
+							r = Byte_ascii.Tab;
+							break;
+						case Byte_ascii.Ltr_n:
+							r = Byte_ascii.Nl;
+							break;
+						case Byte_ascii.Ltr_r:
+							r = Byte_ascii.Cr;
+							break;
+						case Byte_ascii.Ltr_b:
+							r = Byte_ascii.Backfeed;
+							break;
+						case Byte_ascii.Ltr_f:
+							r = Byte_ascii.Formfeed;
+							break;
 						case Byte_ascii.Ltr_u:
-							i += 1; // +1 to skip "u"
-							int utf8_val = gplx.core.encoders.Hex_utl_.Parse_or(src, i, i + 4, -1);
+							r = gplx.core.encoders.Hex_utl_.Parse_or(src, i + 1, i + 5, -1);
 							// check for UTF surrogate-pairs; ISSUE#:487; DATE:2019-06-02
 							// hi: 0xD800-0xDBFF; 55,296-56,319
-							if (utf8_val >= Utf16_.Surrogate_hi_bgn && utf8_val <= Utf16_.Surrogate_hi_end) {
-								int lo_bgn = i + 4;   // +4 to skip 4 hex-dec chars
+							if (r >= Utf16_.Surrogate_hi_bgn && r <= Utf16_.Surrogate_hi_end) {
+								int lo_bgn = i + 5;   // +1 to skip "u" +4 to skip 4 hex-dec chars
 								if (lo_bgn + 6 <= end // +6 to handle encoded String; EX: '\u0022'
 									&& src[lo_bgn]     == Byte_ascii.Backslash
 									&& src[lo_bgn + 1] == Byte_ascii.Ltr_u) {
@@ -130,26 +144,63 @@ public class Json_itm_str extends Json_itm_base {
 									int lo = gplx.core.encoders.Hex_utl_.Parse_or(src, lo_bgn, lo_bgn + 4, -1);
 									// lo: 0xDC00-0xDFFF; 56,320-57,343
 									if (lo >= Utf16_.Surrogate_lo_bgn && lo <= Utf16_.Surrogate_lo_end) {
-										utf8_val = Utf16_.Surrogate_merge(utf8_val, lo);
-										i += 6; // +6 to skip entire lo-String; EX: '\u0022'
+										r = Utf16_.Surrogate_merge(r, lo);
+										size += 6; // +6 to skip entire lo-String; EX: '\u0022'
 									}
 								}
 							}
-							int len = gplx.core.intls.Utf16_.Encode_int(utf8_val, utf8_bry, 0);
-							bfr.Add_mid(utf8_bry, 0, len);
-							i += 3; // +3 b/c for-loop will do another +1 to bring total to 4; EX: '0022'
+							size += 4;
 							break;
 						case Byte_ascii.Backslash:
 						case Byte_ascii.Slash:
-						default:
-							bfr.Add_byte(b);	break;	// \?		" \ / b f n r t
+						default: // anything can be escaped
+							r = b;
+							break;
 					}
 					break;
-				default:
-					bfr.Add_byte(b);
+				case Byte_ascii.Amp:
+					b = src[i];
+					switch (b) {
+						case Byte_ascii.Ltr_l:
+							if (src[i+1] == 't' && src[i+2] == ';') { // &lt;
+								r = Byte_ascii.Lt;
+								size = 3;
+							}
+							break;
+						case Byte_ascii.Ltr_g:
+							if (src[i+1] == 't' && src[i+2] == ';') { // &gt;
+								r = Byte_ascii.Gt;
+								size = 3;
+							}
+							break;
+						case Byte_ascii.Ltr_a:
+							if (src[i+1] == 'm' && src[i+2] == 'p' && src[i+3] == ';') { // &amp;
+								r = Byte_ascii.Amp;
+								size = 4;
+							}
+							break;
+						case Byte_ascii.Ltr_q:
+							if (src[i+1] == 'u' && src[i+2] == 'o' && src[i+3] == 't' && src[i+4] == ';') { // &quot;
+								r = Byte_ascii.Quote;
+								size = 5;
+							}
+							break;
+					}
 					break;
 			}
+			if (r != -1) {
+				bfr.Add_mid(src, start, i - 1);
+				if (r < 128)
+					bfr.Add_byte((byte)r);
+				else {
+					int len = gplx.core.intls.Utf16_.Encode_int(r, utf8_bry, 0);
+					bfr.Add_mid(utf8_bry, 0, len);
+				}
+				i += size;
+				start = i;
+			}
 		}
+		bfr.Add_mid(src, start, end);
 		this.data_bry = bfr.To_bry_and_clear();
 		return data_bry;
 	}

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -17,12 +17,15 @@ package gplx.xowa.langs.msgs;
 
 import gplx.Bry_;
 import gplx.Bry_bfr;
+import gplx.Bry_bfr_;
 import gplx.Byte_ascii;
 import gplx.GfoMsg;
 import gplx.Gfo_invk;
 import gplx.Gfo_invk_;
 import gplx.GfsCtx;
+import gplx.String_;
 import gplx.core.brys.fmtrs.Bry_fmtr;
+import gplx.xowa.Json_escaper;
 import gplx.xowa.Xow_wiki;
 import gplx.xowa.addons.htmls.sidebars.Xoh_sidebar_itm;
 import gplx.xowa.langs.Xol_lang_itm;
@@ -64,6 +67,11 @@ public class Xow_msg_mgr implements Gfo_invk {
 			tmp_bfr.Mkr_rls();
 		}
 		return itm;
+	}
+	public byte[] Val_by_key_obj_escaped(byte[] key) {
+		byte[] val =  Val_by_key(key, null);
+                val = Json_escaper.Escape(val);
+		return val;
 	}
 	public byte[] Val_by_key_args(byte[] key, Object... args) {return Val_by_key(key, args);}
 	public byte[] Val_by_key_obj(String key) {return Val_by_key(Bry_.new_u8(key), null);}
@@ -133,7 +141,13 @@ public class Xow_msg_mgr implements Gfo_invk {
 
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_get))							return this.Val_by_key_obj(m.ReadBry("v"));
+		else if	(ctx.Match(k, Invk_get_escaped))					return this.Val_by_key_obj_escaped(m.ReadBry("v"));
 		else if	(ctx.Match(k, Invk_get_html_accesskey_and_title))	return this.Val_html_accesskey_and_title(m.ReadBry("v"));
 		else	return Gfo_invk_.Rv_unhandled;
-	}	private static final String Invk_get = "get", Invk_get_html_accesskey_and_title = "get_html_accesskey_and_title";
+	}
+	private static final String
+	  Invk_get = "get"
+	, Invk_get_escaped = "get_escaped"
+	, Invk_get_html_accesskey_and_title = "get_html_accesskey_and_title"
+	;
 }

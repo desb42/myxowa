@@ -33,6 +33,6 @@ public class Pgbnr_cfg {
 	public boolean Chk_pgbnr_allowed(Xoa_ttl ttl, Xowe_wiki wiki) {
 		boolean enabled_in_ns = ns_hash.Has(tmp_ns_key.Val_(ttl.Ns().Id()));
 		return	enabled_in_ns										// chk if ns allows banner
-			&&	!Bry_.Eq(ttl.Page_db(), wiki.Props().Main_page()); 	// never show on main page
+			&&	!Bry_.Eq(ttl.Full_db(), wiki.Props().Main_page()); 	// never show on main page
 	}
 }

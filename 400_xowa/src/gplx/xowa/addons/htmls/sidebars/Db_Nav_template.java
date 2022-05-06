@@ -3,6 +3,8 @@ package gplx.xowa.addons.htmls.sidebars;
 import gplx.Bry_;
 import gplx.Bry_bfr;
 import gplx.Bry_bfr_;
+import gplx.Hash_adp;
+import gplx.Hash_adp_;
 import gplx.Io_url;
 import gplx.String_;
 import gplx.langs.jsons.Json_nde;
@@ -24,9 +26,9 @@ public class Db_Nav_template {
 	private static Mustache_tkn_itm menu_root;
 
 	public static Json_nde Build_Sidebar_json(Xowe_wiki wiki, byte[] id, byte[] text, byte[] itms, int iter_count) {
-		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_PORTAL, iter_count);
+		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_PORTAL, iter_count, false);
 	}
-	public static Json_nde Build_Menu(Xowe_wiki wiki, byte[] label, byte[] text, byte[] itms) {
+	public static Json_nde Build_Menu(Xowe_wiki wiki, byte[] label, byte[] text, byte[] itms, boolean is_legacy) {
 		byte[] id = Bry_.Add(Bry_.new_a7("p-"), label);
 		int type;
 /* from SkinVector.php 20210908 :592
@@ -66,19 +68,21 @@ public class Db_Nav_template {
 			type = MENU_TYPE_PORTAL;
 		else
 			type = MENU_TYPE_PORTAL;
-		return s_getMenuData(wiki, id, text, itms, type, 1);
+		return s_getMenuData(wiki, id, text, itms, type, 1, is_legacy);
 	}
 	public static Json_nde Build_Menu_json(Xowe_wiki wiki, byte[] id, byte[] text, byte[] itms) {
-		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_TABS, 1);
+		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_TABS, 1, false);
 	}
 	public static Json_nde Build_Menu_Default_json(Xowe_wiki wiki, byte[] id, byte[] text, byte[] itms) {
-		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_DEFAULT, 1);
+		return s_getMenuData(wiki, id, text, itms, MENU_TYPE_DEFAULT, 1, false);
 	}
+
 	public static void Render_Sidebar(Xowe_wiki wiki, Bry_bfr bfr, Json_nde data) {
 		if (once) {
 			once = false;
 			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
-			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
+                        Hash_adp hash = Hash_adp_.New();
+			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root, hash);
 			menu_root = parser.Parse("top-test");
 		}
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
@@ -89,21 +93,24 @@ public class Db_Nav_template {
 		if (once) {
 			once = false;
 			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
-			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
+                        Hash_adp hash = Hash_adp_.New();
+			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root, hash);
 			menu_root = parser.Parse("content-test");
 		}
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
 		Mustache_bfr mbfr = Mustache_bfr.New_bfr(bfr);
 		menu_root.Render(mbfr, mctx);
 	}
+
 	public static void Build_Sidebar(Xowe_wiki wiki, Bry_bfr bfr, byte[] id, byte[] text, byte[] itms, int iter_count) {
 		if (once) {
 			once = false;
 			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
-			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
+                        Hash_adp hash = Hash_adp_.New();
+			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root, hash);
 			menu_root = parser.Parse("Menu");
 		}
-		Json_nde data = s_getMenuData(wiki, id, text, itms, MENU_TYPE_PORTAL, iter_count);
+		Json_nde data = s_getMenuData(wiki, id, text, itms, MENU_TYPE_PORTAL, iter_count, false);
 
 		// Bry_bfr tmp_bfr = Bry_bfr_.New();
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
@@ -211,16 +218,18 @@ public class Db_Nav_template {
 		return props;
 	}
 
-	private static Json_nde s_getMenuData(Xowe_wiki wiki, byte[] id, byte[] label, byte[] urls, int type, int iter_count) { return s_getMenuData(wiki, id, label, urls, type, false, iter_count); }
-	private static Json_nde s_getMenuData(Xowe_wiki wiki, byte[] id, byte[] label_bry, byte[] urls, int type, boolean setLabelToSelected, int iter_count) {
+	private static Json_nde s_getMenuData(Xowe_wiki wiki, byte[] id, byte[] label, byte[] urls, int type, int iter_count, boolean is_legacy) { return s_getMenuData(wiki, id, label, urls, type, false, iter_count, is_legacy); }
+	private static Json_nde s_getMenuData(Xowe_wiki wiki, byte[] id, byte[] label_bry, byte[] urls, int type, boolean setLabelToSelected, int iter_count, boolean is_legacy) {
 		boolean isPortal = type == MENU_TYPE_PORTAL;
 
 		String plabel = String_.new_u8(id);
 		String label = plabel.substring(2);
-		String msg = String_.new_u8(label_bry); // for now
-		//String msg = msg_mgr.Val_by_str_or_empty(label_bry);
-		//if (msg == "")
-		//	msg = String_.new_u8(label_bry);
+		byte[] bmsg = wiki.Msg_mgr().Val_by_key_obj(label_bry);
+		String msg;
+		if (bmsg == null)
+			msg = String_.new_u8(label_bry);
+		else
+			msg = String_.new_u8(bmsg);
 		//String linkertooltip = String_.Empty;
 
 		Json_nde props = Json_nde.NewByVal();
@@ -274,7 +283,9 @@ public class Db_Nav_template {
 		        + " "
 //		        + (iter_count == 0 ? "portal-first ":"")
 		        + (urls == Bry_.Empty ? "emptyPortlet ":"")
-		        + ((id[2] == 'p' && id[3] == 'e') ? "vector-user-menu-legacy ":"") //'p-personal'?
+		        + ((id[2] == 'p' && id[3] == 'e') ? 
+                                is_legacy ? "vector-user-menu-legacy ": "vector-user-menu vector-user-menu-logged-out vector-menu-dropdown "
+                                :"") //'p-personal'?
 		        )
 			, extraClasses[type]);
 		props.AddKvStr("class", classes);

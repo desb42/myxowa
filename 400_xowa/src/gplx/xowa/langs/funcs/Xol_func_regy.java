@@ -121,9 +121,9 @@ public class Xol_func_regy {
 			match = new Match_hardcode(db_cs_trie, db_ci_trie, lang);
 		}
 		else {
-			cs_trie.Dumpit("cs_trie Xol_func_regy");
+//			cs_trie.Dumpit("cs_trie Xol_func_regy");
 			cs_trie.Clear_subs(); // tidyup
-			ci_trie.Dumpit("ci_trie Xol_func_regy");
+//			ci_trie.Dumpit("ci_trie Xol_func_regy");
 			ci_trie.Clear_subs(); // tidyup
 			match = new Match_btrie(cs_trie, ci_trie, lang);
 		}

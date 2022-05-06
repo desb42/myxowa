@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2021 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -14,59 +14,24 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa;
-import gplx.Bool_;
 import gplx.Bry_;
 import gplx.Bry_bfr;
-import gplx.Bry_bfr_;
-import gplx.DateAdp;
-import gplx.DateAdp_;
-import gplx.core.brys.fmtrs.Bry_fmtr;
-import gplx.langs.htmls.Gfh_utl;
-import gplx.xowa.Xoa_app_;
-import gplx.xowa.Xoa_ttl;
-import gplx.xowa.Xoae_app;
-import gplx.xowa.Xoae_page;
-import gplx.xowa.Xowe_wiki;
-import gplx.xowa.apps.gfs.Gfs_php_converter;
-import gplx.xowa.htmls.core.Xow_hdump_mode;
-import gplx.xowa.htmls.core.htmls.Xoh_html_wtr_escaper;
-import gplx.xowa.htmls.core.htmls.Xoh_wtr_ctx;
-import gplx.xowa.htmls.hxtns.pages.Hxtn_page_mgr;
-import gplx.xowa.htmls.portal.Xoh_page_body_cls;
-import gplx.xowa.htmls.portal.Xow_portal_mgr;
-import gplx.xowa.langs.vnts.Xol_vnt_mgr;
-import gplx.xowa.parsers.Xop_ctx;
-import gplx.xowa.wikis.Xow_page_tid;
-import gplx.xowa.wikis.domains.Xow_domain_tid_;
-import gplx.xowa.wikis.nss.Xow_ns_;
-import gplx.xowa.wikis.pages.Xopg_view_mode_;
-import gplx.xowa.xtns.wbases.Wdata_xwiki_link_wtr;
-
-import gplx.xowa.langs.msgs.Xow_msg_mgr;
-import gplx.xowa.Db_expand;
 import gplx.langs.jsons.*;
-import gplx.Bry_fmt;
-import gplx.xowa.Db_lua_comp;
-import gplx.xowa.parsers.utils.Xop_redirect_mgr;
-import gplx.String_;
-import gplx.xowa.addons.htmls.sidebars.Db_Nav_template;
-import gplx.xowa.parsers.logs.stats.Xop_log_stat;
-import gplx.xowa.wikis.pages.Xopg_page_heading;
-import gplx.xowa.langs.msgs.Xol_msg_mgr;
 import gplx.langs.mustaches.JsonMustacheNde;
 import gplx.langs.mustaches.Mustache_bfr;
 import gplx.langs.mustaches.Mustache_render_ctx;
 import gplx.langs.mustaches.Mustache_tkn_itm;
 import gplx.langs.mustaches.Mustache_tkn_parser;
 import gplx.Io_url;
-import gplx.Gfo_usr_dlg_;
-import gplx.xowa.htmls.Xoh_page_wtr_wkr_;
-import gplx.xowa.htmls.Xoh_page_wtr_mgr;
+import gplx.Hash_adp;
+import gplx.Hash_adp_;
+import gplx.xowa.addons.htmls.sidebars.Db_Nav_template;
+import gplx.xowa.htmls.portal.Xow_portal_mgr;
 public class Db_vector_skin implements Db_skin {
 	private String skintags = "";
-	public String Skintags() {return skintags;}
+	@Override public String Skintags() {return skintags;}
 
-	public byte[] Content(Json_nde data, Bry_bfr tmp_bfr, Db_skin_ skin) {
+	@Override public byte[] Content(Json_nde data, Bry_bfr tmp_bfr, Db_skin_ skin) {
 		Xowe_wiki wiki = skin.Wiki();
 
 		boolean is_legacy = !skin.Page().Page_skin().equals("vector-new");
@@ -87,6 +52,13 @@ public class Db_vector_skin implements Db_skin {
 //?			'should-search-expand' => $this->shouldSearchExpand(),
 
     
+//			'is-language-in-content' => $this->isLanguagesInContent(),
+//			'is-language-in-content-top' => $this->isLanguagesInContentAt( 'top' ),
+//			'is-language-in-content-bottom' => $this->isLanguagesInContentAt( 'bottom' ),
+		data.AddKvBool("is-language-in-content", false);
+		data.AddKvBool("is-language-in-content-top", false);
+		data.AddKvBool("is-language-in-content-bottom", false);
+
 		vector_search(data, is_legacy, wiki);
 
 		//System.out.println(data.Print_as_json());
@@ -95,8 +67,8 @@ public class Db_vector_skin implements Db_skin {
 		return tmp_bfr.To_bry_and_clear();
 	}
 
-	public String[] MsgStrs() { return msgs; }
-	private static String[] msgs = new String[] {
+	@Override public String[] MsgStrs() { return msgs; }
+	private static final String[] msgs = new String[] {
 						"tagline",
 						"search",
 						"navigation-heading",
@@ -121,13 +93,10 @@ public class Db_vector_skin implements Db_skin {
 		if (once) {
 			once = false;
 			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates");
-			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
-			root_legacy = parser.Parse("xowa-legacy"); // aka skin-legacy
-			//parser = new Mustache_tkn_parser(template_root);
-			//// it seem frwiki is at a different stage of development 20210525
-			//template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-Vector", "templates_xowa");
-			//parser = new Mustache_tkn_parser(template_root);
-			root_new = parser.Parse("xowa"); // aka skin
+                        Hash_adp hash = Hash_adp_.New();
+			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root, hash);
+			root_legacy = parser.Parse("skin-legacy"); // aka xowa-legacy
+			root_new = parser.Parse("skin"); // aka xowa
 		}
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
 		Mustache_bfr mbfr = Mustache_bfr.New_bfr(bfr);
@@ -162,7 +131,42 @@ public class Db_vector_skin implements Db_skin {
 		dci.AddKvStr("class", "search-toggle");
 		ds.AddKvNde("data-collapse-icon", dci);
 	}
+	public void getTemplateData(Json_nde data, Db_skin_ skin, Xow_portal_mgr portal_mgr) {
+		Xowe_wiki wiki = skin.Wiki();
+		Xoae_page page = skin.Page();
+		boolean isnoredirect = page.Url().Qargs_mgr().IsNoRedirect();
+		boolean is_legacy = !page.Page_skin().equals("vector-new");
+		Xoa_ttl page_ttl = page.Ttl();
+		Json_nde portlets = Json_nde.NewByVal();
+		//data.AddKvStr("portal_div_personal", portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect));
+		Json_nde personal = Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("personal"), Bry_.new_a7("Personal"), portal_mgr.Txt_personal_bry(page.Html_data().Hdump_exists(), page_ttl, skin.Html_gen_tid(), isnoredirect), is_legacy);
+		portlets.AddKvNde("data-personal",
+			personal
+		);
 
+		//data.AddKvStr("portal_div_ns", portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page));
+		portlets.AddKvNde("data-namespaces",
+			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("namespaces"), Bry_.new_a7("Namespaces"), portal_mgr.Txt_ns_bry(wiki, page_ttl, skin.Ispage_in_wikisource(), page), is_legacy)
+		);
+
+		// possibly data-variants
+
+		//data.AddKvStr("portal_div_view", portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect));
+		portlets.AddKvNde("data-views",
+			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("views"), Bry_.new_a7("Views"), portal_mgr.Txt_view_bry(wiki.Utl__bfr_mkr(), skin.Html_gen_tid(), page.Html_data().Xtn_search_text(), page_ttl, isnoredirect), is_legacy)
+		);
+
+		//  possibly data-actions
+
+		data.AddKvNde("data-portlets", portlets);
+		
+		// and some new stuff
+		if (!is_legacy) {
+			Json_nde dvul = Json_nde.NewByVal();
+			dvul.AddKvNde("data-user-more", personal);
+			data.AddKvNde("data-vector-user-links", dvul);
+		}
+	}
 }
 
 //Db_minerva_skin implements Db_skin

@@ -151,6 +151,8 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 	public Xop_amp_mgr      Parser_amp_mgr() {return parser_amp_mgr;} private final    Xop_amp_mgr parser_amp_mgr = Xop_amp_mgr.Instance;
 	public Db_highlight     SyntaxHighlighter() {return highlight;} private final    Db_highlight highlight = new Db_highlight();
 
+	public Hash_adp Templates() {return hash;} private Hash_adp hash = Hash_adp_.New(); // for mustache templates
+
 	private Xoa_fmtr_mgr fmtr_mgr;
 	public Gfo_number_parser Utl_num_parser() {return utl_num_parser;} private Gfo_number_parser utl_num_parser = new Gfo_number_parser();
 	public void Init_by_app() {

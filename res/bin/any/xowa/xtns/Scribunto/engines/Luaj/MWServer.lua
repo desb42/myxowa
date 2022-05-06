@@ -193,6 +193,7 @@ end
 -- @param chunk The function value
 -- @return The chunk ID
 function MWServer:addChunk( chunk )
+--dbg('addchunk', chunk)
 	local id = self.nextChunkId
 	self.nextChunkId = id + 1
 	self.chunks[id] = chunk
@@ -205,13 +206,29 @@ end
 --
 -- @param message The message from PHP
 -- @return A response message to send back to PHP
+-- REPURPOSE 22020427
 function MWServer:handleCleanupChunks( message )
 	for id, chunk in pairs( message.ids ) do  -- XOWA: different from MW, in that message has chunks to cleanup, not chunks to preserv
     local chunk_key = self.chunks[id];
-    -- dbg(id .. ':' .. tostring(chunk_key));
+    --dbg(id .. ':' .. tostring(chunk_key), self.nextChunkId);
     self.chunks[id] = nil
     self.xchunks[chunk_key] = nil
+    if id + 1 == self.nextChunkId then
+    	self.nextChunkId = id
+    end
 	end
+--	for id, chunk in pairs( message.ids ) do
+----dbg('cc', id, self.nextChunkId)
+----		for i = self.nextChunkId, id + 1, -1 do
+--		for i = id + 1, self.nextChunkId do
+--	    local chunk_key = self.chunks[i];
+--			self.chunks[i] = nil
+--			if chunk_key then
+--	    self.xchunks[chunk_key] = nil
+--	    end
+--		end
+--		self.nextChunkId = id
+--	end
 
 	return {
 		op = 'return',

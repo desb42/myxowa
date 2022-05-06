@@ -48,10 +48,12 @@ public class Xoh_file_fmtr__basic implements Xoh_file_fmtr {
 	}
 	private final    Bry_fmt fmtr_full_img__anch_y = Bry_fmt.Auto
 	( "<a href=\"~{a_href}\"~{a_class}~{a_rel}~{a_title} xowa_title=\"~{a_xowa_title}\">"
-	+ "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} class=\"thumbimage\" decoding=\"async\"/></a>"
+//	+ "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} class=\"thumbimage\" decoding=\"async\"/></a>"
+	+ "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} decoding=\"async\"/></a>"
 	);
 	private final    Bry_fmt fmtr_full_img__anch_n = Bry_fmt.Auto
-	( "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} class=\"thumbimage\" decoding=\"async\"/>");
+//	( "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} class=\"thumbimage\" decoding=\"async\"/>");
+	( "<img id=\"xoimg_~{uid}\" alt=\"~{img_alt}\"~{img_core}~{img_class}~{img_style} decoding=\"async\"/>");
 
 	public byte[] Bld_thumb_part_img(Xoh_wtr_ctx hctx, Xoae_page page, byte[] src, Xof_file_itm xfer_itm, int uid, byte[] lnki_ttl, byte[] a_href, byte[] img_src, byte[] img_alt) {
             tmp_bfr.SetThreadId();

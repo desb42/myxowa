@@ -73,6 +73,7 @@ public class Xow_wiki_props {
 			Xoa_app_.Usr_dlg().Warn_many("", "", "mw_props.load; main_page not found; conn=~{0}", cfg_tbl.Conn().Conn_info().Db_api());
 			this.main_page = Xoa_page_.Main_page_bry;
 		}
+                Bry_.Replace_reuse(this.main_page, Byte_ascii.Space, Byte_ascii.Underline);
 
 		this.modified_latest = cfg_tbl.Select_date_or(Xowd_cfg_key_.Grp__wiki_init, Xowd_cfg_key_.Key__init__modified_latest, null);
 	}
@@ -83,6 +84,7 @@ public class Xow_wiki_props {
 			Xoa_app_.Usr_dlg().Warn_many("", "", "mw_props.load; main_page not found2");
 			this.main_page = Xoa_page_.Main_page_bry;
 		}
+                Bry_.Replace_reuse(this.main_page, Byte_ascii.Space, Byte_ascii.Underline);
 
 		this.bldr_version = bldr_version;
 		this.siteinfo_mainpage = siteinfo_mainpage;

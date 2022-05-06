@@ -54,6 +54,9 @@ public class Luaj_server_func_dbg extends VarArgFunction {
 		html_bfr.Add_str_a7("</span><br/>");
 		core.Page().Html_data().Xtn_scribunto_dbg_(html_bfr.To_bry_and_clear());
 		gplx.core.consoles.Console_adp__sys.Instance.Write_str_w_nl_utf8(dbg_bfr.To_str_and_clear());
+                //if (Bry_.Eq(ttl, Bry_.new_a7("Module:Navbox"))) {
+                //    int a=1;
+                //}
 		return NONE;
 	}
 }

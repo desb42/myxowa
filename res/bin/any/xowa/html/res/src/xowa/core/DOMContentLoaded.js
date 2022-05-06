@@ -17,6 +17,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 document.addEventListener('DOMContentLoaded', function () {
 
+function doimages() {
+       xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/ext.popups.main.js');
+       xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/' + x_p.wiki + '/language.js');
+}
 
 function setaccess() {
     $('[accesskey]').updateTooltipAccessKeys();
@@ -197,7 +201,7 @@ function init () {
     }
 
     if (x_p.wiki.substring(3) == 'wikivoyage.org' || x_p.wiki.substring(3) == 'wikipedia.org' || x_p.wiki == 'simple.wikipedia.org') {
-      $(document).ready( xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/ext.popups.images.js') );
+      $(document).ready(doimages());
     }
     if (document.querySelectorAll('.switcher-container').length) {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/ext.gadget.switch.js');

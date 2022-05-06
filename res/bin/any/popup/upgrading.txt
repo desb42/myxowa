@@ -1,0 +1,18 @@
+﻿to update popups
+
+hover over a link where a popup will occur
+inspect that item
+check Event-Listeners for mouseover
+this will give (usually) a VMnnn
+expand and decode with {}
+copy to an editor
+
+any 'mw.loader.implement' need to be replaced by 'xowa_implement' 
+it seems 'mw.loader.implement' has four args - 'xowa_implement' only has three, so adjust (usually null)
+
+strip out the messages - as these are placed in a separate wiki/language.js file
+
+currently there seems to be only one url() in the css '/w/resources/src/mediawiki.ui.checkbox/images/checkbox-checked.svg?xxxxx'
+
+add "+'?action=firstpara'" to encodeURIComponent(n)
+

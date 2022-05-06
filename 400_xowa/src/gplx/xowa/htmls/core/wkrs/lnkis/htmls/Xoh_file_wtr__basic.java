@@ -198,6 +198,7 @@ public class Xoh_file_wtr__basic implements Gfo_invk {
 
 			// write image_div
 			byte[] alt_html = alt_in_caption ? Bld_alt(Bool_.Y, ctx, hctx, src, lnki) : Bry_.Empty;
+                        //System.out.println(lnki.Ttl());
 			img_fmtr.Add_full_img(tmp_bfr, hctx, page, src, xfer_itm, uid, lnki_href, Bool_.N, Xoh_lnki_consts.Tid_a_cls_image, Xoh_lnki_consts.Tid_a_rel_none, anch_ttl
 				, Xoh_file_fmtr__basic.Escape_xowa_title(lnki_ttl)
                                 , xfer_itm.Html_w() //== -1 ? xfer_itm.Lnki_w() : xfer_itm.Html_w()

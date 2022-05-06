@@ -89,7 +89,7 @@ public class Pgbnr_xtn_mgr extends Xox_mgr_base implements Bfr_arg {
 		//byte[] template_data = Io_mgr.Instance.LoadFilBryOr(wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "WikidataPageBanner", "templates", "banner.mustache"), Template_dflt);
 		//Mustache_tkn_parser parser = new Mustache_tkn_parser();
 		//template_root = parser.Parse(template_data, 0, template_data.length);
-		Mustache_tkn_parser parser = new Mustache_tkn_parser(wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "WikidataPageBanner", "templates"));
+		Mustache_tkn_parser parser = new Mustache_tkn_parser(wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "WikidataPageBanner", "templates"), wiki.Appe().Templates());
 		template_root = parser.Parse("banner", Template_dflt);
 	}
 	public Bfr_arg Write_html(Xoae_page wpg, Xop_ctx pctx, Xoh_wtr_ctx hctx) {

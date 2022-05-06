@@ -485,26 +485,16 @@ local function newFrame( frameId, ... )
 	end
 
 	return frame
-end
---- Set up a cloned environment for execution of a module chunk, then execute
--- the module in that environment. This is called by the host to implement
--- {{#invoke}}.
---
--- @param chunk The module chunk
--- @param name The name of the function to be returned. Nil or false causes the entire export table to be returned
--- @return boolean Whether the requested value was able to be returned
--- @return table|function|string The requested value, or if that was unable to be returned, the type of the value returned by the module
-function mw.executeModule( chunk, name )
+end     
+local function setupenv()
 	local env = mw.clone( _G )
 	makePackageModule( env )
 
 	-- These are unsafe
 	env.mw.makeProtectedEnvFuncs = nil
 	env.mw.executeModule = nil
-	if name ~= false then -- console sets name to false when evaluating its code and nil when evaluating a module's
-		env.mw.getLogBuffer = nil
-		env.mw.clearLogBuffer = nil
-	end
+	env.mw.getLogBuffer = nil
+	env.mw.clearLogBuffer = nil
 
 	if allowEnvFuncs then
 		env.setfenv, env.getfenv = mw.makeProtectedEnvFuncs( {[_G] = true}, {} )
@@ -515,6 +505,39 @@ function mw.executeModule( chunk, name )
 
 	env.os.date = ttlDate
 	env.os.time = ttlTime
+
+	return env
+end
+--- Set up a cloned environment for execution of a module chunk, then execute
+-- the module in that environment. This is called by the host to implement
+-- {{#invoke}}.
+--
+-- @param chunk The module chunk
+-- @param name The name of the function to be returned. Nil or false causes the entire export table to be returned
+-- @return boolean Whether the requested value was able to be returned
+-- @return table|function|string The requested value, or if that was unable to be returned, the type of the value returned by the module
+function mw.executeModule( chunk, name )
+	local env = setupenv()
+--	local env = mw.clone( _G )
+--	makePackageModule( env )
+--
+--	-- These are unsafe
+--	env.mw.makeProtectedEnvFuncs = nil
+--	env.mw.executeModule = nil
+--	if name ~= false then -- console sets name to false when evaluating its code and nil when evaluating a module's
+--		env.mw.getLogBuffer = nil
+--		env.mw.clearLogBuffer = nil
+--	end
+--
+--	if allowEnvFuncs then
+--		env.setfenv, env.getfenv = mw.makeProtectedEnvFuncs( {[_G] = true}, {} )
+--	else
+--		env.setfenv = nil
+--		env.getfenv = nil
+--	end
+--
+--	env.os.date = ttlDate
+--	env.os.time = ttlTime
 
 	setfenv( chunk, env )
 
@@ -597,7 +620,7 @@ function mw.dumpObject( object )
 			return string.format( "%q", object )
 		elseif tp == 'table' then
 			if not doneObj[object] then
-				local s = tostring( object )
+				local s = tostring( object ) -- tables can be closures
 				if s == 'table' then
 					ct[tp] = ( ct[tp] or 0 ) + 1
 					doneObj[object] = 'table#' .. ct[tp]

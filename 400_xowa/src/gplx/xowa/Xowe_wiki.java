@@ -150,7 +150,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public Db_tz_mgr				Tz_mgr() {return tz_mgr;} private Db_tz_mgr tz_mgr;
 	public Db_page_image			Page_image() {return page_image;} private Db_page_image page_image;
 	public Db_skin_mgr				Skin_mgr() {return skin_mgr;} private Db_skin_mgr skin_mgr;
-	private byte[] tagline = null;
+        private byte[] tagline = null;
 	public byte[] Tagline() {
 		tagline = msg_mgr.Val_by_key_obj("tagline");
 		if (tagline.length > 0)
@@ -296,6 +296,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		html__hdump_mgr.Init_by_db(this);
 		Xow_repo_mgr_.Assert_repos(app, this);
 		xtn_mgr.Init_by_wiki(this);
+                html_mgr.Html_wtr().Ref_wtr().Init_by_wiki(this); // defered from html_mgr
 		log_bfr.Add("wiki.init.end");
 		app.Log_wtr().Log_to_session_direct(log_bfr.Xto_str());
 		init_in_process = false;

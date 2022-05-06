@@ -213,6 +213,9 @@ public class Db_wikistrip {
 		if (sz > 6 && ((src[bgn+1] | 32) == 'f') && src[bgn+5] == ':') { // File:
 			return true;
 		}
+                else if (sz > 1 && (src[bgn+1] == -29) && src[bgn+13] == ':') { // japanese File:
+			return true;
+		}
 		else if (sz > 7 && (
 		  (((src[bgn+1] | 32) == 'i') && src[bgn+6] == ':') // Image:
 		  || (((src[bgn+1] | 32) == 'd') && src[bgn+6] == ':') // Datei:

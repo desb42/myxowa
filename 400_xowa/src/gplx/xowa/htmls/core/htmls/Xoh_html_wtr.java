@@ -89,7 +89,7 @@ public class Xoh_html_wtr {
 
 	public void Init_by_wiki(Xowe_wiki wiki) {
 		cfg.Toc__show_(Bool_.Y).Lnki__title_(true).Lnki__visited_y_().Lnki__id_(Bool_.Y);	// NOTE: set during Init_by_wiki, b/c all tests assume these are false
-		ref_wtr.Init_by_wiki(wiki);
+		//ref_wtr.Init_by_wiki(wiki); // defer to after xtn_mgr
 		lnki_wtr.Init_by_wiki(wiki);
 	}
 	public void Init_by_page(Xop_ctx ctx, Xoh_wtr_ctx hctx, byte[] src, Xoae_page page) {

@@ -398,6 +398,7 @@ public class Http_server_wkr implements Gfo_invk {
 				page_html += page_item;
 			}
 			page_html += "]";
+		//Db_readwrite.writeFile(page_html, rootdir + "images.json");
 			response.Set_content_type(Http_server_page.json_mime);
 			response.Write_response_as_html(client_wtr, Bool_.N, page_html);
 		}

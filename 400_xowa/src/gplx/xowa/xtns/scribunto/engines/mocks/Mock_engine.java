@@ -71,4 +71,5 @@ class Mock_server implements Scrib_server {
 	public void		Server_send(byte[] cmd, Object[] cmd_objs) {}
 	public byte[]	Server_recv() {return Bry_.Empty;}
 	public void		Term() {}
+	public int		Highwater() { return 0; }
 }

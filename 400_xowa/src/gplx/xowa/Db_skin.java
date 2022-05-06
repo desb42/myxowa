@@ -16,8 +16,10 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa;
 import gplx.Bry_bfr;
 import gplx.langs.jsons.Json_nde;
+import gplx.xowa.htmls.portal.Xow_portal_mgr;
 public interface Db_skin {
 	public String Skintags();
 	public byte[] Content(Json_nde data, Bry_bfr tmp_bfr, Db_skin_ skin);
 	public String[] MsgStrs();
+        public void getTemplateData(Json_nde data, Db_skin_ skin, Xow_portal_mgr portal_mgr);
 }

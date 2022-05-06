@@ -55,6 +55,7 @@ import gplx.xowa.Xoae_page;
 import gplx.Bry_fmt;
 import gplx.List_adp;
 import gplx.Byte_ascii;
+import gplx.xowa.Json_escaper;
 import gplx.xowa.wikis.nss.Xow_ns_canonical_;
 import gplx.xowa.xtns.proofreadPage.Pp_index_parser;
 public class Xow_portal_mgr implements Gfo_invk {
@@ -140,7 +141,9 @@ public class Xow_portal_mgr implements Gfo_invk {
 	private byte[] div_footer_bry = Bry_.Empty;
 	public byte[] Div_footer(byte[] page_modified_on_msg, String app_version, String app_build_date) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
+                page_modified_on_msg = Json_escaper.Escape(page_modified_on_msg);
 		div_footer_bry = Init_fmtr(tmp_bfr, wiki.Eval_mgr(), div_footer_fmtr, page_modified_on_msg, app_version, app_build_date);
+                //System.out.println("---\n" + String_.new_u8(div_footer_bry));
 		return div_footer_bry;
 	}
 
@@ -195,9 +198,10 @@ public class Xow_portal_mgr implements Gfo_invk {
 			subjectId = Bry_.new_a7("main");
 		else
 			subjectId = Bry_.Lcase__all(subjectId);
+		byte[] akat = msg_mgr.Val_html_accesskey_and_title(Bry_.Add(Bry_.new_a7("ca-nstab-"), subjectId));
 		String subjectKey = "nstab-" + String_.new_u8(subjectId);
 //		if (Bry_.Has_at_end(wiki.Props().Siteinfo_mainpage(), ttl.Page_db()))
-		if (Bry_.Eq(Xoa_ttl.Replace_unders(page.Ttl().Raw()), wiki.Props().Main_page()))
+		if (Bry_.Eq(page.Ttl().Full_db(), wiki.Props().Main_page()))
 			subjectKey = "mainpage-nstab";
 		byte[] portal_main = msg_mgr.Val_by_key_obj(subjectKey);
 		// if no mapping use the Namespace name
@@ -274,8 +278,8 @@ public class Xow_portal_mgr implements Gfo_invk {
 			extra = bfr.To_bry_and_clear();
 		}
 
-		// "portal_ns_subj_href", "portal_ns_subj_cls", "portal_ns_talk_href", "portal_ns_talk_cls", "portal_div_vnts", "portal_main", "portal_ca", "portal_extra"
-		txt_ns_fmtr.Bld_bfr_many(tmp_bfr, subj_href, subj_cls, talk_href, talk_cls, vnt_menu, portal_main, subjectId, extra);
+		// "portal_ns_subj_href", "portal_ns_subj_cls", "portal_ns_talk_href", "portal_ns_talk_cls", "portal_div_vnts", "portal_main", "portal_ca", "portal_extra", "portal_akat"
+		txt_ns_fmtr.Bld_bfr_many(tmp_bfr, subj_href, subj_cls, talk_href, talk_cls, vnt_menu, portal_main, subjectId, extra, akat);
 		return tmp_bfr.To_bry_and_rls();
 	}
 	private static final Bry_fmt
@@ -367,7 +371,7 @@ public class Xow_portal_mgr implements Gfo_invk {
 	, txt_pageread_fmtr = Bry_fmtr.new_("", "page_lang", "page_lang_ltr", "page_data")
 	, txt_pageedit_fmtr = Bry_fmtr.new_("", "edit_div_editnotices", "edit_div_preview", "edit_lang", "edit_lang_ltr", "edit_div_rename", "page_data", "page_text", "page_ttl_full")
 	, txt_pagehtml_fmtr = Bry_fmtr.new_("", "page_lang", "page_lang_ltr", "page_data")
-	, txt_ns_fmtr = Bry_fmtr.new_("~{portal_ns_subj_href};~{portal_ns_subj_cls};~{portal_ns_talk_href};~{portal_ns_talk_cls};~{portal_div_vnts};~{portal_main};~{portal_ca};~{portal_extra}", "portal_ns_subj_href", "portal_ns_subj_cls", "portal_ns_talk_href", "portal_ns_talk_cls", "portal_div_vnts", "portal_main", "portal_ca", "portal_extra")
+	, txt_ns_fmtr = Bry_fmtr.new_("~{portal_ns_subj_href};~{portal_ns_subj_cls};~{portal_ns_talk_href};~{portal_ns_talk_cls};~{portal_div_vnts};~{portal_main};~{portal_ca};~{portal_extra};~{portal_akat}", "portal_ns_subj_href", "portal_ns_subj_cls", "portal_ns_talk_href", "portal_ns_talk_cls", "portal_div_vnts", "portal_main", "portal_ca", "portal_extra", "portal_akat")
 	, txt_view_fmtr = Bry_fmtr.new_("", "portal_view_read_cls", "portal_view_edit_cls", "portal_view_html_cls", "search_text", "portal_view_read_href", "portal_view_edit_href", "portal_view_html_href", "sitename")
 	, txt_personal_fmtr = Bry_fmtr.new_("~{portal_personal_subj_href};~{portal_personal_subj_text};~{portal_personal_talk_cls};~{portal_personal_talk_href};~{portal_personal_talk_cls};~{portal_indicators_pagesource}", "portal_personal_subj_href", "portal_personal_subj_text", "portal_personal_subj_cls", "portal_personal_talk_href", "portal_personal_talk_cls", "portal_indicators_pagesource")
 	;

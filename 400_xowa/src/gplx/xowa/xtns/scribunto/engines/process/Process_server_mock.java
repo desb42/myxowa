@@ -35,6 +35,9 @@ public class Process_server_mock implements Scrib_server {
 		return Bry_.new_u8(rv);
 	}
 	public void Term() {}
+   public int Highwater() {
+       return 0; // To be implemented 20220427
+   }
 	public void Clear() {rsps.Clear(); rsps_idx = 0; log_rcvd.Clear(); log_sent.Clear();}
 	public boolean Print_key() {return print_key;} public Process_server_mock Print_key_(boolean v) {print_key = v; return this;} private boolean print_key;
 	public void Prep_add(String v) {rsps.Add(new Process_server_mock_rcvd_str(v));}

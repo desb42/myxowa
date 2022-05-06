@@ -168,7 +168,7 @@ public class Xoh_page_wtr_wkr {
 
 		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
 		byte[] page_mask_msg = Bry_.new_a7("pagetitle");
-		if (Bry_.Eq(Xoa_ttl.Replace_unders(page.Ttl().Raw()), wiki.Props().Main_page()))
+		if (Bry_.Eq(page.Ttl().Full_db(), wiki.Props().Main_page()))
 			page_mask_msg = Bry_.new_a7("pagetitle-view-mainpage");
 		byte[] page_title = Db_expand.Extracheck( msg_mgr.Val_by_key_args(page_mask_msg, page_name), "");
 
@@ -199,7 +199,7 @@ public class Xoh_page_wtr_wkr {
 		                             ctx, hctx, html_gen_tid, pagename_for_h1, 
 		                             modified_on_msg, page_mode, 
 		                             ispage_in_wikisource, wdata_lang_wtr, 
-		                             ctgs_enabled, mgr, skin_choice.MsgStrs());
+		                             ctgs_enabled, mgr, skin_choice);
 		Json_nde data = skin.getTemplateData();
 
 		fmtr.Bld_bfr_many(bfr

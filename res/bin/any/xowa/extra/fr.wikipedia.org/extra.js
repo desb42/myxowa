@@ -1,4 +1,4 @@
-﻿/* jshint scripturl:true, laxbreak:true, loopfunc:true */
+/* jshint scripturl:true, laxbreak:true, loopfunc:true */
 /* global mw, $, importScript */
 /**
  * N'importe quel JavaScript ici sera chargé pour n'importe quel utilisateur et pour chaque page accédée.
@@ -144,7 +144,7 @@ $( rewritePageTitle );
 /**
  * Ajout d'un sous-titre
  *
- * Fonction utilisée par [[Modèle:Sous-titre]]
+ * Fonction utilisée par [[Modèle:Sous-titre]] et quelques modules de taxobox
  *
  * La fonction cherche un élément de la forme
  * <span id="sous_titre_h1">Sous-titre</span>
@@ -181,12 +181,12 @@ function Palette( $content ) {
 	var $tables = $content.find( 'table.collapsible' );
 	var groups = {};
 
-	$tables.each( function( _, table ) {
+	$tables.each( function ( _, table ) {
 		var group = table.dataset.autocollapseGroup || '__default__';
 		groups[group] = ( groups[group] || 0 ) + 1;
 	} );
 
-	$tables.each( function( _, table ) {
+	$tables.each( function ( _, table ) {
 		var $table = $( table );
 
 		var group = table.dataset.autocollapseGroup || '__default__';
@@ -304,22 +304,22 @@ mw.hook( 'wikipage.content' ).add( BoiteDeroulante );
  * Fonctionnement du [[Modèle:Animation]]
  * Le JavaScript principal se situe dans [[MediaWiki:Gadget-Diaporama.js]]
  */
-//mw.hook( 'wikipage.content' ).add( function ( $content ) {
-//	if ( $content.find( '.diaporama' ).length ) {
-//		mw.loader.using( 'ext.gadget.Diaporama', function () {
-//			Diaporama_Init( $content );
-//		} );
-//	}
-//} );
+mw.hook( 'wikipage.content' ).add( function ( $content ) {
+	if ( $content.find( '.diaporama' ).length ) {
+		mw.loader.using( 'ext.gadget.Diaporama', function () {
+			Diaporama_Init( $content );
+		} );
+	}
+} );
 
 
 /**
  * Permet d'afficher les catégories cachées pour les contributeurs enregistrés, en ajoutant un (+) à la manière des boîtes déroulantes
  */
 function hiddencat( $ ) {
-	//if (mw.util.getParamValue('printable') === 'yes') {
-	//	return;
-	//}
+	if (mw.util.getParamValue('printable') === 'yes') {
+		return;
+	}
 	var cl = document.getElementById('catlinks');
 	if (!cl) {
 		return;
@@ -341,7 +341,7 @@ function hiddencat( $ ) {
 		var a = document.createElement('a');
 		a.href = '/wiki/Catégorie:Accueil';
 		a.title = 'Catégorie:Accueil';
-		a.appendChild(document.createTextNode('Catégories'));
+		a.textContent = 'Catégories';
 		catline.appendChild(a);
 		catline.appendChild(document.createTextNode(' : '));
 		nc = cl.insertBefore(catline, cl.firstChild);
@@ -353,7 +353,7 @@ function hiddencat( $ ) {
 	lnk.style.color = 'black';
 	lnk.style.marginLeft = '0.3em';
 	$(lnk).click(toggleHiddenCats);
-	lnk.appendChild(document.createTextNode('[+]'));
+	lnk.textContent = '[+]';
 	nc.appendChild(lnk);
 }
 
@@ -362,11 +362,11 @@ function toggleHiddenCats(e) {
 	if ( $hc.hasClass('mw-hidden-cats-hidden') ) {
 		$hc.removeClass('mw-hidden-cats-hidden');
 		$hc.addClass('mw-hidden-cat-user-shown');
-		$(e.target).text('[–]');
+		e.target.textContent = '[–]';
 	} else {
 		$hc.removeClass('mw-hidden-cat-user-shown');
 		$hc.addClass('mw-hidden-cats-hidden');
-		$(e.target).text('[+]');
+		e.target.textContent = '[+]';
 	}
 }
 
@@ -380,20 +380,29 @@ xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/mediawiki/mediawiki.
  * Script pour alterner entre plusieurs cartes de géolocalisation
  */
 
-function GeoBox_Init($content){
-
-	$content.find( 'div.img_toogle' ).each( function ( i, Container ) {
-		Container.id = 'img_toogle_' + i;
+function GeoBox_Init($content) {
+	// noter qu'une classe "imgtoggle" (sans l'underscore) est aussi présente sur le wiki, sans rapport avec celle-ci
+	$content.find( '.img_toggle' ).each( function ( i, Container ) {
+		Container.id = 'img_toggle_' + i;
 		var Boxes = $( Container ).find( '.geobox' );
+		if (Boxes.length < 2) {
+			return;
+		}
 		var ToggleLinksDiv = document.createElement('ul');
 		ToggleLinksDiv.id = 'geoboxToggleLinks_' + i;
 		Boxes.each( function ( a, ThisBox ) {
-			ThisBox.id = 'geobox_' + i + "_" + a;
-			ThisBox.style.borderTop='0';
-			var ThisAlt = ThisBox.getElementsByTagName('img')[0].alt;
+			ThisBox.id = 'geobox_' + i + '_' + a;
+			var ThisAlt;
+			var ThisImg = ThisBox.getElementsByTagName('img')[0];
+			if (ThisImg) {
+				ThisAlt = ThisImg.alt;
+			}
+			if (!ThisAlt) {
+				ThisAlt = 'erreur : description non trouvée';
+			}
 			var toggle = document.createElement('a');
-			toggle.id = 'geoboxToggle_' + i + "_" + a;
-			toggle.appendChild(document.createTextNode(ThisAlt));
+			toggle.id = 'geoboxToggle_' + i + '_' + a;
+			toggle.textContent = ThisAlt;
 			toggle.href = 'javascript:';
 			toggle.onclick = function (e) {
 				e.preventDefault();
@@ -403,37 +412,40 @@ function GeoBox_Init($content){
 			Li.appendChild(toggle);
 			ToggleLinksDiv.appendChild(Li);
 			if (a === (Boxes.length - 1)) {
-				Li.style.display = "none";
+				toggle.style.color = '#888';
+				toggle.style.pointerEvents = 'none';
 			} else {
-				ThisBox.style.display = "none";
+				ThisBox.style.display = 'none';
 			}
 		} );
 		Container.appendChild(ToggleLinksDiv);
 	} );
 }
 
-function GeoBox_Toggle(link){
-	var ImgToggleIndex = link.id.replace('geoboxToggle_', '').replace(/_.*/g, "");
-	var GeoBoxIndex = link.id.replace(/.*_/g, "");
-	var ImageToggle = document.getElementById('img_toogle_' + ImgToggleIndex);
+function GeoBox_Toggle(link) {
+	var ImgToggleIndex = link.id.replace('geoboxToggle_', '').replace(/_.*/g, '');
+	var GeoBoxIndex = link.id.replace(/.*_/g, '');
+	var ImageToggle = document.getElementById('img_toggle_' + ImgToggleIndex);
 	var Links = document.getElementById('geoboxToggleLinks_' + ImgToggleIndex);
-	var Geobox = document.getElementById('geobox_' + ImgToggleIndex + "_" + GeoBoxIndex);
-	var Link = document.getElementById('geoboxToggle_' + ImgToggleIndex + "_" + GeoBoxIndex);
-	if ( (!ImageToggle) || (!Links) || (!Geobox) || (!Link) ) {
+	var Geobox = document.getElementById('geobox_' + ImgToggleIndex + '_' + GeoBoxIndex);
+	var Link = document.getElementById('geoboxToggle_' + ImgToggleIndex + '_' + GeoBoxIndex);
+	if ( !ImageToggle || !Links || !Geobox || !Link ) {
 		return;
 	}
 	$( ImageToggle ).find( '.geobox' ).each( function ( _, ThisgeoBox ) {
 		if (ThisgeoBox.id === Geobox.id) {
-			ThisgeoBox.style.display = "";
+			ThisgeoBox.style.display = '';
 		} else {
-			ThisgeoBox.style.display = "none";
+			ThisgeoBox.style.display = 'none';
 		}
 	} );
 	$( Links ).find( 'a' ).each( function ( _, thisToggleLink ) {
-		if (thisToggleLink.id === Link.id){
-			thisToggleLink.parentNode.style.display = "none";
+		if (thisToggleLink.id === Link.id) {
+			thisToggleLink.style.color = '#888';
+			thisToggleLink.style.pointerEvents = 'none';
 		} else {
-			thisToggleLink.parentNode.style.display = "";
+			thisToggleLink.style.color = '';
+			thisToggleLink.style.pointerEvents = '';
 		}
 	} );
 }
@@ -448,7 +460,7 @@ mw.hook( 'wikipage.content' ).add( GeoBox_Init );
  * Pour les commentaires, merci de contacter [[user:Plyd|Plyd]].
  */
 function rewritePageH1bis() {
-	var helpPage = document.getElementById("helpPage");
+	var helpPage = document.getElementById('helpPage');
 	if (helpPage) {
 		var h1 = document.getElementById('firstHeading');
 		if (h1) {
@@ -461,61 +473,87 @@ $( rewritePageH1bis );
 /**
  * Configuration du tri des diacritique dans les tables de class "sortable"
  */
-//mw.config.set( 'tableSorterCollation', {'à':'a', 'â':'a', 'æ':'ae', 'é':'e', 'è':'e', 'ê':'e', 'î':'i', 'ï':'i', 'ô':'o', 'œ':'oe', 'û':'u', 'ç':'c',  } );
+mw.config.set( 'tableSorterCollation', {'à':'a', 'â':'a', 'æ':'ae', 'é':'e', 'è':'e', 'ê':'e', 'î':'i', 'ï':'i', 'ô':'o', 'œ':'oe', 'û':'u', 'ç':'c',  } );
 
 /**
  * Direct imagelinks to Commons
  *
- * Required modules: mediawiki.RegExp, mediawiki.util, user.options
+ * Required modules: mediawiki.util, user.options
  *
  * @source www.mediawiki.org/wiki/Snippets/Direct_imagelinks_to_Commons
  * @author Krinkle
  * @version 2015-06-23
  * Ajouté le 'uselang' ce 18 janvier 2016 — Ltrlg
  */
-//if ( mw.config.get( 'wgNamespaceNumber' ) >= 0 ) {
-//	mw.loader.using( [ 'mediawiki.RegExp', 'mediawiki.util', 'user.options' ] ).done(function(){
-//		mw.hook( 'wikipage.content' ).add( function ( $content ) {
-//			var
-//				uploadBase = '//upload.wikimedia.org/wikipedia/commons/',
-//
-//				fileNamespace = mw.config.get( 'wgFormattedNamespaces' )['6'],
-//				localBasePath = new RegExp( '^' + mw.RegExp.escape( mw.util.getUrl( fileNamespace + ':' ) ) ),
-//				localBaseScript = new RegExp( '^' + mw.RegExp.escape( mw.util.wikiScript() + '?title=' + mw.util.wikiUrlencode( fileNamespace + ':' ) ) ),
-//
-//				commonsBasePath = '//commons.wikimedia.org/wiki/File:',
-//				commonsBaseScript = '//commons.wikimedia.org/w/index.php?title=File:',
-//
-//				lang = mw.user.options.get( 'language' );
-//
-//			$content.find( 'a.image' ).attr( 'href', function ( i, currVal ) {
-//				if ( $( this ).find( 'img' ).attr( 'src' ).indexOf( uploadBase ) === 0 ) {
-//					if ( localBasePath.test( currVal ) ) {
-//						return currVal.replace( localBasePath, commonsBasePath ) + '?uselang=' + lang;
-//					} else if ( localBaseScript.test( currVal ) ) {
-//						return currVal.replace( localBaseScript, commonsBaseScript ) + '&uselang=' + lang;
-//					} else {
-//						return currVal;
-//					}
-//				}
-//			} );
-//		} );
-//	} );
-//}
+if ( mw.config.get( 'wgNamespaceNumber' ) >= 0 ) {
+	mw.loader.using( [ 'mediawiki.util', 'user.options' ], function () {
+		mw.hook( 'wikipage.content' ).add( function ( $content ) {
+			var
+				uploadBase = '//upload.wikimedia.org/wikipedia/commons/',
+
+				fileNamespace = mw.config.get( 'wgFormattedNamespaces' )['6'],
+				localBasePath = new RegExp( '^' + mw.util.escapeRegExp( mw.util.getUrl( fileNamespace + ':' ) ) ),
+				localBaseScript = new RegExp( '^' + mw.util.escapeRegExp( mw.util.wikiScript() + '?title=' + mw.util.wikiUrlencode( fileNamespace + ':' ) ) ),
+
+				commonsBasePath = '//commons.wikimedia.org/wiki/File:',
+				commonsBaseScript = '//commons.wikimedia.org/w/index.php?title=File:',
+
+				lang = mw.user.options.get( 'language' );
+
+			$content.find( '.image' ).each( function ( i, link ) {
+				if ( link.tagName !== 'A' ) {
+					return;
+				}
+
+				var img = link.querySelector( 'img' );
+
+				// attention : on lit l'attribut, et non la propriété (elle contient en plus le protocole)
+				// (en prime, il est plus performant dans ce cas de lire l'attribut)
+				if ( img && img.getAttribute( 'src' ).indexOf( uploadBase ) === 0 ) {
+					var currVal = link.getAttribute( 'href' );
+					if ( localBasePath.test( currVal ) ) {
+						link.setAttribute( 'href', currVal.replace( localBasePath, commonsBasePath ) + '?uselang=' + lang );
+					} else if ( localBaseScript.test( currVal ) ) {
+						link.setAttribute( 'href', currVal.replace( localBaseScript, commonsBaseScript ) + '&uselang=' + lang );
+					}
+				}
+			} );
+		} );
+	} );
+}
 
 /**
- * Ajout d'un lien « ajouter une section » en bas de page
+ * Ajout d'un lien « Ajouter un sujet » en bas de page
  */
 if ( mw.config.get( 'wgAction' ) === 'view' ) {
-	$( function( $ ) {
-		var $newSectionLink = $( '#ca-addsection' ).find( 'a' );
-		if ( $newSectionLink.length ) {
-			$( '#mw-content-text' ).append(
-				'<div style="text-align:right; font-size:0.9em; margin:1em 0 -0.5em">'
-				+ '<a href="' + $newSectionLink.attr( 'href' ) + '" title="Commencer une nouvelle section">Ajouter un sujet</a>'
-				+ '</div>'
-			);
+	$( function ( $ ) {
+		var addSection = document.getElementById( 'ca-addsection' );
+		if ( !addSection ) { // pas d'onglet « Ajouter un sujet »
+			return;
 		}
+		var addSectionLink = addSection.querySelector( 'a' );
+		if ( !addSectionLink ) { // erreur : le markup a changé
+			return;
+		}
+
+		var $container = $( '<div style="text-align:right; font-size:0.9em; margin:1em 0 -0.5em">' );
+
+		var link = document.createElement( 'a' );
+		link.href = addSectionLink.href; // ce href sert encore, pour les middle-click, Ctrl+click... (ouverture dans un nouvel onglet)
+		link.title = addSectionLink.title;
+		link.textContent = addSectionLink.textContent;
+
+		// compatibilité avec la fonctionnalité beta "New Discussion Tool", voir [[mw:Extension:DiscussionTools]]
+		link.addEventListener( 'click', function ( e ) {
+			if ( !e.ctrlKey ) {
+				e.preventDefault();
+				addSectionLink.click(); // .click() JS natif, pour information le .click() jQuery ne fonctionne pas dans le cas présent
+			}
+		} );
+
+		$container.append( link );
+
+		$( '#mw-content-text' ).append( $container );
 	} );
 }
 
@@ -571,14 +609,6 @@ if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'Whatlinkshere' ) {
  */
 if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'Upload' ) {
 	importScript( 'MediaWiki:Onlyifuploading.js' );
-}
-
-/**
- * Supprime de la liste des balises disponibles et de la liste des balises supprimables
- * certaines balises réservées à des outils automatiques
- */
-if ( mw.config.get( 'wgCanonicalSpecialPageName' ) === 'EditTags' ) {
-	importScript( 'MediaWiki:Common.js/EditTags.js' );
 }
 
 } // Fin du code concernant l'espace de nom 'Special'
@@ -647,72 +677,3 @@ var addBibSubsetMenu = function ( $content ) {
 mw.hook( 'wikipage.content' ).add( addBibSubsetMenu );
 
 } // Fin du code concernant l'espace de nom 'Référence'
-
-
-// PAGES SPÉCIFIQUES
-
-// Personnalisation des liens dans les pages d'aide selon un paramètre de l'URL.
-// Utilisé par [[Aide:Comment créer un article/publier]].
-function ReplaceSourcePageInLinks() {
-	var match = window.location.search.match( /[?&]sourcepage=([^&]*)/ );
-	if ( !match ) {
-		return;
-	}
-	var page = decodeURIComponent( match[1] );
-	$( '.sourcepage-subst a' ).each( function() {
-		if ( /^(https?:)?\/\/[^/]+\.wikipedia\.org\//.test( this.href ) ) {
-			this.href = this.href.replace( 'TITRE-A-REMPLACER', encodeURIComponent( page ) );
-		}
-	} );
-}
-
-if ( mw.config.get( 'wgPageName' ) === 'Aide:Comment_créer_un_article/publier' ) {
-	$( ReplaceSourcePageInLinks );
-}
-
-/* EXTRAS */
-
-/* fr.wikipedia.org/wiki/MediaWiki:Gadget-ArchiveLinks.js */
-/**
- * Application de [[Wikipédia:Prise de décision/Système de cache]].
- * Un <span class="noarchive"> autour d'un lien l'empêche d'être pris en compte.
- *
- * {{Catégorisation JS|ArchiveLinks}}
- */
-
-if ( !window.no_external_cache && ( mw.config.get( 'wgNamespaceNumber' ) === 0 /*|| mw.user.options.get( 'gadget-ExtendedCache' )*/ ) ) {
-	mw.hook( 'wikipage.content' ).add( function ( $content ) {
-
-		$content.find( '.external' ).each( function ( _, link ) {
-			if ( link.tagName !== 'A' ) {
-				return;
-			}
-
-			var chemin = link.href;
-
-			if ( /(^|\.)wiki([pm]edia|data)\.org$/.test( link.hostname )
-				|| chemin.indexOf( 'http://tools.wmflabs.org/' ) === 0
-				|| chemin.indexOf( 'http://archive.wikiwix.com/cache/' ) === 0
-				|| chemin.indexOf( 'http://wikiwix.com/cache/' ) === 0
-				|| chemin.indexOf( 'http://web.archive.org/web/' ) === 0
-			) {
-				return;
-			}
-
-			var $link = $( link );
-
-			if ( $link.closest( '.noarchive, .infobox_v3' ).length ) {
-				return;
-			}
-
-			// sécurité : attention à échapper les quotes dans les attributs
-
-			var href = 'http://archive.wikiwix.com/cache/?url=' + encodeURIComponent( chemin );
-			var title = 'archive sur Wikiwix';
-
-			var archiveLink = '<a href="' + href + '" title="' + title + '">archive</a>';
-
-			$link.after( '<small class="cachelinks">\u00a0[' + archiveLink + ']</small>' );
-		});
-	});
-}

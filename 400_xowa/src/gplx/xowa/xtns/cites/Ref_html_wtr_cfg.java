@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,10 +13,11 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.cites; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
+package gplx.xowa.xtns.cites;
+import gplx.*; import gplx.xowa.*;
 import gplx.core.brys.fmtrs.*;
 public class Ref_html_wtr_cfg {
-	private Bry_bfr itm_tmp_bfr = Bry_bfr_.New(), grp_tmp_bfr = Bry_bfr_.New();
+	private final Bry_bfr itm_tmp_bfr = Bry_bfr_.New(), grp_tmp_bfr = Bry_bfr_.New();
 	private Xowe_wiki wiki;
 	public Bry_fmtr Itm_html() 			{return itm_html;} 			private Bry_fmtr itm_html; 			public Ref_html_wtr_cfg Itm_html_(String v) {itm_html 				= Bry_fmtr.new_(v, "itm_id", "grp_id", "grp_key"); return this;}
 	public Bry_fmtr Itm_id_uid() 		{return itm_id_uid;} 		private Bry_fmtr itm_id_uid; 		public Ref_html_wtr_cfg Itm_id_uid_(String v) {itm_id_uid 			= Bry_fmtr.new_(v, "pre", "uid", "suf"); return this;}
@@ -253,9 +254,9 @@ class Backrefs {
 	private int len;
 	private final int[] links;
 	private final byte[] data;
-        private byte[] key0;
-        private byte[] key1;
-        private byte[] key2;
+	private final byte[] key0;
+	private final byte[] key1;
+	private final byte[] key2;
 
 	// first pass count and adjust to one space
 	private void count_and_check() {
@@ -284,7 +285,7 @@ class Backrefs {
 					}
 					break;
 			}
-                        pos++;
+			pos++;
 		}
 		count++;
 	}
@@ -307,17 +308,17 @@ class Backrefs {
 		links = new int[count];
 		setup();
 		// Note - count changes!!
-                key0 = Get_at(0);
-                key1 = Get_at(1);
-                key2 = Get_at(2);
+		key0 = Bry_.Mid(data, links[0], links[1]);
+		key1 = Bry_.Mid(data, links[1], links[2]);
+		key2 = Bry_.Mid(data, links[2], links[3]);
 	}
 	public byte[] Get_at(int i) {
-            if (i == 0) return key0;
-            if (i == 1) return key1;
-            if (i == 2) return key2;
+		if (i == 0) return key0;
+		if (i == 1) return key1;
+		if (i == 2) return key2;
 		return Bry_.Mid(data, links[i], links[i+1]);
 	}
-        public int Length() {
-            return count;
-        }
+	public int Length() {
+		return count;
+	}
 }

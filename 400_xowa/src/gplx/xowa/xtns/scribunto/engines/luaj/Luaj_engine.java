@@ -211,6 +211,10 @@ public class Luaj_engine implements Scrib_engine {
 	}
 	public LuaTable Server_recv_call_x(LuaTable rsp) {
 		String proc_id = rsp.get(1).tojstring(); //Luaj_value_.Get_val_as_str(rsp, "i"); // id
+                //System.out.println("call_x " + proc_id);
+		//if (proc_id.equals("mw.language|lc")) {
+                //int a=1;
+              //}
 		Keyval[] args = Luaj_value_.Lua_tbl_to_kv_ary_x(server, rsp);
                 core.Ctx().Page().Stat_itm().Scrib().Inc_call_count();
 		Scrib_proc proc = proc_mgr.Get_by_key(proc_id); if (proc == null) throw Scrib_xtn_mgr.err_("could not find proc with id of {0}", proc_id);

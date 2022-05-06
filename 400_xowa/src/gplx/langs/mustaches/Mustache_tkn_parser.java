@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -24,6 +24,8 @@ import gplx.Io_mgr;
 import gplx.Io_url;
 import gplx.List_adp;
 import gplx.List_adp_;
+import gplx.Hash_adp;
+import gplx.Hash_adp_;
 
 public class Mustache_tkn_parser {
 	private byte[] src; private int src_end;
@@ -31,13 +33,30 @@ public class Mustache_tkn_parser {
 	private final Mustache_tkn_def tkn_def = new Mustache_tkn_def();
 	public Mustache_tkn_parser() {
 	}
-	public Mustache_tkn_parser(Io_url template_root) {
+	private Hash_adp hash;
+	public Mustache_tkn_parser(Io_url template_root, Hash_adp hash) {
 		this.template_root = template_root;
+                this.hash = hash;
 	}
 	public Mustache_tkn_itm Parse(String template) { return Parse(template, Bry_.Empty); }
-	public Mustache_tkn_itm Parse(String template, byte[] default_text) {
+/*	public Mustache_tkn_itm Parse(String template, byte[] default_text) {
+            System.out.println("m " + template);
 		byte[] template_data = Io_mgr.Instance.LoadFilBryOr(template_root.GenSubFil_nest(template + ".mustache"), default_text);
 		return Parse(template_data, 0, template_data.length);
+	}
+*/
+	public Mustache_tkn_itm Parse(String template, byte[] default_text) {
+		Mustache_tkn_itm itm = (Mustache_tkn_itm)hash.Get_by(template);
+		if (itm == null) {
+//            System.out.println("m " + template);
+			byte[] template_data = Io_mgr.Instance.LoadFilBryOr(template_root.GenSubFil_nest(template + ".mustache"), default_text);
+		Mustache_tkn_root root = new Mustache_tkn_root();
+		this.src = template_data; this.src_end = template_data.length;
+			hash.Add(template, root);
+		Parse_grp(root, 0);
+                return root;
+		}
+		return itm;
 	}
 	public Mustache_tkn_itm Parse(byte[] src) {return Parse(src, 0, src.length);}
 	public Mustache_tkn_itm Parse(byte[] src, int src_bgn, int src_end) {
@@ -102,7 +121,7 @@ public class Mustache_tkn_parser {
 			default:								throw Err_.new_unhandled(tkn_data.tid);
 			case Mustache_tkn_def.Variable:			tkn = new Mustache_tkn_variable(val_bry);	break;
 			case Mustache_tkn_def.Comment:			tkn = new Mustache_tkn_comment();			break;
-			case Mustache_tkn_def.Partial:			tkn = new Mustache_tkn_partial(val_bry, template_root);	break;
+			case Mustache_tkn_def.Partial:			tkn = new Mustache_tkn_partial(val_bry, template_root, hash);	break;
 			case Mustache_tkn_def.Delimiter_bgn:	tkn = new Mustache_tkn_delimiter(val_bry);	break;	// TODO_OLD: implement delimiter; EX: {{=<% %>=}}
 			case Mustache_tkn_def.Escape_bgn:		tkn = new Mustache_tkn_escape(val_bry);		break;
 			case Mustache_tkn_def.Section:			tkn = new Mustache_tkn_section(val_bry);	break;

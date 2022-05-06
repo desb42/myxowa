@@ -93,12 +93,14 @@ local function htmlEncode( s )
 	return ( string.gsub_x1( s ) ) -- special hook
 end
 
+local encode_css = function ( m )
+		return string.format( '\\%X ', mw.ustring.codepoint( m ) )
+	end
 local function cssEncode( s )
 	-- XXX: I'm not sure this character set is complete.
 	-- bug #68011: allow delete character (\127)
-	return mw.ustring.gsub( s, '[^\32-\57\60-\127]', function ( m )
-		return string.format( '\\%X ', mw.ustring.codepoint( m ) )
-	end )
+	return string.gsub( s, '[^\32-\57\60-\127]', encode_css )
+	--return mw.ustring.gsub( s, '[^\32-\57\60-\127]', encode_css )
 end
 
 -- Create a builder object. This is a separate function so that we can show the

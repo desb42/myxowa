@@ -127,8 +127,12 @@ public class Scrib_core {
 		xtn_mgr.Lib_mgr().Init_for_core(this, script_dir);
 		luaid_ExecuteModule = lib_mw.Mod().Fncs_get_id("executeModule");
 		luaid_ExecuteFunction = lib_mw.Mod().Fncs_get_id("executeFunction");
+                this.highwater = engine.Server().Highwater();
+                this.resetlevel = this.highwater;
 		return this;
 	}
+        private int resetlevel;
+        private int highwater;
 	private void Init_register(Io_url script_dir, Scrib_lib... ary) {
 		int len = ary.length;
 		for (int i = 0; i < len; i++)
@@ -136,6 +140,8 @@ public class Scrib_core {
 	}
 	//public void Term() {engine.Server().Term(); mods.Clear();}
 	public void Term() {
+//		engine.CleanupChunks(Keyval_.Ary(Keyval_.int_(resetlevel, "")));
+
 		lib_mw.Notify_page_changed(true);
 		//lib_uri.Notify_page_changed();
 		//lib_title.Notify_page_changed();
@@ -145,6 +151,7 @@ public class Scrib_core {
 		engine.Term();
                 engine.Server_(null); // should be the same as the line below!
 		engine = null;
+                
                 mods.Clear();
 	}
         public void Reset() {
@@ -253,6 +260,7 @@ public class Scrib_core {
 */
 			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), fnc_name_str);
 			Keyval[] func_rslt = engine.CallFunction(luaid_ExecuteModule, func_args);			// call init_chunk to get proc dynamically; DATE:2014-07-12
+                        //System.out.println("invoke:" + String_.new_u8(mod_name) + " " + fnc_name_str);
 			if (func_rslt == null || func_rslt.length < 2) {
 				String errmsg = String_.new_u8(ctx.Wiki().Msg_mgr().Val_by_key_args(Bry_.new_a7("scribunto-common-nosuchfunction"), fnc_name, Scrib_kv_utl_.Val_to_str(func_args, 1)));
 				//throw Err_.new_wo_type("lua.error:" + errmsg, "fnc_name", String_.new_u8(fnc_name)); // must return at least 2 items for func_rslt[1] below; DATE:2014-09-22
@@ -267,6 +275,7 @@ public class Scrib_core {
 			//gplx.xowa.parsers.xndes.Xop_xnde_tkn.Hack_ctx = ctx;
 			//bfr.Add(rslt_bry);
 			if (!Env_.Mode_testing())
+//...				engine.CleanupChunks(Keyval_.Ary(Keyval_.int_(highwater, "")));										// cleanup chunk immediately; needed for heavy pages like en.d:water; DATE:2014-08-07
 				engine.CleanupChunks(Keyval_.Ary(Keyval_.int_(proc.Id(), "")));										// cleanup chunk immediately; needed for heavy pages like en.d:water; DATE:2014-08-07
                         //engine.ClearChunks();
 		}
@@ -294,6 +303,7 @@ public class Scrib_core {
                 
 			rv.LoadString(mod_text);
 			mods.Add(mod_name, rv);
+                        highwater = engine.Server().Highwater();
 		}
 		return rv;
 	}

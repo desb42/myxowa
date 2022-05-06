@@ -40,18 +40,22 @@ public class Db_skin_ {
 	private final Xop_ctx ctx;
 	private final Xoh_wtr_ctx hctx;
 	private final byte html_gen_tid;
+        public byte Html_gen_tid() { return html_gen_tid; }
 	private final byte[] pagename_for_h1;
 	private final byte[] modified_on_msg;
 	private final int page_mode;
 	private final boolean ispage_in_wikisource;
+        public boolean Ispage_in_wikisource() { return ispage_in_wikisource; }
 	private final Wdata_xwiki_link_wtr wdata_lang_wtr;
 	private final boolean ctgs_enabled;
 	private final Xoh_page_wtr_mgr mgr;
 	private final String[] msgs;
 	public Xoae_page Page() { return page; }
 	public Xowe_wiki Wiki() { return wiki; }
+	private final Db_skin skin_choice;
+	private final boolean ismain;
 
-	public Db_skin_(Xow_portal_mgr portal_mgr, byte[] page_data, Xoae_page page, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte html_gen_tid, byte[] pagename_for_h1, byte[] modified_on_msg, int page_mode, boolean ispage_in_wikisource, Wdata_xwiki_link_wtr wdata_lang_wtr, boolean ctgs_enabled, Xoh_page_wtr_mgr mgr, String[] msgs) {
+	public Db_skin_(Xow_portal_mgr portal_mgr, byte[] page_data, Xoae_page page, Xowe_wiki wiki, Xop_ctx ctx, Xoh_wtr_ctx hctx, byte html_gen_tid, byte[] pagename_for_h1, byte[] modified_on_msg, int page_mode, boolean ispage_in_wikisource, Wdata_xwiki_link_wtr wdata_lang_wtr, boolean ctgs_enabled, Xoh_page_wtr_mgr mgr, Db_skin skin_choice) {
 		this.portal_mgr = portal_mgr;
 		this.page_data = page_data;
 		this.page = page;
@@ -66,7 +70,9 @@ public class Db_skin_ {
 		this.wdata_lang_wtr = wdata_lang_wtr;
 		this.ctgs_enabled = ctgs_enabled;
 		this.mgr = mgr;
-		this.msgs = msgs;
+		this.skin_choice = skin_choice;
+		this.msgs = skin_choice.MsgStrs();
+		this.ismain = Bry_.Eq(page.Ttl().Full_db(), wiki.Props().Main_page());
     }
 // from https://github.com/wikimedia/mediawiki/blob/6b115843ed93d8b2eb0a309caa9b3ae52b24bf86/includes/skins/SkinMustache.php
 // and
@@ -83,10 +89,10 @@ public class Db_skin_ {
 
 		// https://github.com/wikimedia/mediawiki/blob/292fa3ae54008ed03e0ea74863291a268b4a2636/includes/skins/SkinTemplate.php#L416
 		byte[] bodytext = Pagebody(portal_mgr, page_data, page, page_mode, wiki, mgr);
-		data.AddKvStr("bodytext", bodytext);
+		//data.AddKvStr("bodytext", bodytext);
 
 		// https://github.com/wikimedia/mediawiki/blob/292fa3ae54008ed03e0ea74863291a268b4a2636/includes/skins/SkinTemplate.php#L451
-		data.AddKvStr("bodycontent", bodytext);
+		//data.AddKvStr("bodycontent", bodytext);
 
 		// https://github.com/wikimedia/mediawiki/blob/6b115843ed93d8b2eb0a309caa9b3ae52b24bf86/includes/skins/SkinMustache.php#L88
 		data.AddKvStr("html-body-content", bodytext);
@@ -106,12 +112,15 @@ public class Db_skin_ {
 				$htmlTitle
 			),*/
 		Bry_fmtr tmp_fmtr = Bry_fmtr.New__tmp().Fail_when_invalid_escapes_(false);
-		tmp_fmtr.Fmt_("<h1 id=\"firstHeading\" class=\"firstHeading mw-first-heading\">~{0}</h1>").Bld_bfr_many(tmp_bfr, ph.getPageTitle());
+		byte[] style = null;
+		if (ismain)
+			style = Bry_.new_a7(" style=\"display: none\"");
+		tmp_fmtr.Fmt_("<h1 id=\"firstHeading\" class=\"firstHeading mw-first-heading\"~{1}>~{0}</h1>").Bld_bfr_many(tmp_bfr, ph.getPageTitle(), style);
 		data.AddKvStr("html-title-heading", tmp_bfr.To_str_and_clear());
 			
 		data.AddKvStr("html-title", ph.getPageTitle());
 		data.AddKvStr("html-subtitle", Xoh_page_wtr_wkr_.Bld_page_content_sub(app, wiki, page, tmp_bfr, isnoredirect));
-		data.AddKvStr("html-body-content", Pagebody(portal_mgr, page_data, page, page_mode, wiki, mgr));
+
 		if (page_mode == Xopg_view_mode_.Tid__read) // only generate categories if READ
 			data.AddKvStr("html-categories", Categories(portal_mgr, wiki, ctx, hctx, page, html_gen_tid, wdata_lang_wtr, ctgs_enabled));
 
@@ -152,13 +161,17 @@ public class Db_skin_ {
 		// Boolean values
 		data.AddKvBool("is-anon", true);
 		data.AddKvBool("is-article", isarticle); // strictly Special: is not an article
-		data.AddKvBool("is-mainpage", Bry_.Eq(page.Ttl().Page_db(), wiki.Props().Main_page()));
+		data.AddKvBool("is-mainpage", ismain);
 		data.AddKvBool("is-specialpage", !isarticle);
 
 //		] + $this->getPortletsTemplateData() + $this->getFooterTemplateData();
 		getPortletsTemplateData(data);
 
-		data.AddKvStr("portal_div_footer", portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date));
+		Json_parser parser = new Json_parser();
+                byte[] footer = portal_mgr.Div_footer(modified_on_msg, Xoa_app_.Version, Xoa_app_.Build_date);
+                Json_doc jdoc = parser.Parse(footer);
+                //System.out.println(jdoc.Root_nde().Print_as_json());
+		data.AddKvNde("data-footer", jdoc.Root_nde());
 
 	}
 	private Json_nde buildSearchProps() {
@@ -319,29 +332,9 @@ public class Db_skin_ {
 	, Key_retrieved = Bry_.new_a7("retrievedfrom")
 	;
 	private void getPortletsTemplateData(Json_nde data) {
-		boolean isnoredirect = page.Url().Qargs_mgr().IsNoRedirect();
-		Xoa_ttl page_ttl = page.Ttl();
-		Json_nde portlets = Json_nde.NewByVal();
-		//data.AddKvStr("portal_div_personal", portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect));
-		portlets.AddKvNde("data-personal",
-			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("personal"), Bry_.new_a7("Personal"), portal_mgr.Txt_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect))
-		);
+		
+		skin_choice.getTemplateData(data, this, portal_mgr);
 
-		//data.AddKvStr("portal_div_ns", portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page));
-		portlets.AddKvNde("data-namespaces",
-			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("namespaces"), Bry_.new_a7("Namespaces"), portal_mgr.Txt_ns_bry(wiki, page_ttl, ispage_in_wikisource, page))
-		);
-
-		// possibly data-variants
-
-		//data.AddKvStr("portal_div_view", portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect));
-		portlets.AddKvNde("data-views",
-			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("views"), Bry_.new_a7("Views"), portal_mgr.Txt_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect))
-		);
-
-		//  possibly data-actions
-
-		data.AddKvNde("data-portlets", portlets);
 		portal_mgr.Sidebar_mgr().Build_json(data);
 
 	}

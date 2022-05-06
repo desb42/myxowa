@@ -99,7 +99,7 @@ public class Http_server_page {
 		// get url
 		// empty title returns main page; EX: "" -> "Main_Page"
 		this.ttl_bry = url_parser.Page();
-		if (Bry_.Len_eq_0(ttl_bry) || Bry_.Eq(Xoa_ttl.Replace_unders(ttl_bry), wiki.Props().Main_page())) {
+		if (Bry_.Len_eq_0(ttl_bry) || Bry_.Eq(ttl_bry, wiki.Props().Main_page())) {
 			this.ttl_bry = wiki.Props().Main_page();
 			url_parser.Is_main_page_set();
 		}

@@ -60,6 +60,8 @@ import gplx.langs.mustaches.Mustache_tkn_itm;
 import gplx.langs.mustaches.Mustache_tkn_parser;
 import gplx.Io_url;
 import gplx.Gfo_usr_dlg_;
+import gplx.Hash_adp;
+import gplx.Hash_adp_;
 import gplx.xowa.htmls.Xoh_page_wtr_wkr_;
 import gplx.xowa.htmls.Xoh_page_wtr_mgr;
 public class Db_minerva_skin implements Db_skin {
@@ -83,7 +85,7 @@ public class Db_minerva_skin implements Db_skin {
 				$content .= $data['subject-page'];
 			}
 */
-		String bodycontent = data.Get_as_str("bodycontent");
+		String bodycontent = data.Get_as_str("html-body-content");
 
 		data.AddKvStr("contenthtml", "<div id=\"bodyContent\" class=\"content\">\n" + bodycontent + "</div>\n");
 
@@ -211,15 +213,44 @@ public class Db_minerva_skin implements Db_skin {
 		if (once) {
 			once = false;
 			Io_url template_root = wiki.Appe().Fsys_mgr().Bin_any_dir().GenSubDir_nest("xowa", "xtns", "Skin-MinervaNeue", "templates");
-			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root);
-			skin_root = parser.Parse("xowa"); // aka skin
+                        Hash_adp hash = Hash_adp_.New();
+			Mustache_tkn_parser parser = new Mustache_tkn_parser(template_root, hash);
+			skin_root = parser.Parse("skin"); // aka xowa
 		}
 		Mustache_render_ctx mctx = new Mustache_render_ctx().Init(new JsonMustacheNde(data));
 		Mustache_bfr mbfr = Mustache_bfr.New_bfr(bfr);
 
 		skin_root.Render(mbfr, mctx);
 	}
+	public void getTemplateData(Json_nde data, Db_skin_ skin, Xow_portal_mgr portal_mgr) {
+		Xowe_wiki wiki = skin.Wiki();
+		Xoae_page page = skin.Page();
+		boolean isnoredirect = page.Url().Qargs_mgr().IsNoRedirect();
+		Xoa_ttl page_ttl = page.Ttl();
+		Json_nde portlets = Json_nde.NewByVal();
+		//data.AddKvStr("portal_div_personal", portal_mgr.Div_personal_bry(page.Html_data().Hdump_exists(), page_ttl, html_gen_tid, isnoredirect));
+/*		Json_nde personal = Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("personal"), Bry_.new_a7("Personal"), portal_mgr.Txt_personal_bry(page.Html_data().Hdump_exists(), page_ttl, skin.Html_gen_tid(), isnoredirect), is_legacy);
+		portlets.AddKvNde("data-personal",
+			personal
+		);
 
+		//data.AddKvStr("portal_div_ns", portal_mgr.Div_ns_bry(wiki, page_ttl, ispage_in_wikisource, page));
+		portlets.AddKvNde("data-namespaces",
+			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("namespaces"), Bry_.new_a7("Namespaces"), portal_mgr.Txt_ns_bry(wiki, page_ttl, skin.Ispage_in_wikisource(), page), is_legacy)
+		);
+
+		// possibly data-variants
+
+		//data.AddKvStr("portal_div_view", portal_mgr.Div_view_bry(wiki.Utl__bfr_mkr(), html_gen_tid, page.Html_data().Xtn_search_text(), page_ttl, isnoredirect));
+		portlets.AddKvNde("data-views",
+			Db_Nav_template.Build_Menu(wiki, Bry_.new_a7("views"), Bry_.new_a7("Views"), portal_mgr.Txt_view_bry(wiki.Utl__bfr_mkr(), skin.Html_gen_tid(), page.Html_data().Xtn_search_text(), page_ttl, isnoredirect), is_legacy)
+		);
+
+		//  possibly data-actions
+*/
+		data.AddKvNde("data-portlets", portlets);
+		
+	}
 }
 
 //Db_minerva_skin implements Db_skin

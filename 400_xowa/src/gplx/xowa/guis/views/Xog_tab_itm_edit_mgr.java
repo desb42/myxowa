@@ -124,7 +124,7 @@ public class Xog_tab_itm_edit_mgr {
 	public static void Rename(Xog_tab_itm tab) {
 		if (tab.View_mode() != Xopg_view_mode_.Tid__edit) return;	// exit if not edit; handles ctrl+r being pressed
 		Xoae_page page = tab.Page(); Xowe_wiki wiki = tab.Wiki(); Xog_win_itm win_itm = tab.Tab_mgr().Win();
-		if (Bry_.Eq(page.Ttl().Page_db(), wiki.Props().Main_page())) {
+		if (Bry_.Eq(page.Ttl().Full_db(), wiki.Props().Main_page())) {
 			win_itm.Usr_dlg().Warn_many("", "", "The Main Page cannot be renamed");
 			win_itm.Kit().Ask_ok("", "", "The Main Page cannot be renamed");
 			return;

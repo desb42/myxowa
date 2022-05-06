@@ -54,21 +54,39 @@ public class Luaj_server implements Scrib_server {
 		chunks = server.get(Val_chunks);
 		LuaC.install(luaj_globals);
 	}
+        public int Highwater() {
+            return chunks.length() + 1; // 1 based array
+        }
 	public LuaTable Dispatch(LuaTable msg) {
 		return (LuaTable)server.method(Val_server_recv, msg);
 	}
 	public int Get_id_by_closure(LuaValue closure) {
+//            return ((LuaInteger)server.method("addChunk", closure)).v;
+            
 		//LuaValue xchunks = server.get(Val_xchunks);
-                if (xchunks == null) {
-                    int a=1;
+                
+                /*
+                int i = 1;
+                while (true) {
+                    LuaValue v = chunks.get(i);
+                    if (v.isnil())
+                        break;
+                    System.out.println("c " + Integer.toString(i) + ":" + v);
+                    i++;
                 }
+                */
 		LuaValue closure_id = xchunks.get(closure);
+                //if (closure.toString().equals("function: =Module:InfoboxImage:172-316")) {
+                //    int a=1;
+                //}
 		int rv = -1;
 		if (closure_id == LuaValue.NIL)		// new closure; add it to chunks table via addChunk (which will return new id)
 			rv = ((LuaInteger)server.method("addChunk", closure)).v;
 		else
 			rv = ((LuaInteger)closure_id).v;
+                //System.out.println("Looking for:" + closure + " " + (closure_id != LuaValue.NIL) + "(" + Integer.toString(rv) + ")");
 		return rv;		
+            
 	}
 	public LuaValue Get_closure_by_id(int id) {
 		//LuaValue chunks = server.get(Val_chunks);

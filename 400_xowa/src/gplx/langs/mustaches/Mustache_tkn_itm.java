@@ -21,6 +21,7 @@ import gplx.Byte_ascii;
 import gplx.Err_;
 import gplx.Io_url;
 import gplx.String_;
+import gplx.Hash_adp;
 
 public interface Mustache_tkn_itm { 
 	int Tid();
@@ -112,9 +113,9 @@ class Mustache_tkn_inverted extends Mustache_tkn_base {	// EX: {{^section}}missi
 }
 class Mustache_tkn_partial extends Mustache_tkn_base { // EX: {{>a}} -> abc (deferred eval)
 	private Mustache_tkn_itm template_root;
-	public Mustache_tkn_partial(byte[] key, Io_url dir) {
+	public Mustache_tkn_partial(byte[] key, Io_url dir, Hash_adp hash) {
 		super(Mustache_tkn_itm_.Tid__partial, key);
-		Mustache_tkn_parser parser = new Mustache_tkn_parser(dir);
+		Mustache_tkn_parser parser = new Mustache_tkn_parser(dir, hash);
 		template_root = parser.Parse(String_.new_a7(Bry_.Trim_bgn(key, Byte_ascii.Space, 0)));
 	}
 	@Override public void Render(Mustache_bfr bfr, Mustache_render_ctx ctx) {
