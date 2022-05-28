@@ -266,10 +266,9 @@ public static final int
 	private static final    Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
 	public static void update_val_(Xol_msg_itm itm, byte[] val) {
 		synchronized (tmp_fmtr) {	// LOCK:static-objs; DATE:2016-07-07
-			boolean has_fmt_arg = tmp_fmtr.Fmt_(val).Compile().Fmt_args_exist();
-			boolean has_tmpl_txt = Bry_find_.Find_fwd(val, Xop_curly_bgn_lxr.Hook, 0) != -1;
+                    Bry_fmtr fmt = tmp_fmtr.Fmt_(val).Compile();
 			//val = trie_space.Replace(tmp_bfr, val, 0, val.length); // is this neccessary 20201103 D
-			itm.Atrs_set(val, has_fmt_arg, has_tmpl_txt);
+			itm.Atrs_set(val, fmt.Fmt_args_exist(), fmt.Fmt_tmpl_exist(), fmt.Fmt_wtxt_exist());
 		}
 	}
 	public static final    byte[] Bry_nbsp = Byte_.Ary_by_ints(194, 160);

@@ -18,7 +18,7 @@ import gplx.xowa.langs.*; import gplx.xowa.langs.kwds.*;
 import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
 public class Db_parser {
 	private byte[] m_src;
-	private int m_src_end, m_pos, m_start, m_tail;
+	private int m_src_end, m_pos, m_start, m_tail, m_nl_start;
 	private Bry_bfr m_newsrc = null;
 	private Xop_ctx ctx;
 	private Tag_match translate_tag = new Tag_match("translate");
@@ -32,6 +32,13 @@ public class Db_parser {
 		m_src_end = src.length;
 		m_newsrc = Bry_bfr_.New();
 		m_pos = 0;
+                // any leading linefeeds?
+                while (m_nl_start < m_src_end) {
+                   if (src[m_nl_start] == Byte_ascii.Nl)
+                       m_nl_start++;
+                   else
+                       break;
+                }
 		/*nsrc = removecomments();
 		m_src = nsrc;
 		m_src_end = nsrc.length;
@@ -48,6 +55,9 @@ public class Db_parser {
 		m_newsrc.Clear();
 		m_pos = 0;
 		nsrc = removesection();
+                if (m_nl_start > 0) { // if not already trimmed
+                    nsrc = Bry_.Mid(src, m_nl_start);
+                }
 		return nsrc;
 	}
 	private byte[] removecomments() {
@@ -68,6 +78,8 @@ public class Db_parser {
 				m_pos++;
 		}
 		if (start_text > 0) {
+                    m_newsrc.Delete_rng_to_bgn(m_nl_start);
+                    m_nl_start = 0;
 			addtext(start_text, m_src_end);
 			return m_newsrc.To_bry_and_clear();
 		}
@@ -138,6 +150,8 @@ public class Db_parser {
 			m_pos++;
 		}
 		if (start_text > 0) {
+                    m_newsrc.Delete_rng_to_bgn(m_nl_start);
+                    m_nl_start = 0;
 			addtext(start_text, m_src_end);
 			return m_newsrc.To_bry_and_clear();
 		}
@@ -164,6 +178,8 @@ public class Db_parser {
 			m_pos++;
 		}
 		if (start_text > 0) {
+                    m_newsrc.Delete_rng_to_bgn(m_nl_start);
+                    m_nl_start = 0;
 			addtext(start_text, m_src_end);
 			return m_newsrc.To_bry_and_clear();
 		}
@@ -185,6 +201,8 @@ public class Db_parser {
 			m_pos++;
 		}
 		if (start_text > 0) {
+                    m_newsrc.Delete_rng_to_bgn(m_nl_start);
+                    m_nl_start = 0;
 			addtext(start_text, m_src_end);
 			return m_newsrc.To_bry_and_clear();
 		}

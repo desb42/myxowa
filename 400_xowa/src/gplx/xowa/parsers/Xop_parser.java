@@ -101,6 +101,16 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 		root.Reset();
 		byte[] mid_bry = Expand_tmpl(root, ctx, tkn_mkr, src);
 		mid_bry = Db_highlight.RemoveSH(mid_bry, ctx.Page());
+                int len = mid_bry.length;
+			int xpos = 0;
+			while (xpos < len) {
+				if (mid_bry[xpos] == Byte_ascii.Nl)
+					xpos++;
+				else
+					break;
+			}
+                        if (xpos > 0)
+                            mid_bry = Bry_.Mid(mid_bry, xpos);
 //		Db_readwrite.writeFile(String_.new_u8(mid_bry), "d:/des/xowa_x/expand.txt");
 //                Gfo_usr_dlg_.Instance.Log_many("", "", "mid_bry=~{0}", String_.new_u8(mid_bry));
 //System.out.println(String_.new_u8(mid_bry));
@@ -112,6 +122,17 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 	public void Parse_wtxt_to_wdom(Xop_root_tkn root, Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, byte[] wtxt, int doc_bgn_pos) {
 		root.Root_src_(wtxt);	// always set latest src; needed for Parse_all wherein src will first be raw and then parsed tmpl
 		Parse(root, ctx, tkn_mkr, wtxt, Xop_parser_tid_.Tid__wtxt, wtxt_trie, doc_bgn_pos);
+	}
+	public byte[] Parse_wtxt_to_html(Xop_ctx pctx, byte[] src) {
+		Bry_bfr bfr = wiki.Utl__bfr_mkr().Get_b512();
+		Xop_ctx ctx = Xop_ctx.New__sub(wiki, pctx, pctx.Page());
+		Xop_tkn_mkr tkn_mkr = ctx.Tkn_mkr();
+		Xop_root_tkn root = tkn_mkr.Root(src);
+		Xop_parser parser = wiki.Parser_mgr().Main();
+		ctx.Para().Enabled_(false);
+		parser.Parse_wtxt_to_wdom(root, ctx, ctx.Tkn_mkr(), src, Xop_parser_.Doc_bgn_bos);
+		wiki.Html_mgr().Html_wtr().Write_doc(bfr, ctx, Xoh_wtr_ctx.Basic, src, root);
+		return bfr.To_bry_and_rls();
 	}
 	private void Parse(Xop_root_tkn root, Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, byte[] src, byte parse_type, Btrie_fast_mgr trie, int doc_bgn_pos) {
 		int len = src.length; if (len == 0) return;	// nothing to parse;

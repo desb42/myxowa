@@ -63,12 +63,12 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
         }
 	public byte[] Full_db_wo_xwiki()	{
 		byte[] rv = Bry_.Mid(full_txt, wik_bgn == -1 ? 0 : ns_bgn == -1 ? page_bgn : ns_bgn, full_txt.length);
-		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);
+		rv = Bry_.Replace_create(rv, Byte_ascii.Space, Byte_ascii.Underline);
 		return rv;
 	}
 	public byte[] Full_db_wo_ns()	{
 		byte[] rv = Bry_.Mid(full_txt, ns_bgn == -1 ? 0 : page_bgn, full_txt.length);
-		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);
+		rv = Bry_.Replace_create(rv, Byte_ascii.Space, Byte_ascii.Underline);
 		return rv;
 	}
 	public byte[] Page_txt_w_anchor()	{return Bry_.Mid(full_txt, page_bgn, qarg_bgn == -1 ? full_txt.length : qarg_bgn - 1);}
@@ -83,7 +83,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 	public byte[] Page_db() {
 //		byte[] rv = this.Page_txt_w_anchor();
 		byte[] rv = this.Page_txt();
-		Bry_.Replace_reuse(rv, Byte_ascii.Space, Byte_ascii.Underline);
+		rv = Bry_.Replace_create(rv, Byte_ascii.Space, Byte_ascii.Underline);
 		return rv;
 	}
 	public String Page_db_as_str()		{return String_.new_u8(Page_db());}
@@ -748,7 +748,7 @@ public class Xoa_ttl {	// PAGE:en.w:http://en.wikipedia.org/wiki/Help:Link; REF.
 			rv = Bry_.Add(wik_itm.Key_bry(), Byte_ascii.Colon_bry, Full_db());
 		else
 			rv = Full_db(); //ns.Gen_ttl(this.Page_db());
-		Bry_.Replace_reuse(rv, Byte_ascii.Underline, Byte_ascii.Space);
+		rv = Bry_.Replace_create(rv, Byte_ascii.Underline, Byte_ascii.Space);
 		return rv;
 	}
 	public String toString() {

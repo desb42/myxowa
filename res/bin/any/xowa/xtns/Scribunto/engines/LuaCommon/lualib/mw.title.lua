@@ -74,7 +74,10 @@ local function makeTitleObject( data )
 
 	local firstSlash, lastSlash
 	if ns.hasSubpages then
-		firstSlash, lastSlash = string.match( data.text, '^[^/]*().*()/[^/]*$' )
+		firstSlash = data.text:find('/')
+		if firstSlash then
+			lastSlash = string.match( data.text, '()/[^/]*$' )
+		end
 	end
 	if firstSlash then
 		data.isSubpage = true

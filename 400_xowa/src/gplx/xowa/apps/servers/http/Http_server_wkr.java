@@ -180,10 +180,11 @@ public class Http_server_wkr implements Gfo_invk {
 					stype = Bry_.new_a7("disambiguation");
 				}
 				byte[] page_title = page.Ttl().Full_db_wo_ns();
+				wikitext = ws.First_para(wikitext, page.Ttl(), page.Wiki());
 				json_fmtr.Bld_bfr_many(bfr, 
-                                stype, page_title, page.Page().Db().Page().Id(), 
-                                thumb, orig, ws.First_para(wikitext, page.Ttl(), page.Wiki()),
-                                page.Wiki().Lang().Key_bry(), page.Wiki().Lang().Dir_ltr_bry());
+					    stype, page_title, page.Page().Db().Page().Id(), 
+					    thumb, orig, wikitext,
+					    page.Wiki().Lang().Key_bry(), page.Wiki().Lang().Dir_ltr_bry());
 
 				page_html = String_.new_u8(bfr.To_bry());
 		}

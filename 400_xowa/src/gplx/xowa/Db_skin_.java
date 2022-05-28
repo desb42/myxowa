@@ -318,7 +318,7 @@ public class Db_skin_ {
 	private byte[] Editnotices(int ns, Xowe_wiki wiki) {
 		String en = "editnotice-" + Integer.toString(ns);
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
-		byte[] editnotices = Db_expand.Extracheck(wiki.Msg_mgr().Val_by_key_obj(en), ""); // this should be the full blown expansion!
+		byte[] editnotices = Db_expand.Extracheck(wiki.Msg_mgr().Val_by_key_obj(en), "", wiki); // this should be the full blown expansion!
 		if (editnotices.length > 0) {
 			Bry_fmt en_fmt = Bry_fmt.Auto("<div class=\"mw-editnotice mw-editnotice-namespace mw-~{0}\">~{1}</div>");
 			en_fmt.Bld_many(tmp_bfr, Bry_.new_a7(en), editnotices);

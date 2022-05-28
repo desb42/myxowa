@@ -214,7 +214,7 @@ class Xol_lang_srl_fxt {
 	}
 	public Xol_msg_itm msg_(String key, String val) {
 		Xol_msg_itm rv = lang.Msg_mgr().Itm_by_key_or_new(Bry_.new_u8(key));
-		rv.Atrs_set(Bry_.new_u8(val), false, false);
+		rv.Atrs_set(Bry_.new_u8(val), false, false, false);
 		return rv;
 	}
 	public Xol_lang_srl_fxt Init_clear() {

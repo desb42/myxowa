@@ -119,6 +119,17 @@ public class Xow_page_cache {
 			// create item
 			if (page_exists) {
 				//page_text = dbp.stripcomments(page_text);
+				int src_len = page_text.length;
+				int pos = 0;
+				while (pos < src_len) {
+					if (page_text[pos] == Byte_ascii.Nl)
+						pos++;
+					else
+						break;
+				}
+				if (pos > 0) {
+					page_text = Bry_.Mid(page_text, pos);
+				}
 				rv = new Xow_page_cache_itm(false, page_id, page_ttl, page_text, page_redirect_from, 0, 0);
 				Add_itm(ttl.Full_db_as_str(), rv);
 			}

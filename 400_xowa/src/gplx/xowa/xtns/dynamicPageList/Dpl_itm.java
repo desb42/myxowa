@@ -31,6 +31,7 @@ public class Dpl_itm {
 	public boolean Show_ns() {return show_ns;} private boolean show_ns;
 	public boolean Show_date() {return ctg_date;} private boolean ctg_date = false;
 	public byte Sort_ascending() {return sort_ascending;} private byte sort_ascending = Bool_.__byte;
+	public boolean Ns_filter_active() {return ns_filter_active;} private boolean ns_filter_active = false;
 	public int Ns_filter() {return ns_filter;} private int ns_filter = 0;
 	public boolean Gallery_filesize() {return gallery_filesize;} private boolean gallery_filesize;
 	public boolean Gallery_filename() {return gallery_filename;} private boolean gallery_filename;
@@ -96,7 +97,7 @@ public class Dpl_itm {
 				}
 				case Byte_ascii.Nl: { // dlm is nl; EX: "\n" in "category=abc\n"
 					if (fld_bgn == pos) { // blank arg - still needs to process
-						if (ws_bgn_chk == false)
+						if (ws_key_found)
 							Parse_cmd(wiki, key_id, Bry_.Empty, usr_dlg, page_ttl);
 					}
 					else {
@@ -132,6 +133,7 @@ public class Dpl_itm {
 			case Dpl_itm_keys.Key_ns: {
 				Xow_ns ns = (Xow_ns)wiki.Ns_mgr().Names_get_or_null(val, 0, val.length);
 				ns_filter = ns == null ? Xow_ns_.Tid__main : ns.Id();
+				ns_filter_active = true;
 				break;
 			}
 			case Dpl_itm_keys.Key_order:				sort_ascending = Dpl_sort.Parse_as_bool_byte(val); break;

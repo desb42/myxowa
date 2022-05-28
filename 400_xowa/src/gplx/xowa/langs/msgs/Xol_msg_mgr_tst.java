@@ -45,7 +45,7 @@ class Xol_msg_mgr_fxt {
 	}	private Xoae_app app; Xowe_wiki wiki; Xow_msg_mgr mgr;
 	public void Test_val_by_key(String val, String expd) {
 		Xol_msg_itm itm = wiki.Lang().Msg_mgr().Itm_by_key_or_new(Bry_.new_a7("test"));
-		itm.Atrs_set(Bry_.new_a7(val), false, true);			
+		itm.Atrs_set(Bry_.new_a7(val), false, true, false);			
 		Tfds.Eq(expd, String_.new_u8(wiki.Msg_mgr().Val_by_key_obj(Bry_.new_a7("test"))), "has_tmpl_txt");
 	}
 	public void Test_mediaWiki_msg(String raw, String expd) {
@@ -63,6 +63,6 @@ class Xol_msg_mgr_fxt {
 	}
 	private void new_msg_itm_(String key, String val) {
 		Xol_msg_itm itm = wiki.Lang().Msg_mgr().Itm_by_key_or_new(Bry_.new_a7(key));
-		itm.Atrs_set(Bry_.new_a7(val), false, true);			
+		itm.Atrs_set(Bry_.new_a7(val), false, true, false);			
 	}
 }

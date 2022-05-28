@@ -46,7 +46,7 @@ public class Xowv_wiki implements Xow_wiki, Xow_ttl_parser, Gfo_invk {
 
 		this.ns_mgr = Xow_ns_mgr_.default_(app.Utl_case_mgr(), app.Utl_case_mgr2());
 		this.lang = app.Lang_mgr().Get_by_or_en(domain_itm.Lang_actl_key());	// NOTE: must not be null, or causes null ref exception on redlinks in drd; DATE:2016-06-28
-		this.msg_mgr = new Xow_msg_mgr(this, lang);
+		this.msg_mgr = null; //new Xow_msg_mgr(this, lang); // eeeeekkkkkkk
 		this.html__hdump_mgr = new Xow_hdump_mgr(this);
 		this.special_mgr = new Xosp_special_mgr(this);
 		this.fsdb_mgr = new Xof_fsdb_mgr__sql();
@@ -54,7 +54,7 @@ public class Xowv_wiki implements Xow_wiki, Xow_ttl_parser, Gfo_invk {
 		this.xwiki_mgr = new Xow_xwiki_mgr(this);
 		this.stats = new Xowd_site_stats_mgr(this);
 		this.lnki_bldr = new Xoh_lnki_bldr(app, href_wtr);
-		this.ctg_catpage_mgr = new Xoctg_catpage_mgr(this);
+		this.ctg_catpage_mgr = null;//new Xoctg_catpage_mgr(this);// eeeeeekkkkkkk
 	}
         public int Wrk_id() {return 0;}
 	public Xoa_app						App() {return app;}

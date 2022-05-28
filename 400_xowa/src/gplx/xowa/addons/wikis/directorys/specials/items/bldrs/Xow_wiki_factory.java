@@ -44,7 +44,7 @@ public class Xow_wiki_factory {
 		rv.Xwiki_mgr().Add_by_atrs("xowa.home", "home");
 
 		// HACK: remove CC copyright message; should change to option
-		rv.Msg_mgr().Get_or_make(Bry_.new_a7("wikimedia-copyright")).Atrs_set(Bry_.Empty, false, false);
+		rv.Msg_mgr().Get_or_make(Bry_.new_a7("wikimedia-copyright")).Atrs_set(Bry_.Empty, false, false, false);
 		return rv;
 	}
 }

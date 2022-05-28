@@ -205,7 +205,7 @@ class Xoh_sidebar_mgr_fxt {
 	public Xoh_sidebar_mgr_fxt Init_msg(String key, String val) {
 		Xol_msg_mgr msg_mgr = wiki.Lang().Msg_mgr();
 		Xol_msg_itm msg_itm = msg_mgr.Itm_by_key_or_new(Bry_.new_a7(key));
-		msg_itm.Atrs_set(Bry_.new_a7(val), false, String_.Has(val, "{{"));
+		msg_itm.Atrs_set(Bry_.new_a7(val), false, String_.Has(val, "{{"), false);
 		return this;
 	}
 	public void Exec__make(String... raw) {

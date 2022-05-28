@@ -150,7 +150,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public Db_tz_mgr				Tz_mgr() {return tz_mgr;} private Db_tz_mgr tz_mgr;
 	public Db_page_image			Page_image() {return page_image;} private Db_page_image page_image;
 	public Db_skin_mgr				Skin_mgr() {return skin_mgr;} private Db_skin_mgr skin_mgr;
-        private byte[] tagline = null;
+	private byte[] tagline = null;
 	public byte[] Tagline() {
 		tagline = msg_mgr.Val_by_key_obj("tagline");
 		if (tagline.length > 0)

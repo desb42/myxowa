@@ -297,10 +297,10 @@ public class Xoh_html_wtr {
 		int shorter = st1_len < st2_end - st2_bgn ? st1_len : st2_end - st2_bgn;
 		int i;
 		for ( i = 0; i < shorter; ++i ) {
-                    byte a = text[st1_bgn + i]; // prefix
-                    byte b = text[st2_bgn + i]; // lastprefix
-                    if (b == ';') // treat ':' and ';' same in lastprefix
-                        b = ':';
+			byte a = text[st1_bgn + i]; // prefix
+			byte b = text[st2_bgn + i]; // lastprefix
+			if (b == ';') // treat ':' and ';' same in lastprefix
+				b = ':';
 			if ( a != b ) {
 				break;
 			}
@@ -352,14 +352,14 @@ public class Xoh_html_wtr {
 		}
 		switch (chr) {
 			case '*': case '#':
-                            // HACK if bfr ends with <li> dont add anything
-                            int bfr_ofs = bfr.Len() - 4;
-                            byte[] bfr_buf = bfr.Bfr();
-                            if (bfr_ofs > 0 && bfr_buf[bfr_ofs] == '<' &&
-                                    bfr_buf[bfr_ofs+1] == 'l' &&
-                                    bfr_buf[bfr_ofs+2] == 'i' &&
-                                    bfr_buf[bfr_ofs+3] == '>')
-                                break;
+				// HACK if bfr ends with <li> dont add anything
+				int bfr_ofs = bfr.Len() - 4;
+				byte[] bfr_buf = bfr.Bfr();
+				if (bfr_ofs > 0 && bfr_buf[bfr_ofs] == '<' &&
+				    bfr_buf[bfr_ofs+1] == 'l' &&
+				    bfr_buf[bfr_ofs+2] == 'i' &&
+				    bfr_buf[bfr_ofs+3] == '>')
+					break;
 				bfr.Add(ni_star);
 				break;
 			case ':': case ';':
@@ -438,7 +438,7 @@ public class Xoh_html_wtr {
 					if (nxt_tkn.Tkn_tid() == Xop_tkn_itm_.Tid_space) {
 						nxt_tkn.Ignore_y_();
 					}
-                                        break; // once a list_new found, no point in going further
+					break; // once a list_new found, no point in going further
 				}
 			}
 	}
@@ -634,18 +634,19 @@ public class Xoh_html_wtr {
 		if (hctx.Mode_is_alt()) return;
 		switch (under.Under_tid()) {
 			case Xol_kwd_grp_.Id_toc:
-				if (cfg.Toc__show())
-                                    page.Html_data().Toc_mgr().Toc_bgn_(bfr.Len());
-                                    page.Html_data().Toc_mgr().Exists_y_();
+				if (cfg.Toc__show()) {
+					page.Html_data().Toc_mgr().Toc_bgn_(bfr.Len());
+					page.Html_data().Toc_mgr().Exists_y_();
+				}
 				break;
 			case Xol_kwd_grp_.Id_forcetoc:
-                            ctx.Page_data().Hdr_forcetoc_y_();
-                            page.Html_data().Toc_mgr().Hdr_forcetoc_y_();
-                            break;
+				ctx.Page_data().Hdr_forcetoc_y_();
+				page.Html_data().Toc_mgr().Hdr_forcetoc_y_();
+				break;
 			case Xol_kwd_grp_.Id_notoc:
-                            ctx.Page_data().Hdr_notoc_y_();
-                            page.Html_data().Toc_mgr().Hdr_notoc_y_();
-                            break;
+				ctx.Page_data().Hdr_notoc_y_();
+				page.Html_data().Toc_mgr().Hdr_notoc_y_();
+				break;
 			case Xol_kwd_grp_.Id_noeditsection:		break;	// ignore; not handling edit sections
 			case Xol_kwd_grp_.Id_nocontentconvert:	ctx.Page_data().Lang_convert_content_(false); break;
 			case Xol_kwd_grp_.Id_notitleconvert:	ctx.Page_data().Lang_convert_title_(false); break;
@@ -665,9 +666,9 @@ public class Xoh_html_wtr {
 			case Xop_xnde_tag_.Tid__br:
 				if (xnde.Src_end() - xnde.Src_bgn() < 4
 					|| xnde.Src_bgn() == -1) 
-                                    bfr.Add(Gfh_tag_.Br_inl); 
-                                else 
-                                    bfr.Add_mid(src, xnde.Src_bgn(), xnde.Src_end()); break;
+					bfr.Add(Gfh_tag_.Br_inl); 
+				else 
+					bfr.Add_mid(src, xnde.Src_bgn(), xnde.Src_end()); break;
 //			case Xop_xnde_tag_.Tid__hr: bfr.Add(Gfh_tag_.Hr_inl); break;
 			case Xop_xnde_tag_.Tid__includeonly:	// NOTE: do not write tags or content
 				break;
@@ -708,10 +709,10 @@ public class Xoh_html_wtr {
 				break;
 			case Xop_xnde_tag_.Tid__dl:
 			case Xop_xnde_tag_.Tid__div:
-                                //ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_end);
+				//ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_end);
 				Write_xnde(bfr, ctx, hctx, xnde, tag, tag_id, src);
-                                // (re)set para start - maybe??
-                                ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_bgn);
+				// (re)set para start - maybe??
+				ctx.Para().Process_block__xnde(xnde.Tag(), Xop_xnde_tag.Block_bgn);
 				break;
 			case Xop_xnde_tag_.Tid__pre: {
 				if (xnde.Tag_open_end() == xnde.Tag_close_bgn()) return; // ignore empty tags, else blank pre line will be printed; DATE:2014-03-12

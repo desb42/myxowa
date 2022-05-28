@@ -95,7 +95,7 @@ public class Pft_func_time__basic__tst {
 	@Test   public void Lang() {
 		Xol_lang_itm fr_lang = fxt.App().Lang_mgr().Get_by_or_new(Bry_.new_a7("fr"));
 		Xol_msg_itm msg_itm = fr_lang.Msg_mgr().Itm_by_key_or_new(Bry_.new_a7("January"));
-		msg_itm.Atrs_set(Bry_.new_a7("Janvier"), false, false);
+		msg_itm.Atrs_set(Bry_.new_a7("Janvier"), false, false, false);
 		fxt.Test_parse_tmpl_str("{{#time:F|2012-01|fr}}"					, "Janvier");
 //			fxt.Test_parse_tmpl_str("{{#time:F|2012-01|fr_bad}}"				, "January");	// default to english	// commented out; fails when running all at once
 	}

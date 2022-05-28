@@ -176,6 +176,7 @@ public class Xomp_parse_wkr implements Gfo_invk {
 				if (wpg.Wiki().Utl__bfr_mkr().Check()) {
 					parser_mgr.Ctx().Wiki().Logger().Log_many("nonzero bfrs: ttl=~{0}", wpg.Ttl().Full_db());
 					System.out.println("nonzero " + wpg.Ttl());
+					wpg.Wiki().Utl__bfr_mkr().Clear();
 				}
 
 				// gen_html

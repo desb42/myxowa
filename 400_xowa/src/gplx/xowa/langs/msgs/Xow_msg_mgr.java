@@ -26,16 +26,16 @@ import gplx.GfsCtx;
 import gplx.String_;
 import gplx.core.brys.fmtrs.Bry_fmtr;
 import gplx.xowa.Json_escaper;
-import gplx.xowa.Xow_wiki;
+import gplx.xowa.Xowe_wiki;
 import gplx.xowa.addons.htmls.sidebars.Xoh_sidebar_itm;
 import gplx.xowa.langs.Xol_lang_itm;
+import gplx.xowa.parsers.Xop_ctx;
 
 public class Xow_msg_mgr implements Gfo_invk {
-	private final Xow_wiki wiki;
+	private final Xowe_wiki wiki;
 	private final Xol_msg_mgr msg_mgr;
 	private Xol_lang_itm lang;
-	private final Bry_fmtr tmp_fmtr = Bry_fmtr.New__tmp();
-	public Xow_msg_mgr(Xow_wiki wiki, Xol_lang_itm lang) {
+	public Xow_msg_mgr(Xowe_wiki wiki, Xol_lang_itm lang) {
 		this.wiki = wiki;
 		this.lang = lang;
 		this.msg_mgr = new Xol_msg_mgr(wiki, false);
@@ -77,6 +77,7 @@ public class Xow_msg_mgr implements Gfo_invk {
 	public byte[] Val_by_key_obj(String key) {return Val_by_key(Bry_.new_u8(key), null);}
 	public byte[] Val_by_key_obj(byte[] key) {return Val_by_key(key, null);}
 	private byte[] Val_by_key(byte[] key, Object[] args) {
+            //System.out.println("msg " + String_.new_u8(key));
 		Xol_msg_itm itm = msg_mgr.Itm_by_key_or_null(key);
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
 		if (itm == null)
@@ -90,11 +91,23 @@ public class Xow_msg_mgr implements Gfo_invk {
 		return rv;
 	}
 	public byte[] Val_by_itm(Bry_bfr tmp_bfr, Xol_msg_itm itm, Object[] args) {
-		byte[] rv = itm.Val();
-		if (args != null) rv = itm.Fmt_tmp(tmp_bfr, tmp_fmtr, rv, args);
+		byte[] rv;
+		if (args == null)
+                    rv = itm.Val();
+                else
+                    rv = itm.Fmt(tmp_bfr, args);
 		if (itm.Has_tmpl_txt()) rv = wiki.Wtxt__expand_tmpl(rv);
+		if (itm.Has_wtxt()) rv = wiki.Wtxt__expand_tmpl(rv);
 		return rv;
 	}
+        private byte[] Wtxt_expand(byte[] src) {
+                        Xop_ctx ctx = Xop_ctx.New__sub__reuse_page(wiki.Parser_mgr().Ctx());
+			//byte[] txt = wiki.Parser_mgr().Main().Parse_text_to_html(ctx, bfr.To_bry());
+			byte[] txt = wiki.Parser_mgr().Main().Parse_wtxt_to_html(ctx, src);
+            System.out.println("n " + String_.new_u8(txt));
+			return txt;
+            
+        }
 	public byte[] Val_html_accesskey_and_title(String id) {return Val_html_accesskey_and_title(Bry_.new_u8(id));}
 	public byte[] Val_html_accesskey_and_title(byte[] id) {
 		Bry_bfr bfr = wiki.Utl__bfr_mkr().Get_b512();
@@ -134,7 +147,7 @@ public class Xow_msg_mgr implements Gfo_invk {
 	private static final byte[] CONST_prefix_tooltip = Bry_.new_a7("tooltip-"), CONST_prefix_accesskey = Bry_.new_a7("accesskey-"), CONST_atr_title = Bry_.new_a7(" title=\""), CONST_atr_accesskey = Bry_.new_a7(" accesskey=\"");
 	public Xol_msg_itm Set(String key_str, String val_str) { // TEST
 		Xol_msg_itm msg_itm = this.Get_or_make(Bry_.new_u8(key_str));
-		msg_itm.Atrs_set(Bry_.new_u8(val_str), false, false);
+		msg_itm.Atrs_set(Bry_.new_u8(val_str), false, false, false);
 		msg_itm.Defined_in_(Xol_msg_itm.Defined_in__lang);
 		return msg_itm;
 	}

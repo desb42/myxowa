@@ -26,7 +26,7 @@ class Pft_func_time_foreign_fxt {
 	}
 	public Pft_func_time_foreign_fxt Init_msg(String key, String val) {
 		Xol_msg_itm msg = fxt.Wiki().Msg_mgr().Get_or_make(Bry_.new_u8(key));
-		msg.Atrs_set(Bry_.new_u8(val), false, false);
+		msg.Atrs_set(Bry_.new_u8(val), false, false, false);
 		return this;
 	}
 	public void Test_parse(String raw, String expd) {

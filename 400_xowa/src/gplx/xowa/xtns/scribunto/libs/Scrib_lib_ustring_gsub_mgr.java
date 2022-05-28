@@ -47,7 +47,7 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 	private String pat_str;
 	private int limit;
 	private byte repl_tid;
-        private String repl_str;
+	private String repl_str;
 	private byte[] repl_bry; private Hash_adp repl_hash; private Scrib_lua_proc repl_func;
 	public int repl_count = 0;
 	public Scrib_lib_ustring_gsub_mgr(Scrib_core core) {
@@ -152,7 +152,7 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 			throw Err_.new_unhandled(Type_.Name(repl_type));
 		return repl_tid;
 	}
-	public boolean Exec_repl_itm(Bry_bfr tmp_bfr, Scrib_regx_converter regx_converter, Regx_match match) {
+/*	public boolean Exec_repl_itm(Bry_bfr tmp_bfr, Scrib_regx_converter regx_converter, Regx_match match) {
 		switch (repl_tid) {
 			case Repl_tid_string:
 				int len = repl_bry.length;
@@ -272,6 +272,7 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 		}
 		return true;
 	}
+        */
 	private static final byte Repl_tid_null = 0, Repl_tid_string = 1, Repl_tid_table = 2, Repl_tid_luacbk = 3;
 	public static final    Scrib_lib_ustring_gsub_mgr[] Ary_empty = new Scrib_lib_ustring_gsub_mgr[0];
 	public boolean Exec_repl_itm(StringBuilder sb, Regx_match match) {

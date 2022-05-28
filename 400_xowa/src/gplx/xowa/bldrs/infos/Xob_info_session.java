@@ -17,7 +17,8 @@ package gplx.xowa.bldrs.infos; import gplx.*; import gplx.xowa.*; import gplx.xo
 import gplx.dbs.cfgs.*;
 public class Xob_info_session {
 	Xob_info_session(String user, String version, String wiki_domain, String dump_name, DateAdp time, Guid_adp guid) {
-		this.user = user; this.version = version; this.wiki_domain = wiki_domain; this.dump_name = dump_name; this.time = time; this.guid = guid;
+		this.user = user; this.version = version; this.wiki_domain = wiki_domain;
+		this.dump_name = dump_name; this.time = time; this.guid = guid;
 	}
 	public String User() {return user;} private final    String user;
 	public String Version() {return version;} private final    String version;

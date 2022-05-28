@@ -133,11 +133,11 @@ class Xoh_head_mgr_fxt {
 		wiki = fxt.Wiki();
 	}
 	public void Init_msg(byte[] key, String val) {
-		wiki.Msg_mgr().Get_or_make(key).Atrs_set(Bry_.new_a7(val), false, false);
+		wiki.Msg_mgr().Get_or_make(key).Atrs_set(Bry_.new_a7(val), false, false, false);
 	}
 	public void Init_msg(int id, String val) {
 		Xol_msg_itm msg_itm = wiki.Lang().Msg_mgr().Itm_by_id_or_null(id);
-		msg_itm.Atrs_set(Bry_.new_a7(val), false, false);
+		msg_itm.Atrs_set(Bry_.new_a7(val), false, false, false);
 	}
 	public void Test_write(String expd) {
 		fxt.Page().Page_guid_empty_();

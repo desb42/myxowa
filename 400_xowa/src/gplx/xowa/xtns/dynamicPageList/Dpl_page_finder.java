@@ -128,7 +128,7 @@ class Dpl_page_finder {
 				break;
 		}
 
-		if (itm.Show_ns()) // needs more research 20200930
+		if (itm.Show_ns() || itm.Ns_filter_active()) // needs more research 20220520
 			// filter by namespace
 			where.append(" and page_namespace=" + Integer.toString(itm.Ns_filter()));
 

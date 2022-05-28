@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -14,7 +14,7 @@ GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.wikis.ctgs.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*;
-import gplx.dbs.*; import gplx.xowa.wikis.nss.*;
+import gplx.dbs.*;import gplx.xowa.addons.wikis.ctgs.htmls.catpages.langs.Xoctg_collation_mgr;
 import gplx.xowa.langs.cases.Xol_case_cvt;
 public class Xoctg_catpage_itm {
 	private byte version;
@@ -39,6 +39,7 @@ public class Xoctg_catpage_itm {
 	public int				Count_subcs()			{return count_subcs;}			private int count_subcs;
 	public int				Count_pages()			{return count_pages;}			private int count_pages;
 	public int				Count_files()			{return count_files;}			private int count_files;
+        public byte[] First_char() { return first_char; } private byte[] first_char;
 
 	public void Page_ttl_(Xoa_ttl ttl) {
 		this.page_ttl = ttl;
@@ -49,13 +50,14 @@ public class Xoctg_catpage_itm {
 		// sortkey_binary will be blank for v2,v3; use page_ttl; PAGE:fr.w:Article_contenant_un_appel_à_traduction_en_anglais; DATE:2016-10-11
 		if (version != Version__4 && Bry_.Len_eq_0(sortkey_binary)) sortkey_binary = page_ttl.Page_txt();
 	}
-	public byte[] Sortkey_handle_make(Bry_bfr tmp_bfr, Xow_wiki wiki, byte[] prv_sortkey_handle) {
-		// page.tbl missing even though in cat_link.tbl; happens for "User:" namespace pages;
+	public byte[] Sortkey_handle_make(Bry_bfr tmp_bfr, Xow_wiki wiki, byte[] prv_sortkey_handle, Xoctg_collation_mgr mgr) {
+            byte[] rv;
+		// page.ttl missing even though in cat_link.tbl; happens for "User:" namespace pages;
 		if (page_ttl == Xoa_ttl.Null) {
 			// sortkey_prefix exists; happens for [[Category:A]] as opposed to [[Category:A|some_sortkey_prefix]]; also, {{DEFAULTSORTKEY:some_sortkey_prefix}}
 			if (Bry_.Len_gt_0(sortkey_prefix)) {
 				sortkey_handle = sortkey_prefix;
-				return sortkey_handle;				// set sortkey_prefix as new prv_sortkey_handle;
+				rv = sortkey_handle;				// set sortkey_prefix as new prv_sortkey_handle;
 			}
 			else {
 				// set sortkey_handle to "prv_sortkey" + "page_id"; needed for multiple "missing" catlinks which span 200 page boundaries
@@ -63,7 +65,7 @@ public class Xoctg_catpage_itm {
 				tmp_bfr.Add_byte_nl();
 				tmp_bfr.Add_int_variable(page_id);
 				sortkey_handle = tmp_bfr.To_bry_and_clear();
-				return prv_sortkey_handle;
+				rv = prv_sortkey_handle;
 			}
 		}
 		// page.tbl exists
@@ -80,8 +82,11 @@ public class Xoctg_catpage_itm {
 				tmp_bfr.Add_byte_nl().Add(page_ttl.Page_txt());	// "$prefix\n$unprefixed";
 				sortkey_handle = tmp_bfr.To_bry_and_clear();
 			}
-			return sortkey_handle;
+			rv = sortkey_handle;
 		}
+            // as a by product workout the firts character (from the sortkey!
+            first_char = mgr.Get_firstchar(sortkey_binary, sortkey_handle);
+                return rv;
 	}
 
 	public static final    Xoctg_catpage_itm[] Ary_empty = new Xoctg_catpage_itm[0];

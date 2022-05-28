@@ -101,7 +101,7 @@ class Pf_msg_mgr_fxt {
 	public void Init_msg_gfs(String key, String val, boolean fmt, boolean tmpl) {Init_msg_gfs(en_lang, key, val, fmt, tmpl);}
 	public void Init_msg_gfs(Xol_lang_itm lang, String key, String val, boolean fmt, boolean tmpl) {
 		Xol_msg_itm msg_itm = lang.Msg_mgr().Itm_by_key_or_new(Bry_.new_u8(key));
-		msg_itm.Atrs_set(Bry_.new_u8(val), fmt, tmpl);
+		msg_itm.Atrs_set(Bry_.new_u8(val), fmt, tmpl, false);
 	}
 	public void Init_msg_db(String ttl, String val) {Init_msg_db(en_wiki, ttl, val);}
 	public void Init_msg_db(Xowe_wiki wiki, String ttl, String val) {

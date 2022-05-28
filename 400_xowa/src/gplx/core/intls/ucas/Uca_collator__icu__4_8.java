@@ -23,6 +23,7 @@ class Uca_collator__icu__4_8 implements Uca_collator {
 	public void	Init(String locale, boolean numeric_ordering) {
 		try {
 			this.collator = Collator.getInstance(Locale.forLanguageTag(locale));
+                        //System.out.println("UCAver " + this.collator.getUCAVersion() + ":Ver " + this.collator.getVersion());
 			if (numeric_ordering) {
 				// NOTE: delaying cast to RuleBasedCollator b/c Collator.getInstance may return a non-RuleBasedCollator and don't want cast to fail if numeric_ordering is false 
 				((RuleBasedCollator)collator).setNumericCollation(true);
@@ -30,12 +31,12 @@ class Uca_collator__icu__4_8 implements Uca_collator {
 		} catch (Exception e) {throw Err_.new_wo_type("collator init failed", "err", Err_.Message_lang(e));}		
 	}
 	public byte[]	Get_sortkey(String s) {
-		CollationKey key = collator.getCollationKey(s);		
+		CollationKey key = collator.getCollationKey(s);
 		byte[] src = key.toByteArray();
 		int src_len = src.length;
 		byte[] rv = src;
 		
-		// remove last byte if it is 0 (which it often is) 
+		// remove last byte if it is 0 (which it often is) ASCIZ?
 		if (src_len > 0 && src[src_len - 1] == 0) {
 			int rv_len = src_len - 1;
 			rv = new byte[rv_len];

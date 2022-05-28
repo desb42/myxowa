@@ -342,28 +342,30 @@ public class Db_wikistrip {
 		// check for special tags to remove <br > <hr > <img >
 		//System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend+40)));
 		int tag_len = nameend - namestart;
-		if (tag_len == 2) { // hr, br
+		switch (tag_len) {
+		case 2: // hr, br
 			if ((src[namestart] | 32) == 'b' && (src[namestart+1] | 32) == 'r')
 				return pos;
 			if ((src[namestart] | 32) == 'h' && (src[namestart+1] | 32) == 'r')
 				return pos;
-		}
-		else if (tag_len == 3) { // img
+			break;
+		case 3: // img
 			if ((src[namestart] | 32) == 'i' && (src[namestart+1] | 32) == 'm' && (src[namestart+2] | 32) == 'g')
 				return pos;
-		}
-		else if (tag_len == 9) { // noinclude
+			break;
+		case 9: // noinclude
 			if ((src[namestart] | 32) == 'n' && (src[namestart+1] | 32) == 'o' && (src[namestart+2] | 32) == 'i'
 			     && (src[namestart+3] | 32) == 'n' && (src[namestart+4] | 32) == 'c' && (src[namestart+5] | 32) == 'l'
 			     && (src[namestart+6] | 32) == 'u' && (src[namestart+7] | 32) == 'd' && (src[namestart+8] | 32) == 'e')
 				return pos;
-		}
-		else if (tag_len == 11) { // onlyinclude
+			break;
+		case 11: // onlyinclude
 			if ((src[namestart] | 32) == 'o' && (src[namestart+1] | 32) == 'n' && (src[namestart+2] | 32) == 'l'
 			     && (src[namestart+3] | 32) == 'y' && (src[namestart+4] | 32) == 'i' && (src[namestart+5] | 32) == 'n'
 			     && (src[namestart+6] | 32) == 'c' && (src[namestart+7] | 32) == 'l' && (src[namestart+8] | 32) == 'u'
 			     && (src[namestart+9] | 32) == 'd' && (src[namestart+10] | 32) == 'e')
 				return pos;
+			break;
 		}
 		// now find the close (or a nesting!)
 		while (pos < src_len) {
@@ -539,7 +541,7 @@ public class Db_wikistrip {
 				case '_':
 					if ((pos > 1 && src[pos-2] == '\n') || (pos == 1)) { // '\n_'
 						if (pos < src_len && src[pos] == '_')
-						bfr.Add_mid(src, startpos, pos-1);
+							bfr.Add_mid(src, startpos, pos-1);
 						while (pos + 1 < src_len) { // find next '_\n'
 							if (src[pos++] == '_' && src[pos] == '\n')
 								break;
@@ -696,7 +698,8 @@ public class Db_wikistrip {
 					}
 					if (apos_count > 1 && startpos <= pos - apos_count) {
 						bfr.Add_mid(src, startpos, pos - apos_count);
-						if (apos_count == 2) {
+						switch (apos_count) {
+						case 2:
 							if (initalic) {
 								bfr.Add(Gfh_tag_.I_rhs);
 								initalic = false;
@@ -705,8 +708,8 @@ public class Db_wikistrip {
 								bfr.Add(Gfh_tag_.I_lhs);
 								initalic = true;
 							}
-						}
-						else if (apos_count == 3 || apos_count == 4) {
+							break;
+						case 3: case 4:
 							if (inbold) {
 								bfr.Add(Gfh_tag_.B_rhs);
 								inbold = false;
@@ -719,8 +722,8 @@ public class Db_wikistrip {
 							}
 							if (apos_count == 4)
 								pos--;	// bold plus apos
-						}
-						else if (apos_count == 5) {
+							break;
+						case 5:
 							if (inbold && initalic) {
 								bfr.Add(Gfh_tag_.I_rhs);
 								initalic = false;
@@ -734,6 +737,7 @@ public class Db_wikistrip {
 								initalic = true;
 							}
 							// there are other combos!!
+							break;
 						}
 						startpos = pos;
 					}

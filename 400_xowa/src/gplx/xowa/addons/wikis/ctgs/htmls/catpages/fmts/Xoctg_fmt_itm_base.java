@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,26 +13,24 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.addons.wikis.ctgs.htmls.catpages.fmts; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.wikis.ctgs.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*;
-import gplx.langs.htmls.*; import gplx.xowa.htmls.*; import gplx.xowa.htmls.hrefs.*; import gplx.xowa.htmls.core.wkrs.lnkis.htmls.*; import gplx.xowa.htmls.core.htmls.*;
-import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.core.intls.ucas.*;
+package gplx.xowa.addons.wikis.ctgs.htmls.catpages.fmts;
+import gplx.*; import gplx.xowa.*;
+import gplx.langs.htmls.*; import gplx.xowa.htmls.hrefs.*; import gplx.xowa.htmls.core.wkrs.lnkis.htmls.*;
 import gplx.xowa.users.history.*;
-import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*;
 public abstract class Xoctg_fmt_itm_base implements gplx.core.brys.Bfr_arg {
 	//private final    Bry_bfr tmp_bfr = Bry_bfr_.New();
 	private Xow_wiki wiki;
 	private Xoctg_catpage_grp grp;
-	private Uca_ltr_extractor ltr_extractor;
 	private byte[] ltr_cur; private int loop_bgn; private int col_end;
 
 	public int		Loop_end_idx() {return loop_end_idx;} private int loop_end_idx;
 	public void		Col_end_(int col_bgn, int col_idx) {
 		this.col_end = col_bgn + Calc_col_len(grp.Itms__len(), col_idx, Cols_max);
 	}
-	public void Init_from_ltr(Xow_wiki wiki, Xoctg_catpage_grp grp, Uca_ltr_extractor ltr_extractor) {
+	public void Init_from_ltr(Xow_wiki wiki, Xoctg_catpage_grp grp) {
 		this.wiki = wiki;
 		this.grp = grp;
-		this.ltr_extractor = ltr_extractor;
 	}
 	public void Set_ltr_and_bgn(byte[] ltr_cur, int loop_bgn) {this.ltr_cur = ltr_cur; this.loop_bgn = loop_bgn;}
 	public void Bfr_arg__add(Bry_bfr bfr) {
@@ -46,10 +44,15 @@ public abstract class Xoctg_fmt_itm_base implements gplx.core.brys.Bfr_arg {
 
 			// get sortkey
 			Xoctg_catpage_itm itm = grp.Itms__get_at(i);
-			byte[] itm_sortkey = itm.Sortkey_handle();
 
+/*
+			byte[] itm_sortkey = itm.Sortkey_handle();
 			// reached end of ltr; exit
 			byte[] ltr_1st = ltr_extractor.Get_1st_ltr(itm_sortkey);
+			ltr_1st = DB_case_mgr.Case_build_1st(true, ltr_1st);
+*/
+                        byte[] ltr_1st = itm.First_char();
+                        
 			if (!Bry_.Has_at_bgn(ltr_1st, ltr_cur, 0, ltr_1st.length)) {
 				loop_end_idx = i;
 				return;

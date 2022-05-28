@@ -181,7 +181,7 @@ public class Xop_fxt {
 	}
 	public void     Init__msg(String key, String val) {
 		Xol_msg_itm msg_itm = wiki.Msg_mgr().Get_or_make(Bry_.new_u8(key));
-		msg_itm.Atrs_set(Bry_.new_u8(val), false, false);
+		msg_itm.Atrs_set(Bry_.new_u8(val), false, false, false);
 	}
 	public Xop_fxt	Init_para_y_() {ctx.Para().Enabled_y_(); return this;}
 	public Xop_fxt	Init_para_n_() {ctx.Para().Enabled_n_(); return this;}

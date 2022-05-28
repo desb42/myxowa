@@ -149,7 +149,7 @@ public class Xol_lang_itm implements Gfo_invk {
 				fallback_dupes_regy.Clear();
 				boolean lang_is_en = lang_id == Xol_lang_stub_.Id_en;
 				if (!lang_is_en) Xol_lang_itm_.Lang_init(this);
-				msg_mgr.Itm_by_key_or_new(Bry_.new_a7("Lang")).Atrs_set(key_bry, false, false);	// set "Lang" keyword; EX: for "fr", "{{int:Lang}}" -> "fr"
+				msg_mgr.Itm_by_key_or_new(Bry_.new_a7("Lang")).Atrs_set(key_bry, false, false, false);	// set "Lang" keyword; EX: for "fr", "{{int:Lang}}" -> "fr"
 				Load_lang(key_bry);
 				ns_aliases.Ary_add_(Xow_ns_canonical_.Ary);	// NOTE: always add English canonical as aliases to all languages
 				this.Evt_lang_changed();

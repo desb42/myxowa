@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -15,15 +15,11 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.scribunto.libs.patterns;
 
-import gplx.Bry_bfr;
-import gplx.Bry_bfr_;
-import gplx.String_;
 import gplx.langs.regxs.Regx_group;
 import gplx.langs.regxs.Regx_match;
 import gplx.objects.strings.unicodes.Ustring;
 import gplx.objects.strings.unicodes.Ustring_;
 import gplx.xowa.xtns.scribunto.libs.Scrib_lib_ustring_gsub_mgr;
-import gplx.xowa.xtns.scribunto.libs.Scrib_regx_converter;
 import org.luaj.vm2.lib.Match_state;
 import org.luaj.vm2.lib.Str_find_mgr__xowa;
 
@@ -31,19 +27,13 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 	public Scrib_pattern_matcher__xowa(byte[] page_url) {}
 
 	@Override public Regx_match Match_one(Ustring src_ucs, String pat_str, int bgn_as_codes, boolean replace) {
-		//regx_converter.patternToRegex(pat_str, Scrib_regx_converter.Anchor_pow, true);
 		Str_find_mgr__xowa mgr = new Str_find_mgr__xowa(src_ucs, Ustring_.New_codepoints(pat_str), bgn_as_codes, false, false);
 		mgr.Process(false);
 		
-		// convert to Regx_match
 		int find_bgn = mgr.Bgn();
 		int find_end = mgr.End();
 		boolean found = find_bgn != -1;
-		if (found) {
-			find_bgn = src_ucs.Map_data_to_char(find_bgn);
-			find_end = src_ucs.Map_data_to_char(find_end);
-		}
-		
+
 		Regx_group[] groups = Make_groups(src_ucs, mgr.Captures_ary());
 		return new Regx_match(found, find_bgn, find_end, groups);
 	}
@@ -60,7 +50,7 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 		//regx_converter.patternToRegex(pat_str, Scrib_regx_converter.Anchor_G, true);
 		Ustring pat = Ustring_.New_codepoints(pat_str);
 		int pat_len = pat.Len_in_data();
-		final boolean pat_is_anchored = pat_len > 0 && pat.Get_data(0) == '^';
+		final int pat_anchored = pat_len > 0 && pat.Get_data(0) == '^' ? 1 : 0;
 		boolean isreplNull = gsub_mgr.IsReplNull();
 //System.out.println("a s:" + src_str + " p:" + pat_str + " r:" + isreplNull);
 //System.out.println("p:" + Scrib_lib_ustring_gsub_mgr.escapeChars(pat_str) );
@@ -79,7 +69,7 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 		int src_idx = 0;
 		while (src_idx < src_max) {
 			ms.reset();
-			int res = ms.match(src_pos, pat_is_anchored ? 1 : 0);
+			int res = ms.match(src_pos, pat_anchored);
 
 			src_pos = ms.Stretch();
 			// match found
@@ -123,7 +113,7 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 			else
 				break;
 
-			if (pat_is_anchored)
+			if (pat_anchored > 0)
 				break;
 
 		}
@@ -151,17 +141,11 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 			int capture_bgn = captures[i];
 			int capture_end = captures[i + 1];
 			// FOOTNOTE:REGX_GROUP
-			int bgn_in_chars = src_ucs.Map_data_to_char(capture_bgn);
-			int end_in_chars;
  			String val;
-			if (capture_end < 0) { // for ()
-				end_in_chars = capture_end;
+			if (capture_end < 0) // for ()
 				val = "";
-			}
-			else {
-				end_in_chars = src_ucs.Map_data_to_char(capture_end);
- 				val = String_.Mid(src_ucs.Src(), bgn_in_chars, end_in_chars);
-			}
+			else
+				val = src_ucs.Substring(capture_bgn, capture_end);
 			groups[i / 2] = new Regx_group(true, capture_bgn, capture_end, val);
 		}
 		return groups;

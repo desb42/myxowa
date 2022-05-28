@@ -112,7 +112,8 @@ public class Bry_fmtr {
 				rv.Add(itm.DatStr());
 		}
 		return rv.To_str();
-	}	private Bry_fmtr_itm[] itms; int itms_len;
+	}
+	private Bry_fmtr_itm[] itms; int itms_len;
 	public byte[] Missing_bgn() {return missing_bgn;} public Bry_fmtr Missing_bgn_(byte[] v) {missing_bgn = v; return this;} private byte[] missing_bgn = missing_bgn_static; static byte[] missing_bgn_static = Bry_.new_u8("~{"), missing_end_static = Bry_.new_u8("}");
 	public byte[] Missing_end() {return missing_end;} public Bry_fmtr Missing_end_(byte[] v) {missing_end = v; return this;} private byte[] missing_end = missing_end_static;
 	public int Missing_adj() {return missing_adj;} public Bry_fmtr Missing_adj_(int v) {missing_adj = v; return this;} int missing_adj;
@@ -206,6 +207,26 @@ public class Bry_fmtr {
 				else {
 					trg_bry[trg_pos++] = cur_byte;
 					fmt_pos += 1;
+					switch (cur_byte) {
+						case '\'':
+							while (fmt_pos < fmt_end && fmt[fmt_pos] == '\'') { // more than one
+								trg_bry[trg_pos++] = cur_byte;
+								fmt_pos += 1;
+								has_wtxt = true;
+							}
+							break;
+						case '[': // any
+							has_wtxt = true;
+							break;
+						case '{':
+							while (fmt_pos < fmt_end && fmt[fmt_pos] == '{') { // more than one
+								trg_bry[trg_pos++] = cur_byte;
+								fmt_pos += 1;
+								has_tmpl_txt = true;
+							}
+							break;
+					
+					}
 				}
 			}
 			if (lkp_is_active) throw Err_.new_wo_type("idx mode not closed");
@@ -230,6 +251,8 @@ public class Bry_fmtr {
 	}
 	static final String GRP_KEY = "gplx.Bry_fmtr";
 	public boolean Fmt_args_exist() {return fmt_args_exist;} private boolean fmt_args_exist;
+	public boolean Fmt_tmpl_exist() {return has_tmpl_txt;} private boolean has_tmpl_txt;
+	public boolean Fmt_wtxt_exist() {return has_wtxt;} private boolean has_wtxt;
 	boolean dirty = true;
 	int baseInt = 0;
 	public static final    byte char_escape = Byte_ascii.Tilde, char_arg_bgn = Byte_ascii.Curly_bgn, char_arg_end = Byte_ascii.Curly_end, char_escape_nl = Byte_ascii.Ltr_n, char_escape_tab = Byte_ascii.Ltr_t, char_eval_bgn = Byte_ascii.Lt, char_eval_end = Byte_ascii.Gt;

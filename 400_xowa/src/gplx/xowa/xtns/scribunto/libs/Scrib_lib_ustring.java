@@ -193,15 +193,17 @@ public class Scrib_lib_ustring implements Scrib_lib {
 
 		// add to tmp_list
 		List_adp tmp_list = List_adp_.New();
-		tmp_list.Add(text_ucs.Map_char_to_data(match.Find_bgn()) + Scrib_lib_ustring.Base1);
-		tmp_list.Add(text_ucs.Map_char_to_data(match.Find_end()) + Scrib_lib_ustring.Base1 - Scrib_lib_ustring.End_adj);
-		AddCapturesFromMatch(tmp_list, match, text_str, matcher.Capt_ary(), false);
+		//tmp_list.Add(text_ucs.Map_char_to_data(match.Find_bgn()) + Scrib_lib_ustring.Base1);
+		//tmp_list.Add(text_ucs.Map_char_to_data(match.Find_end()) + Scrib_lib_ustring.Base1 - Scrib_lib_ustring.End_adj);
+		tmp_list.Add(match.Find_bgn() + Scrib_lib_ustring.Base1);
+		tmp_list.Add(match.Find_end() + Scrib_lib_ustring.Base1 - Scrib_lib_ustring.End_adj);
+		AddCapturesFromMatch(tmp_list, match, text_str, false);
 		return rslt.Init_many_list(tmp_list);
 		}
 		catch (Exception e) {
 			int a=1;
 		}
-                return rslt.Init_null();
+		return rslt.Init_null();
 	}
 	public boolean Match(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// get args
@@ -222,7 +224,7 @@ public class Scrib_lib_ustring implements Scrib_lib {
 		if (match.Rslt_none()) return rslt.Init_null(); // return null if no matches found; EX:w:Mount_Gambier_(volcano); DATE:2014-04-02; confirmed with en.d:民; DATE:2015-01-30
 
 		List_adp tmp_list = List_adp_.New();
-		AddCapturesFromMatch(tmp_list, match, text_str, matcher.Capt_ary(), true);
+		AddCapturesFromMatch(tmp_list, match, text_str, true);
 		return rslt.Init_many_list(tmp_list);
 	}
 	public boolean Gsub(Scrib_proc_args args, Scrib_proc_rslt rslt) {
@@ -232,8 +234,8 @@ public class Scrib_lib_ustring implements Scrib_lib {
 	public boolean Gmatch_init(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// String text = Scrib_kv_utl_.Val_to_str(values, 0);
 		String regx = args.Pull_str(1);
-                Db_regex regx_counter = new Db_regex();
-                regx_counter.patternToRegex(regx);
+		Db_regex regx_counter = new Db_regex();
+		regx_counter.patternToRegex(regx);
 /*
 		Scrib_regx_converter regx_converter = new Scrib_regx_converter();
 		if (Scrib_pattern_matcher.Mode_is_xowa())
@@ -256,7 +258,8 @@ public class Scrib_lib_ustring implements Scrib_lib {
 		Regx_match match = Scrib_pattern_matcher.New(core.Page_url()).Match_one(text_ucs, regx, pos, false);
 		if (match.Rslt_none()) return rslt.Init_many_objs(pos, Keyval_.Ary_empty);
 		List_adp tmp_list = List_adp_.New();
-		AddCapturesFromMatch(tmp_list, match, text, capt, true);	// NOTE: was incorrectly set as false; DATE:2014-04-23
+		// should check that match.length is the same as capt.length
+		AddCapturesFromMatch(tmp_list, match, text, true);	// NOTE: was incorrectly set as false; DATE:2014-04-23
 		return rslt.Init_many_objs(match.Find_end(), Scrib_kv_utl_.base1_list_(tmp_list));
 	}
 	private int To_java_by_lua(int bgn_as_codes_base1, int len_in_codes) {
@@ -280,7 +283,7 @@ public class Scrib_lib_ustring implements Scrib_lib {
 			bgn_as_codes = 0;
 		return bgn_as_codes;
 	}
-	private void AddCapturesFromMatch(List_adp tmp_list, Regx_match rslt, String text, Keyval[] capts, boolean op_is_match) {// NOTE: this matches behavior in UstringLibrary.php!addCapturesFromMatch
+	private void AddCapturesFromMatch(List_adp tmp_list, Regx_match rslt, String text, boolean op_is_match) {// NOTE: this matches behavior in UstringLibrary.php!addCapturesFromMatch
 		Regx_group[] grps = rslt.Groups();
 		int grps_len = grps.length;
 		if (grps_len > 0) {
@@ -292,22 +295,6 @@ public class Scrib_lib_ustring implements Scrib_lib {
 					tmp_list.Add(grp.Val());		// return match
 			}
 		}
-/*
-		int capts_len = capts == null ? 0 : capts.length;
-		if (capts_len > 0) { // NOTE: changed from "grps_len > 0"; PAGE:en.w:Portal:Constructed_languages/Intro DATE:2018-07-02
-			Regx_group[] grps = rslt.Groups();
-			int grps_len = grps.length;
-			for (int j = 0; j < grps_len; j++) {
-				Regx_group grp = grps[j];
-				if (	j < capts_len				// bounds check	b/c null can be passed
-					&&	Bool_.Cast(capts[j].Val())	// check if true; indicates that group is "()" or "anypos" see regex converter; DATE:2014-04-23
-					)
-					tmp_list.Add(grp.Bgn() + Scrib_lib_ustring.Base1);	// return index only for "()"; NOTE: do not return as String; callers expect int and will fail typed comparisons; DATE:2016-01-21
-				else
-					tmp_list.Add(grp.Val());		// return match
-			}
-		}
-*/
 		else if (	op_is_match				// if op_is_match, and no captures, extract find_txt; note that UstringLibrary.php says "$arr[] = $m[0][0];" which means get the 1st match;
 				&&	tmp_list.Count() == 0)	// only add match once; EX: "aaaa", "a" will have four matches; get 1st; DATE:2014-04-02
 			tmp_list.Add(String_.Mid(text, rslt.Find_bgn(), rslt.Find_end()));

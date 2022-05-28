@@ -56,7 +56,7 @@ class Cite_mgr_fxt {
 	private void Init__msg(String key, String val) {Init__msg(Bry_.new_u8(key), val);}
 	private void Init__msg(byte[] key, String val) {
 		Xol_msg_itm msg = wiki.Msg_mgr().Get_or_make(key);
-		msg.Atrs_set(Bry_.new_u8(val), false, false);
+		msg.Atrs_set(Bry_.new_u8(val), false, false, false);
 	}
 	public void Test__getLinkLabel(String group, int offset, String expd) {
 		Gftest.Eq__str(expd, mgr.getLinkLabel(offset, Bry_.new_u8(group)));

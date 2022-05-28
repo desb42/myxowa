@@ -26,23 +26,20 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 		this.html_wtr = new Xoh_page_wtr_wkr(this, Xopg_view_mode_.Tid__html);
 	}
 	public boolean Html_capable() {return html_capable;} public Xoh_page_wtr_mgr Html_capable_(boolean v) {html_capable = v; return this;} private boolean html_capable;
-	public byte[] Css_common_bry() {return css_common_bry;} private byte[] css_common_bry;
-	public byte[] Css_wiki_bry() {return css_wiki_bry;} private byte[] css_wiki_bry;
 	public byte[] Css_night_bry(boolean nightmode_enabled) {return nightmode_enabled ? css_night_bry : Bry_.Empty;} private byte[] css_night_bry;
 	public boolean Scripting_enabled() {return scripting_enabled;} private boolean scripting_enabled;
 	public Bry_fmtr Page_read_fmtr() {return page_read_fmtr;} private Bry_fmtr page_read_fmtr = Bry_fmtr.new_("", Fmtr_keys);
 	public Bry_fmtr Page_edit_fmtr() {return page_edit_fmtr;} private Bry_fmtr page_edit_fmtr = Bry_fmtr.new_("", Fmtr_keys);
 	public Bry_fmtr Page_html_fmtr() {return page_html_fmtr;} private Bry_fmtr page_html_fmtr = Bry_fmtr.new_("", Fmtr_keys);
 	public byte[] Edit_rename_div_bry(Xoa_ttl ttl) {
-            Bry_bfr tmp_bfr = Bry_bfr_.New();
-            return div_edit_rename_fmtr.Bld_bry_many(tmp_bfr, ttl.Full_db_href());
-        }
-	private byte[] base_common_bry, base_wiki_bry;
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		return div_edit_rename_fmtr.Bld_bry_many(tmp_bfr, ttl.Full_db_href());
+	}
 	public void Init_css_urls(Xoa_app app, String wiki_domain, Io_url css_common_url, Io_url css_wiki_url) {
-		this.css_common_bry = css_common_url.To_http_file_bry();
-		this.css_wiki_bry = css_wiki_url.To_http_file_bry();
-		this.base_common_bry = Bry_.Mid(css_common_bry, 0, css_common_bry.length - 4);
-		this.base_wiki_bry = Bry_.Mid(css_wiki_bry, 0, css_wiki_bry.length - 4);
+//		this.css_common_bry = css_common_url.To_http_file_bry();
+//		this.css_wiki_bry = css_wiki_url.To_http_file_bry();
+//		this.base_common_bry = Bry_.Mid(css_common_bry, 0, css_common_bry.length - 4);
+//		this.base_wiki_bry = Bry_.Mid(css_wiki_bry, 0, css_wiki_bry.length - 4);
 
 		// xowa_night.css;
 		Io_url css_night_url = app.Fsys_mgr().Url_finder().Find_by_css_or(wiki_domain, "xowa_night.css", String_.Ary("bin", "any", "xowa", "html", "css", "nightmode"), true);
@@ -54,14 +51,6 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 	}
 	public byte[] Gen(Xoae_page page, byte output_tid) {return Gen(page, Xoh_page_html_source_.Noop, output_tid);}
 	public byte[] Gen(Xoae_page page, Xoh_page_html_source page_html_source, byte output_tid) {
-		if (page.Page_skin().equals("minerva")) {
-			css_common_bry = Bry_.Add(base_common_bry, bry_minerva);
-			css_wiki_bry = Bry_.Add(base_wiki_bry, bry_minerva);
-		}
-		else {
-			css_common_bry = Bry_.Add(base_common_bry, bry_css);
-			css_wiki_bry = Bry_.Add(base_wiki_bry, bry_css);
-		}
 		Xoh_page_wtr_wkr wtr = Wkr(output_tid);
 		Xowe_wiki wiki = page.Wikie();
 		if (init) {
@@ -105,9 +94,9 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
 		, "app_root_dir"
 		, "content"
 		, "html_content_editable"
-		, "html_css_common_path"
+//		, "html_css_common_path"
 		, "html_css_night_tag"
-		, "html_css_wiki_path"
+//		, "html_css_wiki_path"
 		, "page_body_cls"
 		, "page_id"
 		, "page_lang_ltr"
@@ -150,10 +139,6 @@ public class Xoh_page_wtr_mgr implements Gfo_invk {
         , "vectortags" // now "skintags"
 */	};
 	private static final String Cfg__scripting_enabled = "xowa.html.scripting.enabled";
-	private static byte[]
-	  bry_minerva = Bry_.new_a7("_minerva.css")
-	, bry_css = Bry_.new_a7(".css")
-	;
 }
 /*
 NOTE_1:xowa_anchor_button

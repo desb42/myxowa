@@ -23,10 +23,27 @@ public class Xoh_head_itm__common_styles extends Xoh_head_itm__base {
 		// do not cache
 		byte[] common_css;
 		byte[] wiki_css;
-		common_css = app.Fsys_mgr().Wiki_css_dir(wiki.Domain_str()).GenSubFil(Xoa_css_extractor.Css_common_name).To_http_file_bry();
-		wiki_css = app.Fsys_mgr().Wiki_css_dir(wiki.Domain_str()).GenSubFil(Xoa_css_extractor.Css_wiki_name).To_http_file_bry();
+                String css_common;
+                String css_wiki;
+		if (page.Page_skin().equals("minerva")) {
+			css_common = base_common + "_" + page.Page_skin() + css;
+			css_wiki = base_wiki + "_" + page.Page_skin() + css;
+		}
+		else {
+			css_common = base_common + css;
+			css_wiki = base_wiki + css;
+		}
+		//common_css = app.Fsys_mgr().Wiki_css_dir(wiki.Domain_str()).GenSubFil(Xoa_css_extractor.Css_common_name).To_http_file_bry();
+		//wiki_css = app.Fsys_mgr().Wiki_css_dir(wiki.Domain_str()).GenSubFil(css_common_bry).To_http_file_bry();
+		common_css = app.Fsys_mgr().Wiki_css_dir(wiki.Domain_str()).GenSubFil(css_common).To_http_file_bry();
+		wiki_css = app.Fsys_mgr().Wiki_css_dir(wiki.Domain_str()).GenSubFil(css_wiki).To_http_file_bry();
 
 		wtr.Write_css_include(common_css);
 		wtr.Write_css_include(wiki_css);
 	}
+	private static String
+                 base_common = "xowa_common"
+               , base_wiki = "xowa_wiki"
+	, css = ".css"
+	;
 }

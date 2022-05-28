@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2021 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,30 +13,33 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.addons.wikis.ctgs.htmls.catpages; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*; import gplx.xowa.addons.wikis.ctgs.*;
-import gplx.xowa.wikis.dbs.*; import gplx.xowa.wikis.data.tbls.*;
-import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.htmls.core.htmls.*; import gplx.core.intls.ucas.*;
+package gplx.xowa.addons.wikis.ctgs.htmls.catpages;
+import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.wikis.ctgs.*;
+import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*;
 import gplx.langs.htmls.Gfh_tag_;
-import gplx.xowa.wikis.nss.*; import gplx.xowa.htmls.heads.*;
-import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.fmts.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.dbs.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.urls.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.langs.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.fmts.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.dbs.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.urls.*;
+import gplx.xowa.addons.wikis.ctgs.htmls.catpages.langs.*;
 import gplx.xowa.mediawiki.includes.XomwDefines;
 import gplx.xowa.xtns.categorytrees.*;
 import java.util.concurrent.locks.*;
 public class Xoctg_catpage_mgr implements Gfo_invk {
 	public static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-	private final Xow_wiki wiki;
+	private final Xowe_wiki wiki;
 	private final Hash_adp_bry cache = Hash_adp_bry.cs();
 	private final Xoctg_catpage_loader loader = new Xoctg_catpage_loader();
 	private final Xoctg_fmt_grp fmt_subcs = Xoctg_fmt_grp.New__subc(), fmt_pages = Xoctg_fmt_grp.New__page(), fmt_files = Xoctg_fmt_grp.New__file();
-	private final Uca_ltr_extractor ltr_extractor = new Uca_ltr_extractor(true);
 	private String missing_cls = Str__missing_cls__red;
 	//private final	Bry_bfr tmp_bfr = Bry_bfr_.New();
 	public int Grp_max() {return grp_max;} private int grp_max = Grp_max_dflt;
-	public Xoctg_catpage_mgr(Xow_wiki wiki) {
+	public Xoctg_catpage_mgr(Xowe_wiki wiki) {
 		this.wiki = wiki;
 		this.collation_mgr = new Xoctg_collation_mgr(wiki);
 	}
-	public Xoctg_collation_mgr Collation_mgr() {return collation_mgr;} private Xoctg_collation_mgr collation_mgr;
+	public Xoctg_collation_mgr Collation_mgr() {return collation_mgr;}
+	private final Xoctg_collation_mgr collation_mgr;
 	public Xoctg_fmt_grp Fmt(byte tid) {
 		switch (tid) {
 			case Xoa_ctg_mgr.Tid__subc: return fmt_subcs;
@@ -56,7 +59,7 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	}
 	public void Free_mem_all() {cache.Clear();}
 	public Xoctg_catpage_ctg Get_by_cache_or_null(byte[] page_ttl, Xoctg_catpage_url catpage_url, Xoa_ttl cat_ttl, int limit) {
-		Xoctg_catpage_ctg ctg = null;
+		Xoctg_catpage_ctg ctg;
                 // DynamicPageList categories only (b/c of many members); for regular catpages, always retrieve on demand
 //		try { //synchronized (thread_lock) {	// LOCK:used by multiple wrks; DATE:2019-09-09
 //			rwl.writeLock().lock();
@@ -76,7 +79,7 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	}
 	public Xoctg_catpage_ctg Get_by_db_or_null(byte[] page_ttl, Xoctg_catpage_url catpage_url, Xoa_ttl cat_ttl, int limit) {
 		// load categories from cat dbs; exit if not found
-		Xoctg_catpage_ctg ctg = null;
+		Xoctg_catpage_ctg ctg;
 //		try { //synchronized (thread_lock) {	// LOCK:used by multiple wrks; DATE:2016-09-12
 //			rwl.writeLock().lock();
 			ctg = loader.Load_ctg_or_null(wiki, page_ttl, this, catpage_url, cat_ttl, limit);
@@ -107,13 +110,18 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 				Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
 				bfr.Add(Bry_.new_a7("<p>"));
 				//bfr.Add( Db_expand.Extracheck(msg_mgr.Val_by_id_args(Xol_msg_itm_.Id_ctg_empty), "") );
-				bfr.Add( Db_expand.Extracheck(msg_mgr.Val_by_key_obj("category-empty"), "") );
+				bfr.Add( Db_expand.Extracheck(msg_mgr.Val_by_key_obj("category-empty"), "", wiki) );
 				bfr.Add(Bry_.new_a7("</p>"));
 			}
 			else {
-				fmt_subcs.Write_catpage_grp(bfr, wiki, lang, ltr_extractor, ctg, grp_max);
-				fmt_pages.Write_catpage_grp(bfr, wiki, lang, ltr_extractor, ctg, grp_max);
-				fmt_files.Write_catpage_grp(bfr, wiki, lang, ltr_extractor, ctg, grp_max);
+				byte[] display_ttl = page.Html_data().Display_ttl();
+				if (display_ttl != null) {
+					int colpos = Bry_find_.Find_fwd(display_ttl, Byte_ascii.Colon);
+					display_ttl = Bry_.Mid(display_ttl, colpos + 1);
+				}
+				fmt_subcs.Write_catpage_grp(bfr, wiki, lang, ctg, grp_max, display_ttl);
+				fmt_pages.Write_catpage_grp(bfr, wiki, lang, ctg, grp_max, display_ttl);
+				fmt_files.Write_catpage_grp(bfr, wiki, lang, ctg, grp_max, display_ttl);
 			}
 			bfr.Add(Bry_.new_a7("</div>"));
 
@@ -122,14 +130,14 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 		catch (Exception e) {
 			Xoa_app_.Usr_dlg().Warn_many("", "", "failed to generate category: title=~{0} err=~{1}", page.Url_bry_safe(), Err_.Message_gplx_log(e));
 		}
-                return bfr.To_bry_and_clear();
+		return bfr.To_bry_and_clear();
 	}
 	public void Cache__add(byte[] ttl, Xoctg_catpage_ctg ctg) {
 		cache.Del(ttl);
 		cache.Add(ttl, ctg);
 	}
 	public void Grp_max_(int v) {grp_max = v;}	// TEST:
-	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
+	@Override public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk__collation_))		collation_mgr.Collation_name_(m.ReadStr("v"));
 		else if (ctx.Match(k, Cfg__missing_class))		missing_cls = m.ReadStr("v");
 		else	return Gfo_invk_.Rv_unhandled;
@@ -238,28 +246,33 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	private byte[] Create_count_string(Xow_msg_mgr msg_mgr, int count_subcs, int count_pages, int count_files) {
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		int allcount = count_subcs + count_pages + count_files;
-		byte[] contains_title = msg_mgr.Val_by_id_args(Xol_msg_itm_.Id_ctgtree_subc_counts, count_subcs, count_pages, count_files, allcount);
-		byte[] members = Member_nums(tmp_bfr, msg_mgr, count_subcs, count_pages, count_files, allcount);
+		byte[] count_subcs_bry = wiki.Lang().Num_mgr().Format_num(count_subcs);
+		byte[] count_pages_bry = wiki.Lang().Num_mgr().Format_num(count_pages);
+		byte[] count_files_bry = wiki.Lang().Num_mgr().Format_num(count_files);
+		byte[] allcount_bry = wiki.Lang().Num_mgr().Format_num(allcount);
+		byte[] contains_title = msg_mgr.Val_by_id_args(Xol_msg_itm_.Id_ctgtree_subc_counts, count_subcs_bry, count_pages_bry, count_files_bry, allcount_bry);
+		byte[] members = Member_nums(tmp_bfr, msg_mgr, count_subcs_bry, count_pages_bry, count_files_bry, allcount_bry);
 		// Only ~{4} is actually used in the default message.
 		// Other arguments can be used in a customized message.
-		byte[] msg = msg_mgr.Val_by_key_args(key_cmn,  count_subcs, count_pages, count_files, allcount, members);
+		byte[] msg = msg_mgr.Val_by_key_args(key_cmn,  count_subcs_bry, count_pages, count_files, allcount, members);
 		byte[] dir = wiki.Lang().Dir_ltr_bry();
 		Fmt__count_string.Bld_many(tmp_bfr, contains_title, dir, msg);
 		return tmp_bfr.To_bry_and_clear();
 	}
-	private byte[] Member_nums(Bry_bfr tmp_bfr, Xow_msg_mgr msg_mgr, int count_subcs, int count_pages, int count_files, int allcount) {
-		if (allcount == 0) {
+	private byte[] Member_nums(Bry_bfr tmp_bfr, Xow_msg_mgr msg_mgr, byte[] count_subcs, byte[] count_pages, byte[] count_files, byte[] allcount) {
+		if (allcount == null) {
 			return msg_mgr.Val_by_key_obj("categorytree-num-empty");
 		}
-		Bld_contains_text_itm(tmp_bfr, msg_mgr, Xol_msg_itm_.Id_ctgtree_subc_counts_ctg, count_subcs);
-		Bld_contains_text_itm(tmp_bfr, msg_mgr, Xol_msg_itm_.Id_ctgtree_subc_counts_page, count_pages);
-		Bld_contains_text_itm(tmp_bfr, msg_mgr, Xol_msg_itm_.Id_ctgtree_subc_counts_file, count_files);
+		Bld_contains_text_itm(tmp_bfr, msg_mgr, num_categories, count_subcs); // Xol_msg_itm_.Id_ctgtree_subc_counts_ctg
+		Bld_contains_text_itm(tmp_bfr, msg_mgr, num_pages, count_pages); // Xol_msg_itm_.Id_ctgtree_subc_counts_page
+		Bld_contains_text_itm(tmp_bfr, msg_mgr, num_files, count_files); // Xol_msg_itm_.Id_ctgtree_subc_counts_file
 		return tmp_bfr.To_bry_and_clear();
 	}
-	private void Bld_contains_text_itm(Bry_bfr bfr, Xow_msg_mgr msg_mgr, int msg_id, int val) {
-		if (val == 0) return;
+	private void Bld_contains_text_itm(Bry_bfr bfr, Xow_msg_mgr msg_mgr, byte[] msg_key, byte[] val) {
+		if (val[0] == '0') return;
 		if (bfr.Len() > 1) bfr.Add(Bld_contains_text_itm_dlm);	// NOTE: 1 b/c Paren_bgn is always added
-		bfr.Add(msg_mgr.Val_by_id_args(msg_id, val));
+		byte[] msg = msg_mgr.Val_by_key_args(msg_key, val);
+		bfr.Add(msg);
 	}
 	private static final	byte[] Bld_contains_text_itm_dlm = Bry_.new_a7(", "); // should be language sensitive!
 
@@ -288,7 +301,7 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 //	, "<span class=\"CategoryTreeToggle\" data-ct-title=\"~{itm_data_title}\" title=\"~{itm_title}\" ~{data-ct}>~{txt}</span> "
 	, "<span class=\"CategoryTreeToggle\" data-ct-title=\"~{itm_data_title}\" ~{data-ct}></span> "
 	);
-	private static byte[]
+	private final static byte[]
 	  datact_expanded = Bry_.new_a7("data-ct-loaded=\"1\" data-ct-state=\"expanded\"")
 	, datact_collapsed = Bry_.new_a7("data-ct-state=\"collapsed\"")
 	, attr_treebullet = Bry_.new_a7("CategoryTreeBullet")
@@ -299,6 +312,9 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 	, label_category = Bry_.new_a7("CategoryTreeLabelCategory")
 	, label_page = Bry_.new_a7("CategoryTreeLabelPage")
 	, key_cmn = Bry_.new_a7("categorytree-member-num")
+	, num_categories = Bry_.new_a7("categorytree-num-categories")
+	, num_pages = Bry_.new_a7("categorytree-num-pages")
+	, num_files = Bry_.new_a7("categorytree-num-files")
 	;
 
 	public void Renderchild(Bry_bfr bfr, byte[] src, int bgn, int end, Categorytree_params_ params) {
@@ -331,7 +347,7 @@ public class Xoctg_catpage_mgr implements Gfo_invk {
 			Fmt__data_ct.Bld_many(local_tmp_bfr, params.Mode(), params.Hideprefix(), params.Showcount(), params.Namespaces());
 			data_ct_mode = local_tmp_bfr.To_bry_and_clear();
 			if (ctg == null) {
-				byte[] not_found_bry = Db_expand.Extracheck( wiki.Msg_mgr().Val_by_key_args(Bry_.new_a7("categorytree-not-found"), ttl.Page_txt()),"" );
+				byte[] not_found_bry = Db_expand.Extracheck( wiki.Msg_mgr().Val_by_key_args(Bry_.new_a7("categorytree-not-found"), ttl.Page_txt()),"", wiki );
 				Fmt__not_found.Bld_many(bfr, data_ct_mode, not_found_bry);
 				return;
 			}

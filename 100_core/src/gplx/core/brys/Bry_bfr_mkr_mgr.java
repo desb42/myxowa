@@ -28,6 +28,10 @@ public class Bry_bfr_mkr_mgr {
 	public Bry_bfr Get() {
 		synchronized (thread_lock) {
 			Bry_bfr rv = null; int rv_idx = -1;
+                        //System.out.println("qq " + Integer.toString(mgr_id) + Integer.toString(used_len) + Integer.toString(inuse));
+                        //if (mgr_id==2 && used_len==0 && inuse==0) {
+                        //    int a=1;
+                        //}
 			if (free_len > 0) {
 				try {rv_idx = free[--free_len];}	catch (Exception e) {throw Err_.new_exc(e, "core", "failed to get free", "idx", free_len, "free_len", free.length);}
 				try {rv = used[rv_idx];}			catch (Exception e) {throw Err_.new_exc(e, "core", "failed to get used", "idx", rv_idx, "used_len", used.length);}
@@ -54,6 +58,7 @@ public class Bry_bfr_mkr_mgr {
 	}
 	public void Rls(int idx) {
 		synchronized (thread_lock) {
+                        //System.out.println("qqo " + Integer.toString(mgr_id) + Integer.toString(used_len) + Integer.toString(inuse));
 			if (idx == -1) throw Err_.new_wo_type("rls called on bfr that was not created by factory");
 			int new_used_len = used_len - 1;
 			if (idx == new_used_len)

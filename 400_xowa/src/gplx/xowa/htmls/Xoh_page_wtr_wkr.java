@@ -130,7 +130,7 @@ public class Xoh_page_wtr_wkr {
 			modified_on_msg = wiki.Msg_mgr().Val_by_key_args(Key_lastmodifiedat, 
 						wiki.Lang().Time_format_mgr().Get_date_defaultfmt(wiki, modified_on),
 						wiki.Lang().Time_format_mgr().Get_time_defaultfmt(wiki, modified_on));
-			modified_on_msg = Db_expand.Extracheck(modified_on_msg, "");
+			modified_on_msg = Db_expand.Extracheck(modified_on_msg, "", wiki);
 		}
 		if (page.Html_data().GeoCrumb().Count() > 0) {
 			byte[] redirect_msg = Xop_redirect_mgr.Bld_redirect_msg_from(app, wiki, page.Redirect_trail());
@@ -170,7 +170,7 @@ public class Xoh_page_wtr_wkr {
 		byte[] page_mask_msg = Bry_.new_a7("pagetitle");
 		if (Bry_.Eq(page.Ttl().Full_db(), wiki.Props().Main_page()))
 			page_mask_msg = Bry_.new_a7("pagetitle-view-mainpage");
-		byte[] page_title = Db_expand.Extracheck( msg_mgr.Val_by_key_args(page_mask_msg, page_name), "");
+		byte[] page_title = Db_expand.Extracheck( msg_mgr.Val_by_key_args(page_mask_msg, page_name), "", wiki);
 
 		byte[] redlinks = null;
 /*		if (wiki.App().Mode().Tid_is_http()) {
@@ -208,9 +208,9 @@ public class Xoh_page_wtr_wkr {
 		//, Content(portal_mgr, page_data, page, wiki, ctx, hctx, html_gen_tid, pagename_for_h1, modified_on_msg)
 		, skin_choice.Content(data, tmp_bfr, skin)
 		, html_content_editable
-		, mgr.Css_common_bry()
+//		, mgr.Css_common_bry()
 		, mgr.Css_night_bry(nightmode_enabled)
-		, mgr.Css_wiki_bry()
+//		, mgr.Css_wiki_bry()
 		, page_body_class
 		, page.Db().Page().Id()
 		, page.Lang().Dir_ltr_bry()
@@ -498,9 +498,9 @@ public class Xoh_page_wtr_wkr {
 		byte[] license = jdoc.Get_val_as_bry_or(Bry_.new_a7("license"), Bry_.Empty);
 		Xow_msg_mgr msg_mgr = wiki.Msg_mgr();
 		byte[] tmp = Bry_.Add(Bry_.new_a7("jsonconfig-license-name-"), license);
-		byte[] license_name = Db_expand.Extracheck( msg_mgr.Val_by_key_args(tmp), "");
+		byte[] license_name = Db_expand.Extracheck( msg_mgr.Val_by_key_args(tmp), "", wiki);
 		tmp = Bry_.Add(Bry_.new_a7("jsonconfig-license-url-"), license);
-		byte[] license_url = Db_expand.Extracheck( msg_mgr.Val_by_key_args(tmp), "");
+		byte[] license_url = Db_expand.Extracheck( msg_mgr.Val_by_key_args(tmp), "", wiki);
 		byte[] license_a = Bry_.Add(
 		  Bry_.new_a7("<a href=\"")
 		, license_url
@@ -510,12 +510,12 @@ public class Xoh_page_wtr_wkr {
 		);
 		byte[] license_txt = Bry_.Add(
 		  Bry_.new_a7("<p class=\"mw-jsonconfig-license\">")
-		, Db_expand.Extracheck( msg_mgr.Val_by_key_args(Bry_.new_a7("jsonconfig-license"), license_a), "")
+		, Db_expand.Extracheck( msg_mgr.Val_by_key_args(Bry_.new_a7("jsonconfig-license"), license_a), "", wiki)
 		, Bry_.new_a7("</p>")
 		);
 		byte[] sources_txt = Bry_.Add(
 		  Bry_.new_a7("<p class=\"mw-jsonconfig-sources\">")
-		, Db_expand.Extracheck( sources, "")
+		, Db_expand.Extracheck( sources, "", wiki)
 		, Bry_.new_a7("</p>")
 		);
 

@@ -52,7 +52,12 @@ public class Xow_parser_mgr {
 	}	private Wdata_hwtr_msgs wbase__time__msgs;
 	public Bry_bfr                  Tmp_bfr()           {return tmp_bfr;} private final    Bry_bfr tmp_bfr = Bry_bfr_.New();
 	public int						Tag__next_idx() {return ++tag_idx;} private int tag_idx; // NOTE:must be wiki-level variable, not page-level, b/c pre-compiled templates can reserve tag #s; PAGE:de.s:Seite:NewtonPrincipien.djvu/465 DATE:2015-02-03
-	public void						Tmpl_stack_del() {--tmpl_stack_ary_len;}
+	public void						Tmpl_stack_del() {
+            --tmpl_stack_ary_len;
+            if (tmpl_stack_ary_len < 0) {
+                int a=1;
+            }
+        }
 	public boolean						Tmpl_stack_add(byte[] key) {
 		if (key != null) { // #section compilation does not have a name
 			int count = 0;
@@ -108,6 +113,7 @@ public class Xow_parser_mgr {
 		if (	Xow_page_tid.Identify(wiki.Domain_tid(), ttl.Ns().Id(), ttl.Page_db(), page.Db().Page().Model_format()) == Xow_page_tid.Tid_wikitext) {	// only parse page if wikitext; skip .js, .css, Module; DATE:2013-11-10
 			byte[] data_raw = page.Db().Text().Text_bry();
 			data_raw = dbp.stripcomments(data_raw);
+//                        Db_readwrite.writeFile(String_.new_u8(data_raw), "d:/des/xowa_x/raw.txt");
 //			data_raw = Bry_.Add(data_raw, Bry_.new_a7("<references/>\n")); //- causes problems in en.wikisource.org/wiki/The_New_Student%27s_Reference_Work/Cumberland,_Md.
 			// reset Cite info
 			wiki.Html_mgr().Html_wtr().Init_per_page();

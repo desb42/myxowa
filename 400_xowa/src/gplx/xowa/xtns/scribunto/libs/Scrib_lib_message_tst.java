@@ -54,7 +54,7 @@ public class Scrib_lib_message_tst {
 	}
 	private void Init_msg(String key, String val) {Init_msg(fxt.Core().Wiki().Lang(), key, val);}
 	private void Init_msg(Xol_lang_itm lang, String key, String val) {
-		lang.Msg_mgr().Itm_by_key_or_new(Bry_.new_a7(key)).Atrs_set(Bry_.new_a7(val), false, false);
+		lang.Msg_mgr().Itm_by_key_or_new(Bry_.new_a7(key)).Atrs_set(Bry_.new_a7(val), false, false, false);
 	}
 	Keyval[] keys_ary(String msg_key) {return keys_ary(msg_key, null, null);}
 	Keyval[] keys_ary_arg(String msg_key, String arg) {return keys_ary(msg_key, null, arg);}

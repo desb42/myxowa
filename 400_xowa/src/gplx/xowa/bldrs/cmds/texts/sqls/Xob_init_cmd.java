@@ -13,7 +13,8 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.bldrs.cmds.texts.sqls; import gplx.*; import gplx.xowa.*; import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.cmds.*; import gplx.xowa.bldrs.cmds.texts.*;
+package gplx.xowa.bldrs.cmds.texts.sqls; import gplx.*; import gplx.xowa.*;import gplx.xowa.addons.wikis.ctgs.enums.Xoctg_collation_enum;
+ import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.cmds.*; import gplx.xowa.bldrs.cmds.texts.*;
 import gplx.xowa.bldrs.*; import gplx.xowa.apps.apis.xowa.bldrs.imports.*;
 import gplx.xowa.xtns.wbases.imports.*;
 public class Xob_init_cmd extends Xob_init_base {

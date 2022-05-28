@@ -38,7 +38,7 @@ public class References_nde_rare_tst {
 		//cfg.Backlabels_(Bry_.Ary("a"));
 		//byte[][] old = cfg.Backlabels();
 		cfg.Backlabels_(Bry_.new_a7("a"));
-		fxt.Wiki().Msg_mgr().Get_or_make(Ref_html_wtr_cfg.Msg_backlabels_err).Atrs_set(Bry_.new_a7("Ran out of custom link labels for group ~{0}."), true, false);
+		fxt.Wiki().Msg_mgr().Get_or_make(Ref_html_wtr_cfg.Msg_backlabels_err).Atrs_set(Bry_.new_a7("Ran out of custom link labels for group ~{0}."), true, false, false);
 		fxt.Test_parse_page_wiki_str(String_.Concat_lines_nl_skip_last
 		(	"<ref name='ref_1'>a</ref><ref name='ref_1'>b</ref>"
 		,	"<references/>"

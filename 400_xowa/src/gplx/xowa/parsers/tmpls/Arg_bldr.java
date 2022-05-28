@@ -126,11 +126,11 @@ public class Arg_bldr {	// TS
 						case Xop_xnde_tag_.Tid__noinclude: case Xop_xnde_tag_.Tid__includeonly: case Xop_xnde_tag_.Tid__onlyinclude:
 							itm_is_static = false;
 							break;
-						case Xop_xnde_tag_.Tid__nowiki:
+						/*case Xop_xnde_tag_.Tid__nowiki:
 							StripState_xnde xnde = (StripState_xnde)sub_as_xnde.Xnde_xtn();
 							if (xnde != null)
 								cur_itm.Dat_ary_(xnde.Xtn_key());
-							break;
+							break;*/
 						/*case Xop_xnde_tag_.Tid__ref:
 							Ref_nde ref_xnde = (Ref_nde)sub_as_xnde.Xnde_xtn();
 							if (ref_xnde != null)

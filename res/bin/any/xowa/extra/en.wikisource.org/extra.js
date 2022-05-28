@@ -238,8 +238,10 @@ jQuery( document ).ready( function ( $ ) {
 		$( '#xowa_pp_image' ).children().children().appendTo( $( '.prp-page-image' ) );
 	}
 } );
+// much more complicated in the PageNumbers.js as of 20220506
+	var disabledTitle = [ 'Main Page' ].indexOf( mw.config.get( 'wgTitle' ) ) !== -1;
 
-if( mediaWiki.config.get( 'wgNamespaceNumber' ) == 0) {
+if( mediaWiki.config.get( 'wgNamespaceNumber' ) == 0 && !disabledTitle) {
 	xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/extra/en.wikisource.org/Gadget-PageNumbers-core.js');
 	xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/extra/en.wikisource.org/Corrections.js');
 

@@ -25,7 +25,7 @@ class Imap_html__fxt {
 	public Imap_html__fxt() {
 		this.parser_fxt = new Xop_fxt();
 		Xol_msg_itm msg = parser_fxt.Wiki().Msg_mgr().Get_or_make(Bry_.new_a7("imagemap_description"));
-		msg.Atrs_set(Bry_.new_a7("click here"), false, false);
+		msg.Atrs_set(Bry_.new_a7("click here"), false, false, false);
 	}
 	public Imap_html__fxt Hdump_n_() {return Hdump_(Bool_.N);}
 	public Imap_html__fxt Hdump_y_() {return Hdump_(Bool_.Y);}

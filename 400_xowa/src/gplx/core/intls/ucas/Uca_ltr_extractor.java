@@ -46,5 +46,5 @@ public class Uca_ltr_extractor {
 				rv = numeric_heading;
 		}
 		return rv;
-	}		
+	}
 }

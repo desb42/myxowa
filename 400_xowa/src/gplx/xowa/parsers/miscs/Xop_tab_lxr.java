@@ -22,9 +22,9 @@ public class Xop_tab_lxr implements Xop_lxr {
 	public void Term(Btrie_fast_mgr core_trie) {}
 	public int Make_tkn(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, Xop_root_tkn root, byte[] src, int src_len, int bgn_pos, int cur_pos) {
 		cur_pos = Bry_find_.Find_fwd_while(src, cur_pos, src_len, Byte_ascii.Tab);
-		src[bgn_pos] = Byte_ascii.Tab; // HACK: SEE:NOTE_1:tabs
-		for (int i = bgn_pos + 1; i < cur_pos; i++)	
-			src[i] = Byte_ascii.Space;
+		//src[bgn_pos] = Byte_ascii.Tab; // HACK: SEE:NOTE_1:tabs
+		//for (int i = bgn_pos + 1; i < cur_pos; i++)	
+		//	src[i] = Byte_ascii.Space;
 		ctx.Subs_add(root, tkn_mkr.Tab(bgn_pos, cur_pos));
 		return cur_pos;
 	}

@@ -28,7 +28,7 @@ public class Xoctg_catpage_tmp {
 		byte tid = grp.Tid();
 		List_adp list = Get_by_tid(tid);
 		if (list.Len() == 0) return;
-		grp.Itms_(wiki, (Xoctg_catpage_itm[])list.To_ary_and_clear(Xoctg_catpage_itm.class));
+		grp.Itms_(wiki, (Xoctg_catpage_itm[])list.To_ary_and_clear(Xoctg_catpage_itm.class), null);
 	}
 	private List_adp Get_by_tid(byte tid) {
 		switch (tid) {

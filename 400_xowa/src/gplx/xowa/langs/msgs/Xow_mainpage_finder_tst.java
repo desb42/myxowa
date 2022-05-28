@@ -62,7 +62,7 @@ class Xow_mainpage_finder_fxt {
 	}	private static final byte[] Ttl_mainpage = Bry_.new_a7("MediaWiki:Mainpage"); // TEST:
 	public void Init_lang(String mainpage_val) {
 		Xol_msg_itm msg_itm = fxt.Wiki().Lang().Msg_mgr().Itm_by_key_or_new(Xow_mainpage_finder.Msg_mainpage);
-		msg_itm.Atrs_set(Bry_.new_a7(mainpage_val), false, false);
+		msg_itm.Atrs_set(Bry_.new_a7(mainpage_val), false, false, false);
 	}
 	public void Test_mainpage(String expd) {
 		byte[] actl = Xow_mainpage_finder.Find_or(fxt.Wiki(), fxt.Wiki().Props().Main_page());

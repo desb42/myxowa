@@ -41,7 +41,7 @@ public class Gallery_mgr_wtr {
 		Write_ul_lhs(bfr, tmp_bfr, hctx_is_hdump, wiki.Html_mgr().Whitelist_mgr(), src, xnde, ul_id, ul_cls, ul_style, xnde.Atrs_other());
 
 		// write gallery_caption; EX: <li class='gallerycaption'>caption</li>
-		byte[] mgr_caption = xnde.Mgr_caption();
+		byte[] mgr_caption = Db_expand.Extracheck(xnde.Mgr_caption(), "", wiki);
 		if (Bry_.Len_gt_0(mgr_caption)) Gallery_mgr_wtr_.Fmtr__mgr_caption.Bld_bfr_many(bfr, mgr_caption);
 
 		// write <li> items

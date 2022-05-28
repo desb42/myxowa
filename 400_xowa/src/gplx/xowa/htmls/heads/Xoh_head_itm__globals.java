@@ -83,15 +83,17 @@ public class Xoh_head_itm__globals extends Xoh_head_itm__base {
 		wtr.Write_js_global_ini_atr_val(Key_wgDefaultDateFormat			, Date_format_default);
 		wtr.Write_js_global_ini_atr_obj(Key_wgMonthNames				, months_long);
 		wtr.Write_js_global_ini_atr_obj(Key_wgMonthNamesShort			, months_short);
-                Xoa_ttl ttl = page.Ttl();
-                //tmp_bfr.Add_byte_apos().Add_int_variable(page.Ttl().Ns().Id()).Add_byte_apos();
+		Xoa_ttl ttl = page.Ttl();
+		//tmp_bfr.Add_byte_apos().Add_int_variable(page.Ttl().Ns().Id()).Add_byte_apos();
 		//wtr.Write_js_global_ini_atr_obj(Key_wgNamespaceNumber			, tmp_bfr.To_bry_and_clear());
 		wtr.Write_js_global_ini_atr_obj(Key_wgNamespaceNumber			, Int_.To_bry(page.Ttl().Ns().Id()));
-                //tmp_bfr.Add_byte_apos().Add(ttl.Full_db()).Add_byte_apos();
+		//tmp_bfr.Add_byte_apos().Add(ttl.Full_db()).Add_byte_apos();
 		wtr.Write_js_global_ini_atr_val(Key_wgPageName			, ttl.Full_db());
-                //tmp_bfr.Add_byte_apos().Add(ttl.Full_txt_w_ttl_case()).Add_byte_apos();
-		wtr.Write_js_global_ini_atr_val(Key_wgTitle			, ttl.Page_db()); // no namespace
-                //tmp_bfr.Add_byte_apos().Add(ttl.Ns().Name_db()).Add_byte_apos();
+		//tmp_bfr.Add_byte_apos().Add(ttl.Full_txt_w_ttl_case()).Add_byte_apos();
+		byte[] rv = ttl.Page_db(); // no namespace
+		Bry_.Replace_reuse(rv, Byte_ascii.Underline, Byte_ascii.Space);
+		wtr.Write_js_global_ini_atr_val(Key_wgTitle			, rv);
+		//tmp_bfr.Add_byte_apos().Add(ttl.Ns().Name_db()).Add_byte_apos();
 		wtr.Write_js_global_ini_atr_val(Key_wgCanonicalNamespace		, ttl.Ns().Name_db());
 		wtr.Write_js_global_ini_atr_val(Key_wgPageContentLanguage		, page.Lang().Key_bry());
 		wtr.Write_js_global_ini_atr_val(Key_wgUserLanguage		, page.Lang().Key_bry());

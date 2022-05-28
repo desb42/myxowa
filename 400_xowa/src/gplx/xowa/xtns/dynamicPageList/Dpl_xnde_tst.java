@@ -15,6 +15,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.dynamicPageList; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*;
 import org.junit.*; import gplx.core.strings.*; import gplx.xowa.apps.cfgs.*; import gplx.xowa.wikis.nss.*; import gplx.langs.htmls.*;
+import gplx.xowa.addons.wikis.ctgs.enums.Xoctg_collation_enum;
 import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*;
 public class Dpl_xnde_tst {
 	private final    Dpl_xnde_fxt fxt = new Dpl_xnde_fxt();
