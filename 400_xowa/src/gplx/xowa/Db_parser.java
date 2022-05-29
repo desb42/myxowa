@@ -56,7 +56,7 @@ public class Db_parser {
 		m_pos = 0;
 		nsrc = removesection();
                 if (m_nl_start > 0) { // if not already trimmed
-                    nsrc = Bry_.Mid(src, m_nl_start);
+                    nsrc = Bry_.Mid(nsrc, m_nl_start);
                 }
 		return nsrc;
 	}

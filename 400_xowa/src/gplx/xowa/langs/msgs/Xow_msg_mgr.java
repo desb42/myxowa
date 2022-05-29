@@ -93,9 +93,9 @@ public class Xow_msg_mgr implements Gfo_invk {
 	public byte[] Val_by_itm(Bry_bfr tmp_bfr, Xol_msg_itm itm, Object[] args) {
 		byte[] rv;
 		if (args == null)
-                    rv = itm.Val();
-                else
-                    rv = itm.Fmt(tmp_bfr, args);
+			rv = itm.Val();
+		else
+			rv = itm.Fmt(tmp_bfr, args);
 		if (itm.Has_tmpl_txt()) rv = wiki.Wtxt__expand_tmpl(rv);
 		if (itm.Has_wtxt()) rv = wiki.Wtxt__expand_tmpl(rv);
 		return rv;

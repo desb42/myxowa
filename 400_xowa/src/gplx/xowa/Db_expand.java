@@ -120,7 +120,15 @@ public class Db_expand {
 				case '[':
 					if (pos < len && src[pos] == '[') {
 						// found '[['
+                                                int start = pos - 1;
+                                                // consume all others
 						pos++;
+                                                while (pos < len) {
+                                                    if (src[pos] == '[')
+                                                        pos++;
+                                                    else
+                                                        break;
+                                                }
 						lnki_bgn = pos;
 						lnki_end = -1;
 						bar_pos = -1;
@@ -145,18 +153,24 @@ public class Db_expand {
 							break;
 						}
 						if (lnki_end > 0) {
-							tmp_bfr.Add_str_a7("<a href=\"");
 							byte[] ttl_bry;
 							if (bar_pos > 0)
 								ttl_bry = Bry_.Mid(src, lnki_bgn, bar_pos);
 							else
 								ttl_bry = Bry_.Mid(src, lnki_bgn, lnki_end);
 							if (src[lnki_bgn] != '#') {
-								tmp_bfr.Add_str_a7("/wiki/");
 								Xoa_ttl ttl = Xoa_ttl.Parse(wiki, ttl_bry);
+								if (ttl == null) {
+									tmp_bfr.Add_mid(src, start, lnki_end + 2);
+									break;
+								}
 								ttl_bry = ttl.Full_url();
 							}
-							expand(tmp_bfr, ttl_bry, 0, ttl_bry.length);
+							tmp_bfr.Add_str_a7("<a href=\"");
+							if (src[lnki_bgn] != '#') {
+								tmp_bfr.Add_str_a7("/wiki/");
+							}
+							tmp_bfr.Add(ttl_bry);
 							tmp_bfr.Add_str_a7("\"");
 							if (accessibility_label.length() == 0) {
 								tmp_bfr.Add_str_a7(" title=\"");

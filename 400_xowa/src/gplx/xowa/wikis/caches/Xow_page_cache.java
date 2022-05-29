@@ -101,6 +101,7 @@ public class Xow_page_cache {
 			page_exists = page_text != null;
 		}
 
+		synchronized (thread_lock) {
 		// load_page in other cases
 		if (page_text == null) {
 			Xoae_page page = wiki.Data_mgr().Load_page_by_ttl(ttl);	// NOTE: do not call Db_mgr.Load_page; need to handle redirects
@@ -115,7 +116,6 @@ public class Xow_page_cache {
 		}
 		if (!noadd) {
 
-		synchronized (thread_lock) {
 			// create item
 			if (page_exists) {
 				//page_text = dbp.stripcomments(page_text);
