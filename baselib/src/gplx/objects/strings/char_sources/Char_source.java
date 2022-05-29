@@ -23,5 +23,6 @@ public interface Char_source {
 	String Substring(int bgn, int end);
 	byte[] SubstringAsBry(int bgn, int end);
 	int Index_of(Char_source find, int bgn);
+	int Index_of(int find, int bgn);
 	boolean Eq(int lhs_bgn, Char_source rhs, int rhs_bgn, int rhs_end);
 }
