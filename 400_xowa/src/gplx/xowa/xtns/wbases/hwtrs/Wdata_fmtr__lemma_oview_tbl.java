@@ -31,7 +31,7 @@ class Wdata_fmtr__lemma_oview_tbl implements gplx.core.brys.Bfr_arg {
 		this.wdoc = wdoc;
 	}
 	private byte[] Build_lemma_widget() {
-		Ordered_hash list = wdoc.Lemma_list();
+		Wdata_list_label list = wdoc.Lemma_list();
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		int len = list.Count();
 		for (int i = 0; i < len; ++i) {

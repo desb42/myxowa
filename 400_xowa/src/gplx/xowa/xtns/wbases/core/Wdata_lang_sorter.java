@@ -42,11 +42,36 @@ public class Wdata_lang_sorter implements Gfo_evt_itm, gplx.core.lists.ComparerA
 	public void Init_by_wdoc(Wdata_doc wdoc) {
 		if ((Bry_.Ary_eq(wdoc.Sort_langs(), langs))) return;
 		wdoc.Sort_langs_(langs);
-		Sort_wdoc_list(Bool_.Y, wdoc.Slink_list());
-		Sort_wdoc_list(Bool_.N, wdoc.Label_list());
-		Sort_wdoc_list(Bool_.N, wdoc.Lemma_list());
-		Sort_wdoc_list(Bool_.N, wdoc.Descr_list());
-		Sort_wdoc_list(Bool_.N, wdoc.Alias_list());
+		Sort_wdoc_list_slink(wdoc.Slink_list());
+		Sort_wdoc_list_label(Bool_.N, wdoc.Label_list());
+		Sort_wdoc_list_label(Bool_.N, wdoc.Lemma_list());
+		Sort_wdoc_list_label(Bool_.N, wdoc.Descr_list());
+		Sort_wdoc_list_label(Bool_.N, wdoc.Alias_list());
+	}
+	private void Sort_wdoc_list_slink(Wdata_sitelink list) {
+		int len = list.Count();
+		for (int i = 0; i < len; ++i) {
+			Wdata_lang_sortable itm = (Wdata_lang_sortable)list.Get_at(i);
+			Wdata_sitelink_itm slink = (Wdata_sitelink_itm)itm;
+			byte[] lang_val = slink.Domain_info().Lang_orig_key();	// use orig, not cur; EX: simplewiki has orig of "simple" but lang of "en"
+			if (Bry_.Len_eq_0(lang_val)) lang_val = slink.Site();	// unknown lang; EX: "xyzwiki" -> ""; make site = lang, else "" lang will sort towards top of list; PAGE:wd.q:20 DATE:2014-10-03
+			slink.Lang_(lang_val);
+			//itm.Lang_sort_(Sort_calc(itm));
+			Sort_calc(itm);
+		}
+	}
+	private void Sort_wdoc_list_label(boolean is_slink, Wdata_list list) {
+		int len = list.Count();
+		for (int i = 0; i < len; ++i) {
+			Wdata_lang_sortable itm = (Wdata_lang_sortable)list.Get_at(i);
+			if (is_slink) {
+				Wdata_sitelink_itm slink = (Wdata_sitelink_itm)itm;
+				byte[] lang_val = slink.Domain_info().Lang_orig_key();	// use orig, not cur; EX: simplewiki has orig of "simple" but lang of "en"
+				if (Bry_.Len_eq_0(lang_val)) lang_val = slink.Site();	// unknown lang; EX: "xyzwiki" -> ""; make site = lang, else "" lang will sort towards top of list; PAGE:wd.q:20 DATE:2014-10-03
+				slink.Lang_(lang_val);
+			}
+			Sort_calc(itm);
+		}
 	}
 	private void Sort_wdoc_list(boolean is_slink, Ordered_hash list) {
 		int len = list.Count();

@@ -15,15 +15,16 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.wbases.senses; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.wbases.*; import gplx.xowa.xtns.wbases.claims.*;
 import gplx.xowa.xtns.wbases.claims.enums.*;
+import gplx.xowa.xtns.wbases.core.Wdata_list_label;
 public class Wbase_sense_base implements CompareAble {
-	public Wbase_sense_base(byte[] id, Ordered_hash claims, Ordered_hash glosses) {
+	public Wbase_sense_base(byte[] id, Ordered_hash claims, Wdata_list_label glosses) {
 		this.id = id;
 		this.claims = claims;
 		this.glosses = glosses;
 	}
 	public byte[]					Id()				{return id;} private final    byte[] id;
 	public Ordered_hash		Claims()		{return claims;} private final    Ordered_hash claims;
-	public Ordered_hash				Glosses()			{return glosses;} private Ordered_hash glosses;
+	public Wdata_list_label				Glosses()			{return glosses;} private Wdata_list_label glosses;
 
 	public int compareTo(Object obj) {
 		Wbase_sense_base comp = (Wbase_sense_base)obj;

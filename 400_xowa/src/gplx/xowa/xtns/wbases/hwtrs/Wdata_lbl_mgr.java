@@ -131,7 +131,8 @@ public class Wdata_lbl_mgr {
 				}
 			}
 		}
-		Ordered_hash slink_list = wdoc.Slink_list();
+		//Ordered_hash slink_list = wdoc.Slink_list();
+		Wdata_sitelink slink_list = wdoc.Slink_list();
 		len = slink_list.Count();
 		for (int i = 0; i < len; ++i) {
 			Wdata_sitelink_itm itm = (Wdata_sitelink_itm)slink_list.Get_at(i);

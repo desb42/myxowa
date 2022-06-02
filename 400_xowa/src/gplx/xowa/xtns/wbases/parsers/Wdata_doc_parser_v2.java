@@ -36,19 +36,27 @@ import gplx.xowa.xtns.wbases.core.Wdata_dict_langtext;
 import gplx.xowa.xtns.wbases.core.Wdata_dict_sitelink;
 import gplx.xowa.xtns.wbases.core.Wdata_langtext_itm;
 import gplx.xowa.xtns.wbases.core.Wdata_sitelink_itm;
+import gplx.xowa.xtns.wbases.core.Wdata_sitelink;
+import gplx.xowa.xtns.wbases.core.Wdata_list;
+import gplx.xowa.xtns.wbases.core.Wdata_list_alias;
+import gplx.xowa.xtns.wbases.core.Wdata_list_label;
 
 import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_type_;
 public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
-	private Wdata_claims_parser_v2 claims_parser = new Wdata_claims_parser_v2();
-	private Wdata_forms_parser forms_parser = new Wdata_forms_parser();
-	private Wdata_senses_parser senses_parser = new Wdata_senses_parser();
+	private final Wdata_claims_parser_v2 claims_parser = new Wdata_claims_parser_v2();
+	private final Wdata_forms_parser forms_parser = new Wdata_forms_parser();
+	private final Wdata_senses_parser senses_parser = new Wdata_senses_parser();
 	public byte[] Parse_qid(Json_doc doc) {
 		try {
 			Json_itm itm = doc.Find_nde(Bry_id);
 			return Bry_.Lcase__1st(itm.Data_bry());	// standardize on "q" instead of "Q" for compatibility with v1
 		}	catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse qid", "src", String_.new_u8(doc.Src()));}
 	}
-	public Ordered_hash Parse_sitelinks(byte[] qid, Json_doc doc) {
+	public Wdata_sitelink Parse_sitelinks(byte[] qid, Json_doc doc) {
+			Json_nde list_nde = Json_nde.Cast(doc.Get_grp(Bry_sitelinks));
+                        return new Wdata_sitelink(list_nde, qid);
+        }
+	public Ordered_hash xxParse_sitelinks(byte[] qid, Json_doc doc) {
 		try {
 			Json_nde list_nde = Json_nde.Cast(doc.Get_grp(Bry_sitelinks)); if (list_nde == null) return Wdata_doc_parser_v1.Empty_ordered_hash_bry;
 			Ordered_hash rv = Ordered_hash_.New_bry();
@@ -74,13 +82,20 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 			return rv;
 		} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse sitelinks", "qid", String_.new_u8(qid));}
 	}
-	public Ordered_hash Parse_langvals(byte[] qid, Json_doc doc, byte[] langval_key) {
+	public Wdata_list_label Parse_langvals(byte[] qid, Json_doc doc, byte[] langval_key) {
+            Json_nde list_nde = Json_nde.Cast(doc.Get_grp(langval_key));
+                        return new Wdata_list_label(list_nde, qid);
+        }
+	public Wdata_list_label Parse_local_langval(byte[] qid, Json_nde list_nde) {
+                        return new Wdata_list_label(list_nde, qid);
+        }
+	public Ordered_hash xxParse_langvals(byte[] qid, Json_doc doc, byte[] langval_key) {
 		try {
 			Json_nde list_nde = Json_nde.Cast(doc.Get_grp(langval_key)); if (list_nde == null) return Wdata_doc_parser_v1.Empty_ordered_hash_bry;
-			return Parse_local_langval(qid, list_nde);
+			return yParse_local_langval(qid, list_nde);
 		} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse langvals", "qid", String_.new_u8(qid), "langval_key", langval_key);}
 	}
-	public Ordered_hash Parse_local_langval(byte[] qid, Json_nde list_nde) {
+	public Ordered_hash yParse_local_langval(byte[] qid, Json_nde list_nde) {
 		Ordered_hash rv = Ordered_hash_.New_bry();
 		int list_len = list_nde.Len();
 		for (int i = 0; i < list_len; ++i) {
@@ -111,7 +126,11 @@ public class Wdata_doc_parser_v2 implements Wdata_doc_parser {
 		}
 		return rv;
 	}
-	public Ordered_hash Parse_aliases(byte[] qid, Json_doc doc) {
+	public Wdata_list_alias Parse_aliases(byte[] qid, Json_doc doc) {
+            Json_nde list_nde = Json_nde.Cast(doc.Get_grp(Bry_aliases));
+                        return new Wdata_list_alias(list_nde, qid);
+        }
+	public Ordered_hash xxParse_aliases(byte[] qid, Json_doc doc) {
 		try {
 			Json_nde list_nde = Json_nde.Cast(doc.Get_grp(Bry_aliases)); if (list_nde == null) return Wdata_doc_parser_v1.Empty_ordered_hash_bry;
 			Ordered_hash rv = Ordered_hash_.New_bry();

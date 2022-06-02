@@ -29,35 +29,36 @@ public class Wdata_doc_wtr {
 		wtr.Nde_end();
 		return wtr.Bld();
 	}
-	private void Xto_bry__list(byte[] key, Ordered_hash list) {
+	private void Xto_bry__list(byte[] key, Wdata_list_label list) {
 		int len = list.Count();
 		if (len == 0) return;
 		wtr.Key(true, key);
 		wtr.Nde_bgn();
 		for (int i = 0; i < len; i++) {
-			Keyval kv = (Keyval)list.Get_at(i);
-			wtr.Kv(i != 0, Bry_.new_u8(kv.Key()), Bry_.new_u8(kv.Val_to_str_or_empty()));
+//			Keyval kv = (Keyval)list.Get_at(i);
+//			wtr.Kv(i != 0, Bry_.new_u8(kv.Key()), Bry_.new_u8(kv.Val_to_str_or_empty()));
 		}
 		wtr.Nde_end();
-		list.Clear();
+//		list.Clear();
 	}
-	private void Xto_bry__sitelinks(byte[] key, Ordered_hash list) {	// NOTE: changed to reflect new sitelinks structure; DATE:2014-02-04
+	//private void Xto_bry__sitelinks(byte[] key, Ordered_hash list) {	// NOTE: changed to reflect new sitelinks structure; DATE:2014-02-04
+	private void Xto_bry__sitelinks(byte[] key, Wdata_sitelink list) {	// NOTE: changed to reflect new sitelinks structure; DATE:2014-02-04
 		int len = list.Count();
 		if (len == 0) return;
 		wtr.Key(true, key);
 		wtr.Nde_bgn();
 		for (int i = 0; i < len; i++) {
 			if (i != 0) wtr.Comma();
-			Keyval kv = (Keyval)list.Get_at(i);
-			wtr.Key(false, Bry_.new_u8(kv.Key()));												// write key;	EX: enwiki:
-			wtr.Nde_bgn();																			// bgn nde;		EX: {
-			wtr.Kv(false, Wdata_doc_parser_v1.Bry_name, Bry_.new_u8(kv.Val_to_str_or_empty()));	// write name;	EX:   name=Earth
-			wtr.Nde_end();																			// end nde;		EX: }
+//			Keyval kv = (Keyval)list.Get_at(i);
+//			wtr.Key(false, Bry_.new_u8(kv.Key()));												// write key;	EX: enwiki:
+//			wtr.Nde_bgn();																			// bgn nde;		EX: {
+//			wtr.Kv(false, Wdata_doc_parser_v1.Bry_name, Bry_.new_u8(kv.Val_to_str_or_empty()));	// write name;	EX:   name=Earth
+//			wtr.Nde_end();																			// end nde;		EX: }
 		}
 		wtr.Nde_end();
-		list.Clear();
+//		list.Clear();
 	}
-	private void Xto_bry__aliases(Ordered_hash aliases) {
+	private void Xto_bry__aliases(Wdata_list_alias aliases) {
 		int len = aliases.Count();
 		if (len == 0) return;
 		wtr.Key(true, Wdata_doc_parser_v1.Bry_aliases);
@@ -75,7 +76,7 @@ public class Wdata_doc_wtr {
 			wtr.Ary_end();
 		}
 		wtr.Nde_end();
-		aliases.Clear();
+//		aliases.Clear();
 	}
 	private void Xto_bry__claims(byte[] qid, Ordered_hash props) {
 		int len = props.Count();

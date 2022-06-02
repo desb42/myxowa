@@ -16,6 +16,8 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.xtns.wbases.parsers; import gplx.*;
 import gplx.core.primitives.*; import gplx.langs.jsons.*;
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.claims.enums.*; import gplx.xowa.xtns.wbases.claims.itms.*;
+import static gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v2.Bry_aliases;
+import static gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v2.Bry_sitelinks;
 public class Wdata_doc_parser_v1 implements Wdata_doc_parser {
 	public Wdata_doc_parser_v1(Gfo_usr_dlg usr_dlg) {this.usr_dlg = usr_dlg;} private Gfo_usr_dlg usr_dlg;
 	public Wdata_doc_parser_v1() {}
@@ -34,7 +36,11 @@ public class Wdata_doc_parser_v1 implements Wdata_doc_parser {
 			}
 		} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse qid", "src", String_.new_u8(doc.Src()));}
 	}
-	public Ordered_hash Parse_sitelinks(byte[] qid, Json_doc doc) {
+	public Wdata_sitelink Parse_sitelinks(byte[] qid, Json_doc doc) {
+			Json_nde list_nde = Json_nde.Cast(doc.Get_grp(Bry_sitelinks));
+                        return new Wdata_sitelink(list_nde, qid);
+        }
+	public Ordered_hash xxParse_sitelinks(byte[] qid, Json_doc doc) {
 		try {
 			Json_nde list_nde = Json_nde.Cast(doc.Get_grp(Bry_links)); if (list_nde == null) return Wdata_doc_parser_v1.Empty_ordered_hash_bry;
 			Ordered_hash rv = Ordered_hash_.New_bry();
@@ -62,7 +68,11 @@ public class Wdata_doc_parser_v1 implements Wdata_doc_parser {
 			return rv;
 		} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse sitelinks", "qid", String_.new_u8(qid));}
 	}
-	public Ordered_hash Parse_langvals(byte[] qid, Json_doc doc, byte[] langval_key) {
+	public Wdata_list_label Parse_langvals(byte[] qid, Json_doc doc, byte[] langval_key) {
+            Json_nde list_nde = Json_nde.Cast(doc.Get_grp(langval_key));
+                        return new Wdata_list_label(list_nde, qid);
+        }
+	public Ordered_hash xxParse_langvals(byte[] qid, Json_doc doc, byte[] langval_key) {
 		try {
 			Json_nde list_nde = Json_nde.Cast(doc.Get_grp(langval_key)); if (list_nde == null) return Wdata_doc_parser_v1.Empty_ordered_hash_bry;
 			Ordered_hash rv = Ordered_hash_.New_bry();
@@ -76,7 +86,11 @@ public class Wdata_doc_parser_v1 implements Wdata_doc_parser {
 			return rv;
 		} catch (Exception e) {throw Err_.new_exc(e, "xo", "failed to parse langvals", "qid", String_.new_u8(qid), "langval_key", langval_key);}
 	}
-	public Ordered_hash Parse_aliases(byte[] qid, Json_doc doc) {
+	public Wdata_list_alias Parse_aliases(byte[] qid, Json_doc doc) {
+            Json_nde list_nde = Json_nde.Cast(doc.Get_grp(Bry_aliases));
+                        return new Wdata_list_alias(list_nde, qid);
+        }
+	public Ordered_hash xxParse_aliases(byte[] qid, Json_doc doc) {
 		try {
 			Json_nde list_nde = Json_nde.Cast(doc.Get_grp(Bry_aliases)); if (list_nde == null) return Wdata_doc_parser_v1.Empty_ordered_hash_bry;
 			Ordered_hash rv = Ordered_hash_.New_bry();

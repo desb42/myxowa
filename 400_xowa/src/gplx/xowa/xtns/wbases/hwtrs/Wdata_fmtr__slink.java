@@ -24,7 +24,7 @@ class Wdata_fmtr__slink_grp implements gplx.core.brys.Bfr_arg {
 		fmtr_tbl.Init_by_ctor(lang_sorter, toggle_mgr, lbl_regy, href_encoder, fmtr_toc, xwiki_mgr);
 	}
 	public void Init_by_lang(Wdata_hwtr_msgs msgs) {fmtr_tbl.Init_by_lang(msgs);}
-	public void Init_by_wdoc(Ordered_hash list) {
+	public void Init_by_wdoc(Wdata_sitelink list) {
 		this.is_empty = list.Count() == 0; if (is_empty) return;
 		fmtr_tbl.Init_by_wdoc(list);
 	}
@@ -64,7 +64,7 @@ class Wdata_fmtr__slink_tbl implements gplx.core.brys.Bfr_arg {
 			grp.Toggle_itm().Init_msgs(msgs.Toggle_title_y(), msgs.Toggle_title_n());
 		}
 	}
-	public void Init_by_wdoc(Ordered_hash list) {
+	public void Init_by_wdoc(Wdata_sitelink list) {
 		Wdata_slink_grp.Sift(grps, list);
 		for (int i = 0; i < Wdata_slink_grp.Idx__len; ++i) {
 			Wdata_slink_grp grp = grps[i];

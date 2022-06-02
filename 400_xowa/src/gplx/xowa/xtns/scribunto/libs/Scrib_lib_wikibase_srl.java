@@ -40,7 +40,10 @@ import gplx.xowa.xtns.wbases.core.Wdata_dict_claim_v1;
 import gplx.xowa.xtns.wbases.core.Wdata_dict_langtext;
 import gplx.xowa.xtns.wbases.core.Wdata_dict_sitelink;
 import gplx.xowa.xtns.wbases.core.Wdata_langtext_itm;
+import gplx.xowa.xtns.wbases.core.Wdata_list_alias;
+import gplx.xowa.xtns.wbases.core.Wdata_list_label;
 import gplx.xowa.xtns.wbases.core.Wdata_sitelink_itm;
+import gplx.xowa.xtns.wbases.core.Wdata_sitelink;
 import gplx.xowa.xtns.wbases.dbs.Xowb_prop_tbl_itm;
 import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v2;
 import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr;
@@ -77,7 +80,7 @@ public class Scrib_lib_wikibase_srl {
 		if (ary == null) return;	// don't add node if empty; EX: labels:{} should not add "labels" kv
 		rv.Add(Keyval_.new_(label, ary));
 	}
-	private static Keyval[] Srl_langtexts(String lang_label, String text_label, Ordered_hash list) {
+	private static Keyval[] Srl_langtexts(String lang_label, String text_label, Wdata_list_label list) {
 		int len = list.Count(); if (len == 0) return null;
 		Keyval[] rv = new Keyval[len];
 		for (int i = 0; i < len; i++) {
@@ -88,7 +91,7 @@ public class Scrib_lib_wikibase_srl {
 		}
 		return rv;
 	}
-	private static Keyval[] Srl_sitelinks(String key_label, String val_label, Ordered_hash list, int base_adj) {
+	private static Keyval[] Srl_sitelinks(String key_label, String val_label, Wdata_sitelink list, int base_adj) {
 		int len = list.Count(); if (len == 0) return null;
 		Keyval[] rv = new Keyval[len];
 		for (int i = 0; i < len; i++) {
@@ -109,7 +112,7 @@ public class Scrib_lib_wikibase_srl {
 		}
 		return Keyval_.new_("badges", kvs);
 	}
-	private static Keyval[] Srl_aliases(int base_adj, Ordered_hash list) {
+	private static Keyval[] Srl_aliases(int base_adj, Wdata_list_alias list) {
 		int len = list.Count(); if (len == 0) return null;
 		Keyval[] rv = new Keyval[len];
 		for (int i = 0; i < len; i++) {

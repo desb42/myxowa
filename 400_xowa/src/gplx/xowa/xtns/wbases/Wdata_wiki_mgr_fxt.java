@@ -58,7 +58,7 @@ import gplx.xowa.xtns.wbases.pfuncs.Wbase_statement_mgr_;
 import gplx.xowa.xtns.wbases.pfuncs.Wdata_external_lang_links_data;
 import gplx.xowa.xtns.wbases.stores.Wbase_prop_mgr_loader_;
 import gplx.xowa.xtns.wbases.stores.Wbase_qid_mgr;
-
+import gplx.xowa.xtns.wbases.core.Wdata_sitelink;
 public class Wdata_wiki_mgr_fxt {
 	private Xoae_app app; private Xowe_wiki wiki; private Wdata_doc_bldr wdoc_bldr;
 	private final Wdata_xwiki_link_wtr wdata_lang_wtr = new Wdata_xwiki_link_wtr();
@@ -162,8 +162,9 @@ public class Wdata_wiki_mgr_fxt {
 
 		Bry_bfr tmp_bfr = Bry_bfr_.New();
 		Wbase_qid_mgr qid_mgr = wdata_mgr.Qid_mgr;
-		Ordered_hash slinks = wdoc.Slink_list();
-		int slinks_len = slinks.Len();
+		//Ordered_hash slinks = wdoc.Slink_list();
+		Wdata_sitelink slinks = wdoc.Slink_list();
+		int slinks_len = slinks.Count();
 		for (int i = 0; i < slinks_len; i++) {
 			Wdata_sitelink_itm slink = (Wdata_sitelink_itm)slinks.Get_at(i);
 			Xow_domain_itm domain = Xow_abrv_wm_.Parse_to_domain_itm(slink.Site());

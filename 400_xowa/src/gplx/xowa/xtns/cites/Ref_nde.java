@@ -44,7 +44,7 @@ public class Ref_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		if (ctx.Tid_is_popup()) return; // popups don't show <ref>
 		Xox_xnde_.Xatr__set(wiki, this, xatrs_hash, src, xnde);
 		if (xnde.CloseMode() == Xop_xnde_tkn.CloseMode_pair)
-			body = wiki.Parser_mgr().Main().Parse_text_to_wdom_old_ctx(ctx, Bry_.Mid(src, xnde.Tag_open_end(), xnde.Tag_close_bgn()), false);
+			body = wiki.Parser_mgr().Main().Parse_text_to_wdom_old_ctx(ctx, Bry_.Mid(src, xnde.Tag_open_end(), xnde.Tag_close_bgn()), true);
 
 		// override "group" if inside "<references>"
 		byte[] references_group = ctx.References_group();
@@ -60,7 +60,7 @@ public class Ref_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		this.xnde = xnde;
 	}
 	public void Xtn_write(Bry_bfr bfr, Xoae_app app, Xop_ctx ctx, Xoh_html_wtr html_wtr, Xoh_wtr_ctx hctx, Xoae_page wpg, Xop_xnde_tkn xnde, byte[] src) {
-		html_wtr.Ref_wtr().Xnde_ref(hctx, bfr, src, xnde);
+		html_wtr.Ref_wtr().Xnde_ref(bfr, src, xnde);
 	}
 	public Ref_nde[] Related() {return related;} Ref_nde[] related = Ary_empty;
 	public int Related_len() {return related_len;} private int related_len;
@@ -84,7 +84,7 @@ public class Ref_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 	public byte[] Xtn_Key(Xop_ctx ctx, byte[] src, Xop_xnde_tkn xnde) {
 		Xoh_html_wtr html_wtr = ctx.Wiki().Html_mgr().Html_wtr();
 		Bry_bfr bfr = Bry_bfr_.New();
-		html_wtr.Ref_wtr().Xnde_ref_x(bfr, src, xnde);
+		html_wtr.Ref_wtr().Xnde_ref(bfr, src, xnde);
 		return bfr.To_bry();
 	}
 }

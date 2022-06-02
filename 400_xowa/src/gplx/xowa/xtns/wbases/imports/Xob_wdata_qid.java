@@ -39,6 +39,8 @@ import gplx.xowa.xtns.wbases.dbs.Wbase_qid_tbl;
 import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser;
 import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v2;
 import gplx.xowa.xtns.wbases.core.Wdata_langtext_itm;
+import gplx.xowa.xtns.wbases.core.Wdata_sitelink;
+import gplx.xowa.xtns.wbases.core.Wdata_list_label;
 
 public class Xob_wdata_qid extends Xob_itm_dump_base implements Xob_page_wkr, Gfo_invk {
 	private Db_conn conn;
@@ -77,8 +79,9 @@ public class Xob_wdata_qid extends Xob_itm_dump_base implements Xob_page_wkr, Gf
 			Wdata_doc_parser wdoc_parser = app.Wiki_mgr().Wdata_mgr().Wdoc_parser(jdoc);
 			byte[] qid = wdoc_parser.Parse_qid(jdoc);
 			Bry_bfr tmp_bfr = Bry_bfr_.Reset(255);
-			Ordered_hash sitelinks = wdoc_parser.Parse_sitelinks(qid, jdoc);
-			Ordered_hash descr = wdoc_parser.Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_descriptions);
+			//Ordered_hash sitelinks = wdoc_parser.Parse_sitelinks(qid, jdoc);
+			Wdata_sitelink sitelinks = wdoc_parser.Parse_sitelinks(qid, jdoc);
+			Wdata_list_label descr = wdoc_parser.Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_descriptions);
 			int sitelinks_len = sitelinks.Count(); if (sitelinks_len == 0) return;	// no subs; return;
 			for (int i = 0; i < sitelinks_len; i++) { // iterate sitelinks
 				Wdata_sitelink_itm sitelink = (Wdata_sitelink_itm)sitelinks.Get_at(i);

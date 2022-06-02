@@ -39,8 +39,10 @@ public class Wdata_doc {
 	public byte[] Datatype_external() {return Wbase_claim_type_.External_Name(Datatype_id());}
 
 	// NOTE: lazy instantiation b/c we don't want to parse entire json unless called; particulary necessary for {{#property}} calls;
-	private Ordered_hash slink_list;
-	public Ordered_hash Slink_list() {
+	private Wdata_sitelink slink_list;
+	//private Ordered_hash slink_list;
+	//public Ordered_hash Slink_list() {
+	public Wdata_sitelink Slink_list() {
 		if (slink_list == null)
 			synchronized (this) {
 				slink_list = wdoc_parser.Parse_sitelinks(qid, jdoc);
@@ -48,8 +50,10 @@ public class Wdata_doc {
 		return slink_list;
 	}
 
-	private Ordered_hash label_list;
-	public Ordered_hash Label_list() {
+	//private Ordered_hash label_list;
+	//public Ordered_hash Label_list() {
+	private Wdata_list_label label_list;
+	public Wdata_list_label Label_list() {
 		if (label_list == null)
 			synchronized (this) {
 				label_list = wdoc_parser.Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_labels);
@@ -57,8 +61,10 @@ public class Wdata_doc {
 		return label_list;
 	}
 
-	private Ordered_hash descr_list;
-	public Ordered_hash Descr_list() {
+	//private Ordered_hash descr_list;
+	//public Ordered_hash Descr_list() {
+	private Wdata_list_label descr_list;
+	public Wdata_list_label Descr_list() {
 		if (descr_list == null)
 			synchronized (this) {
 				descr_list = wdoc_parser.Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_descriptions);
@@ -66,8 +72,8 @@ public class Wdata_doc {
 		return descr_list;
 	}
 
-	private Ordered_hash alias_list;
-	public Ordered_hash Alias_list() {
+	private Wdata_list_alias alias_list;
+	public Wdata_list_alias Alias_list() {
 		if (alias_list == null)
 			synchronized (this) {
 				alias_list = wdoc_parser.Parse_aliases(qid, jdoc);
@@ -84,8 +90,10 @@ public class Wdata_doc {
 		return claim_list;
 	}
 
-	private Ordered_hash lemma_list;
-	public Ordered_hash Lemma_list() {
+	//private Ordered_hash lemma_list;
+	//public Ordered_hash Lemma_list() {
+	private Wdata_list_label lemma_list;
+	public Wdata_list_label Lemma_list() {
 		if (lemma_list == null)
 			synchronized (this) {
 				lemma_list = wdoc_parser.Parse_langvals(qid, jdoc, Wdata_doc_parser_v2.Bry_lemmas);
@@ -125,9 +133,10 @@ public class Wdata_doc {
 	public Wdata_sitelink_itm Get_slink_itm_or_null(byte[] abrv_wm)    {return (Wdata_sitelink_itm)this.Slink_list().Get_by(abrv_wm);}
 
 	// helper method
-	private Wdata_langtext_itm Get_langtext_itm_or_null(Ordered_hash hash, Xol_lang_itm lang) {
+	//private Wdata_langtext_itm Get_langtext_itm_or_null(Ordered_hash hash, Xol_lang_itm lang) {
+	private Wdata_langtext_itm Get_langtext_itm_or_null(Wdata_list_label array, Xol_lang_itm lang) {
 		// get itm by lang's key
-		Wdata_langtext_itm itm = (Wdata_langtext_itm)hash.Get_by(lang.Key_bry());
+		Wdata_langtext_itm itm = (Wdata_langtext_itm)array.Get_by(lang.Key_bry());
 		if (itm != null) return itm;
 
 		// loop over fallback_langs
@@ -135,7 +144,7 @@ public class Wdata_doc {
 		int len = fallback_langs.length;
 		for (int i = 0; i < len; i++) {
 			byte[] lang_key = fallback_langs[i];
-			Object itm_obj = hash.Get_by(lang_key);
+			Object itm_obj = array.Get_by(lang_key);
 			if (itm_obj != null) {
 				return (Wdata_langtext_itm)itm_obj;
 			}
@@ -143,7 +152,7 @@ public class Wdata_doc {
 		return null;
 	}
 	public Wdata_doc Ctor_by_test(Ordered_hash slink_list, Ordered_hash label_list, Ordered_hash descr_list, Ordered_hash alias_list, Ordered_hash claim_list) {// TEST
-		this.slink_list = slink_list; this.label_list = label_list; this.descr_list = descr_list; this.alias_list = alias_list; this.claim_list = claim_list;
+//		this.slink_list = slink_list; this.label_list = label_list; this.descr_list = descr_list; this.alias_list = alias_list; this.claim_list = claim_list;
 		return this;
 	}
 	public int Name_ofs() {return name;} private int name; // byte offset for Name

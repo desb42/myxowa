@@ -25,7 +25,8 @@ class Wdata_slink_grp {
 	public Wdata_toc_data Toc_data() {return toc_data;} private final     Wdata_toc_data toc_data;
 	public Xoapi_toggle_itm Toggle_itm() {return toggle_itm;} private Xoapi_toggle_itm toggle_itm;
 	public Ordered_hash Rows() {return rows;} private final    Ordered_hash rows = Ordered_hash_.New();
-	public static void Sift(Wdata_slink_grp[] rv, Ordered_hash list) {
+	//public static void Sift(Wdata_slink_grp[] rv, Ordered_hash list) {
+	public static void Sift(Wdata_slink_grp[] rv, Wdata_sitelink list) {
 		for (int i = 0; i < Idx__len; ++i)
 			rv[i].Rows().Clear();
 		int list_len = list.Count();

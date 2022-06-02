@@ -35,6 +35,7 @@ import gplx.xowa.xtns.wbases.core.Wdata_langtext_itm;
 import gplx.xowa.xtns.wbases.dbs.Wbase_pid_tbl;
 import gplx.xowa.xtns.wbases.dbs.Xowb_prop_tbl;
 import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser;
+import gplx.xowa.xtns.wbases.core.Wdata_list_label;
 
 import gplx.xowa.xtns.wbases.parsers.Wdata_doc_parser_v2;
 public class Xob_wdata_pid extends Xob_itm_dump_base implements Xob_page_wkr, Gfo_invk {
@@ -90,7 +91,8 @@ public class Xob_wdata_pid extends Xob_itm_dump_base implements Xob_page_wkr, Gf
 		tbl__prop.Insert_cmd_by_batch(pid, tid);
 
 		// add langs
-		Ordered_hash list = wdoc_parser.Parse_langvals(pid, jdoc, Wdata_doc_parser_v2.Bry_labels);
+		//Ordered_hash list = wdoc_parser.Parse_langvals(pid, jdoc, Wdata_doc_parser_v2.Bry_labels);
+		Wdata_list_label list = wdoc_parser.Parse_langvals(pid, jdoc, Wdata_doc_parser_v2.Bry_labels);
 		int len = list.Count();
 		for (int i = 0; i < len; ++i) {
 			Wdata_langtext_itm label = (Wdata_langtext_itm)list.Get_at(i);

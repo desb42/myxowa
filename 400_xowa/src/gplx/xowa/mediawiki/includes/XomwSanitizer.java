@@ -2066,6 +2066,7 @@ public class XomwSanitizer {
 		Html_entities_set(rv, tmp, "upsilon"  , 965);
 		Html_entities_set(rv, tmp, "Uuml"     , 220);
 		Html_entities_set(rv, tmp, "uuml"     , 252);
+		Html_entities_set(rv, tmp, "vert"     , 124);
 		Html_entities_set(rv, tmp, "weierp"   , 8472);
 		Html_entities_set(rv, tmp, "Xi"       , 926);
 		Html_entities_set(rv, tmp, "xi"       , 958);

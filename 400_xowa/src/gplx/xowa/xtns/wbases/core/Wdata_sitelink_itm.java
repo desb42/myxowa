@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,8 +13,8 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.wbases.core; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.wbases.*;
-import gplx.langs.jsons.*;
+package gplx.xowa.xtns.wbases.core;
+import gplx.*; import gplx.xowa.*;
 import gplx.xowa.wikis.domains.*;
 public class Wdata_sitelink_itm implements Wdata_lang_sortable {
 	public Wdata_sitelink_itm(byte[] site, byte[] name, byte[][] badges) {this.site = site; this.name = name; this.badges = badges;} 

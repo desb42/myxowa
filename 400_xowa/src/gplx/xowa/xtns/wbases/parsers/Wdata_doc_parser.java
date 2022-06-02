@@ -17,9 +17,11 @@ package gplx.xowa.xtns.wbases.parsers; import gplx.*; import gplx.xowa.*; import
 import gplx.langs.jsons.*; import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.xtns.wbases.claims.*; import gplx.xowa.xtns.wbases.claims.itms.*;
 public interface Wdata_doc_parser {
 	byte[] Parse_qid(Json_doc doc);
-	Ordered_hash Parse_sitelinks(byte[] qid, Json_doc doc);
-	Ordered_hash Parse_langvals(byte[] qid, Json_doc doc, byte[] langval_key);
-	Ordered_hash Parse_aliases(byte[] qid, Json_doc doc);
+	//Ordered_hash Parse_sitelinks(byte[] qid, Json_doc doc);
+	Wdata_sitelink Parse_sitelinks(byte[] qid, Json_doc doc);
+	//Ordered_hash Parse_langvals(byte[] qid, Json_doc doc, byte[] langval_key);
+	Wdata_list_label Parse_langvals(byte[] qid, Json_doc doc, byte[] langval_key);
+	Wdata_list_alias Parse_aliases(byte[] qid, Json_doc doc);
 	Ordered_hash Parse_claims(byte[] qid, Json_doc doc);
 	Ordered_hash Parse_sense(byte[] qid, Json_doc doc);
 	Ordered_hash Parse_form(byte[] qid, Json_doc doc);

@@ -29,7 +29,7 @@ class Wdata_fmtr__langtext_tbl implements gplx.core.brys.Bfr_arg {
 		toc_data.Orig_(tbl_hdr);
 		toggle_itm.Init_msgs(msgs.Toggle_title_y(), msgs.Toggle_title_n());
 	}
-	public void Init_by_wdoc(Ordered_hash list) {
+	public void Init_by_wdoc(Wdata_list list) {
 		this.list_len = list.Count(); if (list_len == 0) return;
 		toc_data.Make(list_len);
 		list.Sort_by(lang_sorter);
@@ -54,11 +54,11 @@ class Wdata_fmtr__langtext_tbl implements gplx.core.brys.Bfr_arg {
 	);
 }
 interface Wdata_fmtr__langtext_row extends gplx.core.brys.Bfr_arg {
-	void Init_by_page(Ordered_hash list);
+	void Init_by_page(Wdata_list list);
 }
 class Wdata_fmtr__langtext_row_base implements gplx.core.brys.Bfr_arg, Wdata_fmtr__langtext_row {
-	private Ordered_hash list;
-	public void Init_by_page(Ordered_hash list) {this.list = list;}
+	private Wdata_list list;
+	public void Init_by_page(Wdata_list list) {this.list = list;}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		int len = list.Count();
 		for (int i = 0; i < len; ++i) {
@@ -92,8 +92,8 @@ class Wdata_fmtr__langtext_row_base implements gplx.core.brys.Bfr_arg, Wdata_fmt
 //		, "            </li>"
 }
 class Wdata_fmtr__alias_row implements gplx.core.brys.Bfr_arg, Wdata_fmtr__langtext_row {
-	private Ordered_hash list;
-	public void Init_by_page(Ordered_hash list) {this.list = list;}
+	private Wdata_list list;
+	public void Init_by_page(Wdata_list list) {this.list = list;}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		int len = list.Count();
 		for (int i = 0; i < len; ++i) {

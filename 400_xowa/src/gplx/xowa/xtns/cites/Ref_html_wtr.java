@@ -29,7 +29,7 @@ public class Ref_html_wtr {
 		mgr = new Cite_mgr(wiki);
                 this.wiki = wiki;
 	}
-	public void Xnde_ref(Xoh_wtr_ctx opts, Bry_bfr bfr, byte[] src, Xop_xnde_tkn xnde) {
+	public void Xnde_ref(Bry_bfr bfr, byte[] src, Xop_xnde_tkn xnde) {
 		Bry_bfr tmp_ref = Bry_bfr_.New();
 		Ref_nde itm = (Ref_nde)xnde.Xnde_xtn();
 		if (itm == null) return;
@@ -40,7 +40,7 @@ public class Ref_html_wtr {
 			, Grp_id(itm, cfg.Itm_crslp(), cfg.Itm_crsls())
 			, mgr.getLinkLabel(itm.Idx_major() + 1, itm.Group())
 			);
-                bfr.Add(Db_expand.Extracheck(tmp_ref, cfg.Itm_accessibility_label(), wiki));
+		bfr.Add(Db_expand.Extracheck(tmp_ref, cfg.Itm_accessibility_label(), wiki));
 	}
 	public Ref_html_wtr_cfg Cfg() {return cfg;} private Ref_html_wtr_cfg cfg;
 	public void Init_by_wiki(Xowe_wiki wiki) {
@@ -148,8 +148,8 @@ public class Ref_html_wtr {
 		Bry_bfr tmp_ref = Bry_bfr_.New();
 		Bry_bfr tmp = Bry_bfr_.New();
 		for (int j = 0; j < itms_len; j++) {	// iterate over itms in grp
-                    tmp.Clear();
-                    tmp_ref.Clear();
+			tmp.Clear();
+			tmp_ref.Clear();
 			Ref_nde head_itm = lst.Itms_get_at(j);
 			int list_len = List_len(head_itm);
 			grp_list_fmtr.Init(ctx.Wiki(), cfg, head_itm);
@@ -206,7 +206,7 @@ public class Ref_html_wtr {
 		}
 		lst.Itms_clear(); // so as not to reuse
 	}
-	public void Xnde_ref_x(Bry_bfr bfr, byte[] src, Xop_xnde_tkn xnde) {
+/*	public void Xnde_ref_x(Bry_bfr bfr, byte[] src, Xop_xnde_tkn xnde) {
 		Bry_bfr tmp_ref = Bry_bfr_.New();
 		Ref_nde itm = (Ref_nde)xnde.Xnde_xtn();
 		if (itm == null) return;
@@ -218,5 +218,5 @@ public class Ref_html_wtr {
 			, mgr.getLinkLabel(itm.Idx_major() + 1, itm.Group())
 			);
 		bfr.Add(Db_expand.Extracheck(tmp_ref, cfg.Itm_accessibility_label(), wiki));
-	}
+	}*/
 }

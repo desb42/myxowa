@@ -65,6 +65,10 @@ public class Wbase_claim_entity extends Wbase_claim_base {
 				return TTL_PREFIX_LID;
 			case Wbase_claim_entity_type_.Tid__entityschema:
 				return TTL_PREFIX_EID;
+			case Wbase_claim_entity_type_.Tid__sense:
+				return Bry_.new_a7("Sense_XxXxX");
+			case Wbase_claim_entity_type_.Tid__form:
+				return Bry_.new_a7("Form_YyYyY");
 			default:
 				throw Err_.new_unhandled_default(entityType);
 		}

@@ -244,6 +244,7 @@ public class Db_expand {
 			}
 			if (extreme) {
 				Xop_ctx ctx = Xop_ctx.New__sub__reuse_page(wiki.Parser_mgr().Ctx());
+            System.out.println("b " + String_.new_u8(bfr.Bfr(), 0, bfr.Len()));
 				byte[] txt = wiki.Parser_mgr().Main().Parse_wtxt_to_html(ctx, bfr.To_bry());
             System.out.println("a " + String_.new_u8(txt));
 				return txt;

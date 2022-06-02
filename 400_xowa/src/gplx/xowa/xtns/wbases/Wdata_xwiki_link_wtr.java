@@ -41,7 +41,8 @@ public class Wdata_xwiki_link_wtr implements gplx.core.brys.Bfr_arg {
 			}
 			boolean external_links_mgr_enabled = external_links_mgr.Enabled();
                         external_links_mgr_enabled = false;
-			Ordered_hash links = doc.Slink_list();
+			//Ordered_hash links = doc.Slink_list();
+			Wdata_sitelink links = doc.Slink_list();
 			Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_k004();
 			int len = links.Count();
  			for (int i = 0; i < len; i++) {

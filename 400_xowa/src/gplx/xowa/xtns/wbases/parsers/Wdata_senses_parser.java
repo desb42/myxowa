@@ -33,7 +33,7 @@ class Wdata_senses_parser {
 		int len = nde.Len();
 		byte[] id = null;
 		Ordered_hash claims = null;
-		Ordered_hash glosses = null;
+		Wdata_list_label glosses = null;
 		for (int i = 0; i < len; ++i) {
 			Json_kv sub = Json_kv.Cast(nde.Get_at(i));
 			byte tid = Wdata_dict_sense.Reg.Get_tid_or_max_and_log(qid, sub.Key().Data_bry()); if (tid == Byte_.Max_value_127) continue;

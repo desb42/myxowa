@@ -70,6 +70,7 @@ import gplx.Ordered_hash;
 import gplx.langs.htmls.Gfh_utl;
 import gplx.xowa.xtns.wbases.claims.enums.Wbase_claim_entity_type_;
 import gplx.xowa.xtns.wbases.core.Wdata_langtext_itm;
+import gplx.xowa.xtns.wbases.core.Wdata_list_label;
 import gplx.xowa.langs.Xol_lang_stub;
 import gplx.xowa.langs.Xol_lang_stub_;
 public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
@@ -306,19 +307,19 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 	public byte[] Doc_name(Wdata_doc wdoc) {
 		Xoapi_wikibase wikibase_api = app.Api_root().Xtns().Wikibase();
 		byte[][] core_langs		= wikibase_api.Core_langs();
-		Ordered_hash list;
+		Wdata_list_label list;
 		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme)
 			list = wdoc.Lemma_list();
 		else
 			list = wdoc.Label_list();
-		return Wdata_langtext_itm.Get_text_or_empty(list, core_langs);
+		return list.Get_text_or_empty(core_langs);
 	}
 	private byte[] Wdata_display_title(Wdata_doc wdoc) {
 		// P, Q, L or E
 		byte[] ttl_label;
 		byte[] cls = Bry_.Empty;
 		if (wdoc.Type() == Wbase_claim_entity_type_.Tid__lexeme) {
-			Ordered_hash list = wdoc.Lemma_list();
+			Wdata_list_label list = wdoc.Lemma_list();
 			//Bry_bfr tmp_bfr = Bry_bfr_.New();
 			Bry_bfr oview_bfr = Bry_bfr_.New();
 			int len = list.Count();
@@ -340,7 +341,7 @@ public class Wdata_wiki_mgr implements Gfo_evt_itm, Gfo_invk {
 		else {
 			Xoapi_wikibase wikibase_api = app.Api_root().Xtns().Wikibase();
 			byte[][] core_langs = wikibase_api.Core_langs();
-			oview_label = Wdata_langtext_itm.Get_text_or_empty(wdoc.Label_list(), core_langs);
+			oview_label = wdoc.Label_list().Get_text_or_empty(core_langs);
 			if (oview_label.length == 0) {
 				oview_label = no_label;
 				cls = Bry_.new_a7("wb-empty");

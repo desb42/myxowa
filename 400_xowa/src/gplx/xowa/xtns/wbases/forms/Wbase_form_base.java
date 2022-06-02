@@ -15,8 +15,9 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.xtns.wbases.forms; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.wbases.*; import gplx.xowa.xtns.wbases.claims.*;
 import gplx.xowa.xtns.wbases.claims.enums.*;
+import gplx.xowa.xtns.wbases.core.Wdata_list_label;
 public class Wbase_form_base implements CompareAble {
-	public Wbase_form_base(byte[] id, Ordered_hash claims, Ordered_hash reps, int[] grams) {
+	public Wbase_form_base(byte[] id, Ordered_hash claims, Wdata_list_label reps, int[] grams) {
 		this.id = id;
 		this.claims = claims;
 		this.reps = reps;
@@ -24,7 +25,7 @@ public class Wbase_form_base implements CompareAble {
 	}
 	public byte[]					Id()				{return id;} private final    byte[] id;
 	public Ordered_hash		Claims()		{return claims;} private final    Ordered_hash claims;
-	public Ordered_hash				Reps()			{return reps;} private Ordered_hash reps;
+	public Wdata_list_label				Reps()			{return reps;} private Wdata_list_label reps;
 	public int[]					Grams()			{return grams;} private final int[] grams;
 
 	public int compareTo(Object obj) {

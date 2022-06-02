@@ -36,8 +36,8 @@ class Wdata_fmtr__oview_tbl implements gplx.core.brys.Bfr_arg {
 	}
 	public void Bfr_arg__add(Bry_bfr bfr) {
 		byte[][] core_langs		= wikibase_api.Core_langs();			
-		byte[] oview_label		= Wdata_langtext_itm.Get_text_or_empty(wdoc.Label_list(), core_langs);
-		byte[] oview_descr		= Wdata_langtext_itm.Get_text_or_empty(wdoc.Descr_list(), core_langs);
+		byte[] oview_label		= wdoc.Label_list().Get_text_or_empty(core_langs);
+		byte[] oview_descr		= wdoc.Descr_list().Get_text_or_empty(core_langs);
 		byte[][] oview_alias	= Alias_get_or_empty(wdoc.Alias_list(), core_langs);
 		byte[] aliases_hdr		= oview_alias == Bry_.Ary_empty ? hdr_alias_n : hdr_alias_y;
 		fmtr_aliases.Init_by_itm(oview_alias);
@@ -45,8 +45,8 @@ class Wdata_fmtr__oview_tbl implements gplx.core.brys.Bfr_arg {
 		if (slink != null) {
 			oview_label = slink_fmtr.Bld_bry_many(tmp_bfr, slink.Domain_info().Domain_bry(), href_encoder.Encode(slink.Name()), oview_label);
 		}
-                if (oview_label.length == 0)
-                    oview_label = no_label;
+		if (oview_label.length == 0)
+			oview_label = no_label;
 		byte[] cls = Bry_.Empty;
 		if (oview_descr.length == 0) {
 			oview_descr = no_desc;
@@ -68,7 +68,7 @@ class Wdata_fmtr__oview_tbl implements gplx.core.brys.Bfr_arg {
 	, "      </div>"
 	), "ttl", "ttl_label", "ttl_descr", "hdr_aliases", "ttl_aliases", "cls"
 	);
-	private static byte[][] Alias_get_or_empty(Ordered_hash list, byte[][] langs) {
+	private static byte[][] Alias_get_or_empty(Wdata_list_alias list, byte[][] langs) {
 		if (list == null) return Bry_.Ary_empty;
 		int langs_len = langs.length;
 		for (int i = 0; i < langs_len; ++i) {

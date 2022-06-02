@@ -34,7 +34,7 @@ class Wdata_forms_parser {
 		int len = nde.Len();
 		byte[] id = null;
 		Ordered_hash claims = null;
-		Ordered_hash reps = null;
+		Wdata_list_label reps = null;
 		int[] grams = null;
 		for (int i = 0; i < len; ++i) {
 			Json_kv sub = Json_kv.Cast(nde.Get_at(i));

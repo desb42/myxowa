@@ -30,7 +30,9 @@ public class Ref_itm_lst {
 			}
 			else {
 				Object o = hash.Get_by(follow);
-				if (o == null) {// fail
+				if (o == null) {// not found - convert to major
+				itm.Idx_major_(-1);
+				list.Add(itm);
 				}
 				else {
 					Ref_nde head = (Ref_nde)o;

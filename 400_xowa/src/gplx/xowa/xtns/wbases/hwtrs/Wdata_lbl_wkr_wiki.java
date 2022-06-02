@@ -33,13 +33,13 @@ public class Wdata_lbl_wkr_wiki implements Wdata_lbl_wkr {
 				Xoa_app_.Usr_dlg().Warn_many("", "", "wbase.lbl_wkr:page does not exists; page=~{0}", itm.Ttl());
 				continue; // handle incomplete wikidata dumps; DATE:2015-06-11
 			}
-			Ordered_hash labels = itm.Type() == Wdata_lbl_itm.Tid_lid ? wdoc.Lemma_list() : wdoc.Label_list();
+			Wdata_list_label labels = itm.Type() == Wdata_lbl_itm.Tid_lid ? wdoc.Lemma_list() : wdoc.Label_list();
 			if (labels.Count() == 0) continue;
-			labels.Sort_by(sorter);
+			labels.Sort_by(sorter); // why is this necessary 20220601
 			Wdata_langtext_itm label = 
                                 itm.Type() == Wdata_lbl_itm.Tid_lid ? 
-                                Wdata_langtext_itm.Get_itm_core_or_any(wdoc.Lemma_list()) :
-                                Wdata_langtext_itm.Get_itm_or_null(wdoc.Label_list(), wikibase_api.Core_langs());
+                                wdoc.Lemma_list().Get_itm_core_or_any() :
+                                wdoc.Label_list().Get_itm_or_null(wikibase_api.Core_langs());
 			if (label == null)
 				itm.Load_vals(Bry_.Empty, itm.Ttl());	// NOTE: use itm.Ttl() in case no label is found for the core_lang
 			else {

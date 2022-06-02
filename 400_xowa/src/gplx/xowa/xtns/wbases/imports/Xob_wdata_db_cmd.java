@@ -57,6 +57,7 @@ import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_quantity;
 import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_string;
 import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_time;
 import gplx.xowa.xtns.wbases.claims.itms.Wbase_claim_value;
+import gplx.xowa.xtns.wbases.core.Wdata_list_label;
 
 public class Xob_wdata_db_cmd extends Xob_dump_mgr_base implements Xob_cmd {
 	private Wdata_tbl_mgr tbl_mgr = new Wdata_tbl_mgr();
@@ -138,8 +139,8 @@ abstract class Wdata_tbl_base {
 		this.Make_tbl(conn);
 		insert_stmt = this.Make_insert_stmt(conn);
 	}
-	public static void Exec_insert_kvs(Db_stmt stmt, int page_id, Ordered_hash hash) {
-		int len = hash.Count();
+	public static void Exec_insert_kvs(Db_stmt stmt, int page_id, Wdata_list_label hash) {
+/*		int len = hash.Count();
 		for (int i = 0; i < len; i++) {
 			Json_kv kv = (Json_kv)hash.Get_at(i);
 			stmt.Clear()
@@ -147,7 +148,7 @@ abstract class Wdata_tbl_base {
 			.Val_bry_as_str(kv.Key().Data_bry())
 			.Val_bry_as_str(kv.Val().Data_bry())
 			.Exec_insert();
-		}
+		}*/
 	}
 }
 class Wdata_label_tbl extends Wdata_tbl_base {
@@ -180,7 +181,7 @@ class Wdata_alias_tbl extends Wdata_tbl_base {
 	@Override public Db_idx_itm[] Idx_ary() {return new Db_idx_itm[] {Db_idx_itm.sql_("CREATE INDEX IF NOT EXISTS wdata_alias__main ON wdata_alias (page_id, lang_key);")};}
 	@Override public String[] Fld_ary() {return new String[] {Fld_page_id, Fld_lang_key, Fld_val};}
 	@Override public void Exec_insert_by_wdoc(byte[] lang_key, Wdata_wiki_mgr wdata_mgr, int page_id, Wdata_doc wdoc) {
-		Ordered_hash hash = wdoc.Alias_list();
+/*		Ordered_hash hash = wdoc.Alias_list();
 		int len = hash.Count();
 		Db_stmt insert_stmt = this.Insert_stmt();
 		for (int i = 0; i < len; i++) {
@@ -202,7 +203,7 @@ class Wdata_alias_tbl extends Wdata_tbl_base {
 				.Val_bry_as_str(val)
 				.Exec_insert();
 			}
-		}
+		}*/
 	}
 	private static final    String Fld_page_id = "page_id", Fld_lang_key  = "lang_key", Fld_val = "val";
 }
@@ -236,7 +237,7 @@ class Wdata_link_tbl extends Wdata_tbl_base {
 	@Override public Db_idx_itm[] Idx_ary() {return new Db_idx_itm[] {Db_idx_itm.sql_("CREATE INDEX IF NOT EXISTS wdata_link__main ON wdata_link (page_id, wiki_key);")};}
 	@Override public String[] Fld_ary() {return new String[] {Fld_page_id, Fld_wiki_key, Fld_val};}
 	@Override public void Exec_insert_by_wdoc(byte[] lang_key, Wdata_wiki_mgr wdata_mgr, int page_id, Wdata_doc wdoc) {
-		Ordered_hash hash = wdoc.Slink_list();
+/*		Ordered_hash hash = wdoc.Slink_list();
 		int len = hash.Count();
 		Db_stmt insert_stmt = this.Insert_stmt();
 		for (int i = 0; i < len; i++) {
@@ -256,7 +257,7 @@ class Wdata_link_tbl extends Wdata_tbl_base {
 			.Val_bry_as_str(key)
 			.Val_bry_as_str(val)
 			.Exec_insert();
-		}
+		}*/
 	}
 	private static final    String Fld_page_id = "page_id", Fld_wiki_key  = "wiki_key", Fld_val = "val";
 }
