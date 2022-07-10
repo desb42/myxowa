@@ -13,12 +13,14 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.wikis.pages; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*;
+package gplx.xowa.wikis.pages;
+import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*;
 import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.data.tbls.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.langs.vnts.*;
-import gplx.xowa.guis.views.*;	import gplx.xowa.parsers.utils.*;
-import gplx.xowa.wikis.pages.dbs.*; import gplx.xowa.wikis.pages.redirects.*;
+import gplx.xowa.guis.views.*;
+import gplx.xowa.wikis.pages.redirects.*;
 import gplx.xowa.addons.wikis.ctgs.htmls.catpages.Xoctg_catpage_mgr;
+import gplx.core.ios.streams.Io_stream_tid_;
 public class Xow_page_mgr implements Gfo_invk {
 	private final    Xowe_wiki wiki;
 	public Xow_page_mgr(Xowe_wiki wiki) {this.wiki = wiki;}
@@ -182,8 +184,6 @@ public class Xow_page_mgr implements Gfo_invk {
 					Xow_ns ns = noart.Ns();
 					Load_from_db(page, ns, noart, false);
 					page.Db().Page().Exists_y_();
-//					page.Db().Page().Exists_n_();
-//					return page;
 				}
 			}
 		}
@@ -208,6 +208,25 @@ public class Xow_page_mgr implements Gfo_invk {
 		page.Ttl_(ttl).Url_(url);
 		page.Redirect_trail().Itms__add__article(url, ttl, null);
 	}
+	public Xoae_page Load_local_db_by_ttl(Xoa_ttl ttl) {
+            System.out.println("local " + ttl);
+		Xoae_page rv = Xoae_page.New(wiki, ttl);
+                rv.Url_(wiki.Utl__url_parser().Parse(ttl.Raw()));
+                Db_sql_cursor cur = wiki.Db_local_db();
+			int page_id = cur.Seek_index("page__title", ttl.Page_db_as_str());
+			if (page_id == 0) {
+                            return null;
+                        }
+			Db_record page_rec = cur.Seek_rowid("page", page_id);
+			byte[] wikizip = (byte[]) page_rec.Get_at(2);
+			byte[] wikitext = wiki.Appe().Zip_mgr().Unzip(Io_stream_tid_.Tid__gzip, wikizip);
+			// load page_info
+			rv.Db().Page().Id_(page_id);//.Modified_on_(page_row.Modified_on());
+			rv.Db().Page().Html_db_id_(-1).Model_format_(19);
+
+			rv.Db().Text().Text_bry_(wikitext);
+            return rv;
+        }
 
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {
 		if		(ctx.Match(k, Invk_create_enabled_))				wiki.Db_mgr().Save_mgr().Create_enabled_(m.ReadYn("v"));

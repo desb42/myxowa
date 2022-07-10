@@ -1,4 +1,9 @@
 xowa_implement("ext.popups.main@1gcuz", function($, jQuery, require, module) {
+function fixedEncodeURIComponent(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+  });
+}
     !function(e) {
         var t = {};
         function n(r) {
@@ -568,7 +573,7 @@ xowa_implement("ext.popups.main@1gcuz", function($, jQuery, require, module) {
                 function r(n) {
                     var r = t.endpoint;
                     return e({
-                        url: r + encodeURIComponent(n)+'?action=firstpara',
+                        url: r + fixedEncodeURIComponent(n)+'?action=firstpara',
                         headers: {
                             Accept: 'application/json; charset=utf-8; profile="'.concat("https://www.mediawiki.org/wiki/Specs/Summary/1.2.0", '"'),
                             "Accept-Language": t.acceptLanguage

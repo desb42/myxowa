@@ -13,7 +13,8 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.apps.servers.http; import gplx.*; import gplx.xowa.*; import gplx.xowa.apps.*; import gplx.xowa.apps.servers.*;
+package gplx.xowa.apps.servers.http; import gplx.*;
+import gplx.xowa.*; import gplx.xowa.apps.*; import gplx.xowa.apps.servers.*;
 import gplx.core.ios.*; import gplx.core.ios.streams.*;
 import gplx.core.primitives.*; import gplx.core.net.*; import gplx.langs.htmls.encoders.*;
 import gplx.xowa.apps.*;
@@ -78,7 +79,7 @@ public class Http_server_wkr implements Gfo_invk {
 		this.socket = socket;
 	}
 	public void Run(){
-		synchronized (client_rdr) { // LOCK:else http_server may sometimes deadlock when serving multiple parallel requests; // DATE:2018-03-11
+		synchronized (app) { // LOCK:else http_server may sometimes deadlock when serving multiple parallel requests; // DATE:2018-03-11
 			Http_request_itm request = null;
 			try {
 				client_rdr.Stream_(socket.Get_input_stream());
@@ -147,7 +148,7 @@ public class Http_server_wkr implements Gfo_invk {
 				return;
 			}
 			else if (url_parser.Action() == Xopg_view_mode_.Tid__firstpara) {
-		synchronized (this) {
+		synchronized (app) {
 				if (page.Page() != null) {
 					wikitext = page.Page().Db().Text().Text_bry();
 					page.Wiki().Parser_mgr().Ctx().Page().Ttl_(page.Ttl());	// NOTE: must set cur_page, else page-dependent templates won't work; EX: {{FULLPAGENAME}};
@@ -210,6 +211,7 @@ public class Http_server_wkr implements Gfo_invk {
 				page_html = "Strange! no data";
 			} else {
                 //test_redis();
+                test_sql(page.Ttl(), app);
 
 				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()), page.Redlink());
                                 
@@ -497,7 +499,7 @@ public class Http_server_wkr implements Gfo_invk {
                 //byte[] bb = Bry_.new_u8("vollständige_url");
                 //byte[] bb = Bry_.new_u8("VOLLSTÄNDIGE_URL");
                 //de.Match_bgn(bb, 0, bb.length);
-
+                
                 page_html = page_html.replace("redlinks = [\"\"]", "redlinks = [\"\"" + redlink + "]");
                 // 20211214 somehow this is happening?!
                 page_html = page_html.replaceAll(" »(\\s|<|\\))", "&#160;»$1");
@@ -603,6 +605,46 @@ public class Http_server_wkr implements Gfo_invk {
         long mstime = (System.nanoTime() - tickTime) / 1000000;
         System.out.println(action + ": " + mstime + "ms");
     }
+	public static void test_sql(Xoa_ttl ttl, Xoae_app app) {
+		try {
+                    Db_sql_mgr mgr = app.Sqlx_mgr();
+                    //String wiki = "simple.wikipedia.org";
+                    String wiki = "en.wikipedia.org";
+			String rootdr = "D:/des/xowa_x/wiki/" + wiki + "/";
+			String coredb = wiki + "-core.xowa";
+                        Db_sql_cursor cur = mgr.Make_cursor(rootdr, coredb);
+			int page_id = cur.Seek_index("page__title", ttl.Page_db_as_str(), ttl.Ns().Id());
+			if (page_id == 0)
+				return; // not found
+			Db_record page_rec = cur.Seek_rowid("page", page_id);
+			int redirect_id = (int)page_rec.Get_at(9); // page_redirect_id 9
+			if (redirect_id > 0) {
+                            page_id = redirect_id;
+				page_rec = cur.Seek_rowid("page", redirect_id);
+                        }
+			// page_text_db_id 7      page_html_db_id 8
+			// page_len 5             page_html_len 13
+			// page_text_db_offset 12 page_html_db_offset 14
+			byte[] wikizip;
+			int page_text_db_id = (int)page_rec.Get_at(7);
+			int page_text_db_offset = (int)page_rec.Get_at(12);
+			if (page_text_db_offset > 0) {
+				int page_len = (int)page_rec.Get_at(5);
+				//wikizip = core.Textfind(page_text_db_id, page_text_db_offset, page_len);
+                                wikizip = null;
+			}
+			else {
+				Db_record xowa_db_rec = cur.Seek_rowid("xowa_db", page_text_db_id);
+				Db_sql_cursor text_cur = mgr.Make_cursor(rootdr, (String)xowa_db_rec.Get_at(2));
+				Db_record text_rec = text_cur.Seek_rowid("text", page_id);
+				wikizip = (byte[])text_rec.Get_at(1);
+			}
+                        byte[] wikitext = app.Zip_mgr().Unzip(Io_stream_tid_.Tid__gzip, wikizip);
+                        int a=1;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 	public static byte[] Load_from_file_as_bry(String url_str) {
 		// get reader for file
 		InputStream stream = null;		

@@ -87,7 +87,7 @@ public class Xoh_page implements Xoa_page {
 		html.Toc_mgr().Init(gplx.xowa.htmls.core.htmls.tidy.Xow_tidy_mgr_interface_.Noop, page_url, wiki.Lang().Msg_mgr().Itm_by_id_or_null(gplx.xowa.langs.msgs.Xol_msg_itm_.Id_toc).Val());
 	}
 	public Xoh_page Ctor_by_hdiff(Bry_bfr tmp_bfr, Xoae_page page, byte[] toc_label) {
-		this.wiki = page.Wiki(); this.page_url = page.Url(); this.page_ttl = page.Ttl(); this.page_id = page.Db().Page().Id();			
+		this.wiki = page.Wiki(); this.page_url = page.Url(); this.page_ttl = page.Ttl(); this.page_id = page.Db().Page().Id();
 		this.lang = wiki.Lang();
 
 		db.Html().Html_bry_(page.Db().Html().Html_bry());
@@ -103,11 +103,13 @@ public class Xoh_page implements Xoa_page {
 		html.Toc_mgr().Init(page.Wikie().Html_mgr().Tidy_mgr(), page_url, toc_label);	// NOTE: do not pass in noop tidy_mgr, else broken TOC html will never get corrected during hdump; DATE:2016-08-14
 		return this;
 	}
-	public void Ctor_by_db(int head_flag, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, int zip_tid, int hzip_tid, byte[] body) {
+	public void Ctor_by_db(int head_flag, byte[] display_ttl, byte[] content_sub, byte[] sidebar_div, int zip_tid, int hzip_tid) {
 		head_mgr.Flag_(head_flag);
 		this.display_ttl = display_ttl; this.content_sub = content_sub; this.sidebar_div = sidebar_div;
-		db.Html().Html_bry_(body);
 		db.Html().Zip_tids_(zip_tid, hzip_tid);
+	}
+	public void Ctor_by_db_body(byte[] body) { // should always be used with Ctor_by_db
+		db.Html().Html_bry_(body);
 	}
 	public void Clear() {
 		redirect.Clear();

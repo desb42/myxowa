@@ -94,10 +94,12 @@ public class Wdata_prop_val_visitor implements Wbase_claim_visitor { // THREAD.U
 		bfr.Add_byte(Byte_ascii.Brack_bgn);
 		int upto = 0;
 		for (int i = 0; i < len - 1; i++) {
-			if (extern[i] == '$' && extern[i+1] == '1') {
+			if (extern[i] == '$' && extern[i+1] == '1') { // replace $1
 				bfr.Add_mid(extern, upto, i);
 				//  not quite the same as mw
-				bfr.Add(Xoa_ttl.Replace_spaces(txt));
+				// need to url_encode
+				bfr.Add(gplx.langs.htmls.encoders.Gfo_url_encoder_.Http_url_ttl.Encode(txt));
+				//bfr.Add(Xoa_ttl.Replace_spaces(txt));
 				i += 1;
 				upto = i + 1; 
 			}

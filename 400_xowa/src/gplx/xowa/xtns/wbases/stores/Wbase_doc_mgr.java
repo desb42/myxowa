@@ -41,7 +41,7 @@ public class Wbase_doc_mgr {
 	private final Object thread_lock = new Object();
 	private final Ordered_hash wbase_db_hash = Ordered_hash_.New_bry();
 	private final Gfo_log_wtr wbase_db_log;
-	private final Json_parser jsonParser = new Json_parser();
+	//private final Json_parser jsonParser = new Json_parser();
 	public Wbase_doc_mgr(Wdata_wiki_mgr wbase_mgr, Wbase_qid_mgr qid_mgr) {
 		this.wbase_mgr = wbase_mgr;
 		this.qid_mgr = qid_mgr;
@@ -85,27 +85,26 @@ public class Wbase_doc_mgr {
 		byte[] qid_bry = qid_mgr.Get_qid_or_null(wiki, ttl);	// EX: "enwiki", "Earth" -> "Q2"
 		return qid_bry == null ? null : this.Get_by_exact_id_or_null(qid_bry);
 	}
-	public Wdata_doc Get_by_xid_or_null(byte[] xid) {return Get_by_loose_id_or_null(Wbase_pid.Prepend_property_if_needed(xid));}// scribunto passes either p1 or q1; convert p1 to "Property:p1"
+	//public Wdata_doc Get_by_xid_or_null(byte[] xid) {return Get_by_loose_id_or_null(Wbase_pid.Prepend_property_if_needed(xid));}// scribunto passes either p1 or q1; convert p1 to "Property:p1"
+	public Wdata_doc Get_by_xid_or_null(byte[] xid) {return Get_by_exact_id_or_null(Wbase_pid.Prepend_property_if_needed(xid));}// scribunto passes either p1 or q1; convert p1 to "Property:p1"
 	public Wdata_doc Get_by_loose_id_or_null(byte[] ttl_bry) {
 		return Get_by_exact_id_or_null(ttl_bry);
 	}
 	public Wdata_doc Get_by_exact_id_or_null(byte[] ttl_bry) {// must correct case and ns; EX:"Q2" or "Property:P1"; not "q2" or "P2"
 		// load from cache
-                // try not synched
-//		Wdata_doc rv = doc_cache.Get_or_null(ttl_bry);
-//		if (rv == null) {
-			// go the synched route
-                        Wdata_doc rv;
+		Wdata_doc rv;
+		synchronized (thread_lock) {
+			rv = doc_cache.Get_or_null(ttl_bry);
+		}
+		if (rv == null) {
+			// load from db
+			rv = Load_wdoc_or_null(ttl_bry); 
+			if (rv == null)
+				return null;	// page not found
 			synchronized (thread_lock) {
-				rv = doc_cache.Get_or_null(ttl_bry);
-				if (rv == null) {
-					// load from db
-					rv = Load_wdoc_or_null(ttl_bry); 
-					if (rv == null) return null;	// page not found
-					Add(ttl_bry, rv);// NOTE: use ttl_bry, not rv.Qid; allows subsequent lookups to skip this redirect cycle
-				}
+				Add(ttl_bry, rv);// NOTE: use ttl_bry, not rv.Qid; allows subsequent lookups to skip this redirect cycle
 			}
-//		}
+		}
 		return rv;
 	}
 	private Wdata_doc Load_wdoc_or_null(byte[] ttl_bry) { // EX:"Q2" or "Property:P1"
@@ -135,11 +134,17 @@ public class Wbase_doc_mgr {
 				}
 
 				// get page
-				Xoae_page page = wbase_mgr.Wdata_wiki().Data_mgr().Load_page_by_ttl(cur_ttl);
+				Xoae_page page;
+            System.out.println("wikidata " + cur_ttl);
+// only knows about www.wikidat.org not current wiki!				// try local db cache
+//				page = wbase_mgr.Wdata_wiki().Data_mgr().Load_local_db_by_ttl(cur_ttl);
+//				if (page == null)
+					page = wbase_mgr.Wdata_wiki().Data_mgr().Load_page_by_ttl(cur_ttl);
 				if (!page.Db().Page().Exists()) break;
 
 				byte[] json_text = page.Db().Text().Text_bry();
 				// parse jdoc
+				Json_parser jsonParser = new Json_parser();
 				Json_doc jdoc = jsonParser.Parse(json_text);
 				if (jdoc == null) {
 					Gfo_usr_dlg_.Instance.Warn_many("", "", "invalid jdoc for ttl: orig=~{0} cur=~{1}", ttl_bry, cur_ttl_bry);

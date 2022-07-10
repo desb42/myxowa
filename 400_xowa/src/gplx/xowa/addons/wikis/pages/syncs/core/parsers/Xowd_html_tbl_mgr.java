@@ -29,7 +29,10 @@ public class Xowd_html_tbl_mgr {
 		byte[] content_sub = null;
 		byte[] sidebar_div = null;
 		db.Conn().Meta_tbl_assert(tbl);
-		tbl.Upsert(page_id, Xopg_module_mgr.Tid_null, Io_stream_tid_.Tid__raw, Xoh_hzip_dict_.Hdb__page_sync, display_ttl, content_sub, sidebar_div, src, null);
+                
+                // need to clear the old hxtm=n values and replace them !!!
+                
+		tbl.Upsert(page_id, src, null);
 
 		wiki.Data__core_mgr().Db__core().Tbl__page().Update__html_db_id(page_id, db.Id());
 	}

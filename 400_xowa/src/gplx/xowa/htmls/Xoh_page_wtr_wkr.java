@@ -56,6 +56,7 @@ import gplx.xowa.Db_minerva_skin;
 import gplx.xowa.Db_skin_;
 import gplx.langs.jsons.Json_nde;
 import gplx.xowa.Db_readwrite;
+import gplx.xowa.addons.wikis.hdump.Hxtn_hdump;
 public class Xoh_page_wtr_wkr {
 	private boolean ispage_in_wikisource = false;
 	private final	Object thread_lock_1 = new Object(), thread_lock_2 = new Object();
@@ -259,7 +260,7 @@ public class Xoh_page_wtr_wkr {
 		Xoh_page_wtr_wkr_.Bld_head_end(bfr, tmp_bfr, page);	// add after </head>
 		Xoh_page_wtr_wkr_.Bld_html_end(bfr, tmp_bfr, page);	// add after </html>
 	}
-	public void Write_hdump(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page wpg) {
+	public void Write_hdump(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page wpg, Xoh_page hpg) {
 		this.wiki = ctx.Wiki();
 		int page_id = wpg.Db().Page().Id();
 		Hxtn_page_mgr html_data_mgr = wpg.Wikie().Hxtn_mgr();
@@ -276,6 +277,7 @@ public class Xoh_page_wtr_wkr {
 			wpg.Html_data().Related().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
 			wpg.Html_data().Quality_tots().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
 			wpg.Html_data().Pp_indexpage().HxtnSave(wpg.Wikie(), html_data_mgr, wpg, page_id);
+			Hxtn_hdump.HxtnSave(html_data_mgr, page_id, hpg.Head_mgr().Flag(), 12, hpg.Display_ttl(), hpg.Sidebar_div(), hpg.Content_sub());
 		}
 	}
 	public void Write_body(Bry_bfr bfr, Xop_ctx ctx, Xoh_wtr_ctx hctx, Xoae_page page) {
@@ -306,13 +308,13 @@ public class Xoh_page_wtr_wkr {
 							//if (data_raw[0] == '\'') // is it ''''page not found'''
 							//	bfr.Add(data_raw);
 							//else {
-                                                        if (data_raw.length != 0) {
+							if (data_raw.length != 0) {
 								Json_doc jdoc = app.Utl__json_parser().Parse(data_raw);
 								Jdoc_data_writer(bfr, jdoc);
 								bfr.Add_str_a7("<pre>\n");
 								jdoc.Root_grp().Print_as_json(bfr, 0);
 								bfr.Add_str_a7("</pre>\n");
-                                                        }
+							}
 							//Write_body_pre(bfr, app, wiki, hctx, data_raw, tmp_bfr, page_tid);
 							//page_tid_uses_pre = true;
 								//Write_body_wikitext(bfr, app, wiki, wikitext, ctx, hctx, page, page_tid, page_ns_id);

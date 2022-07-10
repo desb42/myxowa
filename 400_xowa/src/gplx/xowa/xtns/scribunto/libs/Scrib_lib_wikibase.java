@@ -401,11 +401,20 @@ public function formatValues( $snaksSerialization ) {
 		return itm == null ? rslt.Init_ary_empty() : rslt.Init_many_objs(itm.Name(), itm.Lang());
 	}
 	public boolean GetDescription(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		byte[] xid_bry = Get_xid_from_args(args);
+		if (xid_bry == null) return rslt.Init_ary_empty();
+		Xowe_wiki wiki = core.Wiki();
+		//byte[] desc = core.Wiki().Db_mgr().Load_mgr().Load_qid_desc_qid(core.Wiki().Wdata_wiki_abrv(), xid_bry);
+		byte[] desc = wiki.Appe().Wiki_mgr().Wdata_mgr().Qid_mgr.Get_desc_or_null(wiki.Wdata_wiki_abrv(), xid_bry);
+                return Bry_.Len_eq_0(desc) ? rslt.Init_ary_empty() : rslt.Init_many_objs(desc, core.Wiki().Lang().Key_bry());
+
+/*
 		Wdata_doc wdoc = Get_wdoc_or_null(args, core, "GetDescription", true);
 		if (wdoc == null) return rslt.Init_ary_empty();
 
 		Wdata_langtext_itm itm = wdoc.Get_descr_itm_or_null(core.Lang());
 		return itm == null ? rslt.Init_ary_empty() : rslt.Init_many_objs(itm.Text(), itm.Lang());
+                */
 	}
 	public boolean GetUserLang(Scrib_proc_args args, Scrib_proc_rslt rslt) {			
 		return rslt.Init_obj(core.App().Usere().Lang().Key_bry());

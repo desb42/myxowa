@@ -20,7 +20,7 @@ public class Wbase_qid_tbl implements Rls_able {
 	private final    Object thread_lock = new Object();
 	private final    String tbl_name; private final    Dbmeta_fld_list flds = new Dbmeta_fld_list();
 	private final    String fld_src_wiki, fld_src_ns, fld_src_ttl, fld_trg_ttl, fld_trg_desc;
-	private final    Db_conn conn; private Db_stmt stmt_select, stmt_insert;
+	private final    Db_conn conn; private Db_stmt stmt_select, stmt_insert, stmt_select_qid;
 	private boolean src_ttl_has_spaces;
 	Wbase_qid_tbl(Db_conn conn, boolean schema_is_1, boolean src_ttl_has_spaces) {
 		synchronized (this) { // LOCK:app-level
@@ -86,10 +86,26 @@ public class Wbase_qid_tbl implements Rls_able {
 			} finally {rdr.Rls();}
 		}
 	}
+	public byte[] Select_qid_desc_qid(byte[] src_wiki, byte[] qid) {
+		if (stmt_select_qid == null) stmt_select_qid = conn.Stmt_select(tbl_name, flds, fld_src_wiki, fld_trg_ttl);
+		synchronized (stmt_select_qid) {
+			Db_rdr rdr = stmt_select_qid.Clear()
+					.Crt_bry_as_str(fld_src_wiki, src_wiki).Crt_bry_as_str(fld_trg_ttl, qid)
+					.Exec_select__rls_manual();
+			try {
+				byte[] rv = null;
+				if (rdr.Move_next()) {
+					rv = rdr.Read_bry_by_str(fld_trg_desc);
+				}
+				return rv;
+			} finally {rdr.Rls();}
+		}
+	}
 	public void Rls() {
 		synchronized (thread_lock) {
 			stmt_insert = Db_stmt_.Rls(stmt_insert);
 			stmt_select = Db_stmt_.Rls(stmt_select);
+			stmt_select_qid = Db_stmt_.Rls(stmt_select_qid);
 		}
 	}
 	public static Wbase_qid_tbl New_load(Xow_db_mgr core_db_mgr) {

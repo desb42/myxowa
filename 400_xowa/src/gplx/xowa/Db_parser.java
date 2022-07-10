@@ -13,18 +13,18 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.pfuncs.*;
-import gplx.xowa.langs.*; import gplx.xowa.langs.kwds.*;
-import gplx.xowa.parsers.*; import gplx.xowa.parsers.tmpls.*;
+package gplx.xowa;
+import gplx.*;
+import gplx.xowa.parsers.*;
 public class Db_parser {
 	private byte[] m_src;
 	private int m_src_end, m_pos, m_start, m_tail, m_nl_start;
 	private Bry_bfr m_newsrc = null;
 	private Xop_ctx ctx;
-	private Tag_match translate_tag = new Tag_match("translate");
-	private Tag_match tvar_tag = new Tag_match("tvar");
-	private Tag_match noinclude_tag = new Tag_match("noinclude");
-	private Tag_match section_tag = new Tag_match("section");
+	private final Tag_match translate_tag = new Tag_match("translate");
+	private final Tag_match tvar_tag = new Tag_match("tvar");
+	private final Tag_match noinclude_tag = new Tag_match("noinclude");
+	private final Tag_match section_tag = new Tag_match("section");
 
 	public byte[] stripcomments(byte[] src) {
 		byte[] nsrc;
@@ -32,13 +32,14 @@ public class Db_parser {
 		m_src_end = src.length;
 		m_newsrc = Bry_bfr_.New();
 		m_pos = 0;
-                // any leading linefeeds?
-                while (m_nl_start < m_src_end) {
-                   if (src[m_nl_start] == Byte_ascii.Nl)
-                       m_nl_start++;
-                   else
-                       break;
-                }
+		m_nl_start = 0;
+		// any leading linefeeds?
+		while (m_nl_start < m_src_end) {
+			if (src[m_nl_start] == Byte_ascii.Nl)
+				m_nl_start++;
+			else
+				break;
+		}
 		/*nsrc = removecomments();
 		m_src = nsrc;
 		m_src_end = nsrc.length;
@@ -610,8 +611,8 @@ public class Db_parser {
 }
 class Tag_match {
 	public boolean close;
-	private byte[] tag;
-	private int tag_len;
+	private final byte[] tag;
+	private final int tag_len;
 	Tag_match(String tag) {
 		this.tag = Bry_.new_a7(tag);
 		this.tag_len = this.tag.length;

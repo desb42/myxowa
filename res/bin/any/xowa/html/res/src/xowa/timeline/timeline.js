@@ -1469,10 +1469,11 @@ this.replaceAllTimelines = function() {
 	}
 }
 this.init = function() {
-  if (window.xowa)
+/*  if (window.xowa)
     document.addEventListener('DOMContentLoaded', self.replaceAllTimelines, false);  
   else
-    self.replaceAllTimelines();
+    self.replaceAllTimelines();*/
+  $(document).ready(self.replaceAllTimelines());
 }
 this.init();
 });

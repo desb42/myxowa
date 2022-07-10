@@ -148,7 +148,7 @@ public class Db_expand {
 								pipe_count++;
 							}
 						}
-						if (pipe_count > 1) {
+						if (pipe_count > 1 && src[lnki_bgn] != '#') {
 							extreme = true;
 							break;
 						}

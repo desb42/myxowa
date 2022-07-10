@@ -24,6 +24,10 @@ public class Xowd_html_row {
 		this.sidebar_div = sidebar_div;
 		this.body = body;
 	}
+	public void Load(int page_id, byte[] body) {
+		this.page_id = page_id;
+		this.body = body;
+	}
 	public int Page_id() {return page_id;} private int page_id;
 	public int Head_flag() {return head_flag;} private int head_flag;
 	public int Body_flag() {return body_flag;} private int body_flag;

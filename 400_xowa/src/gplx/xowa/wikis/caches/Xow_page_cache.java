@@ -61,7 +61,7 @@ public class Xow_page_cache {
 			synchronized (cache_lock) {
 				cache_misses++;
 			}
-			return Load_page(ttl);
+			return Load_page(ttl, domain);
 		}
 		else {
 			synchronized (cache_lock) {
@@ -84,7 +84,7 @@ public class Xow_page_cache {
 			}
 		}
 	}
-	private Xow_page_cache_itm Load_page(Xoa_ttl ttl) {
+	private Xow_page_cache_itm Load_page(Xoa_ttl ttl, String domain) {
 		// vars
 		Xow_page_cache_itm rv = null;
 		Xoa_ttl page_ttl = ttl;
@@ -131,11 +131,11 @@ public class Xow_page_cache {
 					page_text = Bry_.Mid(page_text, pos);
 				}
 				rv = new Xow_page_cache_itm(false, page_id, page_ttl, page_text, page_redirect_from, 0, 0);
-				Add_itm(ttl.Full_db_as_str(), rv);
+				Add_itm(domain + ttl.Full_db_as_str(), rv);
 			}
 			else {
 				rv = null;
-				Add_itm(ttl.Full_db_as_str(), Xow_page_cache_itm.Missing);
+				Add_itm(domain + ttl.Full_db_as_str(), Xow_page_cache_itm.Missing);
 			}
 		}
 		}

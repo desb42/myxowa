@@ -16,3 +16,11 @@ currently there seems to be only one url() in the css '/w/resources/src/mediawik
 
 add "+'?action=firstpara'" to encodeURIComponent(n)
 
+to be more strict - add this function
+function fixedEncodeURIComponent(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+  });
+}
+
+and change any encodeURIComponent to fixedEncodeURIComponent

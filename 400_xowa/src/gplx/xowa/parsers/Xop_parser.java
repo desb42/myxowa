@@ -37,8 +37,10 @@ public class Xop_parser {	// NOTE: parsers are reused; do not keep any read-writ
 		wtxt_lxr_mgr.Init_by_lang(lang);
 	}
 	public byte[] Expand_tmpl(byte[] src) {	// expands {{A}} -> some wikitext; called by tmpl_invk, lang_msgs, sidebar
+       		synchronized (this) {
 		Xop_ctx ctx = Xop_ctx.New__sub__reuse_page(wiki.Parser_mgr().Ctx());	// PERF: reuse root ctx
 		return Expand_tmpl(ctx, ctx.Tkn_mkr(), src);
+                }
 	}
 	private byte[] Expand_tmpl(Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, byte[] src) {return Expand_tmpl(tkn_mkr.Root(src), ctx, Xot_invk_temp.Null_frame, tkn_mkr, src);}
 	public byte[] Expand_tmpl(Xop_root_tkn root, Xop_ctx ctx, Xop_tkn_mkr tkn_mkr, byte[] src) {return Expand_tmpl(root, ctx, Xot_invk_temp.Null_frame, tkn_mkr, src);}

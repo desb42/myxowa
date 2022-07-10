@@ -73,7 +73,14 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 		sys_cfg = new Xow_sys_cfg(this);
 		fragment_mgr = new Xow_fragment_mgr(this);
 		cfg_parser = new Xowc_parser(this);
+		try {
+			this.sql_cursor = app.Sqlx_mgr().Make_cursor(wiki_dir.toString(), "wikidata.xowa");
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
+
 	public int Wrk_id() {return wrk_id;} private int wrk_id = 0; // non zero for main database
 	public Pfunc_expr_shunter		Expr_shunter()			{return expr_shunter;}	private final    Pfunc_expr_shunter expr_shunter = new Pfunc_expr_shunter();
 	public Gfo_evt_mgr				Evt_mgr() {return ev_mgr;} private final    Gfo_evt_mgr ev_mgr;
@@ -150,6 +157,7 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public Db_tz_mgr				Tz_mgr() {return tz_mgr;} private Db_tz_mgr tz_mgr;
 	public Db_page_image			Page_image() {return page_image;} private Db_page_image page_image;
 	public Db_skin_mgr				Skin_mgr() {return skin_mgr;} private Db_skin_mgr skin_mgr;
+	public Db_sql_cursor    Db_local_db() {return sql_cursor;} private Db_sql_cursor sql_cursor;
 	private byte[] tagline = null;
 	public byte[] Tagline() {
 		tagline = msg_mgr.Val_by_key_obj("tagline");

@@ -55,8 +55,8 @@ public class Xow_hdump_mgr__save {
 	public int Save(Xoae_page page, Xoh_page hpg, Xowd_html_tbl html_tbl, boolean insert, boolean use_hzip_dflt, Db_html_body html_body) {
 		int hzip_tid = use_hzip_dflt ? dflt_hzip_tid : Xoh_hzip_dict_.Hdb__htxt;
 		byte[] db_body = Write(tmp_bfr, wiki, page, hpg, hzip_mgr, zip_mgr, dflt_zip_tid, hzip_tid, hpg.Db().Html().Html_bry());
-		if (insert)		html_tbl.Insert(hpg, dflt_zip_tid, dflt_hzip_tid, db_body, html_body);
-		else			html_tbl.Update(hpg, dflt_zip_tid, dflt_hzip_tid, db_body, html_body);
+		if (insert)		html_tbl.Insert(hpg.Page_id(), db_body, html_body);
+		else			html_tbl.Update(hpg.Page_id(), db_body, html_body);
 		return db_body.length;
 	}
 	public void Bld_hdump(Xoae_page page) {

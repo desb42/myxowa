@@ -91,6 +91,11 @@ public class Xodb_load_mgr_sql implements Xodb_load_mgr {
 			qid_tbl = Wbase_qid_tbl.New_load(db_mgr.Core_data_mgr());
 		return qid_tbl.Select_qid_desc(wiki_alias, ns_num, ttl);
 	}
+	public byte[] Load_qid_desc_qid(byte[] wiki_alias, byte[] qid) {
+		if (qid_tbl == null)
+			qid_tbl = Wbase_qid_tbl.New_load(db_mgr.Core_data_mgr());
+		return qid_tbl.Select_qid_desc_qid(wiki_alias, qid);
+	}
 	public int Load_pid(byte[] lang_key, byte[] pid_name) {
 		if (pid_tbl == null)
 			pid_tbl = Wbase_pid_tbl.New_load(db_mgr.Core_data_mgr());

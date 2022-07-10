@@ -6709,6 +6709,7 @@ wikibase-time-precision-BCE-annum|{{PLURAL:~{0}|~{0} year|~{0} years}} BCE
 wikibase-time-precision-BCE-millennium|~{0}. millennium BCE
 wikibase-time-precision-BCE-century|~{0}. century BCE
 wikibase-time-precision-BCE-10annum|~{0}s BCE
+nstab-mainpage|Main Page
 ']:>
 ).lang
 .time_formats

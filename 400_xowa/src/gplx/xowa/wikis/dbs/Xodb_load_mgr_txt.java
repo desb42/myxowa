@@ -383,6 +383,9 @@ public class Xodb_load_mgr_txt implements Xodb_load_mgr {
 	public byte[] Load_qid_desc(byte[] wiki_alias, int ns_num, byte[] ttl) {
 		return null;
 	}
+	public byte[] Load_qid_desc_qid(byte[] wiki_alias, byte[] qid) {
+		return null;
+	}
 	Io_url qids_root;
 	public int Load_pid(byte[] lang_key, byte[] pid_name) {
 		if (pids_root == null)

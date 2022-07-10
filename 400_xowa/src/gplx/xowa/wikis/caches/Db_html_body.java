@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,9 +13,9 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.wikis.caches; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*;
-import gplx.xowa.wikis.data.tbls.*;
-import java.io.*; import java.util.concurrent.locks.*;
+package gplx.xowa.wikis.caches; import gplx.*;
+import gplx.xowa.*;
+import java.io.*;
 import gplx.Io_url;
 
 public class Db_html_body /*implements Xowd_text_bry_owner*/ {
@@ -91,6 +91,17 @@ public class Db_html_body /*implements Xowd_text_bry_owner*/ {
 			//}
 		}
 		return current_ofs;
+	}
+	public byte[] Add_entry(long page_id, byte[] v) {
+		long ofs = Write(page_id, v);
+		int len = v.length;
+		byte[] body = new byte[1+1+4+8+4];
+		body[0] = 0x1e;
+		body[1] = (byte)Wkr_id();
+		Db_html_body.convertIntToByteArray(body, (int)page_id, 2);
+		Db_html_body.convertLongToByteArray(body, ofs, 6);
+		Db_html_body.convertIntToByteArray(body, len, 14);
+		return body;
 	}
 	public static void convertIntToByteArray(byte[] bytes, int value, int ofs) {
 		bytes[ofs] = (byte)(value >> 24);

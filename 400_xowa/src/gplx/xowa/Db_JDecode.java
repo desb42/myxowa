@@ -34,7 +34,7 @@ public class Db_JDecode {
 		byte b = src[0];
 		if (b == (byte)0xd2) ver = 2;
 		else if (b == (byte)0xd2) ver = 1;
-                if (ver > 0) pos = 1;
+		if (ver > 0) pos = 1;
 		this.maxindent = 0;
 		this.r = new Result();
 		//this.t = new Txt();
@@ -53,7 +53,7 @@ public class Db_JDecode {
 
 	private Txt gettext(int size) {
 		if (this.pos + size <= this.src_len) {
-                    Txt txt = new Txt();
+			Txt txt = new Txt();
 			txt.bgn = pos;
 			txt.end = pos + size;
 			this.pos += size;

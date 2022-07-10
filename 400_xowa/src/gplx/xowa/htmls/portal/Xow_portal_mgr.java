@@ -202,7 +202,8 @@ public class Xow_portal_mgr implements Gfo_invk {
 		String subjectKey = "nstab-" + String_.new_u8(subjectId);
 //		if (Bry_.Has_at_end(wiki.Props().Siteinfo_mainpage(), ttl.Page_db()))
 		if (Bry_.Eq(page.Ttl().Full_db(), wiki.Props().Main_page()))
-			subjectKey = "mainpage-nstab";
+			//subjectKey = "mainpage-nstab"; // switched at some point 
+			subjectKey = "nstab-mainpage";
 		byte[] portal_main = msg_mgr.Val_by_key_obj(subjectKey);
 		// if no mapping use the Namespace name
 		if (portal_main.length == 0)

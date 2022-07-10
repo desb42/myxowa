@@ -170,10 +170,10 @@ public class Xowd_page_tbl implements Db_tbl {
 	public boolean Select_by_ttl(Xowd_page_itm rv, Xoa_ttl ttl, int wrk_id) {return Select_by_ttl(rv, ttl.Ns(), ttl.Page_db(), wrk_id);}
 	public boolean Select_by_ttl(Xowd_page_itm rv, Xow_ns ns, byte[] ttl, int wrk_id) {
 //            System.out.println(Integer.toString(ns.Id()) + " " + String_.new_u8(ttl));
-            if (ns.Id() == 112) {
-            int a = 1; 
-            
-            }
+//            if (ns.Id() == 112) {
+//            int a = 1; 
+//            
+//            }
 		if (stmt_select_all_by_ttl == null) stmt_select_all_by_ttl = conn.Stmt_select(tbl_name, flds, String_.Ary(fld_ns, fld_title));
 //		synchronized (thread_lock) { // LOCK:stmt-rls; DATE:2016-07-06
 		try {

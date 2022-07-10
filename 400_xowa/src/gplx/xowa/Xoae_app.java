@@ -150,6 +150,7 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 	public Http_server_mgr  Http_server() {return http_server;} private Http_server_mgr http_server;
 	public Xop_amp_mgr      Parser_amp_mgr() {return parser_amp_mgr;} private final    Xop_amp_mgr parser_amp_mgr = Xop_amp_mgr.Instance;
 	public Db_highlight     SyntaxHighlighter() {return highlight;} private final    Db_highlight highlight = new Db_highlight();
+	public Db_sql_mgr       Sqlx_mgr() {return sqlx_mgr;} private final Db_sql_mgr sqlx_mgr = new Db_sql_mgr();
 
 	public Hash_adp Templates() {return hash;} private Hash_adp hash = Hash_adp_.New(); // for mustache templates
 

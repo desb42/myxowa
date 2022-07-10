@@ -52,19 +52,21 @@ public class Xob_hdump_bldr implements Gfo_invk {
 		Xoa_ttl ttl = wpg.Ttl();
 		boolean is_wikitext = Xow_page_tid.Identify(wpg.Wiki().Domain_tid(), ttl.Ns().Id(), ttl.Page_db(), wpg.Db().Page().Model_format()) == Xow_page_tid.Tid_wikitext;
 		byte[] orig_bry = Bry_.Empty;
-                Bry_bfr tmp_bfr = Bry_bfr_.New();
+		Bry_bfr tmp_bfr = Bry_bfr_.New();
+		tmp_hpg.Ctor_by_hdiff(tmp_bfr, wpg, toc_label); // make sure tmp_hpg is populated
 		if (is_wikitext) {
-			wiki.Html_mgr().Page_wtr_mgr().Wkr(Xopg_view_mode_.Tid__read).Write_hdump(tmp_bfr, ctx, hctx, wpg);
+			wiki.Html_mgr().Page_wtr_mgr().Wkr(Xopg_view_mode_.Tid__read).Write_hdump(tmp_bfr, ctx, hctx, wpg, tmp_hpg);
 			orig_bry = tmp_bfr.To_bry_and_clear();
 			wpg.Db().Html().Html_bry_(orig_bry);
 		}
 		else {	// not wikitext; EX: pages in MediaWiki: ns; DATE:2016-09-12
 			wpg.Db().Html().Html_bry_(wpg.Db().Text().Text_bry());
 		}
+		tmp_hpg.Ctor_by_db_body(wpg.Db().Html().Html_bry()); // make sure 'src' is populated
 
 		// save to db
 		Xowd_html_tbl html_tbl = html_tbl_retriever.Get_html_tbl(wpg.Ttl().Ns(), prv_row_len);	// get html_tbl
-		this.prv_row_len = hdump_mgr.Save_mgr().Save(wpg, tmp_hpg.Ctor_by_hdiff(tmp_bfr, wpg, toc_label), html_tbl, true, is_wikitext, html_body);	// save to db
+		this.prv_row_len = hdump_mgr.Save_mgr().Save(wpg, tmp_hpg, html_tbl, true, is_wikitext, html_body);	// save to db
 		tmp_hpg.Db().Html().Zip_len_(prv_row_len);
 
 		// run hzip diff if enabled

@@ -179,8 +179,12 @@ public class Xomp_parse_wkr implements Gfo_invk {
 					wpg.Wiki().Utl__bfr_mkr().Clear();
 				}
 
-				// gen_html
-				hdump_bldr.Insert(pctx, wpg, hctx, html_body);
+				long time_cur_now = gplx.core.envs.System_.Ticks();
+				long page_time_now = time_cur_now - done_bgn;
+				if (page_time_now > 2000) { // only add 'real' html if > 2 secs (arbitrary threshold)
+					// gen_html
+					hdump_bldr.Insert(pctx, wpg, hctx, html_body);
+				}
 
 				// index
 				long fulltext_time = 0;

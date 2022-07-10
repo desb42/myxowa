@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function doimages() {
        xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/ext.popups.main.js');
        xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/' + x_p.wiki + '/language.js');
+       xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/popup/popups.css');
 }
 
 function setaccess() {
@@ -168,8 +169,10 @@ function init () {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/google-code-prettify/run_prettify.js?lang=lua&lang=css');
     }
     if (document.querySelectorAll('.mw-highlight').length) {
-      //xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/mediawiki/pygments.generated.css');
       xowa.js.load_lib(xowa.root_dir + 'bin/any/mediawiki/pygments.linenumbers.js');
+    }
+    if (document.querySelectorAll('.timeline-wrapper').length) {
+      xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/src/xowa/timeline/timeline.js');
     }
 
 // interactive maps?

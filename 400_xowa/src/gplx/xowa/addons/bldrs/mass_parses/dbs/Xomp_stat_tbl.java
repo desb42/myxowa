@@ -86,7 +86,7 @@ public class Xomp_stat_tbl implements Rls_able {
 	public void Insert(Xoae_page wpg, Xoh_page hpg, int wkr_uid, long page_time, long fulltext_time) {
 		Xop_log_stat stat = wpg.Stat_itm();
 		stmt_insert.Clear()
-			.Val_int(fld_page_id                , hpg.Page_id())
+			.Val_int(fld_page_id                , wpg.Db().Page().Id()) //hpg.Page_id())
 			.Val_int(fld_wkr_uid                , wkr_uid)
 			.Val_int(fld_wtxt_len               , Len_or_0(wpg.Root().Root_src()))
 			.Val_int(fld_html_len               , Len_or_0(hpg.Db().Html().Html_bry()))

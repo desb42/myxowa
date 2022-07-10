@@ -131,5 +131,6 @@ public class Hxtn_page_mgr {
 	, Id__pgbnr = 4            // wikivoyage
 	, Id__pp_indexpage = 5     // wikisource
 	, Id__related = 6          // wikivoyage
+	, Id__hdump = 7
 	;
 }

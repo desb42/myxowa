@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2017 gnosygnu@gmail.com
+Copyright (C) 2012-202 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -15,7 +15,11 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
 package gplx.xowa.addons.bldrs.mass_parses.makes; import gplx.*; import gplx.xowa.*; import gplx.xowa.addons.*;
 import gplx.core.brys.*;
-import gplx.dbs.*; import gplx.xowa.htmls.core.dbs.*; import gplx.xowa.addons.bldrs.mass_parses.dbs.*;
+import gplx.dbs.*;
+import gplx.xowa.htmls.core.dbs.*;
+import gplx.xowa.addons.bldrs.mass_parses.dbs.*;
+import gplx.xowa.htmls.hxtns.pages.Hxtn_page_mgr;
+import gplx.xowa.htmls.hxtns.blobs.Hxtn_blob_tbl;
 class Xomp_make_html {
 	private final    Int_flag_bldr src_body_flag_bldr = Xowd_html_tbl.Make_body_flag_bldr();
 	public void Exec(Xowe_wiki wiki, Xomp_make_cmd_cfg cfg) {
@@ -60,10 +64,10 @@ class Xomp_make_html {
 		int wkr_id = rdr.Read_int("xomp_wkr_id");
 		int ns_id = rdr.Read_int("page_ns");
 		html_db_rdr.Rows__get(src_row, wkr_id, page_id);
-		src_body_flag_bldr.Decode(src_row.Body_flag());
 
 		// get trg_tbl and write
 		Xowd_html_tbl trg_tbl = html_db_wtr.Tbls__get_or_new(ns_id, html_len);
-		trg_tbl.Insert(src_row.Page_id(), src_row.Head_flag(), src_body_flag_bldr.Get_as_int(0), src_body_flag_bldr.Get_as_int(1), src_row.Display_ttl(), src_row.Content_sub(), src_row.Sidebar_div(), src_row.Body(), null);
+		trg_tbl.Insert(src_row.Page_id(), src_row.Body(), null);
+		//trg_tbl.Insert(src_row.Page_id(), src_row.Head_flag(), src_body_flag_bldr.Get_as_int(0), src_body_flag_bldr.Get_as_int(1), src_row.Display_ttl(), src_row.Content_sub(), src_row.Sidebar_div(), src_row.Body(), null);
 	}
 }

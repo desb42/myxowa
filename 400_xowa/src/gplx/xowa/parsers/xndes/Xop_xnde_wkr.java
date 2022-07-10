@@ -757,7 +757,7 @@ public class Xop_xnde_wkr implements Xop_ctx_wkr {
 					case Xop_xnde_tag_.Tid__listing_sleep:			xnde_xtn = tkn_mkr.Xnde__listing(tag_id); break;
 					case Xop_xnde_tag_.Tid__timeline:
 						boolean log_wkr_enabled = Timeline_log_wkr != Xop_log_basic_wkr.Null; if (log_wkr_enabled) Timeline_log_wkr.Log_end_xnde(ctx.Page(), Xop_log_basic_wkr.Tid_timeline, src, xnde);
-						ctx.Page().Html_data().Head_mgr().Itm__timeline().Enabled_y_();
+// no need 20220606						ctx.Page().Html_data().Head_mgr().Itm__timeline().Enabled_y_();
 						break;
 					case Xop_xnde_tag_.Tid__xowa_tag_bgn:
 					case Xop_xnde_tag_.Tid__xowa_tag_end:

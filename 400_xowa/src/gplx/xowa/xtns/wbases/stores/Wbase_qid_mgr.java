@@ -49,6 +49,9 @@ public class Wbase_qid_mgr {// EX: "enwiki|0|Earth" -> "Q2"
 			return Bry_.Len_eq_0(rv) ? null : rv;						// JAVA: convert Bry_.Empty to null which is what callers expect
 		}
 	}
+	public byte[] Get_desc_or_null(byte[] wdata_wiki_abrv, byte[] qid) {
+            return wbase_mgr.Wdata_wiki().Db_mgr().Load_mgr().Load_qid_desc_qid(wdata_wiki_abrv, qid);            
+        }
 	private void Add(byte[] key, byte[] val) {
 		synchronized (cache) { // LOCK:app-level
 			if (!cache.Has(key))

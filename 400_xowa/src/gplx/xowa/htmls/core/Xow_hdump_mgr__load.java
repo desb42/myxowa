@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2020 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -44,7 +44,9 @@ import gplx.xowa.wikis.pages.lnkis.Xopg_lnki_list;
 import gplx.xowa.wikis.pages.skins.Xopg_xtn_skin_itm_stub;
 
 import gplx.Hash_adp;
+import gplx.xowa.addons.wikis.hdump.Hxtn_hdump;
 import gplx.xowa.wikis.caches.Db_html_body;
+import gplx.xowa.htmls.core.dbs.Xowd_html_tbl;
 public class Xow_hdump_mgr__load implements Gfo_invk {
 	private final    Xow_wiki wiki; private final    Xoh_hzip_mgr hzip_mgr; private final    Io_stream_zip_mgr zip_mgr;
 	private final    Xoh_page tmp_hpg; private final    Bry_bfr tmp_bfr; private final    Xowd_page_itm tmp_dbpg = new Xowd_page_itm();		
@@ -87,6 +89,9 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 			}
 			Xow_db_file html_db = wiki.Data__core_mgr().Dbs__get_by_id_or_fail(tmp_dbpg.Html_db_id());
 			if (!html_db.Tbl__html().Select_by_page(hpg)) return Load__fail(hpg);			// nothing in "html" table
+			wiki.Hxtn_mgr().Load_by_page(hpg, ttl);
+		Hash_adp props = hpg.Props();
+		Hxtn_hdump.Deserialise(hpg, props);
 			byte[] src = Parse(hpg, hpg.Db().Html().Zip_tid(), hpg.Db().Html().Hzip_tid(), hpg.Db().Html().Html_bry());
 
 			// write ctgs (do this in Xoh_page_wtr_wkr.java)
@@ -100,7 +105,6 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 			}*/
 
 			hpg.Db().Html().Html_bry_(src);
-			wiki.Hxtn_mgr().Load_by_page(hpg, ttl);
 			return true;
 		}
 	}
@@ -133,7 +137,7 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
                 // transfer redlinks
 		Xopg_lnki_list src_list = hpg.Html_data().Redlink_list();
 		Xopg_lnki_list trg_list = page.Html_data().Redlink_list();
-                trg_list.Clear();
+		trg_list.Clear();
 		int len = src_list.Len();
 		for (int i = 0; i < len; ++i) {
 			trg_list.Add_direct(src_list.Get_at(i));
@@ -174,12 +178,13 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 	public void Fill_page(Xoae_page wpg, Xoh_page hpg) {
 		Xopg_html_data html_data = wpg.Html_data();
 
-		html_data.Display_ttl_(tmp_hpg.Display_ttl());
-		html_data.Content_sub_(tmp_hpg.Content_sub());			
-		html_data.Xtn_skin_mgr().Add(new Xopg_xtn_skin_itm_stub(tmp_hpg.Sidebar_div()));
 		html_data.Custom_head_tags().Add(hpg.Html_data().Custom_head_tags().To_ary());
 
 		Hash_adp props = tmp_hpg.Props();
+		html_data.Display_ttl_(tmp_hpg.Display_ttl());
+		html_data.Content_sub_(tmp_hpg.Content_sub());			
+		html_data.Xtn_skin_mgr().Add(new Xopg_xtn_skin_itm_stub(tmp_hpg.Sidebar_div()));
+
 		html_data.Indicators().Deserialise(wiki, hpg, props);
 		html_data.Quality_tots().Deserialise(wiki, wpg, props);
 		html_data.Pagebanner().Deserialise(wiki, hpg, props);
@@ -200,7 +205,7 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 			if (hpg_head.Graph1_exists())
 				wpg_head.Itm__graph().Version_(null, 1); // FIX
 		}
-		wpg_head.Itm__timeline().Enabled_		(hpg.Xtn__timeline_exists());
+// no need 20220606		wpg_head.Itm__timeline().Enabled_		(hpg.Xtn__timeline_exists());
 		wpg_head.Itm__gallery_styles().Enabled_	(hpg.Xtn__gallery_exists());
 		wpg_head.Itm__categorytree().Enabled_	(hpg.Xtn__categorytree_exists());
 		wpg_head.Itm__toc().Enabled_(hpg.Html_data().Toc_mgr().Exists());

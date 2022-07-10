@@ -57,7 +57,7 @@ public class Split_wkr__html implements Split_wkr {
 		stmt.Clear().Val_int("page_id", page_id);
 		stmt.Val_int("trg_db_id", trg_db_id);
 		stmt.Val_int("blob_len"	, body_len);
-		tbl.Fill_stmt(stmt, trg_itm.Head_flag(), trg_itm.Body_flag(), display_ttl, content_sub, sidebar_div, body);
+		tbl.Fill_stmt(stmt, body);
 		stmt.Exec_insert();
 		rslt_wkr.On__nth__itm(db_row_size, page_id);
 	}

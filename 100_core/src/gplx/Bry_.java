@@ -397,9 +397,9 @@ public class Bry_ {
 				rv[i - bgn] = src[i];
 			return rv;
 		} catch (Exception e) {
-                    Err_.Noop(e); 
-                    throw Err_.new_("Bry_", "mid failed", "bgn", bgn, "end", end);
-                }
+			Err_.Noop(e); 
+			throw Err_.new_("Bry_", "mid failed", "bgn", bgn, "end", end);
+		}
 	}
 	public static byte[] Mid_w_trim(byte[] src, int bgn, int end) {
 		int len = end - bgn; if (len == 0) return Bry_.Empty;

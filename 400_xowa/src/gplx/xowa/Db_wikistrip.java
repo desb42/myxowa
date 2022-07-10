@@ -213,7 +213,7 @@ public class Db_wikistrip {
 		if (sz > 6 && ((src[bgn+1] | 32) == 'f') && src[bgn+5] == ':') { // File:
 			return true;
 		}
-                else if (sz > 1 && (src[bgn+1] == -29) && src[bgn+13] == ':') { // japanese File:
+		else if (sz > 1 && (src[bgn+1] == -29) && src[bgn+13] == ':') { // japanese File:
 			return true;
 		}
 		else if (sz > 7 && (
@@ -225,12 +225,21 @@ public class Db_wikistrip {
 		else if (sz > 8 && ((src[bgn+1] | 32) == 'f') && src[bgn+8] == ':') { // Fichier:
 			return true;
 		}
-		else if (sz > 10 && (
-		  (  ((src[bgn+1] | 32) == 'c') && src[bgn+8] == 'y' && src[bgn+9] == ':') // Category:
-		  || (src[bgn+1] == -41 && src[bgn+9] == ':') // %d7%a7%d7%95%d7%91%d7%a5: hebrew
-		  || ((src[bgn+1] | 32) == 'c') && src[bgn+10] == 'e' && src[bgn+11] == ':') // Cat%c3%a9gorie: (french)
-		  ) {
+		else if (sz > 9 && ((src[bgn+1] | 32) == 'i') && src[bgn+9] == ':') { // Immagine: (italian)
 			return true;
+		}
+		else if (sz > 10) {
+			if ((src[bgn+1] | 32) == 'c') {
+				if (src[bgn+8] == 'y' && src[bgn+9] == ':' // Category:
+				   || src[bgn+10] == 'e' && src[bgn+11] == ':' // Cat%c3%a9gorie: (french)
+				   || src[bgn+9] == 'a' && src[bgn+10] == ':' // Categoria: (italian)
+				   )
+					return true;
+			}
+			else if (src[bgn+1] == -41 && src[bgn+9] == ':' // %d7%a7%d7%95%d7%91%d7%a5: hebrew
+				   || (src[bgn+1] | 32) == 'k' && src[bgn+9] == 'e' && src[bgn+10] == ':' // Kategorie: (german)
+				   )
+				return true;
 		}
 		return false;
 	}
@@ -239,6 +248,7 @@ public class Db_wikistrip {
 		int endpos = 0;
 		int startpos = pos;
 		int barpos = -1;
+		int pipecnt = 0;
 		boolean intmpl = false;
 		while (pos < src_len) {
 			byte b = src[pos++];
@@ -263,6 +273,7 @@ public class Db_wikistrip {
 					if (!intmpl) {
 						if (barpos == -1)
 							barpos = pos; // first pipe
+							pipecnt++;
 					}
 					break;
 			}
@@ -277,14 +288,15 @@ public class Db_wikistrip {
 			return startpos + 1; // skip the '['
 		}
 		// check for File: and Category: [what about other language wikis?]
-		if (!check_ns(src, startpos, endpos)) {
+		if (pipecnt <= 1 && !check_ns(src, startpos, endpos)) {
 			// beware bad links
 			// beware pipe trick (currently use full link)
-			if (barpos > 0 && barpos < endpos - 3) {
-				bfr.Add_mid(src, barpos, endpos-2);
-			}
+			byte[] lnki;
+			if (barpos > 0 && barpos < endpos - 3)
+				lnki = Bry_.Mid(src, barpos, endpos-2);
 			else
-				bfr.Add_mid(src, startpos+1, endpos-2);
+				lnki = Bry_.Mid(src, startpos+1, endpos-2);
+			bfr.Add(tohtml(lnki));
 		}
 		return endpos;
 	}
@@ -343,6 +355,10 @@ public class Db_wikistrip {
 		//System.out.println(String_.new_u8(Bry_.Mid(src, namestart, nameend+40)));
 		int tag_len = nameend - namestart;
 		switch (tag_len) {
+//		case 1: // a
+//			if ((src[namestart] | 32) == 'a')
+//				return pos;
+//     break;
 		case 2: // hr, br
 			if ((src[namestart] | 32) == 'b' && (src[namestart+1] | 32) == 'r')
 				return pos;
@@ -351,6 +367,22 @@ public class Db_wikistrip {
 			break;
 		case 3: // img
 			if ((src[namestart] | 32) == 'i' && (src[namestart+1] | 32) == 'm' && (src[namestart+2] | 32) == 'g')
+				return pos;
+			break;
+		case 4: // span, time, abbr
+			if ((src[namestart] | 32) == 's' && (src[namestart+1] | 32) == 'p' && (src[namestart+2] | 32) == 'a' && (src[namestart+3] | 32) == 'n') {
+				// BUT class noexcerpt?
+				int ipos = nameend;
+				while (ipos < tagend) {
+					if (src[ipos++] == 'n' && src[ipos] == 'o' && src[ipos+1] == 'e' && src[ipos+2] == 'x' && src[ipos+3] == 'c' && src[ipos+4] == 'e' && src[ipos+5] == 'r' && src[ipos+6] == 'p' && src[ipos+7] == 't')
+						break;
+				}
+				if (ipos == tagend)
+					return pos;
+			}
+			else if ((src[namestart] | 32) == 't' && (src[namestart+1] | 32) == 'i' && (src[namestart+2] | 32) == 'm' && (src[namestart+3] | 32) == 'e')
+				return pos;
+			else if ((src[namestart] | 32) == 'a' && (src[namestart+1] | 32) == 'b' && (src[namestart+2] | 32) == 'b' && (src[namestart+3] | 32) == 'r')
 				return pos;
 			break;
 		case 9: // noinclude
@@ -576,6 +608,8 @@ public class Db_wikistrip {
 	}
 	public byte[] Search_text(byte[] src, Xoa_ttl ttl, Xowe_wiki wiki) {
 		this.ttl = ttl;
+		src = wiki.Parser_mgr().Main().Expand_tmpl(src);
+                //System.out.println(String_.new_u8(src));
 		src = Strip_wiki(src, false, wiki);
 		// now remove '', ''', () and &...; and multiple newlines
 		Bry_bfr bfr = Bry_bfr_.New();
@@ -621,12 +655,12 @@ public class Db_wikistrip {
 					}
 					break;
 				case '(':
-                                    if (pos < src_len) {
-					if (src[pos] == ')') {
-						bfr.Add_mid(src, startpos, pos-1);
-						startpos = pos + 1;
+					if (pos < src_len) {
+						if (src[pos] == ')') {
+							bfr.Add_mid(src, startpos, pos-1);
+							startpos = pos + 1;
+						}
 					}
-                                    }
 					break;
 				case '[':
 					if (pos < src_len) {
@@ -663,35 +697,93 @@ public class Db_wikistrip {
 	}
 	public byte[] First_para(byte[] src, Xoa_ttl ttl, Xowe_wiki wiki) {
 		this.ttl = ttl;
-		src = Strip_wiki(src, true, wiki);
+		int src_len = src.length;
+		if (src_len == 0)
+			return src;
+		int pos = 0;
+		while (pos < src_len) {
+			byte b = src[pos++];
+			if (b != '=')
+				continue;
+			if ((pos > 1 && src[pos-2] == '\n') || (pos == 1))
+				break;
+		}
+		src =  wiki.Parser_mgr().Main().Expand_tmpl(Bry_.Mid(src, 0, pos - 1));
+                //System.out.println(String_.new_u8(src));
+		Bry_bfr bfr = Bry_bfr_.New();
+		bfr.Add(Gfh_tag_.P_lhs);
+		bfr.Add(tohtml(src));
+		bfr.Add(Gfh_tag_.P_rhs);
+		return bfr.To_bry();
+  }
+
+	private byte[] tohtml(byte[] src) {
 		// now change '' and '''
 		Bry_bfr bfr = Bry_bfr_.New();
 		int src_len = src.length;
-		int startpos;
+		int startpos = 0;
 		int pos = 0;
 		boolean inbold = false;
 		boolean initalic = false;
 		boolean firstbracket = true;
 		boolean firstpara = false;
-		bfr.Add(Gfh_tag_.P_lhs);
+		boolean strip_leading = true;
 		byte b;
-		// remove initial '\n's
 		while (pos < src_len) {
-			b = src[pos];
-			if (b != '\n' && b != '\t' && b != ' ' && b != '|' && b != '}') 
-				break;
-			pos++;
-		}
-		startpos = pos;
-		while (pos < src_len) {
+			if (strip_leading) {
+				while (pos < src_len) {
+					b = src[pos];
+					if (b != '\n' && b != '\t' && b != ' ' && b != '|' && b != '}') 
+						break;
+					pos++;
+				}
+				startpos = pos;
+				strip_leading = false;
+				continue;
+			}
 			b = src[pos++];
 			switch (b) {
+				case '<':
+					bfr.Add_mid(src, startpos, pos-1);
+					// special checks for b,i,p,sup /b,/i,/p,/sup
+					if (pos < src_len) {
+						b = src[pos];
+						int cpylen = 0;
+						if (pos + 2 < src_len && (b == 'b' || b == 'i' || b == 'p') && src[pos+1] == '>')
+							cpylen = 2;
+						else if (pos + 5 < src_len && b == 's' && src[pos+1] == 'u' && src[pos+2] == 'p' && src[pos+3] == '>')
+							cpylen = 4;
+						else if (b == '/') {
+							b = src[pos+1];
+							if (pos + 3 < src_len && (b == 'b' || b == 'i' || b == 'p') && src[pos+2] == '>')
+								cpylen = 3;
+							else if (pos + 6 < src_len && b == 's' && src[pos+2] == 'u' && src[pos+3] == 'p' && src[pos+4] == '>')
+								cpylen = 5;
+						}
+						if (cpylen > 0) {
+							bfr.Add_mid(src, pos-1, pos + cpylen);
+							pos += cpylen;
+						}
+						else {
+							int end = findclosingangle(src, src_len, pos);
+							if (end < 0)
+								bfr.Add_byte(Byte_ascii.Angle_bgn);
+							else
+								pos = end;
+							// trim any 'leading' line feeds
+							if (bfr.Len() == 0) {
+								strip_leading = true;
+							}
+						}
+						startpos = pos;
+					}
+					break;
 				case '\'':
 					int apos_count = 1;
 					while (pos < src_len) {
 						if (src[pos] == '\'') {
 							apos_count++;
-                                                        pos++;
+							pos++;
 						}
 						else
 							break;
@@ -778,7 +870,7 @@ public class Db_wikistrip {
 							pos = opos;
 					}
 					break;
-				case ',':
+				case ',': case '.':
 				{
 					bfr.Add_mid(src, startpos, pos-1);
 					int blen = bfr.Len();
@@ -788,6 +880,26 @@ public class Db_wikistrip {
 					startpos = pos - 1;
 					break;
 				}
+				case '_':
+					if (pos < src_len && src[pos] == '_') {
+						int upos = pos;
+						while (upos < src_len) {
+							if (src[upos] == '\n') {
+								if (src[upos-2] == '_' && src[upos-1] == '_' && upos - pos < 15) {
+									bfr.Add_mid(src, startpos, pos-1);
+									pos = upos + 1;
+									// trim any 'leading' line feeds
+									if (bfr.Len() == 0) {
+										strip_leading = true;
+									}
+									startpos = pos;
+								}
+								break;
+							}
+							upos++;
+						}
+					}
+					break;
 				case '"': // convert to &quot;
 					bfr.Add_mid(src, startpos, pos-1);
 					bfr.Add_str_a7("&quot;");
@@ -812,16 +924,8 @@ public class Db_wikistrip {
 						pos++;
 					}
 					if (nlcount > 1) {
-						// check how long the 'first para' is
-						// eg en.wikivoyage.org/wiki/Steam_power
-						if (bfr.Len() < 100) {
-							bfr.Clear(); // start again!
-							startpos = pos;
-						}
-						else {
-							pos = src_len; // break out
-							firstpara = true;
-						}
+						pos = src_len; // break out
+						firstpara = true;
 					}
 					else
 						startpos = pos;
@@ -849,7 +953,61 @@ public class Db_wikistrip {
 						if (b == '[') {
 							bfr.Add_mid(src, startpos, pos-1);
 							pos = findclosingsquare(src, src_len, pos, bfr);
+							// trim any 'leading' line feeds
+							if (bfr.Len() == 0) {
+								strip_leading = true;
+							}
 							startpos = pos;
+						}
+						else if (pos + 10 < src_len && src[pos] == 'h' && src[pos+1] == 't' && src[pos+2] == 't' && src[pos+3] == 'p') {
+							int lpos = pos + 7;
+							while (lpos < src_len) {
+								if (src[lpos++] == ' ')
+									break;
+							}
+							if (lpos == src_len)
+								break;
+							int spos = lpos;
+							while (lpos < src_len) {
+								if (src[lpos++] == ']')
+									break;
+							}
+							if (lpos == src_len)
+								break;
+							bfr.Add_mid(src, startpos, pos-1);
+							bfr.Add_mid(src, spos, lpos-1);
+							pos = lpos;
+							startpos = pos;
+						}
+					}
+					break;
+				case ':':
+					if (pos == 1 || src[pos-2] == '\n') {
+						bfr.Add_mid(src, startpos, pos-1);
+						// ignore the line
+						while (pos < src_len) {
+							b = src[pos++];
+							if (b == '\n')
+								break;
+						}
+						// trim any 'leading' line feeds
+						if (bfr.Len() == 0) {
+							strip_leading = true;
+						}
+						startpos = pos;
+					}
+					break;
+				case '{': // remove 'tables'
+					if (pos < src_len) {
+						b = src[pos];
+						if (b == '|') {
+							bfr.Add_mid(src, startpos, pos-1);
+							pos = findclosingtable(src, src_len, pos + 1);
+							startpos = pos;
+							// trim any 'leading' line feeds
+							if (bfr.Len() == 0) {
+								strip_leading = true;
+							}
 						}
 					}
 					break;
@@ -857,7 +1015,6 @@ public class Db_wikistrip {
 		}
 		if (!firstpara) // add the rest (if we have not found any paragraph break
 			bfr.Add_mid(src, startpos, src_len);
-		bfr.Add(Gfh_tag_.P_rhs);
 		return bfr.To_bry();
 	}
 	private byte[] Compile3(byte[] sub_src, Http_server_page page) {
@@ -880,4 +1037,5 @@ public class Db_wikistrip {
 */
             return Bry_.Empty;
 	}
+
 }
