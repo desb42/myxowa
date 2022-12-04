@@ -32,6 +32,7 @@ import gplx.xowa.xtns.scribunto.procs.Scrib_proc_rslt;
 import org.luaj.vm2.LuaInteger;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.LuaClosure;
 
 public class Luaj_engine implements Scrib_engine {
 	private Luaj_server_func_recv func_recv;
@@ -44,6 +45,7 @@ public class Luaj_engine implements Scrib_engine {
 	private final LuaTable callmsg;
 	private final LuaTable compilemsg;
 	private final LuaTable loadmsg;
+	private final LuaTable loadprotomsg;
 	public Luaj_engine(Xoae_app app, Scrib_core core, boolean debug_enabled) {
 		this.core = core;
 		this.proc_mgr = core.Proc_mgr();
@@ -59,6 +61,8 @@ public class Luaj_engine implements Scrib_engine {
 		compilemsg.set("op", Val_compile);
 		this.loadmsg = LuaValue.tableOf();
 		loadmsg.set("op", Val_loadString);
+		this.loadprotomsg = LuaValue.tableOf();
+		loadprotomsg.set("op", Val_loadprotoString);
 	}
 	public Scrib_server Server() {return server;} public void Server_(Scrib_server v) {server = (Luaj_server)v;} 
 	public boolean Dbg_print() {return dbg_print;} public void Dbg_print_(boolean v) {dbg_print = v;} private boolean dbg_print;
@@ -78,6 +82,10 @@ public class Luaj_engine implements Scrib_engine {
 		loadmsg.set("text", LuaValue.valueOf(text));
 		loadmsg.set("chunkName", LuaValue.valueOf(name));
 		return load_dispatch(name, loadmsg);
+	}
+	public Scrib_lua_proc LoadClosure(Object closure) {
+		loadprotomsg.set("closure", (LuaClosure)closure); // somehow proto becomes a LuaTable
+		return load_dispatch("closure", loadprotomsg);
 	}
 	private Scrib_lua_proc load_dispatch(String name, LuaTable msg) {
 		LuaTable rsp = server.Dispatch(msg);
@@ -215,6 +223,11 @@ public class Luaj_engine implements Scrib_engine {
 		//if (proc_id.equals("mw.language|lc")) {
                 //int a=1;
               //}
+		int tsize = rsp.length();
+		String command = "";
+		for (int i = 0; i < tsize; i++)
+			command += rsp.get(i+1) + " ";
+		System.out.println(command/*tbl_val.get(1)*/);
 		Keyval[] args = Luaj_value_.Lua_tbl_to_kv_ary_x(server, rsp);
                 core.Ctx().Page().Stat_itm().Scrib().Inc_call_count();
 		Scrib_proc proc = proc_mgr.Get_by_key(proc_id); if (proc == null) throw Scrib_xtn_mgr.err_("could not find proc with id of {0}", proc_id);
@@ -254,6 +267,7 @@ public class Luaj_engine implements Scrib_engine {
 	}
 	private static final LuaValue 
 	  Val_loadString 		= LuaValue.valueOf("loadString")
+	, Val_loadprotoString 		= LuaValue.valueOf("loadClosure")
 	, Val_registerLibrary 	= LuaValue.valueOf("registerLibrary")
 	, Val_callFunction 		= LuaValue.valueOf("call")
 	, Val_returnMessage 	= LuaValue.valueOf("return")

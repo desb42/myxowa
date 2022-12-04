@@ -185,16 +185,15 @@ public class Scrib_lib_language implements Scrib_lib {
 			return rslt.Init_obj(lang.Case_mgr().Case_build_1st(bfr, upper, word, 0, word.length));
 		} finally {bfr.Mkr_rls();}
 */
-                byte[] copy_word = Bry_.Mid(word, 0);
-		return rslt.Init_obj(Xol_case_cvt.Up_low_1st(copy_word, 0, word.length, upper));
+		return rslt.Init_obj(Xol_case_cvt.Up_low_1st(word, 0, word.length, upper, Bool_.N));
 	}
 	public boolean Lc(Scrib_proc_args args, Scrib_proc_rslt rslt) {return Case_all(args, rslt, Bool_.N);}
 	public boolean Uc(Scrib_proc_args args, Scrib_proc_rslt rslt) {return Case_all(args, rslt, Bool_.Y);}
 	private boolean Case_all(Scrib_proc_args args, Scrib_proc_rslt rslt, boolean upper) {
 		Xol_lang_itm lang = lang_(args);
 		Object o = args.Pull_obj(1);
-		if (o instanceof String) {
-			byte[] word = Bry_.new_u8(String_.cast(o));// args.Pull_bry(1);
+		if (o instanceof byte[]) {
+			byte[] word = (byte[])o;// args.Pull_bry(1);
 //		return rslt.Init_obj(lang.Case_mgr().Case_build(upper, word, 0, word.length));
 			return rslt.Init_obj(Xol_case_cvt.Case_cvt(word, word.length, upper));
 		}

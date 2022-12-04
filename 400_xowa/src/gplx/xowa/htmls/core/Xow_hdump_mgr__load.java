@@ -45,7 +45,7 @@ import gplx.xowa.wikis.pages.skins.Xopg_xtn_skin_itm_stub;
 
 import gplx.Hash_adp;
 import gplx.xowa.addons.wikis.hdump.Hxtn_hdump;
-import gplx.xowa.wikis.caches.Db_html_body;
+import gplx.xowa.files.Db_html_body;
 import gplx.xowa.htmls.core.dbs.Xowd_html_tbl;
 public class Xow_hdump_mgr__load implements Gfo_invk {
 	private final    Xow_wiki wiki; private final    Xoh_hzip_mgr hzip_mgr; private final    Io_stream_zip_mgr zip_mgr;
@@ -87,8 +87,16 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 				hpg.Db().Html().Html_bry_(page_override);
 				return true;
 			}
+			if (tmp_dbpg.Html_db_offset() > 0) {
+				wiki.Html_body().Init(wiki.App(), wiki.Domain_str(), tmp_dbpg.Html_db_id());
+				byte[] src = wiki.Html_body().Read(tmp_dbpg.Id(), tmp_dbpg.Html_db_offset(), tmp_dbpg.Html_len());
+				hpg.Ctor_by_db_body(src);
+			}
+			else {
 			Xow_db_file html_db = wiki.Data__core_mgr().Dbs__get_by_id_or_fail(tmp_dbpg.Html_db_id());
-			if (!html_db.Tbl__html().Select_by_page(hpg)) return Load__fail(hpg);			// nothing in "html" table
+				if (!html_db.Tbl__html().Select_by_page(hpg))
+					return Load__fail(hpg);            // nothing in "html" table
+			}
 			wiki.Hxtn_mgr().Load_by_page(hpg, ttl);
 		Hash_adp props = hpg.Props();
 		Hxtn_hdump.Deserialise(hpg, props);
@@ -148,11 +156,11 @@ public class Xow_hdump_mgr__load implements Gfo_invk {
 		if (zip_tid > gplx.core.ios.streams.Io_stream_tid_.Tid__raw) {
 			if (src[0] == 0x1e) {
 				// get from another file
-				Db_html_body html_body = new Db_html_body(wiki.App(), wiki.Domain_str(), src[1]);
+				wiki.Html_body().Init(wiki.App(), wiki.Domain_str(), src[1]);
 				int page_id = Db_html_body.convertByteArrayToInt(src, 2);
 				long ofs = Db_html_body.convertByteArrayToLong(src, 6);
 				int len = Db_html_body.convertByteArrayToInt(src, 14);
-				src = html_body.Read(page_id, ofs, len);
+				src = wiki.Html_body().Read(page_id, ofs, len);
 			}
 			src = zip_mgr.Unzip((byte)zip_tid, src);
 		}

@@ -37,11 +37,17 @@ public abstract class Db_conn_info__base implements Db_conn_info {
 		int len = hash.Count();
 		for (int i = 0; i < len; ++i) {
 			Keyval kv = hash.Get_at(i);
-			bfr.Add_str_u8_fmt("{0}={1};", kv.Key(), kv.Val_to_str_or_empty());
+                        bfr.Add_str_u8(kv.Key())
+                        .Add_byte_eq()
+                        .Add(kv.Val_to_byte_or_empty());
+			//bfr.Add_str_u8_fmt("{0}={1};", kv.Key(), kv.Val_to_str_or_empty());
 		}
 		for (Keyval xtn : xtn_ary) {
 			if (hash.Has(xtn.Key())) continue;
-			bfr.Add_str_u8_fmt("{0}={1};", xtn.Key(), xtn.Val_to_str_or_empty());
+                        bfr.Add_str_u8(xtn.Key())
+                        .Add_byte_eq()
+                        .Add(xtn.Val_to_byte_or_empty());
+			//bfr.Add_str_u8_fmt("{0}={1};", xtn.Key(), xtn.Val_to_str_or_empty());
 		}
 		return bfr.To_str_and_clear();
 	}

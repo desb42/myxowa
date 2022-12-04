@@ -34,8 +34,8 @@ public class Scrib_frame_ {
 		else										return Tid_dynamic;
 */
 	}
-	public static Xot_invk Get_frame(Scrib_core core, String frame_id) {
-		switch(frame_id.charAt(0)) {
+	public static Xot_invk Get_frame(Scrib_core core, byte[] frame_id) {
+		switch(frame_id[0]) {
 			case 'c': // "current"
 				return core.Frame_current();
 			case 'p': // "parent"

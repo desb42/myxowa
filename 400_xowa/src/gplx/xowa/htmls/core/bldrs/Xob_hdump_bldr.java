@@ -19,7 +19,7 @@ import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.cmds.*; import gplx.xowa.apps.a
 import gplx.xowa.htmls.core.htmls.*; import gplx.xowa.htmls.core.hzips.*; import gplx.xowa.htmls.core.dbs.*;
 import gplx.xowa.wikis.*; import gplx.xowa.wikis.pages.*; import gplx.xowa.wikis.data.*;
 import gplx.xowa.parsers.*;
-import gplx.xowa.wikis.caches.Db_html_body;
+import gplx.xowa.files.Db_html_body;
 public class Xob_hdump_bldr implements Gfo_invk {
 	private boolean enabled, hzip_enabled, hzip_diff, hzip_b256; private byte zip_tid = Byte_.Max_value_127;
 	private Xowe_wiki wiki; private Xob_hdump_tbl_retriever html_tbl_retriever;

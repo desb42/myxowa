@@ -33,8 +33,8 @@ public class Xodb_load_mgr_txt implements Xodb_load_mgr {
 		this.fsys_mgr = wiki.Tdb_fsys_mgr();
 	}
 	public void Init_by_wiki(Xowe_wiki wiki) {}
-	public void Load_page(Xowd_page_itm rv, Xow_ns ns) {Load_page(rv, rv.Text_db_id(), rv.Tdb_row_idx(), ns, false, tmp_xdat_file, tmp_xdat_itm);}
-	public void Load_page(Xowd_page_itm rv, int txt_fil_idx, int txt_row_idx, Xow_ns ns, boolean timestamp_enabled, Xob_xdat_file xdat_file, Xob_xdat_itm xdat_itm) {
+	public void Load_page(Xowd_page_itm rv, Xow_ns ns, Xowe_wiki wiki) {Load_page(rv, rv.Text_db_id(), rv.Tdb_row_idx(), ns, false, tmp_xdat_file, tmp_xdat_itm, wiki);}
+	public void Load_page(Xowd_page_itm rv, int txt_fil_idx, int txt_row_idx, Xow_ns ns, boolean timestamp_enabled, Xob_xdat_file xdat_file, Xob_xdat_itm xdat_itm, Xowe_wiki wiki) {
 		Io_url file = fsys_mgr.Url_ns_fil(Xotdb_dir_info_.Tid_page, ns.Id(), txt_fil_idx);
 		byte[] bry = Io_mgr.Instance.LoadFilBry(file); int bry_len = bry.length;
 		xdat_file.Clear().Parse(bry, bry_len, file).GetAt(xdat_itm, txt_row_idx);

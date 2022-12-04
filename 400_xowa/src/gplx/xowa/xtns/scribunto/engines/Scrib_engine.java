@@ -19,6 +19,8 @@ public interface Scrib_engine {
 	Scrib_server	Server();		void Server_(Scrib_server v);
 	Scrib_lua_proc	LoadString(String name, String text);
 	Scrib_lua_proc	LoadString(String name, byte[] text);
+        Scrib_lua_proc LoadClosure(Object closure);
+
 	Keyval[]		CallFunction(int id, Keyval[] args);
 	void			RegisterLibrary(Keyval[] functions_ary);
 	Keyval[]		ExecuteModule(int mod_id);

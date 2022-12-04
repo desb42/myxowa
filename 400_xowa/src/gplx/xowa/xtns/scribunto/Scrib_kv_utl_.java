@@ -53,6 +53,15 @@ public class Scrib_kv_utl_ {
 		try {return (String)o;}
 		catch (Exception e) {throw Err_.new_cast(e, String.class, o);}
 	}
+	public static byte[] Val_to_byte(Keyval[] ary, int idx) {
+		if (ary == null) throw Err_.new_wo_type("ary is null");
+		int ary_len = ary.length;
+		if (ary_len == 0 && idx == 0) return Bry_.Empty;	// NOTE: Modules can throw exceptions in which return value is nothing; do not fail; return ""; EX: -logy; DATE:2013-10-14
+		if (idx >= ary_len) throw Err_.new_wo_type("idx is not in bounds", "idx", idx, "len", Keyval_.Ary_to_str(ary));
+		Object o = ary[idx].Val();
+		try {return (byte[])o;}
+		catch (Exception e) {throw Err_.new_cast(e, byte[].class, o);}
+	}
 	public static Keyval[] Val_to_KeyVal_ary(Keyval[] ary, int idx) {
 		if (ary == null) throw Err_.new_wo_type("ary is null"); if (idx >= ary.length) throw Err_.new_wo_type("idx is not in bounds", "idx", idx, "len", Keyval_.Ary_to_str(ary));
 		try {return (Keyval[])ary[idx].Val();}

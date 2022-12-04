@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function doimages() {
        xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/ext.popups.main.js');
-       xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/' + x_p.wiki + '/language.js');
+       xowa.js.load_lib(xowa.root_dir + 'bin/any/popup/' + xowa_global_values.wgContentLanguage + '/language.js');
        xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/popup/popups.css');
 }
 
@@ -212,6 +212,11 @@ function init () {
 
     if (document.querySelectorAll('.mw-header .search-toggle').length) {
       xowa.js.load_lib(xowa.root_dir + 'bin/any/xowa/html/res/lib/skins.vector.js/searchToggle.js');
+    }
+
+    // syntax highlight?
+    if (document.querySelectorAll('.mw-highlight').length) {
+      xowa.js.importStylesheetURI(xowa.root_dir + 'bin/any/xowa/html/res/src/syntaxhighlight.css')
     }
 
 // always the xoimg stuff

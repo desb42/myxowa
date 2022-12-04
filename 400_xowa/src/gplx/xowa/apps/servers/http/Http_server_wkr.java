@@ -192,7 +192,7 @@ public class Http_server_wkr implements Gfo_invk {
 			}
 			else {
 				page_html = page.Html();
-				boolean show_stripped = true;//false;
+				boolean show_stripped = /*true;*/false;
 				if (show_stripped) {
 					byte[] stripped = null;
 					if (page.Page() != null && page.Page().Db().Page().Format() == Xob_xml_parser.Format_wiki) { //1 <format>text/x-wiki</format>
@@ -211,7 +211,7 @@ public class Http_server_wkr implements Gfo_invk {
 				page_html = "Strange! no data";
 			} else {
                 //test_redis();
-                test_sql(page.Ttl(), app);
+                //test_sql(page.Ttl(), app);
 
 				page_html = Convert_page(page_html, root_dir_http, String_.new_u8(url_parser.Wiki()), page.Redlink());
                                 

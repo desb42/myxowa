@@ -49,12 +49,39 @@ public class Xol_duration_mgr {
 		for (int i = 0; i < intervals_len; i++) {
 			Xol_interval_itm interval = intervals[i];
 			Xol_msg_itm msg_itm = interval_msgs[interval.Duration_itm().Tid()];
-			byte[] msg_bry = msg_itm.Fmt(tmp_bfr, tmp_fmtr, interval.Val());
-			msg_bry = ctx.Wiki().Parser_mgr().Main().Parse_text_to_html(ctx, msg_bry);
+			byte[] msg_bry = msg_itm.Fmt(tmp_bfr, interval.Val());
 			msgs_ary[i] = msg_bry;
 		}
-		return List_to_str(msgs_ary);
+		byte[] full_msg =  List_to_str(msgs_ary, ctx.Wiki());
+                // HACK convert &#32; to space - why do it here??? 20220811
+                full_msg = remove32(full_msg);
+		return ctx.Wiki().Parser_mgr().Main().Parse_text_to_html(ctx, full_msg);
 	}
+        private byte[] remove32(byte[] src) {
+            int pos = 0;
+            int src_len = src.length;
+            int start = 0;
+            Bry_bfr bfr = null;
+            while (pos < src_len) {
+                byte b = src[pos++];
+                if (b == '&') {
+                    if (pos + 3 < src_len && src[pos] == '#' && src[pos+1] == '3' && src[pos+2] == '2' && src[pos+3] == ';') {
+                        if (bfr == null)
+                            bfr = Bry_bfr_.New();
+                        bfr.Add_mid(src, start, pos - 1);
+                        bfr.Add_byte_space();
+                        pos += 4;
+                        start = pos;
+                    }
+                }
+            }
+            if (start != 0) {
+                bfr.Add_mid(src, start, src_len);
+                return bfr.To_bry();
+            }
+            else
+                return src;
+        }
 	private byte[] Msg_and, Msg_word_separator, Msg_comma_separator;
 	private void Format_durations_init() {
 		Xol_msg_mgr msg_mgr = lang.Msg_mgr();
@@ -65,21 +92,22 @@ public class Xol_duration_mgr {
 			byte[] msg_key = Bry_.Add(Bry_duration, itm.Name_bry());
 			interval_msgs[i] = msg_mgr.Itm_by_key_or_new(msg_key);
 		}
-	}	private static final    byte[] Bry_duration = Bry_.new_a7("duration-");
-	private void List_to_str_init() {
+	}
+        private static final    byte[] Bry_duration = Bry_.new_a7("duration-");
+	private void List_to_str_init(Xowe_wiki wiki) {
 		Xol_msg_mgr msg_mgr = lang.Msg_mgr();
-		Msg_and = msg_mgr.Val_by_str_or_empty("and");
-		Msg_word_separator = msg_mgr.Val_by_str_or_empty("word-separator");
-		Msg_comma_separator = msg_mgr.Val_by_str_or_empty("comma-separator");
+		Msg_and = msg_mgr.Val_by_str_or_empty(wiki, "and");
+		Msg_word_separator = msg_mgr.Val_by_str_or_empty(wiki, "word-separator");
+		Msg_comma_separator = msg_mgr.Val_by_str_or_empty(wiki, "comma-separator");
 	}
 	
-	public byte[] List_to_str(byte[][] segs_ary) {
+	public byte[] List_to_str(byte[][] segs_ary, Xowe_wiki wiki) {
 		int len = segs_ary.length;
 		switch (len) {
 			case 0: return Bry_.Empty;
 			case 1: return segs_ary[0];
 			default:
-				if (Msg_and == null) List_to_str_init();
+				if (Msg_and == null) List_to_str_init(wiki);
 				int last_idx = len - 1;
 				for (int i = 0; i < last_idx; i++) {
 					if (i != 0) tmp_bfr.Add(Msg_comma_separator);

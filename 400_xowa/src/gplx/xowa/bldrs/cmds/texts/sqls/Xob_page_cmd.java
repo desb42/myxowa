@@ -16,6 +16,7 @@ Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 package gplx.xowa.bldrs.cmds.texts.sqls; import gplx.*; import gplx.xowa.*; import gplx.xowa.bldrs.*; import gplx.xowa.bldrs.cmds.*; import gplx.xowa.bldrs.cmds.texts.*;
 import gplx.dbs.*; import gplx.core.ios.*; import gplx.xowa.bldrs.cmds.*;
 import gplx.xowa.bldrs.wkrs.*;
+import gplx.xowa.files.Db_text_body;
 import gplx.xowa.wikis.nss.*;
 import gplx.xowa.wikis.data.*; import gplx.xowa.wikis.data.tbls.*; import gplx.xowa.wikis.dbs.*; 
 import gplx.xowa.wikis.*; import gplx.xowa.bldrs.filters.dansguardians.*; import gplx.xowa.apps.apis.xowa.bldrs.imports.*;
@@ -50,6 +51,7 @@ public class Xob_page_cmd extends Xob_itm_basic_base implements Xob_page_wkr, Gf
 		Xob_ns_file_itm.Init_ns_bldr_data(Xow_db_file_.Tid__text, wiki.Ns_mgr(), ns_file_map);
 		if (idx_mode.Tid_is_bgn()) page_core_tbl.Create_idx();
 		page_core_tbl.Insert_bgn();
+		wiki.Text_body().Create(wiki.App(), wiki.Domain_itm().Domain_str(), 0);
 		usr_dlg.Prog_many("", "", "import.page.bgn");
 	}
 	public void Page_wkr__run(Xowd_page_itm page) {
@@ -64,17 +66,20 @@ public class Xob_page_cmd extends Xob_itm_basic_base implements Xob_page_wkr, Gf
 			if (dg_match_mgr.Match(1, id, ns.Id(), page.Ttl_page_db(), page.Ttl_full_db(), wiki.Lang(), text_raw)) return;
 		}
 		byte[] text_zip = text_zip_mgr.Zip(text_zip_tid, text_raw);
-		Xow_db_file text_db = ns_to_db_mgr.Get_by_ns(ns.Bldr_data(), text_zip.length);
-		try {db_mgr.Create_page(page_core_tbl, text_db, id, page.Ns_id(), page.Ttl_page_db(), redirect, modified, text_zip, text_raw_len, random_int, page.Model_format());}
+//		Xow_db_file text_db = ns_to_db_mgr.Get_by_ns(ns.Bldr_data(), text_zip.length);
+//		try {
+//			db_mgr.Create_page(page_core_tbl, text_db, id, page.Ns_id(), page.Ttl_page_db(), redirect, modified, text_zip, text_raw_len, random_int, page.Model_format());}
+		try {
+			db_mgr.Create_page_new(page_core_tbl, wiki.Text_body(), id, page.Ns_id(), page.Ttl_page_db(), redirect, modified, text_zip, text_zip.length, random_int, page.Model_format());}
 		catch (Exception e) {
-			throw Err_.new_exc(e, "bldr", "create page in db failed; skipping page", "id", id, "ns", page.Ns_id(), "name", page.Ttl_page_db(), "redirect", redirect, "modified", modified, "text_len", text_raw_len, "text_db_id", text_db.Id());
+			throw Err_.new_exc(e, "bldr", "create page in db failed; skipping page", "id", id, "ns", page.Ns_id(), "name", page.Ttl_page_db(), "redirect", redirect, "modified", modified, "text_len", text_raw_len);
 		}
 		if (redirect && redirect_id_enabled)
 			redirect_tbl.Insert(id, page.Ttl_page_db(), redirect_ttl);
 		++page_count_all;
 		if (ns.Id_is_main() && !page.Redirected()) ++page_count_main;
 		if (page_count_all % commit_interval == 0) {
-			page_core_tbl.Conn().Txn_sav(); text_db.Conn().Txn_sav();
+			page_core_tbl.Conn().Txn_sav(); //text_db.Conn().Txn_sav();
 			if (redirect_id_enabled) redirect_tbl.Conn().Txn_sav();
 			if (dg_match_mgr != null) dg_match_mgr.Commit();
 		}

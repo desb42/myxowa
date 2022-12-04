@@ -45,9 +45,9 @@ public class Db_sql_main {
                     this.found = false;
                     return;
                 }
-                catch (IOException ex) {
-			ex.printStackTrace();
-		}
+                //catch (IOException ex) {
+		//	ex.printStackTrace();
+		//}
 		byte[] pagedata = new byte[100];
 		f.read(pagedata);
 		Magic_Header_String = Bry_.Mid(pagedata, 0, 16);

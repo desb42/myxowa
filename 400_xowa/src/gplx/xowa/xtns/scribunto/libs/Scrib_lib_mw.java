@@ -22,6 +22,8 @@ import gplx.xowa.langs.funcs.*;
 import gplx.xowa.parsers.*;
 import gplx.xowa.parsers.tmpls.*;
 import gplx.xowa.xtns.scribunto.procs.*;
+
+import gplx.xowa.xtns.scribunto.engines.luaj.Luaj_server;
 public class Scrib_lib_mw implements Scrib_lib {
 	private final Scrib_core core; private final Scrib_fsys_mgr fsys_mgr;
 	public Scrib_lib_mw(Scrib_core core) {this.core = core; this.fsys_mgr = core.Fsys_mgr();}
@@ -109,28 +111,44 @@ public class Scrib_lib_mw implements Scrib_lib {
 	, Invk_getFrameTitle, Invk_setTTL
 	, Invk_parentFrameExists
 	);
+	private Object getclosure(int id) {
+		Luaj_server ljs = (Luaj_server)(core.Interpreter().Server());
+		Object rv = ljs.Get_closure_by_id(id);
+		return rv;
+	}
 	public boolean LoadPackage(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		String mod_name = args.Pull_str(0);
 		byte[] mod_code = fsys_mgr.Get_or_null(mod_name);	// check if mod_name a file in /lualib/ directoryScribunto .lua file (in /lualib/)
-                //byte[] mod_code = core.Core_mgr().Get_text(fsys_mgr.Script_dir(), mod_name + ".lua");
+		//byte[] mod_code = core.Core_mgr().Get_text(fsys_mgr.Script_dir(), mod_name + ".lua");
 		if (mod_code != null)
 			return rslt.Init_obj(core.Interpreter().LoadString("@" + mod_name + ".lua", mod_code));
 		Xoa_ttl ttl = Xoa_ttl.Parse(cur_wiki, Bry_.new_u8(mod_name));// NOTE: should have Module: prefix
 		if (ttl == null) return rslt.Init_ary_empty();
-		byte[] page_db = cur_wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, cur_wiki.Domain_str());
-		if (page_db == null) return rslt.Init_ary_empty();
+
 		Scrib_lua_mod xmod = new Scrib_lua_mod(core, mod_name);
-		page_db = Db_lua_comp.Check(page_db);
-		return rslt.Init_obj(xmod.LoadString(page_db));
+		Scrib_lua_proc lp;
+		Object closure = core.App().Get_closure(ttl.Page_db());
+		if (closure != null) {
+			lp = xmod.LoadClosure(closure);
+		}
+		else {
+			byte[] page_db = cur_wiki.Cache_mgr().Page_cache().Get_src_else_load_or_null(ttl, cur_wiki.Domain_str());
+			if (page_db == null) return rslt.Init_ary_empty();
+			page_db = Db_lua_comp.Check(page_db);
+	
+			lp = xmod.LoadString(page_db);
+			core.App().Add_closure(ttl.Page_db(), getclosure(lp.Id()));
+		}
+		return rslt.Init_obj(lp);
 	}
 	public boolean LoadPHPLibrary(Scrib_proc_args args, Scrib_proc_rslt rslt) { // NOTE: noop; Scribunto uses this to load the Scribunto_*Library classses (EX: Scribunto_TitleLibrary); DATE:2015-01-21
 		return rslt.Init_obj(null);
 	}
 	public boolean GetExpandedArgument(Scrib_proc_args args, Scrib_proc_rslt rslt) {
-		String frame_id = args.Pull_str(0);
+		byte[] frame_id = args.Pull_bry(0);
 		Xot_invk frame = Scrib_frame_.Get_frame(core, frame_id);
 		int frame_arg_adj = Scrib_frame_.Get_arg_adj(frame.Frame_tid());
-		String idx_str = args.Pull_str(1);
+		byte[] idx_str = args.Pull_bry(1);
 		int idx_int = Int_.Parse_or(idx_str, Int_.Min_value);	// NOTE: should not receive int value < -1; idx >= 0
                 boolean wc = false;
                 if (idx_int == 1) {
@@ -161,7 +179,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 				return rslt.Init_obj(tmp_bfr.To_str_and_clear());
 		}
 		else {
-			Arg_nde_tkn nde = frame.Args_get_by_key(src, Bry_.new_u8(idx_str));
+			Arg_nde_tkn nde = frame.Args_get_by_key(src, idx_str);
 			if (nde == null) {
                             //System.out.println("nk " + idx_str);
 				return rslt.Init_obj(null);	// idx_str does not exist; [null] not []; PAGE:en.w:Sainte-Catherine,_Quebec DATE:2017-09-16
@@ -210,7 +228,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 			return idx == key_int;
 	}
 	public boolean GetAllExpandedArguments(Scrib_proc_args args, Scrib_proc_rslt rslt) {
-		String frame_id = args.Pull_str(0);
+		byte[] frame_id = args.Pull_bry(0);
 		Xot_invk frame = Scrib_frame_.Get_frame(core, frame_id);
 		byte frame_tid = frame.Frame_tid();
 		Xot_invk parent_frame = Scrib_frame_.Get_parent(core, frame_tid);
@@ -270,7 +288,8 @@ public class Scrib_lib_mw implements Scrib_lib {
 		return rslt.Init_obj((Keyval[])rv.To_ary(Keyval.class));
 	}
 	public boolean FrameExists(Scrib_proc_args args, Scrib_proc_rslt rslt) {
-		String frame_id = args.Cast_str_or_null(0);
+		//String frame_id = args.Cast_str_or_null(0);
+		byte[] frame_id = args.Cast_bry_or_null(0);
 		if (frame_id == null) return rslt.Init_obj(false); // no args should not throw error; PAGE:fr.u:Projet:Laboratoire/Espaces_de_noms/Modèle/Liste_des_pages DATE:2017-05-28
 		Xot_invk frame = Scrib_frame_.Get_frame(core, frame_id);
 		return rslt.Init_obj(frame != null);
@@ -279,15 +298,15 @@ public class Scrib_lib_mw implements Scrib_lib {
 		return rslt.Init_obj(!core.Frame_parent().Frame_is_root());
 	}
 	public boolean Preprocess(Scrib_proc_args args, Scrib_proc_rslt rslt) {
-		String frame_id = args.Pull_str(0);
+		byte[] frame_id = args.Pull_bry(0);
 		Xot_invk frame = Scrib_frame_.Get_frame(core, frame_id);
                 if (frame == null) {
                     int a=1;
                 }
 		byte frame_tid = frame.Frame_tid();
 		Xot_invk parent_frame = Scrib_frame_.Get_parent(core, frame_tid);
-		String text_str = args.Pull_str(1);
-		byte[] text_bry = Bry_.new_u8(text_str);
+		//String text_str = args.Pull_str(1);
+		byte[] text_bry = args.Pull_bry(1);
 		Xop_root_tkn tmp_root = ctx.Tkn_mkr().Root(text_bry);
 		Xop_ctx tmp_ctx = Xop_ctx.New__sub__reuse_page(core.Ctx());
 		int args_adj = Scrib_frame_.Get_arg_adj(frame_tid);
@@ -300,11 +319,11 @@ public class Scrib_lib_mw implements Scrib_lib {
 			String key = tmp_bfr.To_str_and_clear();
 			if (String_.Eq(key, "")) key = Int_.To_str(i);
 			arg.Val_tkn().Tmpl_evaluate(ctx, src, parent_frame, tmp_bfr);	// NOTE: must evaluate against parent_frame; evaluating against current frame may cause stack-overflow; DATE:2013-04-04
-			String val = tmp_bfr.To_str_and_clear();
+			byte[] val = tmp_bfr.To_bry_and_clear();
 			kv_args[i] = Keyval_.new_(key, val);
 		}
 		tmp_bfr.Mkr_rls();
-		Xot_invk_mock mock_frame = Xot_invk_mock.preprocess_(Bry_.new_u8(frame_id), kv_args);	// use frame_id for Frame_ttl; in lieu of a better candidate; DATE:2014-09-21
+		Xot_invk_mock mock_frame = Xot_invk_mock.preprocess_(frame_id, kv_args);	// use frame_id for Frame_ttl; in lieu of a better candidate; DATE:2014-09-21
 		tmp_ctx.Parse_tid_(Xop_parser_tid_.Tid__tmpl);	// default xnde names to template; needed for test, but should be in place; DATE:2014-06-27
 		byte[] result = cur_wiki.Parser_mgr().Main().Expand_tmpl(tmp_root, tmp_ctx, mock_frame, tmp_ctx.Tkn_mkr(), text_bry);
 		return rslt.Init_obj(result);
@@ -428,7 +447,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 		Ordered_hash frame_list = core.Frame_created_list();
 		int frame_list_len = frame_list.Count();
 		if (frame_list_len > 100) throw Err_.new_wo_type("newChild: too many frames");
-		String frame_id = args.Pull_str(0);
+		byte[] frame_id = args.Pull_bry(0);
 		Xot_invk frame = Scrib_frame_.Get_frame(core, frame_id);
 		Object ttl_obj = args.Cast_obj_or_null(1);	// NOTE: callers must pass named title else title will be false; EX: frame:newChild{'current', 'title0'} -> false; frame:newChild{'current', title='title0'} -> 'title0'; DATE:2014-05-20
 		Xoa_ttl ttl;
@@ -447,7 +466,7 @@ public class Scrib_lib_mw implements Scrib_lib {
 		return rslt.Init_obj(new_frame_id);
 	}
 	public boolean GetFrameTitle(Scrib_proc_args args, Scrib_proc_rslt rslt) {
-		String frame_id = args.Pull_str(0);
+		byte[] frame_id = args.Pull_bry(0);
 		Xot_invk frame = Scrib_frame_.Get_frame(core, frame_id);
 		return rslt.Init_obj(frame.Frame_ttl());
 	}

@@ -20,49 +20,87 @@
 }
 
 /*XOWA:ext.cite.styles.css*/
-.mw-cite-backlink,
-.cite-accessibility-label {
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+.mw-cite-backlink,.cite-accessibility-label {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none
 }
 
 .mw-references-columns {
-	-webkit-column-width: 30em;
-	-moz-column-width: 30em;
-	column-width: 30em;
+    -webkit-column-width: 30em;
+    -moz-column-width: 30em;
+    column-width: 30em;
+    margin-top: 0.3em
 }
 
-/* Avoid elements from breaking between columns */
+.mw-parser-output .mw-references-columns .references {
+    margin-top: 0
+}
+
 .mw-references-columns li {
-	-webkit-column-break-inside: avoid;
-	page-break-inside: avoid;
-	break-inside: avoid-column;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid-column
+}
+
+ol.references {
+    counter-reset: mw-ref-extends-parent list-item
+}
+
+ol.references > li {
+    counter-increment: mw-ref-extends-parent;
+    counter-reset: mw-ref-extends-child
+}
+
+ol.references .mw-extended-references {
+    list-style: none;
+    margin-left: 2em
+}
+
+.mw-extended-references > li:before {
+    counter-increment: mw-ref-extends-child;
+    content: counter(mw-ref-extends-parent,decimal) '.' counter(mw-ref-extends-child,decimal) '. '
 }
 
 sup.reference {
-	/* Isolation to fix references in case of RTL words at the end of a reference */
-	unicode-bidi: -moz-isolate;
-	unicode-bidi: -webkit-isolate;
-	unicode-bidi: isolate;
-
-	/* Don't allow a reference that includes a group name
-	to break in the end of the line */
-	white-space: nowrap;
+    unicode-bidi: -moz-isolate;
+    unicode-bidi: -webkit-isolate;
+    unicode-bidi: isolate;
+    white-space: nowrap;
+    font-weight: normal;
+    font-style: normal
 }
 
-/* Highlight clicked reference in blue to help navigation */
-ol.references li:target,
-sup.reference:target {
-	background-color: #eaf3ff;
+ol.references li:target,sup.reference:target {
+    background-color: #eaf3ff
 }
 
-/* Make cite errors "strong" */
 .mw-ext-cite-error {
-	font-weight: bold;
-	/* For the case that the error is embedded in an element with a different direction */
-	unicode-bidi: embed;
+    font-weight: bold;
+    unicode-bidi: embed
+}
+
+.mw-ext-cite-error code {
+    background-color: transparent;
+    color: inherit;
+    padding: 1px 2px
+}
+
+.mw-cite-dir-ltr .reference-text {
+    direction: ltr;
+    unicode-bidi: embed
+}
+
+.mw-cite-dir-rtl .reference-text {
+    direction: rtl;
+    unicode-bidi: embed
+}
+
+@media print {
+    .mw-cite-backlink {
+        display: none
+    }
 }
 
 /*        ext.inputBox.styles */
@@ -185,59 +223,6 @@ input.mw-ui-input-large{font-size:1.75em;font-weight:bold;line-height:1.25em;pad
     color: #222
 }
 
-.mw-cite-backlink,.cite-accessibility-label {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none
-}
-
-.mw-references-columns {
-    -webkit-column-width: 30em;
-    -moz-column-width: 30em;
-    column-width: 30em
-}
-
-.mw-references-columns li {
-    -webkit-column-break-inside: avoid;
-    page-break-inside: avoid;
-    break-inside: avoid-column
-}
-
-sup.reference {
-    unicode-bidi: -moz-isolate;
-    unicode-bidi: -webkit-isolate;
-    unicode-bidi: isolate;
-    white-space: nowrap;
-    font-weight: normal;
-    font-style: normal
-}
-
-ol.references li:target,sup.reference:target {
-    background-color: #eaf3ff
-}
-
-.mw-ext-cite-error {
-    font-weight: bold;
-    unicode-bidi: embed
-}
-
-.mw-cite-dir-ltr .reference-text {
-    direction: ltr;
-    unicode-bidi: embed
-}
-
-.mw-cite-dir-rtl .reference-text {
-    direction: rtl;
-    unicode-bidi: embed
-}
-
-@media print {
-    .mw-cite-backlink {
-        display: none
-    }
-}
-
 /* timeline stuff 20190214 */
 .timeline-wrapper {
     max-width: 100%;
@@ -311,3 +296,58 @@ ol.references li:target,sup.reference:target {
   src: url('/fsys/bin/any/xowa/html/res/lib/myfonts/lobster/v28/neILzCirqoswsqX9zoKmMw.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* ext.Templatedata */
+.mw-templatedata-doc-params tbody > tr > th {
+    text-align: left;
+    font-weight: normal
+}
+
+.mw-templatedata-doc-param-alias {
+    color: #555
+}
+
+.mw-templatedata-doc-muted {
+    font-style: italic;
+    color: #555
+}
+
+.mw-templatedata-doc-param-status-required {
+    font-weight: bold
+}
+
+.mw-templatedata-format {
+    font-weight: normal;
+    font-size: 0.85em;
+    margin-left: 0.25em
+}
+
+.mw-templateData-maps-panel-button {
+    margin-bottom: 0.5em
+}
+
+.mw-templateData-template-map-list-menu-panel {
+    border-right: 1px solid #c8ccd1
+}
+
+.mw-templateData-template-remove-map-button {
+    margin-bottom: 0.8em
+}
+
+.oo-ui-menuLayout.oo-ui-menuLayout-showMenu.oo-ui-menuLayout-top > .oo-ui-menuLayout-menu {
+    height: 4em;
+    text-align: center;
+    box-shadow: 0 5px 16px -8px #000000 1f
+}
+
+.tdg-templateDataDialog-addingNewMap .oo-ui-menuLayout.oo-ui-menuLayout-showMenu.oo-ui-menuLayout-top > .oo-ui-menuLayout-menu {
+    height: 6.6em
+}
+
+.tdg-templateDataDialog-editMapsPanel .oo-ui-menuLayout > .oo-ui-menuLayout-content {
+    top: 4em
+}
+
+.tdg-templateDataDialog-addingNewMap .oo-ui-menuLayout > .oo-ui-menuLayout-content {
+    top: 6.6em
+}
+

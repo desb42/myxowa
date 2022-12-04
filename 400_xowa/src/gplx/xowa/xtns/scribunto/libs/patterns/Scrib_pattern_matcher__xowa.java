@@ -21,11 +21,32 @@ import gplx.objects.strings.unicodes.Ustring;
 import gplx.objects.strings.unicodes.Ustring_;
 import gplx.xowa.xtns.scribunto.libs.Scrib_lib_ustring_gsub_mgr;
 import org.luaj.vm2.lib.Match_state;
+import org.luaj.vm2.lib.Str_find_mgr;
 import org.luaj.vm2.lib.Str_find_mgr__xowa;
+import gplx.List_adp;
+import gplx.List_adp_;
 
 class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 	public Scrib_pattern_matcher__xowa(byte[] page_url) {}
 
+	public Str_find_mgr Find_mgr(Ustring src_ucs, String pat_str, int bgn_as_codes) {
+		Str_find_mgr__xowa mgr = new Str_find_mgr__xowa(src_ucs, Ustring_.New_codepoints(pat_str), bgn_as_codes, false, false);
+		gmatch_state = new Match_state(mgr);
+		return mgr;
+	}
+	private Match_state gmatch_state;
+	public Regx_match Match_with_mgr(Str_find_mgr smgr, int bgn_as_codes, Ustring src_ucs) {
+		Str_find_mgr__xowa mgr = (Str_find_mgr__xowa)smgr;
+		mgr.Set_pos(bgn_as_codes);
+		mgr.Process_gmatch(gmatch_state);
+
+		int find_bgn = mgr.Bgn();
+		int find_end = mgr.End();
+		boolean found = find_bgn != -1;
+
+		Regx_group[] groups = Make_groups(src_ucs, mgr.Captures_ary());
+		return new Regx_match(found, find_bgn, find_end, groups);
+	}
 	@Override public Regx_match Match_one(Ustring src_ucs, String pat_str, int bgn_as_codes, boolean replace) {
 		Str_find_mgr__xowa mgr = new Str_find_mgr__xowa(src_ucs, Ustring_.New_codepoints(pat_str), bgn_as_codes, false, false);
 		mgr.Process(false);
@@ -149,6 +170,41 @@ class Scrib_pattern_matcher__xowa extends Scrib_pattern_matcher {
 			groups[i / 2] = new Regx_group(true, capture_bgn, capture_end, val);
 		}
 		return groups;
+	}
+
+	public List_adp Split(Ustring src_ucs, String pat_str) {
+		// get src vars
+		//String src_str = src_ucs.Src();
+		int src_len = src_ucs.Len_in_data();
+		
+		// get pat vars
+		Ustring pat = Ustring_.New_codepoints(pat_str);
+		int pat_len = pat.Len_in_data();
+
+		int start = 0;
+		Str_find_mgr__xowa match_mgr = new Str_find_mgr__xowa(src_ucs, pat, 0, false, false);
+		Match_state ms = new Match_state(match_mgr);
+		List_adp list = List_adp_.New();
+		
+		int src_pos = 0;
+		while (true) {
+			ms.reset();
+			int res = ms.match(src_pos, 0);
+
+			src_pos = ms.Stretch();
+			// match found?
+			if (res != -1) {
+				list.Add(src_ucs.Substring(start, src_pos));
+				src_pos = res;
+				start = res;
+			}
+			else
+				src_pos++;
+			if (src_pos >= src_len) // XOWA:assert src_pos is in bounds, else will throw ArrayIndexOutOfBounds exception; DATE:2016-09-20
+				break; 
+		}
+		list.Add(src_ucs.Substring(start, src_len)); // the rest
+		return list;
 	}
 }
 

@@ -20,6 +20,8 @@ import gplx.xowa.apps.*;
 import gplx.xowa.guis.*;
 import gplx.xowa.langs.*; import gplx.xowa.langs.msgs.*; import gplx.xowa.langs.cases.*; 
 import gplx.xowa.files.*; import gplx.xowa.files.origs.*; import gplx.xowa.files.fsdb.*; import gplx.xowa.files.bins.*;
+import gplx.xowa.files.Db_html_body;
+import gplx.xowa.files.Db_text_body;
 import gplx.xowa.wikis.domains.*; import gplx.xowa.wikis.metas.*; import gplx.xowa.wikis.data.site_stats.*; import gplx.xowa.wikis.data.*; import gplx.xowa.files.repos.*; import gplx.xowa.wikis.data.tbls.*; import gplx.xowa.wikis.xwikis.*; import gplx.xowa.wikis.ttls.*; import gplx.xowa.addons.*;
 import gplx.xowa.htmls.*; import gplx.xowa.htmls.core.htmls.utls.*; import gplx.xowa.htmls.core.*; import gplx.xowa.htmls.core.hzips.*; import gplx.xowa.htmls.bridges.dbuis.tbls.*; import gplx.xowa.htmls.hrefs.*;
 import gplx.xowa.wikis.nss.*; import gplx.xowa.wikis.fsys.*;
@@ -154,4 +156,7 @@ public class Xowv_wiki implements Xow_wiki, Xow_ttl_parser, Gfo_invk {
 	public Xoa_ttl	Ttl_parse(int ns_id, byte[] ttl)					{return Xoa_ttl.Parse(this, ns_id, ttl);}
 	public void Init_needed_y_() {this.init_needed = true;}
 	public Object Invk(GfsCtx ctx, int ikey, String k, GfoMsg m) {throw Err_.new_unimplemented_w_msg("implemented for Xoa_cfg_mgr");}
+
+	public Db_html_body Html_body() {return html_body;} private final Db_html_body html_body = new Db_html_body();
+	public Db_text_body Text_body() {return text_body;} private final Db_text_body text_body = new Db_text_body();
 }

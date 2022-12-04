@@ -49,8 +49,7 @@ import gplx.xowa.parsers.Xop_ctx;
 import gplx.xowa.parsers.Xow_parser_mgr;
 import gplx.xowa.parsers.logs.Xop_log_wkr_factory;
 import gplx.xowa.wikis.pages.Xopg_view_mode_;
-import gplx.xowa.wikis.caches.Db_html_body;
-import gplx.DateAdp_;
+import gplx.xowa.files.Db_html_body;
 public class Xomp_parse_wkr implements Gfo_invk {
 	// mgr vars
 	private final Xomp_parse_mgr mgr;
@@ -101,7 +100,7 @@ public class Xomp_parse_wkr implements Gfo_invk {
 		this.stat_tbl = new Xomp_stat_tbl(wkr_db.Conn());
 		this.hxtn_mgr = wiki.Hxtn_mgr();
 		this.hxtn_mgr.Init_by_xomp_wkr(wkr_db.Conn(), cfg.Zip_tid());
-		this.html_body = new Db_html_body(wiki.App(), wiki.Domain_itm().Domain_str(), uid);
+		wiki.Html_body().Create(wiki.App(), wiki.Domain_itm().Domain_str(), uid*10);
 	}
 	public void Exec() {
 		Xow_parser_mgr parser_mgr = wiki.Parser_mgr();

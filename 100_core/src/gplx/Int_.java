@@ -76,6 +76,41 @@ public class Int_ {
 		}
 		return rv;
 	}
+	public static int Parse_or(byte[] raw, int or) {
+		// process args
+		if (raw == null) return or;
+		int raw_len = raw.length;
+		if (raw_len == 0) return or;
+
+		// loop backwards from nth to 0th char
+		int rv = 0, power_of_10 = 1;
+		for (int idx = raw_len - 1; idx >= 0; idx--) {
+			byte cur = raw[idx];
+			int digit = -1;
+			switch (cur) {
+				// numbers -> assign digit
+				case '0': digit = 0; break; case '1': digit = 1; break; case '2': digit = 2; break; case '3': digit = 3; break; case '4': digit = 4; break;
+				case '5': digit = 5; break; case '6': digit = 6; break; case '7': digit = 7; break; case '8': digit = 8; break; case '9': digit = 9; break;
+
+				// negative sign
+				case '-': 
+					if (idx != 0) { // invalid if not 1st
+						return or;
+					}
+					else { // is first; multiply by -1
+						rv *= -1;
+						continue;
+					}
+
+				// anything else
+				default:
+					return or;
+			}
+			rv += (digit * power_of_10);
+			power_of_10 *= 10;
+		}
+		return rv;
+	}
 
 	public static int[] Log10Ary = new int[] {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, Int_.Max_value};
 	public static int Log10AryLen = 11;

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2021 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -13,20 +13,22 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.xtns.wbases.dbs; import gplx.*; import gplx.xowa.*; import gplx.xowa.xtns.*; import gplx.xowa.xtns.wbases.*;
-import gplx.dbs.*; import gplx.dbs.utls.*;
+package gplx.xowa.xtns.wbases.dbs;
+import gplx.*;
+import gplx.dbs.*;
 import gplx.xowa.xtns.wbases.claims.enums.*;
 public class Xowb_prop_tbl implements Db_tbl {
 	private final    Dbmeta_fld_list flds = new Dbmeta_fld_list();
-	private final    String fld__wbp_pid, fld__wbp_datatype, fld__wbp_data;
+	private final    String fld__wbp_pid, fld__wbp_datatype, fld__wbp_data, fld__wbp_sort_pos;
 	private final    Db_conn conn;
 	private Db_stmt stmt_insert;
 	public Xowb_prop_tbl(Db_conn conn) {
 		this.conn = conn;
-		this.tbl_name				= "wbase_prop";
-		this.fld__wbp_pid			= flds.Add_str_pkey("wbp_pid", 16);			// EX: "p1"; NOTE: String, not int to conform to wbase_pid
-		this.fld__wbp_datatype		= flds.Add_int("wbp_datatype");				// EX: 12=commonsMedia; SEE:Wbase_claim_type_
-		this.fld__wbp_data		= flds.Add_str("wbp_data", 255);				// datatype==11 extra info
+		this.tbl_name          = "wbase_prop";
+		this.fld__wbp_pid      = flds.Add_str_pkey("wbp_pid", 16);			// EX: "p1"; NOTE: String, not int to conform to wbase_pid
+		this.fld__wbp_datatype = flds.Add_int("wbp_datatype");				// EX: 12=commonsMedia; SEE:Wbase_claim_type_
+		this.fld__wbp_data     = flds.Add_str("wbp_data", 255);				// datatype==11 extra info
+		this.fld__wbp_sort_pos = flds.Add_int("wbp_sort_pos");				// sort pos (from www.wikidata.org/wiki/MediaWiki:Wikibase-SortedProperties)
 		conn.Rls_reg(this);
 	}
 	public String Tbl_name() {return tbl_name;} private final    String tbl_name;
@@ -52,6 +54,7 @@ public class Xowb_prop_tbl implements Db_tbl {
 		String pid = String_.Upper(rdr.Read_str(fld__wbp_pid));	// convert "p123" to "P123"; note (a) Scrib.v2 calls as "P123"; (b) db stores as "p123"; (c) XO loads as "P123"; DATE:2016-12-03
 		byte datatype_id = (byte)rdr.Read_int(fld__wbp_datatype);
 		byte[] data = rdr.Read_bry_by_str(fld__wbp_data);
+		int sort_pos = rdr.Read_int(fld__wbp_sort_pos);
 
 		// convert id to key
 		Wbase_claim_type datatype_itm = (Wbase_claim_type)Wbase_claim_type_.Reg.Get_itm_or(datatype_id, null);
@@ -59,7 +62,7 @@ public class Xowb_prop_tbl implements Db_tbl {
 			Gfo_usr_dlg_.Instance.Warn_many("", "", "wbase:invalid prop datatype_id; pid=~{0} datatype=~{1}", pid, datatype_id);
 			datatype_itm = (Wbase_claim_type)Wbase_claim_type_.Itm__string;
 		}
-		hash.Add(pid, new Xowb_prop_tbl_itm(datatype_itm.Key_for_scrib(), data, datatype_id)); // NOTE: must use Key_for_scrib, else multiple invalid-data-type errors in fr.w; DATE:2017-02-26
+		hash.Add(pid, new Xowb_prop_tbl_itm(datatype_itm.Key_for_scrib(), data, datatype_id, sort_pos)); // NOTE: must use Key_for_scrib, else multiple invalid-data-type errors in fr.w; DATE:2017-02-26
 	}
 	public void Rls() {}
 }

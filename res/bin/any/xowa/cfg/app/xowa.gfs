@@ -150,9 +150,9 @@ app.wikis.get('~{wiki_key}').html.portal {
 ;
   txt_view =
 <:["
-  <li id="ca-view"    class="~{portal_view_read_cls}"><span><a href="~{portal_view_read_href}" class="xowa-hover-off">~{<>msgs.get('vector-view-view');<>}</a></span></li>
-  <li id="ca-edit"    class="~{portal_view_edit_cls}"><span><a href="~{portal_view_edit_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-edit');<>}>~{<>msgs.get('vector-view-edit');<>}</a></span></li>
-  <li id="ca-history" class="~{portal_view_html_cls}"><span><a href="~{portal_view_html_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('xowa-portal-view_html');<>}>~{<>msgs.get('xowa-portal-view_html');<>}</a></span></li>
+  <li id="ca-view"    class="~{portal_view_read_cls} mw-list-item"><a href="~{portal_view_read_href}" class="xowa-hover-off"><span>~{<>msgs.get('vector-view-view');<>}</span></a></li>
+  <li id="ca-edit"    class="~{portal_view_edit_cls} mw-list-item"><a href="~{portal_view_edit_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('ca-edit');<>}><span>~{<>msgs.get('vector-view-edit');<>}</span></a></li>
+  <li id="ca-history" class="~{portal_view_html_cls} mw-list-item"><a href="~{portal_view_html_href}" class="xowa-hover-off"~{<>msgs.get_html_accesskey_and_title('xowa-portal-view_html');<>}><span>~{<>msgs.get('xowa-portal-view_html');<>}</span></a></li>
 "]:>
 ;
   div_logo =

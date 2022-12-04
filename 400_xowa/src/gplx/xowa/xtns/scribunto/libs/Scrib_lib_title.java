@@ -121,8 +121,9 @@ public class Scrib_lib_title implements Scrib_lib {
 	// private static final    byte[] Proto_relative = Bry_.new_a7("relative");
 	// private static final    Hash_adp_bry proto_hash = Hash_adp_bry.ci_a7().Add_str_obj("http", Bry_.new_a7("http://")).Add_str_obj("https", Bry_.new_a7("https://")).Add_str_obj("relative", Bry_.new_a7("//")).Add_str_obj("canonical", Bry_.new_a7("1"));
 	private byte[] Parse_ns(Xowe_wiki wiki, Object ns_obj) {
-		if (Type_.Eq_by_obj(ns_obj, String.class))
-			return Bry_.new_u8(String_.cast(ns_obj));
+		//if (Type_.Eq_by_obj(ns_obj, String.class))
+		if (Type_.Eq_by_obj(ns_obj, byte[].class))
+			return (byte[])ns_obj;
 		else {
 			int ns_id = Int_.Cast(ns_obj);
 			Xow_ns ns = wiki.Ns_mgr().Ids_get_or_null(ns_id);
@@ -134,15 +135,15 @@ public class Scrib_lib_title implements Scrib_lib {
 	public boolean MakeTitle(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		Xowe_wiki wiki = core.Wiki();
 		byte[] ns_bry = Parse_ns(wiki, args.Cast_obj_or_null(0));
-		String ttl_str = args.Pull_str(1);
-		String anchor_str = args.Cast_str_or_null(2);
-		String xwiki_str = args.Cast_str_or_null(3);
+		byte[] ttl_bry = args.Pull_bry(1);
+		byte[] anchor_bry = args.Cast_bry_or_null(2);
+		byte[] xwiki_bry = args.Cast_bry_or_null(3);
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_k004();
-		if (xwiki_str != null) tmp_bfr.Add_str_u8(xwiki_str).Add_byte(Byte_ascii.Colon);		
+		if (xwiki_bry != null) tmp_bfr.Add(xwiki_bry).Add_byte(Byte_ascii.Colon);		
 		if (Bry_.Len_gt_0(ns_bry))	// only prefix ns if available; EX:"Template:Title"; else will get ":Title"; DATE:2014-10-30
 			tmp_bfr.Add(ns_bry).Add_byte(Byte_ascii.Colon);
-		tmp_bfr.Add_str_u8(ttl_str);
-		if (anchor_str != null) tmp_bfr.Add_byte(Byte_ascii.Hash).Add_str_u8(anchor_str);
+		tmp_bfr.Add(ttl_bry);
+		if (anchor_bry != null) tmp_bfr.Add_byte(Byte_ascii.Hash).Add(anchor_bry);
 		Xoa_ttl ttl = Xoa_ttl.Parse(wiki, tmp_bfr.To_bry_and_rls());
 		if (ttl == null) return rslt.Init_obj(null);	// invalid title; exit;
 		return rslt.Init_obj(GetInexpensiveTitleData(ttl));

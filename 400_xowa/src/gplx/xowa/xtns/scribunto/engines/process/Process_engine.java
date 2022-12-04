@@ -36,6 +36,9 @@ public class Process_engine implements Scrib_engine {
 		Keyval[] rslt = this.Dispatch("op", "loadString", "text", String_.new_u8(text), "chunkName", name);
 		return new Scrib_lua_proc(name, Int_.Cast(rslt[0].Val()));
 	}
+	public Scrib_lua_proc LoadClosure(Object closure) {
+		return null;
+	}
 	public Keyval[] CallFunction(int id, Keyval[] args) {
 		return this.Dispatch("op", "call", "id", id, "nargs", args.length, "args", args);
 	}

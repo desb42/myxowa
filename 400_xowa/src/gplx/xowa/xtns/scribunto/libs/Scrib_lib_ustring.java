@@ -41,6 +41,7 @@ import gplx.xowa.xtns.scribunto.procs.Scrib_proc_mgr;
 import gplx.xowa.xtns.scribunto.procs.Scrib_proc_rslt;
 
 import gplx.xowa.Db_regex;
+import org.luaj.vm2.lib.Str_find_mgr;
 public class Scrib_lib_ustring implements Scrib_lib {
 	public Scrib_lib_ustring(Scrib_core core) {this.core = core;} private Scrib_core core;
 	public String Key() {return "mw.ustring";}
@@ -221,7 +222,8 @@ public class Scrib_lib_ustring implements Scrib_lib {
 		// run regex; NOTE add 1st match only; do not add all; PAGE:en.d:действительное_причастие_настоящего_времени DATE:2017-04-23
 		Scrib_pattern_matcher matcher = Scrib_pattern_matcher.New(core.Page_url());
 		Regx_match match = matcher.Match_one(text_ucs, find_str, bgn_as_codes, true);
-		if (match.Rslt_none()) return rslt.Init_null(); // return null if no matches found; EX:w:Mount_Gambier_(volcano); DATE:2014-04-02; confirmed with en.d:民; DATE:2015-01-30
+		if (match.Rslt_none())
+			return rslt.Init_null(); // return null if no matches found; EX:w:Mount_Gambier_(volcano); DATE:2014-04-02; confirmed with en.d:民; DATE:2015-01-30
 
 		List_adp tmp_list = List_adp_.New();
 		AddCapturesFromMatch(tmp_list, match, text_str, true);
@@ -231,35 +233,44 @@ public class Scrib_lib_ustring implements Scrib_lib {
 		Scrib_lib_ustring_gsub_mgr gsub_mgr = new Scrib_lib_ustring_gsub_mgr(core);
 		return gsub_mgr.Exec(args, rslt);
 	}
+        // assume recursion to 5 levels only!?!
+        private gsub_matcher[] gsm_cache = new gsub_matcher[5];
+        public void Gmatch_reset() {
+            for (int i = 0; i < 5; i++)
+                gsm_cache[i] = null;
+        }
 	public boolean Gmatch_init(Scrib_proc_args args, Scrib_proc_rslt rslt) {
-		// String text = Scrib_kv_utl_.Val_to_str(values, 0);
 		String regx = args.Pull_str(1);
+ 		String text = args.Xstr_str_or_null(0);
+		Ustring text_ucs = Ustring_.New_codepoints(text);
+		Scrib_pattern_matcher pat_mgr = Scrib_pattern_matcher.New(core.Page_url());
+		Str_find_mgr find_mgr = pat_mgr.Find_mgr(text_ucs, regx, 0);
+                gsub_matcher gsm = new gsub_matcher(text, text_ucs, find_mgr, pat_mgr);
+                int cache_pos;
+                for (cache_pos = 0; cache_pos < 6; cache_pos++) { // deliberately go out of bounds
+                    if (gsm_cache[cache_pos] == null) {
+                        gsm_cache[cache_pos] = gsm;
+                        break;
+                    }
+                }
 		Db_regex regx_counter = new Db_regex();
 		regx_counter.patternToRegex(regx);
-/*
-		Scrib_regx_converter regx_converter = new Scrib_regx_converter();
-		if (Scrib_pattern_matcher.Mode_is_xowa())
-			regx_converter.patternToRegex(regx, Scrib_regx_converter.Anchor_null, true);
-		else
-			regx = regx_converter.patternToRegex(regx, Scrib_regx_converter.Anchor_null, true);
-
-		return rslt.Init_many_objs(regx, regx_converter.Capt_ary());
-*/
-		return rslt.Init_many_objs(regx, regx_counter.Capt_ary());
+		return rslt.Init_many_objs(cache_pos, regx_counter.Capt_ary());
 	}
 	public boolean Gmatch_callback(Scrib_proc_args args, Scrib_proc_rslt rslt) {
-		String text = args.Xstr_str_or_null(0); // NOTE: UstringLibrary.php!ustringGmatchCallback calls preg_match directly; $s can be any type, and php casts automatically; 
-		String regx = args.Pull_str(1);
-		Keyval[] capt = args.Cast_kv_ary_or_null(2);
-		int pos = args.Pull_int(3);
+		int cache_pos = args.Pull_int(0);
+                gsub_matcher gsm = gsm_cache[cache_pos];
+		int pos = args.Pull_int(2);
 
-		Ustring text_ucs = Ustring_.New_codepoints(text);
-		// int pos_as_codes = To_java_by_lua(pos, text_ucs.Len_in_data());
-		Regx_match match = Scrib_pattern_matcher.New(core.Page_url()).Match_one(text_ucs, regx, pos, false);
-		if (match.Rslt_none()) return rslt.Init_many_objs(pos, Keyval_.Ary_empty);
+		Regx_match match = gsm.pat_mgr.Match_with_mgr(gsm.find_mgr, pos, gsm.text_ucs);
+
+		if (match.Rslt_none()) {
+                    gsm_cache[cache_pos] = null;
+                    return rslt.Init_many_objs(pos, Keyval_.Ary_empty);
+                }
 		List_adp tmp_list = List_adp_.New();
 		// should check that match.length is the same as capt.length
-		AddCapturesFromMatch(tmp_list, match, text, true);	// NOTE: was incorrectly set as false; DATE:2014-04-23
+		AddCapturesFromMatch(tmp_list, match, gsm.text, true);	// NOTE: was incorrectly set as false; DATE:2014-04-23
 		return rslt.Init_many_objs(match.Find_end(), Scrib_kv_utl_.base1_list_(tmp_list));
 	}
 	private int To_java_by_lua(int bgn_as_codes_base1, int len_in_codes) {
@@ -311,4 +322,17 @@ public class Scrib_lib_ustring implements Scrib_lib {
 	private static final int
 	  Base1 = 1
 	, End_adj = 1;	// lua / php uses "end" as <= not <; EX: "abc" and bgn=0, end= 1; for XOWA, this is "a"; for MW / PHP it is "ab"
+}
+class gsub_matcher {
+	public String text;
+	public Ustring text_ucs;
+	public Str_find_mgr find_mgr;
+	public Scrib_pattern_matcher pat_mgr;
+        public gsub_matcher(String text, Ustring text_ucs, Str_find_mgr find_mgr, Scrib_pattern_matcher pat_mgr) {
+            this.text = text;
+            this.text_ucs = text_ucs;
+            this.find_mgr = find_mgr;
+            this.pat_mgr = pat_mgr;
+        }
+
 }

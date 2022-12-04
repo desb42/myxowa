@@ -54,8 +54,8 @@ public class Synh_xtn_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 		Byte_obj_val xatr_id = (Byte_obj_val)xatr_id_obj;
 		switch (xatr_id.Val()) {
 			case Xatr_line:			line_enabled	= true; break;
-			case Xatr_enclose:		inline			= true; break;
-			case Xatr_inline:		inline			= true; break; // 2021-07-08 deprecate 'enclose' -> inline
+			case Xatr_enclose: // 2021-07-08 deprecate 'enclose' -> inline
+			case Xatr_inline:		inline			= true; break;
 			case Xatr_lang:			lang			= xatr.Val_as_bry(); break;
 			case Xatr_style:		style			= xatr.Val_as_bry(); break;
 			case Xatr_start:		start			= xatr.Val_as_int_or(1); break;
@@ -78,7 +78,10 @@ public class Synh_xtn_nde implements Xox_xnde, Mwh_atr_itm_owner1 {
 			tag = Bry_source;
 		else
 			tag = Bry_syntaxhighlight;
-		byte[] sh = Bry_.Add(tag, Bry_.Mid(src, xnde.Atrs_bgn(), xnde.Tag_close_end()));
+		int attr_end = xnde.Atrs_bgn();
+		if (attr_end > xnde.Atrs_end())
+			attr_end = xnde.Atrs_end();
+		byte[] sh = Bry_.Add(tag, Bry_.Mid(src, attr_end, xnde.Tag_close_end()));
 		bfr.Add(Bry_.new_a7(Base64Converter.Encode(sh)));
 		bfr.Add_str_a7("$$");
 //		Synh_xtn_nde_.Make(bfr, app, src, xnde.Tag_open_end(), xnde.Tag_close_bgn(), lang, inline, style, line_enabled, start, highlight_idxs, klass, id, dir);

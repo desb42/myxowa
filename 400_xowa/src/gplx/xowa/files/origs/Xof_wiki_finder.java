@@ -63,7 +63,7 @@ class Xof_wiki_finder {	// UNUSED
 	}
 	private boolean Find_page__by_wiki(Xowd_page_itm db_page, Xowe_wiki wiki, int ns_id, byte[] ttl_bry) {
 		Xow_ns ns = wiki.Ns_mgr().Ids_get_or_null(ns_id);
-		wiki.Db_mgr().Load_mgr().Load_page(db_page, ns);
+		wiki.Db_mgr().Load_mgr().Load_page(db_page, ns, wiki);
 		return db_page.Exists();
 	}	
 }

@@ -79,7 +79,7 @@ public class Wdata_prop_val_visitor_ {
 			Keyval datavalue_itm = datavalue_ary[i];
 			byte datavalue_tid = Wdata_dict_datavalue.Reg.Get_tid_or_max_and_log(page_url, datavalue_itm.Key()); if (datavalue_tid == Byte_.Max_value_127) continue;
 			switch (datavalue_tid) {
-				case Wdata_dict_datavalue.Tid__type:		tid = Wbase_claim_type_.Get_tid_or_unknown((String)datavalue_itm.Val()); break;
+				case Wdata_dict_datavalue.Tid__type:		tid = Wbase_claim_type_.Get_tid_or_unknown((byte[])datavalue_itm.Val()); break;
 				case Wdata_dict_datavalue.Tid__value:		val_obj = datavalue_itm.Val(); break;
 				case Wdata_dict_datavalue.Tid__error:		break;	// ignore: "Can only construct GlobeCoordinateValue with a String globe parameter"
 			}					

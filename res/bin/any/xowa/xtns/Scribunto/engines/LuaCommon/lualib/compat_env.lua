@@ -85,6 +85,7 @@ else -- >= Lua 5.2
     local unknown
     repeat
       up=up+1; name, val = debug.getupvalue(f, up)
+--dbg('envlookup', f, up, name, val)
       if name == '' then unknown = true end
     until name == '_ENV' or name == nil
     if name ~= '_ENV' then
@@ -116,6 +117,9 @@ else -- >= Lua 5.2
   
   -- 5.1 style `setfenv` implemented in 5.2
   function M.setfenv(f, t)
+--    debug.upvaluejoin(f, 1, function() return up end, 1) --unique upval[*]
+--    debug.setupvalue(f, 1, t)
+
     local f = envhelper(f, 'setfenv')
     local up, val, unknown = envlookup(f)
     if up then

@@ -146,6 +146,7 @@ System.out.println(String_.new_u8(mod_name) + " " + String_.new_u8(fnc_name) + "
 			// no threaded execution; run sequentially
 			if (exec) {
 //                            System.out.println("Module:" + String_.new_u8(mod_name));
+core.Lib_ustring().Gmatch_reset(); // eek ekk - because of 'brea'out
 				core.Invoke(wiki, ctx, src, caller, self, bfr, mod_name, mod_raw, fnc_name);
 			}
 			if (invoke_wkr != null)

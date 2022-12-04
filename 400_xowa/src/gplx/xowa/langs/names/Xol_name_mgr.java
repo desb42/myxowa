@@ -43,7 +43,7 @@ public class Xol_name_mgr {
 		if (include == null) include = Scope__str__all;
 		Ordered_hash array = fetchLanguageNames(inLanguage, include, page_url);
 		Keyval rv = (Keyval)array.Get_by(code);
-		return rv == null ? "" : rv.Val_to_str_or_null();
+		return rv == null ? "" : rv.Val_to_str_or_null_fetchlanguage();
 		}
 	}
 	/**
@@ -207,7 +207,7 @@ public class Xol_name_mgr {
 			// # - For other mwNames just add if not added through the hook
 			String code = mw_name.Key();
 			if (String_.Eq(code, inLanguage) || !names.Has(code)) {
-				names.Add_if_dupe_use_nth(code, Keyval_.new_(code, mw_name.Val_to_str_or_empty()));
+				names.Add_if_dupe_use_nth(code, Keyval_.new_(code, mw_name.Val_to_byte_or_empty()));
 			}
 		}
 

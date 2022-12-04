@@ -16,9 +16,14 @@ local function php_gmatch( s, pattern )
 
 	local re, capt = gmatch_init( s, pattern )
 	local pos = 0
-	return function()
+	return function(reset)
+		if reset then
+			gmatch_terminate(re)
+			return
+		end
 		local ret
-		pos, ret = gmatch_callback( s, re, capt, pos )
+--		pos, ret = gmatch_callback( s, re, capt, pos )
+		pos, ret = gmatch_callback( re, capt, pos ) -- dont pass the string (already passed by gmatch_init)
 		return unpack( ret )
 	end, nil, nil
 end
@@ -35,6 +40,7 @@ function ustring.setupInterface( opt )
 	if mw_interface.gmatch_callback and mw_interface.gmatch_init then
 		gmatch_init = mw_interface.gmatch_init
 		gmatch_callback = mw_interface.gmatch_callback
+		gmatch_terminate = mw_interface.gmatch_terminate
 		ustring.gmatch = php_gmatch
 	end
 	mw_interface.gmatch_init = nil

@@ -20,7 +20,7 @@ import gplx.xowa.addons.wikis.ctgs.bldrs.*; import gplx.xowa.addons.wikis.ctgs.*
 import gplx.xowa.addons.wikis.ctgs.htmls.catpages.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.doms.*; import gplx.xowa.addons.wikis.ctgs.htmls.catpages.urls.*;
 public interface Xodb_load_mgr {
 	void Init_by_wiki				(Xowe_wiki wiki);
-	void Load_page					(Xowd_page_itm rv, Xow_ns ns);
+	void Load_page					(Xowd_page_itm rv, Xow_ns ns, Xowe_wiki wiki);
 	boolean Load_by_id					(Xowd_page_itm rv, int id);
 	void Load_by_ids				(Cancelable cancelable, List_adp rv, int bgn, int end);
 	boolean Load_by_ttl				(Xowd_page_itm rv, Xow_ns ns, byte[] ttl);

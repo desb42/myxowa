@@ -17,6 +17,9 @@ package gplx.xowa.xtns.scribunto.libs; import gplx.*; import gplx.xowa.*; import
 import gplx.core.bits.*; import gplx.core.btries.*;
 import gplx.xowa.langs.msgs.*;
 import gplx.xowa.xtns.scribunto.procs.*;
+import gplx.objects.strings.unicodes.Ustring;
+import gplx.objects.strings.unicodes.Ustring_;
+import gplx.xowa.xtns.scribunto.libs.patterns.Scrib_pattern_matcher;
 public class Scrib_lib_text implements Scrib_lib {
 	private final	Scrib_lib_text__json_util json_util = new Scrib_lib_text__json_util();
 	private final	Scrib_lib_text__nowiki_util nowiki_util = new Scrib_lib_text__nowiki_util();
@@ -48,13 +51,34 @@ public class Scrib_lib_text implements Scrib_lib {
 			case Proc_init_text_for_wiki:				return Init_text_for_wiki(args, rslt);
 			case Proc_jsonEncode:						return JsonEncode(args, rslt);
 			case Proc_jsonDecode:						return JsonDecode(args, rslt);
+			case Proc_nowiki:						return Nowiki(args, rslt);
+			case Proc_split:						return Split(args, rslt);
 			default: throw Err_.new_unhandled(key);
 		}
 	}
-	private static final int Proc_unstrip = 0, Proc_unstripNoWiki = 1, Proc_killMarkers = 2, Proc_getEntityTable = 3, Proc_init_text_for_wiki = 4, Proc_jsonEncode = 5, Proc_jsonDecode = 6;
-	public static final String Invk_unstrip = "unstrip", Invk_unstripNoWiki = "unstripNoWiki", Invk_killMarkers = "killMarkers", Invk_getEntityTable = "getEntityTable"
-	, Invk_init_text_for_wiki = "init_text_for_wiki", Invk_jsonEncode = "jsonEncode", Invk_jsonDecode = "jsonDecode";
-	private static final	String[] Proc_names = String_.Ary(Invk_unstrip, Invk_unstripNoWiki, Invk_killMarkers, Invk_getEntityTable, Invk_init_text_for_wiki, Invk_jsonEncode, Invk_jsonDecode);
+	private static final int Proc_unstrip = 0, Proc_unstripNoWiki = 1, Proc_killMarkers = 2, Proc_getEntityTable = 3, Proc_init_text_for_wiki = 4, Proc_jsonEncode = 5, Proc_jsonDecode = 6, Proc_nowiki = 7, Proc_split = 8;
+	public static final String
+	  Invk_unstrip = "unstrip"
+	, Invk_unstripNoWiki = "unstripNoWiki"
+	, Invk_killMarkers = "killMarkers"
+	, Invk_getEntityTable = "getEntityTable"
+	, Invk_init_text_for_wiki = "init_text_for_wiki"
+	, Invk_jsonEncode = "jsonEncode"
+	, Invk_jsonDecode = "jsonDecode"
+	, Invk_nowiki = "nowiki"
+	, Invk_split = "split"
+	;
+	private static final String[] Proc_names = String_.Ary(
+	  Invk_unstrip
+	, Invk_unstripNoWiki
+	, Invk_killMarkers
+	, Invk_getEntityTable
+	, Invk_init_text_for_wiki
+	, Invk_jsonEncode
+	, Invk_jsonDecode
+	, Invk_nowiki
+	, Invk_split
+	);
 	public boolean Unstrip(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		// NOTE: https://www.mediawiki.org/wiki/Extension:Scribunto/Lua_reference_manual#mw.text.unstrip
 		byte[] src = args.Pull_bry(0);
@@ -185,7 +209,8 @@ public class Scrib_lib_text implements Scrib_lib {
 			? json_util.Encode_as_nde(itm_as_nde, flags & Scrib_lib_text__json_util.Flag__pretty, Scrib_lib_text__json_util.Skip__all)
 			: json_util.Encode_as_ary(itm_as_ary, flags & Scrib_lib_text__json_util.Flag__pretty, Scrib_lib_text__json_util.Skip__all)
 			;
-		if (rv == null) throw Err_.new_("scribunto",  "mw.text.jsonEncode: Unable to encode value");
+		if (rv == null)
+			throw Err_.new_("scribunto",  "mw.text.jsonEncode: Unable to encode value");
 		return rslt.Init_obj(rv);
 	}
 	public boolean JsonDecode(Scrib_proc_args args, Scrib_proc_rslt rslt) {
@@ -241,7 +266,7 @@ public class Scrib_lib_text implements Scrib_lib {
 	public static Keyval[] JsonDecodeStatic
 		( Scrib_proc_args args, Scrib_core core, Scrib_lib_text__json_util json_util
 		, byte[] json, int opts, int flags) {
-		// decode json to Object; note that Bool_.Y means ary and Bool_.N means ary
+		// decode json to Object; note that Bool_.Y means nde and Bool_.N means ary
 		byte rv_tid = json_util.Decode(json, opts);
 		if (rv_tid == Bool_.__byte) throw Err_.new_("scribunto",  "mw.text.jsonEncode: Unable to decode String " + String_.new_u8(json));
 		if (rv_tid == Bool_.Y_byte) {
@@ -271,6 +296,206 @@ public class Scrib_lib_text implements Scrib_lib {
 	}
 	private String Init_lib_text_get_msg(Xow_msg_mgr msg_mgr, String msg_key) {
 		return String_.new_u8(msg_mgr.Val_by_key_obj(Bry_.new_u8(msg_key)));
+	}
+
+	public boolean Nowiki(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		byte[] src = args.Pull_bry(0);
+		int len = src.length;
+		int pos = 0;
+		Bry_bfr bfr = Bry_bfr_.New();
+		int startpos = 0;
+		boolean linebreakfound = false;
+		byte b, c;
+		while (pos < len) {
+			b = src[pos++];
+			switch (b) {
+			case '"':
+			case '&':
+			case '\\':
+			case '\'':
+			case '<':
+			case '=':
+			case '>':
+			case '[':
+			case ']':
+			case '{':
+			case '|':
+			case '}':
+				bfr.Add_mid(src, startpos, pos - 1);
+				bfr.Add(amp_hash).Add_int_variable(b).Add_byte(Byte_ascii.Semic);
+				startpos = pos;
+				break;
+	
+			case '#':
+			case '*':
+			case ';':
+			case ' ':
+				if (!linebreakfound) {
+					if (pos == 1 || (c = src[pos-2]) == '\r' || c == '\n') {
+						bfr.Add_mid(src, startpos, pos - 1);
+						bfr.Add(amp_hash).Add_int_variable(b).Add_byte(Byte_ascii.Semic);
+						startpos = pos;
+					}
+				}
+				break;
+	
+			case ':':  // ^n: or ://
+				if (pos + 2 < len && src[pos] == '/' && src[pos+1] == '/') {
+					bfr.Add_mid(src, startpos, pos - 1);
+					bfr.Add(apm58slashslash);
+					pos += 2;
+					startpos = pos;
+				}
+				else {
+					if (!linebreakfound) {
+						if (pos == 1 || (c = src[pos-2]) == '\r' || c == '\n') {
+							bfr.Add_mid(src, startpos, pos - 1);
+							bfr.Add(amp_hash).Add_int_variable(b).Add_byte(Byte_ascii.Semic);
+							startpos = pos;
+						}
+					}
+				}
+				break;
+	
+			case '\n':
+			case '\r':
+			case '\t':
+				if (!linebreakfound) {
+					c = '\n';
+					if (pos == 1 || (c = src[pos-2]) == '\r' || c == '\n') {
+						if (pos > 1)
+							bfr.Add_mid(src, startpos, pos - 2);
+						if (c == '\r' && b == '\n')
+							bfr.Add(slashRslashN); // "&#13;\n"
+						else
+							bfr.Add_byte(c).Add(amp_hash).Add_int_variable(b).Add_byte(Byte_ascii.Semic);
+						startpos = pos;
+						linebreakfound = true;
+						continue;
+					}
+				}
+				break;
+	
+			case '-': //%-%-%-%-
+				c = '\n';
+				if (pos == 1 || (c = src[pos-2]) == '\r' || c == '\n') {
+					if (pos + 3 < len && src[pos] == '-' && src[pos + 1] == '-' && src[pos + 2] == '-') {
+						bfr.Add_mid(src, startpos, pos - 1);
+						bfr.Add(amp45hyphens); // "%1&#45;---"
+						pos += 3;
+						startpos = pos;
+					}
+				}
+				break;
+			case '_': //__
+				if (pos + 1 < len && src[pos] == '_') {
+					bfr.Add_mid(src, startpos, pos - 1);
+					bfr.Add(underscoreamp95); // "_&#95;"
+					pos += 1;
+					startpos = pos;
+				}
+				break;
+			case 'I': //ISBN%s
+				if (pos + 4 < len && src[pos] == 'S' && src[pos+1] == 'B' && src[pos+2] == 'N') {
+					if ((c = src[pos+3]) == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\f') {
+						bfr.Add_mid(src, startpos, pos - 1);
+						bfr.Add(ISBN).Add(amp_hash).Add_int_variable(c).Add_byte(Byte_ascii.Semic);
+						pos += 4;
+						startpos = pos;
+					}
+				}
+				break;
+			case 'R': //RFC%s
+				if (pos + 3 < len && src[pos] == 'F' && src[pos+1] == 'C') {
+					if ((c = src[pos+2]) == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\f') {
+						bfr.Add_mid(src, startpos, pos - 1);
+						bfr.Add(RFC).Add(amp_hash).Add_int_variable(c).Add_byte(Byte_ascii.Semic);
+						pos += 3;
+						startpos = pos;
+					}
+				}
+				break;
+			case 'P': //PMID%s
+				if (pos + 4 < len && src[pos] == 'M' && src[pos+1] == 'I' && src[pos+2] == 'D') {
+					if ((c = src[pos+3]) == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\f') {
+						bfr.Add_mid(src, startpos, pos - 1);
+						bfr.Add(PMID).Add(amp_hash).Add_int_variable(c).Add_byte(Byte_ascii.Semic);
+						pos += 4;
+						startpos = pos;
+					}
+				}
+				break;
+			}
+			linebreakfound = false;
+		}
+		if (startpos > 0) {
+			bfr.Add_mid(src, startpos, len);
+			return rslt.Init_obj(bfr.To_str());
+		}
+		return rslt.Init_obj(args.Pull_str(0));
+	}
+	private static byte[]
+			amp_hash = Bry_.new_a7("&#")
+			, PMID = Bry_.new_a7("PMID")
+			, RFC = Bry_.new_a7("RFC")
+			, ISBN = Bry_.new_a7("ISBN")
+			, underscoreamp95 = Bry_.new_a7("_&#95;")
+			, amp45hyphens = Bry_.new_a7("&#45;---")
+			, slashRslashN = Bry_.new_a7("&#13;\n")
+			, apm58slashslash = Bry_.new_a7("&#58;//")
+			;
+
+	public boolean Split(Scrib_proc_args args, Scrib_proc_rslt rslt) {
+		try {
+		// get args
+		String text_str        = args.Xstr_str_or_null(0);
+		String find_str        = args.Pull_str(1);
+		boolean plain          = args.Cast_bool_or_n(2);
+
+		// init text vars
+		Ustring text_ucs = Ustring_.New_codepoints(text_str); // NOTE: must count codes for supplementaries; PAGE:en.d:iglesia DATE:2017-04-23
+
+		List_adp list;
+		int text_len = text_ucs.Len_in_data();
+		if (find_str.length() == 0) { // break into single characters
+			list = List_adp_.New();
+			for (int i = 0; i < text_len; i++)
+				list.Add(text_ucs.Substring(i, i + 1));
+		}
+		// if plain, just do literal match of find and exit
+		else if (plain) {
+			list = List_adp_.New();
+			// find pos by literal match
+			Ustring find_ucs = Ustring_.New_codepoints(find_str);
+			int start = 0;
+			int pos = 0;
+			while (pos < text_len) {
+				pos = text_ucs.Index_of(find_ucs, pos);
+
+				// if nothing (else) found, return
+				if (pos == String_.Find_none)
+					break;
+				list.Add(text_ucs.Substring(start, pos));
+				pos += find_str.length();
+				start = pos;
+			}
+			list.Add(text_ucs.Substring(start, text_len));
+		}
+		else {
+			// run regex;
+			Scrib_pattern_matcher matcher = Scrib_pattern_matcher.New(core.Page_url());
+			list = matcher.Split(text_ucs, find_str);
+		}
+		int list_len = list.Len();
+		Keyval[] rv = new Keyval[list_len];
+		for (int i = 0; i < list_len; i++)
+			rv[i] = Keyval_.int_(i + 1, (String)list.Get_at(i));
+		return rslt.Init_obj(rv);
+		}
+		catch (Exception e) {
+			int a=1;
+		}
+		return rslt.Init_null();
 	}
 }
 /*

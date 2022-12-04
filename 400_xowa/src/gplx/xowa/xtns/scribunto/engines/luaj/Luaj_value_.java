@@ -163,7 +163,7 @@ class Luaj_value_ {
 		switch (v.type()) {
 			case LuaValue.TNIL: 				return null;
 			case LuaValue.TBOOLEAN:				return ((LuaBoolean)v).toboolean();
-			case LuaValue.TSTRING:				return ((LuaString)v).tojstring();
+			case LuaValue.TSTRING:				return /*((LuaString)v).tojstring(); //*/ ((LuaString)v).tobytes();
 			case LuaValue.TNUMBER:
 				LuaNumber v_num = (LuaNumber)v;
 				if (v_num.isint())

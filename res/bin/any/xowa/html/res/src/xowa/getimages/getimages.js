@@ -32,12 +32,10 @@ send a request of the form
 			elen = 1000; // limit to 1000 images
 		for (var i = 0; i < elen; i++) {
 			var at = elems[i];
-			txt= at.outerHTML.replace(wiki, "/wiki/");
-			var pos = txt.search("data-xoimg=\"");
-			if (pos < 0)
+			var xoimg = at.getAttribute("data-xoimg");
+			if (xoimg == null)
 				continue;
-			if (txt.charAt(pos+12) == "\"")
-				continue;
+			txt = at.outerHTML.replace(wiki, "/wiki/");
 			var entry = {'txt': txt, 'item': i + alen};
 			images[images.length] = entry;
 		}
@@ -54,7 +52,7 @@ send a request of the form
 			}
 		}
 		var text = JSON.stringify(images);
-		console.log(images.length, text);
+		console.log(images.length); //, text);
 		req.send(text + "\n");
 	}
 	function foundImages(msg) {
@@ -62,12 +60,10 @@ send a request of the form
 		console.log(msg);
 		for (var i = 0; i < msg.length; i++) {
 			var itm = msg[i];
-			if (itm.item >= alen)
-				var img = $('img', elems[itm.item - alen]);
-			else
-				var img = $('img', atitle[itm.item]);
-			img.attr("width", itm.width)
-			img.attr("height", itm.height)
+			var img = $('img[id=' + itm.xoimg + ']');
+//			console.log(i + " " + img.attr("id"));
+			img.attr("width", itm.width);
+			img.attr("height", itm.height);
 			img.attr("src", itm.src);
 		}
 	}
@@ -109,7 +105,7 @@ send a request of the form
 			}
 		}
 		var text = JSON.stringify(wikis);
-		console.log(text);
+		//console.log(text);
 		req.send(text + "\n");
 	}
 	function foundReds(msg) {
@@ -124,6 +120,8 @@ send a request of the form
 			for (var j = 0; j < klasses.length; j++) {
 				var kl = klasses[j];
 				if (kl == "new") {
+					if (aa.parent().attr("id") == "ca-talk")
+						aa.parent().addClass(kl);
 					aa.attr('title', xowa_global_values['red-link-title'].replace("\u007e{0}", aa.attr('title')));
 					console.log(aa.text(), lnk);
 				}

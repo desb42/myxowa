@@ -79,7 +79,7 @@ public class Xodb_save_mgr_txt implements Xodb_save_mgr {
 		}
 		// update page
 		Xob_xdat_file page_rdr = new Xob_xdat_file(); Xob_xdat_itm page_itm = new Xob_xdat_itm();
-		load_mgr.Load_page(tmp_page, db_page.Text_db_id(), db_page.Tdb_row_idx(), ns, true, page_rdr, page_itm);
+		load_mgr.Load_page(tmp_page, db_page.Text_db_id(), db_page.Tdb_row_idx(), ns, true, page_rdr, page_itm, wiki);
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
 		if (text == null) text = tmp_page.Text(); 
 		int text_len = text.length;

@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2021 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -705,10 +705,12 @@ public class Db_wikistrip {
 			byte b = src[pos++];
 			if (b != '=')
 				continue;
-			if ((pos > 1 && src[pos-2] == '\n') || (pos == 1))
+			if ((pos > 1 && src[pos-2] == '\n') || (pos == 1)) {
+				pos--;
 				break;
+			}
 		}
-		src =  wiki.Parser_mgr().Main().Expand_tmpl(Bry_.Mid(src, 0, pos - 1));
+		src = wiki.Parser_mgr().Main().Expand_tmpl(Bry_.Mid(src, 0, pos));
                 //System.out.println(String_.new_u8(src));
 		Bry_bfr bfr = Bry_bfr_.New();
 		bfr.Add(Gfh_tag_.P_lhs);

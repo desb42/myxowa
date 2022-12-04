@@ -22,19 +22,25 @@ import gplx.Bry_bfr_;
 
 public class Xol_case_cvt {
 	public static byte[] Upper_1st(byte[] src, int pos, int src_len, boolean reuse) {return Up_low_1st(src, pos, src_len, Bool_.Y, reuse);}
-	public static byte[] Upper_1st(byte[] src, int pos, int src_len) {return Up_low_1st(src, pos, src_len, Bool_.Y);}
+	public static byte[] Upper_1st(byte[] src, int pos, int src_len) {return Up_low_1st(src, pos, src_len, Bool_.Y, Bool_.Y);}
 	public static byte[] Lower_1st(byte[] src, int pos, int src_len, boolean reuse) {return Up_low_1st(src, pos, src_len, Bool_.N, reuse);}
-	public static byte[] Lower_1st(byte[] src, int pos, int src_len) {return Up_low_1st(src, pos, src_len, Bool_.N);}
-	public static byte[] Up_low_1st(byte[] src, int pos, int src_len, boolean upper) {
-		return Up_low_1st(src, pos, src_len, upper, Bool_.Y);
-	}
+	public static byte[] Lower_1st(byte[] src, int pos, int src_len) {return Up_low_1st(src, pos, src_len, Bool_.N, Bool_.Y);}
+
 	public static byte[] Up_low_1st(byte[] src, int pos, int src_len, boolean upper, boolean reuse) {
 		if (src_len == 0) return Bry_.Empty;
 		byte b = src[pos];
 		int b_len = gplx.core.intls.Utf8_.Len_of_char_by_1st_byte(b);
 		if (b_len > src_len) return Bry_.Empty; // bad unicode
+		byte[] ucase;
+		if (upper)
+			ucase = Xol_case_cvt_.Upper(src, pos, b_len);
+		else
+			ucase = Xol_case_cvt_.Lower(src, pos, b_len);
+		if (ucase == Xol_case_cvt_.byte_NOCHANGE)
+			return src;
+
 		if (reuse) {
-			return Upper_Lower_1st(src, pos, src_len, b_len, upper);
+			return Upper_Lower_1st(src, pos, src_len, b_len, upper, ucase);
 		}
 		else {
 			int copyLen = src_len - pos;
@@ -42,7 +48,7 @@ public class Xol_case_cvt {
 			for (int i = 0; i < copyLen; i++) {
 				copy[i] = src[pos + i];
 			}
-			return Upper_Lower_1st(copy, 0, copyLen, b_len, upper);
+			return Upper_Lower_1st(copy, 0, copyLen, b_len, upper, ucase);
 		}
 	}
 	public static byte[] Upper_1st(byte[] src, int pos, int src_len, int b_len) {return Upper_Lower_1st(src, pos, src_len, b_len, Bool_.Y);}
@@ -55,6 +61,10 @@ public class Xol_case_cvt {
 			ucase = Xol_case_cvt_.Lower(src, pos, b_len);
 		if (ucase == Xol_case_cvt_.byte_NOCHANGE)
 			return src;
+
+		return Upper_Lower_1st(src, pos, src_len, b_len, upper, ucase);
+	}
+	private static byte[] Upper_Lower_1st(byte[] src, int pos, int src_len, int b_len, boolean upper, byte[] ucase) {
 		if (ucase.length == b_len) {
 			for (int i = 0; i < b_len; i++)
 				src[pos+i] = ucase[i];

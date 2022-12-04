@@ -1042,7 +1042,7 @@ Regy_add(stub_hash, Id_tvl, "tvl", "Tuvalu");
 			Keyval lang_key = (Keyval)hash.Get_at(i);
 			Xol_lang_stub stub = Get_by_key_or_null(Bry_.new_a7(lang_key.Key()));
 			if (stub != null)
-				stub.Local_name_(Bry_.new_u8(lang_key.Val_to_str_or_empty()));
+				stub.Local_name_(lang_key.Val_to_byte_or_empty());
 		}
 	}
 	public static final    Xol_lang_stub Intl = new Xol_lang_stub(Xol_lang_stub_.Id__intl, Bry_.Empty, Bry_.Empty);	// intended for international wikis like commons, wikidata, etc..

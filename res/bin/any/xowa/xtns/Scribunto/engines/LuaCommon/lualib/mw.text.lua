@@ -135,7 +135,9 @@ for sp, esc in pairs( {
 end
 
 function mwtext.nowiki( s )
+	s = php.nowiki( s ) -- replace with php(java) call
 	-- string.gsub is safe here, because we're only caring about ASCII chars
+--[[
 	s = string.gsub( s, '["&\'<=>%[%]{|}]', nowikiRepl1 )
 	s = '\n' .. s
 	s = string.gsub( s, '[\r\n][#*:; \n\r\t]', nowikiRepl2 )
@@ -146,6 +148,7 @@ function mwtext.nowiki( s )
 	s = string.gsub( s, 'ISBN%s', nowikiReplMagic )
 	s = string.gsub( s, 'RFC%s', nowikiReplMagic )
 	s = string.gsub( s, 'PMID%s', nowikiReplMagic )
+]]
 	for k, v in pairs( options.nowiki_protocols ) do
 		s = string.gsub( s, k, v )
 	end
@@ -218,13 +221,16 @@ function mwtext.killMarkers( s )
 end
 
 function mwtext.split( text, pattern, plain )
+	return php.split( text, pattern, plain )
+end
+--[[ function mwtext.split( text, pattern, plain )
 	local ret = {}
 	for m in mwtext.gsplit( text, pattern, plain ) do
 		ret[#ret+1] = m
 	end
 	return ret
 end
-
+--]]
 function mwtext.gsplit( text, pattern, plain )
 	local s, l = 1, mw.ustring.len( text )
 	return function ()

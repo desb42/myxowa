@@ -141,7 +141,8 @@ public class Xows_page_allpages implements gplx.core.brys.Bfr_arg, Gfo_invk, Xow
 		Xol_msg_itm msg_itm = wiki.Lang().Msg_mgr().Itm_by_id_or_null(msg_id);
 		Bry_bfr tmp_bfr = wiki.Utl__bfr_mkr().Get_b512();
 		try {
-			byte[] lbl_text = msg_itm.Fmt(tmp_bfr, fmtr, ttl.Full_txt());
+			//byte[] lbl_text = msg_itm.Fmt(tmp_bfr, fmtr, ttl.Full_txt());
+			byte[] lbl_text = msg_itm.Fmt(tmp_bfr, ttl.Full_txt());
 			byte[] args__rest = arg_hash.Concat(tmp_bfr, Bry_arg_ns, Bry_arg_hideredirects);
 			byte[] arg_from = gplx.langs.htmls.encoders.Gfo_url_encoder_.Id.Encode(ttl.Page_txt_wo_qargs());
 			return html_list_end.Bld_bry_many(bfr, arg_from, args__rest, lbl_text);

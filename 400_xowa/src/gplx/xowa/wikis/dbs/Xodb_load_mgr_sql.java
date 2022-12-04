@@ -13,7 +13,9 @@ The terms of each license can be found in the source code repository:
 GPLv3 License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-GPLv3.txt
 Apache License: https://github.com/gnosygnu/xowa/blob/master/LICENSE-APACHE2.txt
 */
-package gplx.xowa.wikis.dbs; import gplx.*; import gplx.xowa.*; import gplx.xowa.wikis.*;
+package gplx.xowa.wikis.dbs; import gplx.*;
+import gplx.core.ios.Io_stream_zip_mgr;
+import gplx.xowa.*; import gplx.xowa.wikis.*;
 import gplx.core.primitives.*;
 import gplx.dbs.*; import gplx.dbs.cfgs.*; import gplx.xowa.wikis.data.tbls.*; import gplx.xowa.xtns.wbases.dbs.*;
 import gplx.xowa.apps.gfs.*; 
@@ -56,12 +58,20 @@ public class Xodb_load_mgr_sql implements Xodb_load_mgr {
 	public void Load_by_ttls(Xowe_wiki wiki, Cancelable cancelable, Ordered_hash rv, boolean fill_idx_fields_only, int bgn, int end) {
 		db_mgr.Core_data_mgr().Tbl__page().Select_in__ns_ttl(cancelable, rv, wiki.Ns_mgr(), fill_idx_fields_only, bgn, end);
 	}
-	public void Load_page(Xowd_page_itm rv, Xow_ns ns) {
+	private final Io_stream_zip_mgr zip_mgr = new Io_stream_zip_mgr();
+	public void Load_page(Xowd_page_itm rv, Xow_ns ns, Xowe_wiki wiki) {
 		if (rv.Text_db_id() == -1) return; // NOTE: page_sync will create pages with -1 text_db_id; DATE:2017-05-06
 
 		// get text
-		Xow_db_file db_file = db_mgr.Core_data_mgr().Dbs__get_by_id_or_fail(rv.Text_db_id());
 		byte[] text_bry;
+		if (rv.Text_db_offset() > 0) {
+			// load from DAT
+			wiki.Text_body().Init(wiki.App(), wiki.Domain_str(), rv.Text_db_id());
+			text_bry = wiki.Text_body().Read(rv.Id(), rv.Text_db_offset(), rv.Text_len());
+			text_bry = zip_mgr.Unzip((byte)3, text_bry);
+		}
+                else {
+		Xow_db_file db_file = db_mgr.Core_data_mgr().Dbs__get_by_id_or_fail(rv.Text_db_id());
 		if (db_file.Tbl__text() != null) {
 			Xowd_text_tbl text_tbl = db_file.Tbl__text();
 			text_bry = text_tbl.Select(rv.Id());
@@ -69,6 +79,7 @@ public class Xodb_load_mgr_sql implements Xodb_load_mgr {
 		else {
 			text_bry = db_file.Read_file(rv);
 		}
+                }
 		rv.Text_(text_bry);
 	}
 	public boolean Load_by_id	(Xowd_page_itm rv, int id) {return db_mgr.Core_data_mgr().Tbl__page().Select_by_id(rv, id);}

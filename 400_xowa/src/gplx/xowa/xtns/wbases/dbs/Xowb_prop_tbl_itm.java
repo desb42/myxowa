@@ -1,6 +1,6 @@
 /*
 XOWA: the XOWA Offline Wiki Application
-Copyright (C) 2012-2021 gnosygnu@gmail.com
+Copyright (C) 2012-2022 gnosygnu@gmail.com
 
 XOWA is licensed under the terms of the General Public License (GPL) Version 3,
 or alternatively under the terms of the Apache License Version 2.0.
@@ -21,9 +21,12 @@ public class Xowb_prop_tbl_itm {
 	public byte[] Data() {return data;}
 	private int datatype;
 	public int Datatype() {return datatype;}
-	public Xowb_prop_tbl_itm(String key, byte[] data, int datatype) {
+	private int sort_pos;
+	public int Sort_pos() {return sort_pos;}
+	public Xowb_prop_tbl_itm(String key, byte[] data, int datatype, int sort_pos) {
 		this.key = key;
 		this.data = data;
 		this.datatype = datatype;
+		this.sort_pos = sort_pos;
 	}
 }

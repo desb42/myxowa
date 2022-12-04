@@ -54,6 +54,14 @@ public class Object_ {
 		else if	(Type_.Eq(c, Bry_.Cls_ref_type))		return String_.new_u8((byte[])v);
 		else												return v.toString();	
 	}
+	public static byte[] Xto_byte_strict_or_empty(Object v)		{return v == null ? Bry_.Empty		: ToByte_lang(v);}
+	public static byte[] Xto_byte_strict_or_null(Object v)		{return v == null ? null				: ToByte_lang(v);}
+	private static byte[] ToByte_lang(Object v) {
+            if (v instanceof byte[])
+                return (byte[])v;
+            else
+                return Bry_.new_u8(v.toString());
+	}
 	public static String Xto_str_loose_or(Object v, String or) {	// tries to pretty-print doubles; also standardizes true/false; DATE:2014-07-14
 		if (v == null) return null;
 		Class<?> c = Type_.Type_by_obj(v);
@@ -62,6 +70,15 @@ public class Object_ {
 		else if (Type_.Eq(c, Bool_.Cls_ref_type))		return Bool_.Cast(v) ? Bool_.True_str : Bool_.False_str;	// always return "true" / "false"
 		else if	(Type_.Eq(c, Double_.Cls_ref_type))		return Double_.To_str_loose(Double_.cast(v));
 		else												return v.toString();	
+	}
+	public static byte[] Xto_byte_loose_or(Object v, String or) {	// tries to pretty-print doubles; also standardizes true/false; DATE:2014-07-14
+		if (v == null) return null;
+		Class<?> c = Type_.Type_by_obj(v);
+		if		(Type_.Eq(c, String_.Cls_ref_type))		return Bry_.new_u8((String)v);
+		else if	(Type_.Eq(c, Bry_.Cls_ref_type))		return (byte[])v;
+		else if (Type_.Eq(c, Bool_.Cls_ref_type))		return Bool_.Cast(v) ? Bool_.True_bry : Bool_.False_bry;	// always return "true" / "false"
+		else if	(Type_.Eq(c, Double_.Cls_ref_type))		return Bry_.new_u8(Double_.To_str_loose(Double_.cast(v)));
+		else												return Bry_.new_u8(v.toString());
 	}
 	public static final    Object Null = null;
 	public static final    byte[] Bry__null = Bry_.new_a7("null");

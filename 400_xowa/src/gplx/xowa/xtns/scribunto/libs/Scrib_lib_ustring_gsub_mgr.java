@@ -76,7 +76,9 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
                 //}
 
                 // special case!!!
-                if (limit == -1 && pat_str.length() == 12 && repl_tid == 1 && repl_obj.equals("%1") && pat_str.equals("^%s*(.-)%s*$")) {
+                if (limit == -1 && pat_str.length() == 12 && repl_tid == 1 && pat_str.equals("^%s*(.-)%s*$")) {
+                	byte[] repl_bry = (byte[])repl_obj;
+                	if (repl_bry.length == 2 && repl_bry[0] == '%' && repl_bry[1] == '1') //.equals("%1")) {
                     return rslt.Init_many_objs(src_str.trim(), 1);
                 }
 
@@ -119,10 +121,11 @@ public class Scrib_lib_ustring_gsub_mgr { // THREAD.UNSAFE:LOCAL_VALUES
 		byte repl_tid = Repl_tid_null;
 		// @repl can be String, int, table, func
 		Class<?> repl_type = repl_obj.getClass();
-		if		(Object_.Eq(repl_type, String_.Cls_ref_type)) {
+		//if		(Object_.Eq(repl_type, String_.Cls_ref_type)) {
+		if		(Object_.Eq(repl_type, Bry_.Cls_ref_type)) {
 			repl_tid = Repl_tid_string;
-			repl_bry = Bry_.new_u8((String)repl_obj);
-			repl_str = (String)repl_obj;
+			repl_bry = (byte[])repl_obj;
+			repl_str = String_.new_u8(repl_bry);
 		}
 		else if	(Object_.Eq(repl_type, Int_.Cls_ref_type)) {	// NOTE:@replace sometimes int; PAGE:en.d:λύω; DATE:2014-09-02
 			repl_tid = Repl_tid_string;

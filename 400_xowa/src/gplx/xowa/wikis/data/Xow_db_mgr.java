@@ -32,10 +32,12 @@ import gplx.dbs.Db_cmd_mode;
 import gplx.dbs.Db_conn;
 import gplx.dbs.Db_conn_bldr;
 import gplx.dbs.cfgs.Db_cfg_tbl;
+import gplx.xowa.files.Db_body_itm;
 import gplx.xowa.Xoa_app_;
 import gplx.xowa.Xow_wiki;
 import gplx.xowa.bldrs.infos.Xob_info_file;
 import gplx.xowa.bldrs.infos.Xob_info_session;
+import gplx.xowa.files.Db_text_body;
 import gplx.xowa.wikis.data.tbls.Xowd_page_tbl;
 import gplx.xowa.wikis.data.tbls.Xowd_text_tbl;
 
@@ -209,6 +211,12 @@ public class Xow_db_mgr {
             long text_db_offset = text_db.Offset();
 		core_tbl.Insert_cmd_by_batch(page_id, ns_id, ttl_wo_ns, redirect, modified_on, text_raw_len, random_int, text_db_id, -1, -1, model_format, text_db_offset, 0, 0);
 		text_tbl.Insert_cmd_by_batch(page_id, text_zip_data);
+	}
+	public void Create_page_new(Xowd_page_tbl core_tbl, Db_text_body text_body, int page_id, int ns_id, byte[] ttl_wo_ns, boolean redirect, DateAdp modified_on, byte[] text_zip_data, int text_zip_len, int random_int, int model_format) {
+		Db_body_itm itm = text_body.Write(page_id, text_zip_data);
+		int text_db_id = itm.Id();
+		long text_db_offset = itm.Ofs();
+		core_tbl.Insert_cmd_by_batch(page_id, ns_id, ttl_wo_ns, redirect, modified_on, text_zip_len, random_int, text_db_id, -1, -1, model_format, text_db_offset, 0, 0);
 	}
 	private void Dbs__set_by_tid(Xow_db_file db) {
 		switch (db.Tid()) {

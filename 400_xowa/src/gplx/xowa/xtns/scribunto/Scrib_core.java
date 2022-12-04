@@ -54,6 +54,7 @@ import gplx.xowa.xtns.scribunto.libs.Scrib_lib_proofread;
 import gplx.xowa.xtns.scribunto.procs.Scrib_proc;
 import gplx.xowa.xtns.scribunto.procs.Scrib_proc_mgr;
 
+import gplx.xowa.xtns.scribunto.engines.luaj.Luaj_server;
 public class Scrib_core {
 	private Hash_adp_bry mods = Hash_adp_bry.cs();
 	private int expensive_function_count;
@@ -149,14 +150,13 @@ public class Scrib_core {
 		engine.ClearChunks();
 		engine.Server().Term();
 		engine.Term();
-                engine.Server_(null); // should be the same as the line below!
+		engine.Server_(null); // should be the same as the line below!
 		engine = null;
-                
-                mods.Clear();
+		mods.Clear();
 	}
-        public void Reset() {
-            engine.ClearChunks();
-        }
+	public void Reset() {
+		engine.ClearChunks();
+	}
 	public void When_page_changed(Xoae_page page) {
 		mods.Clear();	// clear any loaded modules
 		Xow_wiki wiki = page.Wiki();
@@ -260,7 +260,7 @@ public class Scrib_core {
 */
 			Keyval[] func_args = Scrib_kv_utl_.base1_many_(mod.Init_chunk_func(), fnc_name_str);
 			Keyval[] func_rslt = engine.CallFunction(luaid_ExecuteModule, func_args);			// call init_chunk to get proc dynamically; DATE:2014-07-12
-                        //System.out.println("invoke:" + String_.new_u8(mod_name) + " " + fnc_name_str);
+			//System.out.println("invoke:" + String_.new_u8(mod_name) + " " + fnc_name_str);
 			if (func_rslt == null || func_rslt.length < 2) {
 				String errmsg = String_.new_u8(ctx.Wiki().Msg_mgr().Val_by_key_args(Bry_.new_a7("scribunto-common-nosuchfunction"), fnc_name, Scrib_kv_utl_.Val_to_str(func_args, 1)));
 				//throw Err_.new_wo_type("lua.error:" + errmsg, "fnc_name", String_.new_u8(fnc_name)); // must return at least 2 items for func_rslt[1] below; DATE:2014-09-22
@@ -269,8 +269,10 @@ public class Scrib_core {
 			Scrib_lua_proc proc = (Scrib_lua_proc)func_rslt[1].Val();												// note that init_chunk should have: [0]:true/false result; [1]:proc
 			func_args = Scrib_kv_utl_.base1_many_(proc);
 			func_rslt = engine.CallFunction(luaid_ExecuteFunction, func_args);				// call function now
-			String rslt = Scrib_kv_utl_.Val_to_str(func_rslt, 0);													// rslt expects an array with 1 scalar value
-			bfr.Add_str_u8(rslt);
+			//String rslt = Scrib_kv_utl_.Val_to_str(func_rslt, 0);													// rslt expects an array with 1 scalar value
+			//bfr.Add_str_u8(rslt);
+			byte[] rslt = Scrib_kv_utl_.Val_to_byte(func_rslt, 0);													// rslt expects an array with 1 scalar value
+			bfr.Add(rslt);
 			//byte[] rslt_bry = Bry_.new_u8(rslt);	// CHART
 			//gplx.xowa.parsers.xndes.Xop_xnde_tkn.Hack_ctx = ctx;
 			//bfr.Add(rslt_bry);
@@ -292,18 +294,32 @@ public class Scrib_core {
 		}
 	}
 	public Scrib_lua_mod Mods_get(byte[] mod_name) {return (Scrib_lua_mod)mods.Get_by(mod_name);}
+
+	private Object getclosure(int id) {
+		Luaj_server ljs = (Luaj_server)(engine.Server());
+		Object rv = ljs.Get_closure_by_id(id);
+		return rv;
+	}
 	private Scrib_lua_mod Mods_get_or_new(byte[] mod_name, byte[] mod_text) {
 		Scrib_lua_mod rv = (Scrib_lua_mod)mods.Get_by(mod_name);
-//                    System.out.println("mod " + String_.new_u8(mod_name));
+//		System.out.println("mod " + String_.new_u8(mod_name));
 		if (rv == null) {
 			rv = new Scrib_lua_mod(this, "Module:" + String_.new_u8(mod_name));
-			//rv.LoadString(String_.new_u8(mod_text));
+			Object closure = app.Get_closure(mod_name);
+			if (closure != null) {
+				rv.LoadClosure(closure);
+			}
+			else {
 
-			mod_text = Db_lua_comp.Check(mod_text);
-                
-			rv.LoadString(mod_text);
+				//rv.LoadString(String_.new_u8(mod_text));
+
+				mod_text = Db_lua_comp.Check(mod_text);
+
+				rv.LoadString(mod_text);
+				app.Add_closure(mod_name, getclosure(rv.Init_chunk_func().Id()));
+			}
 			mods.Add(mod_name, rv);
-                        highwater = engine.Server().Highwater();
+			highwater = engine.Server().Highwater();
 		}
 		return rv;
 	}

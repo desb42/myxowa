@@ -64,8 +64,10 @@ public class Scrib_proc_args {
 	public Keyval[] Ary() {return ary;}
 	public Object	Pull_obj(int i)					{return Get_or_fail(i);}
 	public boolean	Pull_bool(int i)				{return Bool_.Cast(Get_or_fail(i));}
-	public String	Pull_str(int i)					{return String_.cast(Get_or_fail(i));}
-	public byte[]	Pull_bry(int i)					{return Bry_.new_u8(String_.cast(Get_or_fail(i)));}
+//	public String	Pull_str(int i)					{return String_.cast(Get_or_fail(i));}
+//	public byte[]	Pull_bry(int i)					{return Bry_.new_u8(String_.cast(Get_or_fail(i)));}
+	public String	Pull_str(int i)					{return String_.new_u8((byte[])Get_or_fail(i));}
+	public byte[]	Pull_bry(int i)					{return (byte[])Get_or_fail(i);}
 	public int		Pull_int(int i)					{
 		try {return Int_.Coerce(Get_or_fail(i));} // coerce to handle "1" and 1; will still fail if "abc" is passed
 		catch (Exception e) {
@@ -127,11 +129,11 @@ public class Scrib_proc_args {
 			? rv
 			: (Keyval[])list.To_ary(Keyval.class);
 	}
-	public String	Cast_str_or(int i, String or)	{Object rv = Get_or_null(i); return rv == null ? or				: String_.cast		(rv);}
-	public String	Cast_str_or_null(int i)			{Object rv = Get_or_null(i); return rv == null ? null			: String_.cast		(rv);}
-	public byte[]	Cast_bry_or_null(int i)			{Object rv = Get_or_null(i); return rv == null ? null			: Bry_.new_u8(String_.cast	(rv));}	// NOTE: cast is deliberate; Scrib call checkType whi
-	public byte[]	Cast_bry_or_empty(int i)		{Object rv = Get_or_null(i); return rv == null ? Bry_.Empty : Bry_.new_u8(String_.cast	(rv));}
-	public byte[]	Cast_bry_or(int i, byte[] or)	{Object rv = Get_or_null(i); return rv == null ? or				: Bry_.new_u8(String_.cast	(rv));}
+	public String	Cast_str_or(int i, String or)	{Object rv = Get_or_null(i); return rv == null ? or				: String_.new_u8((byte[])rv);}
+	public String	Cast_str_or_null(int i)			{Object rv = Get_or_null(i); return rv == null ? null			: String_.new_u8((byte[])rv);}
+	public byte[]	Cast_bry_or_null(int i)			{Object rv = Get_or_null(i); return rv == null ? null			: (byte[])rv;}
+	public byte[]	Cast_bry_or_empty(int i)		{Object rv = Get_or_null(i); return rv == null ? Bry_.Empty : (byte[])rv;}
+	public byte[]	Cast_bry_or(int i, byte[] or)	{Object rv = Get_or_null(i); return rv == null ? or				: (byte[])rv;}
 	public Object	Cast_obj_or_null(int i)			{return Get_or_null(i);}
 	public boolean	Cast_bool_or_y(int i)			{Object rv = Get_or_null(i); return rv == null ? Bool_.Y		: Bool_.Cast(rv);}
 	public boolean	Cast_bool_or_n(int i)			{Object rv = Get_or_null(i); return rv == null ? Bool_.N		: Bool_.Cast(rv);}
@@ -146,7 +148,8 @@ public class Scrib_proc_args {
 			byte[][] rv = new byte[rv_len][];
 			for (int i = 0; i < rv_len; i++) {
 				Keyval itm = tbl[i];
-				rv[i] = Bry_.new_u8(String_.cast(itm.Val()));
+				//rv[i] = Bry_.new_u8(String_.cast(itm.Val()));
+				rv[i] = (byte[])itm.Val();
 			}
 			return rv;
 		}
@@ -155,13 +158,20 @@ public class Scrib_proc_args {
 			byte[][] rv = new byte[rv_len][];			
 			for (int i = 0; i < rv_len; i++) {
 				Keyval itm = ary[i + params_idx];
-				rv[i] = Bry_.new_u8(String_.cast(itm.Val()));
+				//rv[i] = Bry_.new_u8(String_.cast(itm.Val()));
+				rv[i] = (byte[])itm.Val();
 			}
 			return rv;
 		}
 	}
-	public String	Xstr_str_or_null(int i)			{Object rv = Get_or_null(i); return rv == null ? null			: Object_.Xto_str_loose_or(rv, null);}	// NOTE: Modules can throw exceptions in which return value is nothing; do not fail; return ""; EX: -logy; DATE:2013-10-14
-	public byte[]	Xstr_bry_or_null(int i)			{Object rv = Get_or_null(i); return rv == null ? null			: Bry_.new_u8(Object_.Xto_str_loose_or(rv, null));}
+	public String	Xstr_str_or_null(int i) {
+            Object rv = Get_or_null(i);
+            return rv == null ? null : String_.new_u8(Object_.Xto_byte_loose_or(rv, null));	// NOTE: Modules can throw exceptions in which return value is nothing; do not fail; return ""; EX: -logy; DATE:2013-10-14
+        }
+	public byte[]	Xstr_bry_or_null(int i) {
+            Object rv = Get_or_null(i);
+            return rv == null ? null : Object_.Xto_byte_loose_or(rv, null);
+        }
 	public byte[] Extract_qry_args(Xowe_wiki wiki, int idx) {
 		Object qry_args_obj = Cast_obj_or_null(idx);
 		if (qry_args_obj == null) return Bry_.Empty;

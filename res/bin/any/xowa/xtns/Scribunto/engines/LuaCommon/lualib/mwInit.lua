@@ -104,7 +104,9 @@ function mw.makeProtectedEnvFuncs( protectedEnvironments, protectedFunctions )
 			if env == nil or protectedEnvironments[ env ] then
 				error( "'setfenv' cannot set the requested environment, it is protected", 2 )
 			end
-			old_setfenv( func, newEnv )
+			if env ~= newEnv then
+				old_setfenv( func, newEnv )
+			end
 		else
 			error( "'setfenv' can only be called with a function or integer as the first argument", 2 )
 		end

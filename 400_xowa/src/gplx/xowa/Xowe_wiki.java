@@ -158,6 +158,10 @@ public class Xowe_wiki implements Xow_wiki, Gfo_invk, Gfo_evt_itm {
 	public Db_page_image			Page_image() {return page_image;} private Db_page_image page_image;
 	public Db_skin_mgr				Skin_mgr() {return skin_mgr;} private Db_skin_mgr skin_mgr;
 	public Db_sql_cursor    Db_local_db() {return sql_cursor;} private Db_sql_cursor sql_cursor;
+
+	public Db_html_body Html_body() {return html_body;} private final Db_html_body html_body = new Db_html_body();
+	public Db_text_body Text_body() {return text_body;} private final Db_text_body text_body = new Db_text_body();
+
 	private byte[] tagline = null;
 	public byte[] Tagline() {
 		tagline = msg_mgr.Val_by_key_obj("tagline");

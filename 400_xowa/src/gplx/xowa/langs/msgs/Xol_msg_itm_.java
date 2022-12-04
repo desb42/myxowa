@@ -460,7 +460,7 @@ case Xol_msg_itm_.Id_xowa_portal_about_tooltip: return new_(Xol_msg_itm_.Id_xowa
 case Xol_msg_itm_.Id_xowa_portal_about_accesskey: return new_(Xol_msg_itm_.Id_xowa_portal_about_accesskey, "accesskey-xowa-portal-about", "");
 case Xol_msg_itm_.Id_symbol_catseparator: return new_(Xol_msg_itm_.Id_symbol_catseparator, "catseparator", "\u007C");
 case Xol_msg_itm_.Id_symbol_semicolon_separator: return new_(Xol_msg_itm_.Id_symbol_semicolon_separator, "semicolon-separator", ";&#32;");
-case Xol_msg_itm_.Id_symbol_comma_separator: return new_(Xol_msg_itm_.Id_symbol_comma_separator, "comma-separator", ",&#32;");
+/**/case Xol_msg_itm_.Id_symbol_comma_separator: return new_(Xol_msg_itm_.Id_symbol_comma_separator, "comma-separator", ",&#32;");
 case Xol_msg_itm_.Id_symbol_colon_separator: return new_(Xol_msg_itm_.Id_symbol_colon_separator, "colon-separator", ":&#32;");
 case Xol_msg_itm_.Id_symbol_autocomment_prefix: return new_(Xol_msg_itm_.Id_symbol_autocomment_prefix, "autocomment-prefix", "-&#32;");
 case Xol_msg_itm_.Id_symbol_pipe_separator: return new_(Xol_msg_itm_.Id_symbol_pipe_separator, "pipe-separator", "&#32;\u007C&#32;");

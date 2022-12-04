@@ -29,6 +29,10 @@ import gplx.xowa.bldrs.wms.*;
 import gplx.xowa.wikis.tdbs.*; import gplx.xowa.wikis.tdbs.hives.*; import gplx.xowa.wikis.xwikis.*;
 import gplx.xowa.addons.*; import gplx.xowa.specials.mgrs.*;
 import gplx.xowa.addons.apps.cfgs.*; import gplx.xowa.apps.miscs.*;
+import org.luaj.vm2.LuaClosure;
+import org.luaj.vm2.LuaString;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.Prototype;
 public class Xoae_app implements Xoa_app, Gfo_invk {
 	public static Io_url Root_dir() {return static_root_dir;} private static Io_url static_root_dir;
 	public Xoae_app(Gfo_usr_dlg usr_dlg, Xoa_app_mode mode, Io_url root_dir, Io_url pages_articles_file, Io_url wiki_dir, Io_url file_dir, Io_url user_dir, Io_url css_dir, String bin_dir_name) {
@@ -279,4 +283,254 @@ public class Xoae_app implements Xoa_app, Gfo_invk {
 	, Invk_xwiki_langs_load = "xwiki_langs_load"
 	;
 	public static final String Invk_term_cbk = "term_cbk";
+
+	private Hash_adp_bry closure_cache = Hash_adp_bry.cs();
+	public Object Get_closure(byte[] ttl) {
+		synchronized (this) {
+			return closure_cache.Get_by(ttl);
+		}
+	}
+	public void Add_closure(byte[] ttl, Object closure) {
+		synchronized (this) {
+			LuaClosure lc = (LuaClosure) closure;
+			int ttl_len = ttl.length;
+			int pos = 0;
+			// if title contains 'data/' then remove lineinfo (debug info)
+			while (pos < ttl_len) {
+				if (ttl[pos++] == 'd') {
+					if (pos + 3 < ttl_len && ttl[pos] == 'b'/*a*/ && ttl[pos + 1] == 't' && ttl[pos + 2] == 'a' && ttl[pos + 3] == '/') {
+						lc.p.lineinfo = null;
+						break;
+					}
+				}
+			}
+			// do a bit of string optimisation
+			int kl = lc.p.k.length;
+			if (String_.new_u8(ttl).equals("Road_data/strings/USA/NJ")) {
+				int a=1;
+			}
+			check_p(lc.p);
+			closure_cache.Add(ttl, closure);
+		}
+	}
+	private void check_p(Prototype p) {
+		check_k(p.k);
+                int oldcl = p.code.length;
+		check_settable(p);
+		for (int i = 0; i < p.p.length; i++) {
+			check_p(p.p[i]);
+		}
+	}
+	private void check_k(LuaValue[] k) {
+		int count = 0;
+		int kl = k.length;
+		for (int i = 0; i < kl; i++) {
+			LuaValue lv = k[i];
+			if (lv.type() == LuaValue.TSTRING) {
+				count += k[i].length();
+			}
+		}
+		byte[] data = new byte[count];
+		count = 0;
+		for (int i = 0; i < kl; i++) {
+			LuaValue lv = k[i];
+			if (lv.type() == LuaValue.TSTRING) {
+				LuaString ls = (LuaString) lv;
+				int len = ls.length();
+				System.arraycopy(ls.m_bytes, ls.m_offset, data, count, len);
+				k[i] = LuaString.setValue(data, count, len);
+				count += len;
+			}
+		}
+	}
+	private static int OP_SETTABLE_a = 15; // from Lua.java (luaj)
+	private static int OP_SETTABLE_d = 18; // from Lua.java (luaj)
+	private static int OP_LOADK = 1; // from Lua.java (luaj)
+	private static int OP_SETTABLERANGE = 54;
+        private static int OP_JMP = 32;
+        private static int OP_TFORLOOP = 44;
+	private void check_settable(Prototype p) {
+		int[] code = p.code;
+		int codelen = code.length;
+		int pc = 0;
+		int i, a, b, c = 0;
+		int shrinksize = 0;
+		while (pc < codelen) {
+			i = code[pc++];
+			if ((i & 0x3f) == OP_SETTABLE_a) {
+				int stackptr = a = ((i>>6) & 0xff);
+				int base = b = i>>>23;
+				int tpc = pc - 1;
+				int next = base;
+				int prev = 0;
+				while (tpc < codelen) {
+					i = code[tpc];
+					if ((i & 0x3f) != OP_SETTABLE_a)
+						break;
+					a = ((i>>6) & 0xff);
+					b = i>>>23;
+					c = (i>>14)&0x1ff;
+					if (a != stackptr || b + 1 != c || b != next)
+						break;
+					next += 2;
+					prev = c;
+					tpc++;
+				}
+				// have we got multiple OP_SETTABLE_a
+				int diff = tpc - pc;
+				if (diff > 2) {
+					// merge
+					// need to build OP_SETTABLERANGE
+					System.out.println("diffa:" + (prev-base));
+					if (prev-base == 7) {
+						int z=1;
+					}
+					int extra = write_range(stackptr, base, prev, pc, p, tpc, codelen);
+                                        pc += extra;
+                                        diff -= extra;
+					shrinksize += diff;
+					codelen -= diff;
+				}
+			}
+			else if ((i & 0x3f) == OP_SETTABLE_d) {
+				int stackptr = a = ((i>>6) & 0xff);
+				int tpc = pc - 3;
+                                if (tpc < 0)
+                                    continue;
+				int base = -1;
+				int next = -1;
+				int prev = 0;
+				int a1,bx1,a2,bx2,i1,i2;
+				while (tpc + 3 < codelen) {
+					i2 = code[tpc];
+					if ((i2 & 0x3f) != OP_LOADK)
+						break;
+					i1 = code[tpc + 1];
+					if ((i1 & 0x3f) != OP_LOADK)
+						break;
+					i = code[tpc + 2];
+					if ((i & 0x3f) != OP_SETTABLE_d)
+						break;
+					a = ((i>>6) & 0xff);
+					if (a != stackptr)
+						break;
+					b = i>>>23;
+					c = (i>>14)&0x1ff;
+					a1 = ((i1>>6) & 0xff);
+					bx1 = i1>>>14;
+					a2 = ((i2>>6) & 0xff);
+					bx2 = i2>>>14; // 32-14->18
+					if (bx2 + 1 != bx1 || b != a2 || c != a1 || bx2 > 4095)
+						break;
+					if (base < 0) {
+						base = bx2;
+						next = bx2;
+					}
+					if (bx2 != next)
+						break;
+					next += 2;
+					prev = bx1;
+					tpc += 3;
+				}
+				// have we got multiple OP_SETTABLE_d
+				int diff = tpc - pc;
+				if (diff > 1) {
+					// merge
+					// need to build OP_SETTABLERANGE
+					pc -= 2;
+					int extra = write_range(stackptr, base, prev, pc, p, tpc, codelen);
+                                        pc += extra;
+                                        diff -= extra;
+					shrinksize += diff;
+					codelen -= diff;
+				}
+			}
+		}
+		if (codelen < code.length) {
+			// reduce code and lineinfo
+			System.out.println("s:" + p.source);
+			int[] newcode = new int[codelen];
+			System.arraycopy(code, 0, newcode, 0, codelen);
+			p.code = newcode;
+			if (p.lineinfo != null) {
+				int[] newlineinfo = new int[codelen];
+				System.arraycopy(p.lineinfo, 0, newlineinfo, 0, codelen);
+				p.lineinfo = newlineinfo;
+			}
+		}
+	}
+	private int write_range(int stackptr, int base, int top, int pc, Prototype p, int tpc, int codelen) {
+		int diff = (top - base)/2;
+                int extra = 0;
+		while (diff > 63) {
+			p.code[pc - 1] = CREATE_RANGE(OP_SETTABLERANGE, stackptr, base, 63);
+			pc++;
+                        extra++;
+			base += 128;
+			diff -= 64;
+		}
+		p.code[pc - 1] = CREATE_RANGE(OP_SETTABLERANGE, stackptr, base, diff);
+                // check JMP going forward
+		int jpc = 0;
+		while (jpc < pc) {
+			int i = p.code[jpc];
+                        int op = (i & 0x3f);
+			if (op == OP_JMP) {
+				int targetaddress = (i>>>14)-0x1ffff;
+				if (jpc + targetaddress >= tpc) {
+                                    targetaddress -= (tpc - pc);
+                                    p.code[jpc] = op | ((targetaddress+0x1ffff)<<14);
+                                }
+			}
+			jpc++;
+		}
+                jpc = tpc;
+		while (jpc < codelen) {
+			int i = p.code[jpc];
+                        int op = (i & 0x3f);
+			if (op == OP_TFORLOOP) {
+				int targetaddress = (i>>>14)-0x1ffff;
+				if (jpc + targetaddress < pc) {
+                                    targetaddress += (tpc - pc);
+                                    p.code[jpc] = (i & 0x3fff) | ((targetaddress+0x1ffff)<<14);
+                                }
+			}
+			jpc++;
+		}
+		System.arraycopy(p.code, tpc, p.code, pc, codelen - tpc);
+		if (p.lineinfo != null) // beware /data modules
+			System.arraycopy(p.lineinfo, tpc, p.lineinfo, pc, codelen - tpc);
+                return extra;
+	}
+	public static final int SIZE_OP		= 6;
+	public static final int POS_OP		= 0;
+	public static final int SIZE_A		= 8;
+	public static final int POS_A		= (POS_OP + SIZE_OP);
+	public static final int SIZE_C		= 9;
+	public static final int POS_C		= (POS_A + SIZE_A);
+	public static final int SIZE_B		= 9;
+	public static final int POS_B		= (POS_C + SIZE_C);
+	public static final int MASK_OP = ((1<<SIZE_OP)-1)<<POS_OP;
+	public static final int MASK_A  = ((1<<SIZE_A)-1)<<POS_A;
+	public static final int MASK_B  = ((1<<SIZE_B)-1)<<POS_B;
+	public static final int MASK_C  = ((1<<SIZE_C)-1)<<POS_C;
+
+	static int CREATE_ABC(int o, int a, int b, int c) { // from LuaC.java
+		return ((o << POS_OP) & MASK_OP) |
+				((a << POS_A) & MASK_A) |
+				((b << POS_B) & MASK_B) |
+				((c << POS_C) & MASK_C) ;
+	}
+	public static final int SIZE_Cx		= 6;
+	public static final int POS_Cx		= (POS_A + SIZE_A);
+	public static final int MASK_Cx  = ((1<<SIZE_Cx)-1)<<POS_Cx;
+	public static final int SIZE_Bx		= 12;
+	public static final int POS_Bx		= (POS_Cx + SIZE_Cx);
+	public static final int MASK_Bx  = ((1<<SIZE_Bx)-1)<<POS_Bx;
+	static int CREATE_RANGE(int o, int a, int bx, int cx) {
+		return ((o << POS_OP) & MASK_OP) |
+				((a << POS_A) & MASK_A) |
+				((bx << POS_Bx) & MASK_Bx) |
+				((cx << POS_Cx) & MASK_Cx) ;
+	}
 }

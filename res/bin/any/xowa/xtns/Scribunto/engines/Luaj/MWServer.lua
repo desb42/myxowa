@@ -114,6 +114,7 @@ function MWServer:handleCall( message )
 --  print(message.args[1]);
 	local n, result = self:listToCountAndTable( xpcall(
 		function ()
+--dbg('handleCall', message.id, self.chunks[message.id])
 			return self.chunks[message.id]( unpack( message.args, 1, message.nargs ) )
 		end,
 		function ( err )
@@ -170,7 +171,26 @@ function MWServer:handleLoadString( message )
 --			value = 'cannot load code with a Lua binary chunk marker escape sequence in it'
 --		}
 --	end
+--dbg('lc', message.chunkName)
 	local chunk, errorMsg = loadstring( message.text, message.chunkName )
+	if chunk then
+		setfenv( chunk, self.baseEnv )
+		local id = self:addChunk( chunk )
+		return {
+			op = 'return',
+			nvalues = 1,
+			values = {id}
+		}
+	else
+		return {
+			op = 'error',
+			value = errorMsg
+		}
+	end
+end
+function MWServer:handleLoadClosure( message )
+--dbg('loadclosure', message.closure)
+	local chunk, errorMsg = loadclosure( message.closure )
 	if chunk then
 		setfenv( chunk, self.baseEnv )
 		local id = self:addChunk( chunk )
@@ -372,6 +392,8 @@ function MWServer:server_recv( recv_msg )
     return recv_msg
   elseif op == 'loadString' then
     return self:handleLoadString( recv_msg )
+  elseif op == 'loadClosure' then
+    return self:handleLoadClosure( recv_msg )
   elseif op == 'registerLibrary' then
     return self:handleRegisterLibrary( recv_msg )
   elseif op == 'wrapPhpFunction' then

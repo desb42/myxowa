@@ -18,7 +18,7 @@ import gplx.*;
 import gplx.xowa.htmls.*;
 import gplx.dbs.*;
 import gplx.core.brys.*;
-import gplx.xowa.wikis.caches.Db_html_body;
+import gplx.xowa.files.Db_html_body;
 public class Xowd_html_tbl implements Db_tbl {
 	private final String fld_page_id, fld_body;
 	private Db_stmt stmt_select, stmt_insert, stmt_update;

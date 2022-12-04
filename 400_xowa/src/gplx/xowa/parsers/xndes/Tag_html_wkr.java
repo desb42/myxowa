@@ -45,7 +45,7 @@ class Tag_html_wkr_basic implements Tag_html_wkr {
 	}		
 	public void Tag__process_attr(byte[] key, byte[] val) {
 		int val_len = Bry_.Len(val);
-		if (val_len == 0) return;	// ignore atrs with empty vals: EX:{{#tag:ref||group=}} PAGE:ru.w:Колчак,_Александр_Васильевич DATE:2014-07-03
+//		if (val_len == 0) return;	// ignore atrs with empty vals: EX:{{#tag:ref||group=}} PAGE:ru.w:Колчак,_Александр_Васильевич DATE:2014-07-03
 
 		// NOTE: this behavior emulates /includes/parser/CoreParserFunctions.php|tagObj; REF: $attrText .= ' ' . htmlspecialchars( $name ) . '="' . htmlspecialchars( $value ) . '"';
 		// write key
@@ -61,6 +61,7 @@ class Tag_html_wkr_basic implements Tag_html_wkr {
 				tmp_bfr.Add(key);
 			tmp_bfr.Add_byte(Byte_ascii.Eq);
 		}
+		if (val_len == 0) return;	// need this {{#tag:syntaxhighlight|text|inline=}} frwiki Danemark ({{code|text}} 20220720
 
 		// write val
 		tmp_bfr.Add_byte(Byte_ascii.Quote);

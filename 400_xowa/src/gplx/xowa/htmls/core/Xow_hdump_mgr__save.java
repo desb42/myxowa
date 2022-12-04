@@ -30,7 +30,7 @@ import gplx.xowa.wikis.data.Xow_db_file_;
 import gplx.xowa.wikis.data.Xow_db_mgr;
 import gplx.xowa.wikis.pages.Xopg_view_mode_;
 import gplx.xowa.wikis.pages.dbs.Xopg_db_page;
-import gplx.xowa.wikis.caches.Db_html_body;
+import gplx.xowa.files.Db_html_body;
 
 public class Xow_hdump_mgr__save {
 	private final    Xow_wiki wiki; private final    Xoh_hzip_mgr hzip_mgr; private final    Io_stream_zip_mgr zip_mgr;

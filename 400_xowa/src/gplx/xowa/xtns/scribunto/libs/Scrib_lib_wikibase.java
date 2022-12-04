@@ -20,6 +20,8 @@ import gplx.xowa.xtns.scribunto.procs.*;
 import gplx.xowa.xtns.wbases.core.*; import gplx.xowa.mediawiki.extensions.Wikibase.client.includes.*; import gplx.xowa.mediawiki.extensions.Wikibase.client.includes.dataAccess.scribunto.*;
 import gplx.xowa.mediawiki.*;
 import gplx.xowa.mediawiki.extensions.Wikibase.lib.includes.Store.*;
+import gplx.xowa.xtns.wbases.dbs.Xowb_prop_tbl_itm;
+import gplx.core.lists.*;
 // REF.MW:https://github.com/wikimedia/mediawiki-extensions-Wikibase/blob/master/client/includes/DataAccess/Scribunto/Scribunto_LuaWikibaseLibrary.php
 public class Scrib_lib_wikibase implements Scrib_lib {
 	private final    Scrib_core core;
@@ -341,33 +343,41 @@ public function formatValues( $snaksSerialization ) {
 	public boolean OrderProperties(Scrib_proc_args args, Scrib_proc_rslt rslt) {
 		Keyval[] propertyIds = args.Pull_kv_ary_safe(0);
 
-//			if (propertyIds.length == 0) {
-//				return rslt.Init_obj(propertyIds);
-//			}
+		int prop_len = propertyIds.length;
 //
-//			XophpArray orderedPropertiesPart = XophpArray.New();
-//			XophpArray unorderedProperties = XophpArray.New();
+		if (prop_len > 1) {
+		Wbase_prop_mgr prop_mgr = core.App().Wiki_mgr().Wdata_mgr().Prop_mgr();
+			List_adp list_ordered = List_adp_.New();
+			List_adp list_unordered = List_adp_.New();
 //
 //			// item is [{P1,1}]
 //			XophpArray propertyOrder = this.getPropertyOrderProvider().getPropertyOrder();
-//			foreach (Keyval propertyIdKv in propertyIds) {
-//				// item is [{0,P1}]
-//				String propertyId = propertyIdKv.Val_to_str_or_empty();
-//				if (propertyOrder.isset(propertyId)) {
-//					int propertyOrderSort = propertyOrder.Get_by_int(propertyId);
-//					orderedPropertiesPart.Set(propertyOrderSort, propertyId);
-//				} else {
-//					unorderedProperties.Add(propertyId);
-//				}
-//			}
-//			ksort( orderedPropertiesPart );
-//			orderedProperties = XophpArray.array_merge(orderedPropertiesPart, unorderedProperties);
-
-		// Lua tables start at 1
-//			XophpArray orderedPropertiesResult = XophpArray.array_combine(
-//					range(1, count(orderedProperties)), XophpArray.array_values(orderedProperties)
-//			);
-//			return rslt.Init_obj(orderedPropertiesResult.To_kv_ary());
+// order from www.wikidata.org/wiki/MediaWiki:Wikibase-SortedProperties
+			for (int i = 0; i < prop_len; i++) {
+				Keyval propertyIdKv = propertyIds[i];
+				// item is [{0,P1}]
+				String propertyId = propertyIdKv.Val_to_str_or_empty();
+				Xowb_prop_tbl_itm tbl_itm = prop_mgr.Get_or_null(propertyId, null);
+				if (tbl_itm != null) {
+					list_ordered.Add(new proporder(tbl_itm.Sort_pos(), propertyId));
+				} else {
+					list_unordered.Add(propertyId);
+				}
+			}
+			list_ordered.Sort_by(new propsorter());
+			int pos = 0;
+			int len = list_ordered.Count();
+			for (int i = 0; i < len; i++) {
+				proporder prop = (proporder)list_ordered.Get_at(i);
+				propertyIds[pos] = Keyval_.int_(pos+1, prop.propertyId);
+				pos++;
+			}
+			len = list_unordered.Count();
+			for (int i = 0; i < len; i++) {
+				propertyIds[pos] = Keyval_.int_(pos+1, (String)list_unordered.Get_at(i));
+				pos++;
+			}
+		}
 		return rslt.Init_obj(propertyIds);
 //			throw Err_.new_("wbase", "orderProperties not implemented", "url", core.Page().Url().To_str());
 	}
@@ -504,6 +514,20 @@ public function formatValues( $snaksSerialization ) {
 //			}
 //			return this.propertyOrderProvider;
 //		}
+}
+class proporder {
+	protected int sort_pos;
+	protected String propertyId;
+	protected proporder(int sort_pos, String propertyId) {
+		this.sort_pos = sort_pos;
+		this.propertyId = propertyId;
+	}
+}
+class propsorter implements ComparerAble {
+	public int compare(Object lhsObj, Object rhsObj) {
+		proporder lhs = (proporder)lhsObj, rhs = (proporder)rhsObj;
+		return Int_.Compare(lhs.sort_pos, rhs.sort_pos);
+	}
 }
 /*
 FOOTNOTE:GetEntityModuleName

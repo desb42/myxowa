@@ -94,7 +94,7 @@ public class Xow_page_mgr implements Gfo_invk {
 			rv.Db().Page().Model_format_(page_row.Model_format());
 
 			// load from text table
-			wiki.Db_mgr().Load_mgr().Load_page(page_row, ns);
+			wiki.Db_mgr().Load_mgr().Load_page(page_row, ns, wiki);
 			byte[] wtxt = page_row.Text();
 			rv.Db().Text().Text_bry_(wtxt);
 			if (redirect_force) {
